@@ -3,8 +3,11 @@
 const twilio = require('twilio');
 const catchAsync = require('../utils/catchAsync');
 
-const accountSid = 'ACc4a180b7cd44bc274e45be12279f1068';
-const authToken = 'f060ff2ba31af34d3a2b5056ececffba';
+
+
+const twilioSID = process.env.TWILIO_ACCOUNT_SID;
+const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
+
 
 const client = twilio(accountSid, authToken);
 
