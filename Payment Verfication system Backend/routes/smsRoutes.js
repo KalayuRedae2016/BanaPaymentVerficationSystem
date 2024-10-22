@@ -1,11 +1,11 @@
-// routes.js
+// // routes.js
 
-const express = require('express');
-const smsController = require('../Controllers/smsController');
+// const express = require('express');
+// const smsController = require('../Controllers/smsController');
 
-const router = express.Router();
+// const router = express.Router();
 
-// Route to send an SMS notification
-router.post('/sendSms', smsController.sendSMS);
+// // Route to send an SMS notification
+// router.post('/sendSms', smsController.sendSMS);
 
-module.exports = router;
+// module.exports = router;
