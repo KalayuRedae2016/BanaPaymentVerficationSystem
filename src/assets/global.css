@@ -1,0 +1,28 @@
+/* src/assets/global.css */
+
+.custom-input {
+    @apply  bg-gray-50 border border-gray-300 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline;
+  }
+  
+  .custom-input::placeholder {
+    @apply text-gray-500; /* Customize placeholder color */
+  }
+  
+  .custom-button {
+    @apply bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline;
+  }
+  
+  /* Custom Label Style */
+  .custom-label {
+    @apply block text-gray-700 text-sm font-bold mb-2;
+  }
+
+  .custom-select {
+    @apply bg-gray-50 border border-blue-300 rounded-lg w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline;
+  }
+  .custom-star{
+    @apply  text-red-500;
+  }
+  .custom-font {
+    @apply font-sans text-lg font-semibold text-gray-900;
+  }
