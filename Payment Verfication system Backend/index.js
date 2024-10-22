@@ -114,7 +114,7 @@ app.use('/api/v1/organization', organizationRoutes);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/paymentSetting',paymentSettingRouter);
 app.use('/api/v1/payments',paymentRouter)
-//app.use('/api/v1/sms',smsRoutes)
+
 
 app.use('/api/ups',paymentRouter)//third Party Bank API
 
