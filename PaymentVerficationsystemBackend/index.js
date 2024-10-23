@@ -16,7 +16,8 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 
 const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController');
+//const globalErrorHandler = require('./Controllers/errorController');
+const globalErrorHandler = require('./Controllers/authoController');
 
 const organizationRoutes=require('./routes/organizationRouter')
 const userRouter = require('./routes/userRouter');
