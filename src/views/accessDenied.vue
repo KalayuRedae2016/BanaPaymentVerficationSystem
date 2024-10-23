@@ -12,7 +12,7 @@
       </button>
     </div>
   </template>
-  
+  <!-- ppp -->
   <script>
   export default {
     name: 'AccessDenied',
