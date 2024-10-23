@@ -176,7 +176,7 @@
       class="w-1/2 p-2 receipt border-r-4 border-t-4 border-b-4 border-red-500 border-dotted"
     >
       <div class="bg-green-200 text-blue-800 p-2">
-        <img src="../../../../assets/img/head.png" alt="Barcode" class="mb-3" />
+        <!-- <img src="../../../../assets/img/head.png" alt="Barcode" class="mb-3" /> -->
         <div class="flex items-center justify-between">
           <div class="text-xs flex items-center space-x-2">
             <span class="font-semibold">BillCode:</span>
