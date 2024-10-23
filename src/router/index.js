@@ -29,7 +29,7 @@ import paidUnpaid from "../components/adminaccessiblepages/payment/Reports//paym
 import paidUnPaidOverdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/paidUnPaidOverdue.vue"
 import transferHistory from "../components/adminaccessiblepages/payment/Reports/transferHistory.vue"
 import reciept from "../components/adminaccessiblepages/payment/Reports//reciepts/reciept.vue";
-import reciept1 from "../components/adminaccessiblepages/payment/Reports//reciepts/reciept1.vue";
+
 import idCardAdmin from "../components/adminaccessiblepages/id/idCard.vue";
 import sendEmail from "../components/adminaccessiblepages/messages/sendEmail.vue";
 import bankStatement from "../components/adminaccessiblepages/payment/newPayment/bankStatement.vue";
@@ -111,7 +111,7 @@ const routes = [
       { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
       { path: "verify/:clientId", name: "verify", component: verify },
       { path: "reciept", name: "reciept", component: reciept },
-      { path: "reciept1", name: "reciept1", component: reciept1 },
+      
       { path: "empty/:clientId", component: empty },
       { path: "empty-companey", component: emptyCompaney },
       { path: "empty-client", component: emptyClient }, 
