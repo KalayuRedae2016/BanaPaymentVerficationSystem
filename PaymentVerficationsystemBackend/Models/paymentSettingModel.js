@@ -1,6 +1,5 @@
 const { required } = require('joi');
 const mongoose = require('mongoose');
-const { NumberInstance } = require('twilio/lib/rest/pricing/v2/voice/number');
 const validator = require('validator');
 
 const paymentSettingSchema = new mongoose.Schema(
