@@ -1,8 +1,11 @@
 <template>
+
+  <!-- this is the page to send email -->
   <div class="container mx-auto p-4 flex flex-col">
     <div class="flex flex-row space-x-3">
       <p class="text-blue-800 text-md font-bold">{{ $t("Send E-Message") }}</p>
     </div>
+
     <div class="border-t border-indigo-800 mt-3">
       <div
         class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
