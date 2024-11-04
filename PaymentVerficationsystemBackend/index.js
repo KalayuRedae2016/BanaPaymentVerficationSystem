@@ -33,8 +33,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 // #1 Global Middlwares
 //implement CORS
-app.use(cors({ origin: 'http://49.13.235.6', }));
-app.options('*', cors());
+const corsOptions = {
+  origin: 'http://49.13.235.6', // Allowed origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  credentials: true, // Allows cookies or other credentials
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Apply options pre-flight with the same configuration
+
+// app.use(cors({ origin: 'http://localhost:5173', }));
+// app.options('*', cors());//for development
 // app.options('/api/v1/payments/:id', cors()); for specific API
 
 // Serving static files
