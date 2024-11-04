@@ -65,7 +65,7 @@
             @click.prevent="login()"
             class="mt-5 w-full bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            {{ $t("signInButton") }}
+            Sign In(New)
           </button>
         </form>
       </div>
