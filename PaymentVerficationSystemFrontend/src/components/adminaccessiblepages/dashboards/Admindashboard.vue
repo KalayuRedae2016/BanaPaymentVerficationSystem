@@ -264,7 +264,6 @@
       </transition>
 
       <sidebar-component class="border-r border-gray-300"></sidebar-component>
-
       <div v-if="leftsidebardropdown" class="md:hidden flex flex-col space-y-4">
         <ul
           class="border border-gray-200 md:flex-col md:min-w-full flex flex-col list-none ml-0 mr-0 mt-0"
