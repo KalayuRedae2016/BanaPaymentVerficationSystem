@@ -33,7 +33,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // #1 Global Middlwares
 //implement CORS
-app.use(cors({ origin: 'http://localhost:5173', }));
+app.use(cors({ origin: 'http://49.13.235.6', }));
 app.options('*', cors());
 // app.options('/api/v1/payments/:id', cors()); for specific API
 
