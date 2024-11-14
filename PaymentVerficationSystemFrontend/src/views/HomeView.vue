@@ -7,7 +7,7 @@
       <div class="grid place-items-center">
         <div>
           <img
-            src="../assets/img/bana.png"
+            src="../assets/img/banamall.jpg"
             class="mb-5"
             style="height: 100px; width: 100px"
           />
