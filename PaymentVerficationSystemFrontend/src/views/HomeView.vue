@@ -12,7 +12,7 @@
             style="height: 100px; width: 100px"
           />
         </div>
-        <h1>Banapvs.com</h1>
+        <h1>banapvs.com(49.13.235.6)</h1>
       </div>
 
       <div v-if="loginVisible">
