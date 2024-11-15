@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="flex justify-center">
     <div
       class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md border border-cyan-800 mt-16 rounded-2xl"
@@ -87,7 +88,7 @@
       </div>
     </transition>
   </div>
-
+</div>
 </template>
 <script>
 export default {

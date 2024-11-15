@@ -452,7 +452,7 @@
               <!-- Message 1 -->
               <div class="flex items-start">
                 <img
-                  src="../../../assets/img/profile.jpg"
+                  src="../../../assets/img/profile.JPG"
                   class="w-8 h-8 rounded-full"
                   alt="Avatar"
                 />
@@ -482,7 +482,7 @@
 
               <div class="flex items-start">
                 <img
-                  src="../../../assets/img/profile.jpg"
+                  src="../../../assets/img/profile.JPG"
                   class="w-8 h-8 rounded-full"
                   alt="Avatar"
                 />
