@@ -187,76 +187,166 @@
             class="absolute left-0 top-0 shadow-lg right-0 w-full bg-white border-t border-blue-500"
             style="margin-top: -3px; margin-left: 0px"
           >
-            <li
-              @click="dashboard()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+          <li
+              @click="setActive('dashboard')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'dashboard' ? 'border-r-4 border-indigo-800' : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
+                  class="fa fa-tachometer opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> {{ $t("dashboard") }}</span>
+                <span>{{ $t("dashboard") }}</span>
               </a>
             </li>
 
             <li
-              @click="companyProfile()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('companyProfile')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'companyProfile'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> Company profile </span>
+                <span>{{ $t("companyProfile") }}</span>
               </a>
             </li>
+
             <li
-              @click="clients()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('clients')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'clients' ? 'border-r-4 border-indigo-800' : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-users opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> {{ $t("Clients") }} </span>
+                <span>{{ $t("Client Profile") }}</span>
               </a>
             </li>
+
             <li
-              @click="payments()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('paymentSetting')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'paymentSetting'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-credit-card opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-cogs opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> {{ $t("All Payments") }} </span>
+                <span>{{ $t("Payment Setting") }}</span>
               </a>
             </li>
-            
-           
+
             <li
-              @click="message()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('newPayment')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'newPayment'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-credit-card opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-credit-card opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>Send Message</span>
+                <span>{{ $t("New Payments") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('allPayments')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'allPayments'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-list-alt opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("All Payments") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('paymentReports')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'paymentReports'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-file-alt opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("Reports") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('idCard')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'idCard' ? 'border-r-4 border-indigo-800' : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("Id Card") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('message')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'message' ? 'border-r-4 border-indigo-800' : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("Send Message") }}</span>
               </a>
             </li>
           </ul>
