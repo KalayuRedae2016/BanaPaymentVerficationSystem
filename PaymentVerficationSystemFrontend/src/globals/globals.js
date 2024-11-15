@@ -3,12 +3,12 @@ import axios from 'axios';
 export default {
   install(app) {
     // Create the API client
-    //const baseUrl = 'http://49.13.235.6:3000';
+    const baseUrl = 'http://49.13.235.6:3000';
 
-    const baseUrlLocal = 'http://localhost:8081';
+    //const baseUrlLocal = 'http://localhost:8081';
 
     const apiClient = axios.create({
-      baseURL:baseUrlLocal, // Set your base URL here
+      baseURL:baseUrl, // Set your base URL here
     });
     // Generate the array of years (from now - 5 years up to now + 50 years)
     const currentYear = new Date().getFullYear();
