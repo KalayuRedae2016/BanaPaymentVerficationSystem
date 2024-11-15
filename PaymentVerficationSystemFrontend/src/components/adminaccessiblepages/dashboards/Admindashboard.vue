@@ -81,7 +81,7 @@
                   class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
                 >
                   <img
-                    src="../../../assets/img/profile.jpg"
+                    src="../../../assets/img/profile.JPG"
                     alt="Notification Image"
                     class="w-10 h-10 rounded-full mr-3"
                   />
@@ -123,7 +123,7 @@
                   class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
                 >
                   <img
-                    src="../../../assets/img/profile.jpg"
+                    src="../../../assets/img/profile.JPG"
                     alt="Notification Image"
                     class="w-10 h-10 rounded-full mr-3"
                   />
@@ -140,7 +140,7 @@
 
           <div class="relative -mt-1" @click="toggleDropdown('profile')">
             <img
-              src="../../../assets/img/profile.jpg"
+              src="../../../assets/img/profile.JPG"
               alt="User Profile"
               class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
             />
@@ -468,7 +468,7 @@
 
               <div class="flex items-start">
                 <img
-                  src="../../../assets/img/profile.jpg"
+                  src="../../../assets/img/profile.JPG"
                   class="w-8 h-8 rounded-full"
                   alt="Avatar"
                 />
@@ -587,19 +587,19 @@ export default {
       messages: [
         {
           message: "You have a new friend request.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           date: new Date(),
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           date: new Date(),
         },
       ],
       notifications: [
         {
           message: "You have a new friend request.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"123",
           activeYear:"",
           activeMonth:"",
@@ -607,7 +607,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -615,7 +615,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -623,7 +623,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -631,7 +631,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -639,7 +639,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -647,7 +647,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -655,7 +655,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -663,7 +663,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -671,7 +671,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -679,7 +679,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
