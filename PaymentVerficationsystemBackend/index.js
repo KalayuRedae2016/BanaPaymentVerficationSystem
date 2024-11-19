@@ -42,7 +42,7 @@ app.set('views', path.join(__dirname, 'views'));
 // };
 const corsOptions = {
   origin: (origin, callback) => {
-    const allowedOrigins = ['http://49.13.235.6', 'http://192.168.1.5'];
+    const allowedOrigins = ['http://49.13.235.6', 'http://localhost:5173'];
     if (allowedOrigins.includes(origin) || !origin) {
       // Allow requests from listed origins or non-browser clients
       callback(null, true);
