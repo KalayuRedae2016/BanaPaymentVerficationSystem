@@ -808,22 +808,108 @@ export default {
     getFullImagePath(image) {
       return `../../../${image}`;
     },
-       message() {
+    setActive(item) {
+      this.$store.dispatch('commitActiveItem', { activeItem: item });
+      // Update the active item
+      // You can also handle route navigation here if needed
+      if (item === "dashboard") {
+       this.dashboard();
+      } else if (item === "companyProfile") {
+       this.companyProfile();
+      } else if (item === "clients") {
+        this.clients();
+      }
+      else if(item ==="paymentSetting"){
+        this.paymentSetting();
+      }
+      else if(item ==="paymentReports"){
+        this.paymentReports();
+      }
+      else if(item ==="newPayment"){
+        this.newPayment();
+      }
+      else if(item ==="allPayments"){
+        this.allPayments();
+      }
+      else if(item ==="idCard"){
+        this.idCard();
+      }
+      else if(item ==="message"){
+       this.message();
+      }
+       
+      // Add more navigation handling as needed
+    },
+    idCard() {
+      this.$router.push("/admindashboard/id-card");
+    },
+    dashboard() {
+      this.$router.push("/admindashboard");
+    },
+
+    paymentSetting() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 0,
+        },
+      });
+    },
+
+    newPayment() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 1,
+        },
+      });
+    },
+
+    allPayments() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 2,
+        },
+      });
+    },
+    paymentReports() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 3,
+          reportLevel: "userLevelReport",
+        },
+      });
+    },
+
+    message() {
+      this.sendMessageSelected = true;
       this.$router.push("/admindashboard/send-email");
     },
     clients() {
       this.$router.push("/admindashboard/clients");
     },
-    reports() {
-      this.$router.push("/admindashboard/recent-payment-status-report");
-    },
 
-      payment() {
-      this.$router.push("/admindashboard/payments1");
-    },
-     companyProfile() {
+    companyProfile() {
       this.$router.push("/admindashboard/display-companey");
     },
+    //    message() {
+    //   this.$router.push("/admindashboard/send-email");
+    // },
+    // clients() {
+    //   this.$router.push("/admindashboard/clients");
+    // },
+    // reports() {
+    //   this.$router.push("/admindashboard/recent-payment-status-report");
+    // },
+
+    //   payment() {
+    //   this.$router.push("/admindashboard/payments1");
+    // },
+    //  companyProfile() {
+    //   this.$router.push("/admindashboard/display-companey");
+    // },
   
     changeLanguage(event) {
       // alert("alert")
