@@ -7,7 +7,7 @@
       <div class="flex flex-col lg:flex-row border-t border-blue-500">
         <div class="w-1/2 mt-8">
           <div class="py-4 bg-white">
-            <div class="p-6 mt-1 mt-16 overflow-x-auto">
+            <div class="w-full lg:p-6 mt-1 mt-16 overflow-x-auto rounded-lg">
               <table class="min-w-full divide-y divide-gray-300">
                 <thead class="bg-gray-50">
                   <tr>
