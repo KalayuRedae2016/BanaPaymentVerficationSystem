@@ -8,7 +8,7 @@
         <div class="w-1/2 mt-8">
           <div class="py-4 bg-white">
             <div class="p-6 mt-1 mt-16">
-              <table class="min-w-full divide-y divide-gray-300">
+              <table class="min-w-full divide-y divide-gray-300 overflow-x-auto">
                 <thead class="bg-gray-50">
                   <tr>
                     <th class="px-4 py-2 text-left border border-gray-300">
