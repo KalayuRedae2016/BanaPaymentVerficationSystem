@@ -3,11 +3,11 @@ import axios from 'axios';
 export default {
   install(app) {
     // Create the API client
-    //const baseUrl = 'http://49.13.235.6:3000';
+    const baseUrl = 'http://49.13.235.6:3000';
 
-    const baseUrlLocal = 'http://localhost:8081';
+    //const baseUrlLocal = 'http://localhost:8081';
     const apiClient = axios.create({
-      baseURL:baseUrlLocal, // Set your base URL here
+      baseURL:baseUrl, // Set your base URL here
     });
 
 
