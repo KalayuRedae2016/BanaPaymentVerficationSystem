@@ -77,8 +77,8 @@ const routes = [
   {
     path: "/admindashboard",
     component: Admindashboard,
-    meta: { requiresAuth: true, role: 'Admin' },
-   // meta: { requiresGuest: true },
+    //meta: { requiresAuth: true, role: 'Admin' },
+    meta: { requiresGuest: true },
     children: [
       // Admin routes
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
@@ -124,8 +124,8 @@ const routes = [
   {
     path: "/userdashboard",
     component: userdashboard,
-    meta: { requiresAuth: true, role: 'User' },
-    //meta: { requiresGuest: true },
+    //meta: { requiresAuth: true, role: 'User' },
+    meta: { requiresGuest: true },
     children: [
       // User routes
       { path: "", component: userdashboardFirst },
