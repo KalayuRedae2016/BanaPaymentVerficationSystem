@@ -4,29 +4,44 @@
       <h2 class="text-blue-800 pt-4 px-4 pb-3">
         This Monthly Report(2024-5) <span class=""></span>
       </h2>
+
       <div class="flex flex-col lg:flex-row border-t border-blue-500">
-        <div class="w-1/2 mt-8">
-          <div class="py-4 bg-white">
-            <div class="w-full lg:p-6 mt-1 mt-16 overflow-x-auto rounded-lg">
+        <div class="mt-8">
+          <div class="py-4 bg-white ml-5 mr-5">
+            <div
+              class="w-full overflow-x-auto lg:overflow-x-visible lg:w-autolg:p-6 mt-1 rounded-lg"
+            >
               <table class="min-w-full divide-y divide-gray-300">
                 <thead class="bg-gray-50">
                   <tr>
-                    <th class="px-4 py-2 text-left border border-gray-300">
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
                       Metric
                     </th>
-                    <th class="px-4 py-2 text-left border border-gray-300">
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
                       Paid Clients
                     </th>
-                    <th class="px-4 py-2 text-left border border-gray-300">
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
                       Pending Clients
                     </th>
-                    <th class="px-4 py-2 text-left border border-gray-300">
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
                       Total Paid Capital
                     </th>
-                    <th class="px-4 py-2 text-left border border-gray-300">
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
                       Total Paid Penalty
                     </th>
-                    <th class="px-4 py-2 text-left border border-gray-300">
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
                       Detail
                     </th>
                   </tr>
@@ -34,7 +49,9 @@
                 <tbody class="bg-white divide-y divide-gray-300">
                   <!-- Data Rows -->
                   <tr>
-                    <td class="px-4 py-2 text-left border border-gray-300">
+                    <td
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
                       Year-month
                     </td>
 
@@ -65,19 +82,19 @@
                   </tr>
                 </tbody>
               </table>
-              <a
-                href="#"
-                class="text-blue-800 hover:underline font-semibold text-sm underline"
-                @click="paidUnPaidOverdue()"
-                ><h1 class="mt-5 ml-2">
-                  <i class="fas fa-wallet mr-2 text-pink-500"></i>All Payments
-                </h1>
-              </a>
             </div>
           </div>
+          <a
+            href="#"
+            class="text-blue-800 hover:underline font-semibold text-sm underline"
+            @click="paidUnPaidOverdue()"
+          >
+            <i class="ml-7 mt-5 fas fa-wallet"></i
+            ><span class="text-pink-500 ml-3">All Payments</span>
+          </a>
         </div>
-        <div class="chart w-1/2" @click="viewPaidUnPaid()">
-          <Chart class=""></Chart>
+        <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
+          <Chart class="-ml-5 mr-5 lg: ml-0 mr-0"></Chart>
         </div>
       </div>
     </div>
@@ -104,7 +121,9 @@
     </div>
     <!-- //all years confirmed payments -->
 
-    <div class="border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
+    <div
+      class="border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto"
+    >
       <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-lg">
           <i class="fas fa-check-circle text-green-500"></i> All Years Confirmed
@@ -118,7 +137,7 @@
         </a>
       </div>
 
-      <table class="min-w-full divide-y divide-gray-300 ">
+      <table class="min-w-full divide-y divide-gray-300">
         <thead class="bg-gray-50">
           <tr>
             <th
