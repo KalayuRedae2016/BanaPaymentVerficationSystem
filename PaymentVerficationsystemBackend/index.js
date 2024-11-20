@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 const corsOptions = {
   origin: 'http://49.13.235.6', // Allowed origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ], // Allowed HTTP methods
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH','OPTIONS' ], // Allowed HTTP methods
   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
   credentials: true, // Allows cookies or other credentials
 };
