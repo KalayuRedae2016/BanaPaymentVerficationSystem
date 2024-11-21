@@ -3,8 +3,8 @@
     class="flex flex-col overflow-hidden min-h-screen"
     style="margin-top: 20px"
   >
-    <div class="mt-20">
-      <div class="w-96 ml-10 pr-5 pl-5 -mt-20">
+    <div class="">
+      <div class="">
         <canvas ref="pieChartCanvas" class="chart"></canvas>
       </div>
     </div>

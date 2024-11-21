@@ -81,7 +81,7 @@
                   class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
                 >
                   <img
-                    src="../../../assets/img/profile.jpg"
+                    src="../../../assets/img/profile.JPG"
                     alt="Notification Image"
                     class="w-10 h-10 rounded-full mr-3"
                   />
@@ -123,7 +123,7 @@
                   class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
                 >
                   <img
-                    src="../../../assets/img/profile.jpg"
+                    src="../../../assets/img/profile.JPG"
                     alt="Notification Image"
                     class="w-10 h-10 rounded-full mr-3"
                   />
@@ -140,7 +140,7 @@
 
           <div class="relative -mt-1" @click="toggleDropdown('profile')">
             <img
-              src="../../../assets/img/profile.jpg"
+              src="../../../assets/img/profile.JPG"
               alt="User Profile"
               class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
             />
@@ -187,76 +187,166 @@
             class="absolute left-0 top-0 shadow-lg right-0 w-full bg-white border-t border-blue-500"
             style="margin-top: -3px; margin-left: 0px"
           >
-            <li
-              @click="dashboard()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+          <li
+              @click="setActive('dashboard')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'dashboard' ? 'border-r-4 border-indigo-800' : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
+                  class="fa fa-tachometer opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> {{ $t("dashboard") }}</span>
+                <span>{{ $t("dashboard") }}</span>
               </a>
             </li>
 
             <li
-              @click="companyProfile()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('companyProfile')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'companyProfile'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> Company profile </span>
+                <span>{{ $t("companyProfile") }}</span>
               </a>
             </li>
+
             <li
-              @click="clients()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('clients')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'clients' ? 'border-r-4 border-indigo-800' : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-users opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> {{ $t("Clients") }} </span>
+                <span>{{ $t("Client Profile") }}</span>
               </a>
             </li>
+
             <li
-              @click="payments()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('paymentSetting')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'paymentSetting'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-credit-card opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-cogs opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-
-                <span> {{ $t("All Payments") }} </span>
+                <span>{{ $t("Payment Setting") }}</span>
               </a>
             </li>
-            
-           
+
             <li
-              @click="message()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              @click="setActive('newPayment')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'newPayment'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
             >
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-credit-card opacity-75 mr-2 text-md text-teal-600"
+                  class="fas fa-credit-card opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>Send Message</span>
+                <span>{{ $t("New Payments") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('allPayments')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'allPayments'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-list-alt opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("All Payments") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('paymentReports')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'paymentReports'
+                  ? 'border-r-4 border-indigo-800'
+                  : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-file-alt opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("Reports") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('idCard')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'idCard' ? 'border-r-4 border-indigo-800' : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("Id Card") }}</span>
+              </a>
+            </li>
+
+            <li
+              @click="setActive('message')"
+              class="items-center bg-white hover:bg-gray-300"
+              :class="
+                activeItem === 'message' ? 'border-r-4 border-indigo-800' : ''
+              "
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                ></i>
+                <span>{{ $t("Send Message") }}</span>
               </a>
             </li>
           </ul>
@@ -362,7 +452,7 @@
               <!-- Message 1 -->
               <div class="flex items-start">
                 <img
-                  src="../../../assets/img/profile.jpg"
+                  src="../../../assets/img/profile.JPG"
                   class="w-8 h-8 rounded-full"
                   alt="Avatar"
                 />
@@ -378,7 +468,7 @@
 
               <div class="flex items-start">
                 <img
-                  src="../../../assets/img/profile.jpg"
+                  src="../../../assets/img/profile.JPG"
                   class="w-8 h-8 rounded-full"
                   alt="Avatar"
                 />
@@ -392,7 +482,7 @@
 
               <div class="flex items-start">
                 <img
-                  src="../../../assets/img/profile.jpg"
+                  src="../../../assets/img/profile.JPG"
                   class="w-8 h-8 rounded-full"
                   alt="Avatar"
                 />
@@ -497,19 +587,19 @@ export default {
       messages: [
         {
           message: "You have a new friend request.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           date: new Date(),
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           date: new Date(),
         },
       ],
       notifications: [
         {
           message: "You have a new friend request.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"123",
           activeYear:"",
           activeMonth:"",
@@ -517,7 +607,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -525,7 +615,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -533,7 +623,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -541,7 +631,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -549,7 +639,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -557,7 +647,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -565,7 +655,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -573,7 +663,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -581,7 +671,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -589,7 +679,7 @@ export default {
         },
         {
           message: "Your post has been liked.",
-          image: "assets/img/profile.jpg",
+          image: "assets/img/profile.JPG",
           userCode:"321",
           activeYear:"",
           activeMonth:"",
@@ -718,22 +808,108 @@ export default {
     getFullImagePath(image) {
       return `../../../${image}`;
     },
-       message() {
+    setActive(item) {
+      this.$store.dispatch('commitActiveItem', { activeItem: item });
+      // Update the active item
+      // You can also handle route navigation here if needed
+      if (item === "dashboard") {
+       this.dashboard();
+      } else if (item === "companyProfile") {
+       this.companyProfile();
+      } else if (item === "clients") {
+        this.clients();
+      }
+      else if(item ==="paymentSetting"){
+        this.paymentSetting();
+      }
+      else if(item ==="paymentReports"){
+        this.paymentReports();
+      }
+      else if(item ==="newPayment"){
+        this.newPayment();
+      }
+      else if(item ==="allPayments"){
+        this.allPayments();
+      }
+      else if(item ==="idCard"){
+        this.idCard();
+      }
+      else if(item ==="message"){
+       this.message();
+      }
+       
+      // Add more navigation handling as needed
+    },
+    idCard() {
+      this.$router.push("/admindashboard/id-card");
+    },
+    dashboard() {
+      this.$router.push("/admindashboard");
+    },
+
+    paymentSetting() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 0,
+        },
+      });
+    },
+
+    newPayment() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 1,
+        },
+      });
+    },
+
+    allPayments() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 2,
+        },
+      });
+    },
+    paymentReports() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 3,
+          reportLevel: "userLevelReport",
+        },
+      });
+    },
+
+    message() {
+      this.sendMessageSelected = true;
       this.$router.push("/admindashboard/send-email");
     },
     clients() {
       this.$router.push("/admindashboard/clients");
     },
-    reports() {
-      this.$router.push("/admindashboard/recent-payment-status-report");
-    },
 
-      payment() {
-      this.$router.push("/admindashboard/payments1");
-    },
-     companyProfile() {
+    companyProfile() {
       this.$router.push("/admindashboard/display-companey");
     },
+    //    message() {
+    //   this.$router.push("/admindashboard/send-email");
+    // },
+    // clients() {
+    //   this.$router.push("/admindashboard/clients");
+    // },
+    // reports() {
+    //   this.$router.push("/admindashboard/recent-payment-status-report");
+    // },
+
+    //   payment() {
+    //   this.$router.push("/admindashboard/payments1");
+    // },
+    //  companyProfile() {
+    //   this.$router.push("/admindashboard/display-companey");
+    // },
   
     changeLanguage(event) {
       // alert("alert")

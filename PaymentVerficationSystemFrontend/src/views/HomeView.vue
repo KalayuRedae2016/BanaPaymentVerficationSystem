@@ -1,18 +1,18 @@
 <template>
   <div class="flex justify-center">
     <div
-      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md border border-cyan-800 mt-16 rounded-2xl"
+      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md border border-indigo-300 mt-16 rounded-2xl"
     >
   
       <div class="grid place-items-center">
         <div>
           <img
-            src="../assets/img/bana.png"
+            src="../assets/img/banamall.jpg"
             class="mb-5"
             style="height: 100px; width: 100px"
           />
         </div>
-        <h1>Banapvs.com</h1>
+        <h1>banapvs.com(49.13.235.6)</h1>
       </div>
 
       <div v-if="loginVisible">
@@ -63,9 +63,9 @@
           </div>
           <button
             @click.prevent="login()"
-            class="mt-5 w-full bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            class="mt-5 w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
-            Sign In(New)
+            Sign In
           </button>
         </form>
       </div>

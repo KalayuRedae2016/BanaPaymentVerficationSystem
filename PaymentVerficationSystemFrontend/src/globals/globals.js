@@ -1,11 +1,16 @@
 import axios from 'axios';
+
 export default {
   install(app) {
     // Create the API client
+    const baseUrl = 'http://49.13.235.6:3000';
+    //const baseUrlLocal = 'http://localhost:8081';
     const apiClient = axios.create({
-      baseURL: '49.13.235.6:3000', // Set your base URL here
+      baseURL:baseUrl, // Set your base URL here
     });
+
     // Generate the array of years (from now - 5 years up to now + 50 years)
+
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 56 }, (v, i) => currentYear - 5 + i);
     // Define the months array
@@ -23,6 +28,7 @@ export default {
       { value: 11, name: 'November' },
       { value: 12, name: 'December' }
     ];
+
   const banks =[
     { value: "LIB", name: 'LIB' },
     { value: "WEGAGEN", name: 'WEGAGEN' },
