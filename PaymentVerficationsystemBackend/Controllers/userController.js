@@ -123,16 +123,21 @@ exports.updateUser = catchAsync(async (req, res) => {
     if (req.file) {
       updateData.profileImage = req.file.filename; // Set new profile image filename to update
 
-      let oldImagePath;
-      // Check if the profile image is not the default image
-      if (existingUser.profileImage &&existingUser.profileImage !== 'default.png') {
-        oldImagePath = path.join(__dirname,'../uploads/users',existingUser.profileImage
-        );
-         // Check if the old image file exists and then delete it
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-        }
+let oldImagePath;
+if (existingUser.profileImage && existingUser.profileImage.trim() !== '' && existingUser.profileImage !== 'default.png') {
+  const profileImage = existingUser.profileImage.trim();
+  if (['.png', '.jpg', '.jpeg'].some(ext => profileImage.toLowerCase().endsWith(ext))) {
+    oldImagePath = path.join(__dirname, '../uploads/users', profileImage);
+    if (fs.existsSync(oldImagePath)) {
+      try {
+        fs.unlinkSync(oldImagePath);
+      } catch (error) {
+        console.error(`Error deleting file: ${error.message}`);
       }
+    }
+  }
+}
+
     }
     // // Update user data in the database
     // const updatedUser = await User.findByIdAndUpdate(
@@ -233,6 +238,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.importUsers = catchAsync(async (req, res) => {
+  console.log('Uploaded File:', req.file); // Debug log
   // Transform function to add user code and hashed password
   const transformUserData = async (data) => {
     const organization=await Organization.findOne()
@@ -249,7 +255,7 @@ exports.importUsers = catchAsync(async (req, res) => {
     return user; // Return the transformed user instance
   };
   const filePath = req.file.path; // Path to the uploaded file
-
+  
   // Use the utility function to import data from the Excel file
   const importedUsers = await importFromExcel(filePath, User, transformUserData);
 
