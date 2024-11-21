@@ -279,8 +279,10 @@ exports.exportUsers = catchAsync(async (req, res) => {
 });
 
 exports.sendEmailMessages = catchAsync(async (req, res, next) => {
+  console.log(req.body)
+  console.log("email")
   const { emailList, subject, message } = req.body;
-
+  
   if (!subject || !message) {
     return next(new AppError('Subject and message are required', 400));
   }
@@ -317,7 +319,7 @@ exports.sendEmailMessages = catchAsync(async (req, res, next) => {
     console.log(`Messages successfully sent to all users.`);
     res.status(200).json({
       status: 1,
-      message: 'Messages were sent to the specified email list or all users.',
+      message: 'Messages sent to the specified email list or all users.',
     });
   } catch (error) {
     console.error('Error sending emails:', error);
