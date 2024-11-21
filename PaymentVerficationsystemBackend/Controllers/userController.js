@@ -191,7 +191,7 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
   res.status(200).json({
     status: 1,
     message: `${user.fullName} is ${
-      user.isActive ? 'Activated user' : 'Deactivated user'
+      user.isActive ? 'Activated' : 'Deactivated'
     }`,
   });
 });
