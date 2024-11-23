@@ -187,10 +187,10 @@
   </nav>
 </template>
 
+
+
 <script>
-//import NotificationDropdownComponent from "./NotificationDropdown.vue";
-//import UserDropdownComponent from "./UserDropdown.vue";
-export default {
+ export default {
   name: "SideBar",
   data() {
     return {
@@ -203,7 +203,6 @@ export default {
       clientProfileSelected: false,
       allPaymentsSelected: false,
       sendMessageSelected: false,
-
       sidebarVisible: false,
       collapseShow: "hidden",
       screenSize: "",

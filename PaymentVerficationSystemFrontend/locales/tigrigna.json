@@ -1,11 +1,18 @@
 {
+
+
   "metric": "መጠን",
-  "paidCleints": "ተከፋፈሉ ደንበኞች",
+  "paidClients": "ተከፋፈሉ ደንበኞች",
   "unPaidClients": "ያልተከፋፈሉ ደንበኞች",
-  "totalPaidCapitals": "ጠቅላላ ተከፋፈል ካፒታል",
+  "totalPaidCapital": "ጠቅላላ ተከፋፈል ካፒታል",
   "totalPaidPenality": "ጠቅላላ ተከፋፈል ቅጣት",
-  "details": "ዝርዝሮች",
+  "detail": "ዝርዝሮች",
   "view": "እንቅስቃሴ",
+  "yearMonth":"ዓመት-ወርሒ",
+  "total":"ጠቅላላ",
+
+
+
   "allPaiments": "ሁሉም ክፍያዎች",
   "allOverdueClients": "ሁሉም ተሳሳት ደንበኞች",
   "allYearsConfirmedReport": "ሁሉም ዓመታት እንደተረጋጋ ሪፖርት",
@@ -31,12 +38,12 @@
   "idCard": "መታወቂያ ካርድ",
   "sendMessage": "መልእክት ላክ",
 
-"changePassword": "ማህተም ለመቀየር",
-"logout": "ውጣ",
-"notifications": "ማሳሰቢያዎች",
-"copyright": "ኮፒራይት © 2024 ግራንድ ቴክ",
-"grandTech": "ግራንድ ቴክ",
-"aboutUs": "ስለ እኛ",
+  "changePassword": "ማህተም ለመቀየር",
+  "logout": "ውጣ",
+  "notifications": "ማሳሰቢያዎች",
+  "copyright": "ኮፒራይት © 2024 ግራንድ ቴክ",
+ "grandTech": "ግራንድ ቴክ",
+ "aboutUs": "ስለ እኛ",
 "blog": "ብሎግ",
 "grandTechLicense": "ግራንድ ቴክ ፈቃድ",
   

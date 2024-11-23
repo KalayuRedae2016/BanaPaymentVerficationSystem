@@ -1,11 +1,16 @@
 {
 
+
+
 "metric":"Metric",
 "paidCleints":"Paid Cleints",
 "unPaidClients":"Unpaid Clients",
-"totalPaidCapitals":"Total Paid Capital",
+"totalPaidCapital":"Total Paid Capital",
 "totalPaidPenality":"Total Paid Penality",
-"details":"Detail",
+"detail":"Detail",
+"yearMonth":"Year Month",
+
+
 "view":"View",
 "allPaiments":"All Paiments",
 "allOverdueClients":"All Overdue Clients",
@@ -23,6 +28,7 @@
 "mService": "M.service",
 "totalService": "Total Service",
 "thisMonthlyReport":"This Monthly Report",
+"total":"Total",
 
 
   

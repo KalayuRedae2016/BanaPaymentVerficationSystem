@@ -1,10 +1,14 @@
 {
   "metric": "መጠን",
-  "paidCleints": "ተከፋፈሉ ደንበኞች",
+  "paidClients": "ተከፋፈሉ ደንበኞች",
   "unPaidClients": "ያልተከፋፈሉ ደንበኞች",
-  "totalPaidCapitals": "ጠቅላላ ተከፋፈል ካፒታል",
+  "totalPaidCapital": "ጠቅላላ ተከፋፈል ካፒታል",
   "totalPaidPenality": "ጠቅላላ ተከፋፈል ቅጣት",
-  "details": "ዝርዝሮች",
+  "detail": "ዝርዝሮች",
+  "yearMonth":"ዓመት-ወርሒ",
+  "total":"ጠቅላላ",
+
+
   "view": "እንቅስቃሴ",
   "allPaiments": "ሁሉም ክፍያዎች",
   "allOverdueClients": "ሁሉም ተሳሳት ደንበኞች",

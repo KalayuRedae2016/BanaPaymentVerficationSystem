@@ -2,7 +2,7 @@
   <div>
     <div class="">
       <h2 class="text-blue-800 pt-4 px-4 pb-3">
-        This Monthly Report(2024-5) <span class=""></span>
+         {{ $t('thisMonthlyReport') }}(2024-5) <span class=""></span>
       </h2>
 
       <div class="flex flex-col lg:flex-row border-t border-blue-500">
@@ -17,32 +17,32 @@
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      Metric
+                       {{ $t('metric') }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      Paid Clients
+                    {{ $t('paidClients') }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      Pending Clients
+                    {{ $t('unPaidClients') }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      Total Paid Capital
+                    {{ $t('totalPaidCapital') }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      Total Paid Penalty
+                    {{ $t('totalPaidPenality') }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      Detail
+                    {{ $t('detail') }}
                     </th>
                   </tr>
                 </thead>
@@ -52,7 +52,7 @@
                     <td
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      Year-month
+                    {{ $t('yearMonth') }} (2024-5)
                     </td>
 
                     <td class="px-4 py-2 text-left border border-gray-300">
@@ -76,7 +76,7 @@
                         href="#"
                         class="text-blue-800 hover:underline font-semibold text-sm underline"
                         @click="viewPaidUnPaid"
-                        ><h1 class="">View</h1>
+                        ><h1 class="">{{ $t('view') }}</h1>
                       </a>
                     </td>
                   </tr>
@@ -90,7 +90,7 @@
             @click="paidUnPaidOverdue()"
           >
             <i class="ml-7 mt-5 fas fa-wallet"></i
-            ><span class="text-pink-500 ml-3">All Payments</span>
+            ><span class="text-pink-500 ml-3"> {{ $t('allPayments') }}</span>
           </a>
         </div>
         <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
@@ -106,8 +106,7 @@
         style="margin-top: -200px"
       >
         <p class="text-blue-800 mb-5 text-lg">
-          <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>All Overdue
-          clients :
+          <i class="fas fa-exclamation-circle text-red-500 mr-2"></i> {{ $t('allOverdueClients') }}
           <span v-if="totalOvedue" class="text-red-500">{{ totalOvedue }}</span>
           <span v-else>0</span>
         </p>
@@ -115,7 +114,7 @@
           href="#"
           class="text-blue-800 hover:underline font-semibold text-sm mt-1"
           @click="goAllOverDue()"
-          ><h1 class="underline">View</h1>
+          ><h1 class="underline">{{ $t('view') }}</h1>
         </a>
       </div>
     </div>
@@ -126,14 +125,13 @@
     >
       <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-lg">
-          <i class="fas fa-check-circle text-green-500"></i> All Years Confirmed
-          Report <span class=""></span>
+          <i class="fas fa-check-circle text-green-500"></i> {{ $t('allYearsConfirmedReport') }}<span class=""></span>
         </h2>
         <a
           href="#"
           class="text-blue-800 hover:underline font-semibold text-sm underline"
           @click="viewPaymentsReport()"
-          ><h1 class="">All Report Details</h1>
+          ><h1 class="">{{ $t('allReportDetails') }}</h1>
         </a>
       </div>
 
@@ -144,13 +142,13 @@
               rowspan="3"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Banks
+             {{ $t('banks') }}
             </th>
             <th
               colspan="7"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Balance
+            {{ $t('balance') }}
             </th>
           </tr>
           <tr>
@@ -158,50 +156,50 @@
               colspan="4"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Block
+            {{ $t('block') }}
             </th>
             <th
               colspan="3"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Service
+            {{ $t('service') }}
             </th>
           </tr>
           <tr>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Regular
+            {{ $t('regular') }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Subsidy
+            {{ $t('subsidy') }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Urgent
+            {{ $t('urgent') }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Total Block
+            {{ $t('totalBlock') }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Penality
+            {{ $t('penality') }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              M.service
+            {{ $t('mService') }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              Total Service
+            {{ $t('totalService') }}
             </th>
           </tr>
         </thead>
@@ -242,7 +240,7 @@
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
             >
-              Total
+            {{ $t('total') }}
             </td>
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
