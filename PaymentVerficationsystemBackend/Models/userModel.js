@@ -7,8 +7,7 @@ const Joi = require("joi");
 
 const userSchema = new Schema(
   {
-   
-      firstName: {
+         firstName: {
         type: String,
         default:null
         
@@ -131,15 +130,61 @@ lockUntil:{
 );
 
 //Pre-save hook to set the fullName
-userSchema.pre('save', function(next) {
+userSchema.pre('save', async function(next) {
+  // Construct the fullName from firstName, middleName, and lastName
   this.fullName = `${this.firstName} ${this.middleName ? this.middleName + ' ' : ''}${this.lastName}`;
-  next();
+
+  // Now, update related payments with the new fullName if the user is being created or updated
+  if (this.isModified('fullName')) {
+    try {
+      // Update related payments to reflect the change in fullName
+      await Payment.updateMany(
+        { user: this._id }, // Find payments related to this user
+        { fullName: this.fullName } // Update the fullName in related payments
+      );
+      console.log(`Updated fullName in related payments for user: ${this.userCode}`);
+    } catch (error) {
+      console.error('Error updating fullName in payments:', error);
+    }
+  }
+
+  next(); // Continue with the save operation
 });
+
 
 // userSchema.pre(/^find/, function(next) {
 //   this.find({ isActive:{$ne:false} });
 //   next();
 // });
+
+userSchema.pre('findOneAndUpdate', async function(next) {
+  // Get the updated fields
+  const updatedFields = this.getUpdate();
+
+  // Check if the fullName is being updated
+  if (updatedFields.firstName || updatedFields.middleName || updatedFields.lastName) {
+    // Reconstruct the fullName
+    const fullName = `${updatedFields.firstName} ${updatedFields.middleName ? updatedFields.middleName + ' ' : ''}${updatedFields.lastName}`;
+
+    // Set the updated fullName for the User document
+    this.set({ fullName: fullName });
+
+    try {
+      // Now, update the related payments with the new fullName
+      const userId = this._conditions._id; // Get the user ID from the conditions
+      await Payment.updateMany(
+        { user: userId }, // Find payments related to this user
+        { fullName: fullName } // Update the fullName in related payments
+      );
+      console.log(`Updated fullName in related payments for user: ${this._conditions.userCode}`);
+    } catch (error) {
+      console.error('Error updating fullName in payments:', error);
+    }
+  }
+
+  next(); // Continue with the update operation
+});
+
 
 userSchema.methods.createPasswordResetToken = function () {
   const resetToken = crypto.randomBytes(32).toString('hex')

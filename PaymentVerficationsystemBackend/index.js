@@ -33,37 +33,35 @@ app.set('views', path.join(__dirname, 'views'));
 
 // #1 Global Middlwares
 //implement CORS
+let corsOptions;
+if (process.env.NODE_ENV === 'production') {
+  corsOptions = {
+    origin: 'http://49.13.235.6', // Allowed origin for production
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    credentials: true, // Enable credentials like cookies
+  };
+} else if (process.env.NODE_ENV === 'development') {
+  corsOptions = {
+    origin: (origin, callback) => {
+      const allowedOrigins = ['http://49.13.235.6', 'http://localhost:5173'];
+      if (!origin || allowedOrigins.includes(origin)) {
+        // Allow requests from listed origins or non-browser clients
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+    allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+    credentials: true, // Enable credentials like cookies
+  };
+}
 
-// const corsOptions = {
-//   origin: 'http://49.13.235.6', // Allowed origin
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH','OPTIONS' ], // Allowed HTTP methods
-//   allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
-//   credentials: true, // Allows cookies or other credentials
-// };
-
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    const allowedOrigins = ['http://49.13.235.6', 'http://localhost:5173'];
-    if (allowedOrigins.includes(origin) || !origin) {
-      // Allow requests from listed origins or non-browser clients
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-};
-
-
+// Apply CORS middleware
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Apply options pre-flight with the same configuration
-
-// app.use(cors({ origin: 'http://localhost:5173', }));
-// app.options('*', cors());//for development
-// app.options('/api/v1/payments/:id', cors()); for specific API
+// Handle preflight requests (OPTIONS)
+app.options('*', cors(corsOptions));
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
