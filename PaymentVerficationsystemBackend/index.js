@@ -33,8 +33,6 @@ app.set('views', path.join(__dirname, 'views'));
 
 // #1 Global Middlwares
 //implement CORS
-
-const cors = require('cors');
 let corsOptions;
 if (process.env.NODE_ENV === 'production') {
   corsOptions = {
@@ -64,7 +62,6 @@ if (process.env.NODE_ENV === 'production') {
 app.use(cors(corsOptions));
 // Handle preflight requests (OPTIONS)
 app.options('*', cors(corsOptions));
-
 
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
