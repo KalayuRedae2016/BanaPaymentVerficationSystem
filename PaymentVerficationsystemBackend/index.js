@@ -121,15 +121,9 @@ app.use(
   })
 );
 
-
 //Test Midlware
 app.use((req, res, next) => {
   req.requesttime = new Date().toLocaleString();
-  //console.log("RequestHeaders:",req.headers)
-  // console.log("RequestTime:",req.requesttime);
-  // console.log('Request Method:', req.method);
-  // console.log('Request URL:', req.url);
-  //console.log(req.cookies);
   next();
 });
 
