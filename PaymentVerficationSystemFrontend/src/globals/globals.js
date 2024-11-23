@@ -3,11 +3,10 @@ import axios from 'axios';
 export default {
   install(app) {
     // Check environment and set base URL
-    const isProduction = process.env.NODE_ENV === 'production';
+    const isProduction = import.meta.env.MODE === 'production';
     const baseUrl = isProduction
-      ? process.env.VUE_APP_BASE_URL_PRODUCTION
-      : process.env.VUE_APP_BASE_URL_LOCAL;
-
+      ? import.meta.env.VITE_APP_BASE_URL_PRODUCTION
+      : import.meta.env.VITE_APP_BASE_URL_LOCAL;
     // Create the API client
     const apiClient = axios.create({
       baseURL: baseUrl,
