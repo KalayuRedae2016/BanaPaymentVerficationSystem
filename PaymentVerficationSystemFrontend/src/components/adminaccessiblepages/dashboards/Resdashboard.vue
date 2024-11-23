@@ -348,6 +348,7 @@ export default {
       .catch((error) => {
         console.error("Error fetching client data:", error.response.data.error);
       });
+
     const allTimeRange = "allTime";
     this.$apiClient
       .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
@@ -359,10 +360,12 @@ export default {
       .catch((error) => {
         console.log("Error fetching total overdue", error.response.data.error);
       });
+
+
     //end of the overdue fetch;
     //get the users
 
-    this.$apiClient
+  this.$apiClient
       .get("api/v1/payments/orgBalance")
       .then((response) => {
         console.log("response org balance", response);
@@ -376,7 +379,10 @@ export default {
           error.response.data.error
         );
       });
-  },
+   },
+
+
+
   methods: {
     paidUnPaidOverdue() {
       this.$router.push({
@@ -414,6 +420,7 @@ export default {
           `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.activeYear}&month=${this.activeMonth}`
         )
         .then((response) => {
+          console.log("active month ",this.activeMonth);
           console.log("monthly report in the dashboard", response);
           this.monthlyReport = response.data.items;
           this.monthlyPaid =
