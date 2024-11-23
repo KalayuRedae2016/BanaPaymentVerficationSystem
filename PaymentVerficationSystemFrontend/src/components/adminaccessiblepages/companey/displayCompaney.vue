@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div
     v-if="organizationCreated === 0"
     class="loader mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
@@ -98,6 +99,7 @@
 
     <new-company-profile v-if="organizationCreated === 2"></new-company-profile>
   </div>
+</div>
 </template>
 
 <script>

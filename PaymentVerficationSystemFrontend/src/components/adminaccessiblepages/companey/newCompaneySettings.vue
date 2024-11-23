@@ -2,10 +2,9 @@
   <div class="container flex-col">
     <div class="px-4 py-2">
       <h2 class="text-md font-bold mt-2 text-indigo-800 font-bold">
-        Companey Profile
+        Companey Profile {{ $t("companyProfile") }}
       </h2>
     </div>
-
     <div
       class="border-t border-indigo-50 mt-1 py-4 md:border-t md:border-indigo-800 "
     >
@@ -16,38 +15,38 @@
     <div class="flex flex-col ml-5 mr-5 md:flex-row md:space-x-8 md: mr-8  md:ml-8">
       <div class="flex flex-col w-full md:w-1/2">
         <div class="mb-4">
-          <label class="custom-label" for="username"> Comp. Name </label>
+          <label class="custom-label" for="username"> {{ $t("compName") }} </label>
           <input
             class="custom-input"
             id="comp-name"
             type="text"
-            placeholder="Company Name"
+            :placeholder=" $t('compName')"
             v-model="companyName"
           />
         </div>
 
         <div class="mb-4">
           <label class="custom-label" for="username">
-            Comp. Phone Number<span class="text-red-500 ml-1">*</span>
+            {{ $t("compPhoneNumber") }}<span class="text-red-500 ml-1">*</span>
           </label>
           <input
             class="custom-input"
             id="phone-nu,ber"
             type="text"
-            placeholder=" Phone Number"
+            :placeholder="$t('compPhoneNumber') "
             v-model="companyPhoneNumber"
           />
         </div>
 
         <div class="mb-4">
           <label class="custom-label" for="email">
-            Comp. Email<span class="text-red-500 ml-1">*</span>
+            {{ $t("compEmail") }}<span class="text-red-500 ml-1">*</span>
           </label>
           <input
             class="custom-input"
             id="email"
             type="text"
-            placeholder=" Email"
+            :placeholder="$t('compEmail')"
             v-model="companyEmail"
           />
         </div>
@@ -58,13 +57,13 @@
             class="custom-label"
             for="comp-address"
           >
-            Company Address<span class="text-red-500 ml-1">*</span>
+          {{ $t("compAddress") }}<span class="text-red-500 ml-1">*</span>
           </label>
           <input
             class="custom-input"
             id="comp-address"
             type="text"
-            placeholder=" Address"
+            :placeholder="$t('compAddress')"
             v-model="companyAddress"
           />
         </div>
@@ -73,13 +72,13 @@
             class="custom-label"
             for="prifex-code"
           >
-            Prefix Code<span class="text-red-500 ml-1">*</span>
+          {{ $t("compPrefixCode") }}<span class="text-red-500 ml-1">*</span>
           </label>
           <input
             class="custom-input"
             id="prifex-code"
             type="text"
-            placeholder=" Prifex Code"
+            :placeholder="$t('compPrefixCode')"
             v-model="companyPrefixCode"
           />
         </div>
@@ -92,7 +91,7 @@
           <label
             class="custom-label"
           >
-            Block Accounts
+          {{ $t("blockAccounts") }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <div class="border border-gray-300 rounded-lg">
@@ -106,18 +105,18 @@
                   v-model="bank.bankType"
                   class="custom-select mb-5"
                 >
-                  <option value="" disabled>Select Bank Type</option>
-                  <option value="CBE">CBE</option>
-                  <option value="WEGAGEN">Wegagen</option>
-                  <option value="LIB">Enat</option>
-                  <option value="Dashen">Dashen</option>
-                  <option value="Oromia">Oromia</option>
-                  <option value="Absinia">Absinia</option>
+                  <option value="" disabled>{{ $t("selectBankType") }}</option>
+                  <option value="CBE">{{ $t("cbe") }}</option>
+                  <option value="WEGAGEN">{{ $t("wegagen") }}</option>
+                  <option value="LIB">{{ $t("enat") }}</option>
+                  <option value="Dashen">{{ $t("dashin") }}</option>
+                  <option value="Oromia">{{ $t("oromia") }}</option>
+                  <option value="Absinia">{{ $t("absinia") }}</option>
                 </select>
                 <input
                   type="text"
                   v-model="bank.bankAccountNumber"
-                  placeholder="Bank Account"
+                  :placeholder="$t('bankAccountNumber')"
                   class="custom-input"
                 />
               </div>
@@ -167,7 +166,7 @@
           <label
             class="custom-label"
           >
-            Service Accounts
+          {{ $t("serviceAccounts") }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <div class="border border-gray-300 rounded-lg">
@@ -181,18 +180,18 @@
                   v-model="bank.bankType"
                   class="custom-select  mb-5"
                 >
-                  <option value="" disabled>Select Bank Type</option>
-                  <option value="CBE">CBE</option>
-                  <option value="WEGAGEN">WEGAGEN</option>
-                  <option value="LIB">LIB</option>
-                  <option value="Dashen">Dashen</option>
-                  <option value="Oromia">Oromia</option>
-                  <option value="Absinia">Absinia</option>
+                 <option value="" disabled>{{ $t("selectBankType") }}</option>
+                  <option value="CBE">{{ $t("cbe") }}</option>
+                  <option value="WEGAGEN">{{ $t("wegagen") }}</option>
+                  <option value="LIB">{{ $t("enat") }}</option>
+                  <option value="Dashen">{{ $t("dashin") }}</option>
+                  <option value="Oromia">{{ $t("oromia") }}</option>
+                  <option value="Absinia">{{ $t("absinia") }}</option>
                 </select>
                 <input
                   type="text"
                   v-model="bank. bankAccountNumber"
-                  placeholder="Bank Account"
+                  :placeholder="$t('bankAccountNumber')"
                   class="custom-input"
                 />
               </div>
@@ -242,7 +241,7 @@
           type="submit"
           class="custom-button ml-3 mr-3"
         >
-          Submit
+        {{ $t("submit") }}
         </button>
       </form>
     </div>
@@ -270,7 +269,7 @@
                       d="M5 13l4 4L19 7"
                     ></path>
                   </svg>
-                  <h2 class="text-sm font-bold text-gray-800">Success!</h2>
+                  <h2 class="text-sm font-bold text-gray-800">{{ $t("suiccess") }}</h2>
                 </div>
                 <p class="text-gray-600 text-sm">
                   <!-- Your Comany Profile Created successfully -->
@@ -316,7 +315,7 @@
                   d="M12 8v4m0 4h.01"
                 ></path>
               </svg>
-              <h2 class="text-sm font-bold text-gray-800">Warning!</h2>
+              <h2 class="text-sm font-bold text-gray-800">{{ $t("warning") }}</h2>
             </div>
             <p class="text-gray-600 text-sm">
               {{ warningMessage }}
@@ -325,7 +324,7 @@
               @click="showWarning = false"
               class="mt-6 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
             >
-              OK
+            {{ $t("ok") }}
             </button>
           </div>
         </div>
@@ -357,7 +356,7 @@
                   d="M6 18L18 6M6 6l12 12"
                 ></path>
               </svg>
-              <h2 class="text-sm font-bold text-gray-800">Error!</h2>
+              <h2 class="text-sm font-bold text-gray-800">{{ $t("error") }}</h2>
             </div>
             <p class="text-gray-600 text-sm">
               {{ errorMessage }}
@@ -366,7 +365,7 @@
               @click="showError = false"
               class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
             >
-              OK
+            {{ $t("ok") }}
             </button>
           </div>
         </div>

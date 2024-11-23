@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="container flex-col bg-white">
     <div class="flex flex-row">
       <h2 class="text-md font-bold text-primary mt-3 ml-4">
@@ -827,6 +828,7 @@
       </div>
     </transition>
   </div>
+</div>
 </template>
 
 <script>
@@ -1016,7 +1018,7 @@ export default {
         blockBankAccounts: this.blockBankAccounts,
         serviceBankAccounts: this.serviceBankAccounts,
       };
-console.log("service account: " , this.serviceBankAccounts);
+      console.log("service account: " , this.serviceBankAccounts);
       this.$apiClient
         .patch(
           `/api/v1/organization/${this.companyProfileId}`,

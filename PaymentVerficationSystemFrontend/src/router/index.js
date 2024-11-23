@@ -58,6 +58,8 @@ import idCard from "../components/UserAccessiblepages/idCard/idCard.vue";
 import infoPayment from "../components/UserAccessiblepages/information/info.vue";
 import messages from "../components/UserAccessiblepages/messages/message.vue";
 import changePassword from "../components/UserAccessiblepages/profile/changePassword.vue";
+
+
 const routes = [
   {
     path: "/",

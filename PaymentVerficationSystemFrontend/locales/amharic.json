@@ -1,4 +1,146 @@
 {
+  "metric": "መጠን",
+  "paidCleints": "ተከፋፈሉ ደንበኞች",
+  "unPaidClients": "ያልተከፋፈሉ ደንበኞች",
+  "totalPaidCapitals": "ጠቅላላ ተከፋፈል ካፒታል",
+  "totalPaidPenality": "ጠቅላላ ተከፋፈል ቅጣት",
+  "details": "ዝርዝሮች",
+  "view": "እንቅስቃሴ",
+  "allPaiments": "ሁሉም ክፍያዎች",
+  "allOverdueClients": "ሁሉም ተሳሳት ደንበኞች",
+  "allYearsConfirmedReport": "ሁሉም ዓመታት እንደተረጋጋ ሪፖርት",
+  "allReportDetails": "ሁሉም ሪፖርት ዝርዝሮች",
+  "banks": "ባንኮች",
+  "balance": "እኩልነት",
+  "block": "ተከላከል",
+  "service": "አገልግሎት",
+  "regular": "ተደጋጋሚ",
+  "subsidy": "ስብስብ",
+  "urgent": "አስቸኳይ",
+  "totalBlock": "ጠቅላላ ተከላከል",
+  "penality": "ቅጣት",
+  "mService": "ማ.አገልግሎት",
+  "totalService": "ጠቅላላ አገልግሎት",
+  "thisMonthlyReport": "ይህ ወር ሪፖርት",
+
+  "clientProfile": "ደንበኛ መገለጫ",
+  "paymentSetting": "ክፍያ ስርዓት",
+  "newPayments": "አዲስ ክፍያዎች",
+  "allPayments": "ሁሉም ክፍያዎች",
+  "reports": "ሪፖርቶች",
+  "idCard": "መታወቂያ ካርድ",
+  "sendMessage": "መልእክት ላክ",
+
+  "changePassword": "ማህተም ለመቀየር",
+  "logout": "ውጣ",
+  "notifications": "ማሳሰቢያዎች",
+  "copyright": "ኮፒራይት © 2024 ግራንድ ቴክ",
+  "grandTech": "ግራንድ ቴክ",
+  "aboutUs": "ስለ እኛ",
+  "blog": "ብሎግ",
+  "grandTechLicense": "ግራንድ ቴክ ፈቃድ",
+
+
+
+
+
+  "organizationCreatedLoader": "እንቅስቃሴ በማስተናገድ ላይ...",
+  "details": "ዝርዝሮች",
+  "companyName": "ኩባንያ ስም",
+  "companyPrefixCode": "ኩባንያ ፕሪፊክስ ኮድ",
+  "companyPhoneNumber": "ኩባንያ ስልክ ቁጥር",
+  "companyEmail": "ኩባንያ ኢሜል",
+  "companyAddress": "ኩባንያ አድራሻ",
+  "edit": "አርትዕ",
+  "blockAccounts": "ተከላከል ሂሳቦች",
+  "bankType": "ባንክ አይነት",
+  "bankAccountNumber": "ባንክ ሂሳብ ቁጥር",
+  "serviceAccounts": "አገልግሎት ሂሳቦች",
+  "newCompanyProfile": "አዲስ ኩባንያ ፕሮፋይል",
+  "editCompanyProfile": "ኩባንያ ፕሮፋይልን አርትዕ",
+  "selectBankType": "ባንኩን አይነት ምረጥ",
+  "save": "አስቀምጥ",
+  "addBlockAccount": "ተከላከል ሂሳብ አክል",
+  "addServiceAccount": "አገልግሎት ሂሳብ አክል",
+  "editBlockAccount": "ተከላከል ሂሳብ አርትዕ",
+  "editServiceAccount": "አገልግሎት ሂሳብ አርትዕ",
+  "delete": "አጥፋ",
+  "confirmDeleteBlockAccount": "እርግጠኛ ነህ እንደሆነ ተከላከል ሂሳብ አጥፋ?",
+  "confirmDeleteServiceAccount": "እርግጠኛ ነህ እንደሆነ አገልግሎት ሂሳብ አጥፋ?",
+  "loading": "እንቅስቃሴ በማስተናገድ ላይ...",
+  "successMessage": "ኩባንያ ፕሮፋይል በተሳካ ሁኔታ ተለዋዋጭ ሆነ።",
+  "deleteBlockAccountConfirmation": "እርግጠኛ ነህ ተከላከል ባንክ ሂሳብን አጥፋ?",
+  "deleteServiceAccountConfirmation": "እርግጠኛ ነህ አገልግሎት ባንክ ሂሳብን አጥፋ?",
+  "saveChanges": "ለውጦችን አስቀምጥ",
+  "add": "አክል",
+  "cancel": "ሰርተ",
+  "ok": "እሺ",
+  "saveEditedServiceAccount": "ለውጦችን አስቀምጥ",
+  "changePassword": "የይለፍ ቃል አስተካክል",
+  "oldPassword": "የቀድሞ የይለፍ ቃል:",
+  "newPassword": "አዲስ የይለፍ ቃል:",
+  "confirmNewPassword": "አዲስ የይለፍ ቃል እንደተሳካ ያረጋግጡ:",
+  "changeButton": "ቀይር",
+  "successTitle": "ስኬት!",
+  "warningTitle": "ማስጠንቀቂያ!",
+  "warningMessage": "በጥንቃቄ ተመልከትና ፎልዎችን ተመልከት።",
+  "errorTitle": "ስህተት!",
+  "errorMessage": "ችግኝ ተከስቷል፣ እባኮትን በሌላ ጊዜ ይሞክሩ።",
+  "companyProfile": "ኩባንያ ፕሮፋይል",
+  "compName": "ኩባንያ ስም",
+  "compPhoneNumber": "ስልክ ቁጥር",
+  "compEmail": "ኢሜል",
+  "compAddress": "አድራሻ",
+  "compPrefixCode": "ፕሪፊክስ ኮድ",
+  "blockAccounts": "ተከላከል ሂሳቦች",
+  "selectBankType": "ባንኩን አይነት ምረጥ",
+  "bankAccount": "ባንክ ሂሳብ",
+  "serviceAccounts": "አገልግሎት ሂሳቦች",
+  "success": "ስኬት!",
+  "warning": "ማስጠንቀቂያ!",
+  "ok": "እሺ",
+  "error": "ስህተት!",
+  "submit": "አስገባ",
+  "loading": "እንቅስቃሴ በማስተናገድ ላይ...",
+  "createdSuccessfully": "ኩባንያ ፕሮፋይልዎ በተሳካ ሁኔታ ተፈጥሯል።",
+  "warningMessage": "እባኮትን ሁሉንም አስፈላጊ ፎልዎች ሙሉ በሙሉ ሙሉ ተመልከት።",
+  "errorMessage": "ችግኝ ተከስቷል፣ እባኮትን በሌላ ጊዜ ይሞክሩ።",
+  "successMessage": "ኩባንያ ፕሮፋይልዎ በተሳካ ሁኔታ ተፈጥሯል።",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   "greeting": "ሰላም",
   "message": "ልዩ መልዕክት",
   "About":"ስለ",
@@ -19,6 +161,35 @@
 
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     "homepage": "ዋና የመጀመሪያ ገጽ",
     "keywords": "የቁልፍ ቃላት",
     "register": "ይመዝገቡ",

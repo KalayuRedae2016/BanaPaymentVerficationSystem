@@ -1,4 +1,5 @@
 <template>
+  <div>
     <div class="p-3 border-b border-blue-800">
         <h4 class="text-indigo-800 mt-1">Change Password</h4>
     </div>
@@ -147,6 +148,7 @@
       </div>
     </div>
   </transition>
+</div>
 </div>
 </template>
 
