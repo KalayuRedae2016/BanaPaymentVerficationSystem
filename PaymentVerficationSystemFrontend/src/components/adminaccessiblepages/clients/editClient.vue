@@ -1,7 +1,6 @@
 <template>
-
+<div>
 <div class=" border-b border-blue-500">
-
 <p class="text-blue-800 font-bold px-4 pb-4 pt-3"> Edit Client Profile</p>
 </div>
   <div class="">
@@ -323,7 +322,7 @@
       </div>
     </transition>
   </div>
-
+</div>
 
 </template>
 
@@ -380,8 +379,6 @@ export default {
         .catch((error) => {
          console.error("Error fetching client datakk:", error);
      });
-
-
   },
   methods: {
     handleImageInput() {
@@ -408,9 +405,11 @@ export default {
       formData.append("email", this.clientProfile.email);
       formData.append("phoneNumber", this.clientProfile.phoneNumber);
       formData.append("gender", this.clientProfile.gender);
+      
+      console.log("id", this.clientProfile._id);
+      
       this.$apiClient
         .patch(`/api/v1/users/${this.clientProfile._id}`, formData)
-       
         .then((response) => {
           console.log("response of client finder",response );
              if(response.data.status===1){
@@ -422,7 +421,7 @@ export default {
         .catch((error) => {
           console.log("error in the updating",error)
               this.showError=true;
-              this.errorMessage = error.response.data.message;
+              //this.errorMessage = error.response.data.message;
         });
     },
   },

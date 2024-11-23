@@ -1,5 +1,6 @@
 <template>
-  <div v-if="showModal">
+  <div>
+    <div v-if="showModal">
     <transition name="fade" mode="out-in">
       <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
         <div class="bg-white rounded-lg p-6 border border-cyan-500">
@@ -198,6 +199,7 @@
       </div>
     </transition>
   </div>
+</div>
 </template>
 
 <script>
