@@ -3,7 +3,7 @@
     <div class="container flex-col bg-white">
       <div class="flex flex-row">
         <h2 class="text-md font-bold text-primary mt-3 ml-4">
-          {{ $t("editComp anyProfile") }}
+          {{ $t("editCompanyProfile") }}
         </h2>
       </div>
 
@@ -161,7 +161,7 @@
                     <input
                       type="text"
                       v-model="account.bankAccountNumber"
-                      placeholder="Bank Account"
+                      :placeholder="$t('bankAccountNumber')"
                       class="custom-input"
                     />
                     <button
@@ -288,7 +288,7 @@
                     <input
                       type="text"
                       v-model="account.bankAccountNumber"
-                      placeholder="Bank Account"
+                      :placeholder="$t('bankAccountNumber')"
                       class="custom-input ml-5"
                     />
 
@@ -351,7 +351,8 @@
         >
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="flex flex-row">
-              <div>Edit Block Account</div>
+              <div>{{ $t("editBlockAccount") }}
+              </div>
               <div class="ml-64">
                 <svg
                   @click="showEditBlockModal = !showEditBlockModal"
@@ -469,7 +470,7 @@
                     @click="deleteSuccess = !deleteSuccess"
                     class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
                   >
-                    OK
+                    {{ $t("ok") }}
                   </button>
                 </div>
               </div>
@@ -478,6 +479,8 @@
           </div>
         </transition>
       </div>
+
+
     </div>
     <div v-if="otherBlockSelected">
       <transition name="fade" mode="out-in">
@@ -490,7 +493,7 @@
               <div class="bg-white rounded-lg shadow-lg p-8 w-96">
                 <div class="flex flex-row space-x-32">
                   <h1 class="mb-5 text-indigo-800 text-md font-bold">
-                    Add Block Account
+                      {{ $t('addBlockAccount') }}
                   </h1>
                   <svg
                     @click="otherBlockSelected = !otherBlockSelected"
@@ -511,13 +514,13 @@
                 <form action="" class="">
                   <div class="mb-4">
                     <label class="custom-label" for="username">
-                      {{ $t("bankType") }}
+                      {{ $t("bankName") }}
                     </label>
                     <input
                       class="custom-input"
                       id="bank-name"
                       type="text"
-                      placeholder="Bank Name"
+                      :placeholder="$t('bankType')"
                       v-model="newBlockBankType"
                     />
                   </div>
@@ -529,7 +532,7 @@
                       class="custom-input"
                       id="comp-name"
                       type="text"
-                      placeholder="Account Number"
+                      :placeholder="$t('bankAccountNumber')"
                       v-model="newBlockBankAccountNumber"
                     />
                   </div>
@@ -581,7 +584,7 @@
                 <form action="" class="">
                   <div class="mb-4">
                     <label class="custom-label" for="username">
-                      {{ $t("bankType") }}
+                      {{ $t("bankName") }}
                     </label>
                     <input
                       class="custom-input"
@@ -599,7 +602,7 @@
                       class="custom-input"
                       id="comp-name"
                       type="text"
-                      placeholder="Account Number"
+                      :placeholder="$t('bankAccountNumber')"
                       v-model="newServiceBankAccountNumber"
                     />
                   </div>
@@ -624,21 +627,20 @@
         <div
           class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
         >
-          <!-- Modal Content -->
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="fixed inset-0 flex items-center justify-center z-50">
               <div class="bg-white rounded-lg shadow-lg p-8 w-96">
                 <div class="flex items-center justify-center mb-10">
                   <h2 class="text-md font-bold text-pink-800">
-                    Do You Want To Delate this Block Bank Account??
+                    {{ $t('confirmDeleteBlockAccount') }}
                   </h2>
                 </div>
-
                 <button
                   @click="deleteBlockAccount"
                   class="bg-red-500 text-white px-4 py-2 rounded-md"
                 >
                 {{ $t("delete") }}
+
                 </button>
                 <button
                   @click="cancelDeleteBlockAccount"
@@ -688,7 +690,7 @@
                   <label
                     class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
                   >
-                    Bank Type
+                      {{ $t("bankType") }}
                     <span class="custom-star ml-1">*</span>
                   </label>
 
@@ -701,14 +703,19 @@
                     <option :value="editedServiceAccount.bankType">
                       {{ editedServiceAccount.bankType }}
                     </option>
-                    <option value="">Select Bank Type</option>
-                    <option value="CBE">CBE</option>
-                    <option value="WEGAGEN">Wegagen</option>
-                    <option value="LIB">Enat</option>
-                    <option value="Dashen">Dashen</option>
-
-                    <option value="Oromia">Oromia</option>
-                    <option value="Absinia">Absinia</option>
+                    <option value="" disabled>
+                        {{ $t("selectBankType") }}
+                      </option>
+                      <option value="CBE">{{ $t("CBE") }}</option>
+                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
+                      <option value="Enat">{{ $t("Enat") }}</option>
+                      <option value="Dashen">{{ $t("Dashen") }}</option>
+                      <option value="Lion">{{ $t("Lion") }}</option>
+                      <option value="Oromia">{{ $t("Oromia") }}</option>
+                      <option value="Absinia">{{ $t("Absinia") }}</option>
+                      <option value="other" class="text-indigo-800 font-bold">
+                        {{ $t("other") }}
+                      </option>
                   </select>
                 </div>
 
@@ -716,7 +723,7 @@
                   <label
                     class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
                   >
-                    Bank Account
+                        {{ $t("bankAccountNumber") }}
                     <span class="custom-star ml-1">*</span>
                   </label>
 
@@ -733,7 +740,7 @@
                   class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                 >
                   <i class="fas fa-save"
-                    ><span class="text-md ml-3">Save Changes</span></i
+                    ><span class="text-md ml-3">{{ $t("saveChanges") }}</span></i
                   >
                 </button>
               </form>
@@ -756,7 +763,8 @@
               <div class="bg-white rounded-lg shadow-lg p-8 w-96">
                 <div class="flex items-center justify-center mb-10">
                   <h2 class="text-md font-bold text-pink-800">
-                    Do You Want To Delate this Service Bank Account??
+                    
+                    {{ $t('confirmDeleteServiceAccount') }}
                   </h2>
                 </div>
 
@@ -1036,6 +1044,7 @@ export default {
           console.log("Error in the catch", error.response.data.message);
         });
     },
+
     saveNewServiceBank() {
       // alert("hi")
       this.otherServiceSelected = false;
@@ -1084,7 +1093,6 @@ export default {
       console.log("old", this.blockBankAccounts);
       console.log("added bank accounts", this.addedBlockBankAccounts);
     },
-
     editBlockAccountModal(account) {
       /// alert("called");
       // Open the modal and pass the account details
@@ -1351,6 +1359,7 @@ export default {
         .then((response) => {
           if (Number(response.data.status) === 1) {
             console.log("Update response", response.data);
+            this.successMessage = response.data.message;
             this.editSuccess = true;
           }
         })
