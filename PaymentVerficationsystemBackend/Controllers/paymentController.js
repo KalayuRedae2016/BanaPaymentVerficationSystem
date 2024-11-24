@@ -557,15 +557,15 @@ exports.confirmBills = async (req, res) => {
 };
 
 exports.searchPayments = catchAsync(async (req, res, next) => {
-  const { keyword} = req.query;
+  const { keyword,isPaid} = req.query;
   if (!keyword) {
     return next(new AppError('Keyword is required', 400));
   }
-
   const searchPattern = new RegExp(keyword, 'i');
   const paymentQuery = {
     $or: [
       { userCode: { $regex: searchPattern } },
+      { billCode: { $regex: searchPattern } },
       { fullName: { $regex: searchPattern } },
       { firstName: { $regex: searchPattern } },
       { middleName: { $regex: searchPattern } },
@@ -573,7 +573,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     ],
     isPaid:false//for status:pending or status: overdue
   };
-
+  if (isPaid) paymentQuery.isPaid=isPaid
   const payments = await Payment.find(paymentQuery)
     .populate({
       path: 'user',
@@ -678,6 +678,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
         totalExpectedAmount: payment.totalExpectedAmount + totalPenaltyAmount,
         isPaid: payment.isPaid,
         status: payment.status,
+        latest:payment.latest,
         createdAt:payment.createdAt?formatDate(payment.createdAt):null,
         updatedAt:payment.updatedAt?formatDate(payment.updatedAt):null
       };
@@ -807,7 +808,7 @@ exports.updatePayments = catchAsync(async (req, res,next) => {
     // Find the unpaid bill by billCode
     const payment = await Payment.findOne({ isPaid: true, billCode });
     if (!payment) {
-      return res.status(404).json({ error: 'No aid bill found' });
+      return res.status(404).json({ error: 'No Paid bill found' });
     }
     // Function to update specific payment fields if provided
     const updatePaymentField = (existing, updates) => {
@@ -853,13 +854,14 @@ exports.updatePayments = catchAsync(async (req, res,next) => {
         confirmedDate: formatDate(new Date().toISOString()),
       })
 
-      const latestPayments=await Payment.find({latest:true});
-      if(latestPayments){
-      for (const payment of latestPayments) {
-        payment.latest=false
-        await payment.save();
-      }
-    }
+    //   const latestPayments=await Payment.find({latest:true});
+    //   if(latestPayments){
+    //   for (const payment of latestPayments) {
+    //     payment.latest=false
+    //     await payment.save();
+    //   }
+
+    // }
       // Generate QR code as data URL
       const qrCodeDataUrl = await QRCode.toDataURL(qrContent);
 
@@ -895,12 +897,32 @@ exports.updatePayments = catchAsync(async (req, res,next) => {
       payment.status = 'pending';
       payment.confirmedDate = null;
       payment.latest=false//which one is the latest then
+
+  /// Identify the nearest relevant bill to mark as latest
+  const nearestRelevantBill = await Payment.findOne({userCode: payment.userCode,isPaid:true,_id: { $ne: payment._id }, // Exclude the current bill
+  }).sort({ paidAt: -1, createdAt: -1 }) .exec();// Sort by paidAt or createdAt, descending
+ 
+  // Assign the latest flag to the nearest relevant bill
+  if (nearestRelevantBill) {
+    nearestRelevantBill.latest = true;
+    await nearestRelevantBill.save();
+  }
+  // console.log(nearestRelevantBill)
     }
       // Save the updated bill
     await payment.save();
+
+    const formattedCreatedAt = payment.createdAt ? formatDate(payment.createdAt) : null;
+    const formattedUpdatedAt = payment.updatedAt ? formatDate(payment.updatedAt) : null;
+    const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate): null;
+
     res.status(200).json({
       message: 'Payment updated successfully',
-      items: payment,
+      items: {...payment._doc,
+        formattedCreatedAt,
+        formattedUpdatedAt,
+        formattedConfirmedAt
+      }
     });
 
 });
@@ -1077,14 +1099,15 @@ exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllPayments = catchAsync(async (req, res, next) => {
-  const { keyword } = req.query;
+  const { keyword,isPaid } = req.query;
   if (!keyword) {
     return next(new AppError("Keyword is needed, Please try again <latestPayments or allPayments>"));
   }
 
   const searchPattern = new RegExp(keyword, 'i');
   const paymentQuery = {};
-
+  if (isPaid) paymentQuery.isPaid=isPaid
+  console.log(paymentQuery)
   switch (keyword) {
     case "latestPayments":
       const latestSetting = await PaymentSetting.findOne({ latest: true });
@@ -1172,9 +1195,10 @@ exports.deletePayment = catchAsync(async (req, res,next) => {
     if (!deletedPayment) {
       return next(new AppError("Payment entry not found",404))
     }
-    res.status(204).json({
+    res.status(200).json({
       status: 'success',
-      data: null,
+      //data: null,
+      message:`Payment with ${deletedPayment._id} is Deleted`
     });
 });
 exports.generateReceipt = catchAsync(async (req, res,next) => {
