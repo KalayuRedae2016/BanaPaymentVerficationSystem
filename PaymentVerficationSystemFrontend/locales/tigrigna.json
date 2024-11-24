@@ -139,7 +139,60 @@
 
 
 
+  "number": "ቁጥር",
+  "userCode": "የተጠቃሚ ኮድ",
+  "fullName": "ሙሉ ስም",
+  "createdAt": "ተፈጥሮቷ በ",
+  "updatedAt": "የታደሰበት በ",
+  "deactivate": "አስተናጋጅ",
+  "resetPassword": "የፕስዎርድ እንደገና ማስተካከል",
+  "searchByNameEmailUsername": "በስም፣ ኢሜል፣ ተጠቃሚ ስም ፍለጋ",
+  "addNewClient": "አዲስ ተጠቃሚ አክል",
+  "viewDeactivatedUsers": "ያልተጠቃሚ ተጠቃሚዎችን እይ",
+  "showMore": "ተጨማሪ አሳይ",
+  "select": "መምረጥ",
+  "registerClient": "ተጠቃሚን መዝግብ",
+  "importClientFromExcel": "ከኤክሴል ተጠቃሚ ማስገባት",
+  "viewClients": "ተጠቃሚዎችን እይ",
 
+
+  "firstNameRequired": "መጀመሪያ ስም ያስፈልጋል *",
+  "firstName": "መጀመሪያ ስም",
+
+  "middleNameRequired": "መካከለኛ ስም ያስፈልጋል *",
+  "middleName": "መካከለኛ ስም",
+
+  "lastNameRequired": "መጨረሻ ስም ያስፈልጋል *",
+  "lastName": "መጨረሻ ስም",
+
+ "tigrignaFullNameRequired": "ትግርኛ ሙሉ ስም ያስፈልጋል *",
+  "tigrignaFullName": "በትግርኛ ሙሉ ስም",
+
+  "genderRequired": "ፆታ ያስፈልጋል *",
+  "gender": "ፆታ",
+
+  "ageRequired": "ዕድሜ ያስፈልጋል *",
+  "age": "ዕድሜ",
+
+  "addressRequired": "አድራሻ *",
+  "address": "ክልል-ዞን-ከተማ-ንብረት",
+
+  "emailRequired": "ኢሜል ያስፈልጋል *",
+  "email": "ኢሜል",
+
+  "phoneNumberRequired": "ስልክ ቁጥር ያስፈልጋል *",
+  "phoneNumberExample": "+251 (ኢትዮጵያ)",
+  "phoneNumber": "ስልክ ቁጥር",
+
+  "chooseProfileImage": "የፕሮፋይል ምስል ምረጥ *",
+  "profileImageRequired": "የፕሮፋይል ምስል ያስፈልጋል",
+
+  "noFileChosen": "ምንም ፋይል አልተመረጠም",
+  "editClientProfile": "የተጠቃሚ ፕሮፋይል እድል",
+  "male": "ወንድ",
+  "female": "ሴት",
+  "doYouWantToImportFile": "",
+  "yes": " አዎ",
 
 
 

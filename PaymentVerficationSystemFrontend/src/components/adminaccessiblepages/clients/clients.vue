@@ -4,7 +4,7 @@
     <div class="flex flex-row space-x-3">
       <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
       <button class="text-cyan-500" @click="showDeactivatedUsers()">
-        View Deactivated Users
+      {{ $t('viewDeactivatedUsers') }}
       </button>
     </div>
     <div class="border-t border-indigo-800 mt-3">
@@ -18,7 +18,7 @@
     <input
       v-model="searchQuery"
       type="text"
-      :placeholder="$t('searchPlaceholder')"
+      :placeholder="$t('searchByNameEmailUsername')"
       class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
     />
   </div>
@@ -43,7 +43,7 @@
           stroke-linejoin="round"
         />
       </svg>
-      <span>Add New Client</span>
+      <span>{{ $t('addNewClient') }}</span>
     </button>
   </div>
 </div>
@@ -55,7 +55,7 @@
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("no") }}
+                    {{ $t("number") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
@@ -65,27 +65,27 @@
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Full Name") }}
+                    {{ $t("fullName") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Created At") }}
+                    {{ $t("createdAt") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Updated At") }}
+                    {{ $t("updatedAt") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Deactivate") }}
+                    {{ $t("deactivate") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Reset Password") }}
+                    {{ $t("resetPassword") }}
                   </th>
 
                   <th
@@ -168,7 +168,7 @@
       @change="changePerPageNumber()"
       class="h-9 border border-gray-300 text-gray-700 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
     >
-    <option value="" disabled>Select</option>
+    <option value="" disabled>{{ $t('select') }}</option>
       <option value="2" selected>2</option>
       <option value="3">3</option>
       <option value="10">10</option>

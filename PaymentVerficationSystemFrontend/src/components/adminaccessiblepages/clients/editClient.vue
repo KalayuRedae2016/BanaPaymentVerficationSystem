@@ -1,7 +1,7 @@
 <template>
 <div>
 <div class=" border-b border-blue-500">
-<p class="text-blue-800 font-bold px-4 pb-4 pt-3"> Edit Client Profile</p>
+<p class="text-blue-800 font-bold px-4 pb-4 pt-3"> {{ $t('editCleintProfile') }}</p>
 </div>
   <div class="">
     <div class="">
@@ -31,38 +31,38 @@
                 </p>
 
                 <p class="mb-2 text-md text-gray-600">
-                  <strong>Middle Name :</strong>
+                  <strong>{{ $t('middleName') }} :</strong>
 
                   <span class="ml-3 text-md"> {{ clientProfile.middleName }}</span>
                 </p>
                 <p class="mb-2 text-md text-gray-600">
-                  <strong>Last Name :</strong>
+                  <strong>{{ $t('lastName') }} :</strong>
                   <span class="ml-3 text-md"> {{ clientProfile.lastName }}</span>
                 </p>
 
                 <p class="mb-2 text-md text-gray-600">
-                  <strong>Gender :</strong>
+                  <strong>{{ $t('gender') }} :</strong>
 
                   <span class="ml-3 text-md"> {{ clientProfile.gender }}</span>
                 </p>
                 <p class="mb-2 text-md text-gray-600">
-                  <strong>Age :</strong>
+                  <strong>{{ $t('age') }} :</strong>
                   <span class="ml-3 text-md"> {{ clientProfile.age }}</span>
                 </p>
 
 
                 <p class="mb-2 text-md text-gray-600">
-                  <strong>Address :</strong>
+                  <strong>{{ $t('address') }} :</strong>
                   <span class="ml-3 text-md"> {{ clientProfile.address }}</span>
                 </p>
 
                 <p class="mb-2 text-md text-gray-600">
-                  <strong>Email :</strong>
+                  <strong>{{ $t('email') }} :</strong>
                   <span class="ml-3 text-md"> {{ clientProfile.email }}</span>
                 </p>
 
                 <p class="mb-2 text-md text-gray-600">
-                  <strong>Phone Number :</strong>
+                  <strong>{{ $t('phoneNumber') }}:</strong>
                   <span class="ml-3 text-md"> {{ clientProfile.phoneNumber }}</span>
                 </p>
               </div>
@@ -72,7 +72,7 @@
             @click="showEditModal=true"
             class="text-md mt-3 h-10 text-indigo-500 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <i class="fas fa-edit mr-2"></i>Edit
+            <i class="fas fa-edit mr-2"></i>{{ $t('edit') }}
           </button>
         </div>
       </div>
@@ -84,7 +84,7 @@
       <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
         <div class="bg-white rounded-lg p-6 border border-cyan-500">
           <div class="flex flex-row">
-            <div>Edit User Profile</div>
+            <div> {{ $t('editClientProfile') }}</div>
             <div class="ml-64">
               <svg
                 @click="showEditModal = !showEditModal"
@@ -165,7 +165,7 @@
                 <label
                   class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
                 >
-                  Gender
+                {{ $t('gender') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
 
@@ -174,9 +174,9 @@
                   style="padding-left: 16px"
                   v-model="clientProfile.gender"
                 >
-                  <option value="" disabled selected>Select gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>  
+                  <option value="" disabled selected>{{ $t('gender') }}</option>
+                  <option value="Male">{{ $t('male') }}</option>
+                  <option value="Female">{{ $t('female') }}</option>  
                 </select>
               </div>
              
@@ -262,7 +262,7 @@
                     d="M5 13l4 4L19 7"
                   ></path>
                 </svg>
-                <h2 class="text-md text-green-800">Success!</h2>
+                <h2 class="text-md text-green-800">{{ $t('success') }}!</h2>
               </div>
               <p class="text-blue-800 text-md ml-8">
                 {{ successMessage }}
@@ -271,7 +271,7 @@
                 @click="showSuccess = false"
                 class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t('ok') }}
               </button>
             </div>
           </div>
@@ -304,7 +304,7 @@
                     d="M6 18L18 6M6 6l12 12"
                   ></path>
                 </svg>
-                <h2 class="text-sm font-bold text-gray-800">Error!</h2>
+                <h2 class="text-sm font-bold text-gray-800">{{ $t('error') }}!</h2>
               </div>
               <p class="text-gray-600 text-sm">
                 {{ errorMessage }}
@@ -313,7 +313,7 @@
                 @click="showError = false"
                 class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t('ok') }}
               </button>
             </div>
           </div>
