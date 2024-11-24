@@ -111,7 +111,7 @@
               v-show="showNotificationDropdown"
               class=" absolute right-0 mt-2 w-64 bg-white rounded shadow-lg border-t border-b border-blue-400"
             >
-              <li class="m-6 text-blue-500 font-bold">Notifications (New Payments)</li>
+              <li class="m-6 text-blue-500 font-bold">{{ $t('notifications') }}</li>
               <li
                 v-for="(notification, index) in notifications"
                 :key="index"
@@ -153,7 +153,7 @@
                   href="#"
                   @click="changePassword()"
                   class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                  >Change Password</a
+                  >{{ $t('changePassword') }}</a
                 >
               </li>
 
@@ -162,7 +162,7 @@
                   href="#"
                   class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
                   @click="logout"
-                  >Logout</a
+                  >{{ $t('logout') }}</a
                 >
               </li>
             </ul>
@@ -236,7 +236,7 @@
                 ><i
                   class="fas fa-users opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Client Profile") }}</span>
+                <span>{{ $t("clientProfile") }}</span>
               </a>
             </li>
 
@@ -255,7 +255,7 @@
                 ><i
                   class="fas fa-cogs opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Payment Setting") }}</span>
+                <span>{{ $t("paymentSetting") }}</span>
               </a>
             </li>
 
@@ -274,7 +274,7 @@
                 ><i
                   class="fas fa-credit-card opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("New Payments") }}</span>
+                <span>{{ $t("newPayments") }}</span>
               </a>
             </li>
 
@@ -293,7 +293,7 @@
                 ><i
                   class="fas fa-list-alt opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("All Payments") }}</span>
+                <span>{{ $t("allPayments") }}</span>
               </a>
             </li>
 
@@ -312,7 +312,7 @@
                 ><i
                   class="fas fa-file-alt opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Reports") }}</span>
+                <span>{{ $t("reports") }}</span>
               </a>
             </li>
 
@@ -329,7 +329,7 @@
                 ><i
                   class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Id Card") }}</span>
+                <span>{{ $t("idCard") }}</span>
               </a>
             </li>
 
@@ -346,7 +346,7 @@
                 ><i
                   class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Send Message") }}</span>
+                <span>{{ $t("sendMessage") }}</span>
               </a>
             </li>
           </ul>
@@ -516,7 +516,7 @@
                   href="https://www.creative-tim.com"
                   class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1"
                 >
-                  Grand Tech
+                  {{ $t('grandTech') }}
                 </a>
               </div>
             </div>
@@ -529,7 +529,7 @@
                     href="https://www.creative-tim.com"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
-                    GrandTech
+                  {{ $t('grandTech') }}
                   </a>
                 </li>
                 <li>
@@ -537,7 +537,7 @@
                     href="https://www.creative-tim.com/presentation"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
-                    About Us
+                  {{ $t('aboutUs') }}
                   </a>
                 </li>
                 <li>
@@ -545,7 +545,7 @@
                     href="http://blog.creative-tim.com"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
-                    Blog
+                  {{ $t('blog') }}
                   </a>
                 </li>
                 <li>
@@ -553,7 +553,7 @@
                     href="https://github.com/creativetimofficial/tailwind-starter-kit/blob/main/LICENSE.md"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
-                    GrandTech License
+                  {{ $t('grandTechLicense') }} 
                   </a>
                 </li>
               </ul>
@@ -566,7 +566,6 @@
 </template>
 <script>
 import SidebarComponent from "../layouts/Sidebar.vue";
-
 import { mapGetters } from "vuex";
 export default {
   name: "dashboard-page",

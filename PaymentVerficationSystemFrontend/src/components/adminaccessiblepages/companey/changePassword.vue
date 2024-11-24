@@ -1,23 +1,24 @@
 <template>
+  <div>
     <div class="p-3 border-b border-blue-800">
-        <h4 class="text-indigo-800 mt-1">Change Password</h4>
+        <h4 class="text-indigo-800 mt-1">  {{ $t("changePassword") }}</h4>
     </div>
 
     <div class="border border-gray-300 m-5 p-5 rounded-lg">
       <form action="">
         <div class="md-4" >
-             <label for="oldPassword" class="custom-label">Old Password:</label>
+             <label for="oldPassword" class="custom-label"> {{ $t("oldPassword") }}</label>
              <input type="text" class="custom-input ml-3" v-model="oldPassword">
         </div>
         <div class="md-4" >
-             <label for="newPassword" class="custom-label">New Password:</label>
+             <label for="newPassword" class="custom-label"> {{ $t("newPassword") }}</label>
             <input type="password" class="custom-input ml-3" v-model="newPassword">
         </div>
         <div class="md-4" >
-             <label for="confirmnOldPassword" class="custom-label">Confirm New Password:</label>
+             <label for="confirmnOldPassword" class="custom-label">  {{ $t("confirmNewPassword") }}</label>
              <input type="password" class="custom-input ml-3" v-model="confirmNewPasssord">
         </div>
-        <button @click.prevent="changePassword()" class="custom-button mt-5">Change</button>
+        <button @click.prevent="changePassword()" class="custom-button mt-5 ml-3">  {{ $t("change") }}</button>
       </form>
     </div>
     <div v-if="showSuccess">
@@ -147,6 +148,7 @@
       </div>
     </div>
   </transition>
+</div>
 </div>
 </template>
 

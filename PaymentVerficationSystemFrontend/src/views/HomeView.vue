@@ -237,9 +237,6 @@ export default {
         this.passwordIsRequired = true;
         this.usernameIsRequired = false;
         this.UserNotFound = false;
-
-
-
         return;
       }
 // if(this.password.trim()!='' && this.username.trim()!=''){
@@ -262,7 +259,6 @@ export default {
         .post("/api/v1/users/login", userData)
         .then((response) => {
           console.log("response");
-
           const { role, token, userId,userCode} = response.data;
           console.log("response", response.data);
 

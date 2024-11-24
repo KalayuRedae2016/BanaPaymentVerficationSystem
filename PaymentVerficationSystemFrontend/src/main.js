@@ -10,8 +10,12 @@ import amharicMessages from '../locales/amharic.json';
 import englishMessages from '../locales/english.json';
 import tigrignaMessages from '../locales/tigrigna.json';
 
+// Set the default language
+const defaultLocale = 'amharic';
+
 const i18n = createI18n({
-  locale: store.getters.getLocale,
+  locale: defaultLocale, // Set Amharic as the default language
+  fallbackLocale: 'english', // Set a fallback language
   messages: {
     amharic: amharicMessages,
     english: englishMessages,
@@ -19,5 +23,9 @@ const i18n = createI18n({
   },
 });
 
-createApp(App).use(store).use(globals).use(router).use(i18n).mount('#app'); 
-//hhghjgdkjh
+createApp(App)
+  .use(store)
+  .use(globals)
+  .use(router)
+  .use(i18n)
+  .mount('#app');

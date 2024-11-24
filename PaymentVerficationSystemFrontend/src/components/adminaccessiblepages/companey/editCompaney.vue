@@ -1,420 +1,794 @@
 <template>
-  <div class="container flex-col bg-white">
-    <div class="flex flex-row">
-      <h2 class="text-md font-bold text-primary mt-3 ml-4">
-        Edit company Profile
-      </h2>
-    </div>
-
-    <div class="flex flex-wrap mx-auto py-8 border-t border-indigo-800 mt-4">
-      <div v-if="!closepaymentCreated" class="w-full">
-        <div class="m-4">
-          <form class="mt-8 mr-5">
-            <div class="flex flex-col md:flex-row md:space-x-12">
-              <div class="flex flex-col md:w-1/2">
-                <div class="mb-4">
-                  <label class="custom-label">
-                    Comp.Name
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="companyName"
-                    class="custom-input"
-                    v-model="companyName"
-                    placeholder="Name"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label class="custom-label">
-                    Comp. Email
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="companyEmail"
-                    class="custom-input"
-                    v-model="companyEmail"
-                    placeholder="Email"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label class="custom-label">
-                    Comp. Phone Number
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="companyPhoneNumber"
-                    class="custom-input"
-                    v-model="companyPhoneNumber"
-                    placeholder="Phone Number"
-                  />
-                </div>
-              </div>
-
-              <div class="flex flex-col md:w-1/2">
-                <div class="mb-4">
-                  <label class="custom-label">
-                    Prefix Code
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="companyPrefixCode"
-                    class="custom-input"
-                    v-model="companyPrefixCode"
-                    placeholder="Prefix Code"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label class="custom-label">
-                    Company Address
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="companyAddress"
-                    class="custom-input"
-                    v-model="companyAddress"
-                    placeholder="Address"
-                  />
-                </div>
-              </div>
-            </div>
-
-
-            <div class="rounded-lg px-3 py-3 mt-5">
-              <label class="custom-label"> Block Accounts </label>
-              <div class="border border-gray-300">
-                <table class="w-full border-b border-gray-300">
-                  <thead>
-                    <tr class="bg-gray-200">
-                      <th
-                        class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                      >
-                        Bank Type
-                      </th>
-                      <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                      >
-                        Bank Account
-                      </th>
-                      <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                      >
-                        Detail
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="account in blockBankAccounts" :key="account._id">
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                        <span class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
-                      </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                        {{ account.bankAccountNumber }}
-                      </td>
-                      <td class="p-3 text-sm whitespace-nowrap">
-                        <i
-                          @click="editBlockAccountModal(account)"
-                          class="fas fa-edit mr-2 text-blue-700"
-                        ></i>
-                        <i
-                          @click="confirmDeleteBlockAccount(account)"
-                          class="fas fa-trash-alt custom-star"
-                        ></i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div
-                  v-for="(account, index) in addedBlockBankAccounts"
-                  :key="index"
-                  class="flex flex-col items-center space-y-3 m-5 md:flex-row md:space-x-5 md:space-y-0"
-                >
-                  <select v-model="account.bankType" class="custom-select" @change="trackNewBlockBankType(account.bankType)">
-                    <option value="" disabled>Select Bank Type</option>
-                    <option value="CBE">CBE</option>
-                    <option value="Wegagen">Wegagen</option>
-                    <option value="Enat">Enat</option>
-                    <option value="Dashen">Dashen</option>
-                    <option value="Lion">Lion</option>
-                    <option value="Oromia">Oromia</option>
-                    <option value="Absinia">Absinia</option>
-                    <option value="other" class="text-indigo-800 font-bold">Other</option>
-                  </select>
-                  <input
-                    type="text"
-                    v-model="account.bankAccountNumber"
-                    placeholder="Bank Account"
-                    class="custom-input"
-                  />
-                  <button
-                    @click.prevent="removeBlockBankAccount(index)"
-                    class="text-pink-500 mb-5"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                <button
-                  @click.prevent="addBlockBankAccount()"
-                  class="ml-10 mt-3 mb-5 flex items-center justify-center bg-pink-500 text-white rounded-full w-6 h-6"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="rounded-lg px-3 py-3 mt-5">
-              <label class="custom-label"> Service Accounts </label>
-
-              <div class="border border-gray-300">
-                <table class="w-full border-b border-gray-300">
-                  <thead>
-                    <tr class="bg-gray-200">
-                      <th
-                        class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                      >
-                        Bank Type
-                      </th>
-                      <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                      >
-                        Bank Account
-                      </th>
-                      <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                      >
-                        Detail
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      v-for="account in serviceBankAccounts"
-                      :key="account._id"
-                    >
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     
-                        <span class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
-                      </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                        {{ account.bankAccountNumber }}
-                      </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                        <i
-                          @click="editServiceAccountModal(account)"
-                          class="fas fa-edit mr-2 text-blue-500"
-                        ></i>
-                        <i
-                          @click="confirmDeleteServiceAccount(account)"
-                          class="fas fa-trash-alt custom-star"
-                        ></i>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div
-                  v-for="(account, index) in addedServiceBankAccounts"
-                  :key="index"
-                  class="flex flex-col items-center space-y-5 m-5 md:flex-row md:space-y-0"
-                >
-                  <select
-                    v-model="account.bankType"
-                    class="custom-select"
-                  @change="trackNewServiceBankType(account.bankType)"
-                  >
-                    <option value="" disabled>Select Bank Type</option>
-                    <option value="CBE">CBE</option>
-                    <option value="Wegagen">Wegagen</option>
-                    <option value="Enat">Enat</option>
-                    <option value="Dashen">Dashen</option>
-                    <option value="Lion">Lion</option>
-                    <option value="Oromia">Oromia</option>
-                    <option value="Absinia">Absinia</option>
-                    <option value="other" class="text-indigo-800 font-bold">Other</option>
-                  </select>
-
-                  <input
-                    type="text"
-                    v-model="account.bankAccountNumber"
-                    placeholder="Bank Account"
-                    class="custom-input ml-5"
-                  />
-
-                  <button
-                    @click.prevent="removeServiceBankAccount(index)"
-                    class="text-pink-500 mb-5"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                </div>
-
-                <button
-                  @click.prevent="addServiceBankAccount()"
-                  class="ml-10 mt-3 mb-5 flex items-center justify-center bg-pink-500 text-white rounded-full w-6 h-6"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-
-            <button @click.prevent="seeChange()" class="custom-button ml-3">
-              <i class="fas fa-save text-pink-500 mr-2"></i>Save
-            </button>
-          </form>
-        </div>
+  <div>
+    <div class="container flex-col bg-white">
+      <div class="flex flex-row">
+        <h2 class="text-md font-bold text-primary mt-3 ml-4">
+          {{ $t("editCompanyProfile") }}
+        </h2>
       </div>
-    </div>
-  </div>
 
-  <div v-if="showEditBlockModal">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="flex flex-row">
-            <div>Edit Block Account</div>
-            <div class="ml-64">
-              <svg
-                @click="showEditBlockModal = !showEditBlockModal"
-                class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </div>
-          </div>
+      <div class="flex flex-wrap mx-auto py-8 border-t border-indigo-800 mt-4">
+        <div v-if="!closepaymentCreated" class="w-full">
+          <div class="m-4">
+            <form class="mt-8 mr-5">
+              <div class="flex flex-col md:flex-row md:space-x-12">
+                <div class="flex flex-col md:w-1/2">
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("compName") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      class="custom-input"
+                      v-model="companyName"
+                      placeholder="Name"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("compEmail") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="companyEmail"
+                      class="custom-input"
+                      v-model="companyEmail"
+                      placeholder="Email"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("companyPhoneNumber") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="companyPhoneNumber"
+                      class="custom-input"
+                      v-model="companyPhoneNumber"
+                      placeholder="Phone Number"
+                    />
+                  </div>
+                </div>
 
-          <hr class="my-4 md:min-w-full bg-red-500" />
-
-
-          <div class="">
-            <form class="px-5 py-5">
-              <div class="mb-4">
-                <label
-                  class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
-                >
-                  Bank Type
-                  <span class="custom-star ml-1">*</span>
-                </label>
-
-                <select
-                  class="border border-gray-400 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-10"
-                  required
-                  style="padding-left: 16px"
-                  v-model="editedBlockAccount.bankType"
-                >
-                  <option :value="editedBlockAccount.bankType">
-                    {{ editedBlockAccount.bankType }}
-                  </option>
-                  <option value="">Select Bank Type</option>
-                  <option value="CBE">CBE</option>
-                  <option value="WEGAGEN">Wegagen</option>
-                  <option value="LIB">Enat</option>
-                  <option value="Dashen">Dashen</option>
-                  <option value="Oromia">Oromia</option>
-                  <option value="Absinia">Absinia</option>
-                </select>
+                <div class="flex flex-col md:w-1/2">
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("compPrefixCode") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="companyPrefixCode"
+                      class="custom-input"
+                      v-model="companyPrefixCode"
+                      placeholder="Prefix Code"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("compAddress") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="companyAddress"
+                      class="custom-input"
+                      v-model="companyAddress"
+                      placeholder="Address"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div class="mb-4">
-                <label
-                  class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
-                >
-                  Bank Account
-                  <span class="custom-star ml-1">*</span>
+              <div class="rounded-lg px-3 py-3 mt-5">
+                <label class="custom-label"> {{ $t("blockAccounts") }} </label>
+                <div class="border border-gray-300">
+                  <table class="w-full border-b border-gray-300">
+                    <thead>
+                      <tr class="bg-gray-200">
+                        <th
+                          class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("bankType") }}
+                        </th>
+                        <th
+                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("bankAccount") }}
+                        </th>
+                        <th
+                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("detail") }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="account in blockBankAccounts"
+                        :key="account._id"
+                      >
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                          <span
+                            class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200"
+                            >{{ account.bankType }}</span
+                          >
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                          {{ account.bankAccountNumber }}
+                        </td>
+                        <td class="p-3 text-sm whitespace-nowrap">
+                          <i
+                            @click="editBlockAccountModal(account)"
+                            class="fas fa-edit mr-2 text-blue-700"
+                          ></i>
+                          <i
+                            @click="confirmDeleteBlockAccount(account)"
+                            class="fas fa-trash-alt custom-star"
+                          ></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    v-for="(account, index) in addedBlockBankAccounts"
+                    :key="index"
+                    class="flex flex-col items-center space-y-3 m-5 md:flex-row md:space-x-5 md:space-y-0"
+                  >
+                    <select
+                      v-model="account.bankType"
+                      class="custom-select"
+                      @change="trackNewBlockBankType(account.bankType)"
+                    >
+                      <option value="" disabled>
+                        {{ $t("selectBankType") }}
+                      </option>
+                      <option value="CBE">{{ $t("CBE") }}</option>
+                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
+                      <option value="Enat">{{ $t("Enat") }}</option>
+                      <option value="Dashen">{{ $t("Dashen") }}</option>
+                      <option value="Lion">{{ $t("Lion") }}</option>
+                      <option value="Oromia">{{ $t("Oromia") }}</option>
+                      <option value="Absinia">{{ $t("Absinia") }}</option>
+                      <option value="other" class="text-indigo-800 font-bold">
+                        {{ $t("other") }}
+                      </option>
+                    </select>
+                    <input
+                      type="text"
+                      v-model="account.bankAccountNumber"
+                      :placeholder="$t('bankAccountNumber')"
+                      class="custom-input"
+                    />
+                    <button
+                      @click.prevent="removeBlockBankAccount(index)"
+                      class="text-pink-500 mb-5"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <button
+                    @click.prevent="addBlockBankAccount()"
+                    class="ml-10 mt-3 mb-5 flex items-center justify-center bg-pink-500 text-white rounded-full w-6 h-6"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <div class="rounded-lg px-3 py-3 mt-5">
+                <label class="custom-label">
+                  {{ $t("serviceAccounts") }}
                 </label>
 
-                <input
-                  type="text"
-                  class="w-full px-4 py-2 border border-gray-400 rounded"
-                  v-model="editedBlockAccount.bankAccountNumber"
-                  placeholder="Bank Account"
-                />
+                <div class="border border-gray-300">
+                  <table class="w-full border-b border-gray-300">
+                    <thead>
+                      <tr class="bg-gray-200">
+                        <th
+                          class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("bankType") }}
+                        </th>
+                        <th
+                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("bankAccountNumber") }}
+                        </th>
+                        <th
+                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("detail") }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="account in serviceBankAccounts"
+                        :key="account._id"
+                      >
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                          <span
+                            class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200"
+                            >{{ account.bankType }}</span
+                          >
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                          {{ account.bankAccountNumber }}
+                        </td>
+                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                          <i
+                            @click="editServiceAccountModal(account)"
+                            class="fas fa-edit mr-2 text-blue-500"
+                          ></i>
+                          <i
+                            @click="confirmDeleteServiceAccount(account)"
+                            class="fas fa-trash-alt custom-star"
+                          ></i>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div
+                    v-for="(account, index) in addedServiceBankAccounts"
+                    :key="index"
+                    class="flex flex-col items-center space-y-5 m-5 md:flex-row md:space-y-0"
+                  >
+                    <select
+                      v-model="account.bankType"
+                      class="custom-select"
+                      @change="trackNewServiceBankType(account.bankType)"
+                    >
+                      <option value="" disabled>
+                        {{ $t("selectBankType") }}
+                      </option>
+                      <option value="CBE">{{ $t("CBE") }}</option>
+                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
+                      <option value="Enat">{{ $t("Enat") }}</option>
+                      <option value="Dashen">{{ $t("Dashen") }}</option>
+                      <option value="Lion">{{ $t("Lion") }}</option>
+                      <option value="Oromia">{{ $t("Oromia") }}</option>
+                      <option value="Absinia">{{ $t("Absinia") }}</option>
+                      <option value="other" class="text-indigo-800 font-bold">
+                        {{ $t("other") }}
+                      </option>
+                    </select>
+
+                    <input
+                      type="text"
+                      v-model="account.bankAccountNumber"
+                      :placeholder="$t('bankAccountNumber')"
+                      class="custom-input ml-5"
+                    />
+
+                    <button
+                      @click.prevent="removeServiceBankAccount(index)"
+                      class="text-pink-500 mb-5"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+
+                  <button
+                    @click.prevent="addServiceBankAccount()"
+                    class="ml-10 mt-3 mb-5 flex items-center justify-center bg-pink-500 text-white rounded-full w-6 h-6"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <button
-                @click="saveEditedBlockAccount"
-                type="submit"
-                class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                <i class="fas fa-save"
-                  ><span class="text-md ml-3">Save Changes</span></i
-                >
+
+              <button @click.prevent="seeChange()" class="custom-button ml-3">
+                <i class="fas fa-save text-pink-500 mr-2"></i>{{ $t("save") }}
               </button>
             </form>
           </div>
-
-          <hr class="my-4 md:min-w-full bg-red-500" />
         </div>
       </div>
-    </transition>
+    </div>
+
+    <div v-if="showEditBlockModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="flex flex-row">
+              <div>{{ $t("editBlockAccount") }}
+              </div>
+              <div class="ml-64">
+                <svg
+                  @click="showEditBlockModal = !showEditBlockModal"
+                  class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <hr class="my-4 md:min-w-full bg-red-500" />
+
+            <div class="">
+              <form class="px-5 py-5">
+                <div class="mb-4">
+                  <label
+                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
+                  >
+                   {{ $t("bankType") }}
+
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+
+                  <select
+                    class="border border-gray-400 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-10"
+                    required
+                    style="padding-left: 16px"
+                    v-model="editedBlockAccount.bankType"
+                  >
+                    <option :value="editedBlockAccount.bankType">
+                      {{ editedBlockAccount.bankType }}
+                    </option>
+                     <option value="" disabled>
+                        {{ $t("selectBankType") }}
+                      </option>
+                    <option value="CBE">{{ $t("CBE") }}</option>
+                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
+                      <option value="Enat">{{ $t("Enat") }}</option>
+                      <option value="Dashen">{{ $t("Dashen") }}</option>
+                      <option value="Lion">{{ $t("Lion") }}</option>
+                      <option value="Oromia">{{ $t("Oromia") }}</option>
+                      <option value="Absinia">{{ $t("Absinia") }}</option>
+            
+                  </select>
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
+                  >
+                   {{ $t("bankAccount") }}
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    class="w-full px-4 py-2 border border-gray-400 rounded"
+                    v-model="editedBlockAccount.bankAccountNumber"
+                    placeholder="Bank Account"
+                  />
+                </div>
+                <button
+                  @click="saveEditedBlockAccount"
+                  type="submit"
+                  class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  <i class="fas fa-save"
+                    ><span class="text-md ml-3">{{ $t("saveChanges") }}</span></i
+                  >
+                </button>
+              </form>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+
+      <div v-if="deleteSuccess">
+        <transition name="fade" mode="out-in">
+          <div
+            class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+          >
+            <!-- Modal Content -->
+            <div class="bg-white rounded-lg p-6 border border-cyan-500">
+              <div class="fixed inset-0 flex items-center justify-center z-50">
+                <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                  <div class="flex items-center justify-center mb-4">
+                    <svg
+                      class="w-8 h-10 text-green-500 mr-2"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      ></path>
+                    </svg>
+                    <h2 class="text-md font-bold text-gray-800">{{ $t("success") }}</h2>
+                  </div>
+                  <p class="text-gray-600 text-md">
+                    Company Profile Edited successfully
+                  </p>
+                  <button
+                    @click="deleteSuccess = !deleteSuccess"
+                    class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                  >
+                    {{ $t("ok") }}
+                  </button>
+                </div>
+              </div>
+              <hr class="my-4 md:min-w-full bg-red-500" />
+            </div>
+          </div>
+        </transition>
+      </div>
 
 
+    </div>
+    <div v-if="otherBlockSelected">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex flex-row space-x-32">
+                  <h1 class="mb-5 text-indigo-800 text-md font-bold">
+                      {{ $t('addBlockAccount') }}
+                  </h1>
+                  <svg
+                    @click="otherBlockSelected = !otherBlockSelected"
+                    class="w-8 h-10 text-red-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
 
-    <div v-if="deleteSuccess">
+                <form action="" class="">
+                  <div class="mb-4">
+                    <label class="custom-label" for="username">
+                      {{ $t("bankName") }}
+                    </label>
+                    <input
+                      class="custom-input"
+                      id="bank-name"
+                      type="text"
+                      :placeholder="$t('bankType')"
+                      v-model="newBlockBankType"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label" for="username">
+                      {{ $t("bankAccountNumber") }}
+                    </label>
+                    <input
+                      class="custom-input"
+                      id="comp-name"
+                      type="text"
+                      :placeholder="$t('bankAccountNumber')"
+                      v-model="newBlockBankAccountNumber"
+                    />
+                  </div>
+                  <button
+                    @click.prevent="saveNewBlockBank"
+                    class="custom-button bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2"
+                  >
+                    <i class="fa fa-plus"></i>
+                    <span>{{ $t("add") }}</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="otherServiceSelected">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex flex-row space-x-32">
+                  <h1 class="mb-5 text-indigo-800 text-md font-bold">
+                    {{ $t("addServiceAccount") }}
+                  </h1>
+                  <svg
+                    @click="otherServiceSelected = !otherServiceSelected"
+                    class="w-8 h-10 text-red-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+
+                <form action="" class="">
+                  <div class="mb-4">
+                    <label class="custom-label" for="username">
+                      {{ $t("bankName") }}
+                    </label>
+                    <input
+                      class="custom-input"
+                      id="bank-name"
+                      type="text"
+                      placeholder="Bank Name"
+                      v-model="newServiceBankType"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label" for="username">
+                      {{ $t("bankAccountNumber") }}
+                    </label>
+                    <input
+                      class="custom-input"
+                      id="comp-name"
+                      type="text"
+                      :placeholder="$t('bankAccountNumber')"
+                      v-model="newServiceBankAccountNumber"
+                    />
+                  </div>
+                  <button
+                    @click.prevent="saveNewServiceBank"
+                    class="custom-button bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2"
+                  >
+                    <i class="fa fa-plus"></i>
+                    <span>{{ $t("add") }}</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="showConfirmationBlockModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-10">
+                  <h2 class="text-md font-bold text-pink-800">
+                    {{ $t('confirmDeleteBlockAccount') }}
+                  </h2>
+                </div>
+                <button
+                  @click="deleteBlockAccount"
+                  class="bg-red-500 text-white px-4 py-2 rounded-md"
+                >
+                {{ $t("delete") }}
+
+                </button>
+                <button
+                  @click="cancelDeleteBlockAccount"
+                  class="bg-gray-400 text-white px-4 py-2 rounded-md ml-2"
+                >
+                {{ $t("cancel") }}
+                </button>
+              </div>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="showEditServiceModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="flex flex-row">
+              <div>{{ $t("editBlockAccount") }}</div>
+              <div class="ml-64">
+                <svg
+                  @click="showEditServiceModal = !showEditServiceModal"
+                  class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <hr class="my-4 md:min-w-full bg-red-500" />
+
+            <div class="">
+              <form class="px-5 py-5">
+                <div class="mb-4">
+                  <label
+                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
+                  >
+                      {{ $t("bankType") }}
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+
+                  <select
+                    class="border border-gray-400 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-10"
+                    required
+                    style="padding-left: 16px"
+                    v-model="editedServiceAccount.bankType"
+                  >
+                    <option :value="editedServiceAccount.bankType">
+                      {{ editedServiceAccount.bankType }}
+                    </option>
+                    <option value="" disabled>
+                        {{ $t("selectBankType") }}
+                      </option>
+                      <option value="CBE">{{ $t("CBE") }}</option>
+                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
+                      <option value="Enat">{{ $t("Enat") }}</option>
+                      <option value="Dashen">{{ $t("Dashen") }}</option>
+                      <option value="Lion">{{ $t("Lion") }}</option>
+                      <option value="Oromia">{{ $t("Oromia") }}</option>
+                      <option value="Absinia">{{ $t("Absinia") }}</option>
+                      <option value="other" class="text-indigo-800 font-bold">
+                        {{ $t("other") }}
+                      </option>
+                  </select>
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
+                  >
+                        {{ $t("bankAccountNumber") }}
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+
+                  <input
+                    type="text"
+                    class="w-full px-4 py-2 border border-gray-400 rounded"
+                    v-model="editedServiceAccount.bankAccountNumber"
+                    placeholder="Bank Account"
+                  />
+                </div>
+                <button
+                  @click="saveEditedServiceAccount"
+                  type="submit"
+                  class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  <i class="fas fa-save"
+                    ><span class="text-md ml-3">{{ $t("saveChanges") }}</span></i
+                  >
+                </button>
+              </form>
+            </div>
+
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="showConfirmationServiceModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-10">
+                  <h2 class="text-md font-bold text-pink-800">
+                    
+                    {{ $t('confirmDeleteServiceAccount') }}
+                  </h2>
+                </div>
+
+                <button
+                  @click="deleteServiceAccount"
+                  class="bg-red-500 text-white px-4 py-2 rounded-md"
+                >
+                  {{ $t("delete") }}
+                </button>
+                <button
+                  @click="cancelDeleteServiceAccount"
+                  class="bg-gray-400 text-white px-4 py-2 rounded-md ml-2"
+                >
+                  {{ $t("cancel") }}
+                </button>
+              </div>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="editSuccess">
       <transition name="fade" mode="out-in">
         <div
           class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
@@ -437,14 +811,16 @@
                       d="M5 13l4 4L19 7"
                     ></path>
                   </svg>
-                  <h2 class="text-md font-bold text-gray-800">Success!</h2>
+                  <h2 class="text-md font-bold text-gray-800">
+                    {{ $t("success") }}
+                  </h2>
                 </div>
                 <p class="text-gray-600 text-md">
-                  Company Profile Edited successfully
+                  {{ successMessage }}
                 </p>
                 <button
-                  @click="deleteSuccess = !deleteSuccess"
-                  class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                  @click="editSuccess = !editSuccess"
+                  class="custom-button"
                 >
                   OK
                 </button>
@@ -455,392 +831,62 @@
         </div>
       </transition>
     </div>
-  </div>
-  <div v-if="otherBlockSelected">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex flex-row space-x-32">
-                <h1 class="mb-5 text-indigo-800 text-md font-bold">
-                  Add Block Account
-                </h1>
-                <svg @click="otherBlockSelected=!otherBlockSelected" 
-                  class="w-8 h-10 text-red-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </div>
-
-              <form action="" class="">
-                <div class="mb-4">
-                  <label class="custom-label" for="username"> Bank Name </label>
-                  <input
-                    class="custom-input"
-                    id="bank-name"
-                    type="text"
-                    placeholder="Bank Name"
-                    v-model="newBlockBankType"
-                  />
+    <div v-if="showError">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-red-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-4">
+                  <svg
+                    class="w-8 h-8 text-red-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  <h2 class="text-sm font-bold text-gray-800">
+                    {{ $t("error") }}
+                  </h2>
                 </div>
-                <div class="mb-4">
-                  <label class="custom-label" for="username">
-                    Account Number
-                  </label>
-                  <input
-                    class="custom-input"
-                    id="comp-name"
-                    type="text"
-                    placeholder="Account Number"
-                    v-model="newBlockBankAccountNumber"
-                  />
-                </div>
-                <button @click.prevent="saveNewBlockBank" 
-                  class="custom-button bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2"
+                <p class="text-gray-600 text-sm">
+                  {{ errorMessage }}
+                </p>
+                <button
+                  @click="showError = false"
+                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
-                  <i class="fa fa-plus"></i>
-                  <span>Add</span>
+                  {{ $t("ok") }}
                 </button>
-              </form>
-            </div>
-          </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-  <div v-if="otherServiceSelected">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex flex-row space-x-32">
-                <h1 class="mb-5 text-indigo-800 text-md font-bold">
-                  Add Service Account
-                </h1>
-                <svg @click="otherServiceSelected=!otherServiceSelected" 
-                  class="w-8 h-10 text-red-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
               </div>
-
-              <form action="" class="">
-                <div class="mb-4">
-                  <label class="custom-label" for="username"> Bank Name </label>
-                  <input
-                    class="custom-input"
-                    id="bank-name"
-                    type="text"
-                    placeholder="Bank Name"
-                    v-model="newServiceBankType"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label class="custom-label" for="username">
-                    Account Number
-                  </label>
-                  <input
-                    class="custom-input"
-                    id="comp-name"
-                    type="text"
-                    placeholder="Account Number"
-                    v-model="newServiceBankAccountNumber"
-                  />
-                </div>
-                <button @click.prevent="saveNewServiceBank" 
-                  class="custom-button bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2"
-                >
-                  <i class="fa fa-plus"></i>
-                  <span>Add</span>
-                </button>
-              </form>
             </div>
+            <hr class="my-4 bg-red-500" />
           </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
         </div>
-      </div>
-    </transition>
-  </div>
-
-  <div v-if="showConfirmationBlockModal">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-10">
-                <h2 class="text-md font-bold text-pink-800">
-                  Do You Want To Delate this Block Bank Account??
-                </h2>
-              </div>
-
-              <button
-                @click="deleteBlockAccount"
-                class="bg-red-500 text-white px-4 py-2 rounded-md"
-              >
-                Delete
-              </button>
-              <button
-                @click="cancelDeleteBlockAccount"
-                class="bg-gray-400 text-white px-4 py-2 rounded-md ml-2"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-
-  <div v-if="showEditServiceModal">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="flex flex-row">
-            <div>Edit Block Account</div>
-            <div class="ml-64">
-              <svg
-                @click="showEditServiceModal = !showEditServiceModal"
-                class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </div>
-          </div>
-
-          <hr class="my-4 md:min-w-full bg-red-500" />
-
-          <div class="">
-            <form class="px-5 py-5">
-              <div class="mb-4">
-                <label
-                  class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
-                >
-                  Bank Type
-                  <span class="custom-star ml-1">*</span>
-                </label>
-
-                <select
-                  class="border border-gray-400 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-10"
-                  required
-                  style="padding-left: 16px"
-                  v-model="editedServiceAccount.bankType"
-                >
-                  <option :value="editedServiceAccount.bankType">
-                    {{ editedServiceAccount.bankType }}
-                  </option>
-                  <option value="">Select Bank Type</option>
-                  <option value="CBE">CBE</option>
-                  <option value="WEGAGEN">Wegagen</option>
-                  <option value="LIB">Enat</option>
-                  <option value="Dashen">Dashen</option>
-
-                  <option value="Oromia">Oromia</option>
-                  <option value="Absinia">Absinia</option>
-                </select>
-              </div>
-
-              <div class="mb-4">
-                <label
-                  class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
-                >
-                  Bank Account
-                  <span class="custom-star ml-1">*</span>
-                </label>
-
-                <input
-                  type="text"
-                  class="w-full px-4 py-2 border border-gray-400 rounded"
-                  v-model="editedServiceAccount.bankAccountNumber"
-                  placeholder="Bank Account"
-                />
-              </div>
-              <button
-                @click="saveEditedServiceAccount"
-                type="submit"
-                class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                <i class="fas fa-save"
-                  ><span class="text-md ml-3">Save Changes</span></i
-                >
-              </button>
-            </form>
-          </div>
-
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-
-  <div v-if="showConfirmationServiceModal">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-10">
-                <h2 class="text-md font-bold text-pink-800">
-                  Do You Want To Delate this Service Bank Account??
-                </h2>
-              </div>
-
-              <button
-                @click="deleteServiceAccount"
-                class="bg-red-500 text-white px-4 py-2 rounded-md"
-              >
-                Delete
-              </button>
-              <button
-                @click="cancelDeleteServiceAccount"
-                class="bg-gray-400 text-white px-4 py-2 rounded-md ml-2"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-
-  <div v-if="editSuccess">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-4">
-                <svg
-                  class="w-8 h-10 text-green-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-                <h2 class="text-md font-bold text-gray-800">Success!</h2>
-              </div>
-              <p class="text-gray-600 text-md">
-                {{ successMessage }}
-              </p>
-              <button @click="editSuccess = !editSuccess" class="custom-button">
-                OK
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-  <div v-if="showError">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-red-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-4">
-                <svg
-                  class="w-8 h-8 text-red-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-                <h2 class="text-sm font-bold text-gray-800">Error!</h2>
-              </div>
-              <p class="text-gray-600 text-sm">
-                {{ errorMessage }}
-              </p>
-              <button
-                @click="showError = false"
-                class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                OK
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 bg-red-500" />
-        </div>
-      </div>
-    </transition>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: "paymentsView",
   data() {
     return {
+      newBlockBankType: "",
+      newBlockBankAccountNumber: "",
 
-      newBlockBankType:"",
-      newBlockBankAccountNumber:"",
-
-      newServiceBankType:"",
-      newServiceBankAccountNumber:"",
+      newServiceBankType: "",
+      newServiceBankAccountNumber: "",
 
       otherBlockSelected: false,
       otherServiceSelected: false,
@@ -927,46 +973,47 @@ export default {
       });
   },
   methods: {
-  trackNewBlockBankType(account){
-    //console.log("addedblock",account);
-   if(account=="other"){
-    this.addedBlockBankAccounts.forEach((block) =>{
-      if(block.bankType="account"){
-       // alert("hi this is account");
-        this.otherBlockSelected=true;
-        block.bankType="";
+    trackNewBlockBankType(account) {
+      //console.log("addedblock",account);
+      if (account == "other") {
+        this.addedBlockBankAccounts.forEach((block) => {
+          if ((block.bankType = "account")) {
+            // alert("hi this is account");
+            this.otherBlockSelected = true;
+            block.bankType = "";
+          }
+        });
+      } else {
+        this.otherBlockSelected = false;
+        this.account.bankType = account;
       }
-    });
-   }else{
-    this.otherBlockSelected=false;
-    this.account.bankType=account;
-   }
- },
+    },
 
-
-
- trackNewServiceBankType(account){
-    console.log("account is",account);
-   if(account=="other"){
-    this.addedServiceBankAccounts.forEach((service) =>{
-      if(service.bankType="account"){
-        this.otherServiceSelected=true;
-        service.bankType="";
+    trackNewServiceBankType(account) {
+      console.log("account is", account);
+      if (account == "other") {
+        this.addedServiceBankAccounts.forEach((service) => {
+          if ((service.bankType = "account")) {
+            this.otherServiceSelected = true;
+            service.bankType = "";
+          }
+        });
+      } else {
+        this.otherServiceSelected = false;
+        this.account.bankType = account;
       }
-    });
-   }else{
-    this.otherServiceSelected=false;
-    this.account.bankType=account;
-   }
- },
+    },
 
- 
-    saveNewBlockBank(){
-     this.otherBlockSelected=false;
-      console.log("newbanktype and accoutn ",this.newBankType,this.newBankAccountNumber)
+    saveNewBlockBank() {
+      this.otherBlockSelected = false;
+      console.log(
+        "newbanktype and accoutn ",
+        this.newBankType,
+        this.newBankAccountNumber
+      );
       this.blockBankAccounts.push({
         bankAccountNumber: this.newBlockBankAccountNumber,
-        bankType: this.newBlockBankType
+        bankType: this.newBlockBankType,
       });
 
       const companyEditedData = {
@@ -996,15 +1043,15 @@ export default {
           this.showError = true;
           console.log("Error in the catch", error.response.data.message);
         });
-
     },
-    saveNewServiceBank(){
-     // alert("hi")
-     this.otherServiceSelected=false;
-    
+
+    saveNewServiceBank() {
+      // alert("hi")
+      this.otherServiceSelected = false;
+
       this.serviceBankAccounts.push({
         bankAccountNumber: this.newServiceBankAccountNumber,
-        bankType: this.newServiceBankType
+        bankType: this.newServiceBankType,
       });
 
       const companyEditedData = {
@@ -1016,7 +1063,7 @@ export default {
         blockBankAccounts: this.blockBankAccounts,
         serviceBankAccounts: this.serviceBankAccounts,
       };
-console.log("service account: " , this.serviceBankAccounts);
+      console.log("service account: ", this.serviceBankAccounts);
       this.$apiClient
         .patch(
           `/api/v1/organization/${this.companyProfileId}`,
@@ -1034,7 +1081,6 @@ console.log("service account: " , this.serviceBankAccounts);
           this.showError = true;
           console.log("Error in the catch", error.response.data.message);
         });
-
     },
     addBlockBankAccount() {
       this.addBlockAccount = true;
@@ -1047,7 +1093,6 @@ console.log("service account: " , this.serviceBankAccounts);
       console.log("old", this.blockBankAccounts);
       console.log("added bank accounts", this.addedBlockBankAccounts);
     },
-
     editBlockAccountModal(account) {
       /// alert("called");
       // Open the modal and pass the account details
@@ -1129,10 +1174,8 @@ console.log("service account: " , this.serviceBankAccounts);
           companyEditedData
         )
         .then((response) => {
-        
           console.log("response", response);
           if (Number(response.data.status) === 1) {
-            
             this.editSuccess = true;
             this.successMessage = "Bank Deleted Successfully";
 
@@ -1140,7 +1183,7 @@ console.log("service account: " , this.serviceBankAccounts);
           }
         })
         .catch((error) => {
-          this.errorMessage = "Error Delating Bank"
+          this.errorMessage = "Error Delating Bank";
           this.showError = true;
           console.log("Error in the catch", error.response.data.message);
         });
@@ -1316,6 +1359,7 @@ console.log("service account: " , this.serviceBankAccounts);
         .then((response) => {
           if (Number(response.data.status) === 1) {
             console.log("Update response", response.data);
+            this.successMessage = response.data.message;
             this.editSuccess = true;
           }
         })
