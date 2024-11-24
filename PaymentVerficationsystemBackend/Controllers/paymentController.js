@@ -907,7 +907,7 @@ exports.updatePayments = catchAsync(async (req, res,next) => {
     nearestRelevantBill.latest = true;
     await nearestRelevantBill.save();
   }
-  console.log(nearestRelevantBill)
+  // console.log(nearestRelevantBill)
     }
       // Save the updated bill
     await payment.save();
@@ -1099,14 +1099,15 @@ exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllPayments = catchAsync(async (req, res, next) => {
-  const { keyword } = req.query;
+  const { keyword,isPaid } = req.query;
   if (!keyword) {
     return next(new AppError("Keyword is needed, Please try again <latestPayments or allPayments>"));
   }
 
   const searchPattern = new RegExp(keyword, 'i');
   const paymentQuery = {};
-
+  if (isPaid) paymentQuery.isPaid=isPaid
+  console.log(paymentQuery)
   switch (keyword) {
     case "latestPayments":
       const latestSetting = await PaymentSetting.findOne({ latest: true });
@@ -1191,6 +1192,7 @@ const formattedConfirmedAt = latestPayments.confirmedDate ? formatDate(latestPay
 });
 exports.deletePayment = catchAsync(async (req, res,next) => {
     const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
+    console.log(deletedPayment)
     if (!deletedPayment) {
       return next(new AppError("Payment entry not found",404))
     }
