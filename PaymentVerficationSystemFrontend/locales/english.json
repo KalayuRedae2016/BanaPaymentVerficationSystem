@@ -29,6 +29,7 @@
 "totalService": "Total Service",
 "thisMonthlyReport":"This Monthly Report",
 "total":"Total",
+"change":"Change",
 
 
   
@@ -112,6 +113,17 @@
   "warningMessage": "Please fill out all required fields.",
   "errorMessage": "An error occurred. Please try again.",
   "successMessage": "Your company profile was created successfully.",
+  "bankType":"Bank Type",
+
+  "CBE": "Commercial Bank of Ethiopia (CBE)",
+  "Wegagen": "Wegagen Bank",
+  "Enat": "Enat Bank",
+  "Dashen": "Dashen Bank",
+  "Lion": "Lion Bank",
+  "Oromia": "Oromia Bank",
+  "Absinia": "Absinia Bank",
+  "other": "Other",
+  "editCompanyProfile": "Edit Company Profile",
 
 
 

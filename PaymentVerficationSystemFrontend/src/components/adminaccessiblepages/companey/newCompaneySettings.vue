@@ -2,7 +2,7 @@
   <div class="container flex-col">
     <div class="px-4 py-2">
       <h2 class="text-md font-bold mt-2 text-indigo-800 font-bold">
-        Companey Profile {{ $t("companyProfile") }}
+        {{ $t("companyProfile") }}
       </h2>
     </div>
     <div

@@ -18,23 +18,23 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-x-8">
           <div class="flex flex-col">
             <p class="text-sm mb-2 text-gray-800 space-x-16">
-              <span class="font-semibold">Company Name:</span>
+              <span class="font-semibold">{{ $t("compName") }}:</span>
               <span class="text-indigo-800">{{ companyProfile.companyName }}</span>
             </p>
             <p class="text-sm mb-2 text-gray-800 space-x-6">
-              <span class="font-semibold">Company Prefix Code:</span>
+              <span class="font-semibold">{{ $t("compPrefixCode") }}:</span>
               <span class="text-indigo-800">{{ companyProfile.companyPrefixCode }}</span>
             </p>
             <p class="text-sm mb-2 text-gray-800 space-x-1">
-              <span class="font-semibold">Company Phone Number:</span>
+              <span class="font-semibold">{{ $t("companyPhoneNumber") }}:</span>
               <span class="text-indigo-800">{{ companyProfile.companyPhoneNumber }}</span>
             </p>
             <p class="text-sm mb-2 text-gray-800 space-x-16">
-              <span class="font-semibold">Company Email:</span>
+              <span class="font-semibold">{{ $t("compEmail") }}:</span>
               <span class="text-indigo-800">{{ companyProfile.companyEmail }}</span>
             </p>
             <p class="text-sm mb-2 text-gray-800 space-x-12">
-              <span class="font-semibold">Company Address:</span>
+              <span class="font-semibold">{{ $t("compAddress") }}:</span>
               <span class="text-indigo-800">{{ companyProfile.companyAddress }}</span>
             </p>
           </div>
@@ -46,13 +46,13 @@
         </div>
 
         <div class="font-bold text-lg mt-4 mb-2 divide-y divide-dashed">
-          <p class="text-indigo-500 mb-3 mt-4">Block Accounts</p>
+          <p class="text-indigo-500 mb-3 mt-4">{{ $t("blockAccounts") }}</p>
           <div class="mr-16 mt-5">
             <table class="w-full border border-gray-300">
               <thead>
                 <tr class="bg-gray-200">
-                  <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">Bank Type</th>
-                  <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">Bank Account Number</th>
+                  <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
+                  <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -67,13 +67,13 @@
           </div>
 
           <div class="font-bold text-md mt-10 mb-4 divide-y divide-dashed text-indigo-500">
-            Service Accounts
+                 {{ $t("serviceAccounts") }}
             <div class="mr-16 mt-5">
               <table class="w-full border border-gray-300">
                 <thead>
                   <tr class="bg-gray-200">
-                    <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">Bank Type</th>
-                    <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">Bank Account Number</th>
+                    <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
+                    <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
                   </tr>
                 </thead>
                 <tbody>

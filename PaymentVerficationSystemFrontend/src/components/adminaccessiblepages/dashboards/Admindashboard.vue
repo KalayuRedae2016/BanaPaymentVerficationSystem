@@ -236,7 +236,7 @@
                 ><i
                   class="fas fa-users opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Client Profile") }}</span>
+                <span>{{ $t("clientProfile") }}</span>
               </a>
             </li>
 
@@ -255,7 +255,7 @@
                 ><i
                   class="fas fa-cogs opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Payment Setting") }}</span>
+                <span>{{ $t("paymentSetting") }}</span>
               </a>
             </li>
 
@@ -274,7 +274,7 @@
                 ><i
                   class="fas fa-credit-card opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("New Payments") }}</span>
+                <span>{{ $t("newPayments") }}</span>
               </a>
             </li>
 
@@ -293,7 +293,7 @@
                 ><i
                   class="fas fa-list-alt opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("All Payments") }}</span>
+                <span>{{ $t("allPayments") }}</span>
               </a>
             </li>
 
@@ -312,7 +312,7 @@
                 ><i
                   class="fas fa-file-alt opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Reports") }}</span>
+                <span>{{ $t("reports") }}</span>
               </a>
             </li>
 
@@ -329,7 +329,7 @@
                 ><i
                   class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Id Card") }}</span>
+                <span>{{ $t("idCard") }}</span>
               </a>
             </li>
 
@@ -346,7 +346,7 @@
                 ><i
                   class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
                 ></i>
-                <span>{{ $t("Send Message") }}</span>
+                <span>{{ $t("sendMessage") }}</span>
               </a>
             </li>
           </ul>

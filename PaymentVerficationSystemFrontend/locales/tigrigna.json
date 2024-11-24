@@ -46,6 +46,7 @@
  "aboutUs": "ስለ እኛ",
 "blog": "ብሎግ",
 "grandTechLicense": "ግራንድ ቴክ ፈቃድ",
+"change":"ቀይር",
   
 
   "organizationCreatedLoader": "እንቅስቃሴ በማስተናገድ ላይ...",
@@ -63,6 +64,7 @@
   "newCompanyProfile": "አዲስ ኩባንያ ፕሮፋይል",
   "editCompanyProfile": "ኩባንያ ፕሮፋይልን አርትዕ",
   "selectBankType": "ባንኩን አይነት ምረጥ",
+  "bankType":"ዓይነት ባንክ",
   "save": "አስቀምጥ",
   "addBlockAccount": "ተከላከል ሂሳብ አክል",
   "addServiceAccount": "አገልግሎት ሂሳብ አክል",
@@ -110,6 +112,15 @@
   "warningMessage": "እባኮትን ሁሉንም አስፈላጊ ፎልዎች ሙሉ በሙሉ ሙሉ ተመልከት።",
   "errorMessage": "ችግኝ ተከስቷል፣ እባኮትን በሌላ ጊዜ ይሞክሩ።",
   "successMessage": "ኩባንያ ፕሮፋይልዎ በተሳካ ሁኔታ ተፈጥሯል።",
+ "CBE": "አቢሲቢ",
+  "Wegagen": "ወጋገን",
+  "Enat": "እናት",
+  "Dashen": "ዳሽን",
+  "Lion": "ላዮን",
+  "Oromia": "ኦሮሚያ",
+  "Absinia": "አብሲኒያ",
+  "other": "ሌላ",
+  "editCompanyProfile": "የኩባንያ መገለጫ ያስተካክሉ",
 
 
 
