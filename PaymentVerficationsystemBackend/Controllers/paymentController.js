@@ -1192,13 +1192,13 @@ const formattedConfirmedAt = latestPayments.confirmedDate ? formatDate(latestPay
 });
 exports.deletePayment = catchAsync(async (req, res,next) => {
     const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
-    console.log(deletedPayment)
     if (!deletedPayment) {
       return next(new AppError("Payment entry not found",404))
     }
-    res.status(204).json({
+    res.status(200).json({
       status: 'success',
-      data: null,
+      //data: null,
+      message:`Payment with ${deletedPayment._id} is Deleted`
     });
 });
 exports.generateReceipt = catchAsync(async (req, res,next) => {
