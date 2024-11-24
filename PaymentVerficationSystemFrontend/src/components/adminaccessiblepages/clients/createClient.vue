@@ -3,17 +3,17 @@
     <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md border border-gray-200">
   <!-- Left Section: Register Client Title and Import Excel -->
   <div class="flex items-center space-x-6">
-    <h1 class="text-xl text-indigo-800 font-bold">Register Client</h1>
+    <h1 class="text-xl text-indigo-800 font-bold"> {{ $t('registerClient') }}</h1>
 
     <label for="file-upload" class="cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 py-2 px-4 border border-blue-500 rounded-lg transition">
-      <span>Import Client From Excel</span>
+      <span> {{ $t('importClientFromExcel') }}</span>
       <input id="file-upload" type="file" class="hidden" ref="fileInputExcel" @change="handleFileInput" />
     </label>
   </div>
 
   <!-- Right Section: View Clients Link -->
   <a href="#" @click="viewClients()" class="text-blue-500 font-medium hover:underline">
-    View Clients
+    {{ $t('viewClients') }}
   </a>
 </div>
 
@@ -34,32 +34,32 @@
       <div class="w-full space-y-3 md:w-1/2">
         <div class="w-full">
           <label class="custom-label" for="firstName">
-            First Name
+            {{ $t('firstName') }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <input
             id="firstName"
             type="text"
             class="custom-input"
-            placeholder=" First Name"
+            :placeholder="$t('firstName')"
             style="padding-left: 16px"
             v-model="firstName"
           />
 
           <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            First Name is required
+            {{ $t('firstNameRequired') }}
           </p>
         </div>
         <div class="w-full">
           <label class="custom-label" for="middleName">
-            Middle Name
+            {{ $t('middleName') }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <input
             id="midleName"
             type="text"
             class="custom-input"
-            placeholder="  Middle Name"
+              :placeholder="$t('middleName')"
             style="padding-left: 16px"
             v-model="middleName"
           />
@@ -68,48 +68,48 @@
             v-if="middleNameIsRequired"
             class="text-red-500 text-sm mt-1 ml-10"
           >
-            Middle Name is required
+            Middle Name is required {{ $t('middleNameRequired') }}
           </p>
         </div>
 
         <div class="w-full">
           <label class="custom-label" for="lastName">
-            Last Name
+            {{ $t('lastName') }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <input
             id="lastName"
             type="text"
             class="custom-input"
-            placeholder=" Last Name"
+              :placeholder="$t('lastName')"
             style="padding-left: 16px"
             v-model="lastName"
           />
           <p v-if="lastNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            Last Name is required
+            {{ $t('lastNameRequired') }}
           </p>
         </div>
         <div class="w-full">
           <label class="custom-label " for="lastName">
-            <span class="text-cyan-500">Tigrigna Full Name</span>
+            <span class="text-cyan-500"> {{ $t('tigrignaFullName') }}</span>
             <span class="text-red-500 ml-1">*</span>
           </label>
           <input
             id="Full Name"
             type="text"
             class="custom-input"
-            placeholder="ምሉእ ስም አእቲ"
+            :placeholder="$t('tigrignaFullName')"
             style="padding-left: 16px"
             v-model="fullName"
           />
           <p v-if="fullNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            Full Name is required
+            {{ $t('fullNameRequired') }}
           </p>
         </div>
 
         <div class="w-full">
           <label class="custom-label" for="gender">
-            Gender
+            {{ $t('gender') }}
             <span class="text-red-500">*</span>
           </label>
           <select
@@ -118,70 +118,70 @@
             style="padding-left: 16px"
             v-model="gender"
           >
-            <option value="" disabled selected>gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
+            <option value="" disabled selected>  {{ $t('gender') }}</option>
+            <option value="Male">{{$t('male')}}</option>
+            <option value="Female">{{$t('female')}}</option>
           </select>
           <p v-if="genderIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            Gender is required
+            {{ $t('genderRequired') }}
           </p>
         </div>
 
         <div class="w-full">
-          <label class="custom-label"> Age <span>*</span></label>
+          <label class="custom-label"> {{ $t('age') }} <span>*</span></label>
           <input
             id="age"
             type="number"
             class="custom-input"
             required
-            placeholder=" Age"
+             :placeholder="$t('age')"
             style="padding-left: 16px"
             v-model="age"
           />
         </div>
         <p v-if="ageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-          Age is required
+          {{ $t('ageRequired') }}
         </p>
       </div>
 
       <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
         <div class="w-full">
           <label class="custom-label" for="address">
-            Address
+            {{ $t('address') }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <input
             id="address"
             type="text"
             class="custom-input"
-            placeholder="state-zone-city-subsity"
+            pla:placeholder="$t('address')"
             style="padding-left: 16px"
             v-model="address"
           />
           <p v-if="addressIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            Address is required
+            {{ $t('addressRequired') }}
           </p>
         </div>
         <div class="w-full">
           <label class="custom-label" for="email">
-            Email
+            {{ $t('email') }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <input
             id="email"
             type="text"
             class="custom-input"
-            placeholder="Email"
+           :placeholder="$t('email')"
             style="padding-left: 16px"
             v-model="email"
           />
           <p v-if="emailIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            Email is required
+            {{ $t('emailRequired') }}
           </p>
         </div>
         <div class="w-full">
           <label class="custom-label">
-            Phone Number
+            {{ $t('phoneNumber') }}
             <span class="text-red-500">*</span>
           </label>
           <div class="flex flex-row">
@@ -201,7 +201,7 @@
               type="text"
               class="rounded-sm custom-input h-12 mt-3"
               required
-              placeholder="Phone Number"
+             :placeholder="$t('phoneNumber')"
               style="padding-left: 16px"
               v-model="phoneNumber"
             />
@@ -210,13 +210,13 @@
             v-if="phoneNumberIsRequired"
             class="text-red-500 text-sm mt-1 ml-10"
           >
-            Phone Number is required
+          {{ $t('phoneNumberRequired') }}
           </p>
         </div>
 
         <div class="w-full">
           <label class="custom-label">
-            Choose Profile Image
+            {{ $t('chooseProfileImage') }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <input
@@ -227,7 +227,7 @@
             @change="handleImageInput"
           />
           <p v-if="imageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            Profile Image is required
+            {{ $t('profileImageRequired') }}
           </p>
         </div>
       </div>
@@ -238,7 +238,7 @@
           @click="register()"
           class="mt-5 w-full bg-indigo-700 text-white font-semibold py-2 rounded mb-8"
         >
-          SUBMIT
+        {{ $t('submit') }}
         </button>
       </div>
     </div>
@@ -255,7 +255,7 @@
             <div class="bg-white rounded-lg shadow-lg p-8 w-96">
               <div class="flex items-center flex-row space-x-3">
                 <p class="text-blue-600 text-2xl">
-                  Do You Want To Import This File ??
+                 {{ $t('doYouWantToImportFile') }}
                 </p>
 
                 <svg
@@ -279,7 +279,7 @@
                 @click="importClientsFromExel()"
                 class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
               >
-                YES
+              {{ $t('Yes') }}
               </button>
             </div>
           </div>
@@ -311,7 +311,7 @@
                     d="M5 13l4 4L19 7"
                   ></path>
                 </svg>
-                <h2 class="text-md text-green-800">Success!</h2>
+                <h2 class="text-md text-green-800">{{ $t('success') }}</h2>
               </div>
               <p class="text-blue-800 text-md ml-8">
                 {{ successMessage }}
@@ -320,7 +320,7 @@
                 @click="showSuccess = false"
                 class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t('ok') }}
               </button>
             </div>
           </div>
@@ -353,7 +353,7 @@
                     d="M6 18L18 6M6 6l12 12"
                   ></path>
                 </svg>
-                <h2 class="text-sm font-bold text-gray-800">Error!</h2>
+                <h2 class="text-sm font-bold text-gray-800">{{ $t('error') }}</h2>
               </div>
               <p class="text-gray-600 text-sm">
                 {{ errorMessage }}
@@ -362,7 +362,7 @@
                 @click="showError = false"
                 class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t('ok') }}
               </button>
             </div>
           </div>

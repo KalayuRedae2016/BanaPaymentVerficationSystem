@@ -128,6 +128,63 @@
 
 
 
+  "number": "No.",
+  "userCode": "User Code",
+  "fullName": "Full Name",
+  "createdAt": "Created At",
+  "updatedAt": "Updated At",
+  "deactivate": "Deactivate",
+  "resetPassword": "Reset Password",
+  "searchByNameEmailUsername": "Search by Name, Email, Username",
+  "addNewClient": "Add New Client",
+  "viewDeactivatedUsers": "View Deactivated Users",
+  "showMore": "Show More",
+  "select": "Select",
+  "registerClient": "Register Client",
+  "importClientFromExcel": "Import Client From Excel",
+  "viewClients": "View Clients",
+
+  "firstNameRequired": "First Name is Required *",
+  "firstName": "First Name",
+
+  "middleNameRequired": "Middle Name is required *",
+  "middleName": "Middle Name",
+
+  "lastNameRequired": "Last Name is required*",
+  "lastName": "Last Name",
+
+  "tigrignaFullNameRequired": "Tigrigna Full Name is Required *",
+  "tigrignaFullName": "Full Name In Tigrigna",
+
+  "genderRequired": "Gender is required *",
+  "gender": "Gender",
+
+  "ageRequired": "Age is required *",
+  "age": "Age",
+
+  "addressRequired": "Address *",
+  "address": "State-Zone-City-Subsity",
+
+  "emailRequired": "Email is required*",
+  "email": "Email",
+
+  "phoneNumberRequired": "Phone Number is required *",
+  "phoneNumberExample": "+251 (Eth)",
+  "phoneNumber": "Phone Number",
+
+  "chooseProfileImage": "Choose Profile Image *",
+  "profileImageRequired": "Profile Image is required",
+
+  "noFileChosen": "No file chosen",
+  "editClientProfile": "Edit Client Profile",
+  "male": "Male ",
+  "female": "Female",
+  "doYouWantToImportFile": "Do You Want To Import This File?? ",
+  "yes": "YES ",
+
+
+
+
 
 
 
@@ -142,7 +199,6 @@
   "action": "Action",
   "actions": "Actions",
   "age": "Age",
-  "add": "Add",
   "addClient": "Add Client",
   "addFamilyMember": "Add Family Member",
   "addFamilyMembers": "Add Family Members",

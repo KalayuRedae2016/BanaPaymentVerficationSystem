@@ -351,7 +351,7 @@
         >
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="flex flex-row">
-              <div>{{ $t("editBlockAccount") }}
+              <div>{{ $t("editBlockAccount") }} 
               </div>
               <div class="ml-64">
                 <svg
@@ -437,6 +437,8 @@
           </div>
         </div>
       </transition>
+
+
 
       <div v-if="deleteSuccess">
         <transition name="fade" mode="out-in">
@@ -822,7 +824,7 @@
                   @click="editSuccess = !editSuccess"
                   class="custom-button"
                 >
-                  OK
+                {{ $t('success') }}
                 </button>
               </div>
             </div>
@@ -854,7 +856,7 @@
                       d="M6 18L18 6M6 6l12 12"
                     ></path>
                   </svg>
-                  <h2 class="text-sm font-bold text-gray-800">
+                  <h2 class="text-sm font-bold text-gray-80s0">
                     {{ $t("error") }}
                   </h2>
                 </div>
@@ -1082,6 +1084,7 @@ export default {
           console.log("Error in the catch", error.response.data.message);
         });
     },
+
     addBlockBankAccount() {
       this.addBlockAccount = true;
       console.log("i am here");
@@ -1093,6 +1096,7 @@ export default {
       console.log("old", this.blockBankAccounts);
       console.log("added bank accounts", this.addedBlockBankAccounts);
     },
+
     editBlockAccountModal(account) {
       /// alert("called");
       // Open the modal and pass the account details
@@ -1100,6 +1104,7 @@ export default {
       // Create a copy to prevent direct mutation
       this.showEditBlockModal = true;
     },
+
     saveEditedBlockAccount() {
       // Find the index of the edited account in the array
       const index = this.blockBankAccounts.findIndex(
@@ -1138,9 +1143,9 @@ export default {
           this.showError = true;
           console.log("Error in the catch", error.response.data.message);
         });
-
-      //
     },
+
+
 
     confirmDeleteBlockAccount(account) {
       this.blockAccountToDelete = account;
