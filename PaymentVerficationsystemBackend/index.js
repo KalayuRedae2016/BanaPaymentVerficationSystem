@@ -135,7 +135,6 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/paymentSetting',paymentSettingRouter);
 app.use('/api/v1/payments',paymentRouter)
 
-
 app.use('/api/ups',paymentRouter)//third Party Bank API
 
 app.all('*', (req, res, next) => {

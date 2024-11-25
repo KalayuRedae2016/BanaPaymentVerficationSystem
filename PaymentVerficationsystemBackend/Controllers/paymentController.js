@@ -140,7 +140,7 @@ exports.searchBills = async (req, res) => {
       let totalPenality = 0; // Initialize totalPenality here
 
       for (const type of paymentTypes) {
-        if (payment[type] && payment[type].amount) {
+        if (payment[type] && payment[type].amount&&payment[type].isPaid!=true) {
           const dueDate = new Date(paymentSetting.endingDate);
           const paymentDate = new Date();
           const daysLate = Math.max(0, Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24)));
@@ -157,10 +157,10 @@ exports.searchBills = async (req, res) => {
           // Accumulate penalty for totalPenality
           totalPenality += penalty;
 
-          console.log("Penalty:", penalty);
-          console.log("Amount to Pay:", amountToPay);
-          console.log("Days Late:", daysLate);
-          console.log("Total Penalty:", totalPenality);
+          // console.log("Penalty:", penalty);
+          // console.log("Amount to Pay:", amountToPay);
+          // console.log("Days Late:", daysLate);
+          // console.log("Total Penalty:", totalPenality);
 
           items.push({
             _id: payment._id,
@@ -228,6 +228,7 @@ exports.getMoreBills = async (req, res) => {
           { 'regular._id': id },
           { 'subsidy._id': id },
           { 'service._id': id },
+          { 'penality._id': id },
         ],
       })),
     };
@@ -308,8 +309,7 @@ exports.getMoreBills = async (req, res) => {
           billDetails.push({
             _id: bill._id,
             customerName: bill.fullName,
-            amount:
-              type === 'service'
+            amount:type === 'service'
                 ? paymentType.amount + bill.registrationFee + totalPenality
                 : paymentType.amount,
             billCCY: 'ETB',

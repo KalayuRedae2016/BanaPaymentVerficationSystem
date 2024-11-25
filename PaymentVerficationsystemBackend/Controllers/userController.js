@@ -23,6 +23,14 @@ const userFileUpload = createMulterMiddleware(
   ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'] // Allowed file types
 );
 
+const filterObj = (obj, ...allowedFields) => {
+  const newObj = {};
+  Object.keys(obj).forEach(el => {
+    if (allowedFields.includes(el)) newObj[el] = obj[el];
+  });
+  return newObj;
+};
+
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
 
@@ -202,33 +210,31 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  // Prevent updating password or userCode
-  if (req.body.password || req.body.userCode) {
-    return res.status(401).json({
-      status: 0,
-      message:
-        'Unauthorized to change userCode. Use /updatePassword to change password.',
-    });
+  // 1) Create error if user POSTs password data
+  if (req.body.password) {
+    return next(
+      new AppError(
+        'This route is not for password updates. Please use /updateMyPassword.',
+        400
+      )
+    );
   }
-  // Extract updated data from request body
-  const updatedData = { ...req.body };
-  // Check if there is an uploaded file for the profile image
-  if (req.file) {
-    updatedData.profileImage = req.file.filename;
-  }
-  // Update the user with new data
+  // 2) Filtered out unwanted fields names that are not allowed to be updated
+  const filteredBody = filterObj(req.body,'firstName','middleName','lastName','tigrignaName','phoneNumber','address','email','age','gender');
+  if (req.file) filteredBody.profileImage= req.file.filename;
+
+  // 3) Update user document
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
-    { $set: updatedData },
-    { new: true, runValidators: true }
+    {$set:filteredBody}, 
+    {new: true,runValidators: true}
   );
 
-  const formattedCreatedAt = user.createdAt ? formatDate(user.createdAt) : null;
-  const formattedUpdatedAt = user.updatedAt ? formatDate(user.updatedAt) : null;
+  const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
+  const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
 
-  // Respond with the updated user data
   res.status(200).json({
-    status: 1,
+    status: 'success',
     message: {
       ...updatedUser._doc,
       formattedCreatedAt,

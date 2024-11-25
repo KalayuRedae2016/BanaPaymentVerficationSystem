@@ -114,6 +114,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     }
   }
 });
+
 exports.login = catchAsync(async (req, res, next) => {
   const { userCode, password } = req.body
   // Input validation
@@ -170,6 +171,14 @@ exports.login = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.logout = catchAsync(async(req, res,next) => {
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+  res.status(200).json({ status: 'success' });
+});
+
 exports.authenticationJwt = catchAsync(async (req, _, next) => {
   let token;
   if (
@@ -191,6 +200,38 @@ exports.authenticationJwt = catchAsync(async (req, _, next) => {
     next();
   });
 });
+
+// Only for rendered pages, no errors!
+// exports.isLoggedIn = async (req, res, next) => {
+//   if (req.cookies.jwt) {
+//     try {
+//       // 1) verify token
+//       const decoded = await promisify(jwt.verify)(
+//         req.cookies.jwt,
+//         process.env.JWT_SECRET
+//       );
+
+//       // 2) Check if user still exists
+//       const currentUser = await User.findById(decoded.id);
+//       if (!currentUser) {
+//         return next();
+//       }
+
+//       // 3) Check if user changed password after the token was issued
+//       if (currentUser.changedPasswordAfter(decoded.iat)) {
+//         return next();
+//       }
+
+//       // THERE IS A LOGGED IN USER
+//       res.locals.user = currentUser;
+//       return next();
+//     } catch (err) {
+//       return next();
+//     }
+//   }
+//   next();
+// };
+
 //see also for mulitile roles with argument ...requiredrole
 exports.requiredRole = (requiredrole) => {
   return async (req, res, next) => {
@@ -202,7 +243,6 @@ exports.requiredRole = (requiredrole) => {
     next();
   };
 };
-
 exports.forgetPassword = catchAsync(async (req, res, next) => {
   //console.log(req.body.email)
   const user = await User.findOne({ email: req.body.email });
@@ -244,8 +284,8 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   }
 });
 exports.resetPassword = catchAsync(async (req, res, next) => {
-  console.log(req.body.password)
-  console.log(req.body.token)
+  // console.log(req.body.password)
+  // console.log(req.body.token)
   const hashedToken = crypto.createHash('sha256').update(req.body.token).digest('hex');
   const user = await User.findOne({ passwordResetToken: hashedToken, passwordResetExpires: { $gt: Date.now() } });
   if (!user) {
