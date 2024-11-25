@@ -269,7 +269,7 @@
                       d="M5 13l4 4L19 7"
                     ></path>
                   </svg>
-                  <h2 class="text-sm font-bold text-gray-800">{{ $t("suiccess") }}</h2>
+                  <h2 class="text-sm font-bold text-gray-800">{{ $t("success") }}</h2>
                 </div>
                 <p class="text-gray-600 text-sm">
                   <!-- Your Comany Profile Created successfully -->

@@ -225,6 +225,8 @@
   "regularAmount": "በሚያስፈልግ መጠን: 5000",
   "subsidyAmount": "የእርዳታ መጠን",
   "urgentAmount": "አስቸኳይ መጠን",
+  "serviceAmount": "የአገልግሎት መጠን",
+  "registrationFee": "የምዝገባ ክፍያ",
   "registrationFeePercentage": "የምዝገባ ክፍያ %",
   "activeYear": "በሥራ ያለው ዓመት",
   "activeMonth": "በሥራ ያለው ወር",

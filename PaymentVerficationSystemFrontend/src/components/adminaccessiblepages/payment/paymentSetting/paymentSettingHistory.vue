@@ -3,7 +3,7 @@
     <div class="flex flex-col lg:flex-row lg:space-x-5">
       <div class="flex flex-row w-1/2 space-x-3 mt-5">
         <label for="month" class="block text-sm font-medium text-gray-700"
-          >Year</label
+          >{{ $t('year') }}</label
         >
         <select
           @change="fetchPaymentSetting()"
@@ -19,7 +19,7 @@
       </div>
       <div class="flex flex-row w-1/2 space-x-3 mt-5">
         <label for="month" class="block text-sm font-medium text-gray-700"
-          >Month</label
+          >  {{ $t('month') }}</label
         >
         <select
           @change="fetchPaymentSetting()"
@@ -35,53 +35,53 @@
       </div>
     </div>
     <div class="p-4">
-      <p v-if="selectYear" class="text-red-500">Please Select Year</p>
-      <p v-if="selectMonth" class="text-blue-500">Please Select Month</p>
+      <p v-if="selectYear" class="text-red-500">{{ $t('pleaseSelectYear') }}</p>
+      <p v-if="selectMonth" class="text-blue-500">{{ $t('pleaseSelectMonth') }}</p>
     </div>
 
     <div v-if="!noSettingOpened" class="grid grid-cols-1 gap-4 border-t-4  border-b-4 border-blue-500 -mt-5 rounded-lg" >
       <div class="bg-white shadow-md rounded-lg px-6 pt-5">
         <div class="space-y-2 text-gray-700">
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Regular Amount:</strong>
+            <strong class="w-1/2">Regular Amount {{ $t('regularAmount') }}:</strong>
             <span class="w-1/2">{{ paymentSetting.regularAmount }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Subsidy Amount:</strong>
+            <strong class="w-1/2">Subsidy Amount {{ $t('subsidyAmount') }}:</strong>
             <span class="w-1/2">{{ paymentSetting.subsidyAmount }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Urgent Amount:</strong>
+            <strong class="w-1/2">Urgent Amount {{ $t('urgentAmount') }}:</strong>
             <span class="w-1/2">{{ paymentSetting.urgentAmount }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Service Amount:</strong>
+            <strong class="w-1/2">Service Amount {{ $t('serviceAmount') }}:</strong>
             <span class="w-1/2">{{ paymentSetting.serviceAmount }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Starting Date:</strong>
+            <strong class="w-1/2">Starting Date {{ $t('startingDate') }}:</strong>
             <span class="w-1/2">{{ paymentSetting.formattedStartDate }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Ending Date:</strong>
+            <strong class="w-1/2">Ending Date {{ $t('endingDate') }}:</strong>
             <span class="w-1/2">{{ paymentSetting.formattedEndDate }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Penalty 5 days in %:</strong>
+            <strong class="w-1/2">{{ $t('penaltyPerFiveDaysPercentage') }} %:</strong>
             <span class="w-1/2">{{ paymentSetting.penalityLate5Days }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Penalty 7-10 days in %:</strong>
+            <strong class="w-1/2">{{ $t('penaltyPerTenDaysPercentage') }} %:</strong>
             <span class="w-1/2">{{ paymentSetting.penalityLate10Days }}</span>
           </p>
           <p class="flex justify-between items-center">
-            <strong class="w-1/2">Penalty above 10 days %:</strong>
+            <strong class="w-1/2">{{ $t('penaltyPerAboveTenDaysPercentage') }} %:</strong>
             <span class="w-1/2">{{
               paymentSetting.penalityLateAbove10Days
             }}</span>
           </p>
           <p class="flex justify-between items-center pb-10">
-            <strong class="w-1/2">Registration Fee in %:</strong>
+            <strong class="w-1/2">{{$t('registrationFee')  }} %:</strong>
             <span class="w-1/2 ">{{ paymentSetting.regFeeRate }}</span>
           </p>
         </div>
@@ -90,11 +90,9 @@
 
     <div v-if="noSettingOpened" class="m-5">
       <p class="text-blue-500">
-        No opened payment setting found for the selected month in the given
-        year. You can create and activate a setting for this month for the given
-        year.
+        {{ $t('noOpenedPaymentSetting') }}
       </p>
-      <p class="text-pink-400">Selected Time {{ year }} -{{ month }}</p>
+      <p class="text-pink-400"> {{ $t('selectedTime') }} {{ year }} -{{ month }}</p>
     </div>
   </div>
 </template>

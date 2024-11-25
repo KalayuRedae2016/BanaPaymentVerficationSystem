@@ -14,7 +14,7 @@
               <div class="flex flex col lg:flex-row lg:space-x-12">
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
-                    Regular Amount
+                     {{ $t('regularAmount') }}
                     <span class="text-red-500 ml-1">*</span>
                   </label>
                   <input
@@ -27,7 +27,7 @@
                 </div>
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
-                    Subsidy Amount
+                      {{ $t('subsidyAmount') }}
                     <span class="text-red-500 ml-1">*</span>
                   </label>
                   <input
@@ -40,7 +40,7 @@
                 </div>
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
-                    Urgent
+                     {{ $t('urgent') }}
                     <span class="text-red-500 ml-1">*</span>
                   </label>
                   <input
@@ -53,7 +53,7 @@
                 </div>
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
-                    Service
+                     {{ $t('service') }}
                     <span class="text-red-500 ml-1">*</span>
                   </label>
                   <input
@@ -67,7 +67,7 @@
               </div>
               <div class="mb-4">
                 <label class="custom-label" for="amount">
-                  Registration Fee Rate in %
+                 {{ $t('registrationFeePercentage') }} {{ $t('registrationFeeRatePersentage') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
                 <input
@@ -80,7 +80,7 @@
               </div>
               <div class="mb-4">
                 <label class="custom-label" for="activeMonth">
-                  Active Year
+                  {{ $t('activeYear') }}
                   <span class="custom-star ml-1">*</span>
                 </label>
                 <select
@@ -96,7 +96,7 @@
 
               <div class="mb-4">
                 <label class="custom-label" for="activeMonth">
-                  Active Month
+                  {{ $t('activeMonth') }}
                   <span class="custom-star ml-1">*</span>
                 </label>
                 <select
@@ -120,7 +120,7 @@
 
               <div class="mb-4">
                 <label class="custom-label" for="startingDate">
-                  Starting Day
+                  {{ $t('startingDay') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
                 <input
@@ -134,7 +134,7 @@
 
               <div class="mb-4">
                 <label class="custom-label" for="endingDate">
-                  Ending Day
+                  {{ $t('endingDate') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
                 <input
@@ -148,7 +148,7 @@
 
               <div class="mb-4">
                 <label class="custom-label" for="penalityLate5Days">
-                  Penality Five Days
+                  {{ $t('penalityFiveDaysPercentage') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
                 <input
@@ -161,7 +161,7 @@
               </div>
               <div class="mb-4">
                 <label class="custom-label" for="upTo10Days">
-                  Penality for 7-10 Days
+                  {{ $t('penaltyPerTenDaysPercentage') }}
 
                   <span class="text-red-500 ml-1">*</span>
                 </label>
@@ -175,7 +175,8 @@
               </div>
               <div class="mb-4">
                 <label class="custom-label" for="above10DaysInMonth">
-                  Penality greater 10 days
+             
+                  {{ $t('penaltyPerAboveTenDaysPercentage') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
                 <input
@@ -192,12 +193,13 @@
                   type="submit"
                   class="ml-1 bg-indigo-800 hover:bg-indigo-500 text-white py-2 px-4 rounded"
                 >
-                  Submit
+                {{ $t('submit') }}
                 </button>
 
                 <div class="flex flex-col space-y-3">
                   <p v-if="fillAllfields" class="text-red-500">
                     Fill All Fields
+                    {{ $t('fillAllFields') }}
                   </p>
                   <p v-if="fiveDayLessTenDay" class="text-red-500">
                     Penality 5 days Can not be Greater than charge 10 day
@@ -226,7 +228,7 @@
             @click="showPaymentEditingActivating = true"
             class="custom-button m-4"
           >
-            Activate
+          {{ $t('activate') }}
           </button>
         </div>
 
@@ -237,56 +239,46 @@
           <!-- Payment Information Column 1 -->
           <div class="flex flex-col text-blue-800 w-1/3">
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Regular
-              Amount: {{ paymentSetting.regularAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('regularAmount') }}: {{ paymentSetting.regularAmount }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Subsidy
-              Amount: {{ paymentSetting.subsidyAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('subsidyAmount') }}: {{ paymentSetting.subsidyAmount }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Urgent
-              Amount: {{ paymentSetting.urgentAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>  {{ $t('urgentAmount') }}: {{ paymentSetting.urgentAmount }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Service
-              Amount: {{ paymentSetting.serviceAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>  {{ $t('serviceAmount') }}: {{ paymentSetting.serviceAmount }}
             </p>
             <p class="text-md mb-2">
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i>
-              Registration Fee %: {{ paymentSetting.regFeeRate }} %
+              Registration Fee %: {{ paymentSetting.regFeeRate }} % {{ $t('registrationFeePercentage') }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Active
-              Year: {{ paymentSetting.activeYear }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('activeYear') }}: {{ paymentSetting.activeYear }}
             </p>
           </div>
 
           <!-- Payment Information Column 2 -->
           <div class="flex flex-col text-blue-800 w-1/3">
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Active
-              Month: {{ paymentSetting.activeMonth }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('activeMonth') }}: {{ paymentSetting.activeMonth }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Starting
-              Day: {{ paymentSetting.formattedStartDate }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>{{ $t('startingDay') }}: {{ paymentSetting.formattedStartDate }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Ending
-              Day: {{ paymentSetting.formattedEndDate }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('endingDay') }}: {{ paymentSetting.formattedEndDate }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Penalty
-              Per Five Days %: {{ paymentSetting.penalityLate5Days }} %
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('penalityFiveDaysPercentage') }} %: {{ paymentSetting.penalityLate5Days }} %
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Penalty
-              Per Ten Days %: {{ paymentSetting.penalityLate10Days }} %
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>{{ $t('penaltyPerTenDaysPercentage') }} %:{{ paymentSetting.penalityLate10Days }} %
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> Penalty
-              Per Above 10 Days %:
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> 
+              {{ $t('penaltyPerAboveTenDaysPercentage') }}
               {{ paymentSetting.penalityLateAbove10Days }} %
             </p>
           </div>
@@ -300,7 +292,7 @@
               class="h-8 flex items-center px-4 border border-indigo-800 rounded hover:bg-gray-100 transition duration-200 mt-4"
             >
               <span class="text-gray-600 hover:text-gray-800 font-bold">
-                <i class="fas fa-edit text-pink-500"></i> Edit
+                <i class="fas fa-edit text-pink-500"></i> {{ $t('edit') }}
               </span>
             </button>
           </div>
@@ -316,7 +308,7 @@
         <div class="bg-white rounded-lg p-6 border border-cyan-500">
           <div class="flex flex-row items-center">
             <!-- Text on the left -->
-            <div>Edit Regular Payment</div>
+            <div>Edit Regular Payment {{ $t('editRegularPayment') }}</div>
 
             <!-- Icon on the right -->
             <div
@@ -348,7 +340,7 @@
                 <div class="flex flex-col">
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
-                      Regular Amount
+                      {{ $t('regularAmount') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -361,7 +353,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
-                      Subsidy Amount
+                      {{ $t('subsidyAmount') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -374,7 +366,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
-                      Urgent Amount
+                      {{ $t('urgentAmount') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -388,7 +380,7 @@
 
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
-                      Service Amount
+                      {{ $t('serviceAmount') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -401,7 +393,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
-                      Registration Fee
+                      {{ $t('registrationFee') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -414,7 +406,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="activeMonth">
-                      Active Year
+                      {{ $t('activeYear') }}
                       <span class="custom-star ml-1">*</span>
                     </label>
                     <select
@@ -432,7 +424,7 @@
                 <div class="flex flex-col">
                   <div class="mb-4">
                     <label class="custom-label" for="activeMonth">
-                      Active Month
+                      {{ $t('activeMonth') }}
                       <span class="custom-star ml-1">*</span>
                     </label>
                     <select
@@ -451,7 +443,7 @@
                   </div>
                   <div class="mb-4">
                     <label for="startingDate" class="custom-label"
-                      >Starting Date
+                      >{{ $t('startingDay') }}
                       <span class="text-red-500 ml-1">*</span></label
                     >
                     <input
@@ -463,7 +455,7 @@
                   </div>
                   <div class="mb-4">
                     <label for="endingDate" class="custom-label"
-                      >Ending Date
+                      >{{ $t('endingDay') }}
                       <span class="text-red-500 ml-1">*</span></label
                     >
                     <input
@@ -475,7 +467,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label">
-                      Penality Five Days
+                      {{ $t('penalityFiveDaysPercentage') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -487,7 +479,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label">
-                      Penality Ten Days
+                      {{ $t('penaltyPerTenDaysPercentage') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -500,7 +492,7 @@
 
                   <div class="mb-4">
                     <label class="custom-label">
-                      Penality Above Ten Days
+                     {{ $t('penaltyPerAboveTenDaysPercentage') }}
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -522,7 +514,7 @@
                 type="submit"
                 class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded"
               >
-                Update
+               {{ $t('update') }}
               </button>
               <button
                 v-if="paymentActivate"
@@ -533,7 +525,7 @@
                 type="submit"
                 class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded"
               >
-                Activate
+               {{ $t('activate') }}
               </button>
             </form>
           </div>
@@ -564,7 +556,7 @@
                     d="M5 13l4 4L19 7"
                   ></path>
                 </svg>
-                <h2 class="text-md text-green-800">Success!</h2>
+                <h2 class="text-md text-green-800"> {{ $t('success') }}!</h2>
               </div>
               <p class="text-blue-800 text-md ml-8">
                 {{ successMessage }}
@@ -573,7 +565,7 @@
                 @click="showSuccess = false"
                 class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t('ok') }}
               </button>
             </div>
           </div>
@@ -606,7 +598,7 @@
                     d="M6 18L18 6M6 6l12 12"
                   ></path>
                 </svg>
-                <h2 class="text-sm font-bold text-gray-800">Error!</h2>
+                <h2 class="text-sm font-bold text-gray-800">{{ $t('error') }}!</h2>
               </div>
               <p class="text-gray-600 text-sm">
                 {{ errorMessage }}
@@ -615,7 +607,7 @@
                 @click="showError = false"
                 class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t('ok') }}
               </button>
             </div>
           </div>

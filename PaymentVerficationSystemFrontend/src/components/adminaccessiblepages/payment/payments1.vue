@@ -3,7 +3,7 @@
 
 
     <div class="px-3 md:px-4 py-3">
-      <h1 class="text-indigo-800 font-bold">Payment Settings</h1>
+      <h1 class="text-indigo-800 font-bold">{{ $t('paymentSettings') }}</h1>
     </div>
 
     <div class="border-t border-indigo-800 mt-1 py-4">
@@ -25,12 +25,12 @@
                   <div class="flex items-center">
                     <input v-model="paymentSettingStatus" type="radio" value="currentSetting"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">Current Payment Setting</label>
+                    <label class="ml-3 block text-sm font-medium text-gray-700"> {{ $t('currentPaymentSetting') }}</label>
                   </div>
                   <div class="flex items-center">
                     <input v-model="paymentSettingStatus" type="radio" value="paymentSettingHistory"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">Payment Setting History</label>
+                    <label class="ml-3 block text-sm font-medium text-gray-700">  {{ $t('paymentSettingHistory') }}</label>
                   </div>
 
                 </div>
@@ -48,12 +48,12 @@
                   <div class="flex items-center">
                     <input v-model="paymentStatus" type="radio" value="newPayment"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">Confirm New Payment</label>
+                    <label class="ml-3 block text-sm font-medium text-gray-700"> {{ $t('confirmNewPayment') }}</label>
                   </div>
                   <div class="flex items-center">
                     <input v-model="paymentStatus" type="radio" value="creditTransfer"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">Credit/Transfer</label>
+                    <label class="ml-3 block text-sm font-medium text-gray-700"> {{ $t('creditTransfer') }}</label>
                   </div>
                 </div>
                 <new-payment v-if="paymentStatus === 'newPayment'" />
