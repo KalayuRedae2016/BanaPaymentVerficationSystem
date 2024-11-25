@@ -2,7 +2,7 @@
  
   <div class="flex justify-center bg-gray-50 min-h-screen ">
     <div
-      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 mt-8 mb-8 shadow-xl rounded-2xl bg-white mx-3"
+      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 mt-8 mb-8 shadow-xl rounded-2xl bg-white mx-3 border border-gray-200"
     >
   
       <div class="grid place-items-center">
