@@ -194,6 +194,9 @@
   "checkYourEmail": "Check your email!",
   "passwordResetEmailSent": "We've sent a password reset link to your email. Please follow the instructions to reset your password."
 ,
+
+ "passwordRequired": "Password is required",
+ "usernameRequired": "Username is required",
 "backToLogin": "Back to Login",
  "forgotPassword": "Forgot Password",
  "enterEmailPassword": "Enter email/password",

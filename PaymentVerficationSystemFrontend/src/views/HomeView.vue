@@ -2,7 +2,7 @@
  
   <div class="flex justify-center bg-gray-50 min-h-screen ">
     <div
-      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md  mt-8 mb-8 shadow-xl rounded-2xl bg-white"
+      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 mt-8 mb-8 shadow-xl rounded-2xl bg-white mx-3"
     >
   
       <div class="grid place-items-center">
@@ -34,7 +34,7 @@
                 :placeholder="$t('enterEmailPassword')"
               />
             </div>
-            <p v-if="usernameIsRequired" class="text-red-500 mb-6 text-center mt-3 text-sm mb-3">User name is required</p>
+            <p v-if="usernameIsRequired" class="text-red-500 mb-6 text-center mt-3 text-sm mb-3">{{ $t('usernameRequired') }}</p>
             <label
               class="block text-gray-700 text-sm font-bold mb-2"
               for="p assword"
