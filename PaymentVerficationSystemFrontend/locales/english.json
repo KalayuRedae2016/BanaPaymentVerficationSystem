@@ -81,7 +81,7 @@
   "saveChanges": "Save Changes",
   "add": "Add",
   "cancel": "Cancel",
-  "ok": "OK",
+  "ok": "OK", 
   "saveEditedServiceAccount": "Save Changes",
   "changePassword": "Change Password",
   "oldPassword": "Old Password:",
@@ -124,88 +124,9 @@
   "Absinia": "Absinia Bank",
   "other": "Other",
   "editCompanyProfile": "Edit Company Profile",
-  "bankName":"Bank Name",
 
 
-
-  "number": "No.",
-  "userCode": "User Code",
-  "fullName": "Full Name",
-  "createdAt": "Created At",
-  "updatedAt": "Updated At",
-  "deactivate": "Deactivate",
-  "resetPassword": "Reset Password",
-  "searchByNameEmailUsername": "Search by Name, Email, Username",
-  "addNewClient": "Add New Client",
-  "viewDeactivatedUsers": "View Deactivated Users",
-  "showMore": "Show More",
-  "select": "Select",
-  "registerClient": "Register Client",
-  "importClientFromExcel": "Import Client From Excel",
-  "viewClients": "View Clients",
-
-  "firstNameRequired": "First Name is Required *",
-  "firstName": "First Name",
-
-  "middleNameRequired": "Middle Name is required *",
-  "middleName": "Middle Name",
-
-  "lastNameRequired": "Last Name is required*",
-  "lastName": "Last Name",
-
-  "tigrignaFullNameRequired": "Tigrigna Full Name is Required *",
-  "tigrignaFullName": "Full Name In Tigrigna",
-
-  "genderRequired": "Gender is required *",
-  "gender": "Gender",
-
-  "ageRequired": "Age is required *",
-  "age": "Age",
-
-  "addressRequired": "Address *",
-  "address": "State-Zone-City-Subsity",
-
-  "emailRequired": "Email is required*",
-  "email": "Email",
-
-  "phoneNumberRequired": "Phone Number is required *",
-  "phoneNumberExample": "+251 (Eth)",
-  "phoneNumber": "Phone Number",
-
-  "chooseProfileImage": "Choose Profile Image *",
-  "profileImageRequired": "Profile Image is required",
-
-  "noFileChosen": "No file chosen",
-  "editClientProfile": "Edit Client Profile",
-  "male": "Male ",
-  "female": "Female",
-  "doYouWantToImportFile": "Do You Want To Import This File?? ",
-  "yes": "YES ",
-
-  "enterEmailMessage": "Enter your email address and we'll send you a link to reset your password",
-  "enterYourEmail": "Enter your email",
-  "sendResetLink": "Send Reset Link",
-  "signIn": "Sign In",
-  "rememberedPassword": "Remembered your password?",
-  "loginHere": "Login here",
-  "viewActiveUsers": "View Active Users",
-  "active": "Active",
-  "activated": "Activated",
-  "checkYourEmail": "Check your email!",
-  "passwordResetEmailSent": "We've sent a password reset link to your email. Please follow the instructions to reset your password."
-,
-
- "passwordRequired": "Password is required",
- "usernameRequired": "Username is required",
-"backToLogin": "Back to Login",
- "forgotPassword": "Forgot Password",
- "enterEmailPassword": "Enter email/password",
-  "download": "Download",
-  "sendEMessage": "Send E-Message",
-  "subject": "Subject*",
-  "sendTo": "Send to",
-  "check": "Check",
-  "message":"Message",
+  "sendMessage": "Send Message",
   "paymentSettings": "Payment Settings",
   "paymentSetting": "Payment Setting",
   "newPayment": "New Payment",
@@ -221,7 +142,6 @@
   "regularAmount": "Regular Amount",
   "subsidyAmount": "Subsidy Amount",
   "urgentAmount": "Urgent Amount",
-  "serviceAmount": "Service Amount",
   "registrationFeePercentage": "Registration Fee %",
   "activeYear": "Active Year",
   "activeMonth": "Active Month",
@@ -246,7 +166,6 @@
   "transferToRequired": "Transfer To Required",
   "amountRequired": "Amount Required",
   "transferDateRequired": "Transfer Date Required",
-  "registrationFee":"Registration Fee",
   "unforbiddenTransferFromSameBank": "Unforbidden Transfer From Same Bank",
   "paymentType": "Payment Type",
   "block": "Block",
@@ -298,11 +217,15 @@
 
 
 
+
+
+
   "about": "About",
   "aboutUs": "About Us",
   "action": "Action",
   "actions": "Actions",
   "age": "Age",
+  "add": "Add",
   "addClient": "Add Client",
   "addFamilyMember": "Add Family Member",
   "addFamilyMembers": "Add Family Members",

@@ -7,8 +7,6 @@
   "detail": "ዝርዝሮች",
   "yearMonth":"ዓመት-ወርሒ",
   "total":"ጠቅላላ",
-
-
   "view": "እንቅስቃሴ",
   "allPaiments": "ሁሉም ክፍያዎች",
   "allOverdueClients": "ሁሉም ተሳሳት ደንበኞች",
@@ -26,7 +24,6 @@
   "mService": "ማ.አገልግሎት",
   "totalService": "ጠቅላላ አገልግሎት",
   "thisMonthlyReport": "ይህ ወር ሪፖርት",
-
   "clientProfile": "ደንበኛ መገለጫ",
   "paymentSetting": "ክፍያ ስርዓት",
   "newPayments": "አዲስ ክፍያዎች",
@@ -34,7 +31,6 @@
   "reports": "ሪፖርቶች",
   "idCard": "መታወቂያ ካርድ",
   "sendMessage": "መልእክት ላክ",
-
   "changePassword": "ማህተም ለመቀየር",
   "logout": "ውጣ",
   "notifications": "ማሳሰቢያዎች",
@@ -44,11 +40,6 @@
   "blog": "ብሎግ",
   "grandTechLicense": "ግራንድ ቴክ ፈቃድ",
   "change":"ቀይር",
-
-
-
-
-
   "organizationCreatedLoader": "እንቅስቃሴ በማስተናገድ ላይ...",
   "details": "ዝርዝሮች",
   "companyName": "ኩባንያ ስም",
@@ -112,7 +103,6 @@
   "warningMessage": "እባኮትን ሁሉንም አስፈላጊ ፎልዎች ሙሉ በሙሉ ሙሉ ተመልከት።",
   "errorMessage": "ችግኝ ተከስቷል፣ እባኮትን በሌላ ጊዜ ይሞክሩ።",
   "successMessage": "ኩባንያ ፕሮፋይልዎ በተሳካ ሁኔታ ተፈጥሯል።",
-
   "CBE": "አቢሲቢ",
   "Wegagen": "ወጋገን",
   "Enat": "እናት",
@@ -123,15 +113,6 @@
   "other": "ሌላ",
    "editCompanyProfile": "የኩባንያ መገለጫ ያስተካክሉ",
    "bankName":"የባንክ ሽም",
-
-
-
-
-
-
-
-
-
    "number": "ቁጥር",
    "userCode": "የተጠቃሚ ኮድ",
    "fullName": "ሙሉ ስም",
@@ -147,38 +128,27 @@
    "registerClient": "ተጠቃሚን መዝግብ",
    "importClientFromExcel": "ከኤክሴል ተጠቃሚ ማስገባት",
    "viewClients": "ተጠቃሚዎችን እይ",
-
   "firstNameRequired": "መጀመሪያ ስም ያስፈልጋል *",
   "firstName": "መጀመሪያ ስም",
-
   "middleNameRequired": "መካከለኛ ስም ያስፈልጋል *",
   "middleName": "መካከለኛ ስም",
-
   "lastNameRequired": "መጨረሻ ስም ያስፈልጋል *",
   "lastName": "መጨረሻ ስም",
-
- "tigrignaFullNameRequired": "ትግርኛ ሙሉ ስም ያስፈልጋል *",
+  "tigrignaFullNameRequired": "ትግርኛ ሙሉ ስም ያስፈልጋል *",
   "tigrignaFullName": "በትግርኛ ሙሉ ስም",
-
   "genderRequired": "ፆታ ያስፈልጋል *",
   "gender": "ፆታ",
-
   "ageRequired": "ዕድሜ ያስፈልጋል *",
   "age": "ዕድሜ",
-
   "addressRequired": "አድራሻ *",
   "address": "ክልል-ዞን-ከተማ-ንብረት",
-
   "emailRequired": "ኢሜል ያስፈልጋል *",
   "email": "ኢሜል",
-
   "phoneNumberRequired": "ስልክ ቁጥር ያስፈልጋል *",
   "phoneNumberExample": "+251 (ኢትዮጵያ)",
   "phoneNumber": "ስልክ ቁጥር",
-
   "chooseProfileImage": "የፕሮፋይል ምስል ምረጥ *",
   "profileImageRequired": "የፕሮፋይል ምስል ያስፈልጋል",
-
    "noFileChosen": "ምንም ፋይል አልተመረጠም",
    "editClientProfile": "የተጠቃሚ ፕሮፋይል እድል",
    "male": "ወንድ",
@@ -195,20 +165,17 @@
   "active": "ንቁ",
   "activated": "ተንቀሳቃሽ",
   "checkYourEmail": "ኢሜልዎትን ያረጋግጡ!",
-  "passwordResetEmailSent": "ወደ ኢሜልዎ የይለፍ ቃል ማስተካከያ አገናኝ ላከን። የይለፍ ቃልዎን ለማስተካከል መመሪያውን ይከተሉ።"
-,
+  "passwordResetEmailSent": "ወደ ኢሜልዎ የይለፍ ቃል ማስተካከያ አገናኝ ላከን። የይለፍ ቃልዎን ለማስተካከል መመሪያውን ይከተሉ።",
   "passwordRequired": "የሚከበድ ቃል ያስፈልጋል",
   "usernameRequired": "የተጠቃሚ ስም ያስፈልጋል",
  "backToLogin": "በመታወቂያ ወደ ተመለሰ",
-"enterEmailPassword": "ኢሜል/የይለፍ ቃል ያስገቡ",
+ "enterEmailPassword": "ኢሜል/የይለፍ ቃል ያስገቡ",
  "forgotPassword": "የይለፍ ቃል ማረሚያ",
   "download": "አውርድ",
   "sendEMessage": "ኢ-መልእክት ላክ",
   "subject": "ርዕስ*",
   "sendTo": "ላክ ወደ",
   "check": "አረጋግጥ",
-
-
   "message": "መልእክት",
   "paymentSettings": "ክፍያ ቅንብሮች",
   "paymentSetting": "ክፍያ ቅንብር",
@@ -292,199 +259,5 @@
   "paid": "የተከፈለ",
   "unpaid": "ያልተከፈለ",
   "overdueUsers": "የታለው ተጠቃሚዎች",
-  "overduePayments": "የታለው ክፍያዎች",
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  "greeting": "ሰላም",
-  "message": "ልዩ መልዕክት",
-  "About":"ስለ",
-  "Name":"ስም",
-  "Email":"መይል",
-  "login":"ግባ",
-  "Sign in":"ግባ",
-  "Sign In":"መግብያ",
-  "Your email or username":"ኢሜል አድራሻ ወይም መለያ",
-  "password":"ናይ የይለፍ ቃል",
-  "Email or Username":"ኢመይል አድራሻ ወይም መለያ",
-  "Forgot password?":"የይለፍ ቃል ረስተዋል?",
-  "Language":"ቋንቋ",
-  "Amharic":"አማርኛ",
-  "Tigrigna":"ትግረኛ",
-
-
-
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    "homepage": "ዋና የመጀመሪያ ገጽ",
-    "keywords": "የቁልፍ ቃላት",
-    "register": "ይመዝገቡ",
-    "signup": "ምዝገባ",
-    "login": "ግባ",
-    "username": "የተጠቃሚ ስም",
-    "email": "ኢሜይል",
-    "password": "የይለፍ ቃል",
-    "confirmPassword": "የይለፍ ቃል አረጋግጥ",
-    "forgot Password": "የይለፍ ቃል ረስቻለሁ",
-    "rememberMe": "አስታውሰኝ",
-    "termsAndConditions": "ውል እና ሁኔታዎች",
-    "privacyPolicy": "የድርጅቱ የግላዊነት ፖሊሲ",
-    "createAccount": "አካውንት ይፍጠሩ",
-    "signIn": "በመለያ ግባ",
-    "servicePayment": "የአገልግሎት ክፍያ",
-    "fixedPayment": "ቋሚ ክፍያ",
-    "dashboard": "ዳሽቦርድ",
-    "admin": "አስተዳዳሪ",
-    "paymentVerification": "የክፍያ ማረጋገጫ",
-    "chargeOverdue": "የጊዜ ማሳለፍ ቅጣት ክፍያ",
-    "timelyPayment": "ተጨማሪ ክፍያ",
-    "tax": "ግብር",
-    "paymentHistory": "የክፍያ ታሪክ",
-    "requests": "ጥያቄዎች",
-    "confirm": "አረጋግጥ",
-    "reject": "አስወግድ",
-    "verificationHistory": "የማረጋገጫ ሰነድ ታሪክ",
-    "bankAccounts": "የባንክ አካውንቶች",
-    "familyMembers": "የቤተሰብ አባላት",
-    "personalInformation": "የግል መረጃ",
-    "firstName": "የመጀመርያ ስም",
-    "middleName": "መካከለኛ ስም",
-    "lastName": "የመጨረሻ ስም",
-    "dateOfBirth": "የትውልድ ቀን",
-    "gender": "ፆታ",
-    "address": "አድራሻ",
-    "city": "የሚኖሩበት ከተማ",
-    "country": "አገር",
-    "postalCode": "የፖስታ ኮድ",
-    "phoneNumber": "ስልክ ቁጥር",
-    "maritalStatus": "የጋብቻ ሁኔታ",
-    "occupation": "ሥራ",
-    "familyInformation": "የቤተሰብ መረጃ",
-    "spouse": "የትዳር ጓደኛ",
-    "children": "ልጆች",
-    "actions": "ድርጊቶች",
-    "dateOfPayment": "ክፍያ የሚከፈልበት ቀን",
-    "seeDetails": "ዝርዝር መረጃዎችን ይመልከቱ",
-    "addFamilyMember": "የቤተሰብ አባል ጨምር",
-    "previousData": "ቀዳሚ ዳታ",
-    "nextData": "ቀጣይ ዳታ",
-    "aboutUs": "ስለ እኛ",
-    "createClient": "ደንበኛ ይፍጠሩ",
-    "copyright": "የቅጂ መብት",
-    "grandTech": "ግራንድ ቴክ",
-    "blog": "ጦማር",
-    "grandTechLicense": "ግራንድ ቴክ ፍቃድ",
-    "searchByName": "በስም ፈልግ",
-    "searchByEmail": "በኢሜይል ፈልግ",
-    "searchByUsername": "የተጠቃሚ ስም ፈልግ" ,    
-    "searchByMole" : "በ ሞሌ ፈልግ",
-    "clients": "ደንበኞች",
-    "verifyPayment": "የክፍያ ማረጋገጫ",
-    "paymentSettings": "የክፍያ ምርጫዎች",
-    "servicePaymentSettings": "የአገልግሎት ክፍያ ምርጫዎች",
-    "servicePaymentAmount": "የአገልግሎት ክፍያ መጠን",
-    "servicePaymentStartDate": "የአገልግሎት ክፍያ መጀመርያ ቀን",
-    "servicePaymentEndDate": "የአገልግሎት ክፍያ ማብቂያ ቀን",
-    "calculatedFromClosePayment": "ከዝግ ክፍያ የሚሰላ",
-    "editServicePayment": "የአገልግሎት ክፍያ አስተካክል",
-    "amount": "የመጠን",
-    "startDate": "መጀመርያ ቀን",
-    "endDate": "መጨረሻ ቀን",
-    "frequency": "ድግግሞሽ",
-    "bankAccount": "ባንክ አካውንት",
-    "submit": "አስረክብ",
-    "close": "ዝጋ",
-    "type": "አይነት ዝርዝር",
-    "Amount" : "መጠን",
-    "action": "ተግባር",
-    "view": "ይመልከቱ",
-    "requested": "የተጠየቁ",
-    "unrequested": "ያልተጠየቁ",
-    "confirmed": "የተረጋገጡ",
-    "overdue": "ጊዜ ያለፈበት",
-    "rejected": "ተቀባይነት አላገኘም",
-    "servicePayments": "የአገልግሎት ክፍያዎች",
-    "calendar": "የቀን መቁጠሪያ",
-    "showPaymentsByCalendar": "የቀን አቆጣጠር ክፍያዎችን አሳይ",
-    "today": "በዚህ ቀን",
-    "thisMonth": "በዚህ ወር",
-    "thisYear": "በዚህ ዓመት",
-    "requestedHistory": "የጥያቄ ታሪክ",
-    "requestedAmount": "የተጠየቀው መጠን",
-    "requestedDate": "የተጠየቀበት ቀን",
-    "confirmedDate": "የተረጋገጠበት ቀን",
-    "confirmedAmount": "የተረጋገጠው መጠን",
-    "rejectedHistory": "የተቀባይነት ያላገኙ ታሪክ ",
-    "rejectedDate": "ተቀባይነት ያላገኘበት ቀን",
-    "rejectedAmount": "ተቀባይነት ያጣ መጠን",
-    "rejectReason": "ተቀባይነት ያላገኘበት ምክንያት",
-    "seeServicePaymentsHistory": "የእርስዎ አገልግሎት ክፍያዎች ታሪክ ይመልከቱ",
-    "seeFixedPaymentsHistory": "የእርስዎ ቋሚ ክፍያ ታሪክ ይመልከቱ",
-
-
-    "Clients Profile":"የ ተጠቃሚ ፕሮፍይል",
-    "Company Profile":" የዚ ካምፓኒ ፕሮፍይል",
-    "Payment Settings":"ክፍሊት ማስተካክያዎች",
-    "Client Feedbacks":"ናይ ተጠቃሚ አስተያየት",
-    "All Reports":"ህሉም ጸብጻቦች",
-    
-    "Charges":"ቅጣት",
-    "Capital Report":"የካፒታል ሪፖርት",
-    "Clients":"ተጠቃሚዎች",
-    "Payment Status":"የክፍያ ሁኔታ"
-
-
-
-
-
+  "overduePayments": "የታለው ክፍያዎች"
 }

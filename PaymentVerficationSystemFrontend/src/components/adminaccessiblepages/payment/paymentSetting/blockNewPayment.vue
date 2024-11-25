@@ -1,7 +1,7 @@
 <template>
-  <div
-    class="container flex-col border-t-2 border-b-2 border-blue-500 rounded-lg mt-5"
-  >
+  <div>
+   <div
+    class="container flex-col border-t-2 border-b-2 border-blue-500 rounded-lg mt-5">
     <div class="flex flex-wrap">
       <div
         v-if="paymentSettingCreated === 0"
@@ -11,7 +11,8 @@
         <div class="mx-4 mt-10">
           <form class=" ">
             <div class="">
-              <div class="flex flex col lg:flex-row lg:space-x-12">
+              <div class="flex flex-col lg:flex-row lg:space-x-12">
+               
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
                      {{ $t('regularAmount') }}
@@ -25,6 +26,7 @@
                     placeholder="Amount"
                   />
                 </div>
+
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
                       {{ $t('subsidyAmount') }}
@@ -38,6 +40,7 @@
                     placeholder="Amount"
                   />
                 </div>
+
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
                      {{ $t('urgent') }}
@@ -51,6 +54,7 @@
                     placeholder="Amount"
                   />
                 </div>
+
                 <div class="mb-4">
                   <label class="custom-label" for="amount">
                      {{ $t('service') }}
@@ -64,10 +68,11 @@
                     placeholder="Amount"
                   />
                 </div>
+
               </div>
               <div class="mb-4">
                 <label class="custom-label" for="amount">
-                 {{ $t('registrationFeePercentage') }} {{ $t('registrationFeeRatePersentage') }}
+                 {{ $t('registrationFeePercentage') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
                 <input
@@ -87,7 +92,7 @@
                   v-model="paymentSetting.activeYear"
                   class="custom-select"
                 >
-                  <option value="" disabled>Select Year</option>
+                  <option value="" disabled>{{ $t('selectYear') }}</option>
                   <option v-for="year in $years" :key="year" :value="year">
                     {{ year }}
                   </option>
@@ -105,9 +110,9 @@
                   required
                   style="padding-left: 16px"
                   v-model="paymentSetting.activeMonth"
-                  placeholder="Active Month"
+                  :placeholder="$t('activeMonth')"
                 >
-                  <option value="">Select Active Month</option>
+                  <option value="">{{ $t('selectMonth') }}</option>
                   <option
                     v-for="month in $months"
                     :key="month"
@@ -148,7 +153,7 @@
 
               <div class="mb-4">
                 <label class="custom-label" for="penalityLate5Days">
-                  {{ $t('penalityFiveDaysPercentage') }}
+                  {{ $t('penaltyPerFiveDaysPercentage') }}
                   <span class="text-red-500 ml-1">*</span>
                 </label>
                 <input
@@ -156,7 +161,7 @@
                   id="penalityLate5Days"
                   class="custom-input"
                   v-model="paymentSetting.penalityLate5Days"
-                  placeholder="Penality Five Days"
+                  :placeholder="$t('penaltyPerFiveDaysPercentage')"
                 />
               </div>
               <div class="mb-4">
@@ -170,7 +175,7 @@
                   id="upTo10Days"
                   class="custom-input"
                   v-model="paymentSetting.penalityLate10Days"
-                  placeholder=" Penality for seven-ten Days"
+                  :placeholder="$t('penaltyPerTenDaysPercentage')"
                 />
               </div>
               <div class="mb-4">
@@ -184,14 +189,14 @@
                   id="above10DaysInMonth"
                   class="custom-input"
                   v-model="paymentSetting.penalityLateAbove10Days"
-                  placeholder="Penality Above Ten Days"
+                  :placeholder="$t('penaltyPerAboveTenDaysPercentage')"
                 />
               </div>
               <div class="flex flex-row space-x-5 md:space-x-12">
                 <button
                   @click.prevent="createRegularPayment()"
                   type="submit"
-                  class="ml-1 bg-indigo-800 hover:bg-indigo-500 text-white py-2 px-4 rounded"
+                  class="mb-10 ml-1 bg-indigo-800 hover:bg-indigo-500 text-white py-2 px-4 rounded"
                 >
                 {{ $t('submit') }}
                 </button>
@@ -234,12 +239,12 @@
 
         <div
           v-if="!paymentActivate"
-          class="flex flex-row my-4 p-3 space-x-8 items-start bg-blue-100 rounded-lg"
+          class=""
         >
           <!-- Payment Information Column 1 -->
           <div class="flex flex-col text-blue-800 w-1/3">
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('regularAmount') }}: {{ paymentSetting.regularAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('regularAmount') }}: {{ paymentSetting.regularAmount }}
             </p>
             <p class="text-md mb-2">
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('subsidyAmount') }}: {{ paymentSetting.subsidyAmount }}
@@ -252,7 +257,7 @@
             </p>
             <p class="text-md mb-2">
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i>
-              Registration Fee %: {{ paymentSetting.regFeeRate }} % {{ $t('registrationFeePercentage') }}
+              {{ $t('registrationFee') }} %: {{ paymentSetting.regFeeRate }} % 
             </p>
             <p class="text-md mb-2">
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('activeYear') }}: {{ paymentSetting.activeYear }}
@@ -271,7 +276,7 @@
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('endingDay') }}: {{ paymentSetting.formattedEndDate }}
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('penalityFiveDaysPercentage') }} %: {{ paymentSetting.penalityLate5Days }} %
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('penaltyPerFiveDaysPercentage') }} %: {{ paymentSetting.penalityLate5Days }} %
             </p>
             <p class="text-md mb-2">
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i>{{ $t('penaltyPerTenDaysPercentage') }} %:{{ paymentSetting.penalityLate10Days }} %
@@ -616,6 +621,7 @@
       </div>
     </transition>
   </div>
+ </div>
 </template>
 
 <script>
