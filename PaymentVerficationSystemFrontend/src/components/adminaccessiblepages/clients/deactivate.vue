@@ -5,7 +5,7 @@
       <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
 
       <button class="text-cyan-500" @click="showActiveUsers()">
-        View Active Users
+        {{ $t('viewActiveUsers') }}
       </button>
     </div>
 
@@ -19,7 +19,7 @@
               <input
                 v-model="searchQuery"
                 type="text"
-                :placeholder="$t('searchPlaceholder')"
+                :placeholder="$t('searchByNameEmailUsername')"
                 class="custom-input"
               />
             </div>
@@ -52,7 +52,7 @@
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("no") }}
+                    {{ $t("number") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
@@ -62,12 +62,12 @@
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Full Name") }}
+                    {{ $t("fullName") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Activate") }}
+                    {{ $t("activate") }}
                   </th>
                   <th
                     class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
@@ -159,12 +159,12 @@
                 <svg class="w-8 h-8 text-orange-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h1m0 4h-1m1-4V8h-1v4h1m0 4h-1V8h1m0-4h-1V4h1v4zM12 9V5h.01M4.93 4.93l.08-.08 6.99 6.99M8.34 8.34l6.99 6.99-.08.08M4.93 19.07l6.99-6.99M4.93 4.93l14.14 14.14"></path>
                 </svg>
-                <h2 class="text-2xl font-bold text-gray-800">Activate User</h2>
+                <h2 class="text-2xl font-bold text-gray-800">{{ $t('activeUser') }}</h2>
               </div>
               <!-- Form Content -->
               <form >
                 <div class="mb-4">
-                  <label for="reason" class="block text-lg font-medium text-gray-700">Reason for activation</label>
+                  <label for="reason" class="block text-lg font-medium text-gray-700">{{ $t('reasonForActivation') }}</label>
                   <input
                     type="text"
                     id="reason"
@@ -179,14 +179,14 @@
                     @click.prevent="showActivationModal = false"
                     class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
                   >
-                    Cancel
+                  {{ $t('cancel') }}
                   </button>
                   <button
                     @click.prevent="activate(userIdToBeActivated)"
                     type="submit"
                     class="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
-                    Activate
+                  {{ $t('activate') }}
                   </button>
                 </div>
               </form>
@@ -221,7 +221,7 @@
                     d="M5 13l4 4L19 7"
                   ></path>
                 </svg>
-                <h2 class="text-md text-green-800">Success!</h2>
+                <h2 class="text-md text-green-800">{{ $t('success') }}!</h2>
               </div>
               <p class="text-blue-800 text-md ml-8">
                 {{ successMessage }}
@@ -230,7 +230,7 @@
                 @click="showSuccess = false"
                 class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t('ok') }}
               </button>
             </div>
           </div>
@@ -263,7 +263,7 @@
                     d="M6 18L18 6M6 6l12 12"
                   ></path>
                 </svg>
-                <h2 class="text-sm font-bold text-gray-800">Error!</h2>
+                <h2 class="text-sm font-bold text-gray-800">{{ $t('error') }}!</h2>
               </div>
               <p class="text-gray-600 text-sm">
                 {{ errorMessage }}
@@ -272,7 +272,7 @@
                 @click="showError = false"
                 class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+                 {{ $t('ok') }}
               </button>
             </div>
           </div>

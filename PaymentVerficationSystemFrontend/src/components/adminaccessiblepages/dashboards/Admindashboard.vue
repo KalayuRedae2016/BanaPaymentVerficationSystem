@@ -36,7 +36,7 @@
       >
         <div class="logo">
           <img
-            src="../../../assets/img/BANA1.PNG"
+            src="../../../assets/img/banamall1.jpg"
             alt="Logo"
             class="h-8 w-8 min-w-8 min-h-8 max-w-8 max-h-8"
           />

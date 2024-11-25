@@ -1,13 +1,14 @@
 <template>
-  <div class="flex justify-center">
+  <div class="bg-red-50">
+  <div class="flex justify-center  ">
     <div
-      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md border border-indigo-300 mt-16 rounded-2xl"
+      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md  mt-16 shadow-xl rounded-2xl bg-white"
     >
   
       <div class="grid place-items-center">
         <div>
           <img
-            src="../assets/img/banamall.jpg"
+            src="../assets/img/banamall1.jpg"
             class="mb-5"
             style="height: 100px; width: 100px"
           />
@@ -30,7 +31,7 @@
                 id="username"
                 type="text"
                 v-model="username"
-                :placeholder="$t(' usernamePlaceholder')"
+                :placeholder="$t('enterEmailPassword')"
               />
             </div>
             <p v-if="usernameIsRequired" class="text-red-500 mb-6 text-center mt-3 text-sm mb-3">User name is required</p>
@@ -57,7 +58,7 @@
                 to="#"
                 class="text-blue-500 hover:underline"
                 @click="forgetPassword()"
-                >Forget Password</router-link
+                >{{ $t('forgotPassword') }}</router-link
               >
             </p>
           </div>
@@ -65,7 +66,7 @@
             @click.prevent="login()"
             class="mt-5 w-full bg-blue-700 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
           >
-            Sign In
+            {{ $t('signIn') }}
           </button>
         </form>
       </div>
@@ -73,8 +74,7 @@
       <div v-if="forgetPasswordVisible">
         <div v-if="showForgetPasswordForm">
           <p class="text-gray-600 mb-6 text-center mt-5">
-            Enter your email address and we'll send you a link to reset your
-            password.
+          {{$t('enterEmailMessage') }}
           </p>
           <input
             v-model="resetEmail"
@@ -86,19 +86,19 @@
             @click="sendEmailToServer()"
             class="mt-5 w-full bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Send Reset Link
+          {{ $t('sendResetLink') }}
           </button>
           <p class="mt-4 text-center text-gray-600">
-            Remembered your password?
+            {{ $t('rememberedYourPassword') }}?
             <router-link
               to="#"
               class="text-blue-500 hover:underline"
               @click="makeLoginVissible"
-              >Login here</router-link
+              > {{ $t('loginHere') }}</router-link
             >
           </p>
           <p v-if="resetEmailIsRequired" class="text-red-600 mb-6 text-center mt-5 text-sm">
-           Email is required to reset your password.
+            {{ $t('emailRequired') }}
           </p>
         </div>
         <div
@@ -116,28 +116,18 @@
             />
           </svg>
           <div class="flex flex-col items-center">
-            <span class="font-semibold mb-1">Check your email!</span>
+            <span class="font-semibold mb-1"> {{ $t('checkYourEmail') }}!</span>
             <span
-              >We've sent a password reset link to your email. Please follow the
-              instructions to reset your password.</span
+              >
+               {{ $t('passwordResetEmailSent') }}
+              </span
             >
           </div>
-
-          <!-- <p class="mt-4 text-center text-gray-600">
-              I have remembered my password?
-            <router-link
-              to="#"
-              class="text-blue-500 hover:underline"
-              @click="makeLoginVissible"
-              >Login </router-link
-            >
-          </p> -->
         </div>
-
-
       </div>
     </div>
   </div>
+</div>
 </template>
 <script>
 import { mapGetters } from "vuex";

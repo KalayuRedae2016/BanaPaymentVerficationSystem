@@ -2,19 +2,17 @@
     <div class="mb-10 px-10 py-2 ">
       <div class=" border-b border-indigo-800 mb-5">
         <div class=" flex flex-row mb-5">
-    <h1 class="font-extrabold text-indigo-800">Id Card</h1>
+    <h1 class="font-extrabold text-indigo-800">{{ $t('idCard') }}</h1>
     <div class="">
       <button class="custom-button absolute right-10 flex items-center bg-pink-500 text-white rounded-md hover:bg-pink-600" @click="downloadReceiptAsPDF">
         <i class="fas fa-download mr-2 text-pink-500"></i> 
-        Download
+      {{ $t('download') }}
       </button>
     </div>
   </div>
-      </div>
-   
-  
-      <div class="py-6  -mt-1">
-      <div class="mb-4">
+  </div>
+  <div class="py-6  -mt-1">
+  <div class="mb-4">
         <div class="flex flex-col">
           <div class="flex flex-row space-x-4">
             <input
@@ -23,7 +21,7 @@
               id="id-search"
               type="text"
               class="custom-input h-10"
-              placeholder="Search by Usercode,Name"
+              :placeholder="$t('searchByNameEmailUsername')"
             />
           </div>
           <!-- <p v-if="noUser" class="text-red-500 ml-32"><strong>Hoops! there is no user with this Id <span class="text-blue">{{ currentId }}</span></strong></p> -->
