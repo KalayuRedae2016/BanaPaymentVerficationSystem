@@ -3,7 +3,7 @@
   <!-- this is the page to send email -->
   <div class="container mx-auto p-4 flex flex-col">
     <div class="flex flex-row space-x-3">
-      <p class="text-blue-800 text-md font-bold">{{ $t("Send E-Message") }}</p>
+      <p class="text-blue-800 text-md font-bold">{{ $t("sendEMessage") }}</p>
     </div>
 
     <div class="border-t border-indigo-800 mt-3">
@@ -13,7 +13,7 @@
         <form action="">
           <div class="mb-4 mx-4 mt-5">
             <label class="custom-label" for="subject">
-              Subject<span class="text-red-500 ml-1">*</span>
+              {{ $t('subject') }}<span class="text-red-500 ml-1">*</span>
             </label>
             <input
               class="custom-input"
@@ -40,12 +40,12 @@
 
           <div class="flex flex-row space-x-5 mb-4 mx-4 mt-5">
             <label class="custom-label" for="search">
-              Send To:<span class="text-red-500 ml-1">*</span>
+              {{ $t("sendTo")}}:<span class="text-red-500 ml-1">*</span>
             </label>
             <input
               v-model="searchQuery"
               type="text"
-              :placeholder="$t('searchPlaceholder')"
+              :placeholder="$t('searchByNameEmailUsername')"
               class="custom-input"
             />
           </div>
@@ -57,7 +57,7 @@
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    Check
+                  {{ $t("check")}}
                     <input
                       type="checkbox"
                       v-model="selectAll"
@@ -67,7 +67,7 @@
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("no") }}
+                    {{ $t("number") }}
                   </th>
                   <!-- <th
                       class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
@@ -77,12 +77,12 @@
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Full Name") }}
+                    {{ $t("fullName") }}
                   </th>
                   <th
                     class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                   >
-                    {{ $t("Email") }}
+                    {{ $t("email") }}
                   </th>
                 </tr>
               </thead>
@@ -149,7 +149,7 @@
           </div>
 
           <button @click.prevent="sendMessage()" class="m-4 custom-button">
-            Send Message
+            {{ $t("sendMessage")}}
           </button>
         </form>
       </div>
@@ -178,7 +178,7 @@
                     d="M5 13l4 4L19 7"
                   ></path>
                 </svg>
-                <h2 class="text-md text-green-800">Success!</h2>
+                <h2 class="text-md text-green-800">{{ $t("success")}}!</h2>
               </div>
               <p class="text-blue-800 text-md ml-8">
                 {{ successMessage }}
@@ -187,7 +187,7 @@
                 @click="showSuccess = false"
                 class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t("ok")}}
               </button>
             </div>
           </div>
@@ -220,7 +220,7 @@
                     d="M6 18L18 6M6 6l12 12"
                   ></path>
                 </svg>
-                <h2 class="text-sm font-bold text-gray-800">Error!</h2>
+                <h2 class="text-sm font-bold text-gray-800">{{ $t("error")}}!</h2>
               </div>
               <p class="text-gray-600 text-sm">
                 {{ errorMessage }}
@@ -229,7 +229,7 @@
                 @click="showError = false"
                 class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
-                OK
+              {{ $t("ok")}}
               </button>
             </div>
           </div>

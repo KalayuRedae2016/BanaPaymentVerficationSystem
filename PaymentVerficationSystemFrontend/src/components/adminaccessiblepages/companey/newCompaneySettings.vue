@@ -282,7 +282,7 @@
                   "
                   class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
-                  OK
+            {{ $t('ok') }}
                 </button>
               </div>
             </div>
