@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-red-50">
-  <div class="flex justify-center  ">
+ 
+  <div class="flex justify-center bg-gray-50 min-h-screen ">
     <div
-      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md  mt-16 shadow-xl rounded-2xl bg-white"
+      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md  mt-8 mb-8 shadow-xl rounded-2xl bg-white"
     >
   
       <div class="grid place-items-center">
@@ -50,7 +50,7 @@
                 :placeholder="$t('passwordPlaceholder')"
               />
             </div>
-            <p v-if="passwordIsRequired" class="text-red-500 mb-6 text-center mt-3 text-sm mb-3">Password is required</p>
+            <p v-if="passwordIsRequired" class="text-red-500 mb-6 text-center mt-3 text-sm mb-3">{{ $t('passwordRequired') }}</p>
           </div>
           <div class="flex justify-end">
             <p class="mt-4 text-center text-gray-600">
@@ -79,7 +79,7 @@
           <input
             v-model="resetEmail"
             type="email"
-            placeholder="Enter your email"
+            :placeholder="$t('enterYourEmail')"
             class="custom-input mb-5"
           />
           <button
@@ -89,7 +89,7 @@
           {{ $t('sendResetLink') }}
           </button>
           <p class="mt-4 text-center text-gray-600">
-            {{ $t('rememberedYourPassword') }}?
+            {{ $t('rememberedPassword') }}?
             <router-link
               to="#"
               class="text-blue-500 hover:underline"
@@ -103,7 +103,7 @@
         </div>
         <div
           v-if="notifyToSeeEmail"
-          class="mt-7 flex flex-col items-center justify-center p-4 bg-blue-100 border border-blue-300 rounded-lg text-blue-700"
+          class="mt-7 flex flex-col items-center justify-center p-4 bg-gray-50 border border-blue-300 rounded-3xl text-blue-700"
         >
           <svg
             class="w-5 h-5 mb-3"
@@ -122,12 +122,21 @@
                {{ $t('passwordResetEmailSent') }}
               </span
             >
+            <p class="mt-4 text-center text-gray-600">
+              <router-link
+                to="#"
+                class="text-blue-500 hover:underline"
+                @click="makeLoginVissible"
+                >{{ $t('backToLogin') }}</router-link
+              >
+            </p>
+
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+
 </template>
 <script>
 import { mapGetters } from "vuex";

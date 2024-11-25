@@ -205,7 +205,8 @@
   "checkYourEmail": "ኢሜልዎትን ያረጋግጡ!",
   "passwordResetEmailSent": "ወደ ኢሜልዎ የይለፍ ቃል ማስተካከያ አገናኝ ላከን። የይለፍ ቃልዎን ለማስተካከል መመሪያውን ይከተሉ።"
 ,
-"enterEmailPassword": "ኢሜል/የይለፍ ቃል ያስገቡ",
+ "backToLogin": "በመታወቂያ ወደ ተመለሰ",
+ "enterEmailPassword": "ኢሜል/የይለፍ ቃል ያስገቡ",
  "forgotPassword": "የይለፍ ቃል ማረሚያ",
   "download": "አውርድ",
   "sendEMessage": "ኢ-መልእክት ላክ",
