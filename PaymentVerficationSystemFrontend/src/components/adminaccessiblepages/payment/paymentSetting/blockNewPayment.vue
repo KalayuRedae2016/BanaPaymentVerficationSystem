@@ -242,54 +242,58 @@
           class=""
         >
           <!-- Payment Information Column 1 -->
-          <div class="flex flex-col text-blue-800 w-1/3">
-            <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('regularAmount') }}: {{ paymentSetting.regularAmount }}
+          <div class="flex flex-col text-blue-800 ">
+            <p class="text-md mb-2  ">
+              <i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('regularAmount') }}:<span class="ml-10">{{ paymentSetting.regularAmount }}</span> 
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('subsidyAmount') }}: {{ paymentSetting.subsidyAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('subsidyAmount') }}: <span  class="ml-10">{{ paymentSetting.subsidyAmount }}</span>
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>  {{ $t('urgentAmount') }}: {{ paymentSetting.urgentAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>  {{ $t('urgentAmount') }}: <span  class="ml-10">{{ paymentSetting.urgentAmount }}</span>
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>  {{ $t('serviceAmount') }}: {{ paymentSetting.serviceAmount }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>  {{ $t('serviceAmount') }}: <span  class="ml-10">{{ paymentSetting.serviceAmount }}</span>
             </p>
             <p class="text-md mb-2">
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i>
-              {{ $t('registrationFee') }} %: {{ paymentSetting.regFeeRate }} % 
+              {{ $t('registrationFee') }} %: <span  class="ml-10">{{ paymentSetting.regFeeRate }} % </span> 
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('activeYear') }}: {{ paymentSetting.activeYear }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('activeYear') }}: <span class="ml-10">{{ paymentSetting.activeYear }}</span> 
             </p>
           </div>
 
           <!-- Payment Information Column 2 -->
-          <div class="flex flex-col text-blue-800 w-1/3">
+          <div class="flex flex-col text-blue-800 ">
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('activeMonth') }}: {{ paymentSetting.activeMonth }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('activeMonth') }}: <span class="ml-10">{{ paymentSetting.activeMonth }}</span> 
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>{{ $t('startingDay') }}: {{ paymentSetting.formattedStartDate }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>{{ $t('startingDay') }}:<span class="ml-10"> {{ paymentSetting.formattedStartDate }}</span>
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('endingDay') }}: {{ paymentSetting.formattedEndDate }}
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('endingDay') }}: <span class="ml-10">{{ paymentSetting.formattedEndDate }}</span>
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('penaltyPerFiveDaysPercentage') }} %: {{ paymentSetting.penalityLate5Days }} %
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i> {{ $t('penaltyPerFiveDaysPercentage') }} %: <span class="ml-10">{{ paymentSetting.penalityLate5Days }}</span> 
             </p>
             <p class="text-md mb-2">
-              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>{{ $t('penaltyPerTenDaysPercentage') }} %:{{ paymentSetting.penalityLate10Days }} %
+              <i class="far fa-circle text-xs mr-2 text-blue-500"></i>{{ $t('penaltyPerTenDaysPercentage') }} %:  <span class="ml-10">{{ paymentSetting.penalityLate10Days }}</span> 
             </p>
             <p class="text-md mb-2">
               <i class="far fa-circle text-xs mr-2 text-blue-500"></i> 
-              {{ $t('penaltyPerAboveTenDaysPercentage') }}
-              {{ paymentSetting.penalityLateAbove10Days }} %
+              {{ $t('penaltyPerAboveTenDaysPercentage') }} <span class="ml-10">  {{ paymentSetting.penalityLateAbove10Days }} %</span>
+            
             </p>
           </div>
 
           <!-- Edit Button Column -->
-          <div class="flex flex-col w-1/4 justify-center items-end">
+         
+
+        
+        </div>
+        <div class=" ">
             <button
               @click="
                 showPaymentEditingActivating = !showPaymentEditingActivating
@@ -301,10 +305,13 @@
               </span>
             </button>
           </div>
-        </div>
       </div>
+
+
     </div>
   </div>
+
+
   <div v-if="showPaymentEditingActivating" class="">
     <transition name="fade" mode="out-in">
       <div
