@@ -1247,7 +1247,7 @@ exports.exportPayments = catchAsync(async (req, res,next) => {
 exports.calculateUserBalances = catchAsync(async (req, res,next) => {
     const { userCode, activeYear} = req.query;    
     if (!userCode||!activeYear) {
-      return next(new AppError('User code is missed, please try again.',400))
+      return next(new AppError('User Code or Active Year has not been provided, please try again.',400))
     }
     
     const searchPattern = new RegExp(userCode, 'i')
