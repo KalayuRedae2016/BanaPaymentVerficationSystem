@@ -685,6 +685,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     })
   );
   
+  console.log(paymentDetails)
   return res.status(200).json({
     error: false,
     statusCode: 200,
@@ -792,7 +793,7 @@ exports.confirmPayments = catchAsync(async (req, res,next) => {
     const formattedUpdatedAt = unpaidBill.updatedAt ? formatDate(unpaidBill.updatedAt) : null;
     const formattedConfirmedAt = unpaidBill.confirmedDate ? formatDate(unpaidBill.confirmedDate): null;
 
-
+    console.log(unpaidBill)
     res.status(200).json({
       message: 'Payment types updated successfully',
       items: {...unpaidBill._doc,
@@ -915,7 +916,7 @@ exports.updatePayments = catchAsync(async (req, res,next) => {
     const formattedCreatedAt = payment.createdAt ? formatDate(payment.createdAt) : null;
     const formattedUpdatedAt = payment.updatedAt ? formatDate(payment.updatedAt) : null;
     const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate): null;
-
+console.log(payment)
     res.status(200).json({
       message: 'Payment updated successfully',
       items: {...payment._doc,
@@ -996,6 +997,7 @@ exports.getPenality = catchAsync(async (req, res,next) => {
       penality = 0; // No penalty if not late
     }
 
+    console.log(`Penality:${penality},dasyLate:${daysLate},amount:${amount}`)
     // Send the response
     res.status(200).json({
       status: 'Success',
@@ -1061,6 +1063,7 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     formattedPayment.confirmedDate = formatDate(formattedPayment.confirmedDate); // Format confirmedDate
   }
 
+  console.log(formattedPayment)
   // Respond with the found payments
   res.status(200).json({
     status: 'success',
@@ -1087,7 +1090,7 @@ exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
 
     // Fetch all payments (both seen and unseen)
     const allPayments = await Payment.find({ status: 'confirmed' });
-
+console.log(allPayments)
     return res.status(200).json({
       status: 'success',
       message: 'All payments fetched successfully',
@@ -1148,6 +1151,7 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
     };
   });
 
+  console.log(formattedPayments)
   res.status(200).json({
     status: 'success',
     message: `${keyword} fetched successfully`,
@@ -1179,7 +1183,9 @@ exports.getLatestPayment= catchAsync(async (req, res,next) => {
 const formattedCreatedAt = latestPayments.createdAt ? formatDate(latestPayments.createdAt) : null;
 const formattedUpdatedAt = latestPayments.updatedAt ? formatDate(latestPayments.updatedAt) : null;
 const formattedConfirmedAt = latestPayments.confirmedDate ? formatDate(latestPayments.confirmedDate): null;
-  res.status(200).json({
+
+console.log(latestPayments)
+res.status(200).json({
     status: 'success',
     message: `Latest Payments fetched successfully for ${userCode}`,
     payment: {
@@ -1222,6 +1228,7 @@ exports.generateReceipt = catchAsync(async (req, res,next) => {
     const formattedUpdatedAt = confirmedpayment.updatedAt ? formatDate(confirmedpayment.updatedAt) : null;
     const formattedConfirmedAt = confirmedpayment.confirmedDate ? formatDate(confirmedpayment.confirmedDate): null;
 
+    console.log(confirmedpayment)
     res.status(200).json({
       status:1,
       message: 'Receipt generated successfully',
@@ -1344,6 +1351,7 @@ exports.calculateUserBalances = catchAsync(async (req, res,next) => {
         
     });
     
+    console.log(`UserBalances:${userBalances},payments:${paymentsPerYear}`)
     res.status(200).json({
       status: 'success',
       message: `User balance report generated for userCode: ${userCode}`,
@@ -1362,8 +1370,8 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res,next) => {
   const organizationBalance=bankBalances.Organization
   // Get the bank type balances for the organization
    const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
-   console.log(organizationBalance)
   console.log(organizationBalance)
+  console.log(orgBalancesBasedBankType)
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${organization.companyName}`,
@@ -1439,7 +1447,7 @@ if (!toBankExists) {
 
   // Save the updated organization document
   await organization.save();
-
+  console.log(`Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,)
   res.status(200).json({
     status: 1,
     message: `Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,
@@ -1505,6 +1513,7 @@ exports.reports = catchAsync(async (req, res,next) => {
     const organization=await Organization.findOne()
     const categorizedPayments = calculateBalances(payments,organization);
 
+    console.log(categorizedPayments)
     res.status(200).json({
       status: 'success',
       message: `Reports generated for ${timeRange}`,

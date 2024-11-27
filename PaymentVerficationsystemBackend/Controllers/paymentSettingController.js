@@ -47,6 +47,7 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
       await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
     }
 
+    console.log(newSetting)
     res.status(200).json({
       status:1,
       message:`Payment Setting is created for Month-${req.body.activeMonth}-Year-${req.body.activeYear}`,
@@ -84,6 +85,7 @@ exports.getOnePaymentSettings = catchAsync(async (req, res, next) => {
   const formattedStartDate = paymentSettings.startingDate ? formatDate(paymentSettings.startingDate) : null;
   const formattedEndDate = paymentSettings.endingDate ? formatDate(paymentSettings.endingDate) : null;
   
+  console.log(paymentSetting)
   // Respond with the payment setting if found
   res.status(200).json({
     status: 1,
@@ -121,6 +123,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
         });
     }
 
+    console.log(paymentSetting)
     res.status(200).json({
         status: 1,
         message: "Latest setting fetched successfullyyyyy.",
@@ -151,6 +154,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
+  console.log(paymentSetting)
     res.status(200).json({
       status:1,
       message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
