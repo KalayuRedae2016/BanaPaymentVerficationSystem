@@ -40,49 +40,49 @@
     </div>
 
     <div v-if="!noSettingOpened" class="grid grid-cols-1 gap-4 border-t-4  border-b-4 border-blue-500 -mt-5 rounded-lg" >
-      <div class="bg-white shadow-md rounded-lg px-6 pt-5">
+      <div class="bg-white shadow-md rounded-lg px-6 pt-5 ">
         <div class="space-y-2 text-gray-700">
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">Regular Amount {{ $t('regularAmount') }}:</strong>
-            <span class="w-1/2">{{ paymentSetting.regularAmount }}</span>
+          <p class="flex justify-between items-center text-blue-800">
+            <strong class="w-1/2"> {{ $t('regularAmount') }}:</strong>
+            <strong class="w-1/2">{{ paymentSetting.regularAmount }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">Subsidy Amount {{ $t('subsidyAmount') }}:</strong>
-            <span class="w-1/2">{{ paymentSetting.subsidyAmount }}</span>
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2"> {{ $t('subsidyAmount') }}:</strong>
+            <strong class="w-1/2">{{ paymentSetting.subsidyAmount }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">Urgent Amount {{ $t('urgentAmount') }}:</strong>
-            <span class="w-1/2">{{ paymentSetting.urgentAmount }}</span>
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2"> {{ $t('urgentAmount') }}:</strong>
+            <strong class="w-1/2">{{ paymentSetting.urgentAmount }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">Service Amount {{ $t('serviceAmount') }}:</strong>
-            <span class="w-1/2">{{ paymentSetting.serviceAmount }}</span>
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2"> {{ $t('serviceAmount') }}:</strong>
+            <strong class="w-1/2">{{ paymentSetting.serviceAmount }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">Starting Date {{ $t('startingDate') }}:</strong>
-            <span class="w-1/2">{{ paymentSetting.formattedStartDate }}</span>
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2"> {{ $t('startingDay') }}:</strong>
+            <strong class="w-1/2">{{ paymentSetting.formattedStartDate }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">Ending Date {{ $t('endingDate') }}:</strong>
-            <span class="w-1/2">{{ paymentSetting.formattedEndDate }}</span>
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2"> {{ $t('endingDay') }}:</strong>
+            <strong class="w-1/2">{{ paymentSetting.formattedEndDate }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">{{ $t('penaltyPerFiveDaysPercentage') }} %:</strong>
-            <span class="w-1/2">{{ paymentSetting.penalityLate5Days }}</span>
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2">{{ $t('penaltyPerFiveDaysPercentage') }} :</strong>
+            <strong class="w-1/2">{{ paymentSetting.penalityLate5Days }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">{{ $t('penaltyPerTenDaysPercentage') }} %:</strong>
-            <span class="w-1/2">{{ paymentSetting.penalityLate10Days }}</span>
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2">{{ $t('penaltyPerTenDaysPercentage') }} :</strong>
+            <strong class="w-1/2">{{ paymentSetting.penalityLate10Days }}</strong>
           </p>
-          <p class="flex justify-between items-center">
-            <strong class="w-1/2">{{ $t('penaltyPerAboveTenDaysPercentage') }} %:</strong>
-            <span class="w-1/2">{{
+          <p class="flex justify-between items-center  text-blue-800">
+            <strong class="w-1/2">{{ $t('penaltyPerAboveTenDaysPercentage') }} :</strong>
+            <strong  class="w-1/2">{{
               paymentSetting.penalityLateAbove10Days
-            }}</span>
+            }}</strong >
           </p>
-          <p class="flex justify-between items-center pb-10">
+          <p class="flex justify-between items-center pb-10  text-blue-800">
             <strong class="w-1/2">{{$t('registrationFee')  }} %:</strong>
-            <span class="w-1/2 ">{{ paymentSetting.regFeeRate }}</span>
+            <strong  class="w-1/2 ">{{ paymentSetting.regFeeRate }}</strong >
           </p>
         </div>
       </div>

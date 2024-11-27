@@ -4,7 +4,6 @@
       <h2 class="text-blue-800 pt-4 px-4 pb-3">
          {{ $t('thisMonthlyReport') }}(2024-5) <span class=""></span>
       </h2>
-
       <div class="flex flex-col lg:flex-row border-t border-blue-500">
         <div class="mt-8">
           <div class="py-4 bg-white ml-5 mr-5">
@@ -335,6 +334,8 @@ export default {
   },
 
   mounted() {
+
+  //finding users
     this.$apiClient
       .get("/api/v1/users")
       .then((response) => {
@@ -347,6 +348,8 @@ export default {
         console.error("Error fetching client data:", error.response.data.error);
       });
 
+
+      //overdue payments
     const allTimeRange = "allTime";
     this.$apiClient
       .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
@@ -363,13 +366,14 @@ export default {
     //end of the overdue fetch;
     //get the users
 
+
+    //orgbalances
   this.$apiClient
       .get("api/v1/payments/orgBalance")
       .then((response) => {
         console.log("response org balance", response);
         this.totalBalance = response.data.items;
         this.totalOrgBalance = response.data.items.organizationBalance;
-        //console.log("orgbalance",this.totalOrgBalance);
       })
       .catch((error) => {
         console.error(
@@ -390,7 +394,7 @@ export default {
         },
       });
     },
-
+//latest payment month and active year
     latestPaymentSetting() {
       this.$apiClient
         .get("/api/v1/paymentSetting/latest")
@@ -410,7 +414,7 @@ export default {
           );
         });
     },
-
+//monthly payment
     monthlyPayment() {
       const timeRange = "monthly";
       this.$apiClient
