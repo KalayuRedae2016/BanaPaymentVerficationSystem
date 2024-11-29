@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full flex flex-row hidden" id="printable-area">
-    <!-- First Receipt -->
+  <div>
+  <div class="w-full flex flex-row " id="printable-area">
     <div class="w-1/2 p-2 receipt border-4 border-red-500 border-dotted">
       <div class="bg-green-200 text-blue-800 p-2">
         <!-- <img src="../../../../assets/img/head.png" alt="Barcode" class="mb-3" /> -->
@@ -845,6 +845,7 @@
         </div>
       </div>
     </transition>
+  </div>
   </div>
 </template>
 

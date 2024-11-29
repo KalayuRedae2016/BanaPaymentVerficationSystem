@@ -1598,7 +1598,7 @@ export default {
               (payment) => payment.status == "overdue"
             );
           }
-
+          
           this.payments = this.payments.map((payment) => {
             payment.activeMonthInString = this.changeMonthIntoString(
               payment.activeMonth
