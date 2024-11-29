@@ -603,9 +603,10 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       ['regular', 'urgent', 'subsidy'].forEach((type) => {
         const amountToPay = payment[type].amount || 0;
         const isPaid = payment[type].isPaid || false;
-        let penality = 0;
+        const penality= payment[type].penalty|| 0;
+        // let penality = 0;
         let daysLate = 0;
-
+        
         if (!isPaid && paymentTypeSettings && amountToPay > 0) {
           const dueDate = new Date(paymentTypeSettings.endingDate);
           const paymentDate = new Date();
