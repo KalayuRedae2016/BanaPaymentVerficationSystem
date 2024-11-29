@@ -580,14 +580,14 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       select: 'fullName',
     })
     .sort({ activeMonth: 1 });
-
   if (!payments.length) {
     return res.status(200).json({
       error: true,
       statusCode: 500,
       status: 1,
       items: [],
-      message: 'No payments found matching the criteria',
+      fullName:payments.fullName,
+      message: `No payments found matching the criteria`,
     });
   }
 
