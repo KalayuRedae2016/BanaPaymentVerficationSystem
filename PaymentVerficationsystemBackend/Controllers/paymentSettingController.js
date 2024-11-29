@@ -8,7 +8,7 @@ const {formatDate}=require("../utils/formatDate")
 
 // Create a new payment setting
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
-  const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
+  const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate,startingDate,endingDate}=req.body
 
   // Check for required fields
   if (!activeYear||!activeMonth||!regularAmount||!urgentAmount||!serviceAmount||!subsidyAmount||!regFeeRate) {
@@ -85,7 +85,7 @@ exports.getOnePaymentSettings = catchAsync(async (req, res, next) => {
   const formattedStartDate = paymentSettings.startingDate ? formatDate(paymentSettings.startingDate) : null;
   const formattedEndDate = paymentSettings.endingDate ? formatDate(paymentSettings.endingDate) : null;
   
-  console.log(paymentSetting)
+  console.log(paymentSettings)
   // Respond with the payment setting if found
   res.status(200).json({
     status: 1,
@@ -123,7 +123,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
         });
     }
 
-    console.log(paymentSetting)
+    console.log(latestPaymentSetting)
     res.status(200).json({
         status: 1,
         message: "Latest setting fetched successfullyyyyy.",
