@@ -8,10 +8,14 @@ const {formatDate}=require("../utils/formatDate")
 
 // Create a new payment setting
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
+<<<<<<< HEAD
 
   console.log("req.body",req.body);
 
   const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
+=======
+  const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate,startingDate,endingDate}=req.body
+>>>>>>> 9d7ff870c0d3eac3da81f19241629237bf76450f
 
   // Check for required fields
   if (!activeYear||!activeMonth||!regularAmount||!urgentAmount||!serviceAmount||!subsidyAmount||!regFeeRate) {
@@ -50,6 +54,7 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
       await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
     }
 
+    console.log(newSetting)
     res.status(200).json({
       status:1,
       message:`Payment Setting is created for Month-${req.body.activeMonth}-Year-${req.body.activeYear}`,
@@ -87,6 +92,7 @@ exports.getOnePaymentSettings = catchAsync(async (req, res, next) => {
   const formattedStartDate = paymentSettings.startingDate ? formatDate(paymentSettings.startingDate) : null;
   const formattedEndDate = paymentSettings.endingDate ? formatDate(paymentSettings.endingDate) : null;
   
+  console.log(paymentSettings)
   // Respond with the payment setting if found
   res.status(200).json({
     status: 1,
@@ -124,6 +130,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
         });
     }
 
+    console.log(latestPaymentSetting)
     res.status(200).json({
         status: 1,
         message: "Latest setting fetched successfullyyyyy.",
@@ -155,6 +162,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
+  console.log(paymentSetting)
     res.status(200).json({
       status:1,
       message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,

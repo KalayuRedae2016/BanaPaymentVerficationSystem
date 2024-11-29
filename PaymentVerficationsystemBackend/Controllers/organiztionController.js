@@ -40,6 +40,7 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     blockBankAccounts
   });
 
+  console.log(organization)
   res.status(201).json({
     status: 1,
     message: 'Organizational Profile created successfully',
@@ -57,6 +58,7 @@ exports.getOrganization = catchAsync(async (req, res,next) => {
       formattedTransferDate: transfer.transferDate ? formatDate(transfer.transferDate) : null
     };
   });
+  console.log(organization)
   res.status(200).json({
     status: 1,
     organization: {
@@ -93,6 +95,7 @@ exports.updateOrganization = catchAsync(async (req, res,next) => {
   if (serviceBankAccounts) organization.serviceBankAccounts = serviceBankAccounts;
 
   await organization.save();
+  console.log(organization)
   res.status(200).json({
     status: 1,
     message: 'Organization updated',
@@ -151,6 +154,7 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
   // Save the updated organization
   await organization.save();
 
+  console.log(newBankAccount)
   // Send a success response
   res.status(200).json({
     status: 1,
