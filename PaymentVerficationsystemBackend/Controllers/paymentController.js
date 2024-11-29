@@ -587,7 +587,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       status: 1,
       items: [],
       fullName:payments.fullName,
-      message: `No payments found matching the criteria`,
+      message: `No Payment is Opened for the Provided Criteria`,
     });
   }
 
