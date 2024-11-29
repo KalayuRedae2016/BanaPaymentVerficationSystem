@@ -123,7 +123,7 @@
                   class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
                 >
                   <img
-                    src="../../../assets/img/profile.jpg"
+                    src="../../../assets/img/banamall1.jpg"
                     alt="Notification Image"
                     class="w-10 h-10 rounded-full mr-3 bg-red-500"
                   />
