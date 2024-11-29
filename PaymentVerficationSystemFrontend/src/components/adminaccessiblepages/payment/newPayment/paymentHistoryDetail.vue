@@ -1,11 +1,9 @@
 <template>
-  <div>
-  <div class="w-full flex flex-row " id="printable-area">
+  <div> <div class="w-full flex flex-row  " id="printable-area">
     <div class="w-1/2 p-2 receipt border-4 border-red-500 border-dotted">
       <div class="bg-green-200 text-blue-800 p-2">
         <!-- <img src="../../../../assets/img/head.png" alt="Barcode" class="mb-3" /> -->
         <div class="flex items-center justify-between">
-
 
           <div class="text-xs flex items-center space-x-2">
             <span class="font-semibold">BillCode:</span>
@@ -1087,7 +1085,7 @@ export default {
       await this.generateQRCodeImage();
       const printContent = document.getElementById("printable-area").innerHTML;
       const linkElement = document.createElement("link");
-      linkElement.href = "/src/assets/css/tailwind.css";
+      linkElement.href = "https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.cs";
       linkElement.rel = "stylesheet";
       const printWindow = window.open(
         "",
