@@ -1396,7 +1396,7 @@ export default {
       penalityUnconfirmIndex: false,
 
       userCode: "",
-      fullName: "Tadesse Gebremcieheal Berhe",
+      fullName: "",
       showConfirmModal: false,
       activeYear: "",
       activeMonth: "",
@@ -1577,6 +1577,8 @@ export default {
         },
       });
     },
+
+
     fetchUnPaid() {
       this.$apiClient
         .get(`/api/v1/payments/search?keyword=${this.userCode}`)
@@ -1584,8 +1586,10 @@ export default {
           console.log("response from the payment", response.data);
           if (response.data.status === 1) {
             if (response.data.items.length === 0) {
-              console.log("itmes become zero");
+              this.fullName=response.data.fullName;
+              //console.log("itmes become zero");
               this.nothingToPay = true;
+              
             } else if (response.data.items.paid) {
               this.printDiv();
             }
@@ -1598,7 +1602,7 @@ export default {
               (payment) => payment.status == "overdue"
             );
           }
-          
+
           this.payments = this.payments.map((payment) => {
             payment.activeMonthInString = this.changeMonthIntoString(
               payment.activeMonth
