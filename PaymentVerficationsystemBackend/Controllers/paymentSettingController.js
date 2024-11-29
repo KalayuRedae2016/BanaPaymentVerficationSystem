@@ -18,9 +18,14 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
 >>>>>>> 9d7ff870c0d3eac3da81f19241629237bf76450f
 
   // Check for required fields
-  if (!activeYear||!activeMonth||!regularAmount||!urgentAmount||!serviceAmount||!subsidyAmount||!regFeeRate) {
+  if (!activeYear||!activeMonth||!regularAmount||!urgentAmount||!serviceAmount||!subsidyAmount||!regFeeRate||!startingDate||!endingDate) {
     return next(new AppError('Please provide Required Fields', 400));
   }
+
+  if (new Date(endingDate).getTime() <= new Date(startingDate).getTime()) {
+    return next(new AppError(`Ending Date (${formatDate(endingDate)}) should be greater than Starting Date (${formatDate(startingDate)})!`, 400));
+}
+
     // Check if there's an existing PaymentSetting for the activeYear and Month
     const existingSetting = await PaymentSetting.findOne({
       activeYear:activeYear,
@@ -44,11 +49,10 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
     latest: true
 });
     await newSetting.save();
-    console.log(newSetting)
-
+  
     const userQuery={isActive:true,role:"User"}
     const users = await User.find(userQuery);
-    console.log(users)
+    // console.log(users)
     // Create pending payments for all users
     for (const user of users) {
       await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
