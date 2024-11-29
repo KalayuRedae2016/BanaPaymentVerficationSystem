@@ -698,6 +698,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
 });
 exports.confirmPayments = catchAsync(async (req, res,next) => {
     const { billCode, urgent, regular, subsidy, service, penality } = req.body;
+    console.log(req.body)
 
     // Find the unpaid bill by billCode
     const unpaidBill = await Payment.findOne({ isPaid: false, billCode });
@@ -975,9 +976,9 @@ exports.getPenality = catchAsync(async (req, res,next) => {
       case 'subsidy':
         amount = subsidyAmount;
         break;
-      case 'service':
-        amount = serviceAmount;
-        break;
+      // case 'service':
+      //   amount = serviceAmount;
+      //   break;
       default:
         return res.status(400).json({
           status: 'Error',
