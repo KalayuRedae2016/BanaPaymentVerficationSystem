@@ -930,17 +930,16 @@ console.log(payment)
 
 exports.getPenality = catchAsync(async (req, res,next) => {
     const { paymentType, activeYear, activeMonth, paymentDate } = req.query;
-    //console.log(paymentType, activeYear, activeMonth, paymentDate);
+    console.log(paymentType, activeYear, activeMonth, paymentDate);
     // Fetch payment setting
     const paymentSetting = await PaymentSetting.findOne({
       activeYear,
       activeMonth,
     });
-   
     if (!paymentSetting) {
       return res.status(404).json({
         status: 'Error',
-        message: 'Payment setting not found for the specified year and month',
+        message:`Payment setting not found for the specified ${activeYear} and ${activeMonth}`,
       });
     }
     // Destructure necessary fields from the payment setting
