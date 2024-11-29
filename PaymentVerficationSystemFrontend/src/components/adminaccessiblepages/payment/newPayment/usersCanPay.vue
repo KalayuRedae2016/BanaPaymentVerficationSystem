@@ -1,8 +1,8 @@
 <template>
-  <div class="p-4">
+  <div class="py-4">
   
 
-    <div class="py-6 px-6 -mt-1">
+    <div class="py-6 -mt-1">
       <div class="mb-4">
         <div class="flex flex-col">
           <div class="flex flex-row space-x-4">
@@ -19,21 +19,21 @@
         </div>
       </div>
 
-      <div class="border-t border-blue-900 border-dotted">
+      <div class="border-t border-blue-900 border-dotted h-64 overflow-y-auto">
         <div
-          class="p-4 border-b border-blue-900 border-dotted cursor-pointer"
+          class="px-4 border-b border-blue-900 border-dotted cursor-pointer"
           v-for="(user, userIndex) in filteredUsers"
           :key="userIndex"
           :class="[
             'p-4 border-b cursor-pointer',
             {
-              'bg-blue-200 ': user.userselected, // Background color when selected
-              'bg-gray-50': !user.userselected, // Default background color
+              'bg-blue-200 ': user.userselected, 
+              'bg-gray-50': !user.userselected, 
             },
           ]"
           @click="navigateToPayment(user.userCode)"
         >
-          <div class="mt-4 flex flex-row space-x-5 md:space-x-12">
+          <div class="text-xs flex flex-row space-x-5 md:space-x-12  text-gray-500">
             <p>{{ user.userCode }}</p>
             <p>{{ user.fullName }}</p>
           </div>

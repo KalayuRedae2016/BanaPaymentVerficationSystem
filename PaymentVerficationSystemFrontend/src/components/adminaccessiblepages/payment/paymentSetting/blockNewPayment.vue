@@ -3,10 +3,10 @@
    <div
     class="container flex-col border-t-4 border-b-4 border-blue-500 rounded-lg mt-5">
     <div class="flex flex-wrap">
-      <div
-        v-if="paymentSettingCreated === 0"
+      <div v-if="paymentSettingCreated === 0"
         class="mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
-      ></div>
+      >
+    </div>
       <div v-if="paymentSettingCreated === 2" class="w-full">
         <div class="mx-4 mt-10">
           <form class=" ">
@@ -124,6 +124,7 @@
               </div>
 
               <div class="mb-4">
+
                 <label class="custom-label" for="startingDate">
                   {{ $t('startingDay') }}
                   <span class="text-red-500 ml-1">*</span>
@@ -135,6 +136,8 @@
                   v-model="paymentSetting.startingDate"
                   placeholder="Starting Date"
                 />
+
+                <p v-if="start_date_less_than_activeMonth" class="text-red-500">Starting date should in the interval of the selected month</p>
               </div>
 
               <div class="mb-4">
@@ -149,6 +152,8 @@
                   v-model="paymentSetting.endingDate"
                   placeholder="Ending Date"
                 />
+                <p v-if="end_date_less_than_activeMonth" class="text-red-500">Ending date should in the interval of the selected month</p>
+          
               </div>
 
               <div class="mb-4">
@@ -242,71 +247,71 @@
           class=""
         >
           <!-- Payment Information Column 1 -->
-          <div class="flex flex-col text-blue-800 ">
+          <div class="flex flex-col text-gray-500  space-y-2">
    
               
-            <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('regularAmount') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.regularAmount }}</strong> 
+            <div class="flex flex-row ">
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('regularAmount') }}:</strong>
+              <strong class="  w-1/4 lg:w-1/2 ">{{ paymentSetting.regularAmount }}</strong> 
             </div>
 
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('subsidyAmount') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.subsidyAmount }}</strong> 
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('subsidyAmount') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.subsidyAmount }}</strong> 
             </div>
 
           
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('urgentAmount') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.urgentAmount }}</strong> 
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('urgentAmount') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2">{{ paymentSetting.urgentAmount }}</strong> 
             </div>
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('serviceAmount') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.serviceAmount }}</strong> 
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('serviceAmount') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.serviceAmount }}</strong> 
             </div>
 
            
 
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i>  {{ $t('registrationFee') }} %:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.regFeeRate }} % </strong> 
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i>  {{ $t('registrationFee') }} %:</strong>
+              <strong class="w-1/4 lg:w-1/2">{{ paymentSetting.regFeeRate }} % </strong> 
             </div>
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('activeYear') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.activeYear }}</strong> 
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('activeYear') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2">{{ paymentSetting.activeYear }}</strong> 
             </div>
 
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('activeMonth') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.activeMonth }}</strong> 
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('activeMonth') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.activeMonth }}</strong> 
             </div>
 
          
           </div>
 
           <!-- Payment Information Column 2 -->
-          <div class="flex flex-col text-blue-800 ">
+          <div class="flex flex-col text-gray-500  space-y-2 mt-2 ">
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('startingDay') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.formattedStartDate }}</strong> 
+              <strong class=" text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('startingDay') }}:</strong>
+              <strong class="text-xs w-1/4 lg:w-1/2 ">{{ paymentSetting.formattedStartDate }}</strong> 
             </div>
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('endingDay') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.formattedEndDate }}</strong> 
+              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('endingDay') }}:</strong>
+              <strong class="text-xs w-1/4 lg:w-1/2 ">{{ paymentSetting.formattedEndDate }}</strong> 
             </div>
 
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerFiveDaysPercentage') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.penalityLate5Days }}</strong> 
+              <strong class="w-2/3 text-xs lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerFiveDaysPercentage') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.penalityLate5Days }}</strong> 
             </div>
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerTenDaysPercentage') }}:</strong>
-              <strong class="w-1/2 ">{{ paymentSetting.penalityLate10Days }}</strong> 
+              <strong class="w-2/3 lg:w-1/2 text-xs "><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerTenDaysPercentage') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.penalityLate10Days }}</strong> 
             </div>
          
             <div class="flex flex-row">
-              <strong class="w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerAboveTenDaysPercentage') }}:</strong>
-              <strong class="w-1/2 "> {{ paymentSetting.penalityLateAbove10Days }} %</strong> 
+              <strong class="w-2/3 text-xs lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerAboveTenDaysPercentage') }}:</strong>
+              <strong class="w-1/4 lg:w-1/2 "> {{ paymentSetting.penalityLateAbove10Days }} %</strong> 
             </div>
           </div>
 
@@ -315,7 +320,7 @@
 
         
         </div>
-        <div class=" ">
+        <div  v-if="!paymentActivate" class=" ">
             <button
               @click="
                 showPaymentEditingActivating = !showPaymentEditingActivating
@@ -369,7 +374,7 @@
 
           <hr class="my-4 md:min-w-full bg-red-500" />
           <div class="">
-            <form class="py-5 scroll-y h-96">
+            <form action.prevent="" class="py-5 scroll-y h-96">
               <div class="flex flex-col md:flex-row md:space-x-5">
                 <div class="flex flex-col">
                   <div class="mb-4">
@@ -486,6 +491,8 @@
                       class="custom-input"
                       v-model="paymentSetting.startingDate"
                     />
+                    <p v-if="edit_activate_start_date_less_than_activeMonth" class="text-red-500">Starting date should in the interval of the selected month</p>
+             
                   </div>
                   <div class="mb-4">
                     <label for="endingDate" class="custom-label"
@@ -498,6 +505,8 @@
                       class="custom-input"
                       v-model="paymentSetting.endingDate"
                     />
+                    <p v-if="edit_activate_start_date_less_than_activeMonth" class="text-red-500">Starting date should in the interval of the selected month</p>
+             
                   </div>
                   <div class="mb-4">
                     <label class="custom-label">
@@ -543,7 +552,7 @@
                 v-if="!paymentActivate"
                 @click.prevent="
                   editPaymentSetting();
-                  showPaymentEditingActivating = !showPaymentEditingActivating;
+                
                 "
                 type="submit"
                 class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded"
@@ -554,7 +563,6 @@
                 v-if="paymentActivate"
                 @click.prevent="
                   activatePaymentSetting();
-                  showPaymentEditingActivating = !showPaymentEditingActivating;
                 "
                 type="submit"
                 class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded"
@@ -567,6 +575,7 @@
       </div>
     </transition>
   </div>
+
   <div v-if="showSuccess">
     <transition name="fade" mode="out-in">
       <div
@@ -608,7 +617,6 @@
       </div>
     </transition>
   </div>
-
   <div v-if="showError">
     <transition name="fade" mode="out-in">
       <div
@@ -650,6 +658,7 @@
       </div>
     </transition>
   </div>
+
  </div>
 </template>
 
@@ -658,14 +667,17 @@ export default {
   name: "paymentsView",
   data() {
     return {
-      //fields
-
       paymentSettingCreated: 0,
       showSuccess: false,
       showError: false,
       showPaymentEditingActivating: false,
       successMessage: "Payment Setting Activated Successfully",
       errorMessage: "There is error during activation. Please try again",
+
+      start_date_less_than_activeMonth:false,
+      end_date_less_than_activeMonth:false,
+      edit_activate_start_date_less_than_activeMonth:false,
+      edit_activate_end_date_less_than_activeMonth:false,
 
       paymentActivate: false,
       paymentSetting: {
@@ -721,17 +733,22 @@ export default {
             today.setHours(0, 0, 0, 0);
             endingDate.setHours(0, 0, 0, 0);
             if (today > endingDate) {
-              this.paymentActivate = false;
+              console.log("today is greater than ending date");
+              this.paymentActivate = true;
+            }
+            else{
+              console.log("today is not greater than ending date")
             }
             this.paymentSetting = response.data.paymentSetting;
 
-            this.paymentSetting.startingDate =
-              this.paymentSetting.formattedStartDate;
+            // this.paymentSetting.startingDate =
+            //   this.paymentSetting.startingDate;
 
-            this.paymentSetting.endingDate =
-              this.paymentSetting.formattedEndDate;
+            // this.paymentSetting.endingDate =
+            //   this.paymentSetting.endingDate;
 
             console.log("response setttinghh h ", response.data);
+
           } else {
             this.paymentSettingCreated = 2;
           }
@@ -763,6 +780,7 @@ export default {
       );
       if (
         this.paymentSetting.regularAmount == "" ||
+        this.paymentSetting.serviceAmount == "" ||
         this.paymentSetting.activeMonth === "" ||
         this.paymentSetting.startingDate == "" ||
         this.paymentSetting.endingDate == "" ||
@@ -771,9 +789,11 @@ export default {
         this.paymentSetting.penalityLateAbove10Days == "" ||
         this.paymentSetting.regFeeRate == ""
       ) {
+         // alert("required fields are not filled");
         this.fillAllfields = true;
         return;
       } else if (
+        
         new Date(this.paymentSetting.startingDate) >
         new Date(this.paymentSetting.endingDate)
       ) {
@@ -807,7 +827,37 @@ export default {
         this.tenDayLessAboveTenDay = false;
       }
 
-      const regularData = {
+
+    if (this.paymentSetting.startingDate) {
+        //alert("there is starting date")
+        const date = new Date(this.paymentSetting.startingDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+          this.start_date_less_than_activeMonth=true;
+          return;
+       //  alert("it is less than")
+         }else{
+          this.start_date_less_than_activeMonth=false;
+         }
+      }
+
+
+      if (this.paymentSetting.endingDate) {
+        //alert("there is ending date")
+        const date = new Date(this.paymentSetting.endingDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+          this.end_date_less_than_activeMonth=true;
+        // alert("it is less than")
+        return;
+         }else{
+          this.end_date_less_than_activeMonth=false;
+         }
+      }
+
+      
+
+   
+
+    const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
         subsidyAmount: this.paymentSetting.subsidyAmount,
         urgentAmount: this.paymentSetting.urgentAmount,
@@ -819,6 +869,9 @@ export default {
         activeYear: this.paymentSetting.activeYear,
         regFeeRate: this.paymentSetting.regFeeRate,
       };
+
+
+      this.paymentSetting={};
       console.log(regularData);
       console.log("payment Dataaa", regularData);
       this.$apiClient
@@ -826,6 +879,7 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (response.data.status === 1) {
+            //this.paymentSetting=response.data.paymentSetting;
             this.showSuccess = true;
             this.successMessage = response.data.message;
             this.paymentSettingCreated = 1;
@@ -837,15 +891,39 @@ export default {
           this.showError = true;
           this.errorMessage = error.response.data.message;
         });
+
     },
 
     editPaymentSetting() {
       console.log("paymentId inc lose", this.paymentId);
-
       if (this.paymentSetting.activeMonth == "") {
         this.paymentSetting.activeMonth =
           this.paymentSetting.startingDate.split("-")[1];
       }
+      this.paymentSetting.formattedStartDate=this.paymentSetting.startingDate;
+      this.paymentSetting.formattedEndDate=this.paymentSetting.endingDate;
+
+      if (this.paymentSetting.startingDate) {
+        const date = new Date(this.paymentSetting.startingDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+           this.edit_activate_start_date_less_than_activeMonth=true;
+           this.showPaymentEditingActivating=true;
+           return;
+         }else{
+            this.edit_activate_start_date_less_than_activeMonth=false;
+         }
+      }
+
+
+    if (this.paymentSetting.endingDate) {
+        const date = new Date(this.paymentSetting.endingDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+            this.edit_activate_end_date_less_than_activeMonth=true;
+         return;
+         }else{
+            this.edit_activate_end_date_less_than_activeMonth=false;
+       }
+    }
 
       const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
@@ -862,22 +940,25 @@ export default {
         penalityLateAbove10Days: this.paymentSetting.penalityLateAbove10Days,
         id: this.paymentSetting._id,
       };
-
-      console.log("regular data check it", regularData);
-
+     //const id=this.paymentSetting._id;
       this.$apiClient
         .put(`/api/v1/paymentSetting/${this.paymentSetting._id}`, regularData)
         .then((response) => {
+          console.log("response is=",response);
           if (response.data.status === 1) {
             this.showSuccess = true;
             this.successMessage = response.data.message;
+            this.showPaymentEditingActivating=!this.showPaymentEditingActivating;
+
+            
           }
         })
         .catch((error) => {
           this.showError = true;
           this.errorMessage = error.response.data.message;
-        });
+      });
     },
+
     activatePaymentSetting() {
       console.log("paymentId inc lose", this.paymentId);
       const regularData = {
@@ -894,22 +975,48 @@ export default {
         penalityLate10Days: this.paymentSetting.penalityLate10Days,
         penalityLateAbove10Days: this.paymentSetting.penalityLateAbove10Days,
       };
-      this.$apiClient
+
+    if (this.paymentSetting.startingDate) {
+        const date = new Date(this.paymentSetting.startingDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+           this.edit_activate_start_date_less_than_activeMonth=true;
+           this.showPaymentEditingActivating=true;
+           return;
+         }else{
+            this.edit_activate_start_date_less_than_activeMonth=false;
+         }
+      }
+
+    if (this.paymentSetting.endingDate) {
+        const date = new Date(this.paymentSetting.endingDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+            this.edit_activate_end_date_less_than_activeMonth=true;
+         return;
+         }else{
+            this.edit_activate_end_date_less_than_activeMonth=false;
+      }
+    }
+
+    this.$apiClient
         .post("/api/v1/paymentSetting", regularData)
         .then((response) => {
           console.log("Update response", response.data);
           if (response.data.status === 1) {
+         
             this.showSuccess = true;
             this.successMessage = response.data.message;
             this.paymentActivate = false;
             this.paymentSettingCreated = 1;
+            this.showPaymentEditingActivating=false;
           }
         })
         .catch((error) => {
+          this.showPaymentEditingActivating=false;
           this.showError = true;
           this.errorMessage = error.response.data.message;
-        });
-    },
+    });
+   },
+
   },
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <meta charset="UTF-8" />
+ <div>
   <div class="container mx-auto p-4 flex flex-col">
     <div class="flex flex-row space-x-3">
       <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
@@ -49,7 +49,7 @@
 </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full border-b border-gray-300">
+            <table class="w-full border-b border-gray-300 bg-gray-50">
               <thead>
                 <tr class="bg-gray-200">
                   <th
@@ -443,6 +443,7 @@
       </div>
     </transition>
   </div>
+</div>
 </template>
 
 <script>

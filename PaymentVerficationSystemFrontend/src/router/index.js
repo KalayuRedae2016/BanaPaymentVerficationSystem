@@ -16,19 +16,12 @@ import clients from "../components/adminaccessiblepages/clients/clients.vue";
 import deactivate from "../components/adminaccessiblepages/clients/deactivate.vue";
 import createClient from "../components/adminaccessiblepages/clients/createClient.vue";
 import editClient from "../components/adminaccessiblepages/clients/editClient.vue";
-import allCapitalChargeReport from "../components/adminaccessiblepages/payment/Reports/allCapitalChargeReport.vue";
-import allPaymentStatusReport from "../components/adminaccessiblepages/payment/Reports/allPaymentStatusReport.vue";
-import recentCapitalChargeReport from "../components/adminaccessiblepages/payment/Reports/recentCapitalChargeReport.vue";
-import recentPaymentStatusReport from "../components/adminaccessiblepages/payment/Reports/recentPaymentStatusReport.vue";
-import charges from "../components/adminaccessiblepages/payment/Reports//charges.vue";
-import confirmed from "../components/adminaccessiblepages/payment/Reports//paymentStatus/confirmed.vue";
-import pending from "../components/adminaccessiblepages/payment/Reports//paymentStatus/pending.vue";
+
+
 import overdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/overdue.vue";
-import verify from "../components/adminaccessiblepages/payment/Reports//paymentStatus/verify.vue";
 import paidUnpaid from "../components/adminaccessiblepages/payment/Reports//paymentStatus/paidUnpaid.vue"
-import paidUnPaidOverdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/paidUnPaidOverdue.vue"
 import transferHistory from "../components/adminaccessiblepages/payment/Reports/transferHistory.vue"
-import reciept from "../components/adminaccessiblepages/payment/Reports//reciepts/reciept.vue";
+
 
 import idCardAdmin from "../components/adminaccessiblepages/id/idCard.vue";
 import sendEmail from "../components/adminaccessiblepages/messages/sendEmail.vue";
@@ -97,22 +90,13 @@ const routes = [
       { path: "create-client", name: "create-client", component: createClient },
       { path: "edit-client/:clientId", name: "edit-client", component: editClient },
       { path: "bank-statement/:userCode", component: bankStatement },
-     
       { path: "user-for-bank-statement", component:  usersForBankStatement  },
       
-      { path: "charges", component: charges },
-      { path: "all-payment-status-report", name: "all-payment-status-report", component: allPaymentStatusReport },
-      { path: "all-capital-charge-report", name: "all-capital-charge-report", component: allCapitalChargeReport },
-      { path: "recent-payment-status-report", name: "recent-payment-status-report", component: recentPaymentStatusReport },
-      { path: "recent-capital-charge-report", name: "recent-capital-charge-report", component: recentCapitalChargeReport },
-      { path: "confirmed", name: "confirmed", component: confirmed, props: true },
-      { path: "pending", name: "pending", component: pending, props: true },
+  
       { path: "overdue", name: "overdue", component: overdue, props: true },
       { path: "paid-unpaid", name: "paid-unpaid", component: paidUnpaid, props: true },
-      { path: "paid-unpaid-overdue", name: "paid-unpaid-ovedue", component: paidUnPaidOverdue, props: true },
       { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
-      { path: "verify/:clientId", name: "verify", component: verify },
-      { path: "reciept", name: "reciept", component: reciept },
+   
       
       { path: "empty/:clientId", component: empty },
       { path: "empty-companey", component: emptyCompaney },

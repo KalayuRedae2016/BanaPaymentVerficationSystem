@@ -66,14 +66,14 @@
                 v-for="searchPayment in searchedPayments"
                 :key="searchPayment._id"
               >
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
                   {{ searchPayment.userCode }}
                 </td>
 
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
                   {{ searchPayment.fullName }}
                 </td>
-                <td class="p-3 text-md whitespace-nowrap">
+                <td class="p-3 text-xs whitespace-nowrap">
                   <button
                     @click="userOverdueDetails(searchPayment.userCode)"
                     class="flex items-center px-4 py-2 bg-white hover:bg-blue-100 text-blue-500 rounded"
@@ -102,7 +102,7 @@
                 id="payments-per-page"
                 v-model="paymentsPerpage"
                 @change="changePerPageNumber()"
-                class="h-9 border border-gray-300 text-gray-700 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
+                class="h-9 border border-gray-300 text-gray-500 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
               >
                 <option value="" disabled>Select</option>
                 <option value="2">2</option>

@@ -1,5 +1,5 @@
 <template>
-
+<div>
   <!-- this is the page to send email -->
   <div class="container mx-auto p-4 flex flex-col">
     <div class="flex flex-row space-x-3">
@@ -91,7 +91,7 @@
                   v-for="(searchClient, index) in searchedusers"
                   :key="searchClient._id"
                 >
-                  <td class="p-3 text-xl text-gray-500 whitespace-nowrap">
+                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
                     <input
                       type="checkbox"
                       :checked="emails.includes(searchClient.email)"
@@ -123,14 +123,14 @@
                 @change="changePerPageNumber()"
                 class="h-7 border border-gray-500 mr-3 rounded-md"
               >
-                <option value="2" selected>2</option>
+                <option value="2" selected >2</option>
                 <option value="3">3</option>
                 <option value="10">10</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
               </select>
               <button
-                @click="previosPage"
+                @click.prevent="previosPage"
                 class="text-sm px-2 py-1 rounded border border-gray-500 text-pink-500 hover:bg-gray-200 mr-2"
               >
                 <i class="fa fa-chevron-left"></i>
@@ -140,7 +140,7 @@
                 >{{ currentPage }}</span
               >
               <button
-                @click="nextPage"
+                @click.prevent="nextPage"
                 class="px-2 py-1 rounded border border-gray-500 text-pink-500 hover:bg-gray-200 ml-2"
               >
                 <i class="fas fa-chevron-right"></i>
@@ -238,7 +238,7 @@
       </div>
     </transition>
   </div>
-
+</div>
 </template>
 
 <script>

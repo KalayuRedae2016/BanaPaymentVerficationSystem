@@ -348,17 +348,6 @@ export default {
       clientId:"",
 
       clientProfile:{
-       firstName:"Tadesse",
-       middleName:"Gebremicheal",
-       lastName:"Berhe",
-       age:"27",
-       gender:'male',
-       address:"mekelle",
-       email:"tadiosgb26@gmail.com",
-       phoneNumber:"0967740501",
-       userCode:"BM0001",
-       imageData:"",
-       _id:"",
       },
     };
   },

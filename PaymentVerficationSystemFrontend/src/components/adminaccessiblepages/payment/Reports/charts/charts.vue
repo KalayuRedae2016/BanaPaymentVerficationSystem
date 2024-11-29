@@ -10,7 +10,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import Chart from "chart.js/auto";
 import axios from "axios";
@@ -80,10 +79,9 @@ export default {
             "An error occurred while fetching Payment settings:",
             error
           );
-        });
+      });
     },
    monthlyPayment() {
-   
       const timeRange = "monthly";
       this.$apiClient
         .get(

@@ -8,7 +8,14 @@ const {formatDate}=require("../utils/formatDate")
 
 // Create a new payment setting
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
+<<<<<<< HEAD
+
+  console.log("req.body",req.body);
+
+  const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
+=======
   const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate,startingDate,endingDate}=req.body
+>>>>>>> 9d7ff870c0d3eac3da81f19241629237bf76450f
 
   // Check for required fields
   if (!activeYear||!activeMonth||!regularAmount||!urgentAmount||!serviceAmount||!subsidyAmount||!regFeeRate||!startingDate||!endingDate) {
@@ -141,6 +148,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
 
 // Update a payment setting by ID
 exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
+  console.log(req.params.id);
     const settingId= req.params.id;
     if(!settingId){
       return next(new AppError('Setting ID is required', 404));
