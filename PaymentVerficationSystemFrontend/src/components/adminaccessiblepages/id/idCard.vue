@@ -28,9 +28,9 @@
         </div>
       </div>
 
-      <div class="border-t border-blue-900 border-dotted">
+      <div class="border-t border-blue-900 border-dotted ">
         <div
-          class="p-4 border-b border-blue-900 border-dotted cursor-pointer"
+          class="p-4 border-b border-blue-900 border-dotted cursor-pointer text-gray-500 text-sm"
           v-for="(user, userIndex) in filteredUsers"
           :key="userIndex"
           :class="[
@@ -42,7 +42,7 @@
           ]"
           @click="toggleUserSelection(user)"
         >
-          <div class="mt-4 flex flex-row space-x-5 md:space-x-12">
+          <div class="flex flex-row space-x-5 md:space-x-12">
             <p>{{ user.userCode }}</p>
             <p>{{ user.fullName }}</p>
           </div>
@@ -60,8 +60,7 @@
               <p class="text-white ml-5">Banna Mall digital ID Card </p>
             </div>
           </div>
-          <img src="../../../assets/img/tigflag.jpg" alt="" class="h-10 w-16 mr-10 rounded-lg">
-        </div>
+       </div>
   
         <div class="flex flex-row">
           <div class="bg-white border-t-2 border-l-2 border-b-2 border-dashed border-blue-500 flex flex-col w-1/2">
@@ -126,9 +125,7 @@
                   </div>
 
                 </div>
-  
-                <img src="../../../assets/img/tigflag.jpg" alt="" class="h-6 w-10 mr-10 rounded-lg">
-              </div>
+             </div>
               <div class="flex flex-row mx-5">
                 <div>
                   <img   :src="imageData" alt="" style=" hieght:120px;width:120px;" class="mb-3">
@@ -303,7 +300,7 @@
   
         // Options for html2pdf conversion
         const options = {
-          filename: 'receipt.pdf',
+          filename: 'IDcard.pdf',
           image: { type: 'jpeg', quality: 0.98 },
           html2canvas: { scale: 2 },
           jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }

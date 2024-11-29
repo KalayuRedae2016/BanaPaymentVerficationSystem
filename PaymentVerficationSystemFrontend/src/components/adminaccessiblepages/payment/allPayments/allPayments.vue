@@ -60,51 +60,52 @@
           </select>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full border-b border-indigo-500">
+        <div class="overflow-x-auto ">
+          <div class="">
+          <table class="w-full border-b border-indigo-500 bg-gray-50 ">
             <thead>
               <tr class="bg-gray-200">
                 <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                 >
                   UserCode
                 </th>
                 <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                 >
                   Full Name
                 </th>
                 <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                 >
                   Status
                 </th>
                 <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                 >
                   Action
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr
+              <tr class=" "
                 v-for="searchPayment in searchedpayments"
                 :key="searchPayment._id"
               >
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  <p class="px-3 bg-blue-100 rounded-lg">
+                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
+                  <p class="px-3 rounded-lg">
                     {{ searchPayment.userCode }}
                   </p>
                 </td>
 
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  <p class="px-3 bg-blue-100 rounded-lg">
+                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
+                  <p class="px-3 rounded-lg">
                     {{ searchPayment.fullName }}
                   </p>
                 </td>
 
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  <p class="px-3 bg-blue-100 rounded-lg">
+                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
+                  <p class="px-3 rounded-lg">
                     {{ searchPayment.status }}
                   </p>
                 </td>
@@ -120,13 +121,13 @@
                     )
                   "
                 >
-                  <i class="fas fa-file-alt text-pink-500"></i>
+                  <i class="fas fa-file-alt text-pink-500 text-xs"></i>
                   <span>Detail</span>
                 </button>
               </tr>
             </tbody>
           </table>
-
+        </div>
           <div
             class="flex space-x-12 items-center mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
           >

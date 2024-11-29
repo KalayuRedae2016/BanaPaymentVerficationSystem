@@ -60,19 +60,19 @@
                 v-for="searchPayment in searchedpayments"
                 :key="searchPayment._id"
               >
-                <td class=" text-md text-gray-700 whitespace-nowrap">
+                <td class=" text-md text-gray-500 whitespace-nowrap text-xs">
                   {{ searchPayment.userCode }}
                 </td>
 
-                <td class="text-md text-gray-700 whitespace-nowrap">
+                <td class="text-md text-gray-500 whitespace-nowrap text-xs">
                   {{ searchPayment.fullName }}
                 </td>
-                <td class=" text-md text-gray-700 whitespace-nowrap">
+                <td class=" text-md text-gray-500 whitespace-nowrap text-xs">
                   {{ searchPayment.isPaid }}
                 </td>
-                <button class="custom-button m-1 -p-2 flex items-center space-x-2" @click="paymentHistory(searchPayment.userCode, searchPayment.activeYear, searchPayment.activeMonth,searchPayment.status)">
+                <button class="bg-gray-500 rounded-lg px-2 m-1 -p-2 flex items-center space-x-2" @click="paymentHistory(searchPayment.userCode, searchPayment.activeYear, searchPayment.activeMonth,searchPayment.status)">
                   <i class="fas fa-info-circle text-pink-500"></i> <!-- Icon in pink color -->
-                  <span>Detail</span>
+                  <span class="text-white">Detail</span>
                 </button>
               </tr>
             </tbody>
@@ -87,7 +87,7 @@
       id="payments-per-page"
       v-model="paymentsPerpage"
       @change="changePerPageNumber()"
-      class="h-9 border border-gray-300 text-gray-700 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
+      class="h-9 border border-gray-300text-gray-500 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
     >
       <option value="" disabled>Select</option>
       <option value="2">2</option>

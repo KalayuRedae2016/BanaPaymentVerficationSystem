@@ -85,6 +85,7 @@
               <i class="fas fa-calendar-week text-sm lowercase mr-2 text-blue-500"></i>
               <span>This Mon</span>
             </button>
+
             <button @click="thisWeek()"
               class="h-8 flex items-center  bg-blue-200  text-black rounded-md px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
               <i class="fas fa-calendar-check text-sm lowercase mr-2 text-blue-500"></i>
@@ -165,9 +166,11 @@
               <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
                 {{ bank }}
               </td>
+              
               <td class="px-4 py-2 text-left border border-gray-300">
                 {{ balance.regularBalance }}
               </td>
+
               <td class="px-4 py-2 text-left border border-gray-300">
                 {{ balance.subsidyBalance }}
               </td>

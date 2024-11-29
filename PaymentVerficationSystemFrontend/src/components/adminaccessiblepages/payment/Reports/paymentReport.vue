@@ -32,19 +32,19 @@
       </div>
       <div class="border-t border-blue-900 border-dotted">
         <div
-          class="p-4 border-b border-blue-900 border-dotted cursor-pointer"
+          class="bg-white px-4 border-b border-blue-900 border-dotted cursor-pointer"
           v-for="(user, userIndex) in filteredUsers"
           :key="userIndex"
           :class="[
             'p-4 border-b cursor-pointer',
             {
               'bg-blue-200 ': user.userSelected, // Background color when selected
-              'bg-gray-50': !user.userSelected, // Default background color
+              'bg-white': !user.userSelected, // Default background color
             },
           ]"
           @click="toggleUserSelection(user.userCode)"
         >
-          <div class="mt-4 flex flex-row space-x-5 md:space-x-12">
+          <div class="flex flex-row space-x-5 md:space-x-12 text-xs text-gray-500">
             <p>{{ user.userCode }} </p>
             <p>{{ user.fullName }}</p>
           </div>
@@ -71,10 +71,10 @@
           <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Detail</th>
         </tr>
       </thead>
+
       <tbody>
         <!-- Loop through each month of the year -->
         <tr v-for="payment in payments" :key="payment.activeMonth">
-         
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.userCode}}</td>
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.activeYear }}</td>
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.activeMonth }}</td>
@@ -98,6 +98,7 @@
         </tr>
       </tbody>
     </table>
+
    <div v-if="showPaymentNotFound" class="text-red-500 my-5 mx-5">
      {{userCode}} has no paid payment in the selected year.
    </div>
