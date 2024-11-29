@@ -570,28 +570,26 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       { firstName: { $regex: searchPattern } },
       { middleName: { $regex: searchPattern } },
       { lastName: { $regex: searchPattern } },
+      { phoneNumber: { $regex: searchPattern } },
     ],
     isPaid:false//for status:pending or status: overdue
   };
+  const user=await User.find({keyword})
+    
   if (isPaid) paymentQuery.isPaid=isPaid
-  const payments = await Payment.find(paymentQuery)
-    .populate({
-      path: 'user',
-      select: 'fullName',
-    })
-    .sort({ activeMonth: 1 });
+  const payments = await Payment.find(paymentQuery).populate({path: 'user',select: 'fullName'}).sort({ activeMonth: 1 });
+  console.log(payments)
   if (!payments.length) {
     return res.status(200).json({
       error: true,
       statusCode: 500,
       status: 1,
       items: [],
-      fullName:payments.fullName,
+      fullName:user.fullName,
       message: `No Payment is Opened for the Provided Criteria`,
     });
   }
 
-  
   const paymentDetails = await Promise.all(
     payments.map(async (payment) => {
       const paymentDetails = {};
