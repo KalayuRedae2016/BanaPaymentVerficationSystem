@@ -123,9 +123,9 @@
                   class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
                 >
                   <img
-                    src="../../../assets/img/profile.JPG"
+                    src="../../../assets/img/banamall1.jpg"
                     alt="Notification Image"
-                    class="w-10 h-10 rounded-full mr-3"
+                    class="w-10 h-10 rounded-full mr-3 bg-red-500"
                   />
                   <div class="flex-1">
                     <p class="text-sm">{{ notification.message }}</p>
@@ -140,7 +140,7 @@
 
           <div class="relative -mt-1" @click="toggleDropdown('profile')">
             <img
-              src="../../../assets/img/profile.JPG"
+              src="../../../assets/img/banamall1.jpg"
               alt="User Profile"
               class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
             />

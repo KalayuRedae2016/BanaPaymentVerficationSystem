@@ -1085,7 +1085,7 @@ export default {
       await this.generateQRCodeImage();
       const printContent = document.getElementById("printable-area").innerHTML;
       const linkElement = document.createElement("link");
-      linkElement.href = "https://cdn.jsdelivr.net/npm/tailwindcss@3.3.3/dist/tailwind.min.cs";
+      linkElement.href = "/assets/css/tailwind.min.css";
       linkElement.rel = "stylesheet";
       const printWindow = window.open(
         "",
