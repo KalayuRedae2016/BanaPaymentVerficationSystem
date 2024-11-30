@@ -1,8 +1,8 @@
 const bcrypt = require('bcrypt');
 const sharp = require('sharp');
 const User = require('./../Models/userModel');
-const Organization=require("../Models/organizationModel")
-const PaymentSetting=require("../Models/paymentSettingModel")
+const Organization = require("../Models/organizationModel")
+const PaymentSetting = require("../Models/paymentSettingModel")
 const fs = require('fs');
 const path = require('path');
 const validator = require('validator'); // Ensure you have this library installed
@@ -10,9 +10,9 @@ const validator = require('validator'); // Ensure you have this library installe
 const { sendEmail } = require('../utils/email');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-const {formatDate}=require("../utils/formatDate")
-const createPendingPayments=require("../utils/createPendingPayments")
-const {importFromExcel,exportToExcel,deleteFile,createMulterMiddleware} = require('../utils/excelFileController');
+const { formatDate } = require("../utils/formatDate")
+const createPendingPayments = require("../utils/createPendingPayments")
+const { importFromExcel, exportToExcel, deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
 
 const factory = require('./handlerFactoryController'); //implement latter for next factory function
 
@@ -55,7 +55,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   if (isActive) {
     userQuery.isActive = isActive === 'true';
   }
-  userQuery.role="User"
+  userQuery.role = "User"
   const users = await User.find(userQuery).lean();
   if (!users) {
     return next(new AppError('No users found', 404));
@@ -65,7 +65,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   const formattedsers = users.map(user => {
     const formattedCreatedAt = user.createdAt ? formatDate(user.createdAt) : null;
     const formattedUpdatedAt = user.updatedAt ? formatDate(user.updatedAt) : null;
-    
+
     return {
       ...user,  // Spread the original user data
       formattedCreatedAt,  // Add formatted createdAt
@@ -76,7 +76,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 1,
     result: users.length,
-    users:formattedsers
+    users: formattedsers
   });
 });
 
@@ -107,7 +107,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 1,
-    clientProfile:{ 
+    clientProfile: {
       ...user._doc,
       formattedCreatedAt,
       formattedUpdatedAt
@@ -117,9 +117,9 @@ exports.getUser = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = catchAsync(async (req, res) => {
-  try{
-      const userId = req.params.id;
-      console.log(userId)
+  try {
+    const userId = req.params.id;
+    console.log(userId)
     // Retrieve the existing user
     const existingUser = await User.findById(userId);
     if (!existingUser) {
@@ -128,41 +128,55 @@ exports.updateUser = catchAsync(async (req, res) => {
     // Initialize update data
     let updateData = req.body;
 
+    if (updateData.userCode) {
+      let userCode = updateData.userCode.trim().toUpperCase();  // Trim any spaces and upper case
+
+      const prefix = userCode.slice(0, 2)  // Ensure the userCode starts with "BM"
+      if (prefix !== "BM") {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'User code must start with "BM".',
+        });
+      }
+
+      updateData.userCode = userCode;// Update the user data with the normalized userCode
+
+      const userCodeRegex = new RegExp('^' + userCode + '$', 'i'); // 'i' makes it case-insensitive
+      const userCodeExists = await User.findOne({ userCode: userCodeRegex, _id: { $ne: userId } });
+      
+      if (userCodeExists) {
+        return res.status(400).json({
+          status: 'fail',
+          message: 'User code already in use by another user.',
+        });
+      }
+    }
+
     if (req.file) {
       updateData.profileImage = req.file.filename; // Set new profile image filename to update
 
-let oldImagePath;
-if (existingUser.profileImage && existingUser.profileImage.trim() !== '' && existingUser.profileImage !== 'default.png') {
-  const profileImage = existingUser.profileImage.trim();
-  if (['.png', '.jpg', '.jpeg'].some(ext => profileImage.toLowerCase().endsWith(ext))) {
-    oldImagePath = path.join(__dirname, '../uploads/users', profileImage);
-    if (fs.existsSync(oldImagePath)) {
-      try {
-        fs.unlinkSync(oldImagePath);
-      } catch (error) {
-        console.error(`Error deleting file: ${error.message}`);
+      let oldImagePath;
+      if (existingUser.profileImage && existingUser.profileImage.trim() !== '' && existingUser.profileImage !== 'default.png') {
+        const profileImage = existingUser.profileImage.trim();
+        if (['.png', '.jpg', '.jpeg'].some(ext => profileImage.toLowerCase().endsWith(ext))) {
+          oldImagePath = path.join(__dirname, '../uploads/users', profileImage);
+          if (fs.existsSync(oldImagePath)) {
+            try {
+              fs.unlinkSync(oldImagePath);
+            } catch (error) {
+              console.error(`Error deleting file: ${error.message}`);
+            }
+          }
+        }
       }
     }
-  }
-}
 
-    }
-    // // Update user data in the database
-    // const updatedUser = await User.findByIdAndUpdate(
-    //   userId,
-    //   { $set: updateData },
-    //   { new: true, runValidators: true }
-    // );
-
-    // Apply updates to the existing user object
-    Object.assign(existingUser, updateData);
-
-    // Save the updated user document
-    const updatedUser = await existingUser.save();
+    Object.assign(existingUser, updateData);// Apply updates to the existing user object
+    const updatedUser = await existingUser.save();// Save the updated user document
 
     const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
     const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
-    
+
     res.status(200).json({
       status: 1,
       Message: `${updatedUser.fullName} updated successfully`,
@@ -173,7 +187,7 @@ if (existingUser.profileImage && existingUser.profileImage.trim() !== '' && exis
       },
       profileImage: updatedUser.profileImage,
     });
-  }catch (error) {
+  } catch (error) {
     deleteFile(req.file?.path);
     res.status(500).json({ message: 'Error saving user: ' + error.message });
   }
@@ -198,14 +212,13 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
     });
   }
   // Update the user's active status
-  user.isActive = isActive ===true ? true : false;
+  user.isActive = isActive === true ? true : false;
   user.reason = reason;
   await user.save();
   res.status(200).json({
     status: 1,
-    message: `${user.fullName} is ${
-      user.isActive ? 'Activated' : 'Deactivated'
-    }`,
+    message: `${user.fullName} is ${user.isActive ? 'Activated' : 'Deactivated'
+      }`,
   });
 });
 
@@ -220,14 +233,14 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     );
   }
   // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body,'firstName','middleName','lastName','tigrignaName','phoneNumber','address','email','age','gender');
-  if (req.file) filteredBody.profileImage= req.file.filename;
+  const filteredBody = filterObj(req.body, 'firstName', 'middleName', 'lastName', 'tigrignaName', 'phoneNumber', 'address', 'email', 'age', 'gender');
+  if (req.file) filteredBody.profileImage = req.file.filename;
 
   // 3) Update user document
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
-    {$set:filteredBody}, 
-    {new: true,runValidators: true}
+    { $set: filteredBody },
+    { new: true, runValidators: true }
   );
 
   const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
@@ -247,11 +260,11 @@ exports.importUsers = catchAsync(async (req, res) => {
   console.log('Uploaded File:', req.file); // Debug log
   // Transform function to add user code and hashed password
   const transformUserData = async (data) => {
-    const organization=await Organization.findOne()
-    const prefixCode =organization.companyPrefixCode
+    const organization = await Organization.findOne()
+    const prefixCode = organization.companyPrefixCode
     const length = 4; // Length of user code
 
-    if (!data.firstName||!data.middleName||!data.lastName||!data.email||!data.tigrignaName||!data.phoneNumber) {
+    if (!data.firstName || !data.middleName || !data.lastName || !data.email || !data.tigrignaName || !data.phoneNumber) {
       throw new Error('Required fields are missing.');
     }
     const user = new User(data);
@@ -261,7 +274,7 @@ exports.importUsers = catchAsync(async (req, res) => {
     return user; // Return the transformed user instance
   };
   const filePath = req.file.path; // Path to the uploaded file
-  
+
   // Use the utility function to import data from the Excel file
   const importedUsers = await importFromExcel(filePath, User, transformUserData);
 
@@ -271,9 +284,9 @@ exports.importUsers = catchAsync(async (req, res) => {
     return next(new AppError('No active payment setting found.', 404));
   }
 
-   // Create pending payments for all imported users
+  // Create pending payments for all imported users
   for (const user of importedUsers) {
-    if (!user.isActive||!user.role==="User") continue;
+    if (!user.isActive || !user.role === "User") continue;
     await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
   }
   // Clean up the file after processing
@@ -286,15 +299,15 @@ exports.importUsers = catchAsync(async (req, res) => {
   });
 });
 exports.exportUsers = catchAsync(async (req, res) => {
-    const users = await User.find({}); // Fetching data from MongoDB
-    await exportToExcel(users, 'Users', 'userData.xlsx', res);
+  const users = await User.find({}); // Fetching data from MongoDB
+  await exportToExcel(users, 'Users', 'userData.xlsx', res);
 });
 
 exports.sendEmailMessages = catchAsync(async (req, res, next) => {
   console.log(req.body)
   console.log("email")
   const { emailList, subject, message } = req.body;
-  
+
   if (!subject || !message) {
     return next(new AppError('Subject and message are required', 400));
   }
@@ -318,12 +331,12 @@ exports.sendEmailMessages = catchAsync(async (req, res, next) => {
   }
 
   const emailPromises = users.map(user => {
-    const personalizedMessage = 
+    const personalizedMessage =
       `Dear, ${user.fullName},
 
       ${message}`;
 
-    return sendEmail({email: user.email,subject: subject,message: personalizedMessage});
+    return sendEmail({ email: user.email, subject: subject, message: personalizedMessage });
   });
 
   try {
