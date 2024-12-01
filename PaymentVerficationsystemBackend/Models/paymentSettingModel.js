@@ -86,42 +86,41 @@ paymentSettingSchema.pre('validate', function (next) {
   next();
 });
 
-paymentSettingSchema.pre('save', async function (next) {
-  console.log("herre")
+paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
+  console.log("Pre-findOneAndUpdate Hook");
+
+  const updatedFields = this._update;
+  const paymentSetting = this._conditions;
+
   // If this setting is marked as latest, ensure all previous PaymentSettings are marked as not latest
-  if (this.isModified() && this.latest) {
-    // Update all other PaymentSettings to not be latest
+  if (updatedFields.latest === true) {
     await mongoose.model('PaymentSetting').updateMany(
-      { _id: { $ne: this._id }, latest: true },
+      { _id: { $ne: paymentSetting._id }, latest: true },
       { $set: { latest: false } }
     );
   }
-  console.log(this.latest)
+  console.log("Updated Fields:", updatedFields);
 
-  // Object to hold fields to update in associated payments
-  const updatedFields = {};
+  // Apply changes to associated payments
+  const updatedPaymentFields = {};
 
-  // Check if `activeYear`, `activeMonth`, or `regularAmount...` has been modified
-  if (this.isModified('activeYear')) updatedFields['activeYear'] = this.activeYear;
-  if (this.isModified('activeMonth')) updatedFields['activeMonth'] = this.activeMonth;
-  if (this.isModified('regularAmount')) updatedFields['regular.amount'] = this.regularAmount;
-  if (this.isModified('urgentAmount')) updatedFields['urgent.amount'] = this.urgentAmount;
-  if (this.isModified('subsidyAmount')) updatedFields['subsidy.amount'] = this.subsidyAmount;
+  if (updatedFields.activeYear) updatedPaymentFields['activeYear'] = updatedFields.activeYear;
+  if (updatedFields.activeMonth) updatedPaymentFields['activeMonth'] = updatedFields.activeMonth;
+  if (updatedFields.regularAmount) updatedPaymentFields['regular.amount'] = updatedFields.regularAmount;
+  if (updatedFields.urgentAmount) updatedPaymentFields['urgent.amount'] = updatedFields.urgentAmount;
+  if (updatedFields.subsidyAmount) updatedPaymentFields['subsidy.amount'] = updatedFields.subsidyAmount;
 
-  // Only proceed if there are modifications to apply to associated payments
-  if (Object.keys(updatedFields).length > 0) {
-    const Payment = mongoose.model('Payment'); // Get the Payment model
-    console.log("Begine")
-    console.log("Begine",Payment)
-    console.log("finsih")
-  // Update all payments that match the updated `activeYear` and `activeMonth`
-  await Payment.updateMany({ paymentSetting: this._id},updatedFields)}
+  if (Object.keys(updatedPaymentFields).length > 0) {
+    const Payment = mongoose.model('Payment');
+    await Payment.updateMany(
+      { paymentSetting: paymentSetting._id },
+      updatedPaymentFields
+    );
+  }
 
-  console.log("end",Payment)
-  console.log("updatedFields",updatedFields)
-  console.log("ll",Object.keys(updatedFields).length )
-  next(); // Proceed with the save operation
+  next();
 });
+
 
 paymentSettingSchema.index({activeMonth:1})
 

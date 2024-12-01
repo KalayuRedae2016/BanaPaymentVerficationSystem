@@ -160,7 +160,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
     updatedData.startingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 1)); // First day of the month
     updatedData.endingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 30));  // 30th day of the month
     }
-  // console.log(updatedData)
+  console.log("updatedData",updatedData)
     const paymentSetting = await PaymentSetting.findOneAndUpdate(
       { _id: settingId,latest:true}, 
       updatedData, // Update data from the request body
@@ -174,7 +174,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
-  //console.log(paymentSetting)
+  console.log("Updated Payment Setting:", paymentSetting); // Log updated setting
     res.status(200).json({
       status:1,
       message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
