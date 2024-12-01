@@ -1,35 +1,37 @@
 <template>
-  <div class="container mx-auto flex flex-col mt-5">
-    <div class="px-5 pb-5 flex flex-col bg-white -mt-2">
-      <div class="p-4 mt-8 border border-gray-300">
-        <div class="flex items-center justify-between mb-6 space-x-4 bg-white p-4 rounded-lg shadow-md">
-  <!-- Search Input -->
-  <div class="flex-1">
-    <input
-      v-model="searchQuery"
-      type="text"
-      placeholder="Search by Name, Email, Username"
-      class="w-full px-4 py-2 border border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-    />
-  </div>
+  <div class="container mx-auto flex flex-col mt-5 ">
+    <div class="pb-5 flex flex-col bg-white -mt-2 ">
+      <div class="mt-8 ">
+        <div
+          class="flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-1  bg-white p-4 rounded-lg shadow-md space-y-2 lg:space-x-0"
+        >
+          <!-- Search Input -->
+          <div class="flex-1 w-full lg:w-3/4">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search by Name, Email, Username"
+              class=" text-xs w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            />
+          </div>
 
-  <!-- Payment Type Select -->
-  <select
-    v-model="paymentType"
-    @change="changeSearched(paymentType)"
-    class="border border-blue-500 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-  >
-    <option value="" selected disabled>Select Payment Type</option>
-    <option value="all">All</option>
-    <option value="block">Block</option>
-    <option value="service">Service</option>
-  </select>
-</div>
- 
+          <!-- Payment Type Select -->
+          <select
+            v-model="paymentType"
+            @change="changeSearched(paymentType)"
+            class="w-full lg:w-1/4 text-xs border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          >
+            <option value="" selected disabled>Select Payment Type</option>
+            <option value="all">All</option>
+            <option value="block">Block</option>
+            <option value="service">Service</option>
+          </select>
+        </div>
+
         <div class="overflow-x-auto">
           <table class="w-full border-b border-indigo-500">
             <thead>
-              <tr class="bg-gray-200">
+              <tr class="bg-gray-200  text-xs">
                 <th
                   class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
                 >
@@ -68,9 +70,15 @@
                 :key="searchedTransferedPayment._id"
               >
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  <p v-if="searchedTransferedPayment.transferType=='block'" class="bg-blue-100 px-2 rounded-lg"> {{ searchedTransferedPayment.transferType }}</p>
-                  <p v-else class="bg-yellow-100 px-2 rounded-lg"> {{ searchedTransferedPayment.transferType }}</p>
-                 
+                  <p
+                    v-if="searchedTransferedPayment.transferType == 'block'"
+                    class="bg-blue-100 px-2 rounded-lg"
+                  >
+                    {{ searchedTransferedPayment.transferType }}
+                  </p>
+                  <p v-else class="bg-yellow-100 px-2 rounded-lg">
+                    {{ searchedTransferedPayment.transferType }}
+                  </p>
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   {{ searchedTransferedPayment.fromBankType }}
@@ -91,48 +99,48 @@
             </tbody>
           </table>
 
-          <div class="flex flex-row mt-6 items-center justify-center bg-white p-4 rounded-lg shadow-md border border-gray-200">
-  <h1 class="mr-4 text-lg font-semibold text-gray-800">Show More:</h1>
+          <div
+            class="text-xs flex flex-row mt-6 items-center justify-center bg-white p-4 rounded-lg shadow-md border border-gray-200"
+          >
+            <h1 class="mr-4 text-lg font-semibold text-gray-800">Show More:</h1>
 
-  <!-- Items per Page Select -->
-  <select
-    v-model="paymentTransfersPerpage"
-    @change="changePerPageNumber()"
-    class="h-10 border border-gray-300 rounded-lg bg-white px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mr-4"
-  >
-    <option value="" disabled>Select Items</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="10">10</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
-  </select>
+            <!-- Items per Page Select -->
+            <select
+              v-model="paymentTransfersPerpage"
+              @change="changePerPageNumber()"
+              class="h-10 border border-gray-300 rounded-lg bg-white px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mr-4"
+            >
+              <option value="" disabled>Select Items</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="10">10</option>
+              <option value="50">50</option>
+              <option value="100">100</option>
+            </select>
 
-  <!-- Previous Page Button -->
-  <button
-    @click="previosPage"
-    class="flex items-center justify-center px-3 py-2 rounded-lg border border-gray-300 text-gray-600 bg-gray-100 hover:bg-gray-200 transition duration-200 mr-2"
-    :disabled="currentPage === 1"
-  >
-    <i class="fas fa-chevron-left"></i>
-  </button>
+            <!-- Previous Page Button -->
+            <button
+              @click="previosPage"
+              class="flex items-center justify-center px-3 py-2 rounded-lg border border-gray-300 text-gray-600 bg-gray-100 hover:bg-gray-200 transition duration-200 mr-2"
+              :disabled="currentPage === 1"
+            >
+              <i class="fas fa-chevron-left"></i>
+            </button>
 
-  <!-- Current Page Display -->
-  <span
-    class="px-4 py-2 rounded-lg border border-gray-300 bg-pink-500 text-white text-center font-bold"
-    >{{ currentPage }}</span
-  >
+            <!-- Current Page Display -->
+            <span
+              class="px-4 py-2 rounded-lg border border-gray-300 bg-pink-500 text-white text-center font-bold"
+              >{{ currentPage }}</span
+            >
 
-  <!-- Next Page Button -->
-  <button
-    @click="nextPage"
-    class="flex items-center justify-center px-3 py-2 rounded-lg border border-gray-300 text-gray-600 bg-gray-100 hover:bg-gray-200 transition duration-200 ml-2"
-  >
-    <i class="fas fa-chevron-right"></i>
-  </button>
-</div>
-
-
+            <!-- Next Page Button -->
+            <button
+              @click="nextPage"
+              class="flex items-center justify-center px-3 py-2 rounded-lg border border-gray-300 text-gray-600 bg-gray-100 hover:bg-gray-200 transition duration-200 ml-2"
+            >
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -190,7 +198,7 @@ export default {
         });
     },
     async changeSearched(paymentType) {
-      this.searchedTransferedPayment="";
+      this.searchedTransferedPayment = "";
       if (paymentType == "all") {
         this.searchedTransferedPayments = this.paymentTransfers.filter(
           (paymentTransfer) =>
@@ -200,24 +208,23 @@ export default {
       } else if (paymentType == "block") {
         console.log("block", this.paymentTransfers);
         this.searchedTransferedPayments = this.paymentTransfers.filter(
-          (paymentTransfer) => paymentTransfer.transferType == "block");
-      }else {
-         console.log("else payments",this.searchedTransferedPayments);
-         this.searchedpaymentTransfers = this.paymentTransfers.filter(
+          (paymentTransfer) => paymentTransfer.transferType == "block"
+        );
+      } else {
+        console.log("else payments", this.searchedTransferedPayments);
+        this.searchedpaymentTransfers = this.paymentTransfers.filter(
           (paymentTransfer) => {
- 
             if (paymentTransfer.transferType == "service") {
               console.log("paymenttransfer", paymentTransfer.transferType);
-              return true; 
+              return true;
             } else {
-              this.searchedTransferedPayments="";
-              console.log("Paymenttransfer else",paymentTransfer.transferType);
-              return false; 
+              this.searchedTransferedPayments = "";
+              console.log("Paymenttransfer else", paymentTransfer.transferType);
+              return false;
             }
-
           }
         );
-         console.log("searched in service", this.searchedTransferedPayments);
+        console.log("searched in service", this.searchedTransferedPayments);
       }
     },
     filteredPaymentTransfersInSearch() {
@@ -229,7 +236,7 @@ export default {
               paymentTransfer.transferType.toLowerCase().includes(query) ||
               paymentTransfer.fromBankType.toLowerCase().includes(query)
           );
-      }else{
+      } else {
         this.searchedTransferedPayments = this.paymentTransfers;
       }
     },

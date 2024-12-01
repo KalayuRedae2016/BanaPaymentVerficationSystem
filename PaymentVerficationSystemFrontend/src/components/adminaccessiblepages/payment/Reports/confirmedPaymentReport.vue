@@ -1,6 +1,6 @@
 <template>
   <div class="border border border-gray-400 mt-5">
-    <div class="flex flex-col p-4">
+    <div class="flex flex-col p-4 text-xs">
       <div class="flex flex-row border-b border-blue-500">
         <label class="custom-label"> Report Type: </label>
         <select v-model="reportType" @change="changeReportType()" class="custom-select h-10 border border-blue-500">
@@ -128,10 +128,11 @@
               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
               @click="exportConfirmedToExcel()">
               <i class="fas fa-download"></i>
-              <span>Download</span>
+              <span></span>
             </button>
           </p>
         </div>
+        <div class="overflow-x-auto">
         <table v-if="reportLength > 0" class="min-w-full divide-y divide-gray-300 ">
           <thead class="bg-gray-50">
             <tr>
@@ -223,6 +224,7 @@
             </tr>
           </tbody>
         </table>
+      </div>
         <div class="flex flex-row">
           <p v-if="reportLength > 0" class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4">
             <span >All Pending Payments: <span v-if="pendingLength>0" class="text-blue-500">{{ reports.items.categorizedPayments.pending.uniqueUsers }}</span>
@@ -232,7 +234,7 @@
               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
               @click="exportPendingToExcel()">
               <i class="fas fa-download"></i>
-              <span>Download</span>
+              <span></span>
             </button>
           </p>
 
@@ -252,7 +254,7 @@
               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
               @click="exportOverdueToExcel()">
               <i class="fas fa-download"></i>
-              <span>Download</span>
+              <span></span>
             </button>
           </p>
 

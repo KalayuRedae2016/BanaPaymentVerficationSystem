@@ -13,7 +13,7 @@
     </div>
 <!-- //search user -->
 
-    <div class=" -mt-1">
+    <div class=" -mt-1 text-xs">
       <div class="mb-4">
         <div class="flex flex-col">
           <div class="flex flex-row space-x-4">
