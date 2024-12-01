@@ -19,7 +19,7 @@
 
         <div class="border-t border-blue-800">
           <div v-show="activeTab === 0" class="">
-            <div class="px-0 w-full ml-5 mt-5 mb-10 sm:w-auto">
+            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
                   <div class="flex items-center">
@@ -42,7 +42,7 @@
 
 
           <div v-show="activeTab === 1" class="">
-            <div class="px-0 w-full ml-5 mt-5 mb-10 sm:w-auto">
+            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
                   <div class="flex items-center">
@@ -71,7 +71,7 @@
 
 
           <div v-show="activeTab === 2" class="">
-            <div class="px-0 w-full ml-5 mt-5 mb-10 sm:w-auto">
+            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
                   <div class="flex items-center">
@@ -93,7 +93,7 @@
           </div>
 
           <div v-show="activeTab === 3" class="">
-            <div class="px-0 w-full ml-5 mt-5 mb-10 sm:w-auto">
+            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
                   <div class="flex items-center">

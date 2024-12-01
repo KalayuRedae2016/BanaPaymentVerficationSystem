@@ -1,25 +1,19 @@
 <template>
-  <div class="container mx-auto flex flex-col mt-5">
-    <div class="px-5 pb-5 flex flex-col bg-white -mt-2">
-      <div class="p-4 mt-8 border border-gray-300">
+  <div class=" flex flex-col mt-5">
+    <div class=" pb-5 flex flex-col  -mt-2">
+      <div class="mt-8  -ml-3 rounded-lg p-1 lg:p-3 text-xs">
         <div
-          class="flex items-center justify-between mb-6 space-x-4 bg-white p-4 rounded-lg shadow-md"
+          class="flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg shadow-md space-y-3 lg:space-y-0"
         >
           <!-- Search Input -->
-          <div class="flex-1">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search by Name, Email, Username"
-              class="w-full px-4 py-2 border border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-            />
-          </div>
+        
 
           <!-- Payment Status Select -->
+           
           <select
             v-model="paymentStatus"
             @change="changeSearched(paymentStatus)"
-            class="border border-blue-500 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0   bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           >
             <option value="" selected disabled>Select Status</option>
             <option value="all">All</option>
@@ -32,7 +26,7 @@
           <select
             v-model="selectedYear"
             @change="changeSearched(paymentStatus)"
-            class="border border-blue-500 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           >
             <option value="" disabled>Select Year</option>
             <option value="all">All</option>
@@ -46,7 +40,7 @@
             v-if="selectMonth"
             v-model="selectedMonth"
             @change="changeSearched(paymentStatus)"
-            class="border border-blue-500 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0 lg:px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           >
             <option value="" disabled>Select Month</option>
             <option value="all">All</option>
@@ -58,15 +52,23 @@
               {{ month.name }}
             </option>
           </select>
+          <div class="flex-1 w-full ">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search by Name, Email, Username"
+              class="w-full px-4 py-2 border bborder-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            />
+          </div>
         </div>
 
         <div class="overflow-x-auto ">
           <div class="">
           <table class="w-full border-b border-indigo-500 bg-gray-50 ">
             <thead>
-              <tr class="bg-gray-200">
+              <tr class="bg-gray-200 ">
                 <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800 text-xs"
                 >
                   UserCode
                 </th>

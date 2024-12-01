@@ -52,11 +52,7 @@ export default {
       monthlyPending:0,
       };
   },
-  created() {
-    this.apiClient = axios.create({
-      baseURL: "http://localhost:8081", // Set your base URL here
-    });
-  },
+
   mounted() {
     this.latestPaymentSetting();
   },
