@@ -1,4 +1,3 @@
-const { required } = require('joi');
 const mongoose = require('mongoose');
 const validator = require('validator');
 
@@ -68,16 +67,10 @@ const paymentSettingSchema = new mongoose.Schema(
 
 paymentSettingSchema.pre('validate', function (next) {
   const { activeYear, activeMonth } = this;
-  
-  // Set the first day of the month (activeMonth is zero-indexed, so no need to subtract 1)
-  this.startingDate = new Date(activeYear, activeMonth, 1);
-  
-  // Set the last day of the month (activeMonth + 1 and day set to 0 gives the last day of activeMonth)
-  this.endingDate = new Date(activeYear, activeMonth + 1, 0);
-
+  this.startingDate = new Date(Date.UTC(activeYear, activeMonth-1, 1)); // First day of the month
+  this.endingDate = new Date(Date.UTC(activeYear, activeMonth-1, 30));  // 30th day of the month
   next();
 });
-
 
 paymentSettingSchema.index({activeMonth:1})
 
