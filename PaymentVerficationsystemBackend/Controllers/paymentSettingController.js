@@ -9,12 +9,11 @@ const {formatDate}=require("../utils/formatDate")
 // Create a new payment setting
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
   const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
-
+  
   // Validate required fields
   if (!activeYear || !activeMonth || !regularAmount || !urgentAmount || !serviceAmount || !subsidyAmount || !regFeeRate) {
     return next(new AppError('Please provide Required Fields', 400));
   }
-
   // Set default startingDate and endingDate if not provided
   let { startingDate, endingDate } = req.body;
 
@@ -22,16 +21,12 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
     startingDate = new Date(Date.UTC(activeYear, activeMonth-1, 1)); // First day of the month
     endingDate = new Date(Date.UTC(activeYear, activeMonth-1, 30));  // 30th day of the month
   } else {
-    // Parse provided dates to ensure they are valid
     startingDate = new Date(startingDate);
     endingDate = new Date(endingDate);
   }
-
-  // Check if endingDate is greater than startingDate
   if (endingDate <= startingDate) {
     return next(new AppError(`Ending Date (${endingDate}) should be greater than Starting Date (${startingDate})!`, 400));
   }
-
     // Check if there's an existing PaymentSetting for the activeYear and Month
     const existingSetting = await PaymentSetting.findOne({
       activeYear:activeYear,
