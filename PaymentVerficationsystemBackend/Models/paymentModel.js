@@ -40,7 +40,13 @@ const paymentSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User',//Reference to the User Model
+      required: true,
+      index: true
+    },
+    paymentSetting: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'PaymentSetting', // Reference to the paymentsetting model
       required: true,
     },
     userCode: {
@@ -75,12 +81,8 @@ const paymentSchema = new mongoose.Schema(
     subsidy: paymentTypeSchema,
     service: paymentTypeSchema,
     penality: paymentTypeSchema,
-    baseAmount: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-  totalExpectedAmount: {
+    baseAmount: { type: Number, default: 0, required: true },
+    totalExpectedAmount: {
       type: Number,
       default: 0,
       required: true,
@@ -96,26 +98,20 @@ const paymentSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ['pending', 'confirmed', 'overdue'],
+      default: 'pending',
+      index: true, // Frequently filtered
     },
-    isPaid: {
-      type: Boolean,
-      default: false,
-    },
-    latest:{
-      type:Boolean,
-      default:false
-    },
-  seen: { type: Boolean, default: false } // New field for notifications
-  },
-  {
+    isPaid: {type: Boolean,default: false,index: true, // Frequently filtered},
+    latest: {type: Boolean,default: false},
+    seen: { type: Boolean, default: false } // New field for notifications
+  }
+},
+{
     timestamps: true,
-  },
-  {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
-
 
 // Populate user details dynamically (optional for querying)
 paymentSchema.virtual('userDetails').get(function () {
@@ -126,9 +122,9 @@ paymentSchema.virtual('userDetails').get(function () {
 });
 paymentSchema.pre('save', function (next) {
   // Automatically calculate the total amount before saving
-  let totalExpectedAmount=0;
-    ['urgent', 'regular', 'subsidy', 'service', 'penalty'].forEach((type) => {
-    if (this[type]){
+  let totalExpectedAmount = 0;
+  ['urgent', 'regular', 'subsidy', 'service', 'penalty'].forEach((type) => {
+    if (this[type]) {
       totalExpectedAmount += this[type].amount;
     }
   });
@@ -139,9 +135,9 @@ paymentSchema.pre('save', function (next) {
 paymentSchema.pre('validate', function (next) {
   ['urgent', 'regular', 'subsidy', 'service', 'penalty'].forEach((type) => {
     if (this[type] && this[type].amount < 0) {
-    return next(new Error('Amount cannot be negative'));
-  }
-})
+      return next(new Error('Amount cannot be negative'));
+    }
+  })
   next();
 });
 
@@ -157,6 +153,25 @@ paymentSchema.virtual('totalPaidAmount').get(function () {
   return total;
 });
 
+paymentSchema.post('save', async function () {
+  const now = new Date();
+  const paymentSetting = await PaymentSetting.findOne({
+    activeYear: this.activeYear,
+    activeMonth: this.activeMonth,
+  });
 
+  let status = 'unknown';
+  if (!paymentSetting) {
+    status = 'unknown';
+  } else if (this.confirmedDate) {
+    status = 'confirmed';
+  } else if (now >= paymentSetting.startingDate && now <= paymentSetting.endingDate) {
+    status = 'pending';
+  } else if (now > paymentSetting.endingDate) {
+    status = 'overdue';
+  }
+  await this.constructor.findByIdAndUpdate(this._id, { status });// Update the document with the computed status
+});
+paymentSchema.index({ user: 1, activeYear: 1, activeMonth: 1 });
 const Payment = mongoose.model('Payment', paymentSchema);
 module.exports = Payment;

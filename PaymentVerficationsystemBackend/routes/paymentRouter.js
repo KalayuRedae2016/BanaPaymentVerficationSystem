@@ -16,6 +16,8 @@ router.use(function (req, res, next) {
   next();
 });
 
+router.use(paymentController.updateStatusAndPenality);//define for all routes but you can use for specific routes//
+
 // Route to create unconfirmed payments (initiated but not yet confirmed)
 router.route('/create/bills').post(paymentController.createUnconfirmedPayments);
 

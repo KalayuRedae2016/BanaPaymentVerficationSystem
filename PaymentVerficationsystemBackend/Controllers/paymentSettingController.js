@@ -9,7 +9,7 @@ const {formatDate}=require("../utils/formatDate")
 // Create a new payment setting
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
   const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
-  
+
   // Validate required fields
   if (!activeYear || !activeMonth || !regularAmount || !urgentAmount || !serviceAmount || !subsidyAmount || !regFeeRate) {
     return next(new AppError('Please provide Required Fields', 400));
