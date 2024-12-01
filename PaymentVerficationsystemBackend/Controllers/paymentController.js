@@ -574,8 +574,10 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     ],
     isPaid:false//for status:pending or status: overdue
   };
-  const user=await User.find({keyword})
-    
+  
+  const user=await User.find({userCode:keyword})
+  console.log(user)
+      
   if (isPaid) paymentQuery.isPaid=isPaid
   const payments = await Payment.find(paymentQuery).populate({path: 'user',select: 'fullName'}).sort({ activeMonth: 1 });
   console.log(payments)

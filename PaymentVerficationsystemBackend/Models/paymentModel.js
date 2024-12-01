@@ -116,6 +116,14 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
+
+// Populate user details dynamically (optional for querying)
+paymentSchema.virtual('userDetails').get(function () {
+  return {
+    userCode: this.user?.userCode,
+    fullName: this.user?.fullName,
+  };
+});
 paymentSchema.pre('save', function (next) {
   // Automatically calculate the total amount before saving
   let totalExpectedAmount=0;
