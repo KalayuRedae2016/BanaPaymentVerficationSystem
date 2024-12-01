@@ -1090,13 +1090,13 @@
 <!-- // for displaying nothing is to display message if the user do not have the payment to be paid -->
       <div
         v-if="nothingToPay"
-        class="py-6 px-6 -mt-1 border-t border-blue-500 w-full mb-64"
+        class="py-6  -mt-1 border-t border-blue-500 w-full mb-64"
       >
         <div
-          class="relative p-6 bg-blue-100 border border-green-300 rounded-lg shadow-md flex justify-between items-center"
+          class="flex flex-col md:flex-row relative p-2 bg-blue-50 border border-gray-300 rounded-lg shadow-md flex justify-between items-center"
         >
-          <span class="text-green-800 font-semibold text-lg w-2/3 text-sm">
-            <span class="text-blue-800 text-sm">{{ fullName }} </span> has
+          <span class="w-full lg:w-1/2 text-green-800 font-semibold text-lg  text-sm">
+            <span class="text-blue-800 text-xs">{{ fullName }} </span> has
             successfully completed all payments. No payments are currently
             overdue or in progress. Any open payments will be processed in the
             next month.
@@ -1105,7 +1105,7 @@
           <a
             @click="userLevelReport()"
             href="#"
-            class="text-sm w-1/4 text-blue-600 hover:text-blue-800 font-medium text-lg ml-4"
+            class="w-full lg: w-1/3 text-xs  text-blue-600 hover:text-blue-800 font-medium text-lg "
           >
             See Payment History
           </a>

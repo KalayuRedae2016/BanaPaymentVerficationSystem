@@ -9,14 +9,12 @@
         class="md:flex md:flex-col md:items-stretch md:opacity-100 md:relative sm:-mt-4 md:mt-0 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded"
       >
         <div class="flex flex-col space-y-4 bg-white">
-          <h1 class="ml-10 text-2lg mt-3 text-indigo-800 font-extrabold">
-            {{ $t("verifyPayment") }}
-          </h1>
+          
 
-          <hr class="mt-0 md:min-w-full border border-indigo-800" />
+        
 
           <ul
-            class="md:flex-col md:min-w-full flex flex-col list-none ml-0 mr-0 mt-0 space-y-0"
+            class="mt-3 md:flex-col md:min-w-full flex flex-col list-none ml-0 mr-0 mt-0 space-y-0"
           >
             <li
               @click="setActive('dashboard')"

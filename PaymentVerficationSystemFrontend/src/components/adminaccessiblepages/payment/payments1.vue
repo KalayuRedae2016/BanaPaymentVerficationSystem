@@ -17,7 +17,7 @@
           </button>
         </div>
 
-        <div class="border-t border-blue-800">
+        <div class="border-t border-blue-800 ">
           <div v-show="activeTab === 0" class="">
             <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
@@ -25,12 +25,12 @@
                   <div class="flex items-center">
                     <input v-model="paymentSettingStatus" type="radio" value="currentSetting"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700"> {{ $t('currentPaymentSetting') }}</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('currentPaymentSetting') }}</label>
                   </div>
                   <div class="flex items-center">
                     <input v-model="paymentSettingStatus" type="radio" value="paymentSettingHistory"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">  {{ $t('paymentSettingHistory') }}</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700">  {{ $t('paymentSettingHistory') }}</label>
                   </div>
 
                 </div>
@@ -48,12 +48,12 @@
                   <div class="flex items-center">
                     <input v-model="paymentStatus" type="radio" value="newPayment"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700"> {{ $t('confirmNewPayment') }}</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('confirmNewPayment') }}</label>
                   </div>
                   <div class="flex items-center">
                     <input v-model="paymentStatus" type="radio" value="creditTransfer"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700"> {{ $t('creditTransfer') }}</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('creditTransfer') }}</label>
                   </div>
                 </div>
                 <new-payment v-if="paymentStatus === 'newPayment'" />
@@ -77,13 +77,13 @@
                   <div class="flex items-center">
                     <input v-model="allPaymentsAndTransferedPayments" type="radio" value="allPayments"
                       class="h-4 w-4 border-gray-300 text-pink-600 focus:ring-pink-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">All Payments</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700">All Payments</label>
 
                   </div>
                   <div class="flex items-center">
                     <input v-model="allPaymentsAndTransferedPayments" type="radio" value="transferedPayments"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">Transfered Payments</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700 ">Transfered Payments</label>
                   </div>
                 </div>
                 <all-payments v-if="allPaymentsAndTransferedPayments == 'allPayments'" />
@@ -99,12 +99,12 @@
                   <div class="flex items-center">
                     <input v-model="paymentReportStatus" type="radio" value="userLevelReport"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">User Level Report</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700">User Level Report</label>
                   </div>
                   <div class="flex items-center">
                     <input v-model="paymentReportStatus" type="radio" value="orgLevelReport"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-sm font-medium text-gray-700">Org Level Report</label>
+                    <label class="ml-3 block text-xs font-medium text-gray-700">Org Level Report</label>
                   </div>
                 </div>
                 <all-payment-report v-if="paymentReportStatus === 'userLevelReport'" />

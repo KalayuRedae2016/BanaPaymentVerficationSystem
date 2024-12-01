@@ -30,7 +30,7 @@
           <!-- <p v-if="noUser" class="text-red-500 ml-32"><strong>Hoops! there is no user with this Id <span class="text-blue">{{ currentId }}</span></strong></p> -->
         </div>
       </div>
-      <div class="border-t border-blue-900 border-dotted">
+      <div v-if="showList" class="border-t-4 border-b-4 border-pink-900 border-dotted h-64 overflow-y-auto" id="">
         <div
           class="bg-white px-4 border-b border-blue-900 border-dotted cursor-pointer"
           v-for="(user, userIndex) in filteredUsers"
@@ -53,22 +53,23 @@
     </div>
 
     <!-- //table  -->
+     <div class="overflow-x-auto text-xs ">
     <table v-if="showTable" class="w-full border border-gray-300 mt-5">
       <thead>
         <tr class="bg-gray-200">
-          <th class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">UserCode</th>
-          <th class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Year</th>
-          <th class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Month</th>
+          <th class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">UserCode</th>
+          <th class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Year</th>
+          <th class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Month</th>
           
-          <th class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Regular</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Subsidy</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Urgent</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Total Block</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Service</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Registration Fee</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Penalty</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Total Service</th>
-          <th class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800">Detail</th>
+          <th class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Regular</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Subsidy</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Urgent</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Total Block</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Service</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Registration Fee</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Penalty</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Total Service</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Detail</th>
         </tr>
       </thead>
 
@@ -98,7 +99,7 @@
         </tr>
       </tbody>
     </table>
-
+  </div>
    <div v-if="showPaymentNotFound" class="text-red-500 my-5 mx-5">
      {{userCode}} has no paid payment in the selected year.
    </div>
@@ -110,6 +111,7 @@
 export default {
   data() {
     return {
+      showList:false,
       showTable: false,
       showPaymentNotFound:false,
       selectYear:false,
@@ -184,7 +186,7 @@ userCode:this.userCode,
 toggleUserSelection(userCode) {
   //alert("toggle selection");
   console.log("usercode is",this.userCode)
-
+   this.showList=false;
   this.userCode=userCode;
   this.payments=[];
   console.log("usercode",this.userCode);
@@ -215,6 +217,8 @@ toggleUserSelection(userCode) {
     // the problem is the server problem
 
     searchUsers(keyword) {
+      this.showList=true;
+      this.showPaymentNotFound=false;
       this.showTable=false;
       console.log("this users=", this.users);
 

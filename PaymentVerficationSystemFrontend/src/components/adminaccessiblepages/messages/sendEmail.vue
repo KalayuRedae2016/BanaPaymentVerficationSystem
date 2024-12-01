@@ -6,7 +6,7 @@
       <p class="text-blue-800 text-md font-bold">{{ $t("sendEMessage") }}</p>
     </div>
 
-    <div class="border-t border-indigo-800 mt-3">
+    <div class="border-t border-indigo-800 mt-3 text-xs">
       <div
         class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
       >
@@ -38,9 +38,9 @@
             ></textarea>
           </div>
 
-          <div class="flex flex-row space-x-5 mb-4 mx-4 mt-5">
-            <label class="custom-label" for="search">
-              {{ $t("sendTo")}}:<span class="text-red-500 ml-1">*</span>
+          <div class="flex flex-row space-x-5 mb-4 mx-4 mt-5 text-xs">
+            <label class="custom-label text-xs" for="search">
+              {{ $t("sendTo")}}:<span class="text-red-500 ml-1 ">*</span>
             </label>
             <input
               v-model="searchQuery"
@@ -55,7 +55,7 @@
               <thead>
                 <tr class="bg-gray-200">
                   <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                   >
                   {{ $t("check")}}
                     <input
@@ -65,7 +65,7 @@
                     />
                   </th>
                   <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                   >
                     {{ $t("number") }}
                   </th>
@@ -75,7 +75,7 @@
                       {{ $t("userCode") }}
                     </th> -->
                   <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                   >
                     {{ $t("fullName") }}
                   </th>
@@ -105,18 +105,20 @@
                   <!-- <td class="p-3 text-xl text-gray-500 whitespace-nowrap">
                       {{ searchClient.userCode }}
                     </td> -->
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
+                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
                     {{ searchClient.firstName }} {{ searchClient.middleName }}
                     {{ searchClient.lastName }}
                   </td>
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
+                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
                     {{ searchClient.email }}
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <div class="pagination flex items-center justify-center mt-4">
+          
+          </div>
+          <div class="pagination flex items-center justify-center mt-4">
               <h1 class="mr-2 text-sm">{{ $t("showMore") }}</h1>
               <select
                 v-model="usersPerpage"
@@ -146,8 +148,6 @@
                 <i class="fas fa-chevron-right"></i>
               </button>
             </div>
-          </div>
-
           <button @click.prevent="sendMessage()" class="m-4 custom-button">
             {{ $t("sendMessage")}}
           </button>

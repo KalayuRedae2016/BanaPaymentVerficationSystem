@@ -1,19 +1,18 @@
 <template>
-  <div class=" flex flex-col mt-5">
-    <div class=" pb-5 flex flex-col  -mt-2">
-      <div class="mt-8  -ml-3 rounded-lg p-1 lg:p-3 text-xs">
+  <div class="flex flex-col mt-5">
+    <div class="pb-5 flex flex-col -mt-2">
+      <div class="mt-8 -ml-3 rounded-lg p-1 lg:p-3 text-xs">
         <div
-          class="flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg shadow-md space-y-3 lg:space-y-0"
+          class="border-t border-gray-200 flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg shadow-md space-y-3 lg:space-y-0"
         >
           <!-- Search Input -->
-        
 
           <!-- Payment Status Select -->
-           
+
           <select
             v-model="paymentStatus"
             @change="changeSearched(paymentStatus)"
-            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0   bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           >
             <option value="" selected disabled>Select Status</option>
             <option value="all">All</option>
@@ -52,93 +51,97 @@
               {{ month.name }}
             </option>
           </select>
-          <div class="flex-1 w-full ">
+          <div class="flex-1 w-full">
             <input
               v-model="searchQuery"
               type="text"
               placeholder="Search by Name, Email, Username"
-              class="w-full px-4 py-2 border bborder-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
             />
           </div>
         </div>
 
-        <div class="overflow-x-auto ">
+        <div class="overflow-x-auto">
           <div class="">
-          <table class="w-full border-b border-indigo-500 bg-gray-50 ">
-            <thead>
-              <tr class="bg-gray-200 ">
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800 text-xs"
+            <table class="w-full bg-white shadow-md">
+              <thead>
+                <tr class="bg-gray-200">
+                  <th
+                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800 text-xs"
+                  >
+                    UserCode
+                  </th>
+                  <th
+                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                  >
+                    Full Name
+                  </th>
+                  <th
+                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                  >
+                    Status
+                  </th>
+                  <th
+                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  class=" "
+                  v-for="searchPayment in searchedpayments"
+                  :key="searchPayment._id"
                 >
-                  UserCode
-                </th>
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Full Name
-                </th>
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Status
-                </th>
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class=" "
-                v-for="searchPayment in searchedpayments"
-                :key="searchPayment._id"
-              >
-                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                  <p class="px-3 rounded-lg">
-                    {{ searchPayment.userCode }}
-                  </p>
-                </td>
+                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
+                    <p class="px-3 rounded-lg">
+                      {{ searchPayment.userCode }}
+                    </p>
+                  </td>
 
-                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                  <p class="px-3 rounded-lg">
-                    {{ searchPayment.fullName }}
-                  </p>
-                </td>
+                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
+                    <p class="px-3 rounded-lg">
+                      {{ searchPayment.fullName }}
+                    </p>
+                  </td>
 
-                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                  <p class="px-3 rounded-lg">
-                    {{ searchPayment.status }}
-                  </p>
-                </td>
-
-                <button
-                  class="mt-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
-                  @click="
-                    paymentHistory(
-                      searchPayment.userCode,
-                      searchPayment.activeYear,
-                      searchPayment.activeMonth,
-                      searchPayment.status
-                    )
-                  "
-                >
-                  <i class="fas fa-file-alt text-pink-500 text-xs"></i>
-                  <span>Detail</span>
-                </button>
-              </tr>
-            </tbody>
-          </table>
+                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
+                    <p class="px-3 rounded-lg">
+                      {{ searchPayment.status }}
+                    </p>
+                  </td>
+                  <td class="py-1 text-xs text-gray-500 whitespace-nowrap">
+                    <button
+                      class="mb-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
+                      @click="
+                        paymentHistory(
+                          searchPayment.userCode,
+                          searchPayment.activeYear,
+                          searchPayment.activeMonth,
+                          searchPayment.status
+                        )
+                      "
+                    >
+                      <i class="fas fa-file-alt text-pink-500 text-xs"></i>
+                      <span>Detail</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      
         </div>
-          <div
-            class="flex space-x-12 items-center mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
+        <div
+            class="p-2 flex flex-col md:flex-row space-y-3 md:space-y-0 space-x-12 items-center mt-2 bg-white  rounded-lg shadow-md border border-gray-200"
           >
             <!-- Pagination Controls -->
             <div class="flex items-center">
               <!-- Select Payments Per Page -->
               <label
                 for="payments-per-page"
-                class="mr-2 text-gray-600 font-medium"
+                class="hidden mr-2 text-gray-600 font-medium"
                 >Show:</label
               >
               <select
@@ -179,17 +182,15 @@
                 <i class="fas fa-chevron-right"></i>
               </button>
             </div>
-           
-              <button
-                class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
-                @click="exportToExcel()"
-              >
-                <i class="fas fa-download text-pink-500"></i>
-                <span>Download</span>
-              </button>
-           
+
+            <button
+              class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1  px-3 text-sm rounded flex items-center space-x-1"
+              @click="exportToExcel()"
+            >
+              <i class="fas fa-download text-pink-500"></i>
+              <span>Excel</span>
+            </button>
           </div>
-        </div>
       </div>
     </div>
   </div>

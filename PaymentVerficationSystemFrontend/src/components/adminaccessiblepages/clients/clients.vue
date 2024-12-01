@@ -49,7 +49,7 @@
 </div>
 
           <div class="overflow-x-auto">
-            <table class="w-full border-b border-gray-300 bg-gray-50">
+            <table class="w-full border-b border-gray-300 bg-white shadow-md">
               <thead>
                 <tr class="bg-gray-200">
                   <th
@@ -156,11 +156,20 @@
               </tbody>
             </table>
 
-            <div class="flex justify-between items-center mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+           
+
+
+            
+
+
+
+
+          </div>
+    <div class="flex justify-between items-center mt-2 bg-white py-2 pl-1 rounded-lg shadow-md border border-gray-200">
   <!-- Pagination Controls -->
   <div class="flex items-center">
     <!-- Show More Label -->
-    <h1 class="mr-4 text-gray-600 font-medium">{{ $t("showMore") }}</h1>
+    <h1 class="mr-4 text-gray-600 font-medium hidden">{{ $t("showMore") }}</h1>
     
     <!-- Select Clients Per Page -->
     <select
@@ -201,14 +210,6 @@
     </button>
   </div>
 </div>
-
-
-            
-
-
-
-
-          </div>
         </div>
       </div>
     </div>

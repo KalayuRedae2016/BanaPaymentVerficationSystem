@@ -10,7 +10,7 @@
             <div
               class="w-full overflow-x-auto lg:overflow-x-visible lg:w-autolg:p-6 mt-1 rounded-lg"
             >
-              <table class="min-w-full divide-y divide-gray-300">
+              <table class="min-w-full divide-y divide-gray-300 text-xs">
                 <thead class="bg-gray-50">
                   <tr>
                     <th
@@ -89,7 +89,7 @@
             @click="paidUnPaidOverdue()"
           >
             <i class="ml-7 mt-5 fas fa-wallet"></i
-            ><span class="text-pink-500 ml-3"> {{ $t('allPayments') }}</span>
+            ><span class="text-green-500 ml-3"> {{ $t('allPayments') }}</span>
           </a>
         </div>
         <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
@@ -99,21 +99,21 @@
     </div>
 
     <!-- overdue section -->
-    <div class="mx-4">
+    <div class="mx-4 text-xs">
       <div
         class="flex flex-row space-x-4 w-full border border-gray-300 p-4 rounded-lg"
         style="margin-top: -200px"
       >
-        <p class="text-blue-800 mb-5 text-lg">
+        <p class="text-blue-800 mb-5 text-xs">
           <i class="fas fa-exclamation-circle text-red-500 mr-2"></i> {{ $t('allOverdueClients') }}
           <span v-if="totalOvedue" class="text-red-500">{{ totalOvedue }}</span>
           <span v-else>0</span>
         </p>
         <a
           href="#"
-          class="text-blue-800 hover:underline font-semibold text-sm mt-1"
+          class="text-blue-800 hover:underline font-semibold text-sm italic"
           @click="goAllOverDue()"
-          ><h1 class="underline">{{ $t('view') }}</h1>
+          ><h1 class="underline text-xs italic">{{ $t('view') }}</h1>
         </a>
       </div>
     </div>
@@ -123,18 +123,18 @@
       class="border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto"
     >
       <div class="flex flex-row space-x-4 m-4">
-        <h2 class="text-blue-800 text-lg">
-          <i class="fas fa-check-circle text-green-500"></i> {{ $t('allYearsConfirmedReport') }}<span class=""></span>
+        <h2 class="text-blue-800 text-xs">
+          <i class="fas fa-check-circle text-green-500 text-xs"></i> {{ $t('allYearsConfirmedReport') }}<span class=""></span>
         </h2>
         <a
           href="#"
           class="text-blue-800 hover:underline font-semibold text-sm underline"
           @click="viewPaymentsReport()"
-          ><h1 class="">{{ $t('allReportDetails') }}</h1>
+          ><h1 class="text-xs">{{ $t('allReportDetails') }}</h1>
         </a>
       </div>
 
-      <table class="min-w-full divide-y divide-gray-300">
+      <table class="min-w-full divide-y divide-gray-300 text-xs">
         <thead class="bg-gray-50">
           <tr>
             <th
