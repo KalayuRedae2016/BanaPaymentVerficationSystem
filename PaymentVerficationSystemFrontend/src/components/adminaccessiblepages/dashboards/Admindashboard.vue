@@ -173,7 +173,8 @@
           type="button"
           @click="toggleDropdown('sidebar')"
         >
-          <i class="fas fa-bars"></i>
+          <i class="fas fa-bars" v-if="!sidebarVisible"></i>
+          <i class="fas fa-x text-red-500" v-if="sidebarVisible"></i>
         </button>
       </header>
 

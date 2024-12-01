@@ -12,7 +12,6 @@
 </template>
 <script>
 import Chart from "chart.js/auto";
-import axios from "axios";
 export default {
   name: "ChartComponent",
   data() {
@@ -61,7 +60,7 @@ export default {
       this.$apiClient
         .get("/api/v1/paymentSetting/latest")
         .then((response) => {
-          console.log("latest month response:", response);
+          console.log("latest month response: in charts", response);
 
           if (response.data.status === 1) {
             this.activeMonth = response.data.paymentSetting.activeMonth;
@@ -81,7 +80,7 @@ export default {
       const timeRange = "monthly";
       this.$apiClient
         .get(
-          `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.activeYear}&month=${'9'}`
+          `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.activeYear}&month=${this.activeMonth}`
         )
         .then((response) => {
           console.log("monthly report", response);
