@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const Payment = require('./paymentModel');
 
 const paymentSettingSchema = new mongoose.Schema(
   {
@@ -83,6 +84,43 @@ paymentSettingSchema.pre('validate', function (next) {
   this.startingDate = new Date(Date.UTC(activeYear, activeMonth-1, 1)); // First day of the month
   this.endingDate = new Date(Date.UTC(activeYear, activeMonth-1, 30));  // 30th day of the month
   next();
+});
+
+paymentSettingSchema.pre('save', async function (next) {
+  console.log("herre")
+  // If this setting is marked as latest, ensure all previous PaymentSettings are marked as not latest
+  if (this.isModified() && this.latest) {
+    // Update all other PaymentSettings to not be latest
+    await mongoose.model('PaymentSetting').updateMany(
+      { _id: { $ne: this._id }, latest: true },
+      { $set: { latest: false } }
+    );
+  }
+  console.log(this.latest)
+
+  // Object to hold fields to update in associated payments
+  const updatedFields = {};
+
+  // Check if `activeYear`, `activeMonth`, or `regularAmount...` has been modified
+  if (this.isModified('activeYear')) updatedFields['activeYear'] = this.activeYear;
+  if (this.isModified('activeMonth')) updatedFields['activeMonth'] = this.activeMonth;
+  if (this.isModified('regularAmount')) updatedFields['regular.amount'] = this.regularAmount;
+  if (this.isModified('urgentAmount')) updatedFields['urgent.amount'] = this.urgentAmount;
+  if (this.isModified('subsidyAmount')) updatedFields['subsidy.amount'] = this.subsidyAmount;
+
+  // Only proceed if there are modifications to apply to associated payments
+  if (Object.keys(updatedFields).length > 0) {
+    const Payment = mongoose.model('Payment'); // Get the Payment model
+    console.log("Begine")
+    console.log("Begine",Payment)
+    console.log("finsih")
+  // Update all payments that match the updated `activeYear` and `activeMonth`
+  await Payment.updateMany({ paymentSetting: this._id},updatedFields)}
+
+  console.log("end",Payment)
+  console.log("updatedFields",updatedFields)
+  console.log("ll",Object.keys(updatedFields).length )
+  next(); // Proceed with the save operation
 });
 
 paymentSettingSchema.index({activeMonth:1})

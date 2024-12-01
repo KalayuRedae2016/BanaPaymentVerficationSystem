@@ -150,14 +150,20 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
 
 // Update a payment setting by ID
 exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
-  console.log(req.params.id);
+  //console.log(req.params.id);
     const settingId= req.params.id;
+    const updatedData=req.body
     if(!settingId){
       return next(new AppError('Setting ID is required', 404));
     }
+    if(updatedData.activeMonth && updatedData.activeYear){
+    updatedData.startingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 1)); // First day of the month
+    updatedData.endingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 30));  // 30th day of the month
+    }
+  // console.log(updatedData)
     const paymentSetting = await PaymentSetting.findOneAndUpdate(
-      { _id: settingId}, 
-      req.body, // Update data from the request body
+      { _id: settingId,latest:true}, 
+      updatedData, // Update data from the request body
       { new: true, runValidators: true } // Options to return the updated document and to run validators
     );
     if (!paymentSetting) {
@@ -168,7 +174,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
-  console.log(paymentSetting)
+  //console.log(paymentSetting)
     res.status(200).json({
       status:1,
       message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
