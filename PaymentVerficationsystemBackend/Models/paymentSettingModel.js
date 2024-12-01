@@ -6,9 +6,22 @@ const paymentSettingSchema = new mongoose.Schema(
     activeYear:{
       type:Number,
       required:true,
+      validate:{
+        validator:function(value){
+          return value>2000
+        },
+        message:"activeYear must be greater than 200"
+      }
     },
     activeMonth:{
       type:Number,
+      enum:[1,2,3,4,5,6,7,8,9,10,11,12],
+      validate:{
+        validator:function(value){
+          return value>=1&& value<=12
+        },
+        message:"activeMonth must be between 1 and 12"
+      },
       required:true,
     },
     regFeeRate:{
