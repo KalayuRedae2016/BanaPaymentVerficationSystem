@@ -86,13 +86,6 @@ paymentSettingSchema.pre('validate', function (next) {
   next();
 });
 
-paymentSettingSchema.pre('save',function(next){
-  this.penalityLate5Days/=100
-  this.penalityLate10Days/=100
-  this.penalityLateAbove10Days/=100
-  next()
-})
-
 paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
   console.log("Pre-findOneAndUpdate Hook");
 
@@ -127,7 +120,6 @@ paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
 
   next();
 });
-
 
 paymentSettingSchema.index({activeMonth:1})
 

@@ -637,7 +637,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
 
         paymentDetails['service'] = {
           amount: payment['service'].amount || 0,
-          daysLate: 'Not Needed',
+          daysLate: null,
           penality: 0,
           bankType: payment['service'].bankType || null,
           TTNumber: payment['service'].TTNumber || null,
@@ -1118,6 +1118,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
 exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   const { userCode, activeYear, activeMonth } = req.query;
+  
 
   if (!userCode || !activeYear || !activeMonth) {
     return next(new AppError("either userCode or activeYear or activeMonth is missed, please try again.", 400));
@@ -1133,11 +1134,13 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     isPaid: true,
     status: 'confirmed'
   };
-
+  console.log(req.query)
   const paymentsWithYear = await Payment.findOne(paymentQueryWithYear);
+  const user=await User.findOne({userCode:searchPattern})
+  console.log(user.fullName)
 
   if (!paymentsWithYear) {
-    return next(new AppError(`No payments for Year ${activeYear}-Month ${activeMonth}`, 400));
+    return next(new AppError(`${user.fullName} has No Paid payment for Year ${activeYear}-Month ${activeMonth}`, 400));
   }
 
   // Convert Mongoose document to plain JavaScript object
@@ -1175,7 +1178,7 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   // Respond with the found payments
   res.status(200).json({
     status: 'success',
-    message: `Payments fetched successfully for Year ${activeYear}-Month ${activeMonth}`,
+    message: `${user.fullName}'s payment records for Year ${activeYear}, Month ${activeMonth} were retrieved successfully.`,
     payment: formattedPayment, // This already contains the formatted dates
   });
 });
@@ -1268,36 +1271,35 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
 });
 
 exports.getLatestPayment = catchAsync(async (req, res, next) => {
-  const { userCode } = req.query;
-  const searchPattern = new RegExp(userCode, 'i');
+  let userCode = req.query.userCode
+  // const searchPattern = new RegExp(userCode, 'i');
+  // //console.log(userCode,searchPattern)
 
   if (!userCode) {
     return next(new AppError('User code is missed, please try again.', 400))
   }
-  const paymentQuery = { userCode: { $regex: searchPattern }, isPaid: true, status: 'confirmed' };
-  const payments = await Payment.findOne(paymentQuery);
-  if (!payments) {
-    return res.status(200).json({ status: 1, message: `${userCode} has no confirmed payment`, payment: null });
+  userCode=userCode.toUpperCase()
+  const user=await User.findOne({userCode:userCode})
+  if(!user){
+    return next(new AppError(`User is not found,Make sure userCode->${userCode} is Correct`, 400))
   }
-  paymentQuery.latest = true
-  const latestPayments = await Payment.findOne(paymentQuery)
-  if (!latestPayments) {
-    return res.status(200).json({
-      status: 1,
-      message: `${userCode} has no Latest confirmed Payments`,
-      payment: null
-    });
-  }
-  const formattedCreatedAt = latestPayments.createdAt ? formatDate(latestPayments.createdAt) : null;
-  const formattedUpdatedAt = latestPayments.updatedAt ? formatDate(latestPayments.updatedAt) : null;
-  const formattedConfirmedAt = latestPayments.confirmedDate ? formatDate(latestPayments.confirmedDate) : null;
 
-  console.log(latestPayments)
+  const paymentQuery = { userCode: userCode, isPaid: true, status: 'confirmed',latest:true };
+  const latestPayment= await Payment.findOne(paymentQuery);
+  if (!latestPayment) {
+    return res.status(200).json({ status: 1, message: `${user.fullName} has no Latest confirmed Payments -> userCode: ${userCode}`, payment: null });
+  }
+
+  const formattedCreatedAt = latestPayment.createdAt ? formatDate(latestPayment.createdAt) : null;
+  const formattedUpdatedAt = latestPayment.updatedAt ? formatDate(latestPayment.updatedAt) : null;
+  const formattedConfirmedAt = latestPayment.confirmedDate ? formatDate(latestPayment.confirmedDate) : null;
+
+  console.log("latestPayment",latestPayment)
   res.status(200).json({
     status: 'success',
-    message: `Latest Payments fetched successfully for ${userCode}`,
+    message: `Latest Payment for ${user.fullName} has fetched successfully ->userCode:${userCode}`,
     payment: {
-      ...latestPayments._doc,
+      ...latestPayment._doc,
       formattedCreatedAt,
       formattedUpdatedAt,
       formattedConfirmedAt

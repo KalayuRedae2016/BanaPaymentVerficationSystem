@@ -7,6 +7,21 @@ const User=require("../Models/userModel")
 const createPendingPayments=require("../utils/createPendingPayments")
 const {formatDate}=require("../utils/formatDate")
 
+
+const normalizePenalties = (data) => {
+  const result = { ...data };
+  if (result.penalityLate5Days !== undefined) {
+      result.penalityLate5Days = result.penalityLate5Days > 1 ? result.penalityLate5Days / 100 : result.penalityLate5Days;
+  }
+  if (result.penalityLate10Days !== undefined) {
+      result.penalityLate10Days = result.penalityLate10Days > 1 ? result.penalityLate10Days / 100 : result.penalityLate10Days;
+  }
+  if (result.penalityLateAbove10Days !== undefined) {
+      result.penalityLateAbove10Days = result.penalityLateAbove10Days > 1 ? result.penalityLateAbove10Days / 100 : result.penalityLateAbove10Days;
+  }
+  return result;
+};
+
 // Create a new payment setting
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
   const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
@@ -15,6 +30,10 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
   if (!activeYear || !activeMonth || !regularAmount || !urgentAmount || !serviceAmount || !subsidyAmount || !regFeeRate) {
     return next(new AppError('Please provide Required Fields', 400));
   }
+
+  // Normalize penalty fields
+  const normalizedData = normalizePenalties(req.body);
+  
   // Set default startingDate and endingDate if not provided
   let { startingDate, endingDate } = req.body;
 
@@ -35,25 +54,20 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
       return next(new AppError(`Payment Setting already exists for Month-${activeMonth}-Year-${activeYear}`, 400));
     }
     
-    // Deactivate the previous latest settings
-    const latestSetting=await PaymentSetting.find({latest:true});
-    if(latestSetting){
-      for (const setting of latestSetting) {
-        setting.latest=false
-        await setting.save();
-      }
-    }
+     // Bulk update: Deactivate all previous "latest" settings
+  await PaymentSetting.updateMany({ latest: true }, { $set: { latest: false } });
+
    const newSetting = new PaymentSetting({
-    ...req.body,
+    ...normalizedData,
     startingDate,
     endingDate,
     latest: true
 });
     await newSetting.save();
 
-    const userQuery={isActive:true,role:"User"}
-    const users = await User.find(userQuery);
-    console.log(users)
+    const users = await User.find({isActive:true,role:"User"});
+    //console.log(users)
+
     // Create pending payments for all users
     for (const user of users) {
       await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
@@ -154,6 +168,9 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
     if(!settingId){
       return next(new AppError('Setting ID is required', 404));
     }
+    // Normalize penalties if provided in the update
+    updatedData = normalizePenalties(updatedData);
+
     if(updatedData.activeMonth && updatedData.activeYear){
     updatedData.startingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 1)); // First day of the month
     updatedData.endingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 30));  // 30th day of the month

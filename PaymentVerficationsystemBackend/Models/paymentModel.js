@@ -102,11 +102,10 @@ const paymentSchema = new mongoose.Schema(
       default: 'pending',
       index: true, // Frequently filtered
     },
-    isPaid: {type: Boolean,default: false,index: true, // Frequently filtered},
+    isPaid: {type: Boolean,default: false,index: true}, // Frequently filtered},
     latest: {type: Boolean,default: false},
     seen: { type: Boolean, default: false } // New field for notifications
-  }
-},
+  },
 {
     timestamps: true,
     toJSON: { virtuals: true },
@@ -114,13 +113,6 @@ const paymentSchema = new mongoose.Schema(
   }
 );
 
-// Populate user details dynamically (optional for querying)
-paymentSchema.virtual('userDetails').get(function () {
-  return {
-    userCode: this.user?.userCode,
-    fullName: this.user?.fullName,
-  };
-});
 paymentSchema.pre('save', function (next) {
   // Automatically calculate the total amount before saving
   let totalExpectedAmount = 0;
