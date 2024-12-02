@@ -11,7 +11,7 @@
               v-model="keyword"
               id="id-search"
               type="text"
-              class="custom-input h-10"
+              class="custom-input h-10 text-xs"
               placeholder="Search by Usercode,Name"
             />
           </div>

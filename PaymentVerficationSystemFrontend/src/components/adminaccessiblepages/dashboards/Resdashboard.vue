@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="">
-      <h2 class="text-blue-800 pt-4 px-4 pb-3">
+      <h2 class="text-blue-800 pt-4 px-4 pb-3 font-bold">
          {{ $t('thisMonthlyReport') }} ({{ activeYear }} -{{ activeMonth }}) <span class=""></span>
       </h2>
       <div class="flex flex-col lg:flex-row border-t border-blue-500">

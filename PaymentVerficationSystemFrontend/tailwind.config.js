@@ -23,6 +23,7 @@ export default {
         mono: ['Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
       fontSize: {//text-size
+        xxs: '0.6rem',
         xs: '0.75rem',
         sm: '0.875rem',
         base: '1rem',

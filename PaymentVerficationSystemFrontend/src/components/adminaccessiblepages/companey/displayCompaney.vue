@@ -12,30 +12,30 @@
     class="container flex-col mb-96 bg-white border-t border-indigo-800 -mt-1"
   >
   <div v-if="organizationCreated === 1" class="flex flex-wrap mx-auto p-4">
-  <div class="w-full px-4 py-8 -mt-8">
+  <div class="w-full  py-8 -mt-8">
     <div class="flex flex-col md:flex-row md:items-center">
-      <div class="flex-grow border-t-2 border-b-2 border-blue-500 p-6 shadow-lg rounded-lg bg-white">
+      <div class="flex-grow border-t-2 border-b-2 border-blue-500 p-3 shadow-lg rounded-lg bg-white">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-x-8">
           <div class="flex flex-col">
-            <p class="text-sm mb-2 text-gray-800 space-x-16">
-              <span class="font-semibold">{{ $t("compName") }}:</span>
-              <span class="text-indigo-800">{{ companyProfile.companyName }}</span>
+            <p class="flex flex-row text-xs mb-2 text-gray-800">
+              <span class="w-1/2 lg:w-2/3 font-semibold">{{ $t("compName") }}:</span>
+              <span class="w-1/3 text-indigo-800">{{ companyProfile.companyName }}</span>
             </p>
-            <p class="text-sm mb-2 text-gray-800 space-x-6">
-              <span class="font-semibold">{{ $t("compPrefixCode") }}:</span>
-              <span class="text-indigo-800">{{ companyProfile.companyPrefixCode }}</span>
+            <p class="flex flex-row text-xs mb-2 text-gray-800 ">
+              <span class="w-1/2 lg:w-2/3 font-semibold">{{ $t("compPrefixCode") }}:</span>
+              <span class="w-1/3 text-indigo-800">{{ companyProfile.companyPrefixCode }}</span>
             </p>
-            <p class="text-sm mb-2 text-gray-800 space-x-1">
-              <span class="font-semibold">{{ $t("companyPhoneNumber") }}:</span>
-              <span class="text-indigo-800">{{ companyProfile.companyPhoneNumber }}</span>
+            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-1">
+              <span class="w-2/3  font-semibold">{{ $t("companyPhoneNumber") }}:</span>
+              <span class="w-1/3 text-indigo-800">{{ companyProfile.companyPhoneNumber }}</span>
             </p>
-            <p class="text-sm mb-2 text-gray-800 space-x-16">
-              <span class="font-semibold">{{ $t("compEmail") }}:</span>
-              <span class="text-indigo-800">{{ companyProfile.companyEmail }}</span>
+            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-16">
+              <span class="w-1/4 lg:w-2/3 lg:w-2/3  font-semibold">{{ $t("compEmail") }}:</span>
+              <span class="w-2/3 lg:w-1/3 text-indigo-800">{{ companyProfile.companyEmail }}</span>
             </p>
-            <p class="text-sm mb-2 text-gray-800 space-x-12">
-              <span class="font-semibold">{{ $t("compAddress") }}:</span>
-              <span class="text-indigo-800">{{ companyProfile.companyAddress }}</span>
+            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-12">
+              <span class="w-1/2 lg:w-2/3 w-2/3  font-semibold">{{ $t("compAddress") }}:</span>
+              <span class="w-1/2 lg:w-1/3  text-indigo-800">{{ companyProfile.companyAddress }}</span>
             </p>
           </div>
           <div class="flex justify-end items-center">
@@ -51,37 +51,37 @@
             <table class="w-full border border-gray-300">
               <thead>
                 <tr class="bg-gray-200">
-                  <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
-                  <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
+                  <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
+                  <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="account in companyProfile.blockBankAccounts" :key="account._id">
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <span class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
+                  <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <span class="p-1.5 text-xs font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
                   </td>
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ account.bankAccountNumber }}</td>
+                  <td class="p-3 text-xs text-gray-700 whitespace-nowrap">{{ account.bankAccountNumber }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <div class="font-bold text-md mt-10 mb-4 divide-y divide-dashed text-indigo-500">
+          <div class="font-bold text-xs mt-10 mb-4 divide-y divide-dashed text-indigo-500">
                  {{ $t("serviceAccounts") }}
             <div class="mr-16 mt-5">
               <table class="w-full border border-gray-300">
                 <thead>
                   <tr class="bg-gray-200">
-                    <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
-                    <th class="w-1/2 p-3 text-sm tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
+                    <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
+                    <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="account in companyProfile.serviceBankAccounts" :key="account._id">
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      <span class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
+                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                      <span class="p-1.5 text-xs font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">{{ account.bankAccountNumber }}</td>
+                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">{{ account.bankAccountNumber }}</td>
                   </tr>
                 </tbody>
               </table>

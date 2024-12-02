@@ -8,7 +8,7 @@
     <div class="py-6 -mt-1">
       <div class="mb-4">
         <div class="flex flex-col">
-          <div class="flex flex-row space-x-4">
+          <div class="flex flex-row space-x-4 text-xs">
             <input
               v-model="keyword"
               id="id-search"
@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div class="border-t border-blue-900 border-dotted">
+      <div v-if="showList" class="border-t border-blue-900 border-dotted bg-white h-64 overflow-y-auto ">
         <div
           class="p-4 border-b border-blue-900 border-dotted cursor-pointer text-gray-500 text-sm"
           v-for="(user, userIndex) in filteredUsers"
@@ -30,7 +30,7 @@
             'p-4 border-b cursor-pointer',
             {
               'bg-blue-200 ': user.userselected, // Background color when selected
-              'bg-gray-50': !user.userselected, // Default background color
+              'bg-white': !user.userselected, // Default background color
             },
           ]"
           @click="toggleUserSelection(user)"
@@ -220,6 +220,7 @@ import html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
+      showList:false,
       imageData: "",
       selectedUser: "",
       showIdCard: false,
@@ -269,6 +270,7 @@ export default {
 
   methods: {
     toggleUserSelection(user) {
+      this.showList=false;
       this.showIdCard = true;
       this.filteredUsers = [];
       this.selectedUser = user;
@@ -289,6 +291,7 @@ export default {
     },
 
     searchUsers(keyword) {
+      this.showList=true;
       this.showIdCard = false;
       this.filteredUsers = this.users.filter((user) => {
         return (

@@ -8,15 +8,15 @@
       <form action="">
         <div class="md-4" >
              <label for="oldPassword" class="custom-label"> {{ $t("oldPassword") }}</label>
-             <input type="text" class="custom-input ml-3" v-model="oldPassword">
+             <input type="text" class="custom-input ml-3 text-xs text-gray-500" v-model="oldPassword" placeholder="Enter Old Password">
         </div>
         <div class="md-4" >
              <label for="newPassword" class="custom-label"> {{ $t("newPassword") }}</label>
-            <input type="password" class="custom-input ml-3" v-model="newPassword">
+            <input type="password" class="custom-input ml-3 text-xs text-gray-500" v-model="newPassword" placeholder="Enter New Password">
         </div>
         <div class="md-4" >
              <label for="confirmnOldPassword" class="custom-label">  {{ $t("confirmNewPassword") }}</label>
-             <input type="password" class="custom-input ml-3" v-model="confirmNewPasssord">
+             <input type="password" class="custom-input ml-3  text-xs text-gray-500" v-model="confirmNewPasssord" placeholder="Repeat Password">
         </div>
         <button @click.prevent="changePassword()" class="custom-button mt-5 ml-3">  {{ $t("change") }}</button>
       </form>

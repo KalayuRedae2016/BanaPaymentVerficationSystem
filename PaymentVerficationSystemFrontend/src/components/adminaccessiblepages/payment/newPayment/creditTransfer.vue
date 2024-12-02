@@ -3,7 +3,7 @@
   <div class="border border-gray-300 mt-5 p-5">
     <div class="mb-4">
       <label class="custom-label"> Transfer Type: <span v-if="selectTransferType" class="text-red-500">Please Select Transfer Type!</span> </label>
-      <select name="type" id="" class="custom-input" v-model="transferType">
+      <select name="type" id="" class="custom-input text-xs" v-model="transferType">
         <option value="" disabled>Select Transfer Type</option>
         <option value="block">Block</option>
         <option value="service">Service</option>
@@ -11,7 +11,7 @@
     </div>
     <div class="mb-4">
       <label class="custom-label"> Transfer From:  <span v-if="selectTransferFrom" class="text-red-500">Please select a bank from where to be transfer!</span></label>
-      <select name="type" id="" class="custom-input" v-model="fromBankType">
+      <select name="type" id="" class="custom-input text-xs" v-model="fromBankType">
         <option value="" disabled >Transfer From</option>
         <option value="LIB">LIB</option>
         <option value="WEGAGEN">WEGAGEN</option>
@@ -22,7 +22,7 @@
       <label class="custom-label"> Transfer to:  <span v-if="selectTransferTo" class="text-red-500">Please select a bank to where to be transfer!</span>
         <span v-if="notEqualFromTo" class="text-red-500">Transfer to and transfer from can not be equal!</span>
       </label>
-      <select name="type" id="" class="custom-input" v-model="toBankType">
+      <select name="type" id="" class="custom-input text-xs" v-model="toBankType">
         <option value="" disabled >Transfer To</option>
         <option value="LIB">LIB</option>
         <option value="WEGAGEN">WEGAGEN</option>
@@ -32,15 +32,15 @@
     
     <div class="mb-4">
       <label class="custom-label"> Amount: <span v-if="enterAmount" class="text-red-500">Please Enter Amount!</span></label>
-      <input type="number" class="custom-input" v-model="amount" placeholder="Amount" />
+      <input type="number" class="custom-input text-xs" v-model="amount" placeholder="Amount" />
     </div>
     <div class="mb-4">
       <label class="custom-label"> Transfer Date: <span v-if="enterTransferDate" class="text-red-500">Please Enter Transfer Date!</span></label>
-      <input type="date" class="custom-input" v-model="transferDate" placeholder="Amount" />
+      <input type="date" class="custom-input text-xs" v-model="transferDate" placeholder="Amount" />
     </div>
     <div class="mb-4">
       <label class="custom-label"> Reason: </label>
-      <input type="text" class="custom-input" v-model="reason" placeholder="Reason" />
+      <input type="text" class="custom-input text-xs" v-model="reason" placeholder="Reason" />
     </div>
 
     <button @click.prevent="addCreditTransfer()" class="custom-button">
