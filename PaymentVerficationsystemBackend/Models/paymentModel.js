@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 
 const Organization = require('./organizationModel');
-const PaymentSetting = require('./paymentSettingModel');
+const PaymentSetting =require('./paymentSettingModel');
+
 const User = require('./userModel');
 
 const paymentTypeSchema = new mongoose.Schema({
@@ -153,25 +154,26 @@ paymentSchema.virtual('totalPaidAmount').get(function () {
   return total;
 });
 
-paymentSchema.post('save', async function () {
-  const now = new Date();
-  const paymentSetting = await PaymentSetting.findOne({
-    activeYear: this.activeYear,
-    activeMonth: this.activeMonth,
-  });
+// paymentSchema.post('save', async function () {
+//   const PaymentSetting = require('../models/paymentSetting'); // Lazy import
+//   const now = new Date();
+//   const paymentSetting = await PaymentSetting.findOne({
+//     activeYear: this.activeYear,
+//     activeMonth: this.activeMonth,
+//   });
 
-  let status = 'unknown';
-  if (!paymentSetting) {
-    status = 'unknown';
-  } else if (this.confirmedDate) {
-    status = 'confirmed';
-  } else if (now >= paymentSetting.startingDate && now <= paymentSetting.endingDate) {
-    status = 'pending';
-  } else if (now > paymentSetting.endingDate) {
-    status = 'overdue';
-  }
-  await this.constructor.findByIdAndUpdate(this._id, { status });// Update the document with the computed status
-});
+//   let status = 'unknown';
+//   if (!paymentSetting) {
+//     status = 'unknown';
+//   } else if (this.confirmedDate) {
+//     status = 'confirmed';
+//   } else if (now >= paymentSetting.startingDate && now <= paymentSetting.endingDate) {
+//     status = 'pending';
+//   } else if (now > paymentSetting.endingDate) {
+//     status = 'overdue';
+//   }
+//   await this.constructor.findByIdAndUpdate(this._id, { status });// Update the document with the computed status
+// });
 paymentSchema.index({ user: 1, activeYear: 1, activeMonth: 1 });
 const Payment = mongoose.model('Payment', paymentSchema);
 module.exports = Payment;

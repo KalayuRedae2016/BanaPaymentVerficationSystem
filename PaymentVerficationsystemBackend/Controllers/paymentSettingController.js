@@ -1,4 +1,5 @@
 const PaymentSetting = require('../Models/paymentSettingModel');
+const mongoose = require('mongoose');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -27,14 +28,13 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
   if (endingDate <= startingDate) {
     return next(new AppError(`Ending Date (${endingDate}) should be greater than Starting Date (${startingDate})!`, 400));
   }
+    //const PaymentSetting = mongoose.connection.model('PaymentSetting');
     // Check if there's an existing PaymentSetting for the activeYear and Month
-    const existingSetting = await PaymentSetting.findOne({
-      activeYear:activeYear,
-      activeMonth:activeMonth,
-    });
+    const existingSetting = await PaymentSetting.findOne({activeYear:activeYear,activeMonth:activeMonth});
     if (existingSetting) {
-      return next(new AppError('Setting is exist ,Please Update it', 404));
+      return next(new AppError(`Payment Setting already exists for Month-${activeMonth}-Year-${activeYear}`, 400));
     }
+    
     // Deactivate the previous latest settings
     const latestSetting=await PaymentSetting.find({latest:true});
     if(latestSetting){
@@ -45,12 +45,11 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
     }
    const newSetting = new PaymentSetting({
     ...req.body,
-    startingDate: new Date(req.body.startingDate),
-    endingDate: new Date(req.body.endingDate),
+    startingDate,
+    endingDate,
     latest: true
 });
     await newSetting.save();
-    console.log(newSetting)
 
     const userQuery={isActive:true,role:"User"}
     const users = await User.find(userQuery);
@@ -60,7 +59,6 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
       await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
     }
 
-    console.log(newSetting)
     res.status(200).json({
       status:1,
       message:`Payment Setting is created for Month-${req.body.activeMonth}-Year-${req.body.activeYear}`,
