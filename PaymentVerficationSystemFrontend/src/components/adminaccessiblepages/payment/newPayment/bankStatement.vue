@@ -63,38 +63,38 @@
                     <!-- // head of the tables -->
                     <tr class="bg-gray-200">
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Metric
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Amount
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Payment Date
                       </th>
 
                       <th
-                        class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Bank Type
                       </th>
                       <th
-                        class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         TT Number
                       </th>
                       <th
-                        class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Paid
                       </th>
                       <th
-                        class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Action
                       </th>
@@ -284,7 +284,7 @@
                           class="custom-input h-7"
                           :value="payment.subsidy.amount"
                           @input="payment.subsidy.amount = $event.target.value"
-                        />
+                          style="width:150px;" />
 
                         <p v-else>{{ payment.subsidy.amount }}</p>
                       </td>
@@ -823,52 +823,52 @@
                   <thead>
                     <tr class="bg-gray-200">
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Metric
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Regular Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Subsidy Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Urgent Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Total Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Payment Date
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Bank Type
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         TTNumber
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Paid
                       </th>
                       <th
-                        class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Action
                       </th>
@@ -1583,7 +1583,10 @@ export default {
       this.$apiClient
         .get(`/api/v1/payments/search?keyword=${this.userCode}`)
         .then((response) => {
-          console.log("response from the payment", response.data);
+
+          console.log("response from the paymentnunpaid data", response.data);
+
+
           if (response.data.status === 1) {
             if (response.data.items.length === 0) {
               this.fullName=response.data.fullName;
