@@ -59,15 +59,15 @@ const paymentSettingSchema = new mongoose.Schema(
     },
     penalityLate5Days:{
       type: Number,
-      default: 0.05,
+      //default: 0.05,
     },
     penalityLate10Days:{
       type: Number,
-      default: 0.07,
+      //default: 0.07,
     },
     penalityLateAbove10Days:{
       type: Number,
-      default: 0.1,
+      //default: 0.1,
     },
     latest:{
       type:Boolean,
@@ -85,6 +85,13 @@ paymentSettingSchema.pre('validate', function (next) {
   this.endingDate = new Date(Date.UTC(activeYear, activeMonth-1, 30));  // 30th day of the month
   next();
 });
+
+paymentSettingSchema.pre('save',function(next){
+  this.penalityLate5Days/=100
+  this.penalityLate10Days/=100
+  this.penalityLateAbove10Days/=100
+  next()
+})
 
 paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
   console.log("Pre-findOneAndUpdate Hook");
