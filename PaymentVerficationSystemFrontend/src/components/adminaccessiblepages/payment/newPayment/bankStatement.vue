@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div class="p-4">
-
+    <div class="p-4 text-lg">
       <!-- //for displaying the Head title  -->
       <h1 class="text-md font-bold mb-4 text-indigo-800">
         Manual Confirmation from bank statement
@@ -12,21 +11,22 @@
         class="py-6 -mt-1 border-t border-blue-500"
       >
          <!-- for displ;aying the usercode and full name above the table -->
-        <div class="text-gray-800 font-semibold bg-blue-50 py-4 text-md">
+        <div class="text-gray-800 font-semibold bg-blue-50 py-4 text-md  text-xs">
           <p>
-            <i class="fas fa-chevron-right mr-3 text-pink-500 ml-3"></i>
-            User Code:<span class="text-blue-900 text-sm ml-5"
+            <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1"></i>
+            User Code:<span class="text-blue-900  ml-1"
               >{{ userCode }}
             </span>
           </p>
-          <p>
-            <i class="fas fa-chevron-right mr-3 text-pink-500 ml-3"></i> Full
-            Name:
-            <span class="text-indigo-800 text-sm ml-5">{{ fullName }}</span>
+          <p class="">
+            <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1"></i>
+            
+            <span class="text-indigo-800"> Full
+              Name: <span class="ml-1">{{ fullName }}</span></span>
           </p>
         </div>
         <!-- // displayin the payments each in a table for one user please -->
-        <div class="border-t border-blue-900 ml-5 mt-5">
+        <div class="border-t border-blue-900  mt-5 text-xs">
           <div
             class="p-4 border-b border-blue-900 cursor-pointer"
             v-for="(payment, paymentIndex) in payments"
@@ -43,9 +43,9 @@
             <div class="mt-4 flex flex-col space-y-5">
               <div class="flex flex-row items-center">
                 <div class="flex flex-col">
-                  <p class="text-indigo-800 text-2xl font-extrabold">
+                  <p class="text-indigo-800 text-xs font-extrabold">
                     <i class="fas fa-chevron-right mr-3 text-pink-500"></i>
-                    <span class="text-lg"
+                    <span class="text-xs"
                       >{{ payment.activeYear }} -
                       {{ payment.activeMonthInString }}</span
                     >
@@ -63,38 +63,38 @@
                     <!-- // head of the tables -->
                     <tr class="bg-gray-200">
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Metric
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Amount
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Payment Date
                       </th>
 
                       <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Bank Type
                       </th>
                       <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         TT Number
                       </th>
                       <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Paid
                       </th>
                       <th
-                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-32 p-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Action
                       </th>
@@ -103,20 +103,20 @@
                   <tbody>
                     <!-- // this tr is for the regular data -->
                     <tr>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p
                           class="bg-blue-100 px-2 text-indigo-800 font-extrabold rounded-lg"
                         >
                           Regular
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <!-- <input readonly type="text" class="custom-input h-7" :value="payment.regular.amount"
                         @input="payment.regular.amount = $event.target.value" /> -->
 
                         <p>{{ payment.regular.amount }}</p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.regular.isPaid">
                           {{ payment.regular.paidAt }}
                         </p>
@@ -136,15 +136,15 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700  ">
                         <p v-if="payment.regular.isPaid">
                           {{ payment.regular.bankType }}
                         </p>
                         <select
                           v-if="!payment.regular.isPaid"
-                          class="custom-select w-64 text-sm px-3 py-2.5 leading-tight"
+                          class="custom-select  text-xs px-3 py-2.5 leading-tight flex-shrink-0"
                           v-model="payment.regular.bankType"
-                        >
+                         style="width:150px;">
                           <option value="" disabled selected>Bank Type</option>
                           <option value="LIB">LIB</option>
                           <option value="WEGAGEN">WEGAGEN</option>
@@ -159,7 +159,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.regular.isPaid">
                           {{ payment.regular.TTNumber }}
                         </p>
@@ -168,7 +168,7 @@
                           type="text"
                           class="custom-input h-7"
                           v-model="payment.regular.TTNumber"
-                        />
+                         style="width:150px;"/>
                         <p
                           v-if="payment.verifyRegularTTNumber"
                           class="text-red-500"
@@ -177,12 +177,12 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p>{{ payment.regular.isPaid }}</p>
                       </td>
                       <td
                         v-if="!payment.regular.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -225,7 +225,7 @@
 
                       <td
                         v-if="payment.regular.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -269,14 +269,14 @@
                     </tr>
                     <!-- // for the subsidy -->
                     <tr v-if="payment.subsidy.amount > 0">
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p
                           class="bg-cyan-100 px-2 text-indingo-800 font-extrabold rounded-lg"
                         >
                           Subsidy
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <input
                           v-if="!payment.subsidy.isPaid"
                           readonly
@@ -284,11 +284,11 @@
                           class="custom-input h-7"
                           :value="payment.subsidy.amount"
                           @input="payment.subsidy.amount = $event.target.value"
-                        />
+                          style="width:150px;" />
 
                         <p v-else>{{ payment.subsidy.amount }}</p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.subsidy.isPaid">
                           {{ payment.subsidy.paidAt }}
                         </p>
@@ -317,7 +317,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.subsidy.isPaid">
                           {{ payment.subsidy.bankType }}
                         </p>
@@ -326,7 +326,7 @@
                             payment.subsidy.amount > 0 &&
                             !payment.subsidy.isPaid
                           "
-                          class="custom-select w-64 text-sm px-3 py-2.5 leading-tight"
+                          class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
                           v-model="payment.subsidy.bankType"
                         >
                           <option value="" disabled selected>Bank Type</option>
@@ -345,7 +345,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.subsidy.isPaid">
                           {{ payment.subsidy.TTNumber }}
                         </p>
@@ -368,12 +368,12 @@
                           -------------------------
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p>{{ payment.subsidy.isPaid }}</p>
                       </td>
                       <td
                         v-if="!payment.subsidy.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -418,7 +418,7 @@
 
                       <td
                         v-if="payment.subsidy.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -462,14 +462,14 @@
                     </tr>
                     <!-- //for the urgent data -->
                     <tr v-if="payment.urgent.amount > 0">
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p
                           class="bg-pink-100 px-2 text-indigo-800 font-extrabold rounded-lg"
                         >
                           Urgent
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.urgent.isPaid">
                           {{ payment.urgent.amount }}
                         </p>
@@ -482,7 +482,7 @@
                           @input="payment.urgent.amount = $event.target.value"
                         />
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.urgent.isPaid">
                           {{ payment.urgent.paidAt }}
                         </p>
@@ -505,7 +505,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.urgent.isPaid">
                           {{ payment.urgent.bankType }}
                         </p>
@@ -513,7 +513,7 @@
                           v-if="
                             payment.urgent.amount > 0 && !payment.urgent.isPaid
                           "
-                          class="custom-select w-64 text-sm px-3 py-2.5 leading-tight"
+                          class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
                           v-model="payment.urgent.bankType"
                         >
                           <option value="" disabled selected>Bank Type</option>
@@ -532,7 +532,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.urgent.isPaid">
                           {{ payment.urgent.TTNumber }}
                         </p>
@@ -554,12 +554,12 @@
                           -------------------------
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p>{{ payment.urgent.isPaid }}</p>
                       </td>
                       <td
                         v-if="!payment.urgent.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -602,7 +602,7 @@
                       </td>
                       <td
                         v-if="payment.urgent.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -646,14 +646,14 @@
                     </tr>
                    <!-- for the service data -->
                     <tr>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p
                           class="bg-yellow-100 px-2 text-indigo-800 font-extrabold rounded-lg"
                         >
                           Service
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.service.isPaid">
                           {{ payment.service.amount }}
                         </p>
@@ -665,7 +665,7 @@
                           @input="payment.service.amount = $event.target.value"
                         />
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.service.isPaid">
                           {{ payment.service.paidAt }}
                         </p>
@@ -683,13 +683,13 @@
                           Payment Date is required
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.service.isPaid">
                           {{ payment.service.bankType }}
                         </p>
                         <select
                           v-if="!payment.service.isPaid"
-                          class="custom-select w-64 text-sm px-3 py-2.5 leading-tight"
+                          class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
                           v-model="payment.service.bankType"
                         >
                           <option value="" disabled selected>Bank Type</option>
@@ -705,7 +705,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p v-if="payment.service.isPaid">
                           {{ payment.service.TTNumber }}
                         </p>
@@ -722,12 +722,12 @@
                           TTNumber is required
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p>{{ payment.service.isPaid }}</p>
                       </td>
                       <td
                         v-if="!payment.service.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -772,7 +772,7 @@
 
                       <td
                         v-if="payment.service.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <!-- Confirmation Text Above Button -->
                         <div
@@ -823,52 +823,52 @@
                   <thead>
                     <tr class="bg-gray-200">
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Metric
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Regular Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Subsidy Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Urgent Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Total Penality
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Payment Date
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Bank Type
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         TTNumber
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Paid
                       </th>
                       <th
-                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                        class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
                       >
                         Action
                       </th>
@@ -876,23 +876,23 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p
                           class="bg-red-200 px-2 text-indigo-800 font-extrabold rounded-lg"
                         >
                           Penality
                         </p>
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         {{ payment.regular.penality }}
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         {{ payment.subsidy.penality }}
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         {{ payment.urgent.penality }}
                       </td>
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         {{
                           payment.regular.penality +
                           payment.subsidy.penality +
@@ -900,7 +900,7 @@
                         }}
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <input
                           v-if="
                             payment.regular.penality +
@@ -942,7 +942,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <select
                           v-if="
                             payment.regular.penality +
@@ -950,12 +950,12 @@
                               payment.urgent.penality >
                             0
                           "
-                          class="custom-select w-64 text-sm px-3 py-2.5 leading-tight"
+                          class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
                           v-model="payment.penality.bankType"
                           @input="
                             payment.penality.bankType = $event.target.value
                           "
-                        >
+                       style="width:100px"  >
                           <option value="" disabled selected>Bank Type</option>
                           <option value="LIB">LIB</option>
                           <option value="WEGAGEN">WEGAGEN</option>
@@ -970,7 +970,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <input
                           v-if="
                             payment.regular.penality +
@@ -984,7 +984,7 @@
                           @input="
                             payment.penality.TTNumber = $event.target.value
                           "
-                        />
+                         style="width:100px" />
                         <p v-else>--------</p>
                         <p
                           v-if="payment.verifyPenalityTTNumber"
@@ -994,7 +994,7 @@
                         </p>
                       </td>
 
-                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
                         <p
                           v-if="
                             payment.regular.amount +
@@ -1010,7 +1010,7 @@
 
                       <td
                         v-if="!payment.penality.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <div
                           v-if="paymentIndex === penalityConfirmedIndex"
@@ -1065,7 +1065,7 @@
                       </td>
                       <td
                         v-if="payment.penality.isPaid"
-                        class="p-3 text-sm text-gray-700 whitespace-nowrap relative"
+                        class="p-3 text-xs text-gray-700 whitespace-nowrap relative"
                       >
                         <p
                           class="bg-pink-100 text-indigo-800 p-1 font-extrabold"
@@ -1090,13 +1090,13 @@
 <!-- // for displaying nothing is to display message if the user do not have the payment to be paid -->
       <div
         v-if="nothingToPay"
-        class="py-6 px-6 -mt-1 border-t border-blue-500 w-full mb-64"
+        class="py-6  -mt-1 border-t border-blue-500 w-full mb-64"
       >
         <div
-          class="relative p-6 bg-blue-100 border border-green-300 rounded-lg shadow-md flex justify-between items-center"
+          class="flex flex-col md:flex-row relative p-2 bg-blue-50 border border-gray-300 rounded-lg shadow-md flex justify-between items-center"
         >
-          <span class="text-green-800 font-semibold text-lg w-2/3 text-sm">
-            <span class="text-blue-800 text-sm">{{ fullName }} </span> has
+          <span class="w-full lg:w-1/2 text-green-800 font-semibold text-lg  text-xs">
+            <span class="text-blue-800 text-xs">{{ fullName }} </span> has
             successfully completed all payments. No payments are currently
             overdue or in progress. Any open payments will be processed in the
             next month.
@@ -1105,7 +1105,7 @@
           <a
             @click="userLevelReport()"
             href="#"
-            class="text-sm w-1/4 text-blue-600 hover:text-blue-800 font-medium text-lg ml-4"
+            class="w-full lg: w-1/3 text-xs  text-blue-600 hover:text-blue-800 font-medium text-lg "
           >
             See Payment History
           </a>
@@ -1168,9 +1168,9 @@
                         d="M5 13l4 4L19 7"
                       ></path>
                     </svg>
-                    <h2 class="text-sm font-bold text-gray-800">Success!</h2>
+                    <h2 class="text-xs font-bold text-gray-800">Success!</h2>
                   </div>
-                  <p class="text-gray-600 text-sm">
+                  <p class="text-gray-600 text-xs">
                     Your {{ paymentType }} confirmed successfully
                   </p>
                   <button
@@ -1210,9 +1210,9 @@
                         d="M5 13l4 4L19 7"
                       ></path>
                     </svg>
-                    <h2 class="text-sm font-bold text-gray-800">Success!</h2>
+                    <h2 class="text-xs font-bold text-gray-800">Success!</h2>
                   </div>
-                  <p class="text-gray-600 text-sm">
+                  <p class="text-gray-600 text-xs">
                     Your {{ paymentType }} confirmed successfully
                   </p>
                   <button
@@ -1583,7 +1583,10 @@ export default {
       this.$apiClient
         .get(`/api/v1/payments/search?keyword=${this.userCode}`)
         .then((response) => {
-          console.log("response from the payment", response.data);
+
+          console.log("response from the paymentnunpaid data", response.data);
+
+
           if (response.data.status === 1) {
             if (response.data.items.length === 0) {
               this.fullName=response.data.fullName;

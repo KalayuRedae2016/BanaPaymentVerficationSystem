@@ -1,377 +1,404 @@
 <template>
-  <div class="" style="">
-    <div class="flex items-center justify-between p-4 bg-white rounded-lg shadow-md border border-gray-200">
-  <!-- Left Section: Register Client Title and Import Excel -->
-  <div class="flex items-center space-x-6">
-    <h1 class="text-xl text-indigo-800 font-bold"> {{ $t('registerClient') }}</h1>
+  <div>
+    <div class="" style="">
+      <div
+        class="flex items-center justify-between p-3 bg-white border-b border-blue-500  "
+      >
+        <!-- Left Section: Register Client Title and Import Excel -->
+        <div class="flex items-center space-x-6">
+          <h1 class="text-xl text-indigo-800 font-bold">
+            {{ $t("registerClient") }}
+          </h1>
 
-    <label for="file-upload" class="cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 py-2 px-4 border border-blue-500 rounded-lg transition">
-      <span> {{ $t('importClientFromExcel') }}</span>
-      <input id="file-upload" type="file" class="hidden" ref="fileInputExcel" @change="handleFileInput" />
-    </label>
-  </div>
-
-  <!-- Right Section: View Clients Link -->
-  <a href="#" @click="viewClients()" class="text-blue-500 font-medium hover:underline">
-    {{ $t('viewClients') }}
-  </a>
-</div>
-
-   
-   
-    <div class="flex flex-row z-0 border-t border-blue-500">
-      <div class="flex items-center justify-between mb-4">
-        <div class="m-5">
          
-
-      
         </div>
-      </div>
-    </div>
-    <div
-      class="flex flex-col mx-4 space-y-3 md:space-y-0 md:flex-row md:space-x-5"
-    >
-      <div class="w-full space-y-3 md:w-1/2">
-        <div class="w-full">
-          <label class="custom-label" for="firstName">
-            {{ $t('firstName') }}
-            <span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="firstName"
-            type="text"
-            class="custom-input"
-            :placeholder="$t('firstName')"
-            style="padding-left: 16px"
-            v-model="firstName"
-          />
 
-          <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t('firstNameRequired') }}
-          </p>
-        </div>
-        <div class="w-full">
-          <label class="custom-label" for="middleName">
-            {{ $t('middleName') }}
-            <span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="midleName"
-            type="text"
-            class="custom-input"
-              :placeholder="$t('middleName')"
-            style="padding-left: 16px"
-            v-model="middleName"
-          />
-
-          <p
-            v-if="middleNameIsRequired"
-            class="text-red-500 text-sm mt-1 ml-10"
+        <!-- Right Section: View Clients Link -->
+      <div>
+        <a
+          href="#"
+          @click="viewClients()"
+          class="text-blue-500 font-medium hover:underline"
+        >
+          {{ $t("viewClients") }}
+       
+        </a>
+        <label
+            for="file-upload"
+            class=" mt-3 ml-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 py-2 px-4  rounded-lg transition"
           >
-            Middle Name is required {{ $t('middleNameRequired') }}
-          </p>
-        </div>
-
-        <div class="w-full">
-          <label class="custom-label" for="lastName">
-            {{ $t('lastName') }}
-            <span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="lastName"
-            type="text"
-            class="custom-input"
-              :placeholder="$t('lastName')"
-            style="padding-left: 16px"
-            v-model="lastName"
-          />
-          <p v-if="lastNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t('lastNameRequired') }}
-          </p>
-        </div>
-        <div class="w-full">
-          <label class="custom-label " for="lastName">
-            <span class="text-cyan-500"> {{ $t('tigrignaFullName') }}</span>
-            <span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="Full Name"
-            type="text"
-            class="custom-input"
-            :placeholder="$t('tigrignaFullName')"
-            style="padding-left: 16px"
-            v-model="fullName"
-          />
-          <p v-if="fullNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t('fullNameRequired') }}
-          </p>
-        </div>
-
-        <div class="w-full">
-          <label class="custom-label" for="gender">
-            {{ $t('gender') }}
-            <span class="text-red-500">*</span>
-          </label>
-          <select
-            id="gender"
-            class="custom-select"
-            style="padding-left: 16px"
-            v-model="gender"
-          >
-            <option value="" disabled selected>  {{ $t('gender') }}</option>
-            <option value="Male">{{$t('male')}}</option>
-            <option value="Female">{{$t('female')}}</option>
-          </select>
-          <p v-if="genderIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t('genderRequired') }}
-          </p>
-        </div>
-
-        <div class="w-full">
-          <label class="custom-label"> {{ $t('age') }} <span>*</span></label>
-          <input
-            id="age"
-            type="number"
-            class="custom-input"
-            required
-             :placeholder="$t('age')"
-            style="padding-left: 16px"
-            v-model="age"
-          />
-        </div>
-        <p v-if="ageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-          {{ $t('ageRequired') }}
-        </p>
-      </div>
-
-      <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
-        <div class="w-full">
-          <label class="custom-label" for="address">
-            {{ $t('address') }}
-            <span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="address"
-            type="text"
-            class="custom-input"
-            pla:placeholder="$t('address')"
-            style="padding-left: 16px"
-            v-model="address"
-          />
-          <p v-if="addressIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t('addressRequired') }}
-          </p>
-        </div>
-        <div class="w-full">
-          <label class="custom-label" for="email">
-            {{ $t('email') }}
-            <span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            id="email"
-            type="text"
-            class="custom-input"
-           :placeholder="$t('email')"
-            style="padding-left: 16px"
-            v-model="email"
-          />
-          <p v-if="emailIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t('emailRequired') }}
-          </p>
-        </div>
-        <div class="w-full">
-          <label class="custom-label">
-            {{ $t('phoneNumber') }}
-            <span class="text-red-500">*</span>
-          </label>
-          <div class="flex flex-row">
-            <select
-              v-model="phoneNumberCode"
-              class="rounded-lg h-12 mt-3 w-16 block border-t border-l border-b border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option
-                v-for="country in countries"
-                :key="country.code"
-                :value="country.code"
-              >
-                {{ country.code }} ({{ country.name }})
-              </option>
-            </select>
+            <span> {{ $t("importClientFromExcel") }}</span>
             <input
+              id="file-upload"
+              type="file"
+              class="hidden"
+              ref="fileInputExcel"
+              @change="handleFileInput"
+            />
+          </label>
+      </div>
+      </div>
+
+      <div class="flex flex-row z-0 ">
+        <div class="flex items-center justify-between mb-4">
+          <div class="m-5"></div>
+        </div>
+      </div>
+      <div
+        class="flex flex-col mx-4 space-y-3 md:space-y-0 md:flex-row md:space-x-5"
+      >
+        <div class="w-full space-y-3 md:w-1/2">
+          <div class="w-full">
+            <label class="custom-label" for="firstName">
+              {{ $t("firstName") }}
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="firstName"
               type="text"
-              class="rounded-sm custom-input h-12 mt-3"
-              required
-             :placeholder="$t('phoneNumber')"
+              class="custom-input text-xs"
+              :placeholder="$t('firstName')"
               style="padding-left: 16px"
-              v-model="phoneNumber"
+              v-model="firstName"
+            />
+
+            <p
+              v-if="firstNameIsRequired"
+              class="text-red-500 text-sm mt-1 ml-10"
+            >
+              {{ $t("firstNameRequired") }}
+            </p>
+          </div>
+          <div class="w-full">
+            <label class="custom-label" for="middleName">
+              {{ $t("middleName") }}
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="midleName"
+              type="text"
+              class="custom-input text-xs"
+              :placeholder="$t('middleName')"
+              style="padding-left: 16px"
+              v-model="middleName"
+            />
+
+            <p
+              v-if="middleNameIsRequired"
+              class="text-red-500 text-sm mt-1 ml-10"
+            >
+              Middle Name is required {{ $t("middleNameRequired") }}
+            </p>
+          </div>
+
+          <div class="w-full">
+            <label class="custom-label" for="lastName">
+              {{ $t("lastName") }}
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              class="custom-input text-xs"
+              :placeholder="$t('lastName')"
+              style="padding-left: 16px"
+              v-model="lastName"
+            />
+            <p
+              v-if="lastNameIsRequired"
+              class="text-red-500 text-sm mt-1 ml-10"
+            >
+              {{ $t("lastNameRequired") }}
+            </p>
+          </div>
+          <div class="w-full">
+            <label class="custom-label" for="lastName">
+              <span class="text-cyan-500"> {{ $t("tigrignaFullName") }}</span>
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="Full Name"
+              type="text"
+              class="custom-input text-xs"
+              :placeholder="$t('tigrignaFullName')"
+              style="padding-left: 16px"
+              v-model="fullName"
+            />
+            <p
+              v-if="fullNameIsRequired"
+              class="text-red-500 text-sm mt-1 ml-10"
+            >
+              {{ $t("fullNameRequired") }}
+            </p>
+          </div>
+
+          <div class="w-full">
+            <label class="custom-label" for="gender">
+              {{ $t("gender") }}
+              <span class="text-red-500">*</span>
+            </label>
+            <select
+              id="gender"
+              class="custom-select text-xs"
+              style="padding-left: 16px"
+              v-model="gender"
+            >
+              <option value="" disabled selected>{{ $t("gender") }}</option>
+              <option value="Male">{{ $t("male") }}</option>
+              <option value="Female">{{ $t("female") }}</option>
+            </select>
+            <p v-if="genderIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+              {{ $t("genderRequired") }}
+            </p>
+          </div>
+
+          <div class="w-full">
+            <label class="custom-label"> {{ $t("age") }} <span>*</span></label>
+            <input
+              id="age"
+              type="number"
+              class="custom-input text-xs"
+              required
+              :placeholder="$t('age')"
+              style="padding-left: 16px"
+              v-model="age"
             />
           </div>
-          <p
-            v-if="phoneNumberIsRequired"
-            class="text-red-500 text-sm mt-1 ml-10"
+          <p v-if="ageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+            {{ $t("ageRequired") }}
+          </p>
+        </div>
+
+        <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
+          <div class="w-full">
+            <label class="custom-label" for="address">
+              {{ $t("address") }}
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="address"
+              type="text"
+              class="custom-input text-xs"
+              placeholder="Address"
+              style="padding-left: 16px"
+              v-model="address"
+            />
+            <p v-if="addressIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+              {{ $t("addressRequired") }}
+            </p>
+          </div>
+          <div class="w-full">
+            <label class="custom-label" for="email">
+              {{ $t("email") }}
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              id="email"
+              type="text"
+              class="custom-input text-xs"
+              :placeholder="$t('email')"
+              style="padding-left: 16px"
+              v-model="email"
+            />
+            <p v-if="emailIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+              {{ $t("emailRequired") }}
+            </p>
+          </div>
+          <div class="w-full">
+            <label class="custom-label">
+              {{ $t("phoneNumber") }}
+              <span class="text-red-500">*</span>
+            </label>
+            <div class="flex flex-row">
+              <select
+                v-model="phoneNumberCode"
+                class="text-xs rounded-lg h-12 mt-3 w-16 block border-t border-l border-b border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option
+                  v-for="country in countries"
+                  :key="country.code"
+                  :value="country.code"
+                >
+                  {{ country.code }} ({{ country.name }})
+                </option>
+              </select>
+              <input
+                type="text"
+                class="rounded-sm custom-input h-12 mt-3 text-xs"
+                required
+                :placeholder="$t('phoneNumber')"
+                style="padding-left: 16px"
+                v-model="phoneNumber"
+              />
+            </div>
+            <p
+              v-if="phoneNumberIsRequired"
+              class="text-red-500 text-sm mt-1 ml-10"
+            >
+              {{ $t("phoneNumberRequired") }}
+            </p>
+          </div>
+
+          <div class="w-full">
+            <label class="custom-label">
+              {{ $t("chooseProfileImage") }}
+              <span class="text-red-500 ml-1">*</span>
+            </label>
+            <input
+              class="custom-input mt-5 text-xs"
+              type="file"
+              ref="fileInput"
+              accept="image/*"
+              @change="handleImageInput"
+            />
+            <p v-if="imageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+              {{ $t("profileImageRequired") }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="ml-4 mr-8">
+        <div class="w-1/2">
+          <button
+            @click="register()"
+            class="mt-5 w-32 bg-indigo-600 text-white font-semibold py-2 rounded mb-8 hover:bg-indigo-600"
           >
-          {{ $t('phoneNumberRequired') }}
-          </p>
-        </div>
-
-        <div class="w-full">
-          <label class="custom-label">
-            {{ $t('chooseProfileImage') }}
-            <span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            class="custom-input mt-5"
-            type="file"
-            ref="fileInput"
-            accept="image/*"
-            @change="handleImageInput"
-          />
-          <p v-if="imageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t('profileImageRequired') }}
-          </p>
+            {{ $t("submit") }}
+          </button>
         </div>
       </div>
     </div>
-    <div class="ml-4 mr-8">
-      <div class="w-1/2">
-        <button
-          @click="register()"
-          class="mt-5 w-full bg-indigo-700 text-white font-semibold py-2 rounded mb-8"
+
+    <div v-if="importExelFilePressed">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
         >
-        {{ $t('submit') }}
-        </button>
-      </div>
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center flex-row space-x-3">
+                  <p class="text-blue-600 text-2xl">
+                    {{ $t("doYouWantToImportFile") }}
+                  </p>
+
+                  <svg
+                    @click="importExelFilePressed = !importExelFilePressed"
+                    class="w-10 h-10 text-red-500"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                </div>
+
+                <button
+                  @click="importClientsFromExel()"
+                  class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                  {{ $t("Yes") }}
+                </button>
+              </div>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+    <div v-if="showSuccess">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center mb-4 ml-32">
+                  <svg
+                    class="w-8 h-8 text-green-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  <h2 class="text-md text-green-800">{{ $t("success") }}</h2>
+                </div>
+                <p class="text-blue-800 text-md ml-8">
+                  {{ successMessage }}
+                </p>
+                <button
+                  @click="showSuccess = false"
+                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  {{ $t("ok") }}
+                </button>
+              </div>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="showError">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-red-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-4">
+                  <svg
+                    class="w-8 h-8 text-red-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  <h2 class="text-sm font-bold text-gray-800">
+                    {{ $t("error") }}
+                  </h2>
+                </div>
+                <p class="text-gray-600 text-sm">
+                  {{ errorMessage }}
+                </p>
+                <button
+                  @click="showError = false"
+                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  {{ $t("ok") }}
+                </button>
+              </div>
+            </div>
+            <hr class="my-4 bg-red-500" />
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
-
-  <div v-if="importExelFilePressed">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center flex-row space-x-3">
-                <p class="text-blue-600 text-2xl">
-                 {{ $t('doYouWantToImportFile') }}
-                </p>
-
-                <svg
-                  @click="importExelFilePressed = !importExelFilePressed"
-                  class="w-10 h-10 text-red-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-              </div>
-
-              <button
-                @click="importClientsFromExel()"
-                class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-              >
-              {{ $t('Yes') }}
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-  <div v-if="showSuccess">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center mb-4 ml-32">
-                <svg
-                  class="w-8 h-8 text-green-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-                <h2 class="text-md text-green-800">{{ $t('success') }}</h2>
-              </div>
-              <p class="text-blue-800 text-md ml-8">
-                {{ successMessage }}
-              </p>
-              <button
-                @click="showSuccess = false"
-                class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-              {{ $t('ok') }}
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-
-  <div v-if="showError">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-red-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-4">
-                <svg
-                  class="w-8 h-8 text-red-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-                <h2 class="text-sm font-bold text-gray-800">{{ $t('error') }}</h2>
-              </div>
-              <p class="text-gray-600 text-sm">
-                {{ errorMessage }}
-              </p>
-              <button 
-                @click="showError = false"
-                class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-              {{ $t('ok') }}
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
-
 </template>
 
 <script>
@@ -381,15 +408,14 @@ export default {
   },
   data() {
     return {
+      showSuccess: false,
+      showError: false,
+      errorMessage: "",
+      successMessage: "",
 
-      showSuccess:false,
-      showError:false,
-      errorMessage:"",
-      successMessage:"",
-
-      duplicateEmailError:false,
-      duplicateEntry:false,
-      errorRegister:false,
+      duplicateEmailError: false,
+      duplicateEntry: false,
+      errorRegister: false,
       firstName: "",
       middleName: "",
       lastName: "",
@@ -471,7 +497,6 @@ export default {
       addressIsRequired: false,
       emailIsRequired: false,
       phoneNumberIsRequired: false,
-      
 
       imageFile: "",
       exelFile: "",
@@ -520,15 +545,15 @@ export default {
         this.$apiClient
           .post("/api/v1/users/importUsers", formData)
           .then((response) => {
-            console.log("import response",response);
-            if (response.data.success===1) {
-              this.successMessage=response.data.message;
-              this.showSuccess=true;
+            console.log("import response", response);
+            if (response.data.success === 1) {
+              this.successMessage = response.data.message;
+              this.showSuccess = true;
             }
           })
           .catch((error) => {
-            this.showError=true;
-            this.errorMessage=error.response.data.message;
+            this.showError = true;
+            this.errorMessage = error.response.data.message;
           });
       }
     },
@@ -656,8 +681,8 @@ export default {
         this.addressIsRequired = false;
         this.emailIsRequired = false;
         this.phoneNumberIsRequired = false;
-        this.imageIsRequired =true;
-      }else{
+        this.imageIsRequired = true;
+      } else {
         this.firstNameIsRequired = false;
         this.middleNameIsRequired = false;
         this.lastNameIsRequired = false;
@@ -666,7 +691,7 @@ export default {
         this.addressIsRequired = false;
         this.emailIsRequired = false;
         this.phoneNumberIsRequired = false;
-        this.imageIsRequired =false;
+        this.imageIsRequired = false;
       }
 
       const fullPhoneNumber = this.phoneNumberCode + this.phoneNumber;
@@ -692,19 +717,19 @@ export default {
       formData.append("email", this.email);
       formData.append("phoneNumber", fullPhoneNumber);
       formData.append("profileImage", this.imageFile);
-      formData.append("fullName",this.fullName);
+      formData.append("fullName", this.fullName);
       console.log("image", this.imageFile);
       this.$apiClient
         .post("/api/v1/users/signup", formData)
         .then((response) => {
-          if(response.data.status===1){
-           this.successMessage=response.data.message;
-           this.showSuccess=true;
+          if (response.data.status === 1) {
+            this.successMessage = response.data.message;
+            this.showSuccess = true;
           }
         })
         .catch((error) => {
-        this.errorMessage=error.response.data.message;
-        this.showError=true;
+          this.errorMessage = error.response.data.message;
+          this.showError = true;
         });
     },
   },

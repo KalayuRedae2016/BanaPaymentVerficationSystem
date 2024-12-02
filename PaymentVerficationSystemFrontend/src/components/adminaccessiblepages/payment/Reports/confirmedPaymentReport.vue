@@ -10,7 +10,7 @@
           </option>
         </select>
       </div>
-      <div class="flex flex-row border-b border-blue-500 pb-5">
+   
         <div class="flex flex-col">
           <div class="mt-5 w-full flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0">
            
@@ -63,53 +63,8 @@
               </select>
             </div>
           </div>
-        </div>
-
-        <div class="flex flex-row  mt-5 space-x-3 w-2/3 ">
-          <div class="flex flex-col space-y-3">
-            <button @click="thisYear()"
-              class="h-8 flex items-center bg-blue-200 text-black rounded-md px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
-              <i class="fas fa-calendar-alt text-sm lowercase mr-2 text-blue-500 text-blue-500"></i>
-              <span>This Year</span>
-            </button>
-            <button @click="thisSemi()"
-              class="h-8 flex items-center  bg-blue-200 text-black rounded-md px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
-              <i class="fas fa-calendar-minus text-sm lowercase mr-2 text-blue-500"></i>
-              <span>This Semi</span>
-            </button>
-
-          </div>
-          <div class="flex flex-col space-y-3">
-            <button @click="thisMonth()"
-              class="h-8 flex items-center  bg-blue-200 text-black rounded-md px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
-              <i class="fas fa-calendar-week text-sm lowercase mr-2 text-blue-500"></i>
-              <span>This Mon</span>
-            </button>
-
-            <button @click="thisWeek()"
-              class="h-8 flex items-center  bg-blue-200  text-black rounded-md px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
-              <i class="fas fa-calendar-check text-sm lowercase mr-2 text-blue-500"></i>
-              <span>This Week</span>
-            </button>
-
-          </div>
-          <div class="flex flex-col space-y-3">
-            <button @click="thisDay()"
-              class="h-8 flex items-center  bg-blue-200 text-black rounded-md px-4 py-2 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
-              <i class="fas fa-calendar-day text-sm lowercase mr-2 text-blue-500"></i>
-              <span>This Day</span>
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <button @click="printDiv()" class="custom-button mt-5">
-            <i class="fas fa-print"></i>
-          </button>
-        </div>
-      </div>
-      <!-- //select true or falses -->
-      <div class="mt-5 ml-10 mb-5">
+      
+        <div class="mt-5 ml-10 ">
         <p v-if="selectReportType" class="text-red-500">Please Select Report Type</p>
         <p v-if="selectYear" class="text-red-500">Please Select Year</p>
         <p v-if="selectSemiYear" class="text-red-500">
@@ -119,6 +74,47 @@
         <p v-if="selectWeek" class="text-red-500">Please Select Week</p>
         <p v-if="selectDay" class="text-red-500">Please Select Day</p>
       </div>
+        <div class="flex flex-row  mt-5 space-x-3 w-2/3 ">
+          <div class="flex flex-col space-y-3">
+            <button @click="thisYear()"
+              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
+              <i class="fas fa-calendar-alt text-sm lowercase mr-2 text-blue-500 text-blue-500"></i>
+              <span>This Year</span>
+            </button>
+            <button @click="thisSemi()"
+              class="h-12 lg:h-8  flex items-center  bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
+              <i class="fas fa-calendar-minus text-sm lowercase mr-2 text-blue-500"></i>
+              <span>This Semi</span>
+            </button>
+
+          </div>
+          <div class="flex flex-col space-y-3">
+            <button @click="thisMonth()"
+              class="h-12 lg:h-8 flex items-center  bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
+              <i class="fas fa-calendar-week text-sm lowercase mr-2 text-blue-500"></i>
+              <span>This Mon</span>
+            </button>
+
+            <button @click="thisWeek()"
+              class="h-12 lg:h-8  flex items-center  bg-blue-100  text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
+              <i class="fas fa-calendar-check text-sm lowercase mr-2 text-blue-500"></i>
+              <span>This Week</span>
+            </button>
+
+          </div>
+          <div class="flex flex-col space-y-3">
+            <button @click="thisDay()"
+              class="h-12 lg:h-8  flex items-center  bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50">
+              <i class="fas fa-calendar-day text-sm lowercase mr-2 text-blue-500"></i>
+              <span>This Day</span>
+            </button>
+          </div>
+        </div>
+
+     
+      </div>
+      <!-- //select true or falses -->
+      
       <div>
 
         <div class="flex flex-row">
@@ -128,11 +124,16 @@
               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
               @click="exportConfirmedToExcel()">
               <i class="fas fa-download"></i>
-              <span></span>
+              <span class="text-xs">Excel</span>
             </button>
+         
+          <button @click="printDiv()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-5 text-sm rounded flex items-center space-x-1">
+            <i class="fas fa-print"></i>
+          </button>
+        
           </p>
         </div>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto rounded-lg">
         <table v-if="reportLength > 0" class="min-w-full divide-y divide-gray-300 ">
           <thead class="bg-gray-50">
             <tr>
@@ -234,7 +235,7 @@
               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
               @click="exportPendingToExcel()">
               <i class="fas fa-download"></i>
-              <span></span>
+            <span class="text-xs">Excel</span>
             </button>
           </p>
 
@@ -254,7 +255,7 @@
               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
               @click="exportOverdueToExcel()">
               <i class="fas fa-download"></i>
-              <span></span>
+              <span class="text-xs">Excel</span>
             </button>
           </p>
 

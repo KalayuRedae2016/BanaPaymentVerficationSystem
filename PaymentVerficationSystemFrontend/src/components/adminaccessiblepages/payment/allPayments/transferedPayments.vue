@@ -99,10 +99,13 @@
             </tbody>
           </table>
 
-          <div
-            class="text-xs flex flex-row mt-6 items-center justify-center bg-white p-4 rounded-lg shadow-md border border-gray-200"
+       
+        </div>
+
+        <div
+            class="w-full text-xs flex flex-row mt-6 items-center justify-center bg-white p-4 rounded-lg shadow-md border border-gray-200"
           >
-            <h1 class="mr-4 text-lg font-semibold text-gray-800">Show More:</h1>
+            <h1 class="hidden mr-4 text-lg font-semibold text-gray-800">Show More:</h1>
 
             <!-- Items per Page Select -->
             <select
@@ -141,7 +144,6 @@
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
-        </div>
       </div>
     </div>
   </div>

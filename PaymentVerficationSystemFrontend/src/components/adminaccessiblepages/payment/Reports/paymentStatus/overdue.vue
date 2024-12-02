@@ -4,11 +4,11 @@
       Overdue Users
     </p>
     <div
-      class="border-t border-blue-500 px-5 pb-5 flex flex-col bg-white -mt-2"
+      class="border-t border-blue-500 px-2 pb-5 flex flex-col bg-white -mt-2"
     >
-      <div class="p-4 mt-8">
+      <div class="py-4 mt-8">
         <div class="flex items-center justify-between mb-4">
-          <div class="flex-1 mr-4">
+          <div class="flex-1 ">
             <div class="relative">
               <!-- Search Icon -->
               <span
@@ -35,7 +35,7 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search by Name, Email, Username"
-                class="w-full pl-10 pr-4 py-3 text-gray-700 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="text-xs w-full pl-10  py-3 text-gray-700 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -45,17 +45,17 @@
             <thead>
               <tr class="bg-gray-200">
                 <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                 >
                   UserCode
                 </th>
                 <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                 >
                   Full Name
                 </th>
                 <th
-                  class="w-32 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
+                  class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                 >
                   Overdue Payments
                 </th>
@@ -87,7 +87,9 @@
               </tr>
             </tbody>
           </table>
-          <div
+        
+        </div>
+        <div
             class="flex justify-between items-center mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
           >
             <!-- Pagination Controls -->
@@ -95,7 +97,7 @@
               <!-- Select Payments Per Page -->
               <label
                 for="payments-per-page"
-                class="mr-2 text-gray-600 font-medium"
+                class="mr-2 text-gray-600 font-medium hidden"
                 >Show:</label
               >
               <select
@@ -104,7 +106,7 @@
                 @change="changePerPageNumber()"
                 class="h-9 border border-gray-300 text-gray-500 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
               >
-                <option value="" disabled>Select</option>
+                <option value="" disabled>Show</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
                 <option value="10">10</option>
@@ -137,7 +139,6 @@
               </button>
             </div>
           </div>
-        </div>
       </div>
     </div>
   </div>

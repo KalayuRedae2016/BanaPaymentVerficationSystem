@@ -34,12 +34,17 @@
       <header
         class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400"
       >
-        <div class="logo">
+        <div class="logo flex flex-col lg:flex-row">
           <img
             src="../../../assets/img/banamall1.jpg"
             alt="Logo"
-            class="h-8 w-8 min-w-8 min-h-8 max-w-8 max-h-8"
+            class="h-8 w-8 min-w-8 min-h-8  max-w-8 max-h-8"
           />
+          <!-- <img
+            src="../../../assets/img/banaTextLogo.jpg"
+            alt="Logo"
+            class="mt-3 h-4 w-32 min-w-8 min-h-4 max-w-32 max-h-4 rounded-lg"
+          /> -->
         </div>
 
         <div class="flex items-center space-x-4">
@@ -173,7 +178,8 @@
           type="button"
           @click="toggleDropdown('sidebar')"
         >
-          <i class="fas fa-bars"></i>
+          <i class="fas fa-bars" v-if="!sidebarVisible"></i>
+          <i class="fas fa-x text-red-500" v-if="sidebarVisible"></i>
         </button>
       </header>
 
