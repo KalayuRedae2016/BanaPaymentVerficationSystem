@@ -161,7 +161,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
 });
 
 // Update a payment setting by ID
-exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
+exports.updatePaymentSettingBYId = catchAsync(async (req, res,next) => {
   //console.log(req.params.id);
     const settingId= req.params.id;
     const updatedData=req.body
@@ -202,3 +202,25 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res) => {
 
 });
 
+exports.deleteSetting = catchAsync(async (req, res, next) => {
+  //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
+  const deletedSetting = await PaymentSetting.findByIdAndDelete(req.query.id)
+  if (!deletedSetting) {
+    return next(new AppError("Payment entry not found", 404))
+  }
+  res.status(200).json({
+    status: 'success',
+    //data: null,
+    message: `Payment Deleted`
+  });
+});
+exports.deleteSettings = catchAsync(async (req, res, next) => {
+  const deletedSettings = await PaymentSetting.deleteMany({});  // Deletes all documents
+  if (deletedSettings.deletedCount === 0) {
+    return next(new AppError("No Setting entries found to delete", 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    message: `${deletedSettings.deletedCount} Settings Deleted`
+  });
+});

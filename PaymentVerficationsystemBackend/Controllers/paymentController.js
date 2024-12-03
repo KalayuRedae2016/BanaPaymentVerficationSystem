@@ -1318,11 +1318,9 @@ exports.deletePayment = catchAsync(async (req, res, next) => {
 });
 exports.deletePayments = catchAsync(async (req, res, next) => {
   const deletedPayments = await Payment.deleteMany({});  // Deletes all documents
-
   if (deletedPayments.deletedCount === 0) {
     return next(new AppError("No payment entries found to delete", 404));
   }
-
   res.status(200).json({
     status: 'success',
     message: `${deletedPayments.deletedCount} Payments Deleted`
