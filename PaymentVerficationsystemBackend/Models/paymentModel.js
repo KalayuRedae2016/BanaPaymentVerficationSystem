@@ -121,7 +121,7 @@ const paymentSchema = new mongoose.Schema(
 paymentSchema.pre('save', function (next) {
   // Automatically calculate the total amount before saving
   let totalExpectedAmount = 0;
-  ['urgent', 'regular', 'subsidy', 'service', 'penalty'].forEach((type) => {
+  ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach((type) => {
     if (this[type]) {
       totalExpectedAmount += this[type].amount;
     }
@@ -131,7 +131,7 @@ paymentSchema.pre('save', function (next) {
 });
 // Custom validation to ensure amount is positive
 paymentSchema.pre('validate', function (next) {
-  ['urgent', 'regular', 'subsidy', 'service', 'penalty'].forEach((type) => {
+  ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach((type) => {
     if (this[type] && this[type].amount < 0) {
       return next(new Error('Amount cannot be negative'));
     }

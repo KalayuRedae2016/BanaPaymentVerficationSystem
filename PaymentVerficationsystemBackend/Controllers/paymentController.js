@@ -1590,6 +1590,9 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
 exports.reports = catchAsync(async (req, res, next) => {
   const { paymentType, userCode, fullName, isPaid, status, bankType, year, month, timeRange } = req.query;
   const paymentQuery = {};
+  if(!timeRange){
+    return next (new AppError("Time Range is required"),400)
+  }
 
   if (paymentType) paymentQuery.paymentType = new RegExp(paymentType, 'i');
   if (userCode) paymentQuery.userCode = new RegExp(userCode, 'i');
