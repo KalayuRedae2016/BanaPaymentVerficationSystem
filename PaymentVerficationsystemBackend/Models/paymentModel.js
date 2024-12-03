@@ -19,7 +19,7 @@ const paymentTypeSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
-  penalty: {
+  penality: {
     type: Number,
     default: 0,
   },

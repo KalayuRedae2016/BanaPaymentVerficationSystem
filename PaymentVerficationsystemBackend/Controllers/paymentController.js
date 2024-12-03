@@ -146,18 +146,18 @@ exports.searchBills = async (req, res) => {
           const daysLate = Math.max(0, Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24)));
           const amountToPay = payment[type].amount;
 
-          // Determine penalty rate based on late days
+          // Determine penality rate based on late days
           const penaltyRate = paymentSetting[
             `penalityLate${daysLate > 10 ? 'Above10' : daysLate > 5 ? '10' : '5'}Days`
           ] || 0;
 
-          // Calculate penalty only if there are late days
-          const penalty = amountToPay * (daysLate > 0 ? penaltyRate : 0);
+          // Calculate penality only if there are late days
+          const penality = amountToPay * (daysLate > 0 ? penaltyRate : 0);
 
-          // Accumulate penalty for totalPenality
-          totalPenality += penalty;
+          // Accumulate penality for totalPenality
+          totalPenality += penality;
 
-          // console.log("Penalty:", penalty);
+          // console.log("Penalty:", penality);
           // console.log("Amount to Pay:", amountToPay);
           // console.log("Days Late:", daysLate);
           // console.log("Total Penalty:", totalPenality);
@@ -167,7 +167,7 @@ exports.searchBills = async (req, res) => {
             customerName: payment.user.fullName,
             mobile: payment.user.phoneNumber || '',
             amount: amountToPay,
-            penality: type === 'service' ? totalPenality : penalty || 0, // Use accumulated penalty for service type
+            penality: type === 'service' ? totalPenality : penality || 0, // Use accumulated penality for service type
             servicefee: 0,
             billCCY: 'ETB',
             PaymentTerm: `${type} Payment for active month ${payment.activeMonth} is ${payment.status}`,
@@ -273,16 +273,16 @@ exports.getMoreBills = async (req, res) => {
           const daysLate = Math.max(0, Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24)));
           const amountToPay = paymentType.amount;
 
-          // Determine penalty rate based on late days
+          // Determine penality rate based on late days
           const penaltyRate = paymentSetting[
             `penalityLate${daysLate > 10 ? 'Above10' : daysLate > 5 ? '10' : '5'}Days`
           ] || 0;
 
-          // Calculate penalty only if there are late days
-          const penalty = amountToPay * (daysLate > 0 ? penaltyRate : 0);
+          // Calculate penality only if there are late days
+          const penality = amountToPay * (daysLate > 0 ? penaltyRate : 0);
 
-          // Accumulate penalty for totalPenality
-          totalPenality += penalty;
+          // Accumulate penality for totalPenality
+          totalPenality += penality;
         }
 
         // Check if paymentType ID matches the request, and it's not paid
@@ -442,7 +442,7 @@ exports.confirmBills = async (req, res) => {
         unpaidBill["service"].amount = serviceAmount;
         unpaidBill["service"].bankType = bankType;
         unpaidBill["service"].TTNumber = transactionNumber;
-        unpaidBill["service"].penalty = unpaidBill["service"].penalty || 0;
+        unpaidBill["service"].penality = unpaidBill["service"].penality || 0;
         unpaidBill["service"].isPaid = true;
         unpaidBill["service"].paidAt = new Date();
         unpaidBill["service"].daysLate = unpaidBill["service"].daysLate || 0;
@@ -450,7 +450,7 @@ exports.confirmBills = async (req, res) => {
         unpaidBill["penality"].amount = penalityAmount;
         unpaidBill["penality"].bankType = bankType;
         unpaidBill["penality"].TTNumber = transactionNumber;
-        unpaidBill["penality"].penalty = unpaidBill["penality"].penalty || 0;
+        unpaidBill["penality"].penality = unpaidBill["penality"].penality || 0;
         unpaidBill["penality"].isPaid = true;
         unpaidBill["penality"].paidAt = new Date();
 
@@ -461,7 +461,7 @@ exports.confirmBills = async (req, res) => {
         unpaidBill[subdocumentField].amount = amount;
         unpaidBill[subdocumentField].bankType = bankType;
         unpaidBill[subdocumentField].TTNumber = transactionNumber;
-        unpaidBill[subdocumentField].penalty = unpaidBill[subdocumentField].penalty || 0;
+        unpaidBill[subdocumentField].penality = unpaidBill[subdocumentField].penality || 0;
         unpaidBill[subdocumentField].isPaid = true;
         unpaidBill[subdocumentField].paidAt = new Date();
         // Ensure daysLate is always a number
@@ -600,7 +600,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
   // Utility function for payment details
   const getPaymentDetails = (payment, type) => ({
     amount: payment[type]?.amount || 0,
-    penalty: payment[type]?.penalty || 0,
+    penality: payment[type]?.penality || 0,
     daysLate: payment[type]?.daysLate || 0,
     bankType: payment[type]?.bankType || null,
     TTNumber: payment[type]?.TTNumber || null,
@@ -687,7 +687,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
       TTNumber: isPaid ? updates.TTNumber ?? existing.TTNumber : null,
-      penalty: updates.penalty?? existing.penalty, // Updating penalty amount
+      penality: updates.penality?? existing.penality, // Updating penality amount
       isPaid,
       paidAt,
       daysLate: updates.daysLate ?? existing.daysLate,
@@ -709,7 +709,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.penality.amount=penality.amount,
     unpaidBill.penality.bankType=penality.bankType,
     unpaidBill.penality.TTNumber=penality.TTNumber,
-    unpaidBill.penality.penalty=0
+    unpaidBill.penality.penality=0
     unpaidBill.penality.isPaid=penality.isPaid,
     unpaidBill.penality.paidAt=penality.paidAt||Date.now()||null
     unpaidBill.penality.daysLate=penality.daysLate||null
@@ -943,13 +943,16 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
 
 exports.getPenality = catchAsync(async (req, res, next) => {
   const { paymentType, activeYear, activeMonth, paymentDate } = req.query;
+
+  // Validate required query parameters
   if (!paymentType || !activeYear || !activeMonth) {
-    return next(new AppError(`paymentType, activeYear, or activeMonth are missed, please try again.`, 400));
+    return next(new AppError(`paymentType, activeYear, or activeMonth are missing. Please try again.`, 400));
   }
 
+  // Fetch payment setting for the specified year and month
   const paymentSetting = await PaymentSetting.findOne({ activeYear, activeMonth });
   if (!paymentSetting) {
-    return next(new AppError(`Payment setting not found for the specified ${activeYear} and ${activeMonth}`, 400))
+    return next(new AppError(`Payment setting not found for the specified ${activeYear} and ${activeMonth}.`, 400));
   }
 
   const {
@@ -964,18 +967,26 @@ exports.getPenality = catchAsync(async (req, res, next) => {
     serviceAmount,
   } = paymentSetting;
 
-  const dueDate = new Date(paymentSetting.endingDate);
+  const dueDate = new Date(endingDate);
   const currentDate = new Date();
-
   const paymentDateObj = paymentDate ? new Date(paymentDate) : currentDate;
-  if (paymentDateObj <= new Date(startingDate) || paymentDateObj > currentDate) {
-    return next(new AppError(`Payment date must be greater than the ${startingDate.toLocaleDateString()} and less than or equal to the ${currentDate.toLocaleDateString()}.`, 400))
+
+  // Validate payment date
+  if (paymentDateObj < new Date(startingDate) || paymentDateObj > currentDate) {
+    return next(
+      new AppError(
+        `Payment date must be greater than ${new Date(startingDate).toLocaleDateString()} and less than or equal to ${currentDate.toLocaleDateString()}.`,
+        400
+      )
+    );
   }
 
-  let daysLate = Number(Math.ceil((paymentDateObj - dueDate) / (1000 * 3600 * 24)));
+  // Calculate days late
+  let daysLate = Math.ceil((paymentDateObj - dueDate) / (1000 * 3600 * 24));
   daysLate = daysLate > 0 ? daysLate : 0;
 
-  let amount;//calculate the amount based the payment Type
+  // Determine the payment amount based on the payment type
+  let amount;
   switch (paymentType) {
     case 'regular':
       amount = regularAmount;
@@ -986,17 +997,15 @@ exports.getPenality = catchAsync(async (req, res, next) => {
     case 'subsidy':
       amount = subsidyAmount;
       break;
-    // case 'service':
-    //   amount = serviceAmount;
-    //   break;
+    case 'service':
+      amount = serviceAmount;
+      break;
     default:
-      return res.status(400).json({
-        status: 'Error',
-        message: 'Invalid payment type',
-      });
+      return next(new AppError('Invalid payment type. Please provide a valid type.', 400));
   }
 
-  let penality = 0;// Calculate the penalty based on the days late
+  // Calculate penalty based on days late
+  let penality = 0;
   if (daysLate > 0 && daysLate <= 5) {
     penality = amount * penalityLate5Days;
   } else if (daysLate > 5 && daysLate <= 10) {
@@ -1004,19 +1013,25 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   } else if (daysLate > 10) {
     penality = amount * penalityLateAbove10Days;
   }
-  //console.log(`Penality:${penality},dasyLate:${daysLate},amount:${amount}`)
 
+  // Special condition for service payment type (penalty is always 0)
+  if (paymentType === 'service') {
+    penality = 0;
+  }
+
+  // Return penalty details
   res.status(200).json({
     status: 'Success',
-    message: `Penality for ${paymentType} on ${activeYear}-${activeMonth}`,
+    message: `Penalty for ${paymentType} on ${activeYear}-${activeMonth}`,
     paymentType,
-    dueDate: formatDate(dueDate.toLocaleDateString()),
-    paymentDate: formatDate(paymentDateObj.toLocaleDateString()),
+    dueDate: formatDate(dueDate),
+    paymentDate: formatDate(paymentDateObj),
     daysLate,
     penality,
     amount,
   });
 });
+
 
 exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const paymentDate = req.query.paymentDate ? new Date(req.query.paymentDate) : new Date(); // User-provided or current date
@@ -1061,43 +1076,43 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
       // Helper function to calculate penalties
       const calculatePenalty = (paymentType, amount) => {
-        if (!paymentType) return { penalty: 0, daysLate: 0 };
+        if (!paymentType) return { penality: 0, daysLate: 0 };
 
         const dueDate = new Date(endingDate);
         let daysLate = Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24));
         daysLate = daysLate > 0 ? daysLate : 0;
 
-        let penalty = 0;
+        let penality = 0;
         if (daysLate > 0 && daysLate <= 5) {
-          penalty = amount * penalityLate5Days;
+          penality = amount * penalityLate5Days;
         } else if (daysLate > 5 && daysLate <= 10) {
-          penalty = amount * penalityLate10Days;
+          penality = amount * penalityLate10Days;
         } else if (daysLate > 10) {
-          penalty = amount * penalityLateAbove10Days;
+          penality = amount * penalityLateAbove10Days;
         }
 
-        return { penalty, daysLate };
+        return { penality, daysLate };
       };
 
       // Calculate penalties for each payment type
       const regularPenalty = calculatePenalty(regular, regularAmount);
       const urgentPenalty = calculatePenalty(urgent, urgentAmount);
       const subsidyPenalty = calculatePenalty(subsidy, subsidyAmount);
-      const totalPenaltyAmount = regularPenalty.penalty + urgentPenalty.penalty + subsidyPenalty.penalty;
+      const totalPenaltyAmount = regularPenalty.penality + urgentPenalty.penality + subsidyPenalty.penality;
 
       updateData = {
-        'regular.penalty': regularPenalty.penalty,
+        'regular.penality': regularPenalty.penality,
         'regular.daysLate': regularPenalty.daysLate,
-        'urgent.penalty': urgentPenalty.penalty,
+        'urgent.penality': urgentPenalty.penality,
         'urgent.daysLate': urgentPenalty.daysLate,
-        'subsidy.penalty': subsidyPenalty.penalty,
+        'subsidy.penality': subsidyPenalty.penality,
         'subsidy.daysLate': subsidyPenalty.daysLate,
         'penality.amount':totalPenaltyAmount,
         'totalExpectedAmount':baseAmount+registrationFee+totalPenaltyAmount
       };
     }
 
-    // Add the status and penalty updates to the bulk operations
+    // Add the status and penality updates to the bulk operations
     bulkUpdates.push({
       updateOne: {
         filter: { _id: paymentId },
@@ -1394,15 +1409,15 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   // Initialize payments breakdown for the specified year
   const paymentsPerYear = paymentsWithYear.map(payment => {
     const regularAmount = payment.regular?.isPaid ? payment.regular.amount : 0;
-    const regularPenality = payment.regular?.isPaid ? payment.regular.penalty : 0;
+    const regularPenality = payment.regular?.isPaid ? payment.regular.penality : 0;
     const urgentAmount = payment.urgent?.isPaid ? payment.urgent.amount : 0;
-    const urgentPenality = payment.urgent?.isPaid ? payment.urgent.penalty : 0;
+    const urgentPenality = payment.urgent?.isPaid ? payment.urgent.penality : 0;
 
     const subsidyAmount = payment.subsidy?.isPaid ? payment.subsidy.amount : 0;
-    const subsidyPenality = payment.subsidy?.isPaid ? payment.subsidy.penalty : 0;
+    const subsidyPenality = payment.subsidy?.isPaid ? payment.subsidy.penality : 0;
 
     const serviceAmount = payment.service?.isPaid ? payment.service.amount : 0;
-    const servicePenality = payment.service?.isPaid ? payment.service.penalty : 0;
+    const servicePenality = payment.service?.isPaid ? payment.service.penality : 0;
 
     const penalityAmount = payment.penality?.isPaid ? payment.penality.amount : 0;
     const registrationAmount = payment.registrationFee || 0;
