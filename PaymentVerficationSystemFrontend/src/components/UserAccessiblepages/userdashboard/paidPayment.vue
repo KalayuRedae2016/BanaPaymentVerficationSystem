@@ -1,371 +1,387 @@
 <template>
   <div>
-  <div class="p-4">
-    <div class="flex flex-row space-x-5">
-        <div class="flex flex-row   w-1/2 space-x-3">
-        <label for="month" class="block text-sm font-medium text-gray-700">Year</label>
-        <select
-          v-model="year"
-          id="month"
-          class="custom-select"
-          @click="getData()"
-        >
-          <option value="" disabled>Select Year</option>
-           <option  v-for="year in $years" :key="year" :value="year">{{year}}</option>
-        </select>
-      </div>
-      <div class=" flex flex-row w-1/2 space-x-3">
-        <label for="month" class="block text-sm font-medium text-gray-700"
-          >Month</label
-        >
-        <select v-model="month"  id="month" class="custom-select" @change="getData()">
-          <option value="" disabled>Select Month</option>
-          <option v-for="month in $months" :key="month" :value="month.value">{{month.name}}</option>
-        </select>
-      </div>
-    </div>
-    <div>
-      <div class=" ml-5 ">
-        <div
-          class="cursor-pointer"
+    <div class="p-4">
+     
+        <div class="flex-row">
         
-          :class="[
-            'p-4 border-b cursor-pointer',
-          
-          ]"
-        >
-          <div class=" flex flex-col space-y-5">
-          
+          <select
+            v-model="year"
+            id="month"
+            class="w-1/2 custom-select"
+            @click="getData()"
+          >
+            <option value="" disabled>Select Year</option>
+            <option v-for="year in $years" :key="year" :value="year">
+              {{ year }}
+            </option>
+          </select>
+     
+      </div>
 
-            <div class="border-b border-gray-500">
-              <table class="w-full bg-white">
-                <thead>
-                  <tr class="bg-gray-200">
-                    <th
-                      class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      Metric
-                    </th>
-                    <th
-                      class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      Amount
-                    </th>
-                    <th
-                      class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      Payment Date
-                    </th>
-                    <th
-                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      Days Late
-                    </th>
-                    <th
-                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      Penality
-                    </th>
 
-                    <th
-                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      Bank Type
-                    </th>
-                    <th
-                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      TT Number
-                    </th>
-                    <th
-                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      Paid
-                    </th>
-                  
-                  </tr>
-                </thead>
+  <div class="w-full h-screen">
+    <iframe
+      :src="pdfUrl"
+      class="w-full h-full border-none"
+      frameborder="0"
+    >
+  </iframe>
+</div>
+
+
+
+      <div class="space-y-2">
+  <ul class="bg-white rounded-md shadow-md divide-y divide-gray-200">
+    <li class="flex items-center justify-between px-4 py-2">
+      <a href="#" class="hover:bg-blue-100 hover:text-blue-700 transition duration-150">
+        December
+      </a>
+      <button @click="downloadReceiptAsPDF()" class="text-blue-500 hover:underline">
+        View Receipt
+      </button>
+      <button @click="downloadReceiptAsPDF()" class="text-blue-500 hover:underline">
+        Download Receipt
+      </button>
+    
+    </li>
+    <li class="flex items-center justify-between px-4 py-2">
+      <a href="#" class="hover:bg-blue-100 hover:text-blue-700 transition duration-150">
+        November
+      </a>
+      <button @click="printDiv()" class="text-blue-500 hover:underline">
+        Download
+      </button>
+    </li>
+    <li class="flex items-center justify-between px-4 py-2">
+      <a href="#" class="hover:bg-blue-100 hover:text-blue-700 transition duration-150">
+        October
+      </a>
+      <button @click="printDiv()" class="text-blue-500 hover:underline">
+        Download
+      </button>
+    </li>
+  </ul>
+</div>
+
+
+      <!-- <div>
+        <div class="ml-5">
+          <div class="cursor-pointer" :class="['p-4 border-b cursor-pointer']">
+            <div class="flex flex-col space-y-5">
+              <div class="border-b border-gray-500">
+                <table class="w-full bg-white">
+                  <thead>
+                    <tr class="bg-gray-200">
+                      <th
+                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        Metric
+                      </th>
+                      <th
+                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        Amount
+                      </th>
+                      <th
+                        class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        Payment Date
+                      </th>
+                      <th
+                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        Days Late
+                      </th>
+                      <th
+                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        Penality
+                      </th>
+
+                      <th
+                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        Bank Type
+                      </th>
+                      <th
+                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        TT Number
+                      </th>
+                      <th
+                        class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      >
+                        Paid
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        Regular
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.amount }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.paidAt }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.daysLate }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.penalty }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.bankType }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.TTNumber }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.isPaid }}
+                      </td>
+                    </tr>
+                    <tr v-if="payment.subsidy.amount > 0">
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        subsidy
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.subsidy.amount }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.subsidy.paidAt }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.subsidy.daysLate }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.subsidy.penalty }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.subsidy.bankType }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.subsidy.TTNumber }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.subsidy.isPaid }}
+                      </td>
+                    </tr>
+                    <tr v-if="payment.urgent.amount > 0">
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        Urgent
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.urgent.amount }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.regular.paidAt }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.urgent.daysLate }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.urgent.penalty }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.urgent.bankType }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.urgent.TTNumber }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.urgent.isPaid }}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        Service
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.service.amount }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.service.paidAt }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.service.daysLate }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.service.penalty }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.service.bankType }}
+                      </td>
+
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.service.TTNumber }}
+                      </td>
+                      <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        {{ payment.service.isPaid }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="flex flex-row items-center">
+                <p class="text-indigo-800 text-xl font-extrabold"></p>
+                <div class="ml-auto">
+                  <button @click="printDiv()" class="custom-button">
+                    Get Receipt
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </div>
+    <div class="w-full flex flex-row hidden" id="printable-area">
+    <!-- First Receipt -->
+    <div class="w-full p-2 receipt border-4 border-red-500 border-dotted">
+      <div class="bg-green-200 text-blue-800 p-2 relative">
+        <img src="../../../assets/img/head.png" alt="Barcode" class="mb-3 w-full" />
+        <div class="flex items-center justify-between">
+          <div class="text-xs flex items-center space-x-2">
+            <span class="font-semibold">BillCode:</span>
+            <span>{{ payment.billCode }}</span>
+          </div>
+          <div class="text-xs flex items-center space-x-2">
+            <span class="font-semibold">Confirmation Date:</span>
+            <span>{{ payment.confirmedDate }}</span>
+          </div>
+        </div>
+  
+        <h2 class="text-xs font-semibold mt-2">Company Information</h2>
+        <div class="grid grid-cols-2 gap-2 mt-1">
+          <div class="bg-white border border-gray-300 p-2 relative">
+            <!-- Wrapper for the table and the watermark image -->
+            <div class="relative">
+            <table class="w-full text-xs relative z-10">
                 <tbody>
                   <tr>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      Regular
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{payment.regular.amount}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.regular.paidAt}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.regular.daysLate}}
-                    </td>
-                    <td
-                      class="p-3 text-sm text-gray-700 whitespace-nowrap "
-                    >
-                   
-                      {{payment.regular.penalty}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{payment.regular.bankType}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{payment.regular.TTNumber}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{payment.regular.isPaid}}
-                    </td>
-                  
-                  </tr>
-                  <tr v-if="payment.subsidy.amount>0">
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      subsidy
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.subsidy.amount}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.subsidy.paidAt}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{payment.subsidy.daysLate}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                   {{payment.subsidy.penalty}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.subsidy.bankType}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {{payment.subsidy.TTNumber}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{payment.subsidy.isPaid}}
-                    </td>
-                   
-
-                  </tr>
-                  <tr v-if="payment.urgent.amount>0">
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      Urgent
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.urgent.amount}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {{payment.regular.paidAt}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.urgent.daysLate}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.urgent.penalty}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.urgent.bankType}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {{payment.urgent.TTNumber}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{payment.urgent.isPaid}}
-                    </td>
+                    <td class="font-semibold">Country:</td>
+                    <td>{{ Country }}</td>
                   </tr>
                   <tr>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      Service
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.service.amount}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.service.paidAt}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {{payment.service.daysLate}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {{payment.service.penalty}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.service.bankType}}
-                    </td>
-
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {{payment.service.TTNumber}}
-                    </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                     {{payment.service.isPaid}}
-                    </td>
-                  
+                    <td class="font-semibold">City:</td>
+                    <td>{{ City }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-         <div class="flex flex-row items-center">
-              <p class="text-indigo-800 text-xl font-extrabold">
-               
-              </p>
-              <div class="ml-auto">
-                <button
-                  @click="printDiv()"
-                  class="custom-button"
-                >
-                  Get Receipt
-                </button>
-              </div>
-            </div> 
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
- <div class="w-full flex flex-row hidden" id="printablee-area">
-  <!-- First Receipt -->
-  <div class="w-full p-2 receipt border-4 border-red-500 border-dotted">
-    <div class="bg-green-200 text-blue-800 p-2 relative">
-      <img src="../../../assets/img/head.png" alt="Barcode" class="mb-3 w-full" />
-      <div class="flex items-center justify-between">
-        <div class="text-xs flex items-center space-x-2">
-          <span class="font-semibold">BillCode:</span>
-          <span>{{ payment.billCode }}</span>
-        </div>
-        <div class="text-xs flex items-center space-x-2">
-          <span class="font-semibold">Confirmation Date:</span>
-          <span>{{ payment.confirmedDate }}</span>
-        </div>
-      </div>
-
-      <h2 class="text-xs font-semibold mt-2">Company Information</h2>
-      <div class="grid grid-cols-2 gap-2 mt-1">
-        <div class="bg-white border border-gray-300 p-2 relative">
-          <!-- Wrapper for the table and the watermark image -->
-          <div class="relative">
-          <table class="w-full text-xs relative z-10">
+          <div class="bg-white border border-gray-300 p-2">
+            <table class="w-full text-xs">
               <tbody>
                 <tr>
-                  <td class="font-semibold">Country:</td>
-                  <td>{{ Country }}</td>
+                  <td class="font-semibold">Email:</td>
+                  <td>{{ Email }}</td>
                 </tr>
                 <tr>
-                  <td class="font-semibold">City:</td>
-                  <td>{{ City }}</td>
+                  <td class="font-semibold">Tel:</td>
+                  <td>{{ Tel }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Address:</td>
+                  <td>{{ Address }}</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <div class="bg-white border border-gray-300 p-2">
-          <table class="w-full text-xs">
-            <tbody>
-              <tr>
-                <td class="font-semibold">Email:</td>
-                <td>{{ Email }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Tel:</td>
-                <td>{{ Tel }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Address:</td>
-                <td>{{ Address }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="bg-white border border-gray-300 p-2 mt-2 relative">
-        <div class="relative">
-          <img src="../../../assets/img/sample.jpg" alt="Sample Stamp" class="absolute inset-0 w-64 h-64  mx-auto my-auto ">
-          <table class="w-full text-xs relative z-10">
-            <thead>
-              <tr>
-                <th class="text-left">Payment Information</th>
-                <th class="text-left"></th>
-                <th class="text-right"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="font-semibold">UserCode</td>
-                <td></td>
-                <td class="text-right">{{ payment.userCode }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">FullName</td>
-                <td></td>
-                <td class="text-right">{{ payment.fullName }}</td>
-              </tr>
-            
-              <tr>
-                <td class="font-semibold">PaymentTerm</td>
-                <td></td>
-                <td class="text-right">{{ paymentTerm }}</td>
-              </tr>
-             
+  
+        <div class="bg-white border border-gray-300 p-2 mt-2 relative">
+          <div class="relative">
+            <img src="../../../assets/img/sample.jpg" alt="Sample Stamp" class="absolute inset-0 w-64 h-64  mx-auto my-auto ">
+            <table class="w-full text-xs relative z-10">
+              <thead>
+                <tr>
+                  <th class="text-left">Payment Information</th>
+                  <th class="text-left"></th>
+                  <th class="text-right"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="font-semibold">UserCode</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.userCode }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">FullName</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.fullName }}</td>
+                </tr>
               
-              <tr>
-                <td class="font-semibold">Regular Amount</td>
-                <td></td>
-                <td class="text-right">{{payment.regular.amount }}</td>
-              </tr>
-             
-              <tr>
-                <td class="font-semibold">Subsidy Amount</td>
-                <td></td>
-                <td class="text-right">{{ payment.subsidy.amount}}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Urgent Amount</td>
-                <td></td>
-                <td class="text-right">{{ payment.urgent.amount}}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Service Amount</td>
-                <td></td>
-                <td class="text-right">{{ payment.service.amount }}</td>
-              </tr>
-              <tr>
-                <td class="font-semibold">Penalty</td>
-                <td></td>
-                <td class="text-right">{{ payment.penality.amount }}</td>
-              </tr>
-              
-              <tr>
-                <td class="font-semibold">Total Block Amount Paid</td>
-                <td></td>
-                <td class="text-right">{{ payment.regular.amount + payment.subsidy.amount + payment.urgent.amount }}</td>
-              </tr>
-              <tr v-if="payment.penality.amount>0">
-                <td class="font-semibold">Total Service Amount Paid</td>
-                <td></td>
-                <td class="text-right">{{ payment.service.amount + payment.penality.amount }}</td>
-              </tr>
-            </tbody>
-          </table>
+                <tr>
+                  <td class="font-semibold">PaymentTerm</td>
+                  <td></td>
+                  <td class="text-right">{{ paymentTerm }}</td>
+                </tr>
+               
+                
+                <tr>
+                  <td class="font-semibold">Regular Amount</td>
+                  <td></td>
+                  <td class="text-right">{{payment.regular.amount }}</td>
+                </tr>
+               
+                <tr>
+                  <td class="font-semibold">Subsidy Amount</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.subsidy.amount}}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Urgent Amount</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.urgent.amount}}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Service Amount</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.service.amount }}</td>
+                </tr>
+                <tr>
+                  <td class="font-semibold">Penalty</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.penality.amount }}</td>
+                </tr>
+                
+                <tr>
+                  <td class="font-semibold">Total Block Amount Paid</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.regular.amount + payment.subsidy.amount + payment.urgent.amount }}</td>
+                </tr>
+                <tr v-if="payment.penality.amount>0">
+                  <td class="font-semibold">Total Service Amount Paid</td>
+                  <td></td>
+                  <td class="text-right">{{ payment.service.amount + payment.penality.amount }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+         
         </div>
-       
+        <div class=" mx-auto w-32 h-32 mt-10" id="qrCodeImageContainer"></div>
+  
+     
+        <p class="text-center text-xs mt-2">The Best Mole Ever</p>
+        <p class="text-center text-xs mt-1">
+          &copy; 2024 Bana Mole. All rights reserved.
+        </p>
       </div>
-      <div class=" mx-auto w-32 h-32 mt-10" id="qrCodeImageContainer"></div>
-
-   
-      <p class="text-center text-xs mt-2">The Best Mole Ever</p>
-      <p class="text-center text-xs mt-1">
-        &copy; 2024 Bana Mole. All rights reserved.
-      </p>
+     </div>
     </div>
-   </div>
-  </div>
-
-  <div class="container hidden" id="printable-area">
+    <div class="container hidden" id="printablee-area">
       <div class="receipt">
         <!-- 
   <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
@@ -379,7 +395,6 @@
             alt=""
             style="max-width: 100%; height: auto; display: block"
           />
-         
         </div>
 
         <div class="receipt-header" style="background-color: white">
@@ -435,8 +450,12 @@
         <h2 class="section-title" style="color: #622e2e; font-weight: bold">
           Payment Information
         </h2>
-        <img src="../../../assets/img/sample.jpg" alt="Sample Stamp" class="absolute inset-0 w-64 h-64  mx-auto my-auto ">
-         
+        <img
+          src="../../../assets/img/sample.jpg"
+          alt="Sample Stamp"
+          class="absolute inset-0 w-64 h-64 mx-auto my-auto"
+        />
+
         <table class="table">
           <tr>
             <td style="color: #333; font-weight: bold">FullName</td>
@@ -558,28 +577,32 @@
             reserved.
           </div>
         </div>
-
-        
       </div>
-
-   
     </div>
-</div>
 
+
+
+  </div>
 </template>
 <script>
-import QRCode from 'qrcode';
-import { mapGetters } from "vuex";
 
+import QRCode from "qrcode";
+import html2pdf from "html2pdf.js";
+import { mapGetters } from "vuex";
+import pdf from "vue-pdf";
 export default {
+  components: {
+    pdf,
+  },
   data() {
     return {
-      year:"",
-      month:"",
-      selectYear:false,
-      selectMonth:false,
-       // we will try from db then. but now from static
-      paymentTerm:"monthly",
+      pdfUrl: require("@/assets/receipts/r.pdf"),
+      year: "",
+      month: "",
+      selectYear: false,
+      selectMonth: false,
+      // we will try from db then. but now from static
+      paymentTerm: "monthly",
       websiteUrl: "https://bannamall.com/",
       Email: "bannamall@gmail.com",
       Country: "Ethipia",
@@ -588,56 +611,53 @@ export default {
       City: "Mekelle",
       receiptDate: new Date(),
       //
-       payment: {
-        "urgent": {
-        "amount": 40000,
-        "bankType": null,
-        "TTNumber": null,
-        "_id": "66b4b6dcb669aa17475c9f4c",
-        "isPaid": false,
-        "penality": 0,
-        "paidAt": "2024-08-08T14:57:15.581Z"
+      payment: {
+        urgent: {
+          amount: 40000,
+          bankType: null,
+          TTNumber: null,
+          _id: "66b4b6dcb669aa17475c9f4c",
+          isPaid: false,
+          penality: 0,
+          paidAt: "2024-08-08T14:57:15.581Z",
+        },
+        regular: {
+          amount: 5000,
+          bankType: null,
+          TTNumber: null,
+          _id: "66b4b6dcb669aa17475c9f4d",
+          isPaid: false,
+          penality: 0,
+          paidAt: "2024-08-08T14:57:15.581Z",
+        },
+        subsidy: {
+          amount: 10000,
+          bankType: null,
+          TTNumber: null,
+          _id: "66b4b6dcb669aa17475c9f4e",
+          isPaid: false,
+          penality: 0,
+          paidAt: "2024-08-08T14:57:15.581Z",
+        },
+        service: {
+          amount: 200,
+          bankType: null,
+          TTNumber: null,
+          _id: "66b4b6dcb669aa17475c9f4f",
+          isPaid: false,
+          penality: 0,
+          paidAt: "2024-08-08T14:57:15.581Z",
+        },
+        penality: 0,
+        baseAmount: 55752,
+        totalExpectedAmount: 55000,
+        daysLate: -22,
+        status: "pending",
+        isPaid: false,
+        TotalPenality: 0,
       },
-      "regular": {
-        "amount": 5000,
-        "bankType": null,
-        "TTNumber": null,
-        "_id": "66b4b6dcb669aa17475c9f4d",
-        "isPaid": false,
-        "penality": 0,
-        "paidAt": "2024-08-08T14:57:15.581Z"
-      },
-      "subsidy": {
-        "amount": 10000,
-        "bankType": null,
-        "TTNumber": null,
-        "_id": "66b4b6dcb669aa17475c9f4e",
-        "isPaid": false,
-        "penality": 0,
-        "paidAt": "2024-08-08T14:57:15.581Z"
-      },
-      "service": {
-        "amount": 200,
-        "bankType": null,
-        "TTNumber": null,
-        "_id": "66b4b6dcb669aa17475c9f4f",
-        "isPaid": false,
-        "penality": 0,
-        "paidAt": "2024-08-08T14:57:15.581Z"
-      },
-      "penality": 0,
-      "baseAmount": 55752,
-      "totalExpectedAmount": 55000,
-      "daysLate": -22,
-      "status": "pending",
-      "isPaid": false,
-      "TotalPenality": 0
-    },
-    
-  
 
-
- receiptData: {
+      receiptData: {
         BillCode: "BC123456",
         Date: "2024-08-06",
         Country: "Ethiopia",
@@ -656,12 +676,18 @@ export default {
         Penalty: "300",
         DaysLate: "5",
         TransferredAmount: "8500",
-        website:"bannamall.com"
+        website: "bannamall.com",
       },
     };
   },
   computed: {
-    ...mapGetters(["getToken", "getUserId", "getLocale", "getName","getUserCode"]),
+    ...mapGetters([
+      "getToken",
+      "getUserId",
+      "getLocale",
+      "getName",
+      "getUserCode",
+    ]),
     userId() {
       return this.getUserId;
     },
@@ -677,77 +703,112 @@ export default {
       return this.getName;
     },
 
-    userCode(){
+    userCode() {
       return this.getUserCode();
-    }
-
+    },
   },
-  watch: {
-   
-  },
+  watch: {},
 
   mounted() {
     //const userCode = this.userCode();
-    const userCode="BM0001";
-
-    this.$apiClient.get(`/api/v1/payments/latestPayment`,{
-      params:{
-        userCode: userCode
-      }
-    }).then((response) => {
-        console.log("response latestConfirmed is",response.data);
-        this.payment=response.data.payment;
-    }).catch((error) => {
-      console.log(error);
-    });
-  },
-  methods: {
-   
- getData(){
-  if(this.year==''){
-    this.selectYear=true;
-    return;
-  }
-  if(this.month==''){
-    this.selectMonth=true;
-    return;
-  }
-
-   const userCode="BM0001";
-    //const userCode = this.userCode();
+    const userCode = "BM0001";
 
     this.$apiClient
-      .get("/api/v1/payments/paymentbyMonth", {
+      .get(`/api/v1/payments/latestPayment`, {
         params: {
           userCode: userCode,
-          activeYear: this.year,
-          activeMonth: this.month,
         },
       })
       .then((response) => {
-        console.log("response pp", response);
+        console.log("response latestConfirmed is", response.data);
         this.payment = response.data.payment;
-        console.log("this payment is billcode ", this.payment.billCode);
       })
       .catch((error) => {
         console.log(error);
       });
- },
+  },
+  methods: {
+    async downloadReceiptAsPDF() {
+      //  await this.generateQRCodeImage();
+      // Clone the printable area
+      const element = document.getElementById("printable-area").cloneNode(true);
+      element.classList.remove('hidden');
+      // Create a temporary div to hold the content and Tailwind styles
+      const wrapperDiv = document.createElement("div");
+      wrapperDiv.appendChild(element);
 
-async generateQRCodeImage() {
- const qrData = `Bana Receipt For User`
- 
- try {
-    const qrCodeImage = await QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' });
-    document.getElementById('qrCodeImageContainer').innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
-  } catch (error) {
-    console.error('Error generating QR code:', error);
-  }
-},
+      // Fetch the Tailwind CSS file and append it as a <style> tag to the wrapperDiv
+      // const tailwindStylesheet = await fetch("https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
+      //   .then(response => response.text());
 
- async printDiv() {
-  // First, generate the QR code image
-  await this.generateQRCodeImage();
+      //   alert("look the error still");
+
+      const styleElement = document.createElement("style");
+      // styleElement.innerHTML = tailwindStylesheet;
+
+      // Append the Tailwind CSS <style> tag to the cloned document
+      wrapperDiv.appendChild(styleElement);
+
+      // Options for html2pdf conversion
+      const options = {
+        filename: "Tadesse Gebremicheal Berhe",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+      };
+
+      // Convert the wrapperDiv (which contains the styles and content) to PDF
+      html2pdf().from(wrapperDiv).set(options).save();
+    },
+    getData() {
+      if (this.year == "") {
+        this.selectYear = true;
+        return;
+      }
+      if (this.month == "") {
+        this.selectMonth = true;
+        return;
+      }
+
+      const userCode = "BM0001";
+      //const userCode = this.userCode();
+
+      this.$apiClient
+        .get("/api/v1/payments/paymentbyMonth", {
+          params: {
+            userCode: userCode,
+            activeYear: this.year,
+            activeMonth: this.month,
+          },
+        })
+        .then((response) => {
+          console.log("response pp", response);
+          this.payment = response.data.payment;
+          console.log("this payment is billcode ", this.payment.billCode);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    async generateQRCodeImage() {
+      const qrData = `Bana Receipt For User`;
+
+      try {
+        const qrCodeImage = await QRCode.toDataURL(qrData, {
+          errorCorrectionLevel: "H",
+        });
+        document.getElementById(
+          "qrCodeImageContainer"
+        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
+      } catch (error) {
+        console.error("Error generating QR code:", error);
+      }
+    },
+
+    async printDiv() {
+      // First, generate the QR code image
+      await this.generateQRCodeImage();
       const printContent = document.getElementById("printable-area").innerHTML;
       // Create a link element to read the Tailwind CSS file
       const linkElement = document.createElement("link");
@@ -952,11 +1013,159 @@ async generateQRCodeImage() {
         });
       }
     },
-    
   },
 };
 </script>
 
 <style>
-/* Add any custom styles here */
-</style>
+            @media print {
+              #printable-area {
+                display: flex !important;
+                flex-direction: row !important;
+                width: 100% !important;
+              }
+              .receipt {
+                flex: 1 !important;
+                min-width: 0 !important;
+                page-break-inside: avoid; /* Prevents page breaks inside receipts */
+              }
+              body {
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+              /* Ensure background color is set */
+              #printable-area {
+                background-color: white; /* Use a solid color or adjust as needed */
+              }
+            }
+    
+            @media print {
+              #printable-area {
+                display: flex !important;
+                flex-direction: row !important;
+                width: 100% !important;
+                height:100%;
+                
+              }
+              .receipt {
+                flex: 1 !important;
+                min-width: 0 !important;
+                page-break-inside: avoid; /* Prevents page breaks inside receipts */
+              }
+              body {
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+
+                 .container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+     
+    }
+
+    .receipt {
+      flex: 1;
+      padding: 10px;
+      border: 1px dotted #622e2e; /* Red dotted border */
+    }
+
+    .receipt:nth-child(2) {
+      border-left: none;
+    }
+
+    .receipt-header {
+      background-color: #bbf7d0; /* Light green */
+      color: #1d4ed8; /* Dark blue text */
+      padding: 10px;
+    }
+
+    .receipt-header .info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .receipt-header .info .text {
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .receipt-header .qr {
+      width: 80px;
+      height: 80px;
+      background: #e5e7eb; /* Placeholder for QR Code */
+      margin-left: 10px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .box {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      padding: 5px;
+    }
+
+    .table {
+      width: 100%;
+      font-size: 10px;
+      border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+      padding: 2px;
+      text-align: left;
+    }
+
+    .table .right {
+      text-align: right;
+    }
+
+    .signature-section {
+      margin-top: 15px;
+      font-size: 10px;
+    }
+
+    .signature-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .signature-block {
+      width: 45%;
+      text-align: left;
+    }
+
+    .signature-block span {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .approval-section {
+      margin-top: 10px;
+      font-size: 10px;
+    }
+
+    .approval-block span {
+      display: block;
+      margin-bottom: 5px;
+    }
+              /* Ensure background color is set */
+              #printable-area {
+                background-color: white; /* Use a solid color or adjust as needed */
+              }
+            }
+          </style>

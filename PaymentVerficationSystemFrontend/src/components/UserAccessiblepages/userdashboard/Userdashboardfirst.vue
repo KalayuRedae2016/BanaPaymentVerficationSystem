@@ -19,13 +19,14 @@
     </div>
     <div class="mb-2 mt-0">
       <div v-show="activeTab === 0" class="border border-gray-300 ">
+        <paid-payment></paid-payment>
+      </div>
+      <div v-show="activeTab === 1" class="border border-gray-300 ">
         
         <unpaid-payment></unpaid-payment>
         
       </div>
-      <div v-show="activeTab === 1" class="border border-gray-300 ">
-        <paid-payment></paid-payment>
-      </div>
+      
     </div>
   </div>
   </div>
@@ -58,8 +59,9 @@ export default {
       internetConnected: false,
       activeTab: 0,
       tabs: [
-        "Unpaid Payments",
         "Confirmed/paids Payments",
+        "Unpaid Payments",
+       
       ],
     };
   },

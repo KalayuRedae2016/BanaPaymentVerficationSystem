@@ -433,5 +433,6 @@
   "usernamePlaceholder": "Username or email",
   "viewDetails": "View Details",
   "welcome": "Welcome",
-  "yourEmailOrUsername": "Your email or username"
+  "yourEmailOrUsername": "Your email or username",
+  "verifyPayment":"verifyPayment"
 }
