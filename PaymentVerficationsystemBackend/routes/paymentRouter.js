@@ -34,7 +34,8 @@ router.route('/update') .patch(paymentController.updatePayments);//update Bank S
 /// ========== Routes for Payments Management for all from Bank and from System ==========
 router.route('/getAllPayments').get(paymentController.getAllPayments); // Fetch all payments
 router.route('/latestPayment').get(paymentController.getLatestPayment); // Fetch the latest payment
-router.route('/deletePayment/:id').delete(paymentController.deletePayment);// Delete payments
+router.route('/deletePayment/:id').delete(paymentController.deletePayment);// Delete payment
+router.route('/deletePayments').delete(paymentController.deletePayments);// Delete payments
 router.route('/penality').get(paymentController.getPenality); // Handle penalties
 router.route('/transferFunds').post(paymentController.transferFunds); // Transfer funds
 

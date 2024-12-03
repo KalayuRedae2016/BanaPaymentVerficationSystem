@@ -1305,16 +1305,30 @@ exports.getLatestPayment = catchAsync(async (req, res, next) => {
   })
 });
 exports.deletePayment = catchAsync(async (req, res, next) => {
-  const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
+  //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
+  const deletedPayment = await Payment.findByIdAndDelete(req.query.id)
   if (!deletedPayment) {
     return next(new AppError("Payment entry not found", 404))
   }
   res.status(200).json({
     status: 'success',
     //data: null,
-    message: `Payment with ${deletedPayment._id} is Deleted`
+    message: `Payment Deleted`
   });
 });
+exports.deletePayments = catchAsync(async (req, res, next) => {
+  const deletedPayments = await Payment.deleteMany({});  // Deletes all documents
+
+  if (deletedPayments.deletedCount === 0) {
+    return next(new AppError("No payment entries found to delete", 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    message: `${deletedPayments.deletedCount} Payments Deleted`
+  });
+});
+
 exports.generateReceipt = catchAsync(async (req, res, next) => {
   const { billCode } = req.query;
   if (!billCode) {
