@@ -519,10 +519,10 @@
               <div class="text-xs text-blueGray-500 font-semibold py-1">
                 Copyright © {{ date }}
                 <a
-                  href="https://www.creative-tim.com"
+                  href="https://bannamall.com/copy-right"
                   class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1"
                 >
-                  {{ $t('grandTech') }}
+                  {{ $t('Bana Mall ') }}
                 </a>
               </div>
             </div>
@@ -532,34 +532,27 @@
               >
                 <li>
                   <a
-                    href="https://www.creative-tim.com"
+                    href="https://bannamall.com"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
-                  {{ $t('grandTech') }}
+                  {{ $t('Bana Mall General Trading') }}
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://www.creative-tim.com/presentation"
+                    href="https://bannamall.com/about-us/"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
                   {{ $t('aboutUs') }}
                   </a>
                 </li>
+    
                 <li>
                   <a
-                    href="http://blog.creative-tim.com"
+                    href="#"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
-                  {{ $t('blog') }}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/creativetimofficial/tailwind-starter-kit/blob/main/LICENSE.md"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
-                  >
-                  {{ $t('grandTechLicense') }} 
+                  {{ $t('Grand Technology License') }} 
                   </a>
                 </li>
               </ul>

@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="p-4">
-     
         <div class="flex-row">
-        
           <select
             v-model="year"
             id="month"
@@ -15,54 +13,36 @@
               {{ year }}
             </option>
           </select>
-     
       </div>
-
-
-  <div class="w-full h-screen">
-    <iframe
-      :src="pdfUrl"
-      class="w-full h-full border-none"
-      frameborder="0"
-    >
-  </iframe>
-</div>
-
-
-
-      <div class="space-y-2">
-  <ul class="bg-white rounded-md shadow-md divide-y divide-gray-200">
-    <li class="flex items-center justify-between px-4 py-2">
-      <a href="#" class="hover:bg-blue-100 hover:text-blue-700 transition duration-150">
-        December
-      </a>
-      <button @click="downloadReceiptAsPDF()" class="text-blue-500 hover:underline">
-        View Receipt
-      </button>
-      <button @click="downloadReceiptAsPDF()" class="text-blue-500 hover:underline">
-        Download Receipt
-      </button>
-    
-    </li>
-    <li class="flex items-center justify-between px-4 py-2">
-      <a href="#" class="hover:bg-blue-100 hover:text-blue-700 transition duration-150">
-        November
-      </a>
-      <button @click="printDiv()" class="text-blue-500 hover:underline">
-        Download
-      </button>
-    </li>
-    <li class="flex items-center justify-between px-4 py-2">
-      <a href="#" class="hover:bg-blue-100 hover:text-blue-700 transition duration-150">
-        October
-      </a>
-      <button @click="printDiv()" class="text-blue-500 hover:underline">
-        Download
-      </button>
-    </li>
-  </ul>
-</div>
-
+ 
+      <div class="space-y-2" v-if="showList">
+    <ul class="bg-white rounded-md shadow-md divide-y divide-gray-200">
+      <li
+        v-for="(month, index) in $months"
+        :key="index"
+        class="flex items-center justify-between px-4 py-2"
+      >
+        <a
+          href="#"
+          class="hover:bg-blue-100 hover:text-blue-700 transition duration-150"
+        >
+          {{ month.name }}
+        </a>
+        <button
+          @click=" downloadReceiptAsPDF1"
+          class="text-blue-500 hover:underline"
+        >
+          View Receipt
+        </button>
+        <button
+          @click="downloadReceiptAsPDF()"
+          class="text-blue-500 hover:underline"
+        >
+          Download Receipt
+        </button>
+      </li>
+    </ul>
+  </div>
 
       <!-- <div>
         <div class="ml-5">
@@ -244,7 +224,11 @@
         </div>
       </div> -->
     </div>
-    <div class="w-full flex flex-row hidden" id="printable-area">
+
+    <div v-show="!showList">
+       <i class="fas fa-x " @click="printableArea=false;showList=true;">Close</i>
+    </div>
+    <div class="w-full flex flex-row " id="printable-area">
     <!-- First Receipt -->
     <div class="w-full p-2 receipt border-4 border-red-500 border-dotted">
       <div class="bg-green-200 text-blue-800 p-2 relative">
@@ -252,11 +236,11 @@
         <div class="flex items-center justify-between">
           <div class="text-xs flex items-center space-x-2">
             <span class="font-semibold">BillCode:</span>
-            <span>{{ payment.billCode }}</span>
+            <span>{{ receiptData.billCode }}</span>
           </div>
           <div class="text-xs flex items-center space-x-2">
             <span class="font-semibold">Confirmation Date:</span>
-            <span>{{ payment.confirmedDate }}</span>
+            <span>{{ receiptData.confirmedDate }}</span>
           </div>
         </div>
   
@@ -314,12 +298,14 @@
                 <tr>
                   <td class="font-semibold">UserCode</td>
                   <td></td>
-                  <td class="text-right">{{ payment.userCode }}</td>
+                   <!-- <td class="text-right">{{ payment.userCode }}</td>  -->
+                   <td class="text-right">BM0002</td> 
                 </tr>
                 <tr>
                   <td class="font-semibold">FullName</td>
                   <td></td>
-                  <td class="text-right">{{ payment.fullName }}</td>
+                  <!-- <td class="text-right">{{ payment.fullName }}</td> -->
+                  <td class="text-right">Tadessse Gebremicheal</td>
                 </tr>
               
                 <tr>
@@ -589,14 +575,13 @@
 import QRCode from "qrcode";
 import html2pdf from "html2pdf.js";
 import { mapGetters } from "vuex";
-import pdf from "vue-pdf";
+
 export default {
-  components: {
-    pdf,
-  },
+ 
   data() {
     return {
-      pdfUrl: require("@/assets/receipts/r.pdf"),
+      showList:true,
+      printableArea:false,
       year: "",
       month: "",
       selectYear: false,
@@ -612,6 +597,7 @@ export default {
       receiptDate: new Date(),
       //
       payment: {
+        userCode:"BM0002",
         urgent: {
           amount: 40000,
           bankType: null,
@@ -658,6 +644,7 @@ export default {
       },
 
       receiptData: {
+        confirmedDate: new Date(),
         BillCode: "BC123456",
         Date: "2024-08-06",
         Country: "Ethiopia",
@@ -710,24 +697,66 @@ export default {
   watch: {},
 
   mounted() {
-    //const userCode = this.userCode();
-    const userCode = "BM0001";
 
-    this.$apiClient
-      .get(`/api/v1/payments/latestPayment`, {
-        params: {
-          userCode: userCode,
-        },
-      })
-      .then((response) => {
-        console.log("response latestConfirmed is", response.data);
-        this.payment = response.data.payment;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    console.log("payment is",this.payment);
+
+    // const userCode = "BM0001";
+    // this.$apiClient
+    //   .get(`/api/v1/payments/latestPayment`, {
+    //     params: {
+    //       userCode: userCode,
+    //     },
+    //   })
+    //   .then((response) => {
+    //     console.log("response latestConfirmed is", response.data);
+    //     this.payment = response.data.payment;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   },
   methods: {
+  viewReceipt(userCode,year,month){
+   this.showList=!this.showList;
+    console.log("Usercode,year,month",userCode,year,month);
+
+    console.log("payment is in r",this.payment);
+    this.printableArea=!this.printableArea;
+
+  
+  },
+  async downloadReceiptAsPDF1() {
+  // Clone the printable area
+  const element = document.getElementById("printable-area").cloneNode(true);
+  element.classList.remove('hidden');
+
+  // Create a temporary div to hold the content and Tailwind styles
+  const wrapperDiv = document.createElement("div");
+  wrapperDiv.appendChild(element);
+
+  // Fetch the Tailwind CSS file and append it as a <style> tag to the wrapperDiv (if needed)
+  const styleElement = document.createElement("style");
+  // If your Tailwind CSS is local, ensure it's included in the generated document
+  wrapperDiv.appendChild(styleElement);
+
+  // Options for html2pdf conversion
+  const options = {
+    filename: "Tadesse Gebremicheal Berhe",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2 },
+    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+  };
+
+  // Generate the PDF and get its blob
+  const pdfBlob = await html2pdf().from(wrapperDiv).set(options).outputPdf("blob");
+
+  // Create a Blob URL for the PDF
+  const pdfUrl = URL.createObjectURL(pdfBlob);
+
+  // Open the PDF in a new tab for viewing
+  window.open(pdfUrl, "_blank");
+},
+
     async downloadReceiptAsPDF() {
       //  await this.generateQRCodeImage();
       // Clone the printable area
