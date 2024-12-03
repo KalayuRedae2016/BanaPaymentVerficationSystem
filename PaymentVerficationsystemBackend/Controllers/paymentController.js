@@ -1032,7 +1032,6 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const paymentDate = req.query.paymentDate ? new Date(req.query.paymentDate) : new Date(); // User-provided or current date
   const payments = await Payment.find({ isPaid: false }); // Fetch only unpaid payments
