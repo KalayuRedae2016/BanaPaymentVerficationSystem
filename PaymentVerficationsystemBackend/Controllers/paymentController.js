@@ -557,10 +557,15 @@ exports.confirmBills = async (req, res) => {
 
 exports.searchPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid } = req.query;
+
+  // Validate keyword
   if (!keyword) {
     return next(new AppError('Keyword is required', 400));
   }
+
   const searchPattern = new RegExp(keyword, 'i');
+
+  // Construct payment query
   const paymentQuery = {
     $or: [
       { userCode: { $regex: searchPattern } },
@@ -571,148 +576,118 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       { lastName: { $regex: searchPattern } },
       { phoneNumber: { $regex: searchPattern } },
     ],
-    isPaid: false//for status:pending or status: overdue
+    isPaid:false,
+    //isPaid: isPaid === undefined ? false : isPaid, // Ensure `isPaid` is handled
   };
 
-  const user = await User.find({ userCode: keyword })
-  console.log(user)
+  console.log("Payment Query:", paymentQuery);
 
-  if (isPaid) paymentQuery.isPaid = isPaid
-  const payments = await Payment.find(paymentQuery).populate({ path: 'user', select: 'fullName' }).sort({ activeMonth: 1 });
-  console.log(payments)
+  // Fetch payments
+  const payments = await Payment.find(paymentQuery)
+    .populate({ path: 'user', select: 'fullName' })
+    .sort({ activeMonth: 1 });
+
   if (!payments.length) {
     return res.status(200).json({
       error: true,
       statusCode: 500,
       status: 1,
       items: [],
-      fullName: user.fullName,
-      message: `No Payment is Opened for the Provided Criteria`,
+      message: `No Payment is Opened for the Provided Keyword -> ${keyword}`,
     });
   }
 
-  const paymentDetails = await Promise.all(
-    payments.map(async (payment) => {
-      const paymentDetails = {};
-      let totalPenaltyAmount = 0;
-      // let totalExpectedAmount = payment.totalExpectedAmount; // Start with the registration fee
-      // let baseAmount = payment.baseAmount;
-      const paymentTypeSettings = await PaymentSetting.findOne({ activeYear: payment.activeYear, activeMonth: payment.activeMonth });
+  // Utility function for payment details
+  const getPaymentDetails = (payment, type) => ({
+    amount: payment[type]?.amount || 0,
+    penalty: payment[type]?.penalty || 0,
+    daysLate: payment[type]?.daysLate || 0,
+    bankType: payment[type]?.bankType || null,
+    TTNumber: payment[type]?.TTNumber || null,
+    isPaid: payment[type]?.isPaid || false,
+    paidAt: payment[type]?.paidAt ? formatDate(payment[type].paidAt) : null,
+  });
 
-      ['regular', 'urgent', 'subsidy'].forEach((type) => {
-        const amountToPay = payment[type].amount || 0;
-        const isPaid = payment[type].isPaid || false;
-        let penality = payment[type].penalty || 0;
-        // let penality = 0;
-        let daysLate = 0;
+  // Process payment details
+  const paymentDetails = payments.map((payment) => {
+    const details = {};
+    ['regular', 'urgent', 'subsidy', 'service', 'penality'].forEach((type) => {
+      details[type] = getPaymentDetails(payment, type);
+    });
 
-        if (!isPaid && paymentTypeSettings && amountToPay > 0) {
-          const dueDate = new Date(paymentTypeSettings.endingDate);
-          const paymentDate = new Date();
-          daysLate = Math.max(0, Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24)));
-          let penaltyRate = 0;
-          if (daysLate > 0) {
-            if (daysLate > 10) {
-              penaltyRate = paymentTypeSettings.penalityLateAbove10Days;
-            } else if (daysLate > 5) {
-              penaltyRate = paymentTypeSettings.penalityLate10Days;
-            } else {
-              penaltyRate = paymentTypeSettings.penalityLate5Days;
-            }
-            penality = amountToPay * penaltyRate;
-          }
-          totalPenaltyAmount += penality;
-          //totalExpectedAmount += totalPenaltyAmount;
-        }
+    return {
+      id: payment._id,
+      userId: payment.user?._id || null,
+      paymentSettingId: payment.paymentSetting || null,
+      billCode: payment.billCode,
+      fullName: payment.fullName || "N/A",
+      userCode: payment.userCode || "N/A",
+      activeYear: payment.activeYear,
+      activeMonth: payment.activeMonth,
+      paymentSelected: false, // For frontend
+      ...details, // Spread all types
+      baseAmount: payment.baseAmount || 0,
+      registrationFee: payment.registrationFee || 0,
+      totalPenality: payment.penality?.amount || 0,
+      totalExpectedAmount: payment.totalExpectedAmount || 0,
+      isPaid: payment.isPaid || false,
+      status: payment.status || "N/A",
+      latest: payment.latest || false,
+      createdAt: payment.createdAt ? formatDate(payment.createdAt) : null,
+      updatedAt: payment.updatedAt ? formatDate(payment.updatedAt) : null,
+    };
+  });
 
-        paymentDetails[type] = {
-          amount: amountToPay,
-          penality: amountToPay ? penality : 0,
-          daysLate: amountToPay ? daysLate : 0,
-          bankType: payment[type].bankType || null,
-          TTNumber: payment[type].TTNumber || null,
-          isPaid: amountToPay ? isPaid : 'Not Needed',
-          paidAt: payment[type].paidAt ? formatDate(payment[type].paidAt) : null,
-        };
+  console.log("Payment Details:", paymentDetails);
 
-        paymentDetails['service'] = {
-          amount: payment['service'].amount || 0,
-          daysLate: null,
-          penality: 0,
-          bankType: payment['service'].bankType || null,
-          TTNumber: payment['service'].TTNumber || null,
-          isPaid: payment['service'].amount ? payment['service'].isPaid : 'Not Needed',
-          paidAt: payment["penality"].paidAt ? formatDate(payment["penality"].paidAt) : null,
-        };
+  // Handle cases where paymentDetails array might be empty
+  if (!paymentDetails.length) {
+    return res.status(200).json({
+      error: true,
+      statusCode: 500,
+      status: 1,
+      items: [],
+      message: "No payments found for the provided keyword.",
+    });
+  }
 
-        paymentDetails['penality'] = {
-          amount: totalPenaltyAmount,
-          daysLate: paymentDetails.regular.daysLate || 0,
-          bankType: payment.penality.bankType || null,
-          TTNumber: payment.penality.TTNumber || null,
-          isPaid: payment.penality.isPaid || false,
-          paidAt: payment["penality"].paidAt ? formatDate(payment["penality"].paidAt) : null,
-        };
-      });
-      // let baseAmount=payment.baseAmount
-      // let totalExpectedAmount=payment.totalExpectedAmount+totalPenaltyAmount
-      return {
-        id: payment._id,
-        billCode: payment.billCode,
-        fullName: payment.fullName,
-        userCode: payment.userCode,
-        activeYear: payment.activeYear,
-        activeMonth: payment.activeMonth,
-        paymentSelected: false, // Only for frontend
-        regular: paymentDetails.regular,
-        urgent: paymentDetails.urgent,
-        subsidy: paymentDetails.subsidy,
-        service: paymentDetails.service,
-        penality: paymentDetails.penality,
-        baseAmount: payment.baseAmount,
-        registrationFee: payment.registrationFee,
-        totalPenality: totalPenaltyAmount,
-        totalExpectedAmount: payment.totalExpectedAmount + totalPenaltyAmount,
-        isPaid: payment.isPaid,
-        status: payment.status,
-        latest: payment.latest,
-        createdAt: payment.createdAt ? formatDate(payment.createdAt) : null,
-        updatedAt: payment.updatedAt ? formatDate(payment.updatedAt) : null
-      };
-    })
-  );
-
-  console.log(paymentDetails)
+  // Send response
   return res.status(200).json({
     error: false,
     statusCode: 200,
     status: 1,
     result: paymentDetails.length,
-    fullName: paymentDetails[0].fullName,
-    userCode: paymentDetails[0].userCode,
-    items: paymentDetails
+    fullName: paymentDetails[0]?.fullName || "Unknown",
+    userCode: paymentDetails[0]?.userCode || "Unknown",
+    items: paymentDetails,
   });
 });
+
 exports.confirmPayments = catchAsync(async (req, res, next) => {
   const { billCode, urgent, regular, subsidy, service, penality } = req.body;
-  console.log(req.body)
+  if(!billCode){
+    return next(new AppError(`billCode is required`))
+  }
+  if (!urgent && !regular && !subsidy && !service&& !penality) {
+    return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",))
 
+  }
   // Find the unpaid bill by billCode
   const unpaidBill = await Payment.findOne({ isPaid: false, billCode });
   if (!unpaidBill) {
-    return res.status(404).json({ error: 'No unpaid bill found' });
+    return next(new AppError(`No unpaid bill found for billCode->${billCode}`,400))
   }
 
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
-    const paidAt = isPaid ? (updates.paidAt || existing.paidAt || Date.now()) : null;
+    const paidAt = isPaid?(updates.paidAt|| Date.now()) : null;
 
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
       TTNumber: isPaid ? updates.TTNumber ?? existing.TTNumber : null,
-      penalty: updates.penality ?? existing.penalty,
+      penalty: updates.penalty?? existing.penalty, // Updating penalty amount
       isPaid,
       paidAt,
       daysLate: updates.daysLate ?? existing.daysLate,
@@ -724,21 +699,29 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   if (regular) unpaidBill.regular = updatePaymentField(unpaidBill.regular, regular);
   if (subsidy) unpaidBill.subsidy = updatePaymentField(unpaidBill.subsidy, subsidy);
   if (service) unpaidBill.service = updatePaymentField(unpaidBill.service, service);
+  if(penality&&penality.amount>0){
+    const requiredPayments=['urgent','regular','subsidy','service']
+    const unpaidTypes=requiredPayments.filter(type=>unpaidBill[type]?.amount&&!unpaidBill[type]?.isPaid)
+    console.log(unpaidTypes.length)
+    if (unpaidTypes.length>0){
+      return next(new AppError(`Cannot pay penality. The following payment types must be fully paid first: ${unpaidTypes.join(', ')}`,400))
+    }
+    unpaidBill.penality.amount=penality.amount,
+    unpaidBill.penality.bankType=penality.bankType,
+    unpaidBill.penality.TTNumber=penality.TTNumber,
+    unpaidBill.penality.penalty=0
+    unpaidBill.penality.isPaid=penality.isPaid,
+    unpaidBill.penality.paidAt=penality.paidAt||Date.now()||null
+    unpaidBill.penality.daysLate=penality.daysLate||null
 
-  if (penality) unpaidBill.penality = updatePaymentField(unpaidBill.penality, penality);
-  // Calculate and update the penality amount based on all payment types
-  const totalPenalty = [
-    unpaidBill.urgent.penalty || 0,
-    unpaidBill.regular.penalty || 0,
-    unpaidBill.subsidy.penalty || 0,
-    unpaidBill.service.penalty || 0,
-  ].reduce((sum, penalty) => sum + penalty, 0);
-
-  unpaidBill.penality.amount = totalPenalty;
-
-  // Update penality fields if provided
-  if (penality) unpaidBill.penality = updatePaymentField(unpaidBill.penality, penality);
-
+  }
+  const calculateTotalPaidAmount = () => {
+    unpaidBill.totalPaidAmount = unpaidBill.registrationFee || 0;
+    ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach(type => {
+      if (unpaidBill[type]?.isPaid) unpaidBill.totalPaidAmount += unpaidBill[type].amount;
+    });
+  };
+  calculateTotalPaidAmount();
   // Filter out payment types that have a non-zero amount
   const paymentsToCheck = [
     unpaidBill.urgent,
@@ -750,6 +733,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
 
   // Check if all relevant payment types (with non-zero amounts) are paid
   const allPaid = paymentsToCheck.every(payment => payment.isPaid);
+  //console.log(paymentsToCheck)
   console.log(allPaid)
 
   if (allPaid) {
@@ -802,11 +786,12 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
 
   // Save the updated bill
   await unpaidBill.save();
+  
   const formattedCreatedAt = unpaidBill.createdAt ? formatDate(unpaidBill.createdAt) : null;
   const formattedUpdatedAt = unpaidBill.updatedAt ? formatDate(unpaidBill.updatedAt) : null;
   const formattedConfirmedAt = unpaidBill.confirmedDate ? formatDate(unpaidBill.confirmedDate) : null;
-
-  console.log(unpaidBill)
+  
+  //console.log(unpaidBill)
   res.status(200).json({
     message: 'Payment types updated successfully',
     items: {
@@ -818,7 +803,19 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.updatePayments = catchAsync(async (req, res, next) => {
-  const { billCode, urgent, regular, subsidy, service, penality, isPaid, status } = req.body;
+  const { billCode, urgent, regular, subsidy, service, penality} = req.body;
+  if(!billCode){
+    return next(new AppError(`billCode is required to update Confirmed Payment`))
+  }
+  if (!urgent && !regular && !subsidy && !service&& !penality) {
+    return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",))
+
+  }
+  // Find the unpaid bill by billCode
+  const unpaidBill = await Payment.findOne({ isPaid: false, billCode });
+  if (!unpaidBill) {
+    return next(new AppError(`No unpaid bill found for billCode->${billCode}`,400))
+  }
 
   // Find the unpaid bill by billCode
   const payment = await Payment.findOne({ isPaid: true, billCode });
@@ -1032,7 +1029,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const bulkUpdates = [];
 
   for (let payment of payments) {
-    const { _id: paymentId, paymentSetting: settingId, regular, urgent, subsidy } = payment;
+    const { _id: paymentId, paymentSetting: settingId, regular, urgent, subsidy,baseAmount,registrationFee} = payment;
 
     // Fetch related PaymentSetting
     const paymentSetting = await PaymentSetting.findById(settingId);
@@ -1095,7 +1092,8 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
         'urgent.daysLate': urgentPenalty.daysLate,
         'subsidy.penalty': subsidyPenalty.penalty,
         'subsidy.daysLate': subsidyPenalty.daysLate,
-        'penality.amount':totalPenaltyAmount
+        'penality.amount':totalPenaltyAmount,
+        'totalExpectedAmount':baseAmount+registrationFee+totalPenaltyAmount
       };
     }
 
@@ -1473,7 +1471,7 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
   console.log("reqeust for calculated org balances")
   const payments = await Payment.find({});
   if (!payments.length) {
-    return res.status(404).json({ error: 'No payments found for the given criteria' });
+    return res.status(404).json({ error: 'No payments found!' });
   }
   const organization = await Organization.findOne()
   const bankBalances = calculateBalances(payments, organization);

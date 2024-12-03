@@ -88,6 +88,11 @@ const paymentSchema = new mongoose.Schema(
       default: 0,
       required: true,
     },
+    totalPaidAmount: {
+      type: Number,
+      default: 0,
+      required: true,
+    },
     confirmedDate: {
       type: Date,
       default: null,
@@ -134,38 +139,6 @@ paymentSchema.pre('validate', function (next) {
   next();
 });
 
-// Virtual field to calculate the total PaiddAmount
-paymentSchema.virtual('totalPaidAmount').get(function () {
-  let total = 0;
-  ['urgent', 'regular', 'subsidy', 'service', 'penalty'].forEach((type) => {
-    if (this[type] && this[type].isPaid) {
-      total += this[type].amount;
-    }
-  });
-  total += this.registrationFee;
-  return total;
-});
-
-// paymentSchema.post('save', async function () {
-//   const PaymentSetting = require('../models/paymentSetting'); // Lazy import
-//   const now = new Date();
-//   const paymentSetting = await PaymentSetting.findOne({
-//     activeYear: this.activeYear,
-//     activeMonth: this.activeMonth,
-//   });
-
-//   let status = 'unknown';
-//   if (!paymentSetting) {
-//     status = 'unknown';
-//   } else if (this.confirmedDate) {
-//     status = 'confirmed';
-//   } else if (now >= paymentSetting.startingDate && now <= paymentSetting.endingDate) {
-//     status = 'pending';
-//   } else if (now > paymentSetting.endingDate) {
-//     status = 'overdue';
-//   }
-//   await this.constructor.findByIdAndUpdate(this._id, { status });// Update the document with the computed status
-// });
 paymentSchema.index({ user: 1, activeYear: 1, activeMonth: 1 });
 const Payment = mongoose.model('Payment', paymentSchema);
 module.exports = Payment;

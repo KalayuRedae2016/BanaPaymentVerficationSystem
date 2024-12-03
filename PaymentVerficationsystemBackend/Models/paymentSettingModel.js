@@ -28,22 +28,25 @@ const paymentSettingSchema = new mongoose.Schema(
     regFeeRate:{
       type:Number,
       required:true,
+      default:0
     },
     urgentAmount:{
       type:Number,
-      required:true,
+      default:0
     },
     regularAmount:{
       type:Number,
       required:true,
+      default:0
     },
     serviceAmount:{
       type:Number,
       required:true,
+      default:0
     },
     subsidyAmount:{
       type:Number,
-      required:true,
+      default:0
     },
     startingDate:{
       type:Date,
