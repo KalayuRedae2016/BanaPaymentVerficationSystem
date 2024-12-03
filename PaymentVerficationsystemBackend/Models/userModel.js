@@ -10,27 +10,22 @@ const userSchema = new Schema(
     firstName: {
       type: String,
       default: null
-
     },
     middleName: {
       type: String,
       default: null
-
     },
     lastName: {
       type: String,
       default: null
-
     },
     fullName: {
       type: String,
       default: null
-
     },
     tigrignaName: {
       type: String,
       default: null
-
     },
     userCode: {
       //auto-increment

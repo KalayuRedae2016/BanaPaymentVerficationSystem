@@ -2,14 +2,13 @@ const PaymentSetting = require('../Models/paymentSettingModel');
 const Payment = require('../Models/paymentModel');
 const AppError = require('../utils/appError');
 
-const createPendingPayments = async (user, activeYear, activeMonth) => {
+const createPendingPayments = async (user,activeYear, activeMonth) => {
     // Fetch the payment setting for the current active year and month
     const paymentSetting = await PaymentSetting.findOne({ activeYear, activeMonth });
 
     if (!paymentSetting) {
       throw new AppError('Payment setting not found for the current active month and year', 404);
     }
-
     const { regularAmount, urgentAmount, subsidyAmount, serviceAmount, regFeeRate } = paymentSetting;
 
     let paymentTypeCode;
@@ -34,9 +33,10 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
     // Check if an unconfirmed payment already exists for the user in the same active year and month
   const existingPayment = await Payment.findOne({
     user: user._id,
-    userCode: user.userCode,
-    activeYear,
-    activeMonth,
+    paymentSetting:paymentSetting._id,
+    // userCode: user.userCode,
+    // activeYear,
+    // activeMonth,
   });
 
   if (existingPayment) {
@@ -67,6 +67,7 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
     // Create the payment record
     const payment = new Payment({
       user: user._id,
+      paymentSetting:paymentSetting._id,
       userCode: user.userCode,
       billCode,
       fullName: user.fullName,

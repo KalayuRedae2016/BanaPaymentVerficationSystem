@@ -56,7 +56,7 @@ exports.fetchAndProcessPayments = async (keyword) => {
         const currentDate = new Date();
         const amountToPay = payment[type]?.amount || 0;
         const isPaid = payment[type]?.isPaid || false;
-        let penalty = 0;
+        let penality = 0;
         let daysLate = 0;
 
         if (!isPaid && amountToPay > 0) {
@@ -71,13 +71,13 @@ exports.fetchAndProcessPayments = async (keyword) => {
             penaltyRate = paymentSetting.penalityLate5Days;
           }
 
-          penalty = amountToPay * penaltyRate;
-          totalPenaltyAmount += penalty;
+          penality = amountToPay * penaltyRate;
+          totalPenaltyAmount += penality;
         }
 
         paymentDetails[type] = {
           amount: amountToPay,
-          penalty: amountToPay ? penalty : 0,
+          penality: amountToPay ? penality : 0,
           daysLate: amountToPay ? daysLate : 0,
           bankType: payment[type]?.bankType || null,
           TTNumber: payment[type]?.TTNumber || null,
@@ -90,7 +90,7 @@ exports.fetchAndProcessPayments = async (keyword) => {
       paymentDetails['service'] = {
         amount: payment['service']?.amount || 0,
         daysLate: 'Not Needed',
-        penalty: 0,
+        penality: 0,
         bankType: payment['service']?.bankType || null,
         TTNumber: payment['service']?.TTNumber || null,
         isPaid: payment['service']?.amount ? payment['service'].isPaid : 'Not Needed',
