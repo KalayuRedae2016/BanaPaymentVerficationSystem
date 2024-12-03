@@ -29,7 +29,7 @@
           {{ month.name }}
         </a>
         <button
-          @click=" downloadReceiptAsPDF1"
+          @click="viewReceiptAsPDF()"
           class="text-blue-500 hover:underline"
         >
           View Receipt
@@ -43,6 +43,7 @@
       </li>
     </ul>
   </div>
+  <div id="pdf-container"></div>
 
       <!-- <div>
         <div class="ml-5">
@@ -223,10 +224,6 @@
           </div>
         </div>
       </div> -->
-    </div>
-
-    <div v-show="!showList">
-       <i class="fas fa-x " @click="printableArea=false;showList=true;">Close</i>
     </div>
     <div class="w-full flex flex-row " id="printable-area">
     <!-- First Receipt -->
@@ -574,6 +571,7 @@
 
 import QRCode from "qrcode";
 import html2pdf from "html2pdf.js";
+import { jsPDF } from "jspdf";
 import { mapGetters } from "vuex";
 
 export default {
@@ -716,16 +714,7 @@ export default {
     //   });
   },
   methods: {
-  viewReceipt(userCode,year,month){
-   this.showList=!this.showList;
-    console.log("Usercode,year,month",userCode,year,month);
-
-    console.log("payment is in r",this.payment);
-    this.printableArea=!this.printableArea;
-
-  
-  },
-  async downloadReceiptAsPDF1() {
+    async viewReceiptAsPDF() {
   // Clone the printable area
   const element = document.getElementById("printable-area").cloneNode(true);
   element.classList.remove('hidden');
@@ -757,7 +746,8 @@ export default {
   window.open(pdfUrl, "_blank");
 },
 
-    async downloadReceiptAsPDF() {
+
+    downloadReceiptAsPDF() {
       //  await this.generateQRCodeImage();
       // Clone the printable area
       const element = document.getElementById("printable-area").cloneNode(true);
