@@ -5,6 +5,7 @@
     <div class="flex flex-row mb-6 space-x-3">
         <label for="month" class="block text-sm font-medium text-gray-700">Year</label>
         <select
+         @change="getPaymentBasedOnYear()"
           v-model="year"
           class="custom-select"
         >
@@ -135,7 +136,7 @@ export default {
     },
   },
 
-  mounted() {
+ mounted() {
     this.$apiClient
       .get("/api/v1/users/", {
         params: {
@@ -156,7 +157,10 @@ export default {
     this.filteredUsers=this.users;
     console.log("mounted filtered users",this.filteredUsers);
   },
-  methods: {
+methods: {
+  getPaymentBasedOnYear(){
+      this.toggleUserSelection(this.userCode)
+  },
   paymentHistoryDetail(month){
 
     console.log("active month",this.month);
@@ -197,7 +201,7 @@ toggleUserSelection(userCode) {
       this.selectYear=true;
       return;
     }
-    this.$apiClient.get(
+      this.$apiClient.get(
           `/api/v1/payments/userBalance?&activeYear=${this.year} &userCode=${userCode}`
         )
         .then((response) => {
@@ -214,9 +218,7 @@ toggleUserSelection(userCode) {
         });
     },
 
-    // the problem is the server problem
-
-    searchUsers(keyword) {
+searchUsers(keyword) {
       this.showList=true;
       this.showPaymentNotFound=false;
       this.showTable=false;
@@ -231,7 +233,7 @@ toggleUserSelection(userCode) {
 
       console.log("filtered users", this.filteredUsers);
     },
-    sendToDataBase() {
+sendToDataBase() {
       console.log("paymentsb", this.selectedPayments);
       if (this.selectedPayments.length === 0) {
         this.paymentVerified = false;
@@ -246,8 +248,6 @@ toggleUserSelection(userCode) {
       }
       console.log("paymentsafter", this.selectedPayments);
     },
-
-    
   },
 };
 </script>

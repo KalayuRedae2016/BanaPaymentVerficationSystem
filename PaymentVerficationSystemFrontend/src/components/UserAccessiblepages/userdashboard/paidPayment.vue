@@ -227,7 +227,7 @@
     </div>
   </div>
 
- <div class="w-full flex flex-row hidden" id="printable-area">
+ <div class="w-full flex flex-row hidden" id="printablee-area">
   <!-- First Receipt -->
   <div class="w-full p-2 receipt border-4 border-red-500 border-dotted">
     <div class="bg-green-200 text-blue-800 p-2 relative">
@@ -364,6 +364,206 @@
     </div>
    </div>
   </div>
+
+  <div class="container hidden" id="printable-area">
+      <div class="receipt">
+        <!-- 
+  <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
+  <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
+  <h1 style="margin: 0;">Bana Mall Official Receipt</h1>
+</div> -->
+
+        <div style="width: 90%; max-width: 100%; min-width: 100%">
+          <img
+            src="../../../assets/img/banaReceipt1.jpg"
+            alt=""
+            style="max-width: 100%; height: auto; display: block"
+          />
+         
+        </div>
+
+        <div class="receipt-header" style="background-color: white">
+          <div class="info">
+            <div class="text" style="margin-left: -10px">
+              Bill Code: <span>{{ payment.billCode }}</span>
+            </div>
+            <div class="text">
+              <!-- Date(Day-Month-Year):
+              <span
+                >{{ receiptDate.getDate() }}-{{
+                  changeMonthIntoString(receiptDate.getMonth() + 1)
+                }}-{{ receiptDate.getFullYear() }}</span
+              > -->
+            </div>
+          </div>
+        </div>
+
+        <h2 class="section-title" style="color: #622e2e; font-weight: bold">
+          Company Information
+        </h2>
+        <div class="grid">
+          <div class="box">
+            <table class="table" style="color: #622e2e; font-weight: bold">
+              <tr>
+                <td>Country:</td>
+                <td>{{ Country }}</td>
+              </tr>
+              <tr>
+                <td>City:</td>
+                <td>{{ City }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="box">
+            <table class="table" style="color: #622e2e; font-weight: bold">
+              <tr>
+                <td>Email:</td>
+                <td>{{ Email }}</td>
+              </tr>
+              <tr>
+                <td>Tel:</td>
+                <td>{{ Tel }}</td>
+              </tr>
+              <tr>
+                <td>address:</td>
+                <td>{{ Address }}</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <h2 class="section-title" style="color: #622e2e; font-weight: bold">
+          Payment Information
+        </h2>
+        <img src="../../../assets/img/sample.jpg" alt="Sample Stamp" class="absolute inset-0 w-64 h-64  mx-auto my-auto ">
+         
+        <table class="table">
+          <tr>
+            <td style="color: #333; font-weight: bold">FullName</td>
+            <td class="right">{{ payment.fullName }}</td>
+          </tr>
+          <tr>
+            <td style="color: #333; font-weight: bold">UserCode</td>
+            <td class="right">{{ payment.userCode }}</td>
+          </tr>
+
+          <tr>
+            <td style="color: #333; font-weight: bold">Payment Term</td>
+            <td class="right">{{ paymentTerm }}</td>
+          </tr>
+          <tr>
+            <td style="color: #333; font-weight: bold">RegFee</td>
+            <td class="right">{{ payment.registrationFee }}</td>
+          </tr>
+          <tr>
+            <td style="color: #333; font-weight: bold">Regular Amount</td>
+            <td class="right">{{ payment.regular.amount }}</td>
+          </tr>
+
+          <tr>
+            <td style="color: #333; font-weight: bold">Subsidy Amount</td>
+            <td class="right">{{ payment.subsidy.amount }}</td>
+          </tr>
+          <tr>
+            <td style="color: #333; font-weight: bold">Urgent Amount</td>
+            <td class="right">{{ payment.urgent.amount }}</td>
+          </tr>
+          <tr>
+            <td style="color: #333; font-weight: bold">Service Amount</td>
+            <td class="right">{{ payment.service.amount }}</td>
+          </tr>
+
+          <tr>
+            <td style="color: #333; font-weight: bold">Penality</td>
+            <td class="right">{{ payment.penality.amount }}</td>
+          </tr>
+
+          <tr>
+            <td style="color: #333; font-weight: bold">Total Block</td>
+            <td class="right">
+              {{
+                payment.regular.amount +
+                payment.subsidy.amount +
+                payment.urgent.amount
+              }}
+            </td>
+          </tr>
+          <tr>
+            <td style="color: #333; font-weight: bold">Total Service</td>
+            <td class="right">
+              {{ payment.penality.amount + payment.service.amount }}
+            </td>
+          </tr>
+        </table>
+
+        <div
+          class="signature-section"
+          style="color: #622e2e; font-weight: bold"
+        >
+          <div class="signature-row">
+            <div class="signature-block">
+              <span>Prepared by: ___________________________</span>
+              <span style="margin-left: 11px"
+                >Signature: ___________________________</span
+              >
+            </div>
+            <div class="signature-block">
+              <span>Received by: _________________________</span>
+              <span style="margin-left: 13px"
+                >Signature: _________________________</span
+              >
+            </div>
+          </div>
+
+          <div
+            class="approval-section"
+            style="color: #622e2e; font-weight: bold"
+          >
+            <div class="approval-block">
+              <span>Approval Bank Deposit: ____________________________</span>
+              <span style="margin-left: 58px"
+                >Signature: ____________________________</span
+              >
+            </div>
+          </div>
+          <div style="position: relative; width: 100%; height: 150px">
+            <div
+              class="w-32 h-32"
+              id="qrCodeImageContainer"
+              style="
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 40px;
+                background-color: lightgray;
+              "
+            >
+              QR Code
+            </div>
+          </div>
+        </div>
+
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            color: #622e2e;
+            font-weight: bold;
+          "
+        >
+          <div class="footer">
+            &copy; {{ new Date().getFullYear() }} Bana Mole. All rights
+            reserved.
+          </div>
+        </div>
+
+        
+      </div>
+
+   
+    </div>
 </div>
 
 </template>
@@ -535,9 +735,9 @@ export default {
  },
 
 async generateQRCodeImage() {
- const qrData = `Bana Receipt For User
- ${this.payment.userCode}, "Full Name": ${this.payment.fullName},"Year":${this.payment.activeYear},"Month":${this.payment.activeMonth},"BillCode":${this.payment.billCode},"Confirmation Date":${this.payment.confirmedDate},"Website":${this.websiteUrl}`;
-  try {
+ const qrData = `Bana Receipt For User`
+ 
+ try {
     const qrCodeImage = await QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' });
     document.getElementById('qrCodeImageContainer').innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
   } catch (error) {
@@ -583,6 +783,136 @@ async generateQRCodeImage() {
                 margin: 0 !important;
                 padding: 0 !important;
               }
+              /* Ensure background color is set */
+              #printable-area {
+                background-color: white; /* Use a solid color or adjust as needed */
+              }
+            }
+    
+            @media print {
+              #printable-area {
+                display: flex !important;
+                flex-direction: row !important;
+                width: 100% !important;
+                height:100%;
+                
+              }
+              .receipt {
+                flex: 1 !important;
+                min-width: 0 !important;
+                page-break-inside: avoid; /* Prevents page breaks inside receipts */
+              }
+              body {
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+
+                 .container {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+     
+    }
+
+    .receipt {
+      flex: 1;
+      padding: 10px;
+      border: 1px dotted #622e2e; /* Red dotted border */
+    }
+
+    .receipt:nth-child(2) {
+      border-left: none;
+    }
+
+    .receipt-header {
+      background-color: #bbf7d0; /* Light green */
+      color: #1d4ed8; /* Dark blue text */
+      padding: 10px;
+    }
+
+    .receipt-header .info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .receipt-header .info .text {
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .receipt-header .qr {
+      width: 80px;
+      height: 80px;
+      background: #e5e7eb; /* Placeholder for QR Code */
+      margin-left: 10px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .box {
+      background: #ffffff;
+      border: 1px solid #d1d5db;
+      padding: 5px;
+    }
+
+    .table {
+      width: 100%;
+      font-size: 10px;
+      border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+      padding: 2px;
+      text-align: left;
+    }
+
+    .table .right {
+      text-align: right;
+    }
+
+    .signature-section {
+      margin-top: 15px;
+      font-size: 10px;
+    }
+
+    .signature-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .signature-block {
+      width: 45%;
+      text-align: left;
+    }
+
+    .signature-block span {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .approval-section {
+      margin-top: 10px;
+      font-size: 10px;
+    }
+
+    .approval-block span {
+      display: block;
+      margin-bottom: 5px;
+    }
               /* Ensure background color is set */
               #printable-area {
                 background-color: white; /* Use a solid color or adjust as needed */
