@@ -971,15 +971,15 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   const currentDate = new Date();
   const paymentDateObj = paymentDate ? new Date(paymentDate) : currentDate;
 
-  // Validate payment date
-  if (paymentDateObj < new Date(startingDate) || paymentDateObj > currentDate) {
-    return next(
-      new AppError(
-        `Payment date must be greater than ${new Date(startingDate).toLocaleDateString()} and less than or equal to ${currentDate.toLocaleDateString()}.`,
-        400
-      )
-    );
-  }
+  // // Validate payment date
+  // if (paymentDateObj < new Date(startingDate) || paymentDateObj > currentDate) {
+  //   return next(
+  //     new AppError(
+  //       `Payment date must be greater than ${new Date(startingDate).toLocaleDateString()} and less than or equal to ${currentDate.toLocaleDateString()}.`,
+  //       400
+  //     )
+  //   );
+  // }
 
   // Calculate days late
   let daysLate = Math.ceil((paymentDateObj - dueDate) / (1000 * 3600 * 24));
@@ -1018,7 +1018,6 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   if (paymentType === 'service') {
     penality = 0;
   }
-
   // Return penalty details
   res.status(200).json({
     status: 'Success',
