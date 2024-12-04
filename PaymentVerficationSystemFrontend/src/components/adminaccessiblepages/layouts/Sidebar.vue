@@ -161,7 +161,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-envelope opacity-75 mr-2 text-md text-teal-600"
+                  class="ffas fa-id-card opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("idCard") }}</span>
               </a>

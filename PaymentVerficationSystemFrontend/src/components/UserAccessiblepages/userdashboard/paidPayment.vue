@@ -1,49 +1,67 @@
 <template>
   <div class="text-xs">
     <div class="p-4">
-        <div class="flex-row">
-          <select
-            v-model="year"
-            id="month"
-            class="w-1/2 custom-select"
-            @click="getData()"
-          >
-            <option value="" disabled>Select Year</option>
-            <option v-for="year in $years" :key="year" :value="year">
-              {{ year }}
-            </option>
-          </select>
+      <div class="flex-row">
+        <select
+          v-model="year"
+          id="month"
+          class="w-1/2 custom-select"
+          @change="getData()"
+        >
+          <option value="" disabled>Select Year</option>
+          <option v-for="year in $years" :key="year" :value="year">
+            {{ year }}
+          </option>
+        </select>
       </div>
- 
-      <div class="space-y-2 mt-3 border-t border-gray-300" v-if="showList">
-    <ul class="bg-white rounded-md shadow-md divide-y divide-gray-200">
-      <li
-        v-for="(month, index) in $months"
-        :key="index"
-        class="flex items-center justify-between px-4 py-2"
+      <div
+        v-if="selectYear"
+        class="mt-5 mb-5 w-full p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 rounded-md shadow-md flex justify-between items-center"
       >
-        <a
-          href="#"
-          class="hover:bg-blue-100 hover:text-blue-700 transition duration-150"
-        >
-          {{ month.name }}
-        </a>
+        <div class="flex items-center">
+          <i class="fas fa-exclamation-triangle mr-3"></i>
+          <p class="text-sm">Please Select Year!!</p>
+        </div>
         <button
-          @click="viewReceiptAsPDF()"
-          class="text-blue-500 hover:underline"
+          class="text-yellow-700 hover:text-yellow-900 focus:outline-none"
+          @click="selectYear = !selectYear"
         >
-          View Receipt
+          <i class="fas fa-times"></i>
         </button>
-        <button
-          @click="downloadReceiptAsPDF()"
-          class="text-blue-500 hover:underline"
-        >
-          Download Receipt
-        </button>
-      </li>
-    </ul>
-  </div>
-  <div id="pdf-container"></div>
+      </div>
+
+      <div
+        class="space-y-2 mt-3 border-t border-gray-300"
+        v-if="selectedPaymentLength >= 1"
+      >
+        <ul class="bg-white rounded-md shadow-md divide-y divide-gray-200">
+          <li
+            v-for="(payment, index) in payments"
+            :key="index"
+            class="flex items-center justify-between px-4 py-1"
+          >
+            <a
+              href="#"
+              class="hover:bg-blue-100 hover:text-blue-700 transition duration-150"
+            >
+              {{ payment.activeMonth }}
+            </a>
+            <button
+              @click="viewReceiptAsPDF(payment)"
+              class="text-blue-500 hover:underline"
+            >
+              View Receipt
+            </button>
+            <button
+              @click="downloadReceiptAsPDF(payment)"
+              class="text-blue-500 hover:underline"
+            >
+              Download Receipt
+            </button>
+          </li>
+        </ul>
+      </div>
+      <div id="pdf-container"></div>
 
       <!-- <div>
         <div class="ml-5">
@@ -225,146 +243,214 @@
         </div>
       </div> -->
     </div>
-    <div class="w-full flex flex-row hidden " id="printable-area">
-    <!-- First Receipt -->
-    <div class="w-full p-2 receipt border-4 border-red-500 border-dotted">
-      <div class="bg-green-200 text-blue-800 p-2 relative">
-        <img src="../../../assets/img/head.png" alt="Barcode" class="mb-3 w-full" />
-        <div class="flex items-center justify-between">
-          <div class="text-xs flex items-center space-x-2">
-            <span class="font-semibold">BillCode:</span>
-            <span>{{ receiptData.billCode }}</span>
+    <div class="w-full flex flex-row" id="printable-area">
+      <!-- First Receipt -->
+      <div
+        class="w-full p-2 receipt border-4"
+        style="border: 1px dotted #622e2e"
+      >
+        <div class="text-blue-800 p-2 relative">
+          <img
+            src="../../../assets/img/banaReceipt1.jpg"
+            alt="Barcode"
+            class="mb-3 w-full"
+          />
+          <div class="flex items-center justify-between">
+            <div class="text-xs flex items-center space-x-2" style="">
+              <span class="font-semibold">BillCode:</span>
+              <span>{{ selectedPayment.billCode }}</span>
+            </div>
+            <div
+              class="text-xs flex items-center space-x-2"
+              style="margin-right: 10px"
+            >
+              <span class="font-semibold">Confirmation Date:</span>
+              <span>{{ selectedPayment.confirmedDate }}</span>
+            </div>
           </div>
-          <div class="text-xs flex items-center space-x-2">
-            <span class="font-semibold">Confirmation Date:</span>
-            <span>{{ receiptData.confirmedDate }}</span>
-          </div>
-        </div>
-  
-        <h2 class="text-xs font-semibold mt-2">Company Information</h2>
-        <div class="grid grid-cols-2 gap-2 mt-1">
-          <div class="bg-white border border-gray-300 p-2 relative">
-            <!-- Wrapper for the table and the watermark image -->
-            <div class="relative">
-            <table class="w-full text-xs relative z-10">
+
+          <h2
+            class="text-xs font-semibold mt-2"
+            style="color: #622e2e; font-weight: bold"
+          >
+            Company Information
+          </h2>
+          <div class="grid grid-cols-2 gap-2 mt-1">
+            <div class="bg-white border border-gray-300 p-2 relative">
+              <!-- Wrapper for the table and the watermark image -->
+              <div class="relative">
+                <table
+                  class="w-full text-xs relative z-10"
+                  style="color: #622e2e; font-weight: bold"
+                >
+                  <tbody>
+                    <tr>
+                      <td class="font-semibold">Country:</td>
+                      <td>{{ country }}</td>
+                    </tr>
+                    <tr>
+                      <td class="font-semibold">City:</td>
+                      <td>{{ city }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="bg-white border border-gray-300 p-2">
+              <table
+                class="w-full text-xs"
+                style="color: #622e2e; font-weight: bold"
+              >
                 <tbody>
                   <tr>
-                    <td class="font-semibold">Country:</td>
-                    <td>{{ Country }}</td>
+                    <td class="font-semibold">Email:</td>
+                    <td>{{ email }}</td>
                   </tr>
                   <tr>
-                    <td class="font-semibold">City:</td>
-                    <td>{{ City }}</td>
+                    <td class="font-semibold">Tel:</td>
+                    <td>{{ tel }}</td>
+                  </tr>
+                  <tr>
+                    <td class="font-semibold">Address:</td>
+                    <td>{{ address }}</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
-          <div class="bg-white border border-gray-300 p-2">
-            <table class="w-full text-xs">
-              <tbody>
-                <tr>
-                  <td class="font-semibold">Email:</td>
-                  <td>{{ Email }}</td>
-                </tr>
-                <tr>
-                  <td class="font-semibold">Tel:</td>
-                  <td>{{ Tel }}</td>
-                </tr>
-                <tr>
-                  <td class="font-semibold">Address:</td>
-                  <td>{{ Address }}</td>
-                </tr>
-              </tbody>
-            </table>
+
+          <div class="bg-white border border-gray-300 p-2 mt-2 relative">
+            <div class="relative">
+              <img
+                src="../../../assets/img/sample1.jpg"
+                alt="Sample Stamp"
+                class="absolute inset-0 w-32 h-32 mx-auto my-auto z-10 rounded-full"
+              />
+              <table class="w-full text-xs table-auto">
+                <thead>
+                  <tr>
+                    <th class="text-left text-[#622e2e] font-bold py-1">
+                      Payment Information
+                    </th>
+                    <th class="text-left"></th>
+                    <th class="text-right"></th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-500 font-bold">
+                  <tr class="border-b border-gray-300 border-t border-gray-300">
+                    <td class="font-semibold py-1">UserCode</td>
+                    <td></td>
+                    <td class="text-right py-1">{{ payment.userCode }}</td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">FullName</td>
+                    <td></td>
+                    <td class="text-right py-1">Tadessse Gebremicheal</td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">PaymentTerm</td>
+                    <td></td>
+                    <td class="text-right py-1">{{ paymentTerm }}</td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Year</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{ selectedPayment.activeYear }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Month</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{ selectedPayment.activeMonth }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Regular Amount</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{ selectedPayment.regularAmountPaid }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Subsidy Amount</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{ selectedPayment.subsidyAmountPaid }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Urgent Amount</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{ selectedPayment.urgentAmountPaid }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Service Amount</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{ selectedPayment.serviceAmountPaid }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Penalty</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{ selectedPayment.penalityAmountPaid }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">Total Block Amount Paid</td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{
+                        selectedPayment.regularAmountPaid +
+                        selectedPayment.subsidyAmountPaid +
+                        selectedPayment.urgentAmountPaid
+                      }}
+                    </td>
+                  </tr>
+                  <tr class="border-b border-gray-300">
+                    <td class="font-semibold py-1">
+                      Total Service Amount Paid
+                    </td>
+                    <td></td>
+                    <td class="text-right py-1">
+                      {{
+                        selectedPayment.serviceAmountPaid +
+                        selectedPayment.penalityAmountPaid
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-  
-        <div class="bg-white border border-gray-300 p-2 mt-2 relative">
-          <div class="relative">
-            <img src="../../../assets/img/sample.jpg" alt="Sample Stamp" class="absolute inset-0 w-64 h-64  mx-auto my-auto ">
-            <table class="w-full text-xs relative z-10">
-              <thead>
-                <tr>
-                  <th class="text-left">Payment Information</th>
-                  <th class="text-left"></th>
-                  <th class="text-right"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="font-semibold">UserCode</td>
-                  <td></td>
-                   <!-- <td class="text-right">{{ payment.userCode }}</td>  -->
-                   <td class="text-right">BM0002</td> 
-                </tr>
-                <tr>
-                  <td class="font-semibold">FullName</td>
-                  <td></td>
-                  <!-- <td class="text-right">{{ payment.fullName }}</td> -->
-                  <td class="text-right">Tadessse Gebremicheal</td>
-                </tr>
-              
-                <tr>
-                  <td class="font-semibold">PaymentTerm</td>
-                  <td></td>
-                  <td class="text-right">{{ paymentTerm }}</td>
-                </tr>
-               
-                
-                <tr>
-                  <td class="font-semibold">Regular Amount</td>
-                  <td></td>
-                  <td class="text-right">{{payment.regular.amount }}</td>
-                </tr>
-               
-                <tr>
-                  <td class="font-semibold">Subsidy Amount</td>
-                  <td></td>
-                  <td class="text-right">{{ payment.subsidy.amount}}</td>
-                </tr>
-                <tr>
-                  <td class="font-semibold">Urgent Amount</td>
-                  <td></td>
-                  <td class="text-right">{{ payment.urgent.amount}}</td>
-                </tr>
-                <tr>
-                  <td class="font-semibold">Service Amount</td>
-                  <td></td>
-                  <td class="text-right">{{ payment.service.amount }}</td>
-                </tr>
-                <tr>
-                  <td class="font-semibold">Penalty</td>
-                  <td></td>
-                  <td class="text-right">{{ payment.penality.amount }}</td>
-                </tr>
-                
-                <tr>
-                  <td class="font-semibold">Total Block Amount Paid</td>
-                  <td></td>
-                  <td class="text-right">{{ payment.regular.amount + payment.subsidy.amount + payment.urgent.amount }}</td>
-                </tr>
-                <tr v-if="payment.penality.amount>0">
-                  <td class="font-semibold">Total Service Amount Paid</td>
-                  <td></td>
-                  <td class="text-right">{{ payment.service.amount + payment.penality.amount }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+        
+            <div class="mx-auto w-64 h-64 mt-10" id="qrCodeImageContainer"></div>
          
+          
+
+          <p class="text-center text-xs mt-2">The Best Mole Ever</p>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+              color: #622e2e;
+              font-weight: bold;
+            "
+          >
+            <div class="footer" style="margin-bottom: 172.5px">
+              &copy; {{ new Date().getFullYear() }} Bana Mole. All rights
+              reserved.
+            </div>
+          </div>
         </div>
-        <div class=" mx-auto w-32 h-32 mt-10" id="qrCodeImageContainer"></div>
-  
-     
-        <p class="text-center text-xs mt-2">The Best Mole Ever</p>
-        <p class="text-center text-xs mt-1">
-          &copy; 2024 Bana Mole. All rights reserved.
-        </p>
       </div>
-     </div>
     </div>
-    <div class="container hidden" id="printablee-area">
+    <div class="container hidden" id="printableee-area">
       <div class="receipt">
         <!-- 
   <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
@@ -562,24 +648,20 @@
         </div>
       </div>
     </div>
-
-
-
   </div>
 </template>
 <script>
-
 import QRCode from "qrcode";
 import html2pdf from "html2pdf.js";
-import { jsPDF } from "jspdf";
 import { mapGetters } from "vuex";
 
 export default {
- 
   data() {
     return {
-      showList:true,
-      printableArea:false,
+      selectedPaymentLength: 0,
+      selectedPayment: {},
+      showList: true,
+      printableArea: false,
       year: "",
       month: "",
       selectYear: false,
@@ -587,15 +669,19 @@ export default {
       // we will try from db then. but now from static
       paymentTerm: "monthly",
       websiteUrl: "https://bannamall.com/",
-      Email: "bannamall@gmail.com",
-      Country: "Ethipia",
-      Tel: "0967740501",
-      Address: "Mekelle Kedemay Weyane",
-      City: "Mekelle",
+      email: "",
+      country: "Ethipia",
+      tel: "",
+      address: "",
+      city: "Mekelle",
+
       receiptDate: new Date(),
+
+      payments: [],
+
       //
       payment: {
-        userCode:"BM0002",
+        userCode: "BM0002",
         urgent: {
           amount: 40000,
           bankType: null,
@@ -695,118 +781,161 @@ export default {
   watch: {},
 
   mounted() {
+    this.$apiClient
+      .get("/api/v1/organization")
+      .then((response) => {
+        console.log("Org response", response);
+        if (response.data.status === 1) {
+          console.log(
+            "Organization email",
+            response.data.organization.companyEmail
+          );
+          this.email = response.data.organization.companyEmail;
+          this.tel = response.data.organization.companyPhoneNumber;
+          this.address = response.data.organization.companyAddress;
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error.message);
+        this.organizationCreated = 0;
+      });
+    //console.log("payment is",this.payment);
+    this.year = new Date().getFullYear();
 
-    console.log("payment is",this.payment);
-
-    // const userCode = "BM0001";
-    // this.$apiClient
-    //   .get(`/api/v1/payments/latestPayment`, {
-    //     params: {
-    //       userCode: userCode,
-    //     },
-    //   })
-    //   .then((response) => {
-    //     console.log("response latestConfirmed is", response.data);
-    //     this.payment = response.data.payment;
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    this.getData();
   },
   methods: {
-    async viewReceiptAsPDF() {
-  // Clone the printable area
-  const element = document.getElementById("printable-area").cloneNode(true);
-  element.classList.remove('hidden');
+    async viewReceiptAsPDF(selectedPayment) {
+      console.log("Selected payment:", selectedPayment);
 
-  // Create a temporary div to hold the content and Tailwind styles
-  const wrapperDiv = document.createElement("div");
-  wrapperDiv.appendChild(element);
+      // Update the selected payment
+      this.selectedPayment = selectedPayment;
+      await this.generateQRCodeImage();
+      // Wait for DOM updates
+      await this.$nextTick();
 
-  // Fetch the Tailwind CSS file and append it as a <style> tag to the wrapperDiv (if needed)
-  const styleElement = document.createElement("style");
-  // If your Tailwind CSS is local, ensure it's included in the generated document
-  wrapperDiv.appendChild(styleElement);
-
-  // Options for html2pdf conversion
-  const options = {
-    filename: "Tadesse Gebremicheal Berhe",
-    image: { type: "jpeg", quality: 0.98 },
-    html2canvas: { scale: 2 },
-    jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-  };
-
-  // Generate the PDF and get its blob
-  const pdfBlob = await html2pdf().from(wrapperDiv).set(options).outputPdf("blob");
-
-  // Create a Blob URL for the PDF
-  const pdfUrl = URL.createObjectURL(pdfBlob);
-
-  // Open the PDF in a new tab for viewing
-  window.open(pdfUrl, "_blank");
-},
-
-
-    downloadReceiptAsPDF() {
-      //  await this.generateQRCodeImage();
       // Clone the printable area
       const element = document.getElementById("printable-area").cloneNode(true);
-      element.classList.remove('hidden');
-      // Create a temporary div to hold the content and Tailwind styles
+      element.classList.remove("hidden");
+
+      // Create a wrapper div to hold the content and styles
       const wrapperDiv = document.createElement("div");
       wrapperDiv.appendChild(element);
 
-      // Fetch the Tailwind CSS file and append it as a <style> tag to the wrapperDiv
-      // const tailwindStylesheet = await fetch("https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css")
-      //   .then(response => response.text());
-
-      //   alert("look the error still");
-
+      // Add Tailwind reset styles
       const styleElement = document.createElement("style");
-      // styleElement.innerHTML = tailwindStylesheet;
-
-      // Append the Tailwind CSS <style> tag to the cloned document
+      styleElement.textContent = `
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        
+        }
+        #printable-area {
+          height: 100%;
+          width: 100%;
+          border:2px dotted blue;
+        
+        }
+        @page {
+          margin: 0; /* Remove default PDF margins */
+        }
+      `;
       wrapperDiv.appendChild(styleElement);
 
-      // Options for html2pdf conversion
+      // Configure html2pdf options
       const options = {
-        filename: "Tadesse Gebremicheal Berhe",
+        filename: "Receipt.pdf",
         image: { type: "jpeg", quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+        html2canvas: { scale: 1, useCORS: true }, // Reduce scale if necessary
+        jsPDF: {
+          unit: "in",
+          format: "a4", // A4 size
+          orientation: "portrait", // Portrait orientation
+          compress: true, // Compress to reduce file size
+        },
       };
 
-      // Convert the wrapperDiv (which contains the styles and content) to PDF
-      html2pdf().from(wrapperDiv).set(options).save();
+      // Generate and open the PDF
+      const pdfBlob = await html2pdf()
+        .from(wrapperDiv)
+        .set(options)
+        .outputPdf("blob");
+      const pdfUrl = URL.createObjectURL(pdfBlob);
+      window.open(pdfUrl, "_blank");
     },
-    getData() {
-      if (this.year == "") {
-        this.selectYear = true;
-        return;
-      }
-      if (this.month == "") {
-        this.selectMonth = true;
-        return;
-      }
 
-      const userCode = "BM0001";
+    async downloadReceiptAsPDF(selectedPayment) {
+      console.log(selectedPayment);
+      this.selectedPayment = selectedPayment;
+      await this.generateQRCodeImage();
+      // Wait for Vue to update the DOM
+      this.$nextTick(() => {
+        const element = document
+          .getElementById("printable-area")
+          .cloneNode(true);
+        element.classList.remove("hidden");
+        const wrapperDiv = document.createElement("div");
+        wrapperDiv.appendChild(element);
+        const styleElement = document.createElement("style");
+        styleElement.textContent = `
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        
+        }
+        #printable-area {
+          height: 100%;
+          width: 100%;
+          border:2px dotted blue;
+        
+        }
+        @page {
+          margin: 0; /* Remove default PDF margins */
+        }
+      `;
+        wrapperDiv.appendChild(styleElement);
+
+        const options = {
+          filename: "Tadesse Gebremicheal Berhe",
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+        };
+
+        html2pdf().from(wrapperDiv).set(options).save();
+      });
+    },
+
+    getData() {
+      //alert("get called");
+      // here all paymentys formeach month in the given year will be fetched and displayed in the list.
+      // //alert("getData");
+      console.log("year", this.year);
+
+      // if (this.year == "") {
+      //   this.selectYear = true;
+      //return;
+      // }
+
+      const userCode = "BM0005";
+
       //const userCode = this.userCode();
 
       this.$apiClient
-        .get("/api/v1/payments/paymentbyMonth", {
-          params: {
-            userCode: userCode,
-            activeYear: this.year,
-            activeMonth: this.month,
-          },
-        })
+        .get(
+          `/api/v1/payments/userBalance?&activeYear=${this.year} &userCode=${userCode}`
+        )
         .then((response) => {
-          console.log("response pp", response);
-          this.payment = response.data.payment;
-          console.log("this payment is billcode ", this.payment.billCode);
+          console.log("response userbalance", response);
+          this.payments = response.data.payments;
+          console.log("payments of the given year", this.payments);
+          this.selectedPaymentLength = 1;
         })
         .catch((error) => {
-          console.log(error);
+          this.selectedPaymentLength = 0;
+          console.error("Error fetching user balance:", error);
         });
     },
 
@@ -1037,154 +1166,152 @@ export default {
 </script>
 
 <style>
-            @media print {
-              #printable-area {
-                display: flex !important;
-                flex-direction: row !important;
-                width: 100% !important;
-              }
-              .receipt {
-                flex: 1 !important;
-                min-width: 0 !important;
-                page-break-inside: avoid; /* Prevents page breaks inside receipts */
-              }
-              body {
-                margin: 0 !important;
-                padding: 0 !important;
-              }
-              /* Ensure background color is set */
-              #printable-area {
-                background-color: white; /* Use a solid color or adjust as needed */
-              }
-            }
-    
-            @media print {
-              #printable-area {
-                display: flex !important;
-                flex-direction: row !important;
-                width: 100% !important;
-                height:100%;
-                
-              }
-              .receipt {
-                flex: 1 !important;
-                min-width: 0 !important;
-                page-break-inside: avoid; /* Prevents page breaks inside receipts */
-              }
-              body {
-                margin: 0 !important;
-                padding: 0 !important;
-              }
+@media print {
+  #printable-area {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+  }
+  .receipt {
+    flex: 1 !important;
+    min-width: 0 !important;
+    page-break-inside: avoid; /* Prevents page breaks inside receipts */
+  }
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  /* Ensure background color is set */
+  #printable-area {
+    background-color: white; /* Use a solid color or adjust as needed */
+  }
+}
 
-                 .container {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-     
-    }
+@media print {
+  #printable-area {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100% !important;
+    height: 100%;
+  }
+  .receipt {
+    flex: 1 !important;
+    min-width: 0 !important;
+    page-break-inside: avoid; /* Prevents page breaks inside receipts */
+  }
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 
-    .receipt {
-      flex: 1;
-      padding: 10px;
-      border: 1px dotted #622e2e; /* Red dotted border */
-    }
+  .container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
 
-    .receipt:nth-child(2) {
-      border-left: none;
-    }
+  .receipt {
+    flex: 1;
+    padding: 10px;
+    border: 1px dotted #622e2e; /* Red dotted border */
+  }
 
-    .receipt-header {
-      background-color: #bbf7d0; /* Light green */
-      color: #1d4ed8; /* Dark blue text */
-      padding: 10px;
-    }
+  .receipt:nth-child(2) {
+    border-left: none;
+  }
 
-    .receipt-header .info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+  .receipt-header {
+    background-color: #bbf7d0; /* Light green */
+    color: #1d4ed8; /* Dark blue text */
+    padding: 10px;
+  }
 
-    .receipt-header .info .text {
-      font-size: 10px;
-      font-weight: bold;
-    }
+  .receipt-header .info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .receipt-header .qr {
-      width: 80px;
-      height: 80px;
-      background: #e5e7eb; /* Placeholder for QR Code */
-      margin-left: 10px;
-    }
+  .receipt-header .info .text {
+    font-size: 10px;
+    font-weight: bold;
+  }
 
-    .section-title {
-      font-size: 12px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
+  .receipt-header .qr {
+    width: 80px;
+    height: 80px;
+    background: #e5e7eb; /* Placeholder for QR Code */
+    margin-left: 10px;
+  }
 
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      margin-top: 5px;
-    }
+  .section-title {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 10px;
+  }
 
-    .box {
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      padding: 5px;
-    }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    margin-top: 5px;
+  }
 
-    .table {
-      width: 100%;
-      font-size: 10px;
-      border-collapse: collapse;
-    }
+  .box {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    padding: 5px;
+  }
 
-    .table th,
-    .table td {
-      padding: 2px;
-      text-align: left;
-    }
+  .table {
+    width: 100%;
+    font-size: 10px;
+    border-collapse: collapse;
+  }
 
-    .table .right {
-      text-align: right;
-    }
+  .table th,
+  .table td {
+    padding: 2px;
+    text-align: left;
+  }
 
-    .signature-section {
-      margin-top: 15px;
-      font-size: 10px;
-    }
+  .table .right {
+    text-align: right;
+  }
 
-    .signature-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
+  .signature-section {
+    margin-top: 15px;
+    font-size: 10px;
+  }
 
-    .signature-block {
-      width: 45%;
-      text-align: left;
-    }
+  .signature-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
 
-    .signature-block span {
-      display: block;
-      margin-bottom: 5px;
-    }
+  .signature-block {
+    width: 45%;
+    text-align: left;
+  }
 
-    .approval-section {
-      margin-top: 10px;
-      font-size: 10px;
-    }
+  .signature-block span {
+    display: block;
+    margin-bottom: 5px;
+  }
 
-    .approval-block span {
-      display: block;
-      margin-bottom: 5px;
-    }
-              /* Ensure background color is set */
-              #printable-area {
-                background-color: white; /* Use a solid color or adjust as needed */
-              }
-            }
-          </style>
+  .approval-section {
+    margin-top: 10px;
+    font-size: 10px;
+  }
+
+  .approval-block span {
+    display: block;
+    margin-bottom: 5px;
+  }
+  /* Ensure background color is set */
+  #printable-area {
+    background-color: white; /* Use a solid color or adjust as needed */
+  }
+}
+</style>

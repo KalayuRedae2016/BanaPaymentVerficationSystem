@@ -59,7 +59,7 @@ export default {
       internetConnected: false,
       activeTab: 0,
       tabs: [
-        "Confirmed/paids Payments",
+        "Confirmed(Paid) Payments",
         "Unpaid Payments",
        
       ],

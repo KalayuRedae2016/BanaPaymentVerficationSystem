@@ -415,10 +415,10 @@ export default {
   },
   mounted() {
 
-     const userCode = this.userCode;
-     console.log(userCode);
+    //  const userCode = this.userCode;
+    //  console.log(userCode);
 
-     this.fetchUnPaid();
+    //  this.fetchUnPaid();
   },
   methods: {
     fetchUnPaid() {
