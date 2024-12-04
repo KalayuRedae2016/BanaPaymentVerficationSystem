@@ -243,7 +243,7 @@
         </div>
       </div> -->
     </div>
-    <div class="w-full flex flex-row" id="printable-area">
+    <div class="w-full flex flex-row hidden" id="printable-area">
       <!-- First Receipt -->
       <div
         class="w-full p-2 receipt border-4"
