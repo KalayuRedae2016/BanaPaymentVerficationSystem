@@ -204,7 +204,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-tachometer opacity-75 mr-2 text-md text-pink-600"
+                  class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("dashboard") }}</span>
               </a>
@@ -223,7 +223,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("companyProfile") }}</span>
               </a>
@@ -240,7 +240,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-users opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("clientProfile") }}</span>
               </a>
@@ -259,7 +259,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-cogs opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-cogs opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("paymentSetting") }}</span>
               </a>
@@ -278,7 +278,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-credit-card opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-credit-card opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("newPayments") }}</span>
               </a>
@@ -297,7 +297,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-list-alt opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-list-alt opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("allPayments") }}</span>
               </a>
@@ -316,7 +316,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-file-alt opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-file-alt opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("reports") }}</span>
               </a>
@@ -333,7 +333,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("idCard") }}</span>
               </a>
@@ -350,7 +350,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("sendMessage") }}</span>
               </a>
@@ -519,7 +519,7 @@
               <div class="text-xs text-blueGray-500 font-semibold py-1">
                 Copyright © {{ date }}
                 <a
-                  href="https://bannamall.com/copy-right"
+                 href="#"
                   class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1"
                 >
                   {{ $t('Bana Mall ') }}
@@ -532,7 +532,7 @@
               >
                 <li>
                   <a
-                    href="https://bannamall.com"
+                   href="#"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
                   {{ $t('Bana Mall General Trading') }}
@@ -540,7 +540,7 @@
                 </li>
                 <li>
                   <a
-                    href="https://bannamall.com/about-us/"
+                   href="#"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
                   {{ $t('aboutUs') }}

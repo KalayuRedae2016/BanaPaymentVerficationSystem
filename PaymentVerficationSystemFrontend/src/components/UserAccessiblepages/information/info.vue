@@ -1,9 +1,9 @@
 <template>
-    <div class="">
+    <div class="mb-16">
        <h1 class="py-3 px-6 text-xl text-indigo-800 font-bold">Deadlines(Current Settings)</h1>
       <div class="grid grid-cols-1 gap-4 border-t border-indigo-800">
-        <div class="bg-white shadow-md rounded-lg p-6">
-  <div class="space-y-2 text-gray-700">
+        <div class="bg-white rounded-lg p-6">
+  <div class="space-y-2 text-gray-700 text-xs">
     <p class="flex justify-between items-center">
       <strong class="w-1/2">Regular Amount:</strong> 
       <span class="w-1/2 ">{{ paymentSetting.regularAmount }}</span>

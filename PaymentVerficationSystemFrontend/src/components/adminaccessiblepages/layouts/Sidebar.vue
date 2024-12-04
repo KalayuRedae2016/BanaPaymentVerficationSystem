@@ -11,7 +11,12 @@
         <div class="flex flex-col space-y-4 bg-white">
           
 
-        
+          <h1 class="ml-10 text-md mt-3 text-indigo-800 font-extrabold">
+            {{ $t("Payment Management") }}
+          </h1>
+
+          <hr class="mt-0 md:min-w-full border border-indigo-800" />
+
 
           <ul
             class="mt-3 md:flex-col md:min-w-full flex flex-col list-none ml-0 mr-0 mt-0 space-y-0"
@@ -27,7 +32,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fa fa-tachometer opacity-75 mr-2 text-md text-pink-600"
+                  class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("dashboard") }}</span>
               </a>
@@ -46,7 +51,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("companyProfile") }}</span>
               </a>
@@ -63,7 +68,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-users opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("clientProfile") }}</span>
               </a>
@@ -82,7 +87,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-cogs opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-cogs opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("paymentSetting") }}</span>
               </a>
@@ -101,7 +106,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-credit-card opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-credit-card opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("newPayments") }}</span>
               </a>
@@ -120,7 +125,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-list-alt opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-list-alt opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("allPayments") }}</span>
               </a>
@@ -139,7 +144,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-file-alt opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-file-alt opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("reports") }}</span>
               </a>
@@ -156,7 +161,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("idCard") }}</span>
               </a>
@@ -173,7 +178,7 @@
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
                 ><i
-                  class="fas fa-envelope opacity-75 mr-2 text-md text-pink-600"
+                  class="fas fa-envelope opacity-75 mr-2 text-md text-teal-600"
                 ></i>
                 <span>{{ $t("sendMessage") }}</span>
               </a>

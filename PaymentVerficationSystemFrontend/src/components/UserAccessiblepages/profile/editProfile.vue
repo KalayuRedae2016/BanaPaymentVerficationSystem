@@ -1,77 +1,78 @@
 <template>
-
-    <div class=" border-b border-blue-500">
+<div class=" pb-20 shadow-lg ">
+    <div class=" border-b border-blue-500 ">
     
     <p class="text-blue-800 font-bold px-4 pb-4 pt-3"> Edit Client Profile</p>
     </div>
       <div class="">
-        <div class="">
+        <div class="mb-16">
           <div
             class=""
           >
             <div
-              class="flex flex-row bg-white shadow-md rounded-lg p-2 w-full sm:w-auto"
+              class="flex flex-row bg-white  rounded-lg p-4 mt-10 w-full sm:w-auto"
             >
-              <div class="ml-3 md:ml-16 mt-5 mb-16">
+              <div class="w-full">
                 <div class="flex flex-col md:flex-row md:space-x-5">
                   <img
                     :src="imageData"
                     alt="User Profile Image"
-                    class="mt-2 w-32 h-32 border border-gray-200 p-3"
+                    class="mt-2 w-32 h-32 border border-gray-200 p-3 rounded-5xl"
                   />
-                  <div></div>
+                  
     
                   <div>
-                    <p class="mb-2 text-md text-gray-600">
-                      <strong>{{ $t("Usercode") }} :{{ clientProfile.userCode }}</strong>
+                    <p class="flex flex row mb-2  text-xs text-gray-600">
+                      <strong class="w-1/2">{{ $t("Usercode") }} </strong>
+                      <span class="w-1/2 ml-3  text-xs"> {{ clientProfile.userCode }}</span>
                     </p>
     
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>{{ $t("firstName") }} :</strong>
-                      <span class="ml-3 text-md"> {{ clientProfile.firstName }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.firstName }}</span>
                     </p>
     
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>Middle Name :</strong>
     
-                      <span class="ml-3 text-md"> {{ clientProfile.middleName }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.middleName }}</span>
                     </p>
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>Last Name :</strong>
-                      <span class="ml-3 text-md"> {{ clientProfile.lastName }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.lastName }}</span>
                     </p>
     
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>Gender :</strong>
     
-                      <span class="ml-3 text-md"> {{ clientProfile.gender }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.gender }}</span>
                     </p>
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>Age :</strong>
-                      <span class="ml-3 text-md"> {{ clientProfile.age }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.age }}</span>
                     </p>
     
     
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>Address :</strong>
-                      <span class="ml-3 text-md"> {{ clientProfile.address }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.address }}</span>
                     </p>
     
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>Email :</strong>
-                      <span class="ml-3 text-md"> {{ clientProfile.email }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.email }}</span>
                     </p>
     
-                    <p class="mb-2 text-md text-gray-600">
+                    <p class="mb-2  text-xs text-gray-600">
                       <strong>Phone Number :</strong>
-                      <span class="ml-3 text-md"> {{ clientProfile.phoneNumber }}</span>
+                      <span class="ml-3  text-xs"> {{ clientProfile.phoneNumber }}</span>
                     </p>
                   </div>
                 </div>
               </div>
               <button
                 @click="showEditModal=true"
-                class="text-md mt-3 h-10 text-indigo-500 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class=" text-xs mt-3 h-10 text-indigo-500 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <i class="fas fa-edit mr-2"></i>Edit
               </button>
@@ -228,7 +229,7 @@
                     type="submit"
                     class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    <i class="fas fa-save"><span class="text-md ml-3">{{ $t("save") }}</span></i>
+                    <i class="fas fa-save"><span class=" text-xs ml-3">{{ $t("save") }}</span></i>
                   </button>
                   
                 </form>
@@ -263,9 +264,9 @@
                         d="M5 13l4 4L19 7"
                       ></path>
                     </svg>
-                    <h2 class="text-md text-green-800">Success!</h2>
+                    <h2 class=" text-xs text-green-800">Success!</h2>
                   </div>
-                  <p class="text-blue-800 text-md ml-8">
+                  <p class="text-blue-800  text-xs ml-8">
                     {{ successMessage }}
                   </p>
                   <button
@@ -323,7 +324,7 @@
           </div>
         </transition>
       </div>
-    
+    </div>
     
     </template>
     

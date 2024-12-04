@@ -1,42 +1,12 @@
 <template>
   <div class="bg-gray-200">
     <div class="relative md:ml-64">
-      <!-- navbar -->
-      <!-- <header v-if="!largerScreen" class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400">
-        <div class="logo">
-          <img
-            src="../../../assets/img/BANA1.PNG"
-            alt="Logo"
-            class="h-8 w-8"
-          />
-        </div>
-       
-          <div class="">
-            <p class="hidden">locale: {{ locale }}</p>
-            <select class="text-md text-indigo-800" @change="changeLanguage">
-              <option value="" disabled selected>
-                {{ $t("Language") }}
-              </option>
-              <option value="tigrigna">{{ $t("Tigrigna") }}</option>
-              <option value="amharic">{{ $t("Amharic") }}</option>
-              <option value="english">English</option>
-            </select>
-          </div>
-        <button
-          class="md:hidden cursor-pointer text-black opacity-50 md:hidden py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
-          type="button"
-          @click="toggleDropdown('sidebar')"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-       </header> -->
-
       <header
         class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400"
       >
         <div class="logo">
           <img
-            src="../../../assets/img/BANA1.PNG"
+          src="../../../assets/img/banamall1.jpg"
             alt="Logo"
             class="h-8 w-8 min-w-8 min-h-8 max-w-8 max-h-8"
           />
@@ -96,12 +66,12 @@
             </ul>
           </div> -->
 
-          <div
-            class="relative mt-3 cursor-pointer"
-            @click="toggleDropdown('notifications')"
+          <div class="relative mt-3 cursor-pointer" @click="toggleDropdown('notifications')"
           >
             <i class="fas fa-bell text-blue-500 text-xs"></i>
-            <span v-if="notificationCount>0" @click="notificationCliked()"
+            <span
+              v-if="notificationCount > 0"
+              @click="notificationCliked()"
               style="margin-top: 2px"
               class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full px-1.5"
             >
@@ -173,7 +143,8 @@
           type="button"
           @click="toggleDropdown('sidebar')"
         >
-          <i class="fas fa-bars"></i>
+          <i class="fas fa-bars" v-if="!sidebarVisible"></i>
+          <i class="fas fa-x text-red-500" v-if="sidebarVisible"></i>
         </button>
       </header>
 
@@ -230,89 +201,27 @@
                 <span> {{ $t("profile") }} </span>
               </a>
             </li>
+            <li
+              @click="idCard()"
+              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+            >
+              <a
+                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                href="#"
+                ><i
+                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
+                ></i>
+
+                <span> {{ $t("idCard") }} </span>
+              </a>
+            </li>
           </ul>
         </div>
       </transition>
 
       <sidebar-component class="border-r border-gray-300"></sidebar-component>
 
-      <div v-if="leftsidebardropdown" class="md:hidden flex flex-col space-y-4">
-        <ul
-          class="border border-gray-200 md:flex-col md:min-w-full flex flex-col list-none ml-0 mr-0 mt-0"
-        >
-          <li
-            @click="dashboard()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
-              ></i>
-
-              <span> Dashboard </span>
-            </a>
-          </li>
-
-          <li
-            @click="companyProfile()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
-              ></i>
-
-              <span> Company Profile </span>
-            </a>
-          </li>
-          <li
-            @click="clients()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
-              ></i>
-
-              <span> Clients Profile </span>
-            </a>
-          </li>
-          <li
-            @click="paymentSettings()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fa fa-credit-card opacity-75 mr-2 text-md text-teal-600"
-              >
-              </i>
-              <span> Payment Settings </span>
-            </a>
-          </li>
-
-          <li
-            v-if="screenSize === 3"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="/userdashboard/Messages"
-              ><i
-                class="fas fa-users opacity-75 mr-2 text-md text-teal-900"
-              ></i>
-              <span> Messages </span>
-            </a>
-          </li>
-        </ul>
-      </div>
+     
 
       <div class="flex flex-row rightsidbar">
         <main
@@ -320,67 +229,7 @@
         >
           <router-view />
         </main>
-        <div
-          v-if="screenSize === 9"
-          class="overflow-y:auto fixed top-16 right-0 h-full bg-gray-100 shadow-xl p-4 border-l border-gray-300 w-[250px] mt-[3px]"
-        >
-          <div class="p-4">
-            <h1 class="text-2xl text-indigo-800 font-bold">
-              {{ $t("Client Feedbacks") }}
-            </h1>
-
-            <hr class="my-4 md:min-w-full bg-pink-500" />
-            <div class="flex flex-col space-y-4">
-              <!-- Message 1 -->
-              <div class="flex items-start">
-                <img
-                  src="../../../assets/img/profile.JPG"
-                  class="w-8 h-8 rounded-full"
-                  alt="Avatar"
-                />
-                <div class="bg-gray-200 rounded-lg p-3 ml-5">
-                  <p class="text-gray-800">
-                    I have Sent A Payment Request but still i am not confirmed
-                  </p>
-                  <span class="text-indigo-500 text-xl font-semibold"
-                    >Sentt by John</span
-                  >
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <img
-                  src="../../../assets/img/profile.JPG"
-                  class="w-8 h-8 rounded-full"
-                  alt="Avatar"
-                />
-                <div class="bg-gray-200 rounded-lg p-3 ml-5">
-                  <p class="text-gray-800">Do we have Metting This week</p>
-                  <span class="text-indigo-500 text-xl font-semibold"
-                    >Sent by Tadios</span
-                  >
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <img
-                  src="../../../assets/img/profile.JPG"
-                  class="w-8 h-8 rounded-full"
-                  alt="Avatar"
-                />
-                <div class="bg-gray-200 rounded-lg p-3 ml-5">
-                  <p class="text-gray-800">
-                    When will be the celebration please?
-                  </p>
-                  <span class="text-indigo-500 text-xl font-semibold"
-                    >Sent By Gidey</span
-                  >
-                </div>
-              </div>
-            </div>
-            <hr class="my-4 md:min-w-full bg-pink-500" />
-          </div>
-        </div>
+     
       </div>
 
       <footer
@@ -408,7 +257,7 @@
               >
                 <li>
                   <a
-                    href="https://www.creative-tim.com"
+                    href="#"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
                     GrandTech
@@ -416,7 +265,7 @@
                 </li>
                 <li>
                   <a
-                    href="https://www.creative-tim.com/presentation"
+                    href="#"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
                     About Us
@@ -424,7 +273,7 @@
                 </li>
                 <li>
                   <a
-                    href="http://blog.creative-tim.com"
+                    href="#"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
                     Blog
@@ -432,7 +281,7 @@
                 </li>
                 <li>
                   <a
-                    href="https://github.com/creativetimofficial/tailwind-starter-kit/blob/main/LICENSE.md"
+                    href="#"
                     class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
                   >
                     GrandTech License
@@ -460,7 +309,7 @@ export default {
       payments: "",
       previousPostsCount: 0,
       intervalId: null,
-    
+
       largerScreen: false,
       showNotificationDropdown: false,
       dropdownVisible: false,
@@ -482,17 +331,17 @@ export default {
         {
           message: "You have a new friend request.",
           image: "assets/img/profile.JPG",
-          userCode:"123",
-          activeYear:"",
-          activeMonth:"",
+          userCode: "123",
+          activeYear: "",
+          activeMonth: "",
           date: new Date(),
         },
         {
           message: "Your post has been liked.",
           image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
+          userCode: "321",
+          activeYear: "",
+          activeMonth: "",
           date: new Date(),
         },
       ],
@@ -603,13 +452,45 @@ export default {
     deadlines() {
       this.$router.push("/userdashboard/info");
     },
-   
-  
+
+    idCard() {
+      this.$router.push("/userdashboard/id-card");
+    },
     changeLanguage(event) {
       // alert("alert")
       const selectedLanguage = event.target.value;
       this.$store.dispatch("setLocale", { locale: selectedLanguage });
     },
+
+    setActive(item) {
+      this.$store.dispatch("commitActiveItem", { activeItem: item });
+
+      if (item === "dashboard") {
+        this.dashboard();
+      } else if (item === "idCard") {
+        this.idCard();
+      } else if (item === "message") {
+        this.message();
+      }
+
+      // Add more navigation handling as needed
+    },
+
+    dashboard() {
+      this.$router.push("/userdashboard");
+    },
+
+    profile() {
+      this.$router.push("/userdashboard/profile");
+    },
+
+    deadline() {
+      this.$router.push("/userdashboard/deadline");
+    },
+    idCard() {
+      this.$router.push("/userdashboard/id-card");
+    },
+
     toggleDropdown(target) {
       if (target === "profile") {
         this.showNotificationDropdown = false;

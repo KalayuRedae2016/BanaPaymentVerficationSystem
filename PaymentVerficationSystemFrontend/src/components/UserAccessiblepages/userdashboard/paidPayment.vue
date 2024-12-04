@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-xs">
     <div class="p-4">
         <div class="flex-row">
           <select
@@ -15,7 +15,7 @@
           </select>
       </div>
  
-      <div class="space-y-2" v-if="showList">
+      <div class="space-y-2 mt-3 border-t border-gray-300" v-if="showList">
     <ul class="bg-white rounded-md shadow-md divide-y divide-gray-200">
       <li
         v-for="(month, index) in $months"
@@ -225,7 +225,7 @@
         </div>
       </div> -->
     </div>
-    <div class="w-full flex flex-row " id="printable-area">
+    <div class="w-full flex flex-row hidden " id="printable-area">
     <!-- First Receipt -->
     <div class="w-full p-2 receipt border-4 border-red-500 border-dotted">
       <div class="bg-green-200 text-blue-800 p-2 relative">
