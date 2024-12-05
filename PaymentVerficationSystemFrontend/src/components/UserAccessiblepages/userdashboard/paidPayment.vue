@@ -44,7 +44,7 @@
               href="#"
               class="hover:bg-blue-100 hover:text-blue-700 transition duration-150"
             >
-              {{ payment.activeMonth }}
+              {{ changeMonthIntoString(payment.activeMonth) }}
             </a>
             <button
               @click="viewReceiptAsPDF(payment)"
@@ -363,7 +363,7 @@
                     <td class="font-semibold py-1">Month</td>
                     <td></td>
                     <td class="text-right py-1">
-                      {{ selectedPayment.activeMonth }}
+                      {{ changeMonthIntoString(selectedPayment.activeMonth) }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
@@ -805,6 +805,28 @@ export default {
     this.getData();
   },
   methods: {
+    changeMonthIntoString(month) {
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      console.log("month of month", months[month]);
+
+      if (month >= 1 && month <= 12) {
+        return months[month - 1];
+      }
+      return "Invalid month";
+    },
     async viewReceiptAsPDF(selectedPayment) {
       console.log("Selected payment:", selectedPayment);
 

@@ -6,14 +6,14 @@
       
       class=" "
     >
-      <div class="text-blue-800 font-extrabold">
-        <p>{{ userCode }}</p>
-        <p>{{ fullName }}</p>
+      <div class="text-gray-700 text-sm font-bold">
+        <p>User Code: {{ userCode }}</p>
+        <p>Full Name: {{ fullName }}</p>
       </div>
 
-      <div class="border-t border-blue-900 ml-5 mt-5">
+      <div class="border-t-2 border-blue-500 border-dotted mt-5">
         <div
-          class="p-4 border-b border-blue-900 cursor-pointer"
+          class="p-4 border-b-2 border-blue-500 border-dotted cursor-pointer"
           v-for="(payment, paymentIndex) in payments"
           :key="paymentIndex"
           @click="changePaymentSelection(payment.id, paymentIndex)"
@@ -25,17 +25,9 @@
           <div class="mt-4 flex flex-col space-y-5">
             <div class="flex flex-row items-center">
               <div class="flex flex-col">
-                <p class="text-indigo-800 text-xl font-extrabold"></p>
-                Month:{{ payment.activeMonth }}
-                <p class="mt-3 text-red-500" v-if="payment.permitSelect">
-                  Youcan't pay before you pay months before this month please
-                </p>
-                <p
-                  v-if="payment.confirmRegularSubsisyUrgentFirst"
-                  class="text-red-500 mt-3"
-                >
-                  Please confirm regular, subsidy and urgent payments first
-                </p>
+                <p class="text-blue-800 text-xs font-extrabold bg-blue-100 rounded-lg p-2">Month: {{ changeMonthIntoString(payment.activeMonth) }}</p>
+                
+               
               </div>
             </div>
 
@@ -55,13 +47,13 @@
                     </th>
                     
                     <th
-                      class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-red-800"
                     >
                       Expected Penality
                     </th>
                   
                     <th
-                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Paid
                     </th>
@@ -69,65 +61,84 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      Regular
+                  <tr class="border-b border-gray-300">
+                    <td class="px-3  text-sm text-gray-700 whitespace-nowrap ">
+                       <span class="  rounded-md">Regular</span>
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td class="px-3  text-sm text-gray-700 whitespace-nowrap ">
                      {{ payment.regular.amount }}
                     </td>
                   
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                      {{ payment.regular.penality }}
+                    <td v-if="!payment.regular.isPaid" class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                      Not calculated
+        
                     </td>
-                  
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                      {{ payment.regular.penality }}
+                      
+                    </td>
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                       {{ payment.regular.isPaid }}
                     </td>
 
                    
                    
                   </tr>
-                  <tr>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                  <tr class="border-b border-gray-300">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                       subsidy
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                      {{ payment.subsidy.amount }}
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-if="!payment.subsidy.isPaid" class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                      
+                      Not calculated
+                    </td>
+                    <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                      <!-- {{ payment.subsidy.penality }} -->
                       {{ payment.subsidy.penality }}
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                     {{ payment.subsidy.isPaid }}
                     </td>
                   
                   </tr>
-                  <tr>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                  <tr  class="border-b border-gray-300">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                       Urgent
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                      {{ payment.urgent.amount }}
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-if="!payment.urgent.isPaid" class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                     
+                      Not calculated
+                    </td>
+                    <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                      <!-- {{ payment.urgent.penality }} -->
                       {{ payment.urgent.penality }}
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                    {{ payment.urgent.isPaid }}
                     </td>
                   </tr>
-                  <tr>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                  <tr  class="border-b border-gray-300">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                       Service
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                      {{ payment.service.amount }}
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-if="payment.service.isPaid" class="px-3 text-sm text-gray-700 whitespace-nowrap">
                       {{ payment.service.penality }}
+                 
                     </td>
-                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                      <!-- {{ payment.service.penality }} -->
+                      Not calculated
+                    </td>
+                    <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                      {{ payment.service.isPaid }}
                     </td>
                     
@@ -418,18 +429,41 @@ export default {
     //  const userCode = this.userCode;
     //  console.log(userCode);
 
-    //  this.fetchUnPaid();
+     this.fetchNotPaid();
   },
   methods: {
-    fetchUnPaid() {
+    changeMonthIntoString(month) {
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      console.log("month of month", months[month]);
+
+      if (month >= 1 && month <= 12) {
+        return months[month - 1];
+      }
+      return "Invalid month";
+    },
+    fetchNotPaid() {
+      //this.userCode
       this.$apiClient
-        .get(`/api/v1/payments/search?keyword=${this.userCode}`)
+        .get(`/api/v1/payments/search?keyword=${'BM0006'}`)
         .then((response) => {
           if (response.data.status === 1) {
             this.fullName = response.data.fullName;
             this.userCode = response.data.userCode;
             this.payments = response.data.items;
-            console.log("response", response.data);
+            console.log("response for the unapid ", response.data);
           } else {
             //this.nothingToPay = true;
             console.log("nothing tp pay");

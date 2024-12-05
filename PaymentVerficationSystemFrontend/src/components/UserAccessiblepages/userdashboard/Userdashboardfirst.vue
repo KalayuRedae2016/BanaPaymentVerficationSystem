@@ -21,7 +21,7 @@
       <div v-show="activeTab === 0" class="border border-gray-300 ">
         <paid-payment></paid-payment>
       </div>
-      <div v-show="activeTab === 1" class="border border-gray-300 ">
+      <div  v-show="activeTab === 1" class="border border-gray-300 ">
         
         <unpaid-payment></unpaid-payment>
         
@@ -89,14 +89,13 @@ export default {
     },
   },
   mounted() {
-    // Simulating internet connection check
-    // setTimeout(() => {
-    //   this.internetConnected = true;
-    // }, 100000);
-  
-    // setTimeout(() => {
-    //   this.showWelcome = false;
-    // }, 3000);
+  this.activeTab=1;
+    // const urlParams = new URLSearchParams(window.location.search);
+    // const activeTab = urlParams.get('activeTab');
+    // if (activeTab) {
+    //  this.activateTab=activeTab// Call a method to activate the tab
+    // };
+    
 
 
     this.years = this.generateYearsArray(1914, 100).concat(
@@ -105,6 +104,10 @@ export default {
     this.nameOfUser = this.name;
   },
   methods: {
+    setActiveForLoading(tab){
+      //alert(tab)
+      this.$router.push({ query: { activeTab: tab } }); 
+    },
     generateYearsArray(startYear, numYears) {
       const years = [];
       for (let i = 0; i < numYears; i++) {
@@ -116,6 +119,7 @@ export default {
 
     activateTab(index) {
       this.activeTab = index;
+     // this.$router.push({ query: { activeTab: this.activeTab } }); 
     },
   },
 };

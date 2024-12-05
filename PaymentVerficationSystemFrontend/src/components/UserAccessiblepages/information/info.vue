@@ -22,11 +22,13 @@
     </p>
     <p class="flex justify-between items-center">
       <strong class="w-1/2">Starting Date:</strong> 
-      <span class="w-1/2 ">{{ paymentSetting.startingDate }}</span>
+      <span class="w-1/2 ">{{ paymentSetting.formattedStartDate
+ }}</span>
     </p>
     <p class="flex justify-between items-center">
       <strong class="w-1/2">Ending Date:</strong> 
-      <span class="w-1/2 ">{{ paymentSetting.endingDate }}</span>
+      <span class="w-1/2 ">{{ paymentSetting.formattedEndDate
+ }}</span>
     </p>
     <p class="flex justify-between items-center">
       <strong class="w-1/2">Penalty 5 days in %:</strong> 
