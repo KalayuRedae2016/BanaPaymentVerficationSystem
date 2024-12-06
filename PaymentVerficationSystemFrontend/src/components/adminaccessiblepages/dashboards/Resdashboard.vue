@@ -3,7 +3,7 @@
     <div class="">
       <h2 class="w-full border-b border-blue-500 text-blue-800 pt-4 px-4 pb-3 font-bold">
         Dashboard
-        {{ $t("thisMonthlyReport") }}
+       
         <span class=""></span>
       </h2>
 
