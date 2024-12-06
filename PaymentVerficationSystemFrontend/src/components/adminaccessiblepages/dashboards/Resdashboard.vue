@@ -3,7 +3,7 @@
     <div class="">
       <h2 class="w-full border-b border-blue-500 text-blue-800 pt-4 px-4 pb-3 font-bold">
         Dashboard
-        {{ $t("thisMonthlyReport") }} ({{ activeYear }} -{{ activeMonth }})
+        {{ $t("thisMonthlyReport") }}
         <span class=""></span>
       </h2>
 
@@ -15,7 +15,7 @@
             <div class="flex flex-row space-x-3">
               <p class="text-blue-800 mb-5 text-sm">
                
-                {{ $t("Current Month Report") }}
+                {{ $t("Current Month Report") }} ( ({{ activeYear }} -{{ activeMonth }}))
                
                
               </p>
