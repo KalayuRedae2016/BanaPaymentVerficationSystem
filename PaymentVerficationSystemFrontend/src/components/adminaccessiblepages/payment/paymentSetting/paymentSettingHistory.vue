@@ -1,8 +1,8 @@
 <template>
   <div class="border border-gray-300 rounded-lg p-4 mt-3">
-    <div class="flex flex-col lg:flex-row lg:space-x-5">
-      <div class="flex flex-row w-1/2 space-x-3 mt-5">
-        <label for="month" class="block text-sm font-medium text-gray-700"
+    <div class=" space-x-0  flex flex-col lg:flex-rowlg:space-x-5">
+      <div class="flex flex-row  w-full lg:w-1/2 space-x-3 mt-5">
+        <label for="month" class="w-1/4 block text-sm font-medium text-gray-700"
           >{{ $t('year') }}</label
         >
         <select
@@ -17,14 +17,14 @@
           </option>
         </select>
       </div>
-      <div class="flex flex-row w-1/2 space-x-3 mt-5">
-        <label for="month" class="block text-sm font-medium text-gray-700"
+      <div class="flex flex-row w-full lg:w-1/2 space-x-3 mt-5">
+        <label for="month" class="w-1/4 block text-sm font-medium text-gray-700"
           >  {{ $t('month') }}</label
         >
         <select
           @change="fetchPaymentSetting()"
           id="month"
-          class="custom-select"
+          class="custom-select "
           v-model="month"
         >
           <option value="" disabled>Select Month</option>
@@ -39,7 +39,7 @@
       <p v-if="selectMonth" class="text-blue-500">{{ $t('pleaseSelectMonth') }}</p>
     </div>
 
-    <div v-if="!noSettingOpened" class="grid grid-cols-1 gap-4 border-t-4  border-b-4 border-blue-500 -mt-5 rounded-lg" >
+    <div v-if="!noSettingOpened" class="grid grid-cols-1 gap-4 border-t  border-gray-300 -mt-5 rounded-lg shadow-lg" >
       <div class="bg-white shadow-md rounded-lg px-6 pt-5 ">
         <div class="space-y-2 text-gray-700">
           <p class="flex justify-between items-center text-gray-500">

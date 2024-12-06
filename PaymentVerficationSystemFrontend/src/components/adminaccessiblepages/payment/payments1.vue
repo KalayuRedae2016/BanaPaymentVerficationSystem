@@ -22,7 +22,7 @@
             <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-5:lg:mx-10">
                     <input v-model="paymentSettingStatus" type="radio" value="currentSetting"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                     <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('currentPaymentSetting') }}</label>
@@ -45,7 +45,7 @@
             <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-5:lg:mx-10">
                     <input v-model="paymentStatus" type="radio" value="newPayment"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                     <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('confirmNewPayment') }}</label>
@@ -74,7 +74,7 @@
             <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-5:lg:mx-10">
                     <input v-model="allPaymentsAndTransferedPayments" type="radio" value="allPayments"
                       class="h-4 w-4 border-gray-300 text-pink-600 focus:ring-pink-500" />
                     <label class="ml-3 block text-xs font-medium text-gray-700">All Payments</label>
@@ -96,7 +96,7 @@
             <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
               <div class="mb-10">
                 <div class="flex items-center space-x-4">
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-5:lg:mx-10">
                     <input v-model="paymentReportStatus" type="radio" value="userLevelReport"
                       class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
                     <label class="ml-3 block text-xs font-medium text-gray-700">User Level Report</label>

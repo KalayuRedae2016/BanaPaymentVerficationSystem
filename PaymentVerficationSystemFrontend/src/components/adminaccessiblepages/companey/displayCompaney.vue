@@ -18,36 +18,32 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-x-8">
           <div class="flex flex-col">
             <p class="flex flex-row text-xs mb-2 text-gray-800">
-              <span class="w-1/2 lg:w-2/3 font-semibold">{{ $t("compName") }}:</span>
-              <span class="w-1/3 text-indigo-800">{{ companyProfile.companyName }}</span>
+              <span class="w-1/2 lg:w-2/3  ">{{ $t("compName") }}:</span>
+              <span class="w-1/3 text-gray-500">{{ companyProfile.companyName }}</span>
             </p>
             <p class="flex flex-row text-xs mb-2 text-gray-800 ">
-              <span class="w-1/2 lg:w-2/3 font-semibold">{{ $t("compPrefixCode") }}:</span>
-              <span class="w-1/3 text-indigo-800">{{ companyProfile.companyPrefixCode }}</span>
+              <span class="w-1/2 lg:w-2/3 ">{{ $t("compPrefixCode") }}:</span>
+              <span class="w-1/3 text-gray-500">{{ companyProfile.companyPrefixCode }}</span>
             </p>
             <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-1">
-              <span class="w-2/3  font-semibold">{{ $t("companyPhoneNumber") }}:</span>
-              <span class="w-1/3 text-indigo-800">{{ companyProfile.companyPhoneNumber }}</span>
+              <span class="w-1/2 lg:w-2/3  ">{{ $t("companyPhoneNumber") }}:</span>
+              <span class="w-1/3 text-gray-500">{{ companyProfile.companyPhoneNumber }}</span>
             </p>
-            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-16">
-              <span class="w-1/4 lg:w-2/3 lg:w-2/3  font-semibold">{{ $t("compEmail") }}:</span>
-              <span class="w-2/3 lg:w-1/3 text-indigo-800">{{ companyProfile.companyEmail }}</span>
+            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-1">
+              <span class="w-1/2 lg:w-2/3    ">{{ $t("compEmail") }}:</span>
+              <span class="w-1/2 lg:w-1/3 text-gray-500">{{ companyProfile.companyEmail }}</span>
             </p>
-            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-12">
-              <span class="w-1/2 lg:w-2/3 w-2/3  font-semibold">{{ $t("compAddress") }}:</span>
-              <span class="w-1/2 lg:w-1/3  text-indigo-800">{{ companyProfile.companyAddress }}</span>
+            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-1">
+              <span class="w-1/2 lg:w-2/3  ">{{ $t("compAddress") }}:</span>
+              <span class="w-1/2 lg:w-1/3  text-gray-500">{{ companyProfile.companyAddress }}</span>
             </p>
           </div>
-          <div class="flex justify-end items-center">
-            <button class="bg-white text-blue-500 hover:bg-blue-100 rounded-full p-2" @click="goToEditPage()">
-              <i class="fas fa-edit"></i>
-            </button>
-          </div>
+        
         </div>
 
         <div class="font-bold text-lg mt-4 mb-2 divide-y divide-dashed">
           <p class="text-indigo-500 mb-3 mt-4">{{ $t("blockAccounts") }}</p>
-          <div class="mr-16 mt-5">
+          <div class="mt-5">
             <table class="w-full border border-gray-300">
               <thead>
                 <tr class="bg-gray-200">
@@ -68,7 +64,7 @@
 
           <div class="font-bold text-xs mt-10 mb-4 divide-y divide-dashed text-indigo-500">
                  {{ $t("serviceAccounts") }}
-            <div class="mr-16 mt-5">
+            <div class="mt-5">
               <table class="w-full border border-gray-300">
                 <thead>
                   <tr class="bg-gray-200">
@@ -86,6 +82,12 @@
                 </tbody>
               </table>
             </div>
+          </div>
+
+          <div class="flex mt-5 ">
+            <button class="bg-white text-blue-500 hover:bg-blue-100 rounded-full p-2" @click="goToEditPage()">
+              <i class="fas fa-edit" ><span class="text-xxs ">Edit</span></i>
+            </button>
           </div>
         </div>
       </div>

@@ -338,73 +338,73 @@
                 </thead>
                 <tbody class="text-gray-500 font-bold">
                   <tr class="border-b border-gray-300 border-t border-gray-300">
-                    <td class="font-semibold py-1">UserCode</td>
+                    <td class="font-semibold py-1" style="padding-left:20px;">UserCode</td>
                     <td></td>
-                    <td class="text-right py-1">{{ payment.userCode }}</td>
+                    <td style="padding-right:20px;" class="text-right py-1">{{ payment.userCode }}</td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">FullName</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">FullName</td>
                     <td></td>
-                    <td class="text-right py-1">Tadessse Gebremicheal</td>
+                    <td style="padding-right:20px;" class="text-right py-1">Tadessse Gebremicheal</td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">PaymentTerm</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">PaymentTerm</td>
                     <td></td>
-                    <td class="text-right py-1">{{ paymentTerm }}</td>
+                    <td style="padding-right:20px;" class="text-right py-1">{{ paymentTerm }}</td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Year</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Year</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{ selectedPayment.activeYear }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Month</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Month</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{ changeMonthIntoString(selectedPayment.activeMonth) }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Regular Amount</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Regular Amount</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{ selectedPayment.regularAmountPaid }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Subsidy Amount</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Subsidy Amount</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{ selectedPayment.subsidyAmountPaid }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Urgent Amount</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Urgent Amount</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{ selectedPayment.urgentAmountPaid }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Service Amount</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Service Amount</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{ selectedPayment.serviceAmountPaid }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Penalty</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Penalty</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{ selectedPayment.penalityAmountPaid }}
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">Total Block Amount Paid</td>
+                    <td style="padding-left:20px;" class="font-semibold py-1">Total Block Amount Paid</td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td style="padding-right:20px;" class="text-right py-1">
                       {{
                         selectedPayment.regularAmountPaid +
                         selectedPayment.subsidyAmountPaid +
@@ -413,11 +413,11 @@
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300">
-                    <td class="font-semibold py-1">
+                    <td style="padding-left:20px;" class="font-semibold py-1">
                       Total Service Amount Paid
                     </td>
                     <td></td>
-                    <td class="text-right py-1">
+                    <td  style="padding-right:20px;" class="text-right py-1">
                       {{
                         selectedPayment.serviceAmountPaid +
                         selectedPayment.penalityAmountPaid

@@ -1,13 +1,13 @@
 <template>
   <div>
    <div
-    class="container flex-col border-t-4 border-b-4 border-blue-500 rounded-lg mt-5">
+    class=" flex-col border-t  border-gray-300 rounded-lg mt-5 shadow-lg mx-3 ">
     <div class="flex flex-wrap">
       <div v-if="paymentSettingCreated === 0"
         class="mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
       >
     </div>
-      <div v-if="paymentSettingCreated === 2" class="w-full">
+      <div v-if="paymentSettingCreated === 2" class="">
         <div class="mx-4 mt-10">
           <form class=" ">
             <div class="">

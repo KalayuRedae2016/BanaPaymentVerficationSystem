@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container hidden" id="printable-area">
-      <div class="receipt">
+      <div class="receipt" style="margin-right:10px;margin-top: 10px;margin-bottom: 10px;margin-left: 10px;">
         <!-- 
   <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
   <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
@@ -40,11 +40,11 @@
             <table class="table" style="color: #622e2e; font-weight: bold">
               <tr>
                 <td>Country:</td>
-                <td>{{ Country }}</td>
+                <td>{{ country }}</td>
               </tr>
               <tr>
                 <td>City:</td>
-                <td>{{ City }}</td>
+                <td>{{ city }}</td>
               </tr>
             </table>
           </div>
@@ -52,15 +52,15 @@
             <table class="table" style="color: #622e2e; font-weight: bold">
               <tr>
                 <td>Email:</td>
-                <td>{{ Email }}</td>
+                <td>{{ email }}</td>
               </tr>
               <tr>
                 <td>Tel:</td>
-                <td>{{ Tel }}</td>
+                <td>{{ tel }}</td>
               </tr>
               <tr>
                 <td>address:</td>
-                <td>{{ Address }}</td>
+                <td>{{ address }}</td>
               </tr>
             </table>
           </div>
@@ -70,63 +70,64 @@
           Payment Information
         </h2>
         <table class="table">
-          <tr>
-            <td style="color: #333; font-weight: bold">FullName</td>
-            <td class="right">{{ payment.fullName }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">UserCode</td>
-            <td class="right">{{ payment.userCode }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db; border-top: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">FullName</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.fullName }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">UserCode</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.userCode }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Payment Term</td>
-            <td class="right">{{ paymentTerm }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">RegFee</td>
-            <td class="right">{{ payment.registrationFee }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Regular Amount</td>
-            <td class="right">{{ payment.regular.amount }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Payment Term</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ paymentTerm }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">RegFee</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.registrationFee }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Regular Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.regular.amount }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Subsidy Amount</td>
-            <td class="right">{{ payment.subsidy.amount }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Urgent Amount</td>
-            <td class="right">{{ payment.urgent.amount }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Service Amount</td>
-            <td class="right">{{ payment.service.amount }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Subsidy Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.subsidy.amount }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Urgent Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.urgent.amount }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Service Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.service.amount }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Penality</td>
-            <td class="right">{{ payment.penality.amount }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Penality</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.penality.amount }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Total Block</td>
-            <td class="right">
-              {{
-                payment.regular.amount +
-                payment.subsidy.amount +
-                payment.urgent.amount
-              }}
-            </td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Total Service</td>
-            <td class="right">
-              {{ payment.penality.amount + payment.service.amount }}
-            </td>
-          </tr>
-        </table>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Block</td>
+    <td style=" padding-right: 20px; text-align: right;">
+      {{
+        payment.regular.amount +
+        payment.subsidy.amount +
+        payment.urgent.amount
+      }}
+    </td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Service</td>
+    <td style=" padding-right: 20px; text-align: right;">
+      {{ payment.penality.amount + payment.service.amount }}
+    </td>
+  </tr>
+</table>
+
 
         <div
           class="signature-section"
@@ -193,9 +194,9 @@
 
         
       </div>
+   <div class="vertical-line" style="width: 2px; border-left: 2px dotted #d1d5db; height: 100%; margin-right: 10px;"></div>
 
-      
-      <div class="receipt">
+      <div class="receipt" style="margin-right:10px;margin-top: 10px;margin-bottom: 10px;">
         <!-- 
   <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
   <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
@@ -234,11 +235,11 @@
             <table class="table" style="color: #622e2e; font-weight: bold">
               <tr>
                 <td>Country:</td>
-                <td>{{ Country }}</td>
+                <td>{{ country }}</td>
               </tr>
               <tr>
                 <td>City:</td>
-                <td>{{ City }}</td>
+                <td>{{ city }}</td>
               </tr>
             </table>
           </div>
@@ -246,15 +247,15 @@
             <table class="table" style="color: #622e2e; font-weight: bold">
               <tr>
                 <td>Email:</td>
-                <td>{{ Email }}</td>
+                <td>{{ email }}</td>
               </tr>
               <tr>
                 <td>Tel:</td>
-                <td>{{ Tel }}</td>
+                <td>{{ tel }}</td>
               </tr>
               <tr>
                 <td>address:</td>
-                <td>{{ Address }}</td>
+                <td>{{ address }}</td>
               </tr>
             </table>
           </div>
@@ -264,64 +265,63 @@
           Payment Information
         </h2>
         <table class="table">
-          <tr>
-            <td style="color: #333; font-weight: bold">FullName</td>
-            <td class="right">{{ payment.fullName }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">UserCode</td>
-            <td class="right">{{ payment.userCode }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db; border-top: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">FullName</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.fullName }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">UserCode</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.userCode }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Payment Term</td>
-            <td class="right">{{ paymentTerm }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">RegFee</td>
-            <td class="right">{{ payment.registrationFee }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Regular Amount</td>
-            <td class="right">{{ payment.regular.amount }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Payment Term</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ paymentTerm }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">RegFee</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.registrationFee }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Regular Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.regular.amount }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Subsidy Amount</td>
-            <td class="right">{{ payment.subsidy.amount }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Urgent Amount</td>
-            <td class="right">{{ payment.urgent.amount }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Service Amount</td>
-            <td class="right">{{ payment.service.amount }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Subsidy Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.subsidy.amount }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Urgent Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.urgent.amount }}</td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Service Amount</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.service.amount }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Penality</td>
-            <td class="right">{{ payment.penality.amount }}</td>
-          </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Penality</td>
+    <td style=" padding-right: 20px; text-align: right;">{{ payment.penality.amount }}</td>
+  </tr>
 
-          <tr>
-            <td style="color: #333; font-weight: bold">Total Block</td>
-            <td class="right">
-              {{
-                payment.regular.amount +
-                payment.subsidy.amount +
-                payment.urgent.amount
-              }}
-            </td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Total Service</td>
-            <td class="right">
-              {{ payment.penality.amount + payment.service.amount }}
-            </td>
-          </tr>
-        </table>
-
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Block</td>
+    <td style=" padding-right: 20px; text-align: right;">
+      {{
+        payment.regular.amount +
+        payment.subsidy.amount +
+        payment.urgent.amount
+      }}
+    </td>
+  </tr>
+  <tr style="border-bottom: 1px solid #d1d5db;">
+    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Service</td>
+    <td style=" padding-right: 20px; text-align: right;">
+      {{ payment.penality.amount + payment.service.amount }}
+    </td>
+  </tr>
+</table>
         <div
           class="signature-section"
           style="color: #622e2e; font-weight: bold"
@@ -462,28 +462,28 @@
                       Payment Date
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Days Late
                     </th>
 
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Bank Type
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       TT Number
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Paid
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Action
                     </th>
@@ -491,32 +491,32 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-blue-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
                         Regular
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p>{{ payment.regular.amount }}</p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p>{{ payment.regular.paidAt }}</p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p>{{ payment.regular.daysLate }}</p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.regular.bankType }}
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.regular.TTNumber }}
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.regular.isPaid }}
                     </td>
 
@@ -530,7 +530,7 @@
                           payment.activeYear
                         )
                       "
-                      class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button class="custom-button">
                         <i class="fas fa-edit text-pink-500"></i>
@@ -538,42 +538,42 @@
                     </td>
                   </tr>
                   <tr v-if="payment.subsidy.amount > 0">
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-cyan-100 text-cyan-800 px-2 rounded-lg font-bold"
                       >
                         Subsidy
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.subsidy.amount }}
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.subsidy.amount > 0">
                         {{ payment.subsidy.paidAt }}
                       </p>
                       <p v-else>----------------</p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p>
                         {{ payment.subsidy.daysLate }}
                       </p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.subsidy.amount > 0">
                         {{ payment.subsidy.bankType }}
                       </p>
                       <p v-else>--------------</p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.subsidy.amount > 0">
                         {{ payment.subsidy.TTNumber }}
                       </p>
                       <p v-else>-------------</p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.subsidy.amount > 0">
                         {{ payment.subsidy.isPaid }}
                       </p>
@@ -582,7 +582,7 @@
 
                     <td
                       v-if="payment.subsidy.amount > 0"
-                      class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button
                         @click="
@@ -602,44 +602,44 @@
 
                     <td
                       v-if="payment.subsidy.amount == 0"
-                      class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       Action Not Needed;
                     </td>
                   </tr>
 
                   <tr v-if="payment.urgent.amount > 0">
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-pink-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
                         Urgent
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.urgent.amount }}
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.urgent.paidAt }}
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.urgent.daysLate }}
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.urgent.amount > 0">
                         {{ payment.urgent.bankType }}
                       </p>
                       <p v-else>--------------</p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.urgent.amount > 0">
                         {{ payment.urgent.TTNumber }}
                       </p>
                       <p v-else>-------------</p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.urgent.amount > 0">
                         {{ payment.urgent.isPaid }}
                       </p>
@@ -647,7 +647,7 @@
                     </td>
                     <td
                       v-if="payment.urgent.amount > 0"
-                      class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button
                         @click="
@@ -667,40 +667,40 @@
 
                     <td
                       v-if="payment.urgent.amount == 0"
-                      class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       Action Not Needed;
                     </td>
                   </tr>
                   <tr>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-yellow-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
                         Service
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.amount }}
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.paidAt }}
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="!payment.service.dayslate">
                         {{ payment.service.daysLate }}
                       </p>
                       <p else>0</p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.bankType }}
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.TTNumber }}
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.isPaid }}
                     </td>
                     <td
@@ -713,7 +713,7 @@
                           payment.activeYear
                         )
                       "
-                      class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button class="custom-button">
                         <i class="fas fa-edit text-pink-500"></i>
@@ -743,37 +743,37 @@
                       Subsidy Penality
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Urgent Penality
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Total Penality
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Paid At
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Bank Type
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       TT Number
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Paid
                     </th>
                     <th
-                      class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Action
                     </th>
@@ -781,21 +781,21 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-red-300 text-blue-800 px-2 rounded-lg font-bold"
                       >
                         Penality
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
                         {{ payment.regular.penalty }}
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
@@ -803,40 +803,40 @@
                       </p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
                         {{ payment.urgent.penalty }}
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
                         {{ payment.penality.amount }}
                       </p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.penality.amount > 0">
                         {{ payment.penality.paidAt }}
                       </p>
                       <p v-else>----</p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.penality.amount > 0">
                         {{ payment.penality.bankType }}
                       </p>
                       <p v-else>----</p>
                     </td>
 
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.penality.amount > 0">
                         {{ payment.penality.TTNumber }}
                       </p>
                       <p v-else>----</p>
                     </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.penality.amount > 0">
                         {{ payment.penality.isPaid }}
                       </p>
@@ -852,7 +852,7 @@
                           payment.activeYear
                         )
                       "
-                      class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button class="custom-button">
                         <i class="fas fa-edit text-pink-500"></i>
@@ -870,7 +870,7 @@
     <div v-if="showEditModal">
       <transition name="fade" mode="out-in">
         <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+          class="fixed inset-0 flex items-center justify-center z-10 bg-#d1d5db bg-opacity-50"
         >
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="flex flex-row">
@@ -998,11 +998,12 @@ export default {
       // we will try from db then. but now from static
       paymentTerm: "monthly",
       websiteUrl: "https://bannamall.com/",
-      Email: "bannamall@gmail.com",
-      Country: "Ethipia",
-      Tel: "0967740501",
-      Address: "Mekelle Kedemay Weyane",
-      City: "Mekelle",
+      email: "",
+      country: "Ethipia",
+      tel: "",
+      address: "",
+      city: "Mekelle",
+
       receiptDate: new Date(),
       payment: {
         fullName: "",
@@ -1063,12 +1064,37 @@ export default {
   },
 
   created() {
+
+
+
+
     console.log("In the payment history page");
     this.userCode = this.$route.params.userCode || "Default UserCode";
     this.year = this.$route.query.year || "Default Year";
     this.month = this.$route.query.month || "Default Month";
 
     console.log("usercode,year,month", this.userCode, this.year, this.month);
+
+    this.$apiClient
+      .get("/api/v1/organization")
+      .then((response) => {
+        console.log("Org response", response);
+        if (response.data.status === 1) {
+          console.log(
+            "Organization email",
+            response.data.organization.companyEmail
+          );
+          this.email = response.data.organization.companyEmail;
+          this.tel = response.data.organization.companyPhoneNumber;
+          this.address = response.data.organization.companyAddress;
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error.message);
+        this.organizationCreated = 0;
+      });
+
+
     this.$apiClient
       .get("/api/v1/payments/paymentbyMonth", {
         params: {

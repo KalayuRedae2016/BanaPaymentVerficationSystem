@@ -16,6 +16,7 @@ import clients from "../components/adminaccessiblepages/clients/clients.vue";
 import deactivate from "../components/adminaccessiblepages/clients/deactivate.vue";
 import createClient from "../components/adminaccessiblepages/clients/createClient.vue";
 import editClient from "../components/adminaccessiblepages/clients/editClient.vue";
+import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEditProfile.vue";
 
 
 import overdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/overdue.vue";
@@ -43,6 +44,8 @@ import servicePayment from "../components/UserAccessiblepages/payments/service.v
 import subsidyPayment from "../components/UserAccessiblepages/payments/subsidy.vue";
 import argentPayment from "../components/UserAccessiblepages/payments/argent.vue";
 import profile from "../components/UserAccessiblepages/profile/editProfile.vue";
+import emptyEditUserProfile from "../components/UserAccessiblepages/profile/emptyEditProfile.vue";
+
 import allNewPayment from "../components/UserAccessiblepages/payments/allNewPayment.vue";
 import emptyUserPage from "../components/UserAccessiblepages/emptyUserPage.vue";
 import receiptPage from "../components/UserAccessiblepages/receipts/receipt.vue";
@@ -89,6 +92,8 @@ const routes = [
       { path: "deactivate", component: deactivate },
       { path: "create-client", name: "create-client", component: createClient },
       { path: "edit-client/:clientId", name: "edit-client", component: editClient },
+      { path: "empty-edit-profile/:clientId", name: "empty-edit-profile", component: emptyEditProfile },
+     
       { path: "bank-statement/:userCode", component: bankStatement },
       { path: "user-for-bank-statement", component:  usersForBankStatement  },
       
@@ -124,7 +129,10 @@ const routes = [
       { path: "subsidy-payment", component: subsidyPayment },
       { path: "argent-payment", component: argentPayment },
       { path: "profile", component: profile },
-      { path: "all-new-payment", component: allNewPayment },
+     
+    
+      { path: "empty-edit-user-profile/:clientId", component:  emptyEditUserProfile },
+       { path: "all-new-payment", component: allNewPayment },
       { path: "change-password", component:changePassword},
       { path: "id-card", component:idCard},
     ],

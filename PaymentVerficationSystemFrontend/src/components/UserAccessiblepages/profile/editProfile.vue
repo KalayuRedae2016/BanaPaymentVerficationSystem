@@ -3,6 +3,18 @@
     <div class="border-b border-blue-500">
       <p class="text-blue-800 font-bold px-4 pb-4 pt-3">Edit Client Profile</p>
     </div>
+
+    
+<div v-if="formEmptyEditProfile" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+  <strong class="font-bold">Success!</strong>
+  <span class="block sm:inline">User profile edited successfully.</span>
+  <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" aria-label="Close" onclick="this.parentElement.style.display='none'">
+    <svg class="fill-current h-6 w-6 text-green-700" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <title>Close</title>
+      <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.641a.5.5 0 00.707.707L10 10.707l3.641 3.64a.5.5 0 00.707-.707L10.707 10l3.641-3.641a.5.5 0 000-.707z" />
+    </svg>
+  </button>
+</div>
     <div class="">
       <div class="mb-16">
         <div class="">
@@ -89,7 +101,7 @@
       </div>
     </div>
 
-    <div v-if="showEditModal" style="height: 400px">
+    <div v-if="showEditModal" style="height: 350px ; width: 300px;">
       <transition name="fade" mode="out-in">
         <div
           class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
@@ -115,17 +127,17 @@
               </div>
             </div>
 
-            <hr class="my-4 md:bg-red-500" />
-            <div class="scroll-y" style="height: 400px">
+            <hr class="my-4 md:bg-red-500 text-xxs" />
+            <div class="scroll-y" style="height: 350px">
               <form>
                 <div class="flex flex-col lg:flex-row">
                   <img
                     :src="imageData"
                     alt="User Profile Image"
-                    class="w-32 h-32 rounded-full"
+                    class="w-16 h-16  rounded-full"
                   />
                   <input
-                    class="mb-5 ml-3 mt-5 lg:mt-16"
+                    class="text-xs md:text-lg mb-5  mt-5 lg:mt-16"
                     type="file"
                     ref="fileInput"
                     accept="image/*"
@@ -448,9 +460,10 @@ export default {
           console.log("response from the update: " ,response);
           if (response.data.status === 1) {
             this.clientProfile =response.data.updatedUser;
-            this.imageData = "data:image/jpeg;base64," + this.imageFile;
-            this.showSuccess = true;
-            this.successMessage = response.data.message;
+            this.$router.push(`/admindashboard/empty-edit-profile/${this.clientProfile._id}`)
+           // this.imageData = "data:image/jpeg;base64," + this.imageFile;
+           // this.showSuccess = true;
+           // this.successMessage = response.data.message;
             
           }
         })

@@ -1,47 +1,59 @@
 <template>
   <div>
     <div class="">
-      <h2 class="text-blue-800 pt-4 px-4 pb-3 font-bold">
-         {{ $t('thisMonthlyReport') }} ({{ activeYear }} -{{ activeMonth }}) <span class=""></span>
+      <h2 class="w-full border-b border-blue-500 text-blue-800 pt-4 px-4 pb-3 font-bold">
+        Dashboard
+        {{ $t("thisMonthlyReport") }} ({{ activeYear }} -{{ activeMonth }})
+        <span class=""></span>
       </h2>
-      <div class="flex flex-col lg:flex-row border-t border-blue-500">
-        <div class="mt-8">
-          <div class="py-4 bg-white ml-5 mr-5">
-            <div
-              class="w-full overflow-x-auto lg:overflow-x-visible lg:w-autolg:p-6 mt-1 rounded-lg"
-            >
-              <table class="min-w-full divide-y divide-gray-300 text-xs">
+
+      <div class="">
+        <div class="mx-4 text-xs">
+          <div
+            class="mt-5 mb-5 flex flex-col w-full border border-gray-300 p-4 rounded-lg"
+          >
+            <div class="flex flex-row space-x-3">
+              <p class="text-blue-800 mb-5 text-sm">
+               
+                {{ $t("Current Month Report") }}
+               
+               
+              </p>
+              
+            </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-300 text-xs">
                 <thead class="bg-gray-50">
                   <tr>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                       {{ $t('metric') }}
+                      {{ $t("metric") }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                    {{ $t('paidClients') }}
+                      {{ $t("paidClients") }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                    {{ $t('unPaidClients') }}
+                      {{ $t("unPaidClients") }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                    {{ $t('totalPaidCapital') }}
+                      {{ $t("totalPaidCapital") }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                    {{ $t('totalPaidPenality') }}
+                      {{ $t("totalPaidPenality") }}
                     </th>
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                    {{ $t('detail') }}
+                      {{ $t("detail") }}
                     </th>
                   </tr>
                 </thead>
@@ -51,7 +63,7 @@
                     <td
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                    {{ $t('yearMonth') }} (2024-5)
+                      {{ $t("yearMonth") }} (2024-5)
                     </td>
 
                     <td class="px-4 py-2 text-left border border-gray-300">
@@ -75,46 +87,87 @@
                         href="#"
                         class="text-blue-800 hover:underline font-semibold text-sm underline"
                         @click="viewPaidUnPaid"
-                        ><h1 class="">{{ $t('view') }}</h1>
+                        ><h1 class="">{{ $t("view") }}</h1>
                       </a>
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </div>
-          <a
+              <div class="w-full mx-auto mt-6">
+              <div class="text-sm font-medium text-gray-700 mb-2">
+                {{ monthlyPaid }} of {{ totalClients }} Clients Paid In This
+                Month
+              </div>
+              <div class="relative w-full h-4 bg-gray-200 rounded">
+                <div
+                  class="absolute top-0 left-0 h-4 bg-green-500 rounded"
+                  :style="{ width: progressPercentage + '%' }"
+                ></div>
+              </div>
+              <div class="text-sm text-gray-600 mt-2">
+                {{ progressPercentage.toFixed(1) }}% paid
+              </div>
+            </div>
+            <a
             href="#"
-            class="text-blue-800 hover:underline font-semibold text-sm underline"
+            class="mt-5 text-blue-800 hover:underline font-semibold text-sm italic"
             @click="paidUnPaidOverdue()"
-          >
-            <i class="ml-7 mt-5 fas fa-wallet"></i
-            ><span class="text-green-500 ml-3"> {{ $t('allPayments') }}</span>
+            ><h1 class="underline text-xs italic">{{ $t("All Payments") }}</h1>
           </a>
+          </div>
+        
         </div>
-        <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
+
+
+        
+     
+
+        <!-- <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
           <Chart class="-ml-5 mr-5 lg: ml-0 mr-0"></Chart>
-        </div>
+          
+        </div> -->
       </div>
     </div>
 
     <!-- overdue section -->
     <div class="mx-4 text-xs">
-      <div
-        class="flex flex-row space-x-4 w-full border border-gray-300 p-4 rounded-lg"
-        style="margin-top: -200px"
-      >
-        <p class="text-blue-800 mb-5 text-xs">
-          <i class="fas fa-exclamation-circle text-red-500 mr-2"></i> {{ $t('allOverdueClients') }}
-          <span v-if="totalOvedue" class="text-red-500">{{ totalOvedue }}</span>
-          <span v-else>0</span>
-        </p>
-        <a
-          href="#"
-          class="text-blue-800 hover:underline font-semibold text-sm italic"
-          @click="goAllOverDue()"
-          ><h1 class="underline text-xs italic">{{ $t('view') }}</h1>
-        </a>
+      <div class="flex flex-col w-full border border-gray-300 p-4 rounded-lg">
+        <div class="flex flex-row space-x-3">
+          <p class="text-blue-800 mb-5 text-sm">
+            <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+            {{ $t("allOverdueClients") }}
+            <span v-if="totalOvedue" class="text-red-500">{{
+              totalOvedue
+            }}</span>
+            <span v-else>0</span>
+          </p>
+          <a
+            href="#"
+            class="text-blue-800 hover:underline font-semibold text-sm italic"
+            @click="goAllOverDue()"
+            ><h1 v-if="totalOvedue > 0" class="underline text-xs italic">{{ $t("view") }}</h1>
+          </a>
+        </div>
+        <div class="">
+          <div v-if="totalOvedue>0" class="text-sm font-medium text-gray-700 mb-2">
+            {{ totalOvedue }} of {{ totalClients }} Clients Have Overdue
+            Payments
+          </div>
+          <div v-else>
+            0 of {{ totalClients }} Clients Have Overdue
+            Payments
+          </div>
+          <div class="relative w-full h-4 bg-gray-200 rounded">
+            <div
+              class="absolute top-0 left-0 h-4 bg-red-500 rounded"
+              :style="{ width: progressPercentage + '%' }"
+            ></div>
+          </div>
+          <div class="text-sm text-gray-600 mt-2">
+            {{ progressPercentage.toFixed(1) }}% Overdue
+          </div>
+        </div>
       </div>
     </div>
     <!-- //all years confirmed payments -->
@@ -124,13 +177,14 @@
     >
       <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-xs">
-          <i class="fas fa-check-circle text-green-500 text-xs"></i> {{ $t('allYearsConfirmedReport') }}<span class=""></span>
+          <i class="fas fa-check-circle text-green-500 text-xs"></i>
+          {{ $t("allYearsConfirmedReport") }}<span class=""></span>
         </h2>
         <a
           href="#"
           class="text-blue-800 hover:underline font-semibold text-sm underline"
           @click="viewPaymentsReport()"
-          ><h1 class="text-xs">{{ $t('allReportDetails') }}</h1>
+          ><h1 class="text-xs">{{ $t("allReportDetails") }}</h1>
         </a>
       </div>
 
@@ -141,13 +195,13 @@
               rowspan="3"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-             {{ $t('banks') }}
+              {{ $t("banks") }}
             </th>
             <th
               colspan="7"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('balance') }}
+              {{ $t("balance") }}
             </th>
           </tr>
           <tr>
@@ -155,50 +209,50 @@
               colspan="4"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('block') }}
+              {{ $t("block") }}
             </th>
             <th
               colspan="3"
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('service') }}
+              {{ $t("service") }}
             </th>
           </tr>
           <tr>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('regular') }}
+              {{ $t("regular") }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('subsidy') }}
+              {{ $t("subsidy") }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('urgent') }}
+              {{ $t("urgent") }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('totalBlock') }}
+              {{ $t("totalBlock") }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('penality') }}
+              {{ $t("penality") }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('mService') }}
+              {{ $t("mService") }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-            {{ $t('totalService') }}
+              {{ $t("totalService") }}
             </th>
           </tr>
         </thead>
@@ -239,7 +293,7 @@
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
             >
-            {{ $t('total') }}
+              {{ $t("total") }}
             </td>
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
@@ -289,6 +343,7 @@
   </div>
 </template>
 <script>
+import AllPayments from "../payment/allPayments/allPayments.vue";
 import Chart from "../payment/Reports/charts/charts.vue";
 import { mapGetters } from "vuex";
 export default {
@@ -298,6 +353,8 @@ export default {
   name: "CapitalReport",
   data() {
     return {
+      paidClients: 1, // Number of clients who have paid
+      totalClients: 2000, // Total number of client
       monthlyPaid: "",
       monthlyPending: "",
       monthlyCapital: "",
@@ -328,28 +385,29 @@ export default {
       this.$i18n.locale = this.getLocale;
       return this.getLocale;
     },
+    progressPercentage() {
+      return (this.monthlyPaid / this.totalClients) * 100;
+    },
   },
   created() {
     this.latestPaymentSetting();
   },
 
   mounted() {
-
-  //finding users
+    //finding users
     this.$apiClient
       .get("/api/v1/users")
       .then((response) => {
         console.log("response clients", response);
         this.clientProfile = response.data;
-        this.clientLength = response.data.result;
+        this.totalClients = response.data.result;
         console.log("clientlength", this.clientLength);
       })
       .catch((error) => {
         console.error("Error fetching client data:", error.response.data.error);
       });
 
-
-      //overdue payments
+    //overdue payments
     const allTimeRange = "allTime";
     this.$apiClient
       .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
@@ -362,13 +420,11 @@ export default {
         console.log("Error fetching total overdue", error.response.data.error);
       });
 
-
     //end of the overdue fetch;
     //get the users
 
-
     //orgbalances
-  this.$apiClient
+    this.$apiClient
       .get("api/v1/payments/orgBalance")
       .then((response) => {
         console.log("response org balance", response);
@@ -381,9 +437,7 @@ export default {
           error.response.data.error
         );
       });
-   },
-
-
+  },
 
   methods: {
     paidUnPaidOverdue() {
@@ -394,7 +448,7 @@ export default {
         },
       });
     },
-//latest payment month and active year
+    //latest payment month and active year
     latestPaymentSetting() {
       this.$apiClient
         .get("/api/v1/paymentSetting/latest")
@@ -414,7 +468,7 @@ export default {
           );
         });
     },
-//monthly payment
+    //monthly payment
     monthlyPayment() {
       const timeRange = "monthly";
       this.$apiClient
@@ -422,7 +476,7 @@ export default {
           `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.activeYear}&month=${this.activeMonth}`
         )
         .then((response) => {
-          console.log("active month ",this.activeMonth);
+          console.log("active month ", this.activeMonth);
           console.log("monthly report in the dashboard", response);
           this.monthlyReport = response.data.items;
           this.monthlyPaid =

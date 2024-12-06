@@ -7,7 +7,7 @@
       <button
         v-for="(tab, index) in tabs"
         :key="index"
-        :class="`px-4 py-2  mb-2 mr-2 ${
+        :class="`px-4 py-2  mb-2 mr-2 text-sm ${
           activeTab === index
             ? 'bg-gray-300 border-b-4 border-blue-500 text-blue-500 font-extrabold text-lg'
             : 'bg-gray-100 text-indigo-700 font-extrabold text-lg'
@@ -89,7 +89,7 @@ export default {
     },
   },
   mounted() {
-  this.activeTab=1;
+
     // const urlParams = new URLSearchParams(window.location.search);
     // const activeTab = urlParams.get('activeTab');
     // if (activeTab) {
