@@ -7,6 +7,43 @@
       {{ $t('viewDeactivatedUsers') }}
       </button>
     </div>
+  
+    <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5   bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ successToastMessage }}</span>
+    </div>
+  </transition> 
+  <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5   bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
+
+
     <div class="border-t border-indigo-800 mt-3">
       <div
         class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
@@ -403,6 +440,12 @@
     </transition>
   </div>
 
+ 
+
+
+
+ 
+
   <div v-if="showError">
     <transition name="fade" mode="out-in">
       <div
@@ -456,7 +499,11 @@ export default {
   },
   data() {
     return {
-
+      successToastMessage:"",
+      errorToastMessage:"",
+      
+     showErrorToast:false,
+     showSuccessToast:false,
      showSuccess:false,
      showError:false,
      successMessage:"",
@@ -536,6 +583,30 @@ export default {
 
 
   methods: {
+      
+    showSuccessToastMessage(message) {
+      this.successToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+       
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+
+
+    
     resetPassword(user) {
       console.log("userId is",user._id);
       this.showResetModal=false;
@@ -573,14 +644,18 @@ export default {
         .then((response) => {
           console.log("users", response.data.message);
           if (response.data.status===1) {
-            this.successMessage = response.data.message
-            this.showSuccess=true;
-            this.displayedItems();
+           // this.fetchUsers();
+            this.showSuccessToastMessage(response.data.message)
+            // this.successMessage = response.data.message
+            // this.showSuccess=true;
+            //this.displayedItems();
+          }else{
+            this.showErrorToastMessage("Something went wrong!!"); 
           }
         })
         .catch((error) => {
-            this.errorMessage = error.response.data.message
-            this.showError=true;
+          console.log(error)
+          this.showErrorToastMessage("Something went wrong!!");
         });
     },
     showDeactivatedUsers() {
@@ -606,7 +681,7 @@ export default {
             this.searchedClients = response.data.message;
             this.clients = response.data.message;
             console.log("this.clientssearch", this.searchedClients);
-            this.displayedItems();
+            //this.displayedItems();
           }
         })
         .catch((error) => {

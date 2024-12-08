@@ -145,7 +145,7 @@
 
           <div class="relative -mt-1" @click="toggleDropdown('profile')">
             <img
-              src="../../../assets/img/banamall1.jpg"
+              src="../../../assets/img/profile.jpg"
               alt="User Profile"
               class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
             />

@@ -30,6 +30,8 @@
   "allPayments": "ሁሉም ክፍያዎች",
   "reports": "ሪፖርቶች",
   "idCard": "መታወቂያ ካርድ",
+
+
   "sendMessage": "መልእክት ላክ",
   "changePassword": "ማህተም ለመቀየር",
   "logout": "ውጣ",
@@ -112,6 +114,8 @@
   "Absinia": "አብሲኒያ",
   "other": "ሌላ",
    "editCompanyProfile": "የኩባንያ መገለጫ ያስተካክሉ",
+
+
    "bankName":"የባንክ ሽም",
    "number": "ቁጥር",
    "userCode": "የተጠቃሚ ኮድ",
@@ -177,6 +181,8 @@
   "sendTo": "ላክ ወደ",
   "check": "አረጋግጥ",
   "message": "መልእክት",
+
+  
   "paymentSettings": "ክፍያ ቅንብሮች",
   "paymentSetting": "ክፍያ ቅንብር",
   "newPayment": "አዲስ ክፍያ",
@@ -186,6 +192,7 @@
   "creditTransfer": "የክሬዲት/ዝውውር",
   "currentPaymentSetting": "አሁን የሚኖር ክፍያ ቅንብር",
   "paymentSettingHistory": "የክፍያ ቅንብር ታሪክ",
+
   "transferedPayments": "ዝውውር የተደረጉ ክፍያዎች",
   "status": "ሁኔታ",
   "action": "ተግባር",

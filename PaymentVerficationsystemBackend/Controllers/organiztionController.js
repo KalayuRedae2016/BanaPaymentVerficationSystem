@@ -47,26 +47,63 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     organization,
   });
 });
-exports.getOrganization = catchAsync(async (req, res,next) => {
-  // console.log('Organization is displayed');
+// exports.getOrganization = catchAsync(async (req, res,next) => {
+//   // console.log('Organization is displayed');
+//   const organization = await Organization.findOne();
+
+//   // If paymentTransfers exist, format the transfer date of each transfer
+//   const paymentTransfers = organization.paymentTransfers.map((transfer) => {
+//     return {
+//       ...transfer._doc,  // Spread the original transfer details
+//       formattedTransferDate: transfer.transferDate ? formatDate(transfer.transferDate) : null
+//     };
+//   });
+
+
+//   console.log(organization)
+
+
+//   res.status(200).json({
+//     status: 1,
+//     organization: {
+//       ...organization._doc,
+//       paymentTransfers
+//     }
+//   });
+// });
+
+exports.getOrganization = catchAsync(async (req, res, next) => {
+  // Fetch the organization from the database
   const organization = await Organization.findOne();
 
-  // If paymentTransfers exist, format the transfer date of each transfer
-  const paymentTransfers = organization.paymentTransfers.map((transfer) => {
+  // If no organization is found, respond with an empty array for organization
+  if (!organization) {
+    return res.status(200).json({
+      status: 1,
+      organization: [], // Send organization as an empty array
+    });
+  }
+
+  // If organization is found, process the payment transfers
+  const paymentTransfers = organization.paymentTransfers?.map((transfer) => {
     return {
-      ...transfer._doc,  // Spread the original transfer details
-      formattedTransferDate: transfer.transferDate ? formatDate(transfer.transferDate) : null
+      ...transfer._doc, // Spread the original transfer details
+      formattedTransferDate: transfer.transferDate
+        ? formatDate(transfer.transferDate)
+        : null,
     };
-  });
-  console.log(organization)
+  }) || []; // Default to an empty array if undefined
+
+  // Respond with the organization details
   res.status(200).json({
     status: 1,
     organization: {
-      ...organization._doc,
-      paymentTransfers
-    }
+      ...organization._doc, // Spread the organization details
+      paymentTransfers,     // Include processed payment transfers
+    },
   });
 });
+
 
 exports.updateOrganization = catchAsync(async (req, res,next) => {
   //it is one organization

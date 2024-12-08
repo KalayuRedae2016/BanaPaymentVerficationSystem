@@ -4,7 +4,7 @@
    <div class="pt-6 -mt-1">
      <div class="mb-4">
        <div class="flex flex-col">
-         <div class="flex flex-row space-x-4 px-5">
+         <div class="flex flex-row space-x-4 px-5 ">
            <input
              @keyup.enter="searchUser"
              v-model="keyword"

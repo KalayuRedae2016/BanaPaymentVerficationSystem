@@ -11,7 +11,7 @@
         <p>Full Name: {{ fullName }}</p>
       </div>
 
-      <div class="border-t-2 border-blue-500 border-dotted mt-5">
+      <div class="border-t-2 border-blue-500 border-dotted mt-5" v-if="payments">
         <div
           class="p-4 border-b-2 border-blue-500 border-dotted cursor-pointer"
           v-for="(payment, paymentIndex) in payments"
@@ -150,6 +150,9 @@
           </div>
         </div>
       </div>
+      <div v-else>
+        Nothing to pay
+      </div>
 
       <!-- this is the end of the forloop -->
     </div>
@@ -274,6 +277,12 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      userEmail:"",
+      userAddress:"",
+      userPhoneNumber:"",
+      userGender:"",
+      fullName:this.userCode + " " + "Bana User",
+
       allPaymentSuccess: false,
       confirmedSuccessfully: "",
       paymentType: "",
@@ -304,111 +313,18 @@ export default {
       searchId: "",
       currentId: "",
       selectedUser: null,
-      payments: [
-        {
-          fullName: "John Doe",
-          userCode: "JD123",
-          activeYear: 2024,
-          activeMonth: "August",
-          id: 1,
-       
-          regular: {
-            paidAt: "2024-04-03",
-            isPaid: false,
-            amount: 100,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-          subsidy: {
-            paidAt: null,
-            isPaid: false,
-            amount: 50,
-            penality: 0,
-            bankType: "WEGAGEN",
-            TTNumber: null,
-          },
-          urgent: {
-            paidAt: null,
-            isPaid: false,
-            amount: 200,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-          service: {
-            paidAt: null,
-            isPaid: false,
-            amount: 75,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-          penality: {
-            paidAt: null,
-            isPaid: false,
-            amount: 20,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-        },
-
-        {
-          id: 2,
-          fullName: "Jane Smith",
-          userCode: "JS456",
-          activeYear: 2024,
-          activeMonth: "August",
-          paymentSelected: false,
-          permitSelect: false,
-          confirmRegularSubsisyUrgentFirst: false,
-          regular: {
-            paidAt: null,
-            isPaid: false,
-            amount: 150,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-          subsidy: {
-            paidAt: null,
-            isPaid: false,
-            amount: 75,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-          urgent: {
-            paidAt: null,
-            isPaid: false,
-            amount: 300,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-          service: {
-            paidAt: null,
-            isPaid: false,
-            amount: 100,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-          penality: {
-            paidAt: null,
-            isPaid: false,
-            amount: 30,
-            penality: 0,
-            bankType: "",
-            TTNumber: null,
-          },
-        },
-      ],
+      payments: [],
     }
   },
   computed: {
-    ...mapGetters(["getToken", "getUserId", "getLocale", "getName"]),
+    ...mapGetters([
+      "getToken",
+      "getUserId",
+      "getLocale",
+      "getName",
+      "getUserCode",
+    ]),
+
     userId() {
       return this.getUserId;
     },
@@ -423,11 +339,32 @@ export default {
     name() {
       return this.getName;
     },
+
+    userCode() {
+      return this.getUserCode;
+    },
   },
   mounted() {
+  this.$apiClient
+    .get(`/api/v1/users/${localStorage.getItem('userId')}`)
+    .then((response) => {
+      console.log("Response client profile based on the id", response);
 
-    //  const userCode = this.userCode;
-    //  console.log(userCode);
+      // Assigning response data to component properties
+      this.userEmail = response.data.clientProfile.email;
+      this.userAddress = response.data.clientProfile.address;
+      this.userGender = response.data.clientProfile.gender;
+      this.fullName = response.data.clientProfile.fullName;
+      this.userPhoneNumber = response.data.clientProfile.phoneNumber;
+      this.userCode = response.data.clientProfile.userCode;
+
+    })
+    .catch((error) => {
+      console.error("Error fetching client data:", error);
+    });
+
+
+
 
      this.fetchNotPaid();
   },
@@ -457,8 +394,9 @@ export default {
     fetchNotPaid() {
       //this.userCode
       this.$apiClient
-        .get(`/api/v1/payments/search?keyword=${'BM0006'}`)
+        .get(`/api/v1/payments/search?keyword=${localStorage.getItem('userCode')}`)
         .then((response) => {
+          console.log("not paid are",response)
           if (response.data.status === 1) {
             this.fullName = response.data.fullName;
             this.userCode = response.data.userCode;

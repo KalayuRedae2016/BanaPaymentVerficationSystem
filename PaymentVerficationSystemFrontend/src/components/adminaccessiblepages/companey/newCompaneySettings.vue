@@ -5,6 +5,45 @@
         {{ $t("companyProfile") }}
       </h2>
     </div>
+
+ 
+    <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ succesToastMessage }}</span>
+    </div>
+  </transition> 
+
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
+
+
     <div
       class="border-t border-indigo-50 mt-1 py-4 md:border-t md:border-indigo-800 "
     >
@@ -383,6 +422,12 @@ export default {
   name: "paymentsView",
   data() {
     return {
+
+     successToastMessage:"",
+     errorToastMessage:"",
+     showErrorToast:false,
+     showSuccessToast:false,
+
       showError:false,
       showWarning :false,
       warningMessage:"",
@@ -443,6 +488,27 @@ export default {
   },
 
   methods: {
+showSuccessToastMessage(message) {
+      this.successToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+       
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    
 
     
     routeToDisplay() {
@@ -473,18 +539,16 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (Number(response.data.status)===1) {
-            this.createdSuccessfully = true;
-            this.successMessage=response.data.message;
             this.$router.push("/admindashboard/empty-companey");
           }else{
-            this.showWarning = true;
-            this.warningMessage=response.data.message;
+          this.showErrorToastMessage("Something went wrong");
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.data.message;
-          this.showError = true;
-          console.log("Error in the catch",error.response.data.message);
+
+          console.log(error);
+          this.showErrorToastMessage("Something went wrong");
+
         });
 
       // if (this.closepaymentCreated ===false) {

@@ -1,5 +1,50 @@
 <template>
   <div>
+
+
+  <!-- //start of transtion -->
+
+
+  <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{showSuccessToastMessage}}</span>
+    </div>
+</transition> 
+
+<transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+</transition> 
+
+
+
+
+  <!-- //end of transtion -->
    <div
     class=" flex-col border-t  border-gray-300 rounded-lg mt-5 shadow-lg mx-3 ">
     <div class="flex flex-wrap">
@@ -347,7 +392,7 @@
         <div class="bg-white rounded-lg p-6 border border-cyan-500">
           <div class="flex flex-row items-center">
             <!-- Text on the left -->
-            <div>Edit Regular Payment {{ $t('editRegularPayment') }}</div>
+            <div>Edit Regular Payment</div>
 
             <!-- Icon on the right -->
             <div
@@ -667,6 +712,13 @@ export default {
   name: "paymentsView",
   data() {
     return {
+
+     successToastMessage:"",
+     errorToastMessage:"",
+     showErrorToast:false,
+     showSuccessToast:false,
+
+
       paymentSettingCreated: 0,
       showSuccess: false,
       showError: false,
@@ -762,7 +814,29 @@ export default {
         this.paymentSettingCreated = 0; // Indicate an error state
       });
   },
+
+
   methods: {
+    showSuccessToastMessage(message) {
+      this.successToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+       
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
     createRegularPayment() {
       console.log(
         this.paymentSetting.subsidyAmount,
@@ -880,16 +954,17 @@ export default {
           console.log("response", response);
           if (response.data.status === 1) {
             //this.paymentSetting=response.data.paymentSetting;
-            this.showSuccess = true;
-            this.successMessage = response.data.message;
+
+            this.showSuccessToastMessage(response.data.message);
+
             this.paymentSettingCreated = 1;
           } else {
-            console.log("data is note inserted");
+            this.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
-          this.showError = true;
-          this.errorMessage = error.response.data.message;
+          console.log(error)
+          this.showErrorToastMessage("Something went wrong");
         });
 
     },
@@ -946,16 +1021,15 @@ export default {
         .then((response) => {
           console.log("response is=",response);
           if (response.data.status === 1) {
-            this.showSuccess = true;
-            this.successMessage = response.data.message;
+            this.showSuccessToastMessage(response.data.message);
             this.showPaymentEditingActivating=!this.showPaymentEditingActivating;
 
             
           }
         })
         .catch((error) => {
-          this.showError = true;
-          this.errorMessage = error.response.data.message;
+          console.log(error)
+          this.showErrorToastMessage("Something went wrong");
       });
     },
 
@@ -1002,18 +1076,23 @@ export default {
         .then((response) => {
           console.log("Update response", response.data);
           if (response.data.status === 1) {
-         
-            this.showSuccess = true;
-            this.successMessage = response.data.message;
+            this.showSuccessToastMessage(response.data.message);
             this.paymentActivate = false;
             this.paymentSettingCreated = 1;
             this.showPaymentEditingActivating=false;
           }
         })
         .catch((error) => {
-          this.showPaymentEditingActivating=false;
-          this.showError = true;
-          this.errorMessage = error.response.data.message;
+          if(error.response){
+            this.showErrorToastMessage(error.response.message);
+          }
+          else if(error.request){
+            this.showErrorToastMessage("Something went wrong,in response");
+          }else{
+            this.showErrorToastMessage("Something went wrong");
+          }
+         
+          
     });
    },
 

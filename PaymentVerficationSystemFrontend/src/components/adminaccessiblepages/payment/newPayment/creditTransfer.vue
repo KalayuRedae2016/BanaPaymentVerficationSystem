@@ -13,9 +13,13 @@
       <label class="custom-label"> Transfer From:  <span v-if="selectTransferFrom" class="text-red-500">Please select a bank from where to be transfer!</span></label>
       <select name="type" id="" class="custom-input text-xs" v-model="fromBankType">
         <option value="" disabled >Transfer From</option>
-        <option value="LIB">LIB</option>
-        <option value="WEGAGEN">WEGAGEN</option>
-        <option value="CBE">CBE</option>
+        <option 
+    v-for="(bank, index) in $blockBanks" 
+    :key="index" 
+    :value="bank.bankType">
+    {{ bank.bankType }}
+  </option>
+     
       </select>
     </div>
     <div class="mb-4">

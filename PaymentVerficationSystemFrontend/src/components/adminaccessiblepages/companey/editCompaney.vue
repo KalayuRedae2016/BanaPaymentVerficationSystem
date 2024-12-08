@@ -6,7 +6,44 @@
           {{ $t("editCompanyProfile") }}
         </h2>
       </div>
+ 
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ successToastMessage }}</span>
+    </div>
+  </transition> 
 
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
+
+      
       <div class="flex flex-wrap mx-auto py-8 border-t border-indigo-800 mt-4">
         <div v-if="!closepaymentCreated" class="w-full">
           <div class="m-4">
@@ -884,6 +921,12 @@ export default {
   name: "paymentsView",
   data() {
     return {
+     successToastMessage:"",
+     errorToastMessage:"",
+     showErrorToast:false,
+     showSuccessToast:false,
+
+
       newBlockBankType: "",
       newBlockBankAccountNumber: "",
 
@@ -975,6 +1018,26 @@ export default {
       });
   },
   methods: {
+    showSuccessToastMessage(message) {
+      this.successToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+       
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
     trackNewBlockBankType(account) {
       //console.log("addedblock",account);
       if (account == "other") {
@@ -1036,13 +1099,11 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
-            this.editSuccess = true;
-            this.successMessage = response.data.message;
+           this.showSuccessToastMessage(response.data.message)
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.data.message;
-          this.showError = true;
+          this.showSuccessToastMessage("Something went wrong");
           console.log("Error in the catch", error.response.data.message);
         });
     },
@@ -1074,13 +1135,11 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
-            this.editSuccess = true;
-            this.successMessage = response.data.message;
+            this.showSuccessToastMessage(response.data.message)
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.data.message;
-          this.showError = true;
+          this.showSuccessToastMessage("Something went wrong");
           console.log("Error in the catch", error.response.data.message);
         });
     },
@@ -1134,13 +1193,11 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
-            this.editSuccess = true;
-            this.successMessage = response.data.message;
+            this.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.data.message;
-          this.showError = true;
+          this.showErrorToastMessage("Something went wrong");
           console.log("Error in the catch", error.response.data.message);
         });
     },
@@ -1181,15 +1238,12 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
-            this.editSuccess = true;
-            this.successMessage = "Bank Deleted Successfully";
-
+            this.showSuccessToastMessage(response.data.message);
             //alert(this.successMessage);
           }
         })
         .catch((error) => {
-          this.errorMessage = "Error Delating Bank";
-          this.showError = true;
+          this.showErrorToastMessage("Something went wrong");
           console.log("Error in the catch", error.response.data.message);
         });
     },
@@ -1252,13 +1306,11 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
-            this.editSuccess = true;
-            this.successMessage = response.data.message;
+            this.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.error.message;
-          this.showError = true;
+          this.showErrorToastMessage("Something went wrong");
           console.log("Error in the catch", error.response.data.message);
         });
     },
@@ -1305,13 +1357,11 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
-            this.editSuccess = true;
-            this.successMessage = "Bank Delated Successfully";
+            this.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
-          this.errorMessage = "Error Delating Bank";
-          this.showError = true;
+          this.showErrorToastMessage("Something went wrong");
           console.log("Error in the catch", error.response.error.message);
         });
     },
@@ -1363,15 +1413,12 @@ export default {
         )
         .then((response) => {
           if (Number(response.data.status) === 1) {
-            console.log("Update response", response.data);
-            this.successMessage = response.data.message;
-            this.editSuccess = true;
+           this.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
           console.log("Error updating close", error);
-          this.errorMessage = error.response.data.message;
-          this.showError = true;
+          this.showErrorToastMessage("Something went wrong");
         });
     },
     //block bank account

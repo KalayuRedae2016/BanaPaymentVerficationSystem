@@ -1,5 +1,5 @@
 <template>
-    <div>It is updating</div>
+    <div class="mb-96">It is updating</div>
 </template>
 <script>
 export default {
@@ -9,10 +9,10 @@ export default {
      //id:"663f0e60664ec7097cda8383",
     };
   },
-  created(){
+  mounted(){
     console.log("empty called")
     this.$router.push({
-  path: `/userdashboard/edit-client/${this.$route.params.clientId}`,
+  path: `/userdashboard/profile`,
   query: { formEmptyEditProfile: true },
 });
   },

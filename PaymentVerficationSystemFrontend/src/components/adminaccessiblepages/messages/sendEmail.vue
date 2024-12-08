@@ -5,6 +5,41 @@
     <div class="flex flex-row space-x-3">
       <p class="text-blue-800 text-md font-bold">{{ $t("sendEMessage") }}</p>
     </div>
+    <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ succesToastMessage }}</span>
+    </div>
+  </transition> 
+
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
 
     <div class="border-t border-indigo-800 mt-3 text-xs">
       <div
@@ -18,7 +53,7 @@
             <input
               class="custom-input"
               id="subject"
-              type="text"
+              type="email"
               placeholder="subject"
               v-model="subject"
             />
@@ -249,6 +284,12 @@ export default {
   },
   data() {
     return {
+     successToastMessage:"",
+     errorToastMessage:"",
+     showErrorToast:false,
+     showSuccessToast:false,
+
+
      showError:false,
      showSuccess:false,
      successMessage:"",
@@ -261,8 +302,8 @@ export default {
       screenSize: "",
       detailModal: false,
       searchedusers: [],
-      subject: "bana@gmail.com",
-      message: "every Body Should pay at the given deadline",
+      subject: "",
+      message: "",
       selectedUserIds: [],
       selectedUsers: [],
       clientId: "",
@@ -343,6 +384,26 @@ export default {
   },
 
   methods: {
+    showSuccessToastMessage(message) {
+      this.successToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+       
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
     selectDeselectEmail(email) {
       console.log("selectDeselectEmail", email);
       const index = this.emails.indexOf(email);
@@ -368,11 +429,26 @@ export default {
       }
     },
     sendMessage() {
+
+      if(this.subject==''){
+        this.showErrorToastMessage("Subject is required");
+        return;
+      }
+      if(this.message==''){
+        this.showErrorToastMessage("Message is required");
+        return;
+      }
+      if(this.emails==''){
+        this.showErrorToastMessage("Please select users to send message");
+        return;
+      }
       const emailList = {
         subject: this.subject,
         message: this.message,
         emails: this.emails,
       };
+
+      
       console.log(emailList);
       this.$apiClient.post("/api/v1/users/sendEmails", emailList)
         .then((response) => {
@@ -380,15 +456,15 @@ export default {
           if (response.data.status===1) {
             this.searchedusers = this.users;//response.data.message;
             this.displayedItems();
-            this.showSuccess=true;
-            this.successMessage = response.data.message;
+            this.showSuccessToastMessage("Email sent successfully");
+            // this.showSuccess=true;
+            // this.successMessage = response.data.message;
             this.selectAll=false;
           }
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
-          this.showError=true;
-          this.errorMessage=error.response.data.message;
+          this.showErrorToastMessage("Something went wrong")
         });
       this.emails=[];
      
@@ -405,7 +481,7 @@ export default {
       this.perPage = this.usersPerpage;
       this.showMoreChanged = true;
       console.log("perpage is", this.perPage);
-      //this.searchedusers=this.users
+       this.searchedusers=this.users
       this.displayedItems();
     },
     fetchUsers() {
@@ -422,7 +498,7 @@ export default {
             this.users = response.data.message;
             this.messageSentSuccessfully=true;
             //console.log("this.userssearch", this.searchedusers);
-           // this.displayedItems();
+           //this.displayedItems();
           }
         })
         .catch((error) => {

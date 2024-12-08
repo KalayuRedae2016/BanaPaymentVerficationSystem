@@ -3,7 +3,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import globals from './globals/globals.js';
+import globals from './globals/globals1.js';
 import './assets/global.css'; // Import the global CSS
 import { createI18n } from 'vue-i18n';
 import amharicMessages from '../locales/amharic.json';

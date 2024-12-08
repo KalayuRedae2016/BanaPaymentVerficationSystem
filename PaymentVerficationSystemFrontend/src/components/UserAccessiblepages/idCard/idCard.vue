@@ -47,11 +47,11 @@
             <div class="mx-5 mt-8 text-xs">
 
               <p class="text-blue-500 text-xs">ምሉእ ሽም/Full Name:<span class=" ml-2 text-yellow-800 text-xs">{{
-                  user.fullName }} </span></p>
-              <p class="text-blue-500 text-xs">ኣድራሻ/Address:<span class=" ml-2 text-yellow-800 text-xs">{{ user.address
+                  fullName }} </span></p>
+              <p class="text-blue-500 text-xs">ኣድራሻ/Address:<span class=" ml-2 text-yellow-800 text-xs">{{ userAddress
                   }}</span></p>
               <p class="text-blue-500 font-bold text-xs">ጾታ/Gender:<span
-                  class=" ml-2 text-yellow-800 font-bold text-xs">{{ user.gender }}</span></p>
+                  class=" ml-2 text-yellow-800 font-bold text-xs">{{ userGender }}</span></p>
 
             </div>
           </div>
@@ -109,10 +109,10 @@
                 <img :src="imageData" alt="" style=" hieght:120px;width:120px;" class="mb-3">
               </div>
               <div class="p-4 space-y-2">
-                <p class="text-xs">ተጠቃሚ ኮድ/Usercode:{{ user.userCode }}</p>
+                <p class="text-xs">ተጠቃሚ ኮድ/Usercode:{{ userCode }}</p>
                 <p class="text-xs">ሙሉእ ሽም/Full Name:</p>
-                <p class="text-xs ml-3">{{ user.fullName }}</p>
-                <p class="text-xs">ጾታ / Sex :{{ user.gender }}</p>
+                <p class="text-xs ml-3">{{ fullName }}</p>
+                <p class="text-xs">ጾታ / Sex :{{ userGender }}</p>
 
               </div>
             </div>
@@ -122,15 +122,15 @@
               <div class="w-1/2 text-xs">
                 <p class="text-xs">ስልኪ ቁጽሪ/Phone Number</p>
                 <p class="ml-5 text-xs">
-                  {{ user.phoneNumber }}
+                  {{ userPhoneNumber }}
                 </p>
                 <p class="text-xs">ኢመይል /Email</p>
                 <p class="ml-5 text-xs">
-                  {{ user.email }}
+                  {{ userEmail }}
                 </p>
                 <p class="text-xs">ኣድራሻ /Address</p>
                 <p class="ml-5 text-xs">
-                  {{ user.address }}
+                  {{ userAddress }}
                 </p>
 
 
@@ -156,6 +156,12 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      userEmail:"",
+      userAddress:"",
+      userPhoneNumber:"",
+      userGender:"",
+      fullName:this.userCode + " " + "Bana User",
+
 
       user: "",
       userProfile: "",
@@ -180,25 +186,26 @@ export default {
   mounted() {
 
 
-    this.$apiClient
-      .get(`/api/v1/users/${this.userId}`)
-      .then((response) => {
-        console.log("Response client profile", response);
-        this.clientProfile = response.data.clientProfile;
-        this.user = response.data.clientProfile;
+   this.$apiClient
+    .get(`/api/v1/users/${localStorage.getItem('userId')}`)
+    .then((response) => {
+      console.log("Response client profile based on the id", response);
 
-        console.log("this.user=", this.user);
+      // Assigning response data to component properties
+      this.userEmail = response.data.clientProfile.email;
+      this.userAddress = response.data.clientProfile.address;
+      this.userGender = response.data.clientProfile.gender;
+      this.fullName = response.data.clientProfile.fullName;
+      this.userPhoneNumber = response.data.clientProfile.phoneNumber;
+      this.userCode = response.data.clientProfile.userCode;
 
-        console.log("userid", this.userId);
-        this.imageData = "data:image/jpeg;base64," + response.data.imageData;
-        this.generateQRCodeImage(this.user);
+    })
+    .catch((error) => {
+      console.error("Error fetching client data:", error);
+    });
 
-      })
-      .catch((error) => {
-        console.error("Error fetching client datakk:", error);
-      });
+    this.generateQRCodeImage();
 
-    this.generateQRCodeImage(this.userId);
   },
 
   computed: {
@@ -224,7 +231,7 @@ export default {
 
   // Options for html2pdf conversion
   const options = {
-    filename: "Tadesse Gebremicheal Berhe",
+    filename: this.fullName + "(" + this.userCode + ")",
     image: { type: "jpeg", quality: 0.98 },
     html2canvas: { scale: 2 },
     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
@@ -240,10 +247,9 @@ export default {
   window.open(pdfUrl, "_blank");
 },
 
-    async generateQRCodeImage(userId) {
+    async generateQRCodeImage() {
 
-      const qrData = `"User Code":${userId.userCode}, "Full Name": ${userId.fullName}, "Phone Number":${userId.phoneNumber}, "Email":${userId.email}, "Address":${userId.address}, "Gender":${userId.gender}, "ID Giver Company":${'https://bannamall.com/'}`;
-
+      const qrData = `"User Code":${this.userCode}, "Full Name": ${this.fullName}, "Phone Number":${this.userPhoneNumber}, "Email":${this.userEmail}, "Address":${this.userAddress}, "Gender":${this.userGender}, "Company":${'https://bannamall.com/'}`;
       try {
         const qrCodeImage = await QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' });
         document.getElementById('qrCodeImageContainer').innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
@@ -288,7 +294,7 @@ export default {
 
       // Options for html2pdf conversion
       const options = {
-        filename: 'receipt.pdf',
+        filename: this.fullName + "(" + this.userCode + ")",
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }

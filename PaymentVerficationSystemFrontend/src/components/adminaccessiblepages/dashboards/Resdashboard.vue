@@ -7,6 +7,39 @@
         <span class=""></span>
       </h2>
 
+      
+      <div v-if="showToast">
+    <!-- Optional overlay for modal effect -->
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50 z-10"
+      @click="closeToast"
+    ></div>
+
+    <transition
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-from-class="translate-y-full opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transform transition duration-300 ease-in"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="translate-y-full opacity-0"
+    >
+      <div
+        class="z-20 fixed inset-0 flex items-center justify-center"
+        role="alert"
+      >
+        <div
+          class="bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg text-center max-w-md"
+        >
+          <strong class="font-bold">Success!</strong>
+          <p class="mt-2">{{ toastMessage }}</p>
+          
+        </div>
+      </div>
+    </transition>
+  </div>
+
+
+
       <div class="">
         <div class="mx-4 text-xs">
           <div
@@ -353,6 +386,7 @@ export default {
   name: "CapitalReport",
   data() {
     return {
+      showToast:false,
       paidClients: 1, // Number of clients who have paid
       totalClients: 2000, // Total number of client
       monthlyPaid: "",
@@ -394,6 +428,13 @@ export default {
   },
 
   mounted() {
+
+    if (this.$route.query.loginSuccess === 'true') {
+    this.showSuccessToast("Successfully Login in to your dashboard");
+      setTimeout(() => {
+        this.$router.push('/admindashboard');
+      }, 2000);
+    }
     //finding users
     this.$apiClient
       .get("/api/v1/users")
@@ -440,6 +481,19 @@ export default {
   },
 
   methods: {
+    showSuccessToast(message) {
+      this.toastMessage = message;
+      this.showToast = true;
+
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        this.showToast = false;
+      }, 1000); 
+      
+      
+      
+      // Toast will disappear after 3 seconds
+    },
     paidUnPaidOverdue() {
       this.$router.push({
         path: "/admindashboard/payments1",

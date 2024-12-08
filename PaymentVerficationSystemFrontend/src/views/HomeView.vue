@@ -13,9 +13,21 @@
             style="height: 100px; width: 100px"
           />
         </div>
-        <h1>banapvs.com(49.13.235.6)</h1>
+        <h1>banapvs.com</h1>
       </div>
 
+     
+
+  <div v-if="showError" class=" mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+  <strong class="font-bold">Error!</strong>
+  <span class="block sm:inline">{{ errorMessage }}</span>
+  <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" aria-label="Close" onclick="this.parentElement.style.display='none'">
+    <svg class="fill-current h-6 w-6 text-red-700" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <title>Close</title>
+      <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.641a.5.5 0 00.707.707L10 10.707l3.641 3.64a.5.5 0 00.707-.707L10.707 10l3.641-3.641a.5.5 0 000-.707z" />
+    </svg>
+  </button>
+</div>
       <div v-if="loginVisible">
         <!-- <h1 class="text-indigo-800 font-semibold text-2xl">
           {{ $t("signIn") }} <span class="text-white"></span>
@@ -143,6 +155,8 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      errorMessage:"",
+      showError:false,
       passwordIsRequired: false,
       usernameIsRequired: false,
       username: "",
@@ -194,10 +208,12 @@ export default {
       this.forgetPasswordVisible = true;
     },
     sendEmailToServer() {
+      this.showError=false;
+      this.errorMessage="";
       //alert("Sending email to: " + this.resetEmail);
      if(this.resetEmail===''){
-      //alert("Email is required to reset your password.");
-       this.resetEmailIsRequired=true;
+      this.showError=true;
+      this.errorMessage="Email is required"
        return;
      }
      const emailData = {
@@ -223,19 +239,20 @@ export default {
       console.log("local is changed =", this.locale);
     },
     login() {
+
+      this.showError=false;
+      this.errorMessage="";
     // alert("Login", this.username, this.password);
       if (this.username.trim() === "") {
-        this.usernameIsRequired = true;
-        this.UserNotFound = false;
-        this.passwordIsRequired = false;
+       this.showError=true;
+       this.errorMessage = "Please enter a username";
         return;
       }
 
       // Check if password is empty
       if (this.password.trim() === "") {
-        this.passwordIsRequired = true;
-        this.usernameIsRequired = false;
-        this.UserNotFound = false;
+        this.showError=true;
+        this.errorMessage = "Please enter a password";
         return;
       }
 // if(this.password.trim()!='' && this.username.trim()!=''){
@@ -257,8 +274,9 @@ export default {
       this.$apiClient
         .post("/api/v1/users/login", userData)
         .then((response) => {
-          console.log("response");
-          const { role, token, userId,userCode} = response.data;
+          console.log("response during login now");
+          
+          const { role, token, userId} = response.data;
           console.log("response", response.data);
 
           if (response.data.status === 1) {
@@ -268,30 +286,53 @@ export default {
               this.$store.dispatch("login", { token });
               this.$store.dispatch("commitId", { userId });
               this.$store.dispatch("commitRole", { role });
-
-              this.$store.dispatch("commitUserCode", { userCode });
-
-              this.$router.push("/admindashboard/");
+              this.$store.dispatch('commitUserCode', { userCode: 'BM0002' });
+              this.$router.push({ path: '/admindashboard', query: { loginSuccess: 'true' } });
             } else if (role.includes("User")) {
               console.log("role=====", role);
               console.log("the user is user role");
               this.$store.dispatch("login", { token });
               this.$store.dispatch("commitId", { userId });
               this.$store.dispatch("commitRole", { role });
-              this.$store.dispatch("commitUserCode", { userCode });
-              this.$router.push("/userdashboard");
+              this.$store.dispatch('commitUserCode', { userCode: 'BM0001' });
+
+              this.$router.push({ path: '/userdashboard', query: { loginSuccess: 'true' } });
+
+              
             } else {
-              console.log("unauthorized user");
+              this.showError=true;
+              this.errorMessage=response.data.message;
             }
           } else {
-            this.UserNotFound = true;
+              this.showError=true;
+              this.errorMessage=response.data.message;
           }
         })
         .catch((error) => {
-          console.log("eror in catch", error);
-          this.passwordIsRequired = false;
-          this.usernameIsRequired = false;
-          this.UserNotFound = true;
+         console.log("error",error);
+
+         if (error.response) {
+            // The request was made, and the server responded with a status code outside the 2xx range
+            console.error('Error code:', error.response.status); // e.g., 401
+
+
+            console.error('Error message:', error.response.data.message); // Message from server
+
+           
+              this.showError=true;
+              this.errorMessage=error.response.data.message
+  
+            
+          } else if (error.request) {
+            // The request was made, but no response was received
+            console.error('No response received:', error.request);
+            this.showError=true;
+            this.errorMessage="Something went wrong!!,No response received";
+          } else {
+            this.showError=true;
+            this.errorMessage="Something went wrong!!";
+          }
+         
         });
     },
   },

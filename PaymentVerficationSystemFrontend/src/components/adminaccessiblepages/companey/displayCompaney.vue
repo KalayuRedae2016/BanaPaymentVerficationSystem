@@ -1,5 +1,42 @@
 <template>
+
+  
   <div>
+    <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ successToastMessage }}</span>
+    </div>
+  </transition> 
+
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
   <div
     v-if="organizationCreated === 0"
     class="loader mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
@@ -7,6 +44,8 @@
   <div v-if="organizationCreated === 1" class="p-4">
     <h1 class="text-indigo-800 font-bold">Details</h1>
   </div>
+
+
   <div
     v-if="organizationCreated === 1 || organizationCreated === 2"
     class="container flex-col mb-96 bg-white border-t border-indigo-800 -mt-1"
@@ -115,6 +154,12 @@ export default {
   name: "paymentsView",
   data() {
     return {
+     successToastMessage:"",
+     errorToastMessage:"",
+     showErrorToast:false,
+     showSuccessToast:false,
+
+
       loading: true,
       companyProfile: {
         companyName: "",
@@ -145,12 +190,21 @@ export default {
     },
   },
   mounted() {
+    if (this.$route.query.fromEmpty === 'true') {
+    
+     this.showSuccessToastMessage("Your Company Profile Creeated Successfully");
+      setTimeout(() => {
+        this.$router.push({
+      path: `/admindashboard/display-companey`
+         });
+      }, 2000);
+    }
     this.$apiClient
       .get("/api/v1/organization")
       .then((response) => {
         console.log("Org response", response);
         if (response.data.status === 1) {
-          if (response.data.organization == null) {
+          if (response.data.organization.length ==0) {
             this.organizationCreated = 2;
             return;
           }
@@ -158,13 +212,34 @@ export default {
           this.organizationCreated = 1;
           console.log("cretaed");
         }
-      })
+      }) 
       .catch((error) => {
-        console.log("Error", error.message);
+        console.log("Error", error);
         this.organizationCreated = 0;
       });
   },
   methods: {
+    showSuccessToastMessage(message) {
+    //  alert(message);
+      console.log("message", message);
+      this.successToastMessage = message
+      this.showSuccessToast = true;
+      setTimeout(() => {
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
     localee() {
       console.log("locale", this.getLocale);
     },

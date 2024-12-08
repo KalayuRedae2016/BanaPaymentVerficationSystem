@@ -340,12 +340,12 @@
                   <tr class="border-b border-gray-300 border-t border-gray-300">
                     <td class="font-semibold py-1" style="padding-left:20px;">UserCode</td>
                     <td></td>
-                    <td style="padding-right:20px;" class="text-right py-1">{{ payment.userCode }}</td>
+                    <td style="padding-right:20px;" class="text-right py-1">{{ userCode }}</td>
                   </tr>
                   <tr class="border-b border-gray-300">
                     <td style="padding-left:20px;" class="font-semibold py-1">FullName</td>
                     <td></td>
-                    <td style="padding-right:20px;" class="text-right py-1">Tadessse Gebremicheal</td>
+                    <td style="padding-right:20px;" class="text-right py-1">{{ fullName }}</td>
                   </tr>
                   <tr class="border-b border-gray-300">
                     <td style="padding-left:20px;" class="font-semibold py-1">PaymentTerm</td>
@@ -658,6 +658,14 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+
+      userEmail:"",
+      userAddress:"",
+      userPhoneNumber:"",
+      userGender:"",
+      fullName:this.userCode + " " + "Bana User",
+
+      
       selectedPaymentLength: 0,
       selectedPayment: {},
       showList: true,
@@ -775,12 +783,13 @@ export default {
     },
 
     userCode() {
-      return this.getUserCode();
+      return this.getUserCode;
     },
   },
   watch: {},
 
   mounted() {
+   
     this.$apiClient
       .get("/api/v1/organization")
       .then((response) => {
@@ -801,6 +810,26 @@ export default {
       });
     //console.log("payment is",this.payment);
     this.year = new Date().getFullYear();
+
+//find user info
+this.$apiClient
+      .get(`/api/v1/users/${this.userId}`)
+      .then((response) => {
+        console.log("Response client profile", response);
+
+        this.userEmail= response.data.clientProfile.email;
+        this.userAddress= response.data.clientProfile.address;
+        this.userGender= response.data.clientProfile.gender;
+        this.fullName= response.data.clientProfile.fullName;
+        this.userPhoneNumber= response.data.clientProfile.phoneNumber;
+       
+      })
+      .catch((error) => {
+        console.error("Error fetching client datakk:", error);
+      });
+
+
+
 
     this.getData();
   },
@@ -840,10 +869,9 @@ export default {
       const element = document.getElementById("printable-area").cloneNode(true);
       element.classList.remove("hidden");
 
-      // Create a wrapper div to hold the content and styles
+      // Create a wrapper dv to hold the content and styles
       const wrapperDiv = document.createElement("div");
       wrapperDiv.appendChild(element);
-
       // Add Tailwind reset styles
       const styleElement = document.createElement("style");
       styleElement.textContent = `
@@ -867,7 +895,7 @@ export default {
 
       // Configure html2pdf options
       const options = {
-        filename: "Receipt.pdf",
+        filename: this.userCode,
         image: { type: "jpeg", quality: 0.98 },
         html2canvas: { scale: 1, useCORS: true }, // Reduce scale if necessary
         jsPDF: {
@@ -920,7 +948,7 @@ export default {
         wrapperDiv.appendChild(styleElement);
 
         const options = {
-          filename: "Tadesse Gebremicheal Berhe",
+          filename: this.fullName + "(" + this.userCode +")",
           image: { type: "jpeg", quality: 0.98 },
           html2canvas: { scale: 2 },
           jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
@@ -931,23 +959,9 @@ export default {
     },
 
     getData() {
-      //alert("get called");
-      // here all paymentys formeach month in the given year will be fetched and displayed in the list.
-      // //alert("getData");
-      console.log("year", this.year);
-
-      // if (this.year == "") {
-      //   this.selectYear = true;
-      //return;
-      // }
-
-      const userCode = "BM0005";
-
-      //const userCode = this.userCode();
-
       this.$apiClient
         .get(
-          `/api/v1/payments/userBalance?&activeYear=${this.year} &userCode=${userCode}`
+          `/api/v1/payments/userBalance?&activeYear=${this.year} &userCode=${this.userCode}`
         )
         .then((response) => {
           console.log("response userbalance", response);
@@ -962,8 +976,9 @@ export default {
     },
 
     async generateQRCodeImage() {
-      const qrData = `Bana Receipt For User`;
-
+    
+      const qrData = `"User Code":${this.userCode}, "Full Name": ${this.fullName}, "Phone Number":${this.userPhoneNumber}, "Email":${this.userEmail}, "Address":${this.userAddress}, "Gender":${this.userGender}, "Company":${'https://bannamall.com/'}`;
+      
       try {
         const qrCodeImage = await QRCode.toDataURL(qrData, {
           errorCorrectionLevel: "H",
@@ -976,201 +991,7 @@ export default {
       }
     },
 
-    async printDiv() {
-      // First, generate the QR code image
-      await this.generateQRCodeImage();
-      const printContent = document.getElementById("printable-area").innerHTML;
-      // Create a link element to read the Tailwind CSS file
-      const linkElement = document.createElement("link");
-      linkElement.href = "/src/assets/css/tailwind.css"; // Adjust the path as necessary
-      linkElement.rel = "stylesheet";
-
-      // Create a new window for printing
-      const printWindow = window.open(
-        "",
-        "",
-        `height=${window.innerHeight},width=${window.innerWidth}`
-      );
-      printWindow.document.open();
-
-      // Write the content to the new window
-      printWindow.document.write(`
-      <html>
-        <head>
-        
-          <style>
-            @media print {
-              #printable-area {
-                display: flex !important;
-                flex-direction: row !important;
-                width: 100% !important;
-              }
-              .receipt {
-                flex: 1 !important;
-                min-width: 0 !important;
-                page-break-inside: avoid; /* Prevents page breaks inside receipts */
-              }
-              body {
-                margin: 0 !important;
-                padding: 0 !important;
-              }
-              /* Ensure background color is set */
-              #printable-area {
-                background-color: white; /* Use a solid color or adjust as needed */
-              }
-            }
-    
-            @media print {
-              #printable-area {
-                display: flex !important;
-                flex-direction: row !important;
-                width: 100% !important;
-                height:100%;
-                
-              }
-              .receipt {
-                flex: 1 !important;
-                min-width: 0 !important;
-                page-break-inside: avoid; /* Prevents page breaks inside receipts */
-              }
-              body {
-                margin: 0 !important;
-                padding: 0 !important;
-              }
-
-                 .container {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-     
-    }
-
-    .receipt {
-      flex: 1;
-      padding: 10px;
-      border: 1px dotted #622e2e; /* Red dotted border */
-    }
-
-    .receipt:nth-child(2) {
-      border-left: none;
-    }
-
-    .receipt-header {
-      background-color: #bbf7d0; /* Light green */
-      color: #1d4ed8; /* Dark blue text */
-      padding: 10px;
-    }
-
-    .receipt-header .info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .receipt-header .info .text {
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    .receipt-header .qr {
-      width: 80px;
-      height: 80px;
-      background: #e5e7eb; /* Placeholder for QR Code */
-      margin-left: 10px;
-    }
-
-    .section-title {
-      font-size: 12px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5px;
-      margin-top: 5px;
-    }
-
-    .box {
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      padding: 5px;
-    }
-
-    .table {
-      width: 100%;
-      font-size: 10px;
-      border-collapse: collapse;
-    }
-
-    .table th,
-    .table td {
-      padding: 2px;
-      text-align: left;
-    }
-
-    .table .right {
-      text-align: right;
-    }
-
-    .signature-section {
-      margin-top: 15px;
-      font-size: 10px;
-    }
-
-    .signature-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .signature-block {
-      width: 45%;
-      text-align: left;
-    }
-
-    .signature-block span {
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .approval-section {
-      margin-top: 10px;
-      font-size: 10px;
-    }
-
-    .approval-block span {
-      display: block;
-      margin-bottom: 5px;
-    }
-              /* Ensure background color is set */
-              #printable-area {
-                background-color: white; /* Use a solid color or adjust as needed */
-              }
-            }
-          </style>
-          ${linkElement.outerHTML} <!-- Include the Tailwind CSS link -->
-        </head>
-        <body>
-          <div id="printable-area">
-            ${printContent}
-          </div>
-        </body>
-      </html>
-    `);
-      printWindow.document.close();
-
-      // Ensure that the print dialog opens and window closes after printing
-      printWindow.onload = function () {
-        printWindow.focus();
-        printWindow.print();
-      };
-      printWindow.onafterprint = function () {
-        printWindow.close();
-        this.nothingToPay = true;
-      };
-    },
+ 
     showPaymentMethod() {
       if (this.year === "") {
         //  this.showPayment=true,

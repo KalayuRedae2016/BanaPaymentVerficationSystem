@@ -1,5 +1,5 @@
 <template>
-  <meta charset="UTF-8" />
+<div>
   <div class="container mx-auto p-4 flex flex-col">
     <div class="flex flex-row space-x-3">
       <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
@@ -8,7 +8,40 @@
         {{ $t('viewActiveUsers') }}
       </button>
     </div>
-
+    <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5   bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ successToastMessage }}</span>
+    </div>
+  </transition> 
+  <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5   bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
     <div class="border-t border-indigo-800 mt-3">
       <div
         class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
@@ -198,88 +231,7 @@
     </transition>
   </div>
 
-  <div v-if="showSuccess">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center mb-4 ml-32">
-                <svg
-                  class="w-8 h-8 text-green-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-                <h2 class="text-md text-green-800">{{ $t('success') }}!</h2>
-              </div>
-              <p class="text-blue-800 text-md ml-8">
-                {{ successMessage }}
-              </p>
-              <button
-                @click="showSuccess = false"
-                class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-              {{ $t('ok') }}
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
-        </div>
-      </div>
-    </transition>
-  </div>
 
-  <div v-if="showError">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-red-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-4">
-                <svg
-                  class="w-8 h-8 text-red-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-                <h2 class="text-sm font-bold text-gray-800">{{ $t('error') }}!</h2>
-              </div>
-              <p class="text-gray-600 text-sm">
-                {{ errorMessage }}
-              </p>
-              <button 
-                @click="showError = false"
-                class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-                 {{ $t('ok') }}
-              </button>
-            </div>
-          </div>
-          <hr class="my-4 bg-red-500" />
-        </div>
-      </div>
-    </transition>
   </div>
 </template>
 <script>
@@ -290,8 +242,10 @@ export default {
   },
   data() {
     return {
-
-
+      showSuccessToast:false,
+      showErrorToast:false,
+      successToastMessage:"",
+      errorToastMessage:"",
     showError:false,
     showSuccess:false,
     sucessMessage:"",
@@ -363,7 +317,26 @@ export default {
   },
 
   methods: {
-
+    showSuccessToastMessage(message) {
+      this.successToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+       
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
     activate(userId) {
           this.showActivationModal = false;
           const payload={
@@ -379,15 +352,21 @@ export default {
         .then((response) => {
           console.log("users", response);
           if (response.data.status===1) {
-            this.successMessage = response.data.message;//"Selected user is Activated";//
-            this.showSuccess=true;
-            this.displayedItems();
+
+            this.showSuccessToastMessage(response.data.message);
+            // this.successMessage = response.data.message;//"Selected user is Activated";//
+            // this.showSuccess=true;
+            // this.displayedItems();
 
           }
         })
         .catch((error) => {
-            this.errorMessage = error.response.data.message
-            this.showError=true;
+          
+          
+          console.log(error);
+            // this.errorMessage = error.response.data.message
+            // this.showError=true;
+            this.showErrorToastMessage("Something went wrong")
         });
     },
     showActiveUsers() {

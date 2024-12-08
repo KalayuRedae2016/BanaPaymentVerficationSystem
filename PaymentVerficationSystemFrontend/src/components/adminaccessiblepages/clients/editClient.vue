@@ -4,7 +4,44 @@
 <p class="text-blue-800 font-bold px-4 pb-4 pt-3"> {{ $t('editCleintProfile') }}</p>
 </div>
 
-<div v-if="formEmptyEditProfile" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+
+<transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ succesToastMessage }}</span>
+    </div>
+  </transition> 
+
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
+
+<div v-if="formEmptyEditProfilemmm" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
   <strong class="font-bold">Success!</strong>
   <span class="block sm:inline">User profile edited successfully.</span>
   <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" aria-label="Close" onclick="this.parentElement.style.display='none'">
@@ -370,6 +407,10 @@ export default {
   },
   data() {
     return {
+      showSuccessToast:false,
+      showErrorToast:false,
+      succesToastMessage:"",
+      errorToastMessage:"",
       formEmptyEditProfile: false,
       showSuccess:false,
       showError:false,
@@ -389,10 +430,19 @@ export default {
 
   mounted(){
 
-    if (this.$route.query.formEmptyEditProfile === "true") {
-      this.formEmptyEditProfile = true;
-    }
+   
+
+
     this.clientId = this.$route.params.clientId;
+    if (this.$route.query.formEmptyEditProfile === 'true') {
+    this.showSuccessToastMessage("Your Profile Editted Successfully");
+      setTimeout(() => {
+        this.$router.push({
+      path: `/admindashboard/edit-client/${this.clientId}`
+         });
+      }, 2000);
+    }
+
     console.log("client Id",this.clientId);
     this.$apiClient
         .get(`/api/v1/users/${this.clientId}`)
@@ -407,6 +457,22 @@ export default {
      });
   },
   methods: {
+
+    showSuccessToastMessage(message) {
+      this.succesToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+        this.showSuccessToast = false;
+      }, 1000); 
+    },
+
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+        this.showErrorToast = false;
+      }, 1000); 
+    },
     handleImageInput() {
       const fileInput = this.$refs.fileInput;
       console.log("fileInput", fileInput);
@@ -450,8 +516,7 @@ export default {
         })
         .catch((error) => {
           console.log("error in the updating",error)
-              this.showError=true;
-              //this.errorMessage = error.response.data.message;
+             this.showErrorToastMessage("Something went wrong");
         });
     },
   },

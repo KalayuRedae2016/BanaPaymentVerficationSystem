@@ -10,7 +10,11 @@ export default {
     };
   },
   created(){
-     this.$router.push("/admindashboard/display-companey");
+    this.$router.push({
+  path: "/admindashboard/display-companey",
+  query: { fromEmpty: true },
+});
+
   },
   methods: {
   

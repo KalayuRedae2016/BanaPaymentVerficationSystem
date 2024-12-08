@@ -2,30 +2,27 @@
   <div>
     <div class="" style="">
       <div
-        class="flex items-center justify-between p-3 bg-white border-b border-blue-500  "
+        class="flex items-center justify-between p-3 bg-white border-b border-blue-500"
       >
         <!-- Left Section: Register Client Title and Import Excel -->
         <div class="flex items-center space-x-6">
           <h1 class="text-xl text-indigo-800 font-bold">
             {{ $t("registerClient") }}
           </h1>
-
-         
         </div>
 
         <!-- Right Section: View Clients Link -->
-      <div>
-        <a
-          href="#"
-          @click="viewClients()"
-          class="text-blue-500 font-medium hover:underline"
-        >
-          {{ $t("viewClients") }}
-       
-        </a>
-        <label
+        <div>
+          <a
+            href="#"
+            @click="viewClients()"
+            class="text-blue-500 font-medium hover:underline"
+          >
+            {{ $t("viewClients") }}
+          </a>
+          <label
             for="file-upload"
-            class=" mt-3 ml-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 py-2 px-4  rounded-lg transition"
+            class="mt-3 ml-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 py-2 px-4 rounded-lg transition"
           >
             <span> {{ $t("importClientFromExcel") }}</span>
             <input
@@ -36,10 +33,48 @@
               @change="handleFileInput"
             />
           </label>
-      </div>
+        </div>
       </div>
 
-      <div class="flex flex-row z-0 ">
+
+
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ succesToastMessage }}</span>
+    </div>
+  </transition> 
+
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
+
+      <div class="flex flex-row z-0">
         <div class="flex items-center justify-between mb-4">
           <div class="m-5"></div>
         </div>
@@ -87,7 +122,7 @@
               v-if="middleNameIsRequired"
               class="text-red-500 text-sm mt-1 ml-10"
             >
-              Middle Name is required {{ $t("middleNameRequired") }}
+             {{ $t("middleNameRequired") }}
             </p>
           </div>
 
@@ -408,6 +443,14 @@ export default {
   },
   data() {
     return {
+
+      showSuccessToast:false,
+      showErrorToast:false,
+      succesToastMessage:"",
+      errorToastMessage:"",
+
+
+
       showSuccess: false,
       showError: false,
       errorMessage: "",
@@ -532,6 +575,22 @@ export default {
     // });
   },
   methods: {
+
+    showSuccessToastMessage(message) {
+      this.succesToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+        this.showSuccessToast = false;
+      }, 1000); 
+    },
+
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+        this.showErrorToast = false;
+      }, 1000); 
+    },
     viewClients() {
       this.$router.push("/admindashboard/clients");
     },
@@ -547,13 +606,12 @@ export default {
           .then((response) => {
             console.log("import response", response);
             if (response.data.success === 1) {
-              this.successMessage = response.data.message;
-              this.showSuccess = true;
+              this.showSuccessToastMessage(response.data.message)
             }
           })
           .catch((error) => {
-            this.showError = true;
-            this.errorMessage = error.response.data.message;
+            console.log("import error", error);
+            this.showErrorToastMessage("Something went wrong")
           });
       }
     },
@@ -576,7 +634,8 @@ export default {
         console.log("this.presses", this.importExelFilePressed);
         // Rest of your code to handle the file
       } else {
-        console.log("No file selected");
+        this.showErrorToastMessage("No file selected,Or Invalid format");
+        
       }
     },
 
@@ -608,12 +667,14 @@ export default {
       console.log("register called");
       if (this.firstName === "") {
         this.firstNameIsRequired = true;
+        this.showErrorToastMessage("First name is required")
         return;
       }
 
       if (this.middleName === "") {
         this.firstNameIsRequired = false;
         this.middleNameIsRequired = true;
+        this.showErrorToastMessage("Middle name is required")
         return;
       }
 
@@ -621,6 +682,7 @@ export default {
         this.firstNameIsRequired = false;
         this.middleNameIsRequired = false;
         this.lastNameIsRequired = true;
+        this.showErrorToastMessage("Last name is required")
         return;
       }
 
@@ -629,6 +691,7 @@ export default {
         this.middleNameIsRequired = false;
         this.lastNameIsRequired = false;
         this.genderIsRequired = true;
+        this.showErrorToastMessage("Gender is required")
         return;
       }
 
@@ -638,6 +701,7 @@ export default {
         this.lastNameIsRequired = false;
         this.genderIsRequired = false;
         this.ageIsRequired = true;
+        this.showErrorToastMessage("Age is required")
         return;
       }
 
@@ -648,6 +712,7 @@ export default {
         this.genderIsRequired = false;
         this.ageIsRequired = false;
         this.addressIsRequired = true;
+        this.showErrorToastMessage("Address is required")
         return;
       }
 
@@ -659,6 +724,7 @@ export default {
         this.ageIsRequired = false;
         this.addressIsRequired = false;
         this.emailIsRequired = true;
+        this.showErrorToastMessage("Email is required")
         return;
       }
 
@@ -671,17 +737,8 @@ export default {
         this.addressIsRequired = false;
         this.emailIsRequired = false;
         this.phoneNumberIsRequired = true;
+        this.showErrorToastMessage("Phone Number is required")
         return;
-      } else if (this.imageFile === "") {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
-        this.lastNameIsRequired = false;
-        this.genderIsRequired = false;
-        this.ageIsRequired = false;
-        this.addressIsRequired = false;
-        this.emailIsRequired = false;
-        this.phoneNumberIsRequired = false;
-        this.imageIsRequired = true;
       } else {
         this.firstNameIsRequired = false;
         this.middleNameIsRequired = false;
@@ -723,13 +780,12 @@ export default {
         .post("/api/v1/users/signup", formData)
         .then((response) => {
           if (response.data.status === 1) {
-            this.successMessage = response.data.message;
-            this.showSuccess = true;
+           this.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
-          this.errorMessage = error.response.data.message;
-          this.showError = true;
+          console.log("error register", error);
+          this.showErrorToastMessage("Some error occurred");
         });
     },
   },

@@ -43,24 +43,41 @@
       </div>
     </div>
 
-
-    <div v-if="showIdCard" class="flex flex-col m-0  border border-gray-300 p-5 rounded-lg shadow-md">
-      <h1 class=" text-xs text-gray-500 font-extrabold" >Usercode:<span class="ml-3 font-semibold">{{ selectedUser.userCode }}</span></h1>
-      <h1 class=" text-xs text-gray-500 font-extrabold" >Name:<span class="ml-3 font-semibold">{{ selectedUser.fullName }}</span></h1>
-      <div class="flex flex-row space-x-2 lg:space-x-64 mt-5">
-   
-      <img :src="imageData" alt="" class="h-32 w-32  rounded-lg" />
-          <button
-            class="custom-button h-8"
-            @click="downloadReceiptAsPDF"
-          >
-            <i class="fas fa-download mr-2 text-pink-500"></i>
-           
-          </button>
-        </div>
+    <div v-if="showIdCard" class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300 rounded-xl shadow-lg  space-y-6 lg:space-y-0 lg:space-x-8">
+    
+    <!-- Left Section: Image and Button (Mobile and Desktop) -->
+    <div class="flex flex-col items-center space-y-4 w-full lg:w-1/4 lg:items-start">
+      <img :src="imageData" alt="User Profile" class="h-48 w-48 rounded-full object-cover shadow-xl border-4 border-gray-100" />
+      
+     
     </div>
 
-    <div v-if="showIdCard" class="flex flex-col hidden" id="printable-area">
+    <!-- Right Section: User Info -->
+    <div class="w-full lg:w-1/3 text-center lg:text-left">
+    
+      <div class=" text-sm text-gray-500 ml-8">
+        <div class="flex items-center space-x-5">
+          <span class="w-1/3 font-medium text-gray-500">Usercode:</span>
+          <span class="w-2/3 font-medium text-gray-500">{{ selectedUser.userCode }}</span>
+        </div>
+        <div class="mt-3 flex items-center space-x-5">
+          <span class="w-1/3 font-medium text-gray-500">Name:</span>
+          <span class="w-2/3 font-medium text-gray-500">{{ selectedUser.fullName }}</span>
+        </div>
+        <button
+        class="mt-5 flex items-center px-6 py-3 bg-indigo-600 text-white text-base font-medium rounded-full shadow-lg transform transition duration-300 ease-in-out hover:bg-indigo-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+        @click="downloadReceiptAsPDF"
+      >
+        <i class="fas fa-download mr-3"></i>Download ID Card
+      </button>
+      </div>
+    </div>
+   
+  </div>
+
+
+
+  <div v-if="showIdCard" class="flex flex-col hidden" id="printable-area">
       <div
         class="header h-20 w-full bg-blue-500 flex items-center justify-between"
       >
@@ -210,6 +227,7 @@
           </div>
         </div>
       </div>
+    
     </div>
   </div>
 </template>

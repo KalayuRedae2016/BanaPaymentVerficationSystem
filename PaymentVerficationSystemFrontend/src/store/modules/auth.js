@@ -11,17 +11,21 @@ const state = {
 const mutations = {
   setUserCode(state, userCode) {
     state.userCode = userCode;
+    localStorage.setItem('userCode', userCode);
     console.log("userCode in mutation", userCode);
   },
   setUserId(state, userId) {
     state.userId = userId;
+    localStorage.setItem('userId', userId);
     console.log("userId in mutation", userId);
   },
   setToken(state, token) {
     state.token = token;
+    localStorage.setItem('token', token);
   },
   setName(state, name) {
     console.log("name in mutation", name);
+    localStorage.setItem('name', name);
     state.name = name;
   },
   setLocale(state, locale) {
@@ -38,6 +42,8 @@ const mutations = {
     localStorage.setItem('activeItem', activeItem); // Save activeItem in localStorage
   },
   logout(state) {
+    state.userCode = null;
+    state.name = null;
     state.userId = null;
     state.token = null;
     state.role = null;
@@ -48,6 +54,7 @@ const mutations = {
 
 const actions = {
   login({ commit }, { token }) {
+    console.log("token in commit ",token);
     commit('setToken', token);
     localStorage.setItem('token', token);
   },
@@ -57,7 +64,7 @@ const actions = {
     localStorage.setItem('userId', userId);
   },
   commitUserCode({ commit }, { userCode }) {
-    console.log('user in commit action', userCode);
+    console.log('userCode in commit action', userCode);
     commit('setUserCode', userCode);
     localStorage.setItem('userCode', userCode);
   },
@@ -99,6 +106,7 @@ const getters = {
     return state.userId;
   },
   getUserCode(state) {
+    console.log("usercode in usercode get",state.userCode);
     return state.userCode;
   },
   getRole(state) {
