@@ -24,17 +24,13 @@
          v-for="(user, userIndex) in filteredUsers"
          :key="userIndex"
          :class="[
-           'p-4 border-b cursor-pointer',
-           {
-             'bg-blue-200 ': user.userselected, 
-             'bg-gray-50': !user.userselected, 
-           },
+           'bg-white p-4 border-b cursor-pointer hover:bg-blue-100',
          ]"
          @click="navigateToPayment(user.userCode)"
        >
          <div class="text-xs flex flex-row space-x-5 md:space-x-12  text-gray-500">
-           <p>{{ user.userCode }}</p>
-           <p>{{ user.fullName }}</p>
+           <p class="font-bold text-blue-800 ">{{ user.userCode }}</p>
+           <p class="text-gray-500 font-bold">{{ user.fullName }}</p>
          </div>
        </div>
      </div>

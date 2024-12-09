@@ -162,9 +162,11 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
 
 // Update a payment setting by ID
 exports.updatePaymentSettingBYId = catchAsync(async (req, res,next) => {
+  console.log("body is for setting is ",req.body)
   //console.log(req.params.id);
     const settingId= req.params.id;
-    const updatedData=req.body
+    //const updatedData=req.body
+    let updatedData=req.body
     if(!settingId){
       return next(new AppError('Setting ID is required', 404));
     }

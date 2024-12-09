@@ -43,7 +43,7 @@
 
     <div class="border-t border-indigo-800 mt-3 text-xs">
       <div
-        class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
+        class=" border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
       >
         <form action="">
           <div class="mb-4 mx-4 mt-5">
@@ -85,75 +85,60 @@
             />
           </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full border-b border-gray-300">
-              <thead>
-                <tr class="bg-gray-200">
-                  <th
-                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                  {{ $t("check")}}
-                    <input
-                      type="checkbox"
-                      v-model="selectAll"
-                      @change="selectDeselectAll()"
-                    />
-                  </th>
-                  <th
-                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("number") }}
-                  </th>
-                  <!-- <th
-                      class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                    >
-                      {{ $t("userCode") }}
-                    </th> -->
-                  <th
-                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("fullName") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("email") }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(searchClient, index) in searchedusers"
-                  :key="searchClient._id"
-                >
-                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                    <input
-                      type="checkbox"
-                      :checked="emails.includes(searchClient.email)"
-                      @change="selectDeselectEmail(searchClient.email)"
-                    />
-                  </td>
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{ index + 1 }}
-                  </td>
-
-                  <!-- <td class="p-3 text-xl text-gray-500 whitespace-nowrap">
-                      {{ searchClient.userCode }}
-                    </td> -->
-                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                    {{ searchClient.firstName }} {{ searchClient.middleName }}
-                    {{ searchClient.lastName }}
-                  </td>
-                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                    {{ searchClient.email }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-          
-          </div>
-          <div class="pagination flex items-center justify-center mt-4">
+<div class="overflow-x-auto overflow-y-auto h-96  ">
+  <!-- Table -->
+  <table class="table-auto min-w-full border-collapse border-b border-gray-300">
+    <!-- Table Head -->
+    <thead class="bg-blue-50 text-white sticky top-0 z-10">
+      <tr class="text-blue-500">
+        <th class="w-24 p-4  font-bold text-left">
+          {{ $t("check") }}
+          <input
+            type="checkbox"
+            class="ml-2"
+            v-model="selectAll"
+            @change="selectDeselectAll()"
+          />
+        </th>
+        <th class="w-24 p-4  font-bold text-left">{{ $t("userCode") }}</th>
+        <th class="w-24 p-4  font-bold text-left">{{ $t("fullName") }}</th>
+        <th class="w-24 p-4  font-bold text-left">{{ $t("email") }}</th>
+      </tr>
+    </thead>
+    <!-- Scrollable Table Body -->
+    <tbody class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto">
+      <tr
+        v-for="(searchClient, index) in searchedusers"
+        :key="searchClient._id"
+        class="bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg p-4"
+      >
+      <td class="p-4 text-md text-gray-700">
+          <input
+            type="checkbox"
+            class="rounded focus:ring focus:ring-indigo-300"
+            :checked="emails.includes(searchClient.email)"
+            @change="selectDeselectEmail(searchClient.email)"
+          />
+        </td>
+      <td class="p-4 text-md text-gray-700  hidden">
+          <span class="font-bold text-indigo-600">{{index +1  }}</span>
+        </td>
+        <td class="p-4 text-md text-gray-700">
+          <span class="font-bold text-indigo-600">{{ searchClient.userCode }}</span>
+        </td>
+        <td class="p-4 text-md text-gray-700 font-bold">
+          {{ searchClient.fullName }}
+        </td>
+        <td class="p-4 text-md text-gray-700 font-bold">
+          {{ searchClient.email }}
+        </td>
+       
+      </tr>
+    </tbody>
+  </table>
+</div>
+         <div class="w-full mt-5 bg-blue-100 border-t blue-200 p-4 text-blue-700">Total selected : <span class="text-gray-600 font-extrabold">{{ emails.length }}</span></div>
+          <!-- <div class="pagination flex items-center justify-center mt-4">
               <h1 class="mr-2 text-sm">{{ $t("showMore") }}</h1>
               <select
                 v-model="usersPerpage"
@@ -182,8 +167,8 @@
               >
                 <i class="fas fa-chevron-right"></i>
               </button>
-            </div>
-          <button @click.prevent="sendMessage()" class="m-4 custom-button">
+            </div> -->
+          <button @click.prevent="sendMessage()" class="m-4 custom-button ">
             {{ $t("sendMessage")}}
           </button>
         </form>

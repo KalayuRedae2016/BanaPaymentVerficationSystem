@@ -39,53 +39,119 @@
       <p v-if="selectMonth" class="text-blue-500">{{ $t('pleaseSelectMonth') }}</p>
     </div>
 
-    <div v-if="!noSettingOpened" class="grid grid-cols-1 gap-4 border-t  border-gray-300 -mt-5 rounded-lg shadow-lg" >
-      <div class="bg-white shadow-md rounded-lg px-6 pt-5 ">
-        <div class="space-y-2 text-gray-700">
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2"> {{ $t('regularAmount') }}:</strong>
-            <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.regularAmount }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2"> {{ $t('subsidyAmount') }}:</strong>
-            <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.subsidyAmount }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2"> {{ $t('urgentAmount') }}:</strong>
-            <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.urgentAmount }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2"> {{ $t('serviceAmount') }}:</strong>
-            <strong class=" w-1/4 lg:w-1/2 ">{{ paymentSetting.serviceAmount }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2"> {{ $t('startingDay') }}:</strong>
-            <strong class="text-xs w-1/4 lg:w-1/2 ">{{ paymentSetting.formattedStartDate }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2"> {{ $t('endingDay') }}:</strong>
-            <strong class="text-xs w-1/4 lg:w-1/2 ">{{ paymentSetting.formattedEndDate }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2">{{ $t('penaltyPerFiveDaysPercentage') }} :</strong>
-            <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.penalityLate5Days }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2">{{ $t('penaltyPerTenDaysPercentage') }} :</strong>
-            <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.penalityLate10Days }}</strong>
-          </p>
-          <p class="flex justify-between items-center text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2">{{ $t('penaltyPerAboveTenDaysPercentage') }} :</strong>
-            <strong  class="w-1/4 lg:w-1/2 ">{{
-              paymentSetting.penalityLateAbove10Days
-            }}</strong >
-          </p>
-          <p class="flex justify-between items-center pb-10 text-gray-500">
-            <strong class="text-xs w-2/3 lg:w-1/2">{{$t('registrationFee')  }} %:</strong>
-            <strong  class="w-1/4 lg:w-1/2  ">{{ paymentSetting.regFeeRate }}</strong >
-          </p>
+    <div v-if="!noSettingOpened" class="grid grid-cols-1 gap-4 border-t  border-gray-300 -mt-5 rounded-lg " >
+   
+      <div  class="w-full m-4">
+
+
+  <div >
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Left Column (First 6 Items) -->
+      <div class="space-y-4">
+        <div class="bg-white border-b border-dotted p-4 rounded-md ">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-money-bill-alt text-green-500"></i>
+            <span class="font-semibold text-sm">{{ $t('regularAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.regularAmount }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-hand-holding-usd text-yellow-500"></i>
+            <span class="font-semibold text-sm">{{ $t('subsidyAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.subsidyAmount > 0 ? paymentSetting.subsidyAmount : '0' }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-exclamation-circle text-red-500"></i>
+            <span class="font-semibold text-sm">{{ $t('urgentAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.urgentAmount > 0 ? paymentSetting.urgentAmount : '0' }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-cogs text-indigo-500"></i>
+            <span class="font-semibold text-sm">{{ $t('serviceAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.serviceAmount }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-percent text-blue-500"></i>
+            <span class="font-semibold text-sm">{{ $t('registrationFee') }} %:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.regFeeRate }} %</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-check text-teal-500"></i>
+            <span class="font-semibold text-sm">{{ $t('activeYear') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.activeYear }}</span>
+          </div>
         </div>
       </div>
+
+      <!-- Right Column (Remaining Items) -->
+      <div class="space-y-4">
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-day text-purple-500"></i>
+            <span class="font-semibold text-sm">{{ $t('activeMonth') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.activeMonth }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-alt text-orange-500"></i>
+            <span class="font-semibold text-sm">{{ $t('startingDay') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.formattedStartDate }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-times text-red-500"></i>
+            <span class="font-semibold text-sm">{{ $t('endingDay') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.formattedEndDate }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-clock text-yellow-500"></i>
+            <span class="font-semibold text-sm">{{ $t('penaltyPerFiveDaysPercentage') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate5Days }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-clock text-yellow-500"></i>
+            <span class="font-semibold text-sm">{{ $t('penaltyPerTenDaysPercentage') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate10Days }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-clock text-red-500"></i>
+            <span class="font-semibold text-sm">{{ $t('penaltyPerAboveTenDaysPercentage') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLateAbove10Days }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+   
+  </div>
+</div>
     </div>
 
     <div v-if="noSettingOpened" class="m-5">

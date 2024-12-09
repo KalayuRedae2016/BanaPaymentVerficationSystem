@@ -2,14 +2,14 @@
     <div class="flex flex-col items-center justify-center h-screen">
       <h1 class="text-4xl font-bold text-red-500">403 - Access Denied</h1>
       <p class="text-gray-600 mt-4">
-        You do not have permission to access this page.
+        No such like page accessible for you please!!!
       </p>
-      <button
+      <!-- <button
         class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mt-8"
         @click="goBack"
       >
         Go Back
-      </button>
+      </button> -->
     </div>
   </template>
   <!-- ppp -->

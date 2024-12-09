@@ -5,7 +5,7 @@
   <!-- //start of transtion -->
 
 
-  <transition
+<transition
     enter-active-class="transform transition duration-300 ease-out"
     enter-from-class="translate-x-full opacity-0"
     enter-to-class="translate-x-0 opacity-100"
@@ -19,7 +19,7 @@
       role="alert"
     >
       <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{showSuccessToastMessage}}</span>
+      <span class="block sm:inline">{{    this.successToastMessage }}</span>
     </div>
 </transition> 
 
@@ -41,12 +41,8 @@
     </div>
 </transition> 
 
-
-
-
   <!-- //end of transtion -->
-   <div
-    class=" flex-col border-t  border-gray-300 rounded-lg mt-5 shadow-lg mx-3 ">
+   <div class=" flex-col border-t  border-gray-300 rounded-lg mt-5  mx-3 ">
     <div class="flex flex-wrap">
       <div v-if="paymentSettingCreated === 0"
         class="mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
@@ -70,6 +66,7 @@
                     v-model="paymentSetting.regularAmount"
                     placeholder="Amount"
                   />
+                  <p v-if="regularIsRequired" class="text-red-500 text-xxs mt-2">Regular amount is required *</p>
                 </div>
 
                 <div class="mb-4">
@@ -84,6 +81,7 @@
                     v-model="paymentSetting.subsidyAmount"
                     placeholder="Amount"
                   />
+               
                 </div>
 
                 <div class="mb-4">
@@ -112,6 +110,8 @@
                     v-model="paymentSetting.serviceAmount"
                     placeholder="Amount"
                   />
+                  <p v-if="serviceIsRequired" class="text-red-500 text-xxs mt-2">Service amount is required *</p>
+                
                 </div>
 
               </div>
@@ -142,6 +142,8 @@
                     {{ year }}
                   </option>
                 </select>
+                <p v-if="activeYearIsRequired" class="text-red-500 text-xxs mt-2">Active Year  is required *</p>
+                
               </div>
 
               <div class="mb-4">
@@ -166,6 +168,8 @@
                     {{ month.name }}
                   </option>
                 </select>
+                <p v-if="activeMonthIsRequired" class="text-red-500 text-xxs mt-2">Active Month  is required *</p>
+                
               </div>
 
               <div class="mb-4">
@@ -181,9 +185,13 @@
                   v-model="paymentSetting.startingDate"
                   placeholder="Starting Date"
                 />
-
-                <p v-if="start_date_less_than_activeMonth" class="text-red-500">Starting date should in the interval of the selected month</p>
-              </div>
+                <p v-if="startingDateIsRequired" class="text-red-500 text-xxs mt-2">Starting Date is required *</p>
+                <p v-if="start_date_less_than_activeMonth" class="text-red-500 text-xxs mt-2">Starting date should in the interval of the selected month</p>
+              
+                <p v-if="startDateLessEndDate" class="text-red-500 text-xxs mt-2">
+                    Starting Date Can Not be greated then ending date
+                  </p>
+                </div>
 
               <div class="mb-4">
                 <label class="custom-label" for="endingDate">
@@ -197,8 +205,9 @@
                   v-model="paymentSetting.endingDate"
                   placeholder="Ending Date"
                 />
-                <p v-if="end_date_less_than_activeMonth" class="text-red-500">Ending date should in the interval of the selected month</p>
-          
+                <p v-if="endingDateIsRequired" class="text-red-500 text-xxs mt-2">Ending Date  is required *</p>
+                <p v-if="end_date_less_than_activeMonth" class="text-red-500 text-xxs mt-2">Ending date should in the interval of the selected month</p>
+              
               </div>
 
               <div class="mb-4">
@@ -213,6 +222,10 @@
                   v-model="paymentSetting.penalityLate5Days"
                   :placeholder="$t('penaltyPerFiveDaysPercentage')"
                 />
+                <p v-if="penality5DayIsRequired" class="text-red-500 text-xxs mt-2">Penality for late 5 days is required *</p>
+                <p v-if="fiveDayLessTenDay" class="text-red-500 text-xxs mt-2">
+                    Penality 5 days Can not be Greater than charge 10 day
+                  </p>
               </div>
               <div class="mb-4">
                 <label class="custom-label" for="upTo10Days">
@@ -227,6 +240,11 @@
                   v-model="paymentSetting.penalityLate10Days"
                   :placeholder="$t('penaltyPerTenDaysPercentage')"
                 />
+                <p v-if="penality10DayIsRequired" class="text-red-500 text-xxs mt-2">Penality for late 10 days  is required *</p>
+                <p v-if="tenDayLessAboveTenDay" class="text-red-500 text-xxs mt-2">
+                    Penality 10 for days Can not be Greater than charge above 10
+                    days
+                  </p>
               </div>
               <div class="mb-4">
                 <label class="custom-label" for="above10DaysInMonth">
@@ -241,6 +259,9 @@
                   v-model="paymentSetting.penalityLateAbove10Days"
                   :placeholder="$t('penaltyPerAboveTenDaysPercentage')"
                 />
+                <p v-if="penalityAbove10DayIsRequired" class="text-red-500 text-xxs mt-2">Penality for late above 10 days is required *</p>
+              
+
               </div>
               <div class="flex flex-row space-x-5 md:space-x-12">
                 <button
@@ -252,20 +273,15 @@
                 </button>
 
                 <div class="flex flex-col space-y-3">
-                  <p v-if="fillAllfields" class="text-red-500">
-                    Fill All Fields
-                    {{ $t('fillAllFields') }}
-                  </p>
-                  <p v-if="fiveDayLessTenDay" class="text-red-500">
-                    Penality 5 days Can not be Greater than charge 10 day
-                  </p>
-                  <p v-if="tenDayLessAboveTenDay" class="text-red-500">
-                    Penality 10 for days Can not be Greater than charge above 10
-                    days
-                  </p>
-                  <p v-if="startDateLessEndDate" class="text-red-500">
-                    Starting Date Can Not be greated then ending date
-                  </p>
+                  
+                
+
+
+                  
+
+                
+
+
                 </div>
               </div>
             </div>
@@ -274,110 +290,135 @@
       </div>
 
       <div v-if="paymentSettingCreated === 1" class="w-full m-4">
-        <div v-if="paymentActivate">
-          <p class="text-blue-500">
-            Please activate the payment settings to allow users to proceed with
-            their payments.
-          </p>
-          <button
-            @click="showPaymentEditingActivating = true"
-            class="custom-button m-4"
-          >
-          {{ $t('activate') }}
-          </button>
+  <div v-if="paymentActivate">
+    <p class="text-blue-500">
+      Please activate the payment settings to allow users to proceed with their payments.
+    </p>
+    <button @click="showPaymentEditingActivating = true" class="custom-button m-4">
+      {{ $t('activate') }}
+    </button>
+  </div>
+
+  <div v-if="!paymentActivate">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Left Column (First 6 Items) -->
+      <div class="space-y-4">
+        <div class="bg-white border-b border-dotted p-4 rounded-md ">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-money-bill-alt text-green-500"></i>
+            <span class="font-semibold text-sm">{{ $t('regularAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.regularAmount }}</span>
+          </div>
         </div>
 
-        <div
-          v-if="!paymentActivate"
-          class=""
-        >
-          <!-- Payment Information Column 1 -->
-          <div class="flex flex-col text-gray-500  space-y-2">
-   
-              
-            <div class="flex flex-row ">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('regularAmount') }}:</strong>
-              <strong class="  w-1/4 lg:w-1/2 ">{{ paymentSetting.regularAmount }}</strong> 
-            </div>
-
-            <div class="flex flex-row">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('subsidyAmount') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.subsidyAmount }}</strong> 
-            </div>
-
-          
-            <div class="flex flex-row">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('urgentAmount') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2">{{ paymentSetting.urgentAmount }}</strong> 
-            </div>
-            <div class="flex flex-row">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('serviceAmount') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.serviceAmount }}</strong> 
-            </div>
-
-           
-
-            <div class="flex flex-row">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i>  {{ $t('registrationFee') }} %:</strong>
-              <strong class="w-1/4 lg:w-1/2">{{ paymentSetting.regFeeRate }} % </strong> 
-            </div>
-            <div class="flex flex-row">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('activeYear') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2">{{ paymentSetting.activeYear }}</strong> 
-            </div>
-
-            <div class="flex flex-row">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('activeMonth') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.activeMonth }}</strong> 
-            </div>
-
-         
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-hand-holding-usd text-yellow-500"></i>
+            <span class="font-semibold text-sm">{{ $t('subsidyAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.subsidyAmount > 0 ? paymentSetting.subsidyAmount : '0' }}</span>
           </div>
-
-          <!-- Payment Information Column 2 -->
-          <div class="flex flex-col text-gray-500  space-y-2 mt-2 ">
-            <div class="flex flex-row">
-              <strong class=" text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('startingDay') }}:</strong>
-              <strong class="text-xs w-1/4 lg:w-1/2 ">{{ paymentSetting.formattedStartDate }}</strong> 
-            </div>
-            <div class="flex flex-row">
-              <strong class="text-xs w-2/3 lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('endingDay') }}:</strong>
-              <strong class="text-xs w-1/4 lg:w-1/2 ">{{ paymentSetting.formattedEndDate }}</strong> 
-            </div>
-
-            <div class="flex flex-row">
-              <strong class="w-2/3 text-xs lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerFiveDaysPercentage') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.penalityLate5Days }}</strong> 
-            </div>
-            <div class="flex flex-row">
-              <strong class="w-2/3 lg:w-1/2 text-xs "><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerTenDaysPercentage') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2 ">{{ paymentSetting.penalityLate10Days }}</strong> 
-            </div>
-         
-            <div class="flex flex-row">
-              <strong class="w-2/3 text-xs lg:w-1/2"><i class="far fa-circle text-xs mr-2 text-blue-500 font-extrabold"></i> {{ $t('penaltyPerAboveTenDaysPercentage') }}:</strong>
-              <strong class="w-1/4 lg:w-1/2 "> {{ paymentSetting.penalityLateAbove10Days }} %</strong> 
-            </div>
-          </div>
-
-          <!-- Edit Button Column -->
-         
-
-        
         </div>
-        <div  v-if="!paymentActivate" class=" ">
-            <button
-              @click="
-                showPaymentEditingActivating = !showPaymentEditingActivating
-              "
-              class="h-8 flex items-center px-4 border border-indigo-800 rounded hover:bg-gray-100 transition duration-200 mt-4"
-            >
-              <span class="text-gray-600 hover:text-gray-800 font-bold">
-                <i class="fas fa-edit text-pink-500"></i> {{ $t('edit') }}
-              </span>
-            </button>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-exclamation-circle text-red-500"></i>
+            <span class="font-semibold text-sm">{{ $t('urgentAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.urgentAmount > 0 ? paymentSetting.urgentAmount : '0' }}</span>
           </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-cogs text-indigo-500"></i>
+            <span class="font-semibold text-sm">{{ $t('serviceAmount') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.serviceAmount }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-percent text-blue-500"></i>
+            <span class="font-semibold text-sm">{{ $t('registrationFee') }} %:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.regFeeRate }} %</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-check text-teal-500"></i>
+            <span class="font-semibold text-sm">{{ $t('activeYear') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.activeYear }}</span>
+          </div>
+        </div>
       </div>
+
+      <!-- Right Column (Remaining Items) -->
+      <div class="space-y-4">
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-day text-purple-500"></i>
+            <span class="font-semibold text-sm">{{ $t('activeMonth') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.activeMonth }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-alt text-orange-500"></i>
+            <span class="font-semibold text-sm">{{ $t('startingDay') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.formattedStartDate }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-calendar-times text-red-500"></i>
+            <span class="font-semibold text-sm">{{ $t('endingDay') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.formattedEndDate }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-clock text-yellow-500"></i>
+            <span class="font-semibold text-sm">{{ $t('penaltyPerFiveDaysPercentage') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate5Days }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-clock text-pink-400"></i>
+            <span class="font-semibold text-sm">{{ $t('penaltyPerTenDaysPercentage') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate10Days }}</span>
+          </div>
+        </div>
+
+        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
+          <div class="flex items-center space-x-3">
+            <i class="fas fa-clock text-red-500"></i>
+            <span class="font-semibold text-sm">{{ $t('penaltyPerAboveTenDaysPercentage') }}:</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLateAbove10Days }}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Button -->
+    <div class="flex mt-6">
+      <button
+        @click="showPaymentEditingActivating = !showPaymentEditingActivating"
+        class="h-8 flex items-center px-4 border border-indigo-800 rounded hover:bg-gray-100 transition duration-200"
+      >
+        <span class="text-gray-600 hover:text-gray-800 font-bold">
+          <i class="fas fa-edit text-pink-500"></i> {{ $t('edit') }}
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+
 
 
     </div>
@@ -434,6 +475,8 @@
                       v-model="paymentSetting.regularAmount"
                       value="600"
                     />
+                    <p v-if="regularIsRequired" class="text-red-500 text-xxs mt-2">Regular amount  is required *</p>
+                
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
@@ -448,7 +491,7 @@
                       value="600"
                     />
                   </div>
-                  <div class="mb-4">
+                  <div class="mb-4" >
                     <label class="custom-label" for="amount">
                       {{ $t('urgentAmount') }}
                       <span class="text-red-500 ml-1">*</span>
@@ -474,6 +517,8 @@
                       v-model="paymentSetting.serviceAmount"
                       value="600"
                     />
+                    <p v-if="serviceIsRequired" class="text-red-500 text-xxs mt-2">Service amount  is required *</p>
+                
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
@@ -502,6 +547,8 @@
                         {{ year }}
                       </option>
                     </select>
+                    <p v-if="activeYearIsRequired" class="text-red-500 text-xxs mt-2">Active Year  is required *</p>
+                
                   </div>
                 </div>
 
@@ -524,6 +571,8 @@
                         {{ month.name }}
                       </option>
                     </select>
+                    <p v-if="activeMonthIsRequired" class="text-red-500 text-xxs mt-2">Active Month  is required *</p>
+                
                   </div>
                   <div class="mb-4">
                     <label for="startingDate" class="custom-label"
@@ -534,10 +583,15 @@
                       type="date"
                       id="startingDate"
                       class="custom-input"
-                      v-model="paymentSetting.startingDate"
+                      v-model="paymentSetting.formattedStartDate"
                     />
-                    <p v-if="edit_activate_start_date_less_than_activeMonth" class="text-red-500">Starting date should in the interval of the selected month</p>
-             
+                    <p v-if="startingDateIsRequired" class="text-red-500 text-xxs mt-2">Starting Date is required *</p>
+                    <p v-if="start_date_less_than_activeMonth" class="text-red-500 text-xxs mt-2">Starting date should in the interval of the selected month</p>
+              
+                    <p v-if="startDateLessEndDate" class="text-red-500 text-xxs mt-2">
+                    Starting Date Can Not be greated then ending date
+                    </p>
+
                   </div>
                   <div class="mb-4">
                     <label for="endingDate" class="custom-label"
@@ -548,10 +602,13 @@
                       type="date"
                       id="edingDate"
                       class="custom-input"
-                      v-model="paymentSetting.endingDate"
+                      v-model="paymentSetting.formattedEndDate"
                     />
-                    <p v-if="edit_activate_start_date_less_than_activeMonth" class="text-red-500">Starting date should in the interval of the selected month</p>
-             
+
+                  <p v-if="endingDateIsRequired" class="text-red-500 text-xxs mt-2">Ending Date  is required *</p>
+                    <p v-if="endingDateIsRequired" class="text-red-500 text-xxs mt-2">Ending Date  is required *</p>
+                   <p v-if="end_date_less_than_activeMonth" class="text-red-500 text-xxs mt-2">Ending date should in the interval of the selected month</p>
+              
                   </div>
                   <div class="mb-4">
                     <label class="custom-label">
@@ -564,6 +621,13 @@
                       class="custom-input"
                       v-model="paymentSetting.penalityLate5Days"
                     />
+
+                    <p v-if="penality5DayIsRequired" class="text-red-500 text-xxs mt-2">Penality for late 5 days is required *</p>
+                    <p v-if="fiveDayLessTenDay" class="text-red-500 text-xxs mt-2">
+                    Penality 5 days Can not be Greater than charge 10 day
+                   </p>
+
+
                   </div>
                   <div class="mb-4">
                     <label class="custom-label">
@@ -576,6 +640,12 @@
                       class="custom-input"
                       v-model="paymentSetting.penalityLate10Days"
                     />
+                    <p v-if="penality10DayIsRequired" class="text-red-500 text-xxs mt-2">Penality for late 10 days  is required *</p>
+                    <p v-if="tenDayLessAboveTenDay" class="text-red-500 text-xxs mt-2">
+                    Penality 10 for days Can not be Greater than charge above 10
+                    days
+                  </p>
+
                   </div>
 
                   <div class="mb-4">
@@ -590,6 +660,8 @@
                       v-model="paymentSetting.penalityLateAbove10Days"
                     />
                   </div>
+                  <p v-if="penalityAbove10DayIsRequired" class="text-red-500 text-xxs mt-2">Penality for above 10 days  is required *</p>
+                
                 </div>
               </div>
 
@@ -731,6 +803,18 @@ export default {
       edit_activate_start_date_less_than_activeMonth:false,
       edit_activate_end_date_less_than_activeMonth:false,
 
+      regularIsRequired:false,
+      serviceIsRequired:false,
+      activeYearIsRequired:false,
+      serviceActiveMonthIsRequired:false,
+
+      startingDateIsRequired:false,
+      endingDateIsRequired:false,
+      penality5DayIsRequired:false,
+      penality10DayIsRequired:false,
+      penalityAbove10DayIsRequired:false,
+
+
       paymentActivate: false,
       paymentSetting: {
         paymentActivate: true,
@@ -791,7 +875,9 @@ export default {
             else{
               console.log("today is not greater than ending date")
             }
-            this.paymentSetting = response.data.paymentSetting;
+           
+          // this.paymentSetting={};
+           this.paymentSetting = response.data.paymentSetting;
 
             // this.paymentSetting.startingDate =
             //   this.paymentSetting.startingDate;
@@ -818,7 +904,11 @@ export default {
 
   methods: {
     showSuccessToastMessage(message) {
+
+
       this.successToastMessage = message;
+
+      console.log("Message is ",this.successToastMessage);
       this.showSuccessToast = true;
       setTimeout(() => {
        
@@ -852,84 +942,124 @@ export default {
         this.paymentSetting.startingDate,
         this.paymentSetting.endingDate
       );
-      if (
-        this.paymentSetting.regularAmount == "" ||
-        this.paymentSetting.serviceAmount == "" ||
-        this.paymentSetting.activeMonth === "" ||
-        this.paymentSetting.startingDate == "" ||
-        this.paymentSetting.endingDate == "" ||
-        this.paymentSetting.penalityLate5Days == "" ||
-        this.paymentSetting.penalityLate10Days == "" ||
-        this.paymentSetting.penalityLateAbove10Days == "" ||
-        this.paymentSetting.regFeeRate == ""
-      ) {
-         // alert("required fields are not filled");
-        this.fillAllfields = true;
-        return;
-      } else if (
-        
-        new Date(this.paymentSetting.startingDate) >
-        new Date(this.paymentSetting.endingDate)
-      ) {
-        this.startDateLessEndDate = true;
-        return;
-      } else if (
-        Number(this.paymentSetting.penalityLate5Days) >
-        Number(this.paymentSetting.penalityLate10Days)
-      ) {
-        console.log("5-10");
-        this.startDateLessEndDate = false;
-        this.fillAllfields = false;
-        this.fiveDayLessTenDay = true;
-        return;
-      } else if (
-        Number(this.paymentSetting.penalityLate10Days) >
-        Number(this.paymentSetting.penalityLateAbove10Days)
-      ) {
-        console.log("up 10", this.paymentSetting.penalityLate10Days);
-        this.startDateLessEndDate = false;
-        this.fillAllfields = false;
-        this.fiveDayLessTenDay = false;
-        this.tenDayLessAboveTenDay = true;
-        console.log("10-a10");
-        console.log("> 10", this.paymentSetting.penalityLateAbove10Days);
-        return;
-      } else {
-        this.startDateLessEndDate = false;
-        this.fillAllfields = false;
-        this.fiveDayLessTenDay = false;
-        this.tenDayLessAboveTenDay = false;
-      }
 
 
-    if (this.paymentSetting.startingDate) {
-        //alert("there is starting date")
-        const date = new Date(this.paymentSetting.startingDate);
-        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
-          this.start_date_less_than_activeMonth=true;
-          return;
-       //  alert("it is less than")
-         }else{
-          this.start_date_less_than_activeMonth=false;
-         }
-      }
+      this.regularIsRequired=false;
+      this.serviceIsRequired=false;
+      this.activeYearIsRequired=false;
+      this.activeMonthIsRequired=false;
+      this.startingDateIsRequired=false;
+      this.endingDateIsRequired=false;
+      this.penality5DayIsRequired=false;
+      this.penality10DayIsRequired=false;
+      this.penalityAbove10DayIsRequired=false;
+      this.start_date_less_than_activeMonth=false;
+      this.startDateLessEndDate = false;
+      this.fiveDayLessTenDay = false;
+      this.tenDayLessAboveTenDay = false;
 
 
-      if (this.paymentSetting.endingDate) {
+
+     if(this.paymentSetting.regularAmount==''){
+      this.regularIsRequired=true;
+      this.showErrorToastMessage("Regular amount is required");
+      return;
+     }
+     if(this.paymentSetting.serviceAmount==''){
+  
+      this.serviceIsRequired=true;
+      this.showErrorToastMessage("Service amount is required");
+      return;
+     }
+     if(this.paymentSetting.activeYear==''){
+      this.activeYearIsRequired=true;
+      this.showErrorToastMessage("Active Year is required");
+      return;
+     }
+     if(this.paymentSetting.activeMonth==''){
+      this.activeMonthIsRequired=true;
+      this.showErrorToastMessage("Active Month is required");
+      return;
+     }
+     if(this.paymentSetting.startingDate==''){
+      this.startingDateIsRequired=true;
+      this.showErrorToastMessage("Starting Date is required");
+      return;
+     }
+    
+     const date = new Date(this.paymentSetting.startingDate);//used for the ff if condtions;
+
+   if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+      this.start_date_less_than_activeMonth=true;
+      this.showErrorToastMessage("Starting date should be in the interval of selected month")
+      return;
+    }
+     
+     if(this.paymentSetting.endingDate==''){
+      this.endingDateIsRequired=true;
+      this.showErrorToastMessage("ending Date is required");
+      return;
+     }
+
+   
+
+     if (this.paymentSetting.endingDate) {
         //alert("there is ending date")
         const date = new Date(this.paymentSetting.endingDate);
         if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
           this.end_date_less_than_activeMonth=true;
-        // alert("it is less than")
+         this.showErrorToastMessage("Ending date Should be in the interval of the selected month")
         return;
          }else{
           this.end_date_less_than_activeMonth=false;
          }
       }
 
-      
+      if (new Date(this.paymentSetting.startingDate) > new Date(this.paymentSetting.endingDate)) {
+        this.startDateLessEndDate = true;
+        this.showErrorToastMessage("Starting date should be lesser than Ending date");
+        return;
+      } 
 
-   
+     if(this.paymentSetting.penalityLate5Days==''){
+      this.penality5DayIsRequired=true;
+      this.showErrorToastMessage("Penality Late 5 Days  is required");
+      return;
+     }
+
+
+     
+     if(this.paymentSetting.penalityLate10Days==''){
+      this.penality10DayIsRequired=true;
+      this.showErrorToastMessage("Penality Late 10 Days  is required");
+      return;
+     }
+
+     if (
+        Number(this.paymentSetting.penalityLate5Days) >
+        Number(this.paymentSetting.penalityLate10Days)
+      ) {
+        this.fiveDayLessTenDay = true;
+        this.showErrorToastMessage("Penality for late 5 days should be less than penality for 10 days");
+        return;
+      } 
+
+     if(this.paymentSetting.penalityLateAbove10Days==''){
+      this.penalityAbove10DayIsRequired=true;
+      this.showErrorToastMessage("penality Late above 10 Days  is required");
+      return;
+     }
+
+
+
+    if (
+        Number(this.paymentSetting.penalityLate10Days) >
+        Number(this.paymentSetting.penalityLateAbove10Days)
+      ) {
+        this.tenDayLessAboveTenDay = true;
+        this.showErrorToastMessage("Penality for late 10 days should be less than penality for above 10 days");
+        return;
+      }
 
     const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
@@ -964,41 +1094,139 @@ export default {
         })
         .catch((error) => {
           console.log(error)
+
+           if(error.response){
+            this.showErrorToastMessage("Something went wrong with response");
+           }
+         if(error.request){
+          this.showErrorToastMessage(error.response.message);
+           }
+         else{
           this.showErrorToastMessage("Something went wrong");
+      }
         });
 
     },
 
     editPaymentSetting() {
-      console.log("paymentId inc lose", this.paymentId);
-      if (this.paymentSetting.activeMonth == "") {
-        this.paymentSetting.activeMonth =
-          this.paymentSetting.startingDate.split("-")[1];
-      }
-      this.paymentSetting.formattedStartDate=this.paymentSetting.startingDate;
-      this.paymentSetting.formattedEndDate=this.paymentSetting.endingDate;
+         
+      
+  
+      this.regularIsRequired=false;
+      this.serviceIsRequired=false;
+      this.activeYearIsRequired=false;
+      this.activeMonthIsRequired=false;
+      this.startingDateIsRequired=false;
+      this.endingDateIsRequired=false;
+      this.penality5DayIsRequired=false;
+      this.penality10DayIsRequired=false;
+      this.penalityAbove10DayIsRequired=false;
+      this.start_date_less_than_activeMonth=false;
+      this.startDateLessEndDate = false;
+      this.fiveDayLessTenDay = false;
+      this.tenDayLessAboveTenDay = false;
 
-      if (this.paymentSetting.startingDate) {
-        const date = new Date(this.paymentSetting.startingDate);
+    if(this.paymentSetting.regularAmount==''){
+      this.regularIsRequired=true;
+      this.showErrorToastMessage("Regular amount is required");
+      return;
+     }
+     if(this.paymentSetting.serviceAmount==''){
+  
+      this.serviceIsRequired=true;
+      this.showErrorToastMessage("Service amount is required");
+      return;
+     }
+     if(this.paymentSetting.activeYear==''){
+      this.activeYearIsRequired=true;
+      this.showErrorToastMessage("Active Year is required");
+      return;
+     }
+     if(this.paymentSetting.activeMonth==''){
+      this.activeMonthIsRequired=true;
+      this.showErrorToastMessage("Active Month is required");
+      return;
+     }
+     if(this.paymentSetting.formattedStartDate==''){
+      this.startingDateIsRequired=true;
+      this.showErrorToastMessage("Starting Date is required");
+      return;
+     }
+    
+     const date = new Date(this.paymentSetting.formattedStartDate);//used for the ff if condtions;
+
+   if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+      this.start_date_less_than_activeMonth=true;
+      this.showErrorToastMessage("Starting date should be in the interval of selected month")
+      return;
+    }
+     
+     if(this.paymentSetting.formattedEndDate==''){
+      this.endingDateIsRequired=true;
+      this.showErrorToastMessage("ending Date is required");
+      return;
+     }
+
+   
+
+     if (this.paymentSetting.formattedEndDate) {
+        //alert("there is ending date")
+        const date = new Date(this.paymentSetting.formattedEndDate);
         if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
-           this.edit_activate_start_date_less_than_activeMonth=true;
-           this.showPaymentEditingActivating=true;
-           return;
+          this.end_date_less_than_activeMonth=true;
+         this.showErrorToastMessage("Ending date Should be in the interval of the selected month")
+        return;
          }else{
-            this.edit_activate_start_date_less_than_activeMonth=false;
+          this.end_date_less_than_activeMonth=false;
          }
       }
 
+      if (new Date(this.paymentSetting.formattedStartDate) > new Date(this.paymentSetting.formattedEndDate)) {
+        this.startDateLessEndDate = true;
+        this.showErrorToastMessage("Starting date should be lesser than Ending date");
+        return;
+      } 
 
-    if (this.paymentSetting.endingDate) {
-        const date = new Date(this.paymentSetting.endingDate);
-        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
-            this.edit_activate_end_date_less_than_activeMonth=true;
-         return;
-         }else{
-            this.edit_activate_end_date_less_than_activeMonth=false;
-       }
-    }
+     if(this.paymentSetting.penalityLate5Days==''){
+      this.penality5DayIsRequired=true;
+      this.showErrorToastMessage("Penality Late 5 Days  is required");
+      return;
+     }
+
+
+     
+     if(this.paymentSetting.penalityLate10Days==''){
+      this.penality10DayIsRequired=true;
+      this.showErrorToastMessage("Penality Late 10 Days  is required");
+      return;
+     }
+
+     if (
+        Number(this.paymentSetting.penalityLate5Days) >
+        Number(this.paymentSetting.penalityLate10Days)
+      ) {
+        this.fiveDayLessTenDay = true;
+        this.showErrorToastMessage("Penality for late 5 days should be less than penality for 10 days");
+        return;
+      } 
+
+     if(this.paymentSetting.penalityLateAbove10Days==''){
+      this.penalityAbove10DayIsRequired=true;
+      this.showErrorToastMessage("penality Late above 10 Days  is required");
+      return;
+     }
+
+
+
+    if (
+        Number(this.paymentSetting.penalityLate10Days) >
+        Number(this.paymentSetting.penalityLateAbove10Days)
+      ) {
+        this.tenDayLessAboveTenDay = true;
+        this.showErrorToastMessage("Penality for late 10 days should be less than penality for above 10 days");
+        return;
+      }
+
 
       const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
@@ -1008,32 +1236,171 @@ export default {
         regFeeRate: this.paymentSetting.regFeeRate,
         activeMonth: this.paymentSetting.activeMonth,
         activeYear: this.paymentSetting.activeYear,
-        startingDate: this.paymentSetting.startingDate,
-        endingDate: this.paymentSetting.endingDate,
+        startingDate: this.paymentSetting.formattedStartDate,
+        endingDate: this.paymentSetting.formattedEndDate,
         penalityLate5Days: this.paymentSetting.penalityLate5Days,
         penalityLate10Days: this.paymentSetting.penalityLate10Days,
         penalityLateAbove10Days: this.paymentSetting.penalityLateAbove10Days,
         id: this.paymentSetting._id,
       };
+
+        console.log("to be edit data",regularData);
+
+
      //const id=this.paymentSetting._id;
       this.$apiClient
         .put(`/api/v1/paymentSetting/${this.paymentSetting._id}`, regularData)
         .then((response) => {
-          console.log("response is=",response);
+          console.log("response is now=",response);
           if (response.data.status === 1) {
+            console.log("response.data.message",response.data.message)
             this.showSuccessToastMessage(response.data.message);
-            this.showPaymentEditingActivating=!this.showPaymentEditingActivating;
 
-            
+            this.showPaymentEditingActivating=!this.showPaymentEditingActivating;
           }
         })
         .catch((error) => {
-          console.log(error)
-          this.showErrorToastMessage("Something went wrong");
+          if(error.response){
+           if(error.response.data.message){
+            this.showErrorToastMessage(error.response.data.message);
+            }else{
+              this.showErrorToastMessage("Something went wrong,in response"); 
+            }
+          }
+          else if(error.request){
+            this.showErrorToastMessage("Something went wrong For the Request ");
+          }else{
+            this.showErrorToastMessage("Something went wrong");
+        }
       });
     },
 
     activatePaymentSetting() {
+
+
+      this.regularIsRequired=false;
+      this.serviceIsRequired=false;
+      this.activeYearIsRequired=false;
+      this.activeMonthIsRequired=false;
+      this.startingDateIsRequired=false;
+      this.endingDateIsRequired=false;
+      this.penality5DayIsRequired=false;
+      this.penality10DayIsRequired=false;
+      this.penalityAbove10DayIsRequired=false;
+      this.start_date_less_than_activeMonth=false;
+      this.startDateLessEndDate = false;
+      this.fiveDayLessTenDay = false;
+      this.tenDayLessAboveTenDay = false;
+
+    if(this.paymentSetting.regularAmount==''){
+      this.regularIsRequired=true;
+      this.showErrorToastMessage("Regular amount is required");
+      return;
+     }
+     if(this.paymentSetting.serviceAmount==''){
+  
+      this.serviceIsRequired=true;
+      this.showErrorToastMessage("Service amount is required");
+      return;
+     }
+     if(this.paymentSetting.activeYear==''){
+      this.activeYearIsRequired=true;
+      this.showErrorToastMessage("Active Year is required");
+      return;
+     }
+     if(this.paymentSetting.activeMonth==''){
+      this.activeMonthIsRequired=true;
+      this.showErrorToastMessage("Active Month is required");
+      return;
+     }
+     if(this.paymentSetting.formattedStartDate==''){
+      this.startingDateIsRequired=true;
+      this.showErrorToastMessage("Starting Date is required");
+      return;
+     }
+    
+     const date = new Date(this.paymentSetting.formattedStartDate);//used for the ff if condtions;
+
+   if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+      this.start_date_less_than_activeMonth=true;
+      this.showErrorToastMessage("Starting date should be in the interval of selected month")
+      return;
+    }
+     
+     if(this.paymentSetting.formattedEndDate==''){
+      this.endingDateIsRequired=true;
+      this.showErrorToastMessage("ending Date is required");
+      return;
+     }
+
+   
+
+     if (this.paymentSetting.formattedEndDate) {
+        //alert("there is ending date")
+        const date = new Date(this.paymentSetting.formattedEndDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+          this.end_date_less_than_activeMonth=true;
+         this.showErrorToastMessage("Ending date Should be in the interval of the selected month")
+        return;
+         }else{
+          this.end_date_less_than_activeMonth=false;
+         }
+      }
+
+      if (new Date(this.paymentSetting.formattedStartDate) > new Date(this.paymentSetting.formattedEndDate)) {
+        this.startDateLessEndDate = true;
+        this.showErrorToastMessage("Starting date should be lesser than Ending date");
+        return;
+      } 
+
+     if(this.paymentSetting.penalityLate5Days==''){
+      this.penality5DayIsRequired=true;
+      this.showErrorToastMessage("Penality Late 5 Days  is required");
+      return;
+     }
+
+
+     
+     if(this.paymentSetting.penalityLate10Days==''){
+      this.penality10DayIsRequired=true;
+      this.showErrorToastMessage("Penality Late 10 Days  is required");
+      return;
+     }
+
+     if (
+        Number(this.paymentSetting.penalityLate5Days) >
+        Number(this.paymentSetting.penalityLate10Days)
+      ) {
+        this.fiveDayLessTenDay = true;
+        this.showErrorToastMessage("Penality for late 5 days should be less than penality for 10 days");
+        return;
+      } 
+
+     if(this.paymentSetting.penalityLateAbove10Days==''){
+      this.penalityAbove10DayIsRequired=true;
+      this.showErrorToastMessage("penality Late above 10 Days  is required");
+      return;
+     }
+
+
+
+    if (
+        Number(this.paymentSetting.penalityLate10Days) >
+        Number(this.paymentSetting.penalityLateAbove10Days)
+      ) {
+        this.tenDayLessAboveTenDay = true;
+        this.showErrorToastMessage("Penality for late 10 days should be less than penality for above 10 days");
+        return;
+      }
+
+
+
+  
+
+
+ 
+
+
       console.log("paymentId inc lose", this.paymentId);
       const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
@@ -1043,34 +1410,44 @@ export default {
         regFeeRate: this.paymentSetting.regFeeRate,
         activeMonth: this.paymentSetting.activeMonth,
         activeYear: this.paymentSetting.activeYear,
-        startingDate: this.paymentSetting.startingDate,
-        endingDate: this.paymentSetting.endingDate,
+        startingDate: this.paymentSetting.formattedStartDate,
+        endingDate: this.paymentSetting.formattedEndDate,
         penalityLate5Days: this.paymentSetting.penalityLate5Days,
         penalityLate10Days: this.paymentSetting.penalityLate10Days,
         penalityLateAbove10Days: this.paymentSetting.penalityLateAbove10Days,
       };
 
-    if (this.paymentSetting.startingDate) {
-        const date = new Date(this.paymentSetting.startingDate);
-        if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+
+      console.log("regular in the activating is",regularData)
+    if (this.paymentSetting.formattedEndDate) {
+        const date = new Date(this.paymentSetting.formattedStartDate);
+        if(date.getMonth() + 1 < this.paymentSetting.activeMonth ){
            this.edit_activate_start_date_less_than_activeMonth=true;
            this.showPaymentEditingActivating=true;
+           console.log("it enters to return start ")
+           this.showErrorToastMessage("Start date should in the Interval of the selected month")
            return;
          }else{
             this.edit_activate_start_date_less_than_activeMonth=false;
          }
       }
 
-    if (this.paymentSetting.endingDate) {
-        const date = new Date(this.paymentSetting.endingDate);
+    if (this.paymentSetting.formattedEndDate) {
+        const date = new Date(this.paymentSetting.formattedEndDate);
         if(date.getMonth() + 1 < this.paymentSetting.activeMonth){
+          console.log("it enters to return end ")
             this.edit_activate_end_date_less_than_activeMonth=true;
+
+            this.showErrorToastMessage("End date should in the Interval of the selected month")
          return;
          }else{
             this.edit_activate_end_date_less_than_activeMonth=false;
       }
     }
 
+
+
+ console.log("it will go the server");
     this.$apiClient
         .post("/api/v1/paymentSetting", regularData)
         .then((response) => {
@@ -1080,19 +1457,22 @@ export default {
             this.paymentActivate = false;
             this.paymentSettingCreated = 1;
             this.showPaymentEditingActivating=false;
+            
           }
         })
         .catch((error) => {
           if(error.response){
-            this.showErrorToastMessage(error.response.message);
+           if(error.response.data.message){
+            this.showErrorToastMessage(error.response.data.message);
+            }else{
+              this.showErrorToastMessage("Something went wrong,in response"); 
+            }
           }
           else if(error.request){
-            this.showErrorToastMessage("Something went wrong,in response");
+            this.showErrorToastMessage("Something went wrong For the Request ");
           }else{
             this.showErrorToastMessage("Something went wrong");
-          }
-         
-          
+        }
     });
    },
 

@@ -33,75 +33,75 @@
           </select>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full border-b border-indigo-500">
-            <thead>
-              <tr class="bg-gray-200">
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  UserCode
-                </th>
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Full Name
-                </th>
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Paid/Unpaid
-                </th>
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="searchPayment in searchedpayments"
-                :key="searchPayment._id"
-              >
-                <td class="text-md text-gray-500 whitespace-nowrap text-xs">
-                  {{ searchPayment.userCode }}
-                </td>
+        <div class="overflow-x-auto overflow-y-auto h-96 ">
+  <!-- Table -->
+  <table class="table-auto min-w-full border-collapse">
+    <!-- Table Head -->
+    <thead class="bg-blue-50 text-white sticky top-0 z-10">
+      <tr class="text-blue-500 text-xs">
+        <th class="w-24 p-4  font-bold tracking-wide text-left">UserCode</th>
+        <th class="w-36 p-4  font-bold tracking-wide text-left">Full Name</th>
+        <th class="w-24 p-4  font-bold tracking-wide text-left">Paid/Unpaid</th>
+        <th class="w-24 p-4  font-bold tracking-wide text-left">Action</th>
+      </tr>
+    </thead>
+    <!-- Scrollable Table Body -->
+    <tbody class="divide-y divide-gray-200 bg-gray-50  overflow-y-auto">
+      <tr
+      @click="
+              paymentHistory(
+                searchPayment.userCode,
+                searchPayment.activeYear,
+                searchPayment.activeMonth,
+                searchPayment.status
+              )
+            "
+        v-for="searchPayment in searchedpayments"
+        :key="searchPayment._id"
+        class="cursor-pointer bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg p-4"
+      >
+        <td class="p-4 text-xs text-gray-700">
+          <span class="font-bold text-indigo-600">{{ searchPayment.userCode }}</span>
+        </td>
+        <td class="p-4 text-xs text-gray-700 font-bold">
+          {{ searchPayment.fullName }}
+        </td>
+        <td class="p-4 text-xs">
+          <span
+            :class="{
+              'bg-green-100 text-green-600 font-bold px-2 py-1 rounded': searchPayment.isPaid,
+              'bg-red-100 text-red-600 font-bold px-2 py-1 rounded': !searchPayment.isPaid
+            }"
+          >
+            {{ searchPayment.isPaid ? 'Paid' : 'Unpaid' }}
+          </span>
+        </td>
+        <td class="p-4">
+          <button
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded shadow-lg"
+            @click="
+              paymentHistory(
+                searchPayment.userCode,
+                searchPayment.activeYear,
+                searchPayment.activeMonth,
+                searchPayment.status
+              )
+            "
+          >
+            <i class="fas fa-info-circle"></i> Detail
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-                <td class="text-md text-gray-500 whitespace-nowrap text-xs">
-                  {{ searchPayment.fullName }}
-                </td>
-                <td class="text-md text-gray-500 whitespace-nowrap text-xs">
-                  {{ searchPayment.isPaid }}
-                </td>
-                <td class="py-1 text-xs text-gray-500 whitespace-nowrap">
-                    <button
-                      class="mb-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
-                      @click="
-                        paymentHistory(
-                          searchPayment.userCode,
-                          searchPayment.activeYear,
-                          searchPayment.activeMonth,
-                          searchPayment.status
-                        )
-                      "
-                    >
-                      <i class="fas fa-file-alt text-pink-500 text-xs"></i>
-                      <span>Detail</span>
-                    </button>
-                  </td>
-              </tr>
 
-
-            
-            </tbody>
-          </table>
-        </div>
-
-        <div
+<!-- //paging -->
+        <!-- <div
           class="flex justify-between items-center mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
         >
-          <!-- Pagination Controls -->
+       
           <div class="flex items-center">
             <select
               id="payments-per-page"
@@ -117,7 +117,6 @@
               <option value="100">100</option>
             </select>
 
-            <!-- Previous Page Button -->
             <button
               @click="previosPage"
               class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-l-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
@@ -126,14 +125,14 @@
               <i class="fas fa-chevron-left"></i>
             </button>
 
-            <!-- Current Page Display -->
+       
             <span
               class="px-4 py-1.5 bg-indigo-800 text-white font-bold border-t border-b border-gray-300"
             >
               {{ currentPage }}
             </span>
 
-            <!-- Next Page Button -->
+       
             <button
               @click="nextPage"
               class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-r-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
@@ -141,7 +140,7 @@
               <i class="fas fa-chevron-right"></i>
             </button>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

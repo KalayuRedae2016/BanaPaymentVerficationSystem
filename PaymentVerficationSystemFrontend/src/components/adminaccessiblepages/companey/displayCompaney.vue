@@ -1,146 +1,214 @@
 <template>
-
-  
   <div>
     <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-from-class="translate-x-full opacity-0"
+      enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transform transition duration-300 ease-in"
+      leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="translate-x-full opacity-0"
     >
-      <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ successToastMessage }}</span>
-    </div>
-  </transition> 
+      <div
+        v-if="showSuccessToast"
+        class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+        role="alert"
+      >
+        <strong class="font-bold">Success!</strong>
+        <span class="block sm:inline">{{ successToastMessage }}</span>
+      </div>
+    </transition>
 
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
+    <transition
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-from-class="translate-x-full opacity-0"
+      enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transform transition duration-300 ease-in"
+      leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="translate-x-full opacity-0"
     >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
+      <div
+        v-if="showErrorToast"
+        class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+        role="alert"
+      >
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline">{{ errorToastMessage }}</span>
+      </div>
+    </transition>
+    <div
+      v-if="organizationCreated === 0"
+      class="loader mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
+    ></div>
+    <div v-if="organizationCreated === 1" class="p-4">
+      <h1 class="text-indigo-800 font-bold">Details</h1>
     </div>
-  </transition> 
-  <div
-    v-if="organizationCreated === 0"
-    class="loader mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
-  ></div>
-  <div v-if="organizationCreated === 1" class="p-4">
-    <h1 class="text-indigo-800 font-bold">Details</h1>
+
+    <div
+      v-if="organizationCreated === 1 || organizationCreated === 2"
+      class="container flex-col mb-96 bg-white border-t border-indigo-800 -mt-1"
+    >
+      <div v-if="organizationCreated === 1" class="flex flex-wrap mx-auto p-4">
+        <div class="w-full py-8 -mt-8">
+          <div class="flex flex-col md:flex-row md:items-center">
+            <div
+              class="flex-grow border-t-2 border-b-2 border-blue-500 p-3 rounded-lg bg-white"
+            >
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+  <div class="flex flex-col space-y-4">
+    <!-- Company Name -->
+    <div class="bg-white border-b border-dotted p-4 rounded-md">
+      <div class="flex items-center space-x-3">
+        <i class="fas fa-building text-indigo-500"></i>
+        <span class="font-semibold text-sm">{{ $t("compName") }}:</span>
+        <span class="text-xs text-gray-800">{{ companyProfile.companyName }}</span>
+      </div>
+    </div>
+
+    <!-- Company Prefix Code -->
+    <div class="bg-white border-b border-dotted p-4 rounded-md">
+      <div class="flex items-center space-x-3">
+        <i class="fas fa-code text-blue-500"></i>
+        <span class="font-semibold text-sm">{{ $t("compPrefixCode") }}:</span>
+        <span class="text-xs text-gray-800">{{ companyProfile.companyPrefixCode }}</span>
+      </div>
+    </div>
+
+    <!-- Phone Number -->
+    <div class="bg-white border-b border-dotted p-4 rounded-md">
+      <div class="flex items-center space-x-3">
+        <i class="fas fa-phone text-green-500"></i>
+        <span class="font-semibold text-sm">{{ $t("companyPhoneNumber") }}:</span>
+        <span class="text-xs text-gray-800">{{ companyProfile.companyPhoneNumber }}</span>
+      </div>
+    </div>
   </div>
 
+  <div class="flex flex-col space-y-4">
+    <!-- Company Email -->
+    <div class="bg-white border-b border-dotted p-4 rounded-md">
+      <div class="flex items-center space-x-3">
+        <i class="fas fa-envelope text-yellow-500"></i>
+        <span class="font-semibold text-sm">{{ $t("compEmail") }}:</span>
+        <span class="text-xs text-gray-800">{{ companyProfile.companyEmail }}</span>
+      </div>
+    </div>
 
-  <div
-    v-if="organizationCreated === 1 || organizationCreated === 2"
-    class="container flex-col mb-96 bg-white border-t border-indigo-800 -mt-1"
-  >
-  <div v-if="organizationCreated === 1" class="flex flex-wrap mx-auto p-4">
-  <div class="w-full  py-8 -mt-8">
-    <div class="flex flex-col md:flex-row md:items-center">
-      <div class="flex-grow border-t-2 border-b-2 border-blue-500 p-3 shadow-lg rounded-lg bg-white">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 md:gap-x-8">
-          <div class="flex flex-col">
-            <p class="flex flex-row text-xs mb-2 text-gray-800">
-              <span class="w-1/2 lg:w-2/3  ">{{ $t("compName") }}:</span>
-              <span class="w-1/3 text-gray-500">{{ companyProfile.companyName }}</span>
-            </p>
-            <p class="flex flex-row text-xs mb-2 text-gray-800 ">
-              <span class="w-1/2 lg:w-2/3 ">{{ $t("compPrefixCode") }}:</span>
-              <span class="w-1/3 text-gray-500">{{ companyProfile.companyPrefixCode }}</span>
-            </p>
-            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-1">
-              <span class="w-1/2 lg:w-2/3  ">{{ $t("companyPhoneNumber") }}:</span>
-              <span class="w-1/3 text-gray-500">{{ companyProfile.companyPhoneNumber }}</span>
-            </p>
-            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-1">
-              <span class="w-1/2 lg:w-2/3    ">{{ $t("compEmail") }}:</span>
-              <span class="w-1/2 lg:w-1/3 text-gray-500">{{ companyProfile.companyEmail }}</span>
-            </p>
-            <p class="flex flex-row text-xs mb-2 text-gray-800 space-x-1">
-              <span class="w-1/2 lg:w-2/3  ">{{ $t("compAddress") }}:</span>
-              <span class="w-1/2 lg:w-1/3  text-gray-500">{{ companyProfile.companyAddress }}</span>
-            </p>
-          </div>
-        
-        </div>
-
-        <div class="font-bold text-lg mt-4 mb-2 divide-y divide-dashed">
-          <p class="text-indigo-500 mb-3 mt-4">{{ $t("blockAccounts") }}</p>
-          <div class="mt-5">
-            <table class="w-full border border-gray-300">
-              <thead>
-                <tr class="bg-gray-200">
-                  <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
-                  <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="account in companyProfile.blockBankAccounts" :key="account._id">
-                  <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
-                    <span class="p-1.5 text-xs font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
-                  </td>
-                  <td class="p-3 text-xs text-gray-700 whitespace-nowrap">{{ account.bankAccountNumber }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="font-bold text-xs mt-10 mb-4 divide-y divide-dashed text-indigo-500">
-                 {{ $t("serviceAccounts") }}
-            <div class="mt-5">
-              <table class="w-full border border-gray-300">
-                <thead>
-                  <tr class="bg-gray-200">
-                    <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankType") }}</th>
-                    <th class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800">{{ $t("bankAccountNumber") }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="account in companyProfile.serviceBankAccounts" :key="account._id">
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
-                      <span class="p-1.5 text-xs font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200">{{ account.bankType }}</span>
-                    </td>
-                    <td class="p-3 text-xs text-gray-700 whitespace-nowrap">{{ account.bankAccountNumber }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <div class="flex mt-5 ">
-            <button class="bg-white text-blue-500 hover:bg-blue-100 rounded-full p-2" @click="goToEditPage()">
-              <i class="fas fa-edit" ><span class="text-xxs ">Edit</span></i>
-            </button>
-          </div>
-        </div>
+    <!-- Company Address -->
+    <div class="bg-white border-b border-dotted p-4 rounded-md">
+      <div class="flex items-center space-x-3">
+        <i class="fas fa-map-marker-alt text-red-500"></i>
+        <span class="font-semibold text-sm">{{ $t("compAddress") }}:</span>
+        <span class="text-xs text-gray-800">{{ companyProfile.companyAddress }}</span>
       </div>
     </div>
   </div>
 </div>
 
 
+              <div class="font-bold text-lg mt-4 mb-2 divide-y divide-dashed">
+                <p class="text-indigo-500 mb-3 mt-4">
+                  {{ $t("blockAccounts") }}
+                </p>
+                <div class="mt-5">
+                  <table class="w-full border border-gray-300">
+                    <thead>
+                      <tr class="bg-gray-200">
+                        <th
+                          class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("bankType") }}
+                        </th>
+                        <th
+                          class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800"
+                        >
+                          {{ $t("bankAccountNumber") }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr
+                        v-for="account in companyProfile.blockBankAccounts"
+                        :key="account._id"
+                      >
+                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                          <span
+                            class="p-1.5 text-xs font-medium tracking-wider text-blue-500 rounded-lg bg-blue-50"
+                            >{{ account.bankType }}</span
+                          >
+                        </td>
+                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                          {{ account.bankAccountNumber }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
+                <div
+                  class="font-bold text-xs mt-10 mb-4 divide-y divide-dashed text-indigo-500"
+                >
+                  {{ $t("serviceAccounts") }}
+                  <div class="mt-5">
+                    <table class="w-full border border-gray-300">
+                      <thead>
+                        <tr class="bg-gray-200">
+                          <th
+                            class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800"
+                          >
+                            {{ $t("bankType") }}
+                          </th>
+                          <th
+                            class="w-1/2 p-3 text-xs tracking-wide text-left text-indigo-800"
+                          >
+                            {{ $t("bankAccountNumber") }}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="account in companyProfile.serviceBankAccounts"
+                          :key="account._id"
+                        >
+                          <td
+                            class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                          >
+                            <span
+                              class="p-1.5 text-xs font-medium tracking-wider text-blue-500 rounded-lg bg-blue-50"
+                              >{{ account.bankType }}</span
+                            >
+                          </td>
+                          <td
+                            class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                          >
+                            {{ account.bankAccountNumber }}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
 
+                <div class="flex mt-5">
+                  <button
+                    class="bg-white text-blue-500 hover:bg-blue-100 rounded-full p-2"
+                    @click="goToEditPage()"
+                  >
+                    <i class="fas fa-edit"
+                      ><span class="text-xxs">Edit</span></i
+                    >
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <new-company-profile v-if="organizationCreated === 2"></new-company-profile>
+      <new-company-profile
+        v-if="organizationCreated === 2"
+      ></new-company-profile>
+    </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -154,11 +222,10 @@ export default {
   name: "paymentsView",
   data() {
     return {
-     successToastMessage:"",
-     errorToastMessage:"",
-     showErrorToast:false,
-     showSuccessToast:false,
-
+      successToastMessage: "",
+      errorToastMessage: "",
+      showErrorToast: false,
+      showSuccessToast: false,
 
       loading: true,
       companyProfile: {
@@ -190,13 +257,14 @@ export default {
     },
   },
   mounted() {
-    if (this.$route.query.fromEmpty === 'true') {
-    
-     this.showSuccessToastMessage("Your Company Profile Creeated Successfully");
+    if (this.$route.query.fromEmpty === "true") {
+      this.showSuccessToastMessage(
+        "Your Company Profile Creeated Successfully"
+      );
       setTimeout(() => {
         this.$router.push({
-      path: `/admindashboard/display-companey`
-         });
+          path: `/admindashboard/display-companey`,
+        });
       }, 2000);
     }
     this.$apiClient
@@ -204,7 +272,7 @@ export default {
       .then((response) => {
         console.log("Org response", response);
         if (response.data.status === 1) {
-          if (response.data.organization.length ==0) {
+          if (response.data.organization.length == 0) {
             this.organizationCreated = 2;
             return;
           }
@@ -212,7 +280,7 @@ export default {
           this.organizationCreated = 1;
           console.log("cretaed");
         }
-      }) 
+      })
       .catch((error) => {
         console.log("Error", error);
         this.organizationCreated = 0;
@@ -220,24 +288,23 @@ export default {
   },
   methods: {
     showSuccessToastMessage(message) {
-    //  alert(message);
+      //  alert(message);
       console.log("message", message);
-      this.successToastMessage = message
+      this.successToastMessage = message;
       this.showSuccessToast = true;
       setTimeout(() => {
         this.showSuccessToast = false;
-      }, 1000); 
-      
+      }, 1000);
+
       // Toast will disappear after 3 seconds
     },
     showErrorToastMessage(message) {
       this.errorToastMessage = message;
       this.showErrorToast = true;
       setTimeout(() => {
-       
         this.showErrorToast = false;
-      }, 1000); 
-      
+      }, 1000);
+
       // Toast will disappear after 3 seconds
     },
     localee() {

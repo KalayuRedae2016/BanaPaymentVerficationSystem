@@ -218,7 +218,7 @@
   "penaltyPerAboveTenDaysPercentage": "Penalty Per Above 10 Days %",
   "year": "Year",
   "month": "Month",
-  "noOpenedPaymentSetting": "No opened payment setting found for the selected month in the given year. You can create and activate a setting for this month for the given year.",
+  "noOpenedPaymentSetting": "No opened payment setting found for the selected month in the given year.",
   "selectedTime": "Selected Time",
   "update": "Update",
   "transferType": "Transfer Type",

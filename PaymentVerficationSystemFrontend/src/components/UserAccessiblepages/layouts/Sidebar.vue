@@ -44,7 +44,7 @@
                   class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
                 ></i>
 
-                <span> {{ $t("DeadLines") }}</span>
+                <span> {{ $t("Dead Lines") }}</span>
               </a>
             </li>
             <li

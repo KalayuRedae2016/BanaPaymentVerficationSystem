@@ -67,8 +67,15 @@ const routes = [
     component: reset,
     meta: { requiresGuest: true },
   },
+  // {
+  //   path: "/access-denied",
+  //   component: accessDenied,
+  //   meta: { requiresGuest: true },
+  // },
+
+
   {
-    path: "/access-denied",
+    path: "/:pathMatch(.*)*",
     component: accessDenied,
     meta: { requiresGuest: true },
   },

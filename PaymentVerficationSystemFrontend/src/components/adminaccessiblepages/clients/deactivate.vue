@@ -1,237 +1,262 @@
 <template>
-<div>
-  <div class="container mx-auto p-4 flex flex-col">
-    <div class="flex flex-row space-x-3">
-      <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
+  <div>
+    <div class="container mx-auto p-4 flex flex-col">
+      <div class="flex flex-row space-x-3">
+        <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
 
-      <button class="text-cyan-500" @click="showActiveUsers()">
-        {{ $t('viewActiveUsers') }}
-      </button>
-    </div>
-    <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5   bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ successToastMessage }}</span>
-    </div>
-  </transition> 
-  <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5   bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
-    </div>
-  </transition> 
-    <div class="border-t border-indigo-800 mt-3">
-      <div
-        class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
+        <button class="text-cyan-500" @click="showActiveUsers()">
+          {{ $t("viewActiveUsers") }}
+        </button>
+      </div>
+      <transition
+        enter-active-class="transform transition duration-300 ease-out"
+        enter-from-class="translate-x-full opacity-0"
+        enter-to-class="translate-x-0 opacity-100"
+        leave-active-class="transform transition duration-300 ease-in"
+        leave-from-class="translate-x-0 opacity-100"
+        leave-to-class="translate-x-full opacity-0"
       >
-        <div class="p-4 mt-8">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex-1 mr-4">
-              <input
-                v-model="searchQuery"
-                type="text"
-                :placeholder="$t('searchByNameEmailUsername')"
-                class="custom-input"
-              />
-            </div>
-            <div>
-              <button
-                class="bg-blue-800 border border-indigo-500 h-12 font-extrabold rounded-lg text-white font-semibold hover:bg-blue-500"
-                @click="navigateToCreateClient"
-              >
-                <svg
-                  class="w-10 h-7 mr-2"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+        <div
+          v-if="showSuccessToast"
+          class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+          role="alert"
+        >
+          <strong class="font-bold">Success!</strong>
+          <span class="block sm:inline">{{ successToastMessage }}</span>
+        </div>
+      </transition>
+      <transition
+        enter-active-class="transform transition duration-300 ease-out"
+        enter-from-class="translate-x-full opacity-0"
+        enter-to-class="translate-x-0 opacity-100"
+        leave-active-class="transform transition duration-300 ease-in"
+        leave-from-class="translate-x-0 opacity-100"
+        leave-to-class="translate-x-full opacity-0"
+      >
+        <div
+          v-if="showErrorToast"
+          class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+          role="alert"
+        >
+          <strong class="font-bold">Error!</strong>
+          <span class="block sm:inline">{{ errorToastMessage }}</span>
+        </div>
+      </transition>
+      <div class="border-t border-indigo-800 mt-3">
+        <div
+          class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
+        >
+          <div class="p-4 mt-8">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex-1 mr-4">
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  :placeholder="$t('searchByNameEmailUsername')"
+                  class="custom-input"
+                />
+              </div>
+              <div>
+                <button
+                  class="bg-blue-800 border border-indigo-500 h-12 font-extrabold rounded-lg text-white font-semibold hover:bg-blue-500"
+                  @click="navigateToCreateClient"
                 >
-                  <path
-                    d="M12 5V19M5 12H19"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    class="w-10 h-7 mr-2"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M12 5V19M5 12H19"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full border-b border-gray-300">
-              <thead>
-                <tr class="bg-gray-200">
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+            <div class="overflow-x-auto">
+              <table class="w-full border-b border-gray-300 bg-white">
+                <thead class="bg-blue-50">
+                  <tr class="text-blue-500">
+                    <th
+                      class="w-24 p-3 text-sm font-extrabold tracking-wide text-left"
+                    >
+                      {{ $t("number") }}
+                    </th>
+                    <th
+                      class="w-24 p-3 text-sm font-extrabold tracking-wide text-left"
+                    >
+                      {{ $t("userCode") }}
+                    </th>
+                    <th
+                      class="w-48 p-3 text-sm font-extrabold tracking-wide text-left"
+                    >
+                      {{ $t("fullName") }}
+                    </th>
+                    <th
+                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left"
+                    >
+                      {{ $t("activate") }}
+                    </th>
+                    <th
+                      class="w-32 p-3 text-sm font-extrabold tracking-wide text-left"
+                    >
+                      {{ $t("detail") }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="(searchClient, index) in searchedClients"
+                    :key="searchClient._id"
+                    class="cursor-pointer hover:bg-blue-100 transition duration-200"
                   >
-                    {{ $t("number") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("userCode") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("fullName") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("activate") }}
-                  </th>
-                  <th
-                    class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("detail") }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(searchClient, index) in searchedClients"
-                  :key="searchClient._id"
-                >
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{ index + 1 }}
-                  </td>
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
-                    {{ searchClient.userCode }}
-                  </td>
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
-                    {{ searchClient.firstName }} {{ searchClient.middleName }}
-                    {{ searchClient.lastName }}
-                  </td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap" @click="navigateToInClient(searchClient._id)">
+                      {{ index + 1 }}
+                    </td>
+                    <td class="p-3 text-md text-gray-700" @click="navigateToInClient(searchClient._id)">
+                      <span class="text-indigo-600">{{
+                        searchClient.userCode
+                      }}</span>
+                    </td>
+                    <td class="p-3 text-sm text-gray-500 whitespace-nowrap" @click="navigateToInClient(searchClient._id)">
+                      {{ searchClient.firstName }} {{ searchClient.middleName }}
+                      {{ searchClient.lastName }}
+                    </td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <button
+                        @click="
+                          showActivationModal = !showActivationModal;
+                          userIdToBeActivated = searchClient._id;
+                        "
+                        class="flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                      >
+                        <i class="fas fa-check-circle mr-2"></i>
+                        {{ $t("activate") }}
+                      </button>
+                    </td>
+                    <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <button
+                        @click="navigateToInClient(searchClient._id)"
+                        class="flex items-center px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-cyan-300"
+                      >
+                        <i class="fas fa-eye mr-2"></i>
+                        {{ $t("viewDetails") }}
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
 
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button
-                      @click="showActivationModal=!showActivationModal;userIdToBeActivated=searchClient._id"
-                      class="flex items-center px-4 py-2 bg-indigo-200 hover:bg-cyan-500 text-gray-800 rounded"
-                    >
-                      {{ $t("Activate") }}
-                    </button>
-                  </td>
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button
-                      @click="navigateToInClient(searchClient._id)"
-                      class="flex items-center px-4 py-2 bg-indigo-200 hover:bg-cyan-500 text-gray-800 rounded"
-                    >
-                      <i class="fas fa-eye mr-2"></i>
-                      {{ $t("viewDetails") }}
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <div class="pagination flex items-center justify-center mt-4">
-              <h1 class="mr-2">{{ $t("showMore") }}</h1>
-              <select
-                v-model="clientsPerpage"
-                @change="changePerPageNumber()"
-                class="h-7 border border-gray-500 mr-3 rounded-md"
-              >
-                <option value="2" selected>2</option>
-                <option value="3">3</option>
-                <option value="10">10</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-              <button
-                @click="previosPage"
-                class="px-2 py-1 rounded border border-gray-500 text-pink-500 hover:bg-gray-200 mr-2"
-              >
-                <i class="fa fa-chevron-left"></i>
-              </button>
-              <span
-                class="px-2 py-1 rounded border border-gray-500 bg-pink-500 text-white"
-                >{{ currentPage }}</span
-              >
-              <button
-                @click="nextPage"
-                class="px-2 py-1 rounded border border-gray-500 text-pink-500 hover:bg-gray-200 ml-2"
-              >
-                <i class="fas fa-chevron-right"></i>
-              </button>
+              <!-- Pagination -->
+              <div class="flex items-center justify-center mt-4">
+                <span class="mr-2 font-bold">{{ $t("showMore") }}:</span>
+                <select
+                  v-model="clientsPerpage"
+                  @change="changePerPageNumber"
+                  class="h-10 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="10">10</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                </select>
+                <button
+                  @click="previosPage"
+                  class="ml-3 px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                >
+                  <i class="fa fa-chevron-left"></i>
+                </button>
+                <span
+                  class="mx-3 px-3 py-1 rounded border bg-pink-500 text-white text-sm font-bold"
+                >
+                  {{ currentPage }}
+                </span>
+                <button
+                  @click="nextPage"
+                  class="px-3 py-1 rounded border border-gray-300 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+                >
+                  <i class="fas fa-chevron-right"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
     <div v-if="showActivationModal">
-    <transition name="fade" mode="out-in">
-      <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-        <div class="bg-white rounded-lg p-6 border border-orange-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-4">
-                <!-- Warning Icon -->
-                <svg class="w-8 h-8 text-orange-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h1m0 4h-1m1-4V8h-1v4h1m0 4h-1V8h1m0-4h-1V4h1v4zM12 9V5h.01M4.93 4.93l.08-.08 6.99 6.99M8.34 8.34l6.99 6.99-.08.08M4.93 19.07l6.99-6.99M4.93 4.93l14.14 14.14"></path>
-                </svg>
-                <h2 class="text-2xl font-bold text-gray-800">{{ $t('activeUser') }}</h2>
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <div class="bg-white rounded-lg p-6 border border-orange-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-4">
+                  <!-- Warning Icon -->
+                  <svg
+                    class="w-8 h-8 text-orange-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M13 16h-1v-4h1m0 4h-1m1-4V8h-1v4h1m0 4h-1V8h1m0-4h-1V4h1v4zM12 9V5h.01M4.93 4.93l.08-.08 6.99 6.99M8.34 8.34l6.99 6.99-.08.08M4.93 19.07l6.99-6.99M4.93 4.93l14.14 14.14"
+                    ></path>
+                  </svg>
+                  <h2 class="text-2xl font-bold text-gray-800">
+                    {{ $t("activeUser") }}
+                  </h2>
+                </div>
+                <!-- Form Content -->
+                <form>
+                  <div class="mb-4">
+                    <label
+                      for="reason"
+                      class="block text-lg font-medium text-gray-700"
+                      >{{ $t("reasonForActivation") }}</label
+                    >
+                    <input
+                      type="text"
+                      id="reason"
+                      v-model="deactivationReason"
+                      class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      placeholder="Enter reason"
+                      required
+                    />
+                  </div>
+                  <div class="flex justify-end space-x-4 mt-6">
+                    <button
+                      @click.prevent="showActivationModal = false"
+                      class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
+                    >
+                      {{ $t("cancel") }}
+                    </button>
+                    <button
+                      @click.prevent="activate(userIdToBeActivated)"
+                      type="submit"
+                      class="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    >
+                      {{ $t("activate") }}
+                    </button>
+                  </div>
+                </form>
               </div>
-              <!-- Form Content -->
-              <form >
-                <div class="mb-4">
-                  <label for="reason" class="block text-lg font-medium text-gray-700">{{ $t('reasonForActivation') }}</label>
-                  <input
-                    type="text"
-                    id="reason"
-                    v-model="deactivationReason"
-                    class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-                    placeholder="Enter reason"
-                    required
-                  />
-                </div>
-                <div class="flex justify-end space-x-4 mt-6">
-                  <button
-                    @click.prevent="showActivationModal = false"
-                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
-                  >
-                  {{ $t('cancel') }}
-                  </button>
-                  <button
-                    @click.prevent="activate(userIdToBeActivated)"
-                    type="submit"
-                    class="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  >
-                  {{ $t('activate') }}
-                  </button>
-                </div>
-              </form>
             </div>
+            <hr class="my-4 md:min-w-full bg-orange-500" />
           </div>
-          <hr class="my-4 md:min-w-full bg-orange-500" />
         </div>
-      </div>
-    </transition>
-  </div>
-
-
+      </transition>
+    </div>
   </div>
 </template>
 <script>
@@ -242,18 +267,18 @@ export default {
   },
   data() {
     return {
-      showSuccessToast:false,
-      showErrorToast:false,
-      successToastMessage:"",
-      errorToastMessage:"",
-    showError:false,
-    showSuccess:false,
-    sucessMessage:"",
-    errorMessage:"",
-    deactivationReason:"",
+      showSuccessToast: false,
+      showErrorToast: false,
+      successToastMessage: "",
+      errorToastMessage: "",
+      showError: false,
+      showSuccess: false,
+      sucessMessage: "",
+      errorMessage: "",
+      deactivationReason: "",
 
-      userIdToBeActivated:"",
-      showActivationModal:false,
+      userIdToBeActivated: "",
+      showActivationModal: false,
       showFamilyMemberModal: false,
       addingSuccess: false,
       screenSize: "",
@@ -262,13 +287,13 @@ export default {
       clientId: "",
       clients: [
         {
-          _id:"1",
-          fullName:"Tadesse Gebremicheal berhe",
-          firstName:"tadesse",
-          middleName:"gebremicheal",
-          lastName:"berehe",
-          userCode:"BM 0023"
-        }
+          _id: "1",
+          fullName: "Tadesse Gebremicheal berhe",
+          firstName: "tadesse",
+          middleName: "gebremicheal",
+          lastName: "berehe",
+          userCode: "BM 0023",
+        },
       ],
 
       showMoreChanged: false,
@@ -293,27 +318,26 @@ export default {
       return Math.ceil(this.clients.length / this.perPage);
     },
   },
-  
+
   mounted() {
     this.$apiClient
-      .get("/api/v1/users",{
-        params:{
-          isActive:false,
-        }
+      .get("/api/v1/users", {
+        params: {
+          isActive: false,
+        },
       })
       .then((response) => {
-        if (response.data.status===1) {
+        if (response.data.status === 1) {
           console.log("success fetching users");
           this.clients = response.data.users;
           this.searchedClients = this.clients;
 
-          console.log("this clients from db",this.clients)
+          console.log("this clients from db", this.clients);
         }
       })
       .catch((error) => {
         console.log("eror fetching users", error);
       });
-   
   },
 
   methods: {
@@ -321,52 +345,46 @@ export default {
       this.successToastMessage = message;
       this.showSuccessToast = true;
       setTimeout(() => {
-       
         this.showSuccessToast = false;
-      }, 1000); 
-      
+      }, 1000);
+
       // Toast will disappear after 3 seconds
     },
     showErrorToastMessage(message) {
       this.errorToastMessage = message;
       this.showErrorToast = true;
       setTimeout(() => {
-       
         this.showErrorToast = false;
-      }, 1000); 
-      
+      }, 1000);
+
       // Toast will disappear after 3 seconds
     },
     activate(userId) {
-          this.showActivationModal = false;
-          const payload={
-            userId: userId,
-            reason: this.deactivationReason,
-            isActive: true,
-          }
-       console.log("payload",payload);
-      this.showDeactivateModal=false; 
-      
+      this.showActivationModal = false;
+      const payload = {
+        userId: userId,
+        reason: this.deactivationReason,
+        isActive: true,
+      };
+      console.log("payload", payload);
+      this.showDeactivateModal = false;
+
       this.$apiClient
-        .put("/api/v1/users/active-deactive",payload)
+        .put("/api/v1/users/active-deactive", payload)
         .then((response) => {
           console.log("users", response);
-          if (response.data.status===1) {
-
+          if (response.data.status === 1) {
             this.showSuccessToastMessage(response.data.message);
             // this.successMessage = response.data.message;//"Selected user is Activated";//
             // this.showSuccess=true;
             // this.displayedItems();
-
           }
         })
         .catch((error) => {
-          
-          
           console.log(error);
-            // this.errorMessage = error.response.data.message
-            // this.showError=true;
-            this.showErrorToastMessage("Something went wrong")
+          // this.errorMessage = error.response.data.message
+          // this.showError=true;
+          this.showErrorToastMessage("Something went wrong");
         });
     },
     showActiveUsers() {
@@ -401,12 +419,14 @@ export default {
     navigateToInClient(clientId) {
       this.$router.push(`/admindashboard/edit-client/${clientId}`);
     },
-filteredClientsInSearch() {
+    filteredClientsInSearch() {
       console.log("this users=", this.clients);
 
       this.searchedClients = this.clients.filter((client) => {
         return (
-          client.fullName.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+          client.fullName
+            .toLowerCase()
+            .includes(this.searchQuery.toLowerCase()) ||
           client.userCode.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       });

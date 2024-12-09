@@ -27,17 +27,17 @@
           v-for="(user, userIndex) in filteredUsers"
           :key="userIndex"
           :class="[
-            'p-4 border-b cursor-pointer',
+            'p-4 border-b cursor-pointer bg-white hover:bg-blue-100 text-bold',
             {
-              'bg-blue-200 ': user.userselected, // Background color when selected
-              'bg-white': !user.userselected, // Default background color
+              ' ': user.userselected, // Background color when selected
+              '': !user.userselected, // Default background color
             },
           ]"
           @click="toggleUserSelection(user)"
         >
-          <div class="flex flex-row space-x-5 md:space-x-12">
-            <p>{{ user.userCode }}</p>
-            <p>{{ user.fullName }}</p>
+          <div class="flex flex-row space-x-5 md:space-x-12 font-bold ">
+            <p class="text-blue-800 ">{{ user.userCode }}</p>
+            <p class="text-gray-600">{{ user.fullName }}</p>
           </div>
         </div>
       </div>

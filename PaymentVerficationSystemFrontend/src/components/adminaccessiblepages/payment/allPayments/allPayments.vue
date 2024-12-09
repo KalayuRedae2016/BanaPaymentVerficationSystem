@@ -61,136 +61,70 @@
           </div>
         </div>
 
-        <div class="overflow-x-auto">
-          <div class="">
-            <table class="w-full bg-white shadow-md">
-              <thead>
-                <tr class="bg-gray-200">
-                  <th
-                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800 text-xs"
-                  >
-                    UserCode
-                  </th>
-                  <th
-                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    Full Name
-                  </th>
-                  <th
-                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    Status
-                  </th>
-                  <th
-                    class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    Action
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  class=" "
-                  v-for="searchPayment in searchedpayments"
-                  :key="searchPayment._id"
-                >
-                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                    <p class="px-3 rounded-lg">
-                      {{ searchPayment.userCode }}
-                    </p>
-                  </td>
-
-                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                    <p class="px-3 rounded-lg">
-                      {{ searchPayment.fullName }}
-                    </p>
-                  </td>
-
-                  <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                    <p class="px-3 rounded-lg">
-                      {{ searchPayment.status }}
-                    </p>
-                  </td>
-                  <td class="py-1 text-xs text-gray-500 whitespace-nowrap">
-                    <button
-                      class="mb-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
-                      @click="
-                        paymentHistory(
-                          searchPayment.userCode,
-                          searchPayment.activeYear,
-                          searchPayment.activeMonth,
-                          searchPayment.status
-                        )
-                      "
-                    >
-                      <i class="fas fa-file-alt text-pink-500 text-xs"></i>
-                      <span>Detail</span>
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-      
-        </div>
-        <div
-            class="p-2 flex flex-col md:flex-row space-y-3 md:space-y-0 space-x-12 items-center mt-2 bg-white  rounded-lg shadow-md border border-gray-200"
+        <div class="overflow-x-auto overflow-y-auto h-96">
+  <!-- Table -->
+  <table class="table-auto min-w-full border-collapse">
+    <!-- Table Head -->
+    <thead class="bg-blue-50 text-white sticky top-0 z-10">
+      <tr class="text-blue-500 text-xs">
+        <th class="w-24 p-4 font-bold tracking-wide text-left">UserCode</th>
+        <th class="w-36 p-4 font-bold tracking-wide text-left">Full Name</th>
+        <th class="w-24 p-4 font-bold tracking-wide text-left">Paid/Unpaid</th>
+        <th class="w-24 p-4 font-bold tracking-wide text-left">Action</th>
+      </tr>
+    </thead>
+    <!-- Scrollable Table Body -->
+    <tbody class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto">
+      <tr
+      @click="paymentHistory(
+              searchPayment.userCode,
+              searchPayment.activeYear,
+              searchPayment.activeMonth,
+              searchPayment.status
+            )"
+        v-for="searchPayment in searchedpayments"
+        :key="searchPayment._id"
+        class="cursor-pointer bg-white hover:shadow-lg hover:bg-blue-100 rounded-lg p-4"
+      >
+        <td class="p-4 text-xs text-gray-700">
+          <span class="font-bold text-indigo-600">{{ searchPayment.userCode }}</span>
+        </td>
+        <td class="p-4 text-xs text-gray-700 font-bold">
+          {{ searchPayment.fullName }}
+        </td>
+        <td class="p-4 text-xs" >
+          <span
+            :class="{
+              'bg-green-100 text-green-600 font-bold px-2 py-1 rounded': searchPayment.isPaid,
+              'bg-yellow-100 text-yellow-600 font-bold px-2 py-1 rounded': !searchPayment.isPaid && !searchPayment.isOverdue,
+              'bg-red-100 text-red-600 font-bold px-2 py-1 rounded': searchPayment.isOverdue,
+              'bg-red-100 text-red-600 font-bold px-2 py-1 rounded line-through': searchPayment.isOverdue && !searchPayment.isPaid
+            }"
           >
-            <!-- Pagination Controls -->
-            <div class="flex items-center">
-              <!-- Select Payments Per Page -->
-              <label
-                for="payments-per-page"
-                class="hidden mr-2 text-gray-600 font-medium"
-                >Show:</label
-              >
-              <select
-                id="payments-per-page"
-                v-model="paymentsPerpage"
-                @change="changePerPageNumber()"
-                class="h-9 border border-gray-300 text-gray-700 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
-              >
-                <option value="" disabled>Select</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="10">10</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
+            <span v-if="searchPayment.isPaid">Paid</span>
+            <span v-else-if="!searchPayment.isPaid && !searchPayment.isOverdue">Unpaid (Pending)</span>
+            <span v-else-if="searchPayment.isOverdue">Unpaid (Overdue)</span>
+          </span>
+        </td>
+        <td class="p-4">
+          <button
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded shadow-lg"
+            @click="paymentHistory(
+              searchPayment.userCode,
+              searchPayment.activeYear,
+              searchPayment.activeMonth,
+              searchPayment.status
+            )"
+          >
+            <i class="fas fa-info-circle"></i> Detail
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-              <!-- Previous Page Button -->
-              <button
-                @click="previosPage"
-                class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-l-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
-                :disabled="currentPage === 1"
-              >
-                <i class="fas fa-chevron-left"></i>
-              </button>
-
-              <!-- Current Page Display -->
-              <span
-                class="px-4 py-1.5 bg-indigo-800 text-white font-bold border-t border-b border-gray-300"
-              >
-                {{ currentPage }}
-              </span>
-
-              <!-- Next Page Button -->
-              <button
-                @click="nextPage"
-                class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-r-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
-              >
-                <i class="fas fa-chevron-right"></i>
-              </button>
-            </div>
-
-            <button
-              class=" bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1  px-3 text-sm rounded flex items-center space-x-1"
-              @click="exportToExcel()"
-            >
-              <i class="fas fa-download text-pink-500"></i>
-              <span>Excel</span>
-            </button>
-          </div>
+  
       </div>
     </div>
   </div>
@@ -406,7 +340,7 @@ export default {
       } else if (this.paymentStatus == "unpaid") {
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(
-            (payment) => payment.isPaid == false && payment.status == "pending"
+            (payment) => payment.isPaid == false && payment.status == "unknown"
           );
           console.log("this in unpaid only", this.searchedpayments);
         } else {
@@ -416,7 +350,7 @@ export default {
               (payment) =>
                 payment.isPaid == false &&
                 payment.activeYear == this.selectedYear &&
-                payment.status == "pending"
+                payment.status == "unknown"
             );
           } else {
             this.searchedpayments = this.payments.filter(
@@ -424,7 +358,7 @@ export default {
                 payment.isPaid == false &&
                 payment.activeYear == this.selectedYear &&
                 payment.activeMonth == this.selectedMonth &&
-                payment.status == "pending"
+                payment.status == "unknown"
             );
           }
         }

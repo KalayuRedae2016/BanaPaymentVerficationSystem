@@ -28,122 +28,72 @@
           </select>
         </div>
 
-        <div class="overflow-x-auto">
-          <table class="w-full border-b border-indigo-500">
-            <thead>
-              <tr class="bg-gray-200  text-xs">
-                <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Payment Type
-                </th>
-                <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Transfered From
-                </th>
-                <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Transfered To
-                </th>
-                <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Transfer Date
-                </th>
-                <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Amount
-                </th>
-                <th
-                  class="w-24 p-3 text-md font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Reason
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="searchedTransferedPayment in searchedTransferedPayments"
-                :key="searchedTransferedPayment._id"
-              >
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  <p
-                    v-if="searchedTransferedPayment.transferType == 'block'"
-                    class="bg-blue-100 px-2 rounded-lg"
-                  >
-                    {{ searchedTransferedPayment.transferType }}
-                  </p>
-                  <p v-else class="bg-yellow-100 px-2 rounded-lg">
-                    {{ searchedTransferedPayment.transferType }}
-                  </p>
-                </td>
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ searchedTransferedPayment.fromBankType }}
-                </td>
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ searchedTransferedPayment.toBankType }}
-                </td>
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ searchedTransferedPayment.formattedTransferDate }}
-                </td>
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ searchedTransferedPayment.amount }}
-                </td>
-                <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ searchedTransferedPayment.reason }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-       
-        </div>
-
-        <div
-            class="w-full text-xs flex flex-row mt-6 items-center justify-center bg-white p-4 rounded-lg shadow-md border border-gray-200"
+        <div class="overflow-x-auto h-96">
+  <table class="w-full border-b border-indigo-500">
+    <thead>
+      <tr class="bg-blue-50 text-xs text-blue-500">
+        <th class="w-24 p-3 text-md font-extrabold tracking-wide text-left ">
+          Payment Type
+        </th>
+        <th class="w-24 p-3 text-md font-extrabold tracking-wide text-left ">
+          Transfered From
+        </th>
+        <th class="w-24 p-3 text-md font-extrabold tracking-wide text-left ">
+          Transfered To
+        </th>
+        <th class="w-24 p-3 text-md font-extrabold tracking-wide text-left ">
+          Transfer Date
+        </th>
+        <th class="w-24 p-3 text-md font-extrabold tracking-wide text-left ">
+          Amount
+        </th>
+        <th class="w-24 p-3 text-md font-extrabold tracking-wide text-left ">
+          Reason
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="searchedTransferedPayment in searchedTransferedPayments" :key="searchedTransferedPayment._id">
+        <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+          <p
+            v-if="searchedTransferedPayment.transferType === 'block'"
+            class="bg-blue-100 px-2 rounded-lg"
           >
-            <h1 class="hidden mr-4 text-lg font-semibold text-gray-800">Show More:</h1>
+            {{ searchedTransferedPayment.transferType }}
+          </p>
+          <p
+            v-else
+            class="bg-yellow-100 px-2 rounded-lg"
+          >
+            {{ searchedTransferedPayment.transferType }}
+          </p>
+        </td>
+        <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+          {{ searchedTransferedPayment.fromBankType }}
+        </td>
+        <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+          {{ searchedTransferedPayment.toBankType }}
+        </td>
+        <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+          {{ searchedTransferedPayment.formattedTransferDate }}
+        </td>
+        <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+          {{ searchedTransferedPayment.amount }}
+        </td>
+        <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+          {{ searchedTransferedPayment.reason }}
+        </td>
+      </tr>
+    </tbody>
 
-            <!-- Items per Page Select -->
-            <select
-              v-model="paymentTransfersPerpage"
-              @change="changePerPageNumber()"
-              class="h-10 border border-gray-300 rounded-lg bg-white px-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200 mr-4"
-            >
-              <option value="" disabled>Select Items</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="10">10</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
+   
+  </table>
 
-            <!-- Previous Page Button -->
-            <button
-              @click="previosPage"
-              class="flex items-center justify-center px-3 py-2 rounded-lg border border-gray-300 text-gray-600 bg-gray-100 hover:bg-gray-200 transition duration-200 mr-2"
-              :disabled="currentPage === 1"
-            >
-              <i class="fas fa-chevron-left"></i>
-            </button>
+  <div v-if="!searchedTransferedPayments" class="">No Transfered Payments</div>
+</div>
 
-            <!-- Current Page Display -->
-            <span
-              class="px-4 py-2 rounded-lg border border-gray-300 bg-pink-500 text-white text-center font-bold"
-              >{{ currentPage }}</span
-            >
 
-            <!-- Next Page Button -->
-            <button
-              @click="nextPage"
-              class="flex items-center justify-center px-3 py-2 rounded-lg border border-gray-300 text-gray-600 bg-gray-100 hover:bg-gray-200 transition duration-200 ml-2"
-            >
-              <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
+    
       </div>
     </div>
   </div>

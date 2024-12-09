@@ -85,124 +85,100 @@
   </div>
 </div>
 
-          <div class="overflow-x-auto">
-            <table class="w-full border-b border-gray-300 bg-white shadow-md">
-              <thead>
-                <tr class="bg-gray-200">
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("number") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("userCode") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("fullName") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("createdAt") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("updatedAt") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("deactivate") }}
-                  </th>
-                  <th
-                    class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("resetPassword") }}
-                  </th>
-
-                  <th
-                    class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
-                  >
-                    {{ $t("detail") }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr
-                  v-for="(searchClient, index) in searchedClients"
-                  :key="searchClient._id"
-                >
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    {{ index + 1 }}
-                  </td>
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
-                    {{ searchClient.userCode }}
-                  </td>
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
-                    {{ searchClient.fullName }}
-                  </td>
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
-                    {{ searchClient.formattedCreatedAt }}
-                  </td>
-                  <td class="p-3 text-sm text-gray-500 whitespace-nowrap">
-                    {{ searchClient.formattedUpdatedAt }}
-                  </td>
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button
-                      @click="
-                        showDeactivateModal = !showDeactivateModal;
-                        userIdToBeDeactivated = searchClient._id;
-                      "
-                      class="bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 flex items-center"
-                    >
-                      <i class="fas fa-user-times mr-2"></i>
-                      <!-- Font Awesome icon for deactivation -->
-                      {{ $t("") }}
-                    </button>
-                  </td>
-
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button
-                      @click="
-                        showResetModal = !showResetModal;
-                        selectedUserToBeResetPassword = searchClient;
-                      "
-                      class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 flex items-center"
-                    >
-                      <i class="fas fa-redo-alt mr-2"></i>
-                      <!-- Font Awesome icon -->
-                      {{ $t("") }}
-                    </button>
-                  </td>
-
-                  <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
-                    <button
-                      @click="navigateToInClient(searchClient._id)"
-                      class="flex items-center px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-gray-800 rounded"
-                    >
-                      <i class="fas fa-eye mr-2 text-gray-50"></i>
-                      {{ $t("") }}
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-           
+    
 
 
-            
+   <div class="overflow-x-auto bg-gray-50  rounded-md">
+  <table class="w-full border-collapse bg-white rounded-md ">
+    <thead>
+      <tr class="bg-blue-50 text-blue-500">
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("number") }}
+        </th>
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("userCode") }}
+        </th>
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("fullName") }}
+        </th>
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("createdAt") }}
+        </th>
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("updatedAt") }}
+        </th>
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("deactivate") }}
+        </th>
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("resetPassword") }}
+        </th>
+        <th class="p-3 text-sm font-semibold tracking-wide text-left">
+          {{ $t("detail") }}
+        </th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <tr
+      
+        v-for="(searchClient, index) in searchedClients"
+        :key="searchClient._id"
+        class="hover:bg-blue-100 cursor-pointer"
+      >
+        <td class="p-3 text-sm text-gray-700 whitespace-nowrap"   @click="navigateToInClient(searchClient._id)">
+          {{ index + 1 }}
+        </td>
+        <td class="p-3 text-md text-gray-700"   @click="navigateToInClient(searchClient._id)">
+          <span class=" text-indigo-600">{{ searchClient.userCode }}</span>
+        </td>
+        <td class="p-3 text-sm text-gray-500 whitespace-nowrap"   @click="navigateToInClient(searchClient._id)">
+          {{ searchClient.fullName }}
+        </td>
+        <td class="p-3 text-sm text-gray-500 whitespace-nowrap"   @click="navigateToInClient(searchClient._id)">
+          {{ searchClient.formattedCreatedAt }}
+        </td>
+        <td class="p-3 text-sm text-gray-500 whitespace-nowrap"   @click="navigateToInClient(searchClient._id)">
+          {{ searchClient.formattedUpdatedAt }}
+        </td>
+        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+          <button
+            @click="
+              showDeactivateModal = !showDeactivateModal;
+              userIdToBeDeactivated = searchClient._id;
+            "
+            class="flex items-center px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full"
+          >
+            <i class="fas fa-user-times mr-2"></i>
+            {{ $t("") }}
+          </button>
+        </td>
+        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+          <button
+            @click="
+              showResetModal = !showResetModal;
+              selectedUserToBeResetPassword = searchClient;
+            "
+            class="flex items-center px-3 py-1 bg-blue-500 hover:bg-blue-600 text-white rounded-full"
+          >
+            <i class="fas fa-redo-alt mr-2"></i>
+            {{ $t("") }}
+          </button>
+        </td>
+        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+          <button
+            @click="navigateToInClient(searchClient._id)"
+            class="flex items-center px-3 py-1 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full"
+          >
+            <i class="fas fa-eye mr-2"></i>
+            {{ $t("") }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
-
-
-
-          </div>
-    <div class="flex justify-between items-center mt-2 bg-white py-2 pl-1 rounded-lg shadow-md border border-gray-200">
+    <div class="flex justify-between items-center mt-2 bg-white py-2 pl-1 rounded-lg  border border-gray-200">
   <!-- Pagination Controls -->
   <div class="flex items-center">
     <!-- Show More Label -->
@@ -499,11 +475,11 @@ export default {
   },
   data() {
     return {
-      successToastMessage:"",
-      errorToastMessage:"",
-      
+     successToastMessage:"",
+     errorToastMessage:"",
      showErrorToast:false,
      showSuccessToast:false,
+
      showSuccess:false,
      showError:false,
      successMessage:"",
