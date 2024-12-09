@@ -1,7 +1,7 @@
 <template>
-  <div class="container mx-auto flex flex-col mt-5 ">
+  <div class="container mx-auto flex flex-col  ">
     <div class="pb-5 flex flex-col bg-white -mt-2 ">
-      <div class="mt-8 ">
+      <div class=" ">
         <div
           class="flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-1  bg-white p-4 rounded-lg shadow-md space-y-2 lg:space-x-0"
         >

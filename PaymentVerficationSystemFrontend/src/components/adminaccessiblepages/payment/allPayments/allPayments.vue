@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col mt-5">
+  <div class="flex flex-col ">
     <div class="pb-5 flex flex-col -mt-2">
-      <div class="mt-8 -ml-3 rounded-lg p-1 lg:p-3 text-xs">
+      <div class="-ml-3 rounded-lg p-1 lg:p-3 text-xs">
         <div
           class="border-t border-gray-200 flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg shadow-md space-y-3 lg:space-y-0"
         >
@@ -63,7 +63,7 @@
 
         <div class="overflow-x-auto overflow-y-auto h-96">
   <!-- Table -->
-  <table class="table-auto min-w-full border-collapse">
+  <table class="table-auto min-w-full border-collapse border-b border-gray-300">
     <!-- Table Head -->
     <thead class="bg-blue-50 text-white sticky top-0 z-10">
       <tr class="text-blue-500 text-xs">

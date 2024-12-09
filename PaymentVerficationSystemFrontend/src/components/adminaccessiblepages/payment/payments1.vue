@@ -19,48 +19,107 @@
 
         <div class="border-t border-blue-800 ">
           <div v-show="activeTab === 0" class="">
-            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
-              <div class="mb-10">
-                <div class="flex items-center space-x-4">
-                  <div class="flex items-center mx-5:lg:mx-10">
-                    <input v-model="paymentSettingStatus" type="radio" value="currentSetting"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('currentPaymentSetting') }}</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input v-model="paymentSettingStatus" type="radio" value="paymentSettingHistory"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700">  {{ $t('paymentSettingHistory') }}</label>
-                  </div>
+            <div class="">
 
-                </div>
-                <block-payment v-if="paymentSettingStatus === 'currentSetting'" />
-                <payment-setting-history v-else-if="paymentSettingStatus === 'paymentSettingHistory'" />
-              </div>
-            </div>
+  <!-- Payment Settings Options -->
+  <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
+    <div class="flex flex-col sm:flex-row  gap-6">
+      <!-- Current Payment Setting -->
+      <div class="flex items-center">
+        <input
+          v-model="paymentSettingStatus"
+          type="radio"
+          value="currentSetting"
+          id="current-setting"
+          class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+        />
+        <label
+          for="current-setting"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+        >
+          <i class="fas fa-cog mr-2 text-indigo-500"></i>{{ $t('currentPaymentSetting') }}
+        </label>
+      </div>
+
+      <!-- Payment Setting History -->
+      <div class="flex items-center">
+        <input
+          v-model="paymentSettingStatus"
+          type="radio"
+          value="paymentSettingHistory"
+          id="payment-setting-history"
+          class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+        />
+        <label
+          for="payment-setting-history"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+        >
+          <i class="fas fa-history mr-2 text-blue-500"></i>{{ $t('paymentSettingHistory') }}
+        </label>
+      </div>
+    </div>
+
+    <!-- Conditional Components -->
+    <div class="mt-8">
+      <block-payment v-if="paymentSettingStatus === 'currentSetting'" />
+      <payment-setting-history v-else-if="paymentSettingStatus === 'paymentSettingHistory'" />
+    </div>
+  </div>
+</div>
+
           </div>
 
 
           <div v-show="activeTab === 1" class="">
-            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
-              <div class="mb-10">
-                <div class="flex items-center space-x-4">
-                  <div class="flex items-center mx-5:lg:mx-10">
-                    <input v-model="paymentStatus" type="radio" value="newPayment"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('confirmNewPayment') }}</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input v-model="paymentStatus" type="radio" value="creditTransfer"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700"> {{ $t('creditTransfer') }}</label>
-                  </div>
-                </div>
-                <new-payment v-if="paymentStatus === 'newPayment'" />
-                <credit-transfer v-else-if="paymentStatus === 'creditTransfer'" />
+            <div class="">
+  <!-- Payment Selection Header -->
 
-              </div>
-            </div>
+  <!-- Payment Options -->
+  <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
+    <div class="flex flex-col sm:flex-row  gap-6">
+      <!-- Confirm New Payment -->
+      <div class="flex items-center">
+        <input
+          v-model="paymentStatus"
+          type="radio"
+          value="newPayment"
+          id="new-payment"
+          class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+        />
+        <label
+          for="new-payment"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+        >
+          <i class="fas fa-file-invoice-dollar mr-2 text-green-500"></i>{{ $t('confirmNewPayment') }}
+        </label>
+      </div>
+
+      <!-- Credit Transfer -->
+      <div class="flex items-center">
+        <input
+          v-model="paymentStatus"
+          type="radio"
+          value="creditTransfer"
+          id="credit-transfer"
+          class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+        />
+        <label
+          for="credit-transfer"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+        >
+          <i class="fas fa-university mr-2 text-blue-500"></i>{{ $t('creditTransfer') }}
+        </label>
+      </div>
+    </div>
+
+    <!-- Conditional Components -->
+    <div class="mt-8">
+      <new-payment v-if="paymentStatus === 'newPayment'" />
+      <credit-transfer v-else-if="paymentStatus === 'creditTransfer'" />
+    </div>
+  </div>
+</div>
+
           </div>
 
 
@@ -71,46 +130,107 @@
 
 
           <div v-show="activeTab === 2" class="">
-            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
-              <div class="mb-10">
-                <div class="flex items-center space-x-4">
-                  <div class="flex items-center mx-5:lg:mx-10">
-                    <input v-model="allPaymentsAndTransferedPayments" type="radio" value="allPayments"
-                      class="h-4 w-4 border-gray-300 text-pink-600 focus:ring-pink-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700">All Payments</label>
+            <div class="">
 
-                  </div>
-                  <div class="flex items-center">
-                    <input v-model="allPaymentsAndTransferedPayments" type="radio" value="transferedPayments"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700 ">Transfered Payments</label>
-                  </div>
-                </div>
-                <all-payments v-if="allPaymentsAndTransferedPayments == 'allPayments'" />
-                <transfered-payments v-else-if="allPaymentsAndTransferedPayments == 'transferedPayments'" />
-              </div>
-            </div>
+
+  <!-- Payment Options -->
+  <div class="bg-white shadow-sm  border border-gray-200 pt-6 px-3">
+    <div class="flex flex-col sm:flex-row gap-6">
+      <!-- All Payments -->
+      <div class="flex items-center">
+        <input
+          v-model="allPaymentsAndTransferedPayments"
+          type="radio"
+          value="allPayments"
+          id="all-payments"
+          class="h-5 w-5 text-pink-600 focus:ring-pink-500 border-gray-300"
+        />
+        <label
+          for="all-payments"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-pink-600 transition"
+        >
+          <i class="fas fa-money-check-alt mr-2 text-pink-500"></i>All Payments
+        </label>
+      </div>
+
+      <!-- Transferred Payments -->
+      <div class="flex items-center">
+        <input
+          v-model="allPaymentsAndTransferedPayments"
+          type="radio"
+          value="transferedPayments"
+          id="transfered-payments"
+          class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+        />
+        <label
+          for="transfered-payments"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+        >
+          <i class="fas fa-exchange-alt mr-2 text-indigo-500"></i>Transferred Payments
+        </label>
+      </div>
+    </div>
+
+    <!-- Conditional Components -->
+    <div class="mt-8">
+      <all-payments v-if="allPaymentsAndTransferedPayments === 'allPayments'" />
+      <transfered-payments v-else-if="allPaymentsAndTransferedPayments === 'transferedPayments'" />
+    </div>
+  </div>
+</div>
+
           </div>
 
           <div v-show="activeTab === 3" class="">
-            <div class="px-0 w-full  mt-5 mb-10 sm:w-auto">
-              <div class="mb-10">
-                <div class="flex items-center space-x-4">
-                  <div class="flex items-center mx-5:lg:mx-10">
-                    <input v-model="paymentReportStatus" type="radio" value="userLevelReport"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700">User Level Report</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input v-model="paymentReportStatus" type="radio" value="orgLevelReport"
-                      class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" />
-                    <label class="ml-3 block text-xs font-medium text-gray-700">Org Level Report</label>
-                  </div>
-                </div>
-                <all-payment-report v-if="paymentReportStatus === 'userLevelReport'" />
-                <confirmed-payment-report v-else-if="paymentReportStatus === 'orgLevelReport'" />
-              </div>
-            </div>
+            <div class="">
+
+
+  <!-- Report Options -->
+  <div class="bg-white shadow-sm  border border-gray-200 py-6 px-3">
+    <div class="flex flex-col sm:flex-row  gap-6">
+      <!-- User Level Report -->
+      <div class="flex items-center">
+        <input
+          v-model="paymentReportStatus"
+          type="radio"
+          value="userLevelReport"
+          id="user-level-report"
+          class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+        />
+        <label
+          for="user-level-report"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+        >
+          <i class="fas fa-user-alt mr-2 text-indigo-500"></i>User Level Report
+        </label>
+      </div>
+
+      <!-- Org Level Report -->
+      <div class="flex items-center">
+        <input
+          v-model="paymentReportStatus"
+          type="radio"
+          value="orgLevelReport"
+          id="org-level-report"
+          class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300"
+        />
+        <label
+          for="org-level-report"
+          class="ml-3 text-sm font-medium text-gray-700 hover:text-blue-600 transition"
+        >
+          <i class="fas fa-building mr-2 text-blue-500"></i>Org Level Report
+        </label>
+      </div>
+    </div>
+
+    <!-- Conditional Components -->
+    <div class="mt-8">
+      <all-payment-report v-if="paymentReportStatus === 'userLevelReport'" />
+      <confirmed-payment-report v-else-if="paymentReportStatus === 'orgLevelReport'" />
+    </div>
+  </div>
+</div>
+
           </div>
 
 

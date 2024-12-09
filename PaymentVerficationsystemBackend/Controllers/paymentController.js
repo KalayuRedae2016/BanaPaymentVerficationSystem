@@ -1193,6 +1193,8 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     payment: formattedPayment, // This already contains the formatted dates
   });
 });
+
+
 exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
   const { seen } = req.query; // Get the `seen` parameter from the query
 
@@ -1209,7 +1211,6 @@ exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
   else if (seen === 'true') {
     // Update all unseen payments to seen
     await Payment.updateMany({ seen: false, status: 'confirmed' }, { seen: true });
-
     // Fetch all payments (both seen and unseen)
     const allPayments = await Payment.find({ status: 'confirmed' });
     console.log(allPayments)
@@ -1254,7 +1255,7 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
   const payments = await Payment.find(paymentQuery);
   if (payments.length === 0) {
     return res.status(200).json({
-      status: 'success',
+      status: 'success ',
       payments: null,
       message: "No Payments found"
     });
