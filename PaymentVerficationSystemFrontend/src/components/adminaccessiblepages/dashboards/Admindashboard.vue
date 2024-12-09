@@ -144,11 +144,11 @@
           </div>
 
           <div class="relative -mt-1" @click="toggleDropdown('profile')">
-            <img
-              src="../../../assets/img/profile.jpg"
+            <!-- <img
+              src="../../../assets/img/bana.jpg"
               alt="User Profile"
               class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
-            />
+            /> -->
             <ul
               v-show="dropdownVisible"
               class="absolute right-0 mt-4 w-48 bg-white rounded shadow-lg border-t border-b border-blue-400"
