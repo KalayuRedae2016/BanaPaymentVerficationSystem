@@ -17,173 +17,98 @@
 
           <hr class="mt-0 md:min-w-full border border-indigo-800" />
 
+          <ul class="mt-3 flex flex-col list-none space-y-1">
+    <!-- Dashboard -->
+    <li
+      @click="setActive('dashboard')"
+      class="items-center bg-white hover:bg-gray-100 transition"
+      :class="activeItem === 'dashboard' ? 'border-r-4 border-indigo-600' : ''"
+    >
+      <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
+        <i class="fa fa-tachometer mr-3 text-teal-600"></i>
+        <span>{{ $t('dashboard') }}</span>
+      </a>
+    </li>
 
-          <ul
-            class="mt-3 md:flex-col md:min-w-full flex flex-col list-none ml-0 mr-0 mt-0 space-y-0"
-          >
-            <li
-              @click="setActive('dashboard')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'dashboard' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("dashboard") }}</span>
-              </a>
-            </li>
+    <!-- Company Profile -->
+    <li
+      @click="setActive('companyProfile')"
+      class="items-center bg-white hover:bg-gray-100 transition"
+      :class="activeItem === 'companyProfile' ? 'border-r-4 border-indigo-600' : ''"
+    >
+      <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
+        <i class="fas fa-building mr-3 text-teal-600"></i>
+        <span>{{ $t('companyProfile') }}</span>
+      </a>
+    </li>
 
-            <li
-              @click="setActive('companyProfile')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'companyProfile'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("companyProfile") }}</span>
-              </a>
-            </li>
+    <!-- Clients -->
+    <li
+      @click="setActive('clients')"
+      class="items-center bg-white hover:bg-gray-100 transition"
+      :class="activeItem === 'clients' ? 'border-r-4 border-indigo-600' : ''"
+    >
+      <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
+        <i class="fas fa-users mr-3 text-teal-600"></i>
+        <span>{{ $t('clientProfile') }}</span>
+      </a>
+    </li>
 
-            <li
-              @click="setActive('clients')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'clients' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("clientProfile") }}</span>
-              </a>
-            </li>
+    <!-- Payments (Collapsible) -->
+    <li
+      class="items-center bg-white hover:bg-gray-100 transition"
+      :class="paymentMenuOpen ? 'bg-gray-50' : ''"
+    >
+      <div
+        class="ml-4 flex items-center justify-between py-3 font-medium text-gray-800 cursor-pointer"
+        @click="togglePayments"
+      >
+        <div class="flex items-center">
+          <i class="fas fa-wallet mr-3 text-teal-600"></i>
+          <span>{{ $t('payments') }}</span>
+        </div>
+        <i :class="paymentMenuOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
+      </div>
+      <ul v-show="paymentMenuOpen" class="ml-6 mt-2 space-y-1">
+        <li
+          v-for="(item, index) in paymentSubmenu"
+          :key="index"
+          @click="setActive(item.key)"
+          class="items-center bg-white hover:bg-gray-100 transition"
+          :class="activeItem === item.key ? 'border-r-4 border-indigo-600' : ''"
+        >
+          <a class="flex items-center text-gray-800 py-2 font-medium" href="#">
+            <i :class="item.icon + ' mr-3 text-teal-600'"></i>
+            <span>{{ $t(item.label) }}</span>
+          </a>
+        </li>
+      </ul>
+    </li>
 
-            <li
-              @click="setActive('paymentSetting')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'paymentSetting'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-cogs opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("paymentSetting") }}</span>
-              </a>
-            </li>
+    <!-- ID Card -->
+    <li
+      @click="setActive('idCard')"
+      class="items-center bg-white hover:bg-gray-100 transition"
+      :class="activeItem === 'idCard' ? 'border-r-4 border-indigo-600' : ''"
+    >
+      <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
+        <i class="fas fa-id-card mr-3 text-teal-600"></i>
+        <span>{{ $t('idCard') }}</span>
+      </a>
+    </li>
 
-            <li
-              @click="setActive('newPayment')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'newPayment'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-credit-card opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("newPayments") }}</span>
-              </a>
-            </li>
-
-            <li
-              @click="setActive('allPayments')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'allPayments'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-list-alt opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("allPayments") }}</span>
-              </a>
-            </li>
-
-            <li
-              @click="setActive('paymentReports')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'paymentReports'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-file-alt opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("reports") }}</span>
-              </a>
-            </li>
-
-            <li
-              @click="setActive('idCard')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'idCard' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="ffas fa-id-card opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("idCard") }}</span>
-              </a>
-            </li>
-
-            <li
-              @click="setActive('message')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'message' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-envelope opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("sendMessage") }}</span>
-              </a>
-            </li>
-          </ul>
+    <!-- Send Message -->
+    <li
+      @click="setActive('message')"
+      class="items-center bg-white hover:bg-gray-100 transition"
+      :class="activeItem === 'message' ? 'border-r-4 border-indigo-600' : ''"
+    >
+      <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
+        <i class="fas fa-envelope mr-3 text-teal-600"></i>
+        <span>{{ $t('sendMessage') }}</span>
+      </a>
+    </li>
+  </ul>
         </div>
       </div>
     </div>
@@ -197,6 +122,15 @@
   name: "SideBar",
   data() {
     return {
+      
+
+      paymentSubmenu: [
+        { key: "paymentSetting", label: "paymentSetting", icon: "fas fa-cogs" },
+        { key: "newPayment", label: "newPayments", icon: "fas fa-credit-card" },
+        { key: "allPayments", label: "allPayments", icon: "fas fa-list-alt" },
+        { key: "paymentReports", label: "reports", icon: "fas fa-file-alt" },
+      ],
+      paymentMenuOpen: false,
       activeItem: "dashboard",
       dashboardSelected: true,
       compPorifleSelected: false,
@@ -236,6 +170,9 @@
     window.removeEventListener("resize", this.setScreenSize);
   },
   methods: {
+    togglePayments() {
+      this.paymentMenuOpen = !this.paymentMenuOpen;
+    },
     setActive(item) {
       this.$store.dispatch('commitActiveItem', { activeItem: item });
       // Update the active item
@@ -355,3 +292,8 @@
   },
 };
 </script>
+<style scoped>
+.border-r-4 {
+  border-right-width: 4px;
+}
+</style>
