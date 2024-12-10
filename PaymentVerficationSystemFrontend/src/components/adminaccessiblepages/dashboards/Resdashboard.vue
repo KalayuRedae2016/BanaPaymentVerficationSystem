@@ -376,7 +376,7 @@
   </div>
 </template>
 <script>
-import AllPayments from "../payment/allPayments/allPayments.vue";
+
 import Chart from "../payment/Reports/charts/charts.vue";
 import { mapGetters } from "vuex";
 export default {
@@ -430,6 +430,10 @@ export default {
   mounted() {
 
     if (this.$route.query.loginSuccess === 'true') {
+      
+      const activeItem="dashboard";
+      this.$store.dispatch("commitActiveItem", { activeItem });
+
     this.showSuccessToast("Successfully Login in to your dashboard");
       setTimeout(() => {
         this.$router.push('/admindashboard');

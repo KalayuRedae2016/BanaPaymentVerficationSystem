@@ -9,6 +9,7 @@ import { createI18n } from 'vue-i18n';
 import amharicMessages from '../locales/amharic.json';
 import englishMessages from '../locales/english.json';
 import tigrignaMessages from '../locales/tigrigna.json';
+import apiClientPlugin from "./store/plugins/apiClientPlugin";
 
 // Set the default language
 const defaultLocale = 'amharic';
@@ -28,4 +29,5 @@ createApp(App)
   .use(globals)
   .use(router)
   .use(i18n)
+  .use(apiClientPlugin)
   .mount('#app');

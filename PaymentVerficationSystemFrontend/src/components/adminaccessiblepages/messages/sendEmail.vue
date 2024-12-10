@@ -89,7 +89,7 @@
   <!-- Table -->
   <table class="table-auto min-w-full border-collapse border-b border-gray-300">
     <!-- Table Head -->
-    <thead class="bg-blue-50 text-white sticky top-0 z-10">
+    <thead class="bg-blue-50 text-white sticky top-0 z-0">
       <tr class="text-blue-500">
         <th class="w-24 p-4  font-bold text-left">
           {{ $t("check") }}

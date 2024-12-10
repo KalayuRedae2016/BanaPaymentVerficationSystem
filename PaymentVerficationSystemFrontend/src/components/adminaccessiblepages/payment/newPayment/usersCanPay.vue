@@ -165,9 +165,10 @@
                          :value="payment.regular.paidAt"
                          @input="payment.regular.paidAt = $event.target.value"
                        />
+
                        <p
                          v-if="payment.verifyRegularPaymentDate"
-                         class="text-red-500"
+                         class="text-red-500 text-xs"
                        >
                          Payment Date is required
                        </p>
@@ -183,14 +184,13 @@
                          v-model="payment.regular.bankType"
                         style="width:150px;">
                          <option value="" disabled selected>Bank Type</option>
-                         <option value="LIB">LIB</option>
-                         <option value="WEGAGEN">WEGAGEN</option>
-                         <option value="CBE">CBE</option>
+                         <option  v-for="(bank,index) in blockBanks" :key="index" :value="bank.bankType">{{ bank.bankType }}</option>
+
                        </select>
 
                        <p
                          v-if="payment.verifyRegularBankType"
-                         class="text-red-500"
+                         class="text-red-500 text-xs"
                        >
                          Bank Type is required
                        </p>
@@ -208,7 +208,7 @@
                         style="width:150px;"/>
                        <p
                          v-if="payment.verifyRegularTTNumber"
-                         class="text-red-500"
+                         class="text-red-500 text-xs"
                        >
                          TTNumber is required
                        </p>
@@ -217,6 +217,9 @@
                      <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                        <p>{{ payment.regular.isPaid }}</p>
                      </td>
+
+
+
                      <td
                        v-if="!payment.regular.isPaid"
                        class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
@@ -314,16 +317,9 @@
                        </p>
                      </td>
                      <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                       <input
-                         v-if="!payment.subsidy.isPaid"
-                         readonly
-                         type="text"
-                         class="custom-input h-7"
-                         :value="payment.subsidy.amount"
-                         @input="payment.subsidy.amount = $event.target.value"
-                         style="width:150px;" />
+                      
 
-                       <p v-else>{{ payment.subsidy.amount }}</p>
+                       {{  payment.subsidy.amount }}
                      </td>
                      <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                        <p v-if="payment.subsidy.isPaid">
@@ -367,9 +363,8 @@
                          v-model="payment.subsidy.bankType"
                        >
                          <option value="" disabled selected>Bank Type</option>
-                         <option value="LIB">LIB</option>
-                         <option value="WEGAGEN">WEGAGEN</option>
-                         <option value="CBE">CBE</option>
+                         <option  v-for="(bank,index) in blockBanks" :key="index" :value="bank.bankType">{{ bank.bankType }}</option>
+
                        </select>
                        <p
                          v-if="payment.verifySubsidyBankType"
@@ -507,17 +502,10 @@
                        </p>
                      </td>
                      <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                       <p v-if="payment.urgent.isPaid">
+                       <p >
                          {{ payment.urgent.amount }}
                        </p>
-                       <input
-                         v-if="!payment.urgent.isPaid"
-                         readonly
-                         type="text"
-                         class="custom-input h-7"
-                         :value="payment.urgent.amount"
-                         @input="payment.urgent.amount = $event.target.value"
-                       />
+                     
                      </td>
                      <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                        <p v-if="payment.urgent.isPaid">
@@ -554,9 +542,8 @@
                          v-model="payment.urgent.bankType"
                        >
                          <option value="" disabled selected>Bank Type</option>
-                         <option value="LIB">LIB</option>
-                         <option value="WEGAGEN">WEGAGEN</option>
-                         <option value="CBE">CBE</option>
+                         <option  v-for="(bank,index) in blockBanks" :key="index" :value="bank.bankType">{{ bank.bankType }}</option>
+
                        </select>
                        <p
                          v-if="payment.verifyUrgentBankType"
@@ -687,14 +674,15 @@
                        <p
                          class="bg-yellow-100 px-2 text-indigo-800 font-extrabold rounded-lg"
                        >
-                         Service
+                         Service(+ Reg Fee)
                        </p>
                      </td>
-                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                       <p v-if="payment.service.isPaid">
+                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap ">
+                       <p v-if="payment.service.isPaid" >
                          {{ payment.service.amount }}
                        </p>
                        <input
+                         style="width:150px;"
                          v-if="!payment.service.isPaid"
                          type="text"
                          class="custom-input h-7 w-32"
@@ -730,9 +718,8 @@
                          v-model="payment.service.bankType"
                        >
                          <option value="" disabled selected>Bank Type</option>
-                         <option value="LIB">LIB</option>
-                         <option value="WEGAGEN">WEGAGEN</option>
-                         <option value="CBE">CBE</option>
+                         <option  v-for="(bank,index) in serviceBanks" :key="index" :value="bank.bankType">{{ bank.bankType }}</option>
+
                        </select>
                        <p
                          v-if="payment.verifyServiceBankType"
@@ -940,7 +927,7 @@
                      <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                        <input
                          v-if="
-                           payment.regular.penality +
+                             payment.regular.penality +
                              payment.subsidy.penality +
                              payment.urgent.penality >
                              0 && !payment.penality.isPaid
@@ -994,9 +981,8 @@
                          "
                       style="width:100px"  >
                          <option value="" disabled selected>Bank Type</option>
-                         <option value="LIB">LIB</option>
-                         <option value="WEGAGEN">WEGAGEN</option>
-                         <option value="CBE">CBE</option>
+                         <option  v-for="(bank,index) in serviceBanks" :key="index" :value="bank.bankType">{{ bank.bankType }}</option>
+
                        </select>
                        <p v-else>--------</p>
                        <p
@@ -1486,9 +1472,22 @@ payload: {
    },
   
  },
-
+ created(){
+  this.$store.dispatch("fetchBanks");
+ },
+computed:{
+  serviceBanks() {
+      return this.$store.getters.serviceBanks;
+    },
+    blockBanks() {
+      return this.$store.getters.blockBanks;
+  },
+},
  mounted() {
 
+
+ console.log("service banks are",this.serviceBanks);
+ console.log("block banks are",this.blockBanks);
    //this.filteredUsers=this.users;
    this.$apiClient
      .get("/api/v1/users/", {

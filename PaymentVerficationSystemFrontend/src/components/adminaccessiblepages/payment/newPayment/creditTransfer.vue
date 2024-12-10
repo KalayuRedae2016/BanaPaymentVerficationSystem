@@ -63,13 +63,25 @@
           v-model="fromBankType"
         >
           <option value="" disabled>Transfer From</option>
-          <option
-            v-for="(bank, index) in $banks"
-            :key="index"
-            :value="bank.value"
-          >
-            {{ bank.name }}
-          </option>
+
+          <template v-if="transferType === 'block'">
+            <option
+              v-for="(bank, index) in blockBanks"
+              :key="'block-' + index"
+              :value="bank.bankType"
+            >
+              {{ bank.bankType }}
+            </option>
+          </template>
+          <template v-else-if="transferType === 'service'">
+            <option
+              v-for="(bank, index) in serviceBanks"
+              :key="'service-' + index"
+              :value="bank.bankType"
+            >
+              {{ bank.bankType }}
+            </option>
+          </template>
         </select>
         <p v-if="selectTransferFrom" class="text-red-500 text-xs mt-2">
           Please select a bank from where to be transfer!
@@ -84,15 +96,25 @@
           v-model="toBankType"
         >
           <option value="" disabled>Transfer To</option>
-          <option
-            v-for="(bank, index) in $banks"
-            :key="index"
-            :value="bank.value"
-          >
-            {{ bank.name }}
-          </option>
+          <template v-if="transferType === 'block'">
+            <option
+              v-for="(bank, index) in blockBanks"
+              :key="'block-' + index"
+              :value="bank.bankType"
+            >
+              {{ bank.bankType }}
+            </option>
+          </template>
+          <template v-else-if="transferType === 'service'">
+            <option
+              v-for="(bank, index) in serviceBanks"
+              :key="'service-' + index"
+              :value="bank.bankType"
+            >
+              {{ bank.bankType }}
+            </option>
+          </template>
         </select>
-
 
         <p v-if="selectTransferTo" class="text-red-500 text-xs mt-2">
           Please select a bank to where to be transfer!
@@ -100,41 +122,34 @@
         <p v-if="notEqualFromTo" class="text-red-500 text-xs mt-2">
           Transfer to and transfer from can not be equal!
         </p>
-
-
       </div>
 
       <div class="mb-4">
-        <label class="custom-label">
-          Amount:
-         
-          </label
-        >
+        <label class="custom-label"> Amount: </label>
         <input
           type="number"
           class="custom-input text-xs"
           v-model="amount"
           placeholder="Amount"
         />
-        <p v-if="enterAmount" class="text-red-500 text-xs mt-2"
-        >Please Enter Amount!</p>
-        <p v-if="amountNotZero" class="text-red-500 text-xs mt-2"
-        >Amount can not be zero!</p>
+        <p v-if="enterAmount" class="text-red-500 text-xs mt-2">
+          Please Enter Amount!
+        </p>
+        <p v-if="amountNotZero" class="text-red-500 text-xs mt-2">
+          Amount can not be zero!
+        </p>
       </div>
       <div class="mb-4">
-        <label class="custom-label">
-          Transfer Date:
-         </label
-        >
+        <label class="custom-label"> Transfer Date: </label>
         <input
           type="date"
           class="custom-input text-xs"
           v-model="transferDate"
           placeholder="Amount"
         />
-         <p v-if="enterTransferDate" class="text-red-500 text-xs mt-2"
-            >Please Enter Transfer Date!</p
-          >
+        <p v-if="enterTransferDate" class="text-red-500 text-xs mt-2">
+          Please Enter Transfer Date!
+        </p>
       </div>
       <div class="mb-4">
         <label class="custom-label"> Reason: </label>
@@ -263,7 +278,7 @@ export default {
       successMessage: "",
       errorMessage: "",
 
-      amountNotZero:false,
+      amountNotZero: false,
       selectTransferFrom: false,
       selectTransferTo: false,
       selectTransferType: false,
@@ -271,6 +286,16 @@ export default {
       notEqualFromTo: false,
     };
   },
+
+  computed: {
+    serviceBanks() {
+      return this.$store.getters.serviceBanks;
+    },
+    blockBanks() {
+      return this.$store.getters.blockBanks;
+    },
+  },
+
   methods: {
     showSuccessToastMessage(message) {
       //  alert(message);
@@ -292,18 +317,28 @@ export default {
 
       // Toast will disappear after 3 seconds
     },
-    addCreditTransfer(){
-console.log("data",this.transferType,this.fromBankType,this.toBankType,this.transferDate,this.amount,this.reason)
+    addCreditTransfer() {
+      console.log(
+        "data",
+        this.transferType,
+        this.fromBankType,
+        this.toBankType,
+        this.transferDate,
+        this.amount,
+        this.reason
+      );
       this.selectTransferType = false;
       this.selectTransferFrom = false;
       this.selectTransferTo = false;
       this.enterAmount = false;
       this.notEqualFromTo = false;
       this.amountNotZero = false;
-      this.enterTransferDate=false;
-        
+      this.enterTransferDate = false;
+
       if (this.transferType == "") {
-        this.showErrorToastMessage("Transfer Type(Either service or Block)is required");
+        this.showErrorToastMessage(
+          "Transfer Type(Either service or Block)is required"
+        );
         this.selectTransferType = true;
         return;
       }
@@ -318,7 +353,6 @@ console.log("data",this.transferType,this.fromBankType,this.toBankType,this.tran
         return;
       }
 
-      
       if (this.fromBankType == this.toBankType) {
         //alert("Hiii")
         this.showErrorToastMessage("You can't transfer from the same bank");
@@ -326,18 +360,18 @@ console.log("data",this.transferType,this.fromBankType,this.toBankType,this.tran
         return;
       }
 
-      if (this.amount ==='') {
+      if (this.amount === "") {
         this.showErrorToastMessage("Amount is required");
         this.enterAmount = true;
         return;
       }
-      
-      if(this.amount ==0){
+
+      if (this.amount == 0) {
         this.showErrorToastMessage("Amount can not be zero");
-        this.amountNotZero=true;
+        this.amountNotZero = true;
         return;
       }
-    
+
       if (this.transferDate == "") {
         this.showErrorToastMessage("Transfer Date is required");
         this.enterTransferDate = true;
@@ -361,7 +395,7 @@ console.log("data",this.transferType,this.fromBankType,this.toBankType,this.tran
         .then((response) => {
           console.log("response", response);
           if (response.data.status === 1) {
-             this.showSuccessToastMessage(response.data.message);
+            this.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {

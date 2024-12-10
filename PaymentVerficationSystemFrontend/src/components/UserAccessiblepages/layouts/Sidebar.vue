@@ -5,7 +5,7 @@
   >
     <div class="-ml-5 -mr-5">
       <div
-        v-if="sidebarVisible" 
+        v-if="sidebarVisible"
         class="md:flex md:flex-col md:items-stretch md:opacity-100 md:relative sm:-mt-4 md:mt-0 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded"
       >
         <div class="flex flex-col space-y-4 bg-white">
@@ -20,59 +20,62 @@
           >
             <li
               @click="dashboard()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              class="items-center bg-white hover:bg-gray-100 transition"
+              :class="activeItem === '' ? 'border-r-4 border-indigo-600' : ''"
             >
               <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
-                ><i
-                  class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-
-                <span> {{ $t("dashboard") }}</span>
+              >
+                <i class="fas fa-envelope mr-3 text-teal-600"></i>
+                <span>{{ $t("dasboard") }}</span>
               </a>
             </li>
 
             <li
               @click="deadlines()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              class="items-center bg-white hover:bg-gray-100 transition"
+              :class="
+                activeItem === 'deadline' ? 'border-r-4 border-indigo-600' : ''
+              "
             >
               <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
-                ><i
-                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-
-                <span> {{ $t("Dead Lines") }}</span>
+              >
+                <i class="fas fa-envelope mr-3 text-teal-600"></i>
+                <span>{{ $t("Dead Lines") }}</span>
               </a>
             </li>
+
             <li
               @click="profile()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              class="items-center bg-white hover:bg-gray-100 transition"
+              :class="
+                activeItem === 'deadline' ? 'border-r-4 border-indigo-600' : ''
+              "
             >
               <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
-                ><i
-                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-
-                <span> {{ $t("Profile") }} </span>
+              >
+                <i class="fas fa-envelope mr-3 text-teal-600"></i>
+                <span>{{ $t("Profile") }}</span>
               </a>
             </li>
             <li
               @click="idCard()"
-              class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
+              class="items-center bg-white hover:bg-gray-100 transition"
+              :class="
+                activeItem === 'idCard' ? 'border-r-4 border-indigo-600' : ''
+              "
             >
               <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
+                class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
-                ><i
-                  class="fas fa-id-card opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-
-                <span> ID Card </span>
+              >
+                <i class="fas fa-envelope mr-3 text-teal-600"></i>
+                <span>{{ $t("idCard") }}</span>
               </a>
             </li>
           </ul>
@@ -83,8 +86,6 @@
 </template>
 
 <script>
-
-
 //import NotificationDropdownComponent from "./NotificationDropdown.vue";
 //import UserDropdownComponent from "./UserDropdown.vue";
 export default {
@@ -115,7 +116,7 @@ export default {
     window.removeEventListener("resize", this.setScreenSize);
   },
   methods: {
-    idCard(){
+    idCard() {
       this.$router.push("/userdashboard/id-card");
     },
     togglePaymentSetting() {
@@ -136,13 +137,12 @@ export default {
     dashboard() {
       this.$router.push("/userdashboard");
     },
-    profile(){
-      this.$router.push('/userdashboard/profile')
+    profile() {
+      this.$router.push("/userdashboard/profile");
     },
-    deadlines(){
-      this.$router.push('/userdashboard/info')
+    deadlines() {
+      this.$router.push("/userdashboard/info");
     },
-   
 
     setScreenSize() {
       const screenWidth = window.innerWidth;

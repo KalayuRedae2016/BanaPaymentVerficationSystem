@@ -6,9 +6,20 @@ const state = {
   role: localStorage.getItem('role') || null,
   userCode: localStorage.getItem('userCode') || null,
   activeItem: localStorage.getItem('activeItem') || 'dashboard', // Default to 'dashboard'
+  serviceBanks: localStorage.getItem('serviceBanks') || [],
+  blockBanks:localStorage.getItem('blockBanks') || [],
 };
 
 const mutations = {
+
+  setServiceBanks(state, banks) {
+    state.serviceBanks = banks;
+    localStorage.setItem('serviceBanks', banks);
+  },
+  setBlockBanks(state, banks) {
+    localStorage.setItem('blockBanks', banks);
+    state.blockBanks = banks;
+  },
   setUserCode(state, userCode) {
     state.userCode = userCode;
     localStorage.setItem('userCode', userCode);
@@ -53,6 +64,29 @@ const mutations = {
 };
 
 const actions = {
+
+  async fetchBanks({ commit }) {
+    try {
+
+
+      this.$apiClient
+      .get("/api/v1/organization")
+      .then((response) => {
+          console.log("response from the store", response);
+          const serviceBanks =response.data.organization.serviceBankAccounts;
+          const blockBanks =response.data.organization.blockBankAccounts;
+          commit('setServiceBanks',serviceBanks,);
+          commit('setBlockBanks',blockBanks);
+       })
+      .catch((error) => {
+       console.log(error);
+      });
+
+    
+    } catch (error) {
+      console.error('Error fetching banks:', error);
+    }
+  },
   login({ commit }, { token }) {
     console.log("token in commit ",token);
     commit('setToken', token);
@@ -92,6 +126,10 @@ const actions = {
 };
 
 const getters = {
+
+  serviceBanks: (state) => state.serviceBanks,
+  blockBanks: (state) => state.blockBanks,
+
   isAuthenticated(state) {
     return !!state.token;
   },
