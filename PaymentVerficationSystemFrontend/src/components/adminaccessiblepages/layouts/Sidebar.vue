@@ -25,7 +25,7 @@
       :class="activeItem === 'dashboard' ? 'border-r-4 border-indigo-600' : ''"
     >
       <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
-        <i class="fa fa-tachometer mr-3 text-teal-600"></i>
+        <i class="fas fa-tachometer-alt mr-3 text-teal-600"></i>
         <span>{{ $t('dashboard') }}</span>
       </a>
     </li>

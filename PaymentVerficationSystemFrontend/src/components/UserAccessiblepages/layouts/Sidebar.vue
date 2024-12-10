@@ -27,8 +27,8 @@
                 class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
               >
-                <i class="fas fa-envelope mr-3 text-teal-600"></i>
-                <span>{{ $t("dasboard") }}</span>
+                <i class="fas fa-tachometer-alt mr-3 text-teal-600"></i>
+                <span>{{ $t("Dasboard") }}</span>
               </a>
             </li>
 
@@ -43,7 +43,7 @@
                 class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
               >
-                <i class="fas fa-envelope mr-3 text-teal-600"></i>
+                <i class="fas fa-calendar-alt mr-3 text-teal-600"></i>
                 <span>{{ $t("Dead Lines") }}</span>
               </a>
             </li>
@@ -52,14 +52,14 @@
               @click="profile()"
               class="items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'deadline' ? 'border-r-4 border-indigo-600' : ''
+                activeItem === 'profile' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
                 class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
               >
-                <i class="fas fa-envelope mr-3 text-teal-600"></i>
+                <i class="fas fa-user mr-3 text-teal-600"></i>
                 <span>{{ $t("Profile") }}</span>
               </a>
             </li>
@@ -74,7 +74,7 @@
                 class="ml-4 flex items-center text-gray-800 py-3 font-medium"
                 href="#"
               >
-                <i class="fas fa-envelope mr-3 text-teal-600"></i>
+                <i class="fas fa-id-card mr-3 text-teal-600"></i>
                 <span>{{ $t("idCard") }}</span>
               </a>
             </li>
