@@ -167,6 +167,7 @@ exports.login = catchAsync(async (req, res, next) => {
     token: token,
     role: user.role,
     userId: user._id,
+    userCode:user.userCode,
     Message: 'Login Succeffullly',
   });
 });

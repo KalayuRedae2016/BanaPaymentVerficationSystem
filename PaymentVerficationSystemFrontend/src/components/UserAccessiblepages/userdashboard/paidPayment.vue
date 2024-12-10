@@ -783,12 +783,15 @@ export default {
     },
 
     userCode() {
+      console.log("I give this usercode please",this.getUserCode);
       return this.getUserCode;
     },
   },
   watch: {},
 
   mounted() {
+   this.userCode;
+
    
     this.$apiClient
       .get("/api/v1/organization")
@@ -815,23 +818,22 @@ export default {
 this.$apiClient
       .get(`/api/v1/users/${this.userId}`)
       .then((response) => {
-        console.log("Response client profile", response);
+        console.log("Response client profile in unpaid", response);
 
         this.userEmail= response.data.clientProfile.email;
         this.userAddress= response.data.clientProfile.address;
         this.userGender= response.data.clientProfile.gender;
         this.fullName= response.data.clientProfile.fullName;
         this.userPhoneNumber= response.data.clientProfile.phoneNumber;
-       
+        this.userCode= response.data.clientProfile.userCode;
       })
       .catch((error) => {
         console.error("Error fetching client datakk:", error);
       });
 
-
-
-
     this.getData();
+
+
   },
   methods: {
     changeMonthIntoString(month) {
@@ -959,6 +961,8 @@ this.$apiClient
     },
 
     getData() {
+
+      console.log("this.usercode is",this.userCode);
       this.$apiClient
         .get(
           `/api/v1/payments/userBalance?&activeYear=${this.year} &userCode=${this.userCode}`

@@ -276,7 +276,7 @@ export default {
         .then((response) => {
           console.log("response during login now");
           
-          const { role, token, userId} = response.data;
+          const { role, token, userId,userCode} = response.data;
           console.log("response", response.data);
 
           if (response.data.status === 1) {
@@ -286,7 +286,7 @@ export default {
               this.$store.dispatch("login", { token });
               this.$store.dispatch("commitId", { userId });
               this.$store.dispatch("commitRole", { role });
-              this.$store.dispatch('commitUserCode', { userCode: 'BM0002' });
+              this.$store.dispatch('commitUserCode', { userCode: userCode });
               this.$router.push({ path: '/admindashboard', query: { loginSuccess: 'true' } });
             } else if (role.includes("User")) {
               console.log("role=====", role);
@@ -294,11 +294,8 @@ export default {
               this.$store.dispatch("login", { token });
               this.$store.dispatch("commitId", { userId });
               this.$store.dispatch("commitRole", { role });
-              this.$store.dispatch('commitUserCode', { userCode: 'BM0001' });
-
+              this.$store.dispatch('commitUserCode', { userCode: userCode });
               this.$router.push({ path: '/userdashboard', query: { loginSuccess: 'true' } });
-
-              
             } else {
               this.showError=true;
               this.errorMessage=response.data.message;

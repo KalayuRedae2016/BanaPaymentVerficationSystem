@@ -92,7 +92,7 @@
 
         <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm">
           <div class="flex items-center space-x-3">
-            <i class="fas fa-clock text-yellow-500"></i>
+            <i class="fas fa-clock text-pink-400"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerTenDaysPercentage') }}:</span>
             <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate10Days }}</span>
           </div>

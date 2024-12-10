@@ -343,7 +343,7 @@ export default {
     },
   },
   mounted() {
-
+console.log("this usercode and userId are",this.userCode,this.userId);
   this.$apiClient
     .get(`/api/v1/users/${localStorage.getItem('userId')}`)
     .then((response) => {
@@ -354,6 +354,7 @@ export default {
       this.fullName = response.data.clientProfile.fullName;
       this.userPhoneNumber = response.data.clientProfile.phoneNumber;
       this.userCode = response.data.clientProfile.userCode;
+      console.log("Usercode is=" ,response.data.clientProfile.userCode);
     })
     .catch((error) => {
       console.error("Error fetching client data:", error);

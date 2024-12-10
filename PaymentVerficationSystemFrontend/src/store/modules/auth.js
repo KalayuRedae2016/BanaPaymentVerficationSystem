@@ -68,7 +68,6 @@ const actions = {
   async fetchBanks({ commit }) {
     try {
 
-
       this.$apiClient
       .get("/api/v1/organization")
       .then((response) => {
@@ -119,9 +118,17 @@ const actions = {
     console.log("commit activeItem is called", activeItem);
     commit('setActiveItem', activeItem);
   },
+
   logout({ commit }) {
     commit('logout');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userCode');
+    localStorage.removeItem('name');
+    localStorage.removeItem('role');
+    localStorage.removeItem('locale');
     localStorage.removeItem('token');
+    localStorage.removeItem('serviceBanks'),
+    localStorage.removeItem('blockBanks')
   },
 };
 
