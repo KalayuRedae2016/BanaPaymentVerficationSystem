@@ -267,8 +267,6 @@
         </div>
       </transition>
     </div>
-
-    
   </div>
 </template>
 
@@ -345,27 +343,21 @@ export default {
     },
   },
   mounted() {
+
   this.$apiClient
     .get(`/api/v1/users/${localStorage.getItem('userId')}`)
     .then((response) => {
       console.log("Response client profile based on the id", response);
-
-      // Assigning response data to component properties
       this.userEmail = response.data.clientProfile.email;
       this.userAddress = response.data.clientProfile.address;
       this.userGender = response.data.clientProfile.gender;
       this.fullName = response.data.clientProfile.fullName;
       this.userPhoneNumber = response.data.clientProfile.phoneNumber;
       this.userCode = response.data.clientProfile.userCode;
-
     })
     .catch((error) => {
       console.error("Error fetching client data:", error);
     });
-
-
-
-
      this.fetchNotPaid();
   },
   methods: {

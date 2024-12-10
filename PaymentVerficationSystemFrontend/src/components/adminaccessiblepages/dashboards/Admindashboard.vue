@@ -41,7 +41,7 @@
             class="h-8 w-8 min-w-8 min-h-8  max-w-8 max-h-8"
           />
           <!-- <img
-            src="../../../assets/img/banaTextLogo.jpg"
+            src="../../../assets/img/sampleProfile.jpg"
             alt="Logo"
             class="mt-3 h-4 w-32 min-w-8 min-h-4 max-w-32 max-h-4 rounded-lg"
           /> -->
@@ -144,11 +144,11 @@
           </div>
 
           <div class="relative -mt-1" @click="toggleDropdown('profile')">
-            <!-- <img
-              src="../../../assets/img/bana.jpg"
+            <img
+              src="../../../assets/img/sampleProfile.jpg"
               alt="User Profile"
               class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
-            /> -->
+            />
             <ul
               v-show="dropdownVisible"
               class="absolute right-0 mt-4 w-48 bg-white rounded shadow-lg border-t border-b border-blue-400"
@@ -725,6 +725,8 @@ export default {
       this.$i18n.locale = this.getLocale;
       return this.getLocale;
     },
+
+  
   },
   methods: {
 
