@@ -1106,7 +1106,6 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
         'subsidy.penality': subsidyPenalty.penality,
         'subsidy.daysLate': subsidyPenalty.daysLate,
         'penality.amount':totalPenaltyAmount,
-        'status':status,
         'totalExpectedAmount':baseAmount+registrationFee+totalPenaltyAmount
       };
     }

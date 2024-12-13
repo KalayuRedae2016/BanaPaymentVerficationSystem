@@ -45,7 +45,7 @@
       <form action="">
         <div class="md-4" >
              <label for="oldPassword" class="custom-label"> {{ $t("oldPassword") }}</label>
-             <input type="text" class="custom-input ml-3 text-xs text-gray-500" v-model="oldPassword" placeholder="Enter Old Password">
+             <input type="password" class="custom-input ml-3 text-xs text-gray-500" v-model="oldPassword" placeholder="Enter Old Password">
         </div>
         <div class="md-4" >
              <label for="newPassword" class="custom-label"> {{ $t("newPassword") }}</label>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from "vuex";
 export default {
   data(){
       return{
@@ -81,6 +81,19 @@ export default {
           errorMessage:"",
           warningMessage:"",
       }
+  },
+
+  computed: {
+   
+  
+   ...mapGetters(["getToken", "getUserId"]),
+   userId() {
+     return this.getUserId;
+   },
+   token() {
+     return this.getToken;
+   },
+
   },
   methods:{
     showSuccessToastMessage(message) {
@@ -121,12 +134,15 @@ export default {
           this.showErrorToastMessage(" Confirm New Password must be the same with new password")
           return;
         }
+     
         const payload={
-            oldPassword:this.oldPassword,
-            newPassword:this.newPassword
+            currentPassword:this.oldPassword,
+            newPassword:this.newPassword,
+            userId:this.userId,
+
         }
 
-        this.$apiClient.post('api/v1/password/changePassword',payload).then((response)=>{
+        this.$apiClient.patch('api/v1/users/updatePassword',payload).then((response)=>{
             console.log("response");
             if(response.data.status===1){
               this.showSuccessToastMessage(response.data.message)
@@ -134,8 +150,10 @@ export default {
               this.showErrorToastMessage("Something went wrong")
             }
         }).catch((error)=>{
-            console.log("error",error);
-           this.showErrorToastMessage("Something went wrong")
+          console.log(error)
+            this.showErrorToastMessage("Incorrect current password")
+           
+         
         })
       }
   }

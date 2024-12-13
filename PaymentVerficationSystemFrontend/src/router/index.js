@@ -62,6 +62,7 @@ const routes = [
     component: HomeView,
     meta: { requiresGuest: true },
   },
+  
   {
     path: "/resetPassword/:token",
     component: reset,
@@ -82,8 +83,8 @@ const routes = [
   {
     path: "/admindashboard",
     component: Admindashboard,
-    meta: { requiresAuth: true, role: 'Admin' },
-    //meta: { requiresGuest: true },
+     meta: { requiresAuth: true, role: 'Admin' },
+   // meta: { requiresGuest: true },
     children: [
       // Admin routes
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },

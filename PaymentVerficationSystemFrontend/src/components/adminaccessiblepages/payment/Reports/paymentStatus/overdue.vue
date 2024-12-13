@@ -56,7 +56,7 @@
     </thead>
     <!-- Scrollable Table Body -->
     <tbody class="divide-y divide-gray-200 bg-gray-50  overflow-y-auto">
-      <tr  @click="userOverdueDetails(searchPayment.userCode)"
+      <tr  @click="userOverdueDetails(searchPayment.userCode,searchPayment.fullName)"
        v-for="searchPayment in searchedPayments"
                 :key="searchPayment._id"
         class="cursor-pointer bg-white hover:shadow-lg hover:bg-blue-100 rounded-lg p-4"
@@ -164,14 +164,17 @@ export default {
   },
 
   methods: {
-    userOverdueDetails(userCode) {
+    userOverdueDetails(userCode,fullName) {
       //alert(userCode);
-      this.$router.push(`/admindashboard/bank-statement/${userCode}`, {
-        params: {
-          userCode: "BM0001",
-          pending: 0,
-        },
-      });
+      this.$router.push({
+          path: "/admindashboard/payments1",
+          query:{
+            activeTab:1,
+            userCode:userCode,
+            userSelected:true,
+            fullName:fullName
+          }
+        });
     },
     navigateProfile(paymentId) {
       console.log("paymentid", paymentId);

@@ -420,8 +420,9 @@ export default {
     //   this.intervalId = setInterval(() => this.fetchPayments(), 1000);
     // },
     changePassword() {
-      this.$router.push("/admindashboard/change-password");
+      this.$router.push("/userdashboard/change-password");
     },
+    
     checkScreenSize() {
       // If the screen width is larger than the md breakpoint, hide the dropdown
       if (window.innerWidth >= 768) {
@@ -431,6 +432,7 @@ export default {
         this.largerScreen = false;
       }
     },
+
     formatDate(date) {
       const options = {
         hour: "2-digit",

@@ -106,14 +106,13 @@
           <span
             :class="{
               'bg-green-100 text-green-600 font-bold px-2 py-1 rounded': searchPayment.isPaid,
-              'bg-yellow-100 text-yellow-600 font-bold px-2 py-1 rounded': !searchPayment.isPaid && !searchPayment.isOverdue,
-              'bg-red-100 text-red-600 font-bold px-2 py-1 rounded': searchPayment.isOverdue,
-              'bg-red-100 text-red-600 font-bold px-2 py-1 rounded line-through': searchPayment.isOverdue && !searchPayment.isPaid
+              'bg-yellow-100 text-yellow-600 font-bold px-2 py-1 rounded': (!searchPayment.isPaid && searchPayment.status==='pending'),
+              'bg-red-100 text-red-600 font-bold px-2 py-1 rounded': (!searchPayment.isPaid && searchPayment.status==='overdue')
             }"
           >
             <span v-if="searchPayment.isPaid">Paid</span>
-            <span v-else-if="!searchPayment.isPaid && !searchPayment.isOverdue">Unpaid (Pending)</span>
-            <span v-else-if="searchPayment.isOverdue">Unpaid (Overdue)</span>
+            <span v-else-if="!searchPayment.isPaid && searchPayment.status==='pending'">pending</span>
+            <span v-else-if="!searchPayment.isPaid && searchPayment.status==='overdue'">Overdue</span>
           </span>
         </td>
         <td class="p-4">
@@ -293,7 +292,7 @@ export default {
           },
         })
         .then((response) => {
-          console.log("response in the all payment ", response);
+          console.log("response in the all payment nnnnnnn ", response);
           this.payments = response.data.payments;
           this.searchedpayments = this.payments;
           console.log("in fetch");
@@ -359,7 +358,7 @@ export default {
       } else if (this.paymentStatus == "unpaid") {
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(
-            (payment) => payment.isPaid == false && payment.status == "unknown"
+            (payment) => payment.isPaid == false && payment.status == "pending"
           );
           console.log("this in unpaid only", this.searchedpayments);
         } else {
@@ -369,7 +368,7 @@ export default {
               (payment) =>
                 payment.isPaid == false &&
                 payment.activeYear == this.selectedYear &&
-                payment.status == "unknown"
+                payment.status == "pending"
             );
           } else {
             this.searchedpayments = this.payments.filter(
@@ -377,7 +376,7 @@ export default {
                 payment.isPaid == false &&
                 payment.activeYear == this.selectedYear &&
                 payment.activeMonth == this.selectedMonth &&
-                payment.status == "unknown"
+                payment.status == "pending"
             );
           }
         }

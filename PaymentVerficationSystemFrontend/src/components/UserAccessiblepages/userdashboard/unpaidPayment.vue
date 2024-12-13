@@ -11,7 +11,7 @@
         <p>Full Name: {{ fullName }}</p>
       </div>
 
-      <div class="border-t-2 border-blue-500 border-dotted mt-5" v-if="payments">
+      <div class="border-t-2 border-blue-500 border-dotted mt-5" v-if="payments.length >0">
         <div
           class="p-4 border-b-2 border-blue-500 border-dotted cursor-pointer"
           v-for="(payment, paymentIndex) in payments"
@@ -150,8 +150,8 @@
           </div>
         </div>
       </div>
-      <div v-else>
-        Nothing to pay
+      <div v-else class="mt-5 border border-gray-200 rounded-lg p-5 text-blue-500 shadow-lg">
+        There is no opened unpaid Payment
       </div>
 
       <!-- this is the end of the forloop -->
