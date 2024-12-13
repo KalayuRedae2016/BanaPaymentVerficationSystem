@@ -37,10 +37,12 @@
   <!-- Table -->
   <table class="table-auto min-w-full border-collapse">
     <!-- Table Head -->
-    <thead class="bg-blue-50 text-white sticky top-0 z-10">
+    <thead class="bg-blue-50 text-white sticky top-0 z-8">
       <tr class="text-blue-500 text-xs">
         <th class="w-24 p-4  font-bold tracking-wide text-left">UserCode</th>
         <th class="w-36 p-4  font-bold tracking-wide text-left">Full Name</th>
+        <th class="w-36 p-4  font-bold tracking-wide text-left">Year</th>
+        <th class="w-36 p-4  font-bold tracking-wide text-left">Month</th>
         <th class="w-24 p-4  font-bold tracking-wide text-left">Paid/Unpaid</th>
         <th class="w-24 p-4  font-bold tracking-wide text-left">Action</th>
       </tr>
@@ -66,6 +68,12 @@
         </td>
         <td class="p-4 text-xs text-gray-700 font-bold">
           {{ searchPayment.fullName }}
+        </td>
+        <td class="p-4 text-xs text-gray-700 font-bold">
+              {{ searchPayment.activeYear }}
+        </td>
+        <td class="p-4 text-xs text-gray-700 font-bold">
+          {{ searchPayment.activeMonth }}
         </td>
         <td class="p-4 text-xs">
           <span

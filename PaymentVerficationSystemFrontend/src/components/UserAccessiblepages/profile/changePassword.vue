@@ -1,4 +1,42 @@
 <template>
+
+  <div>
+
+    <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ succesToastMessage }}</span>
+    </div>
+  </transition> 
+
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
     <div class="p-3 border-b border-blue-800">
         <h4 class="text-indigo-800 mt-1">Change Password</h4>
     </div>
@@ -148,6 +186,7 @@
     </div>
   </transition>
 </div>
+</div>
 </template>
 
 <script>
@@ -155,6 +194,14 @@
 export default {
   data(){
       return{
+
+         successToastMessage:"",
+         errorToastMessage:"",
+         showErrorToast:false,
+         showSuccessToast:false,
+
+
+         
           oldPassword:'',
           newPassword:'',
           confirmNewPasssord:'',
@@ -167,14 +214,32 @@ export default {
       }
   },
   methods:{
+
+
       changePassword(){
+        if(this.oldPassword==""){
+          this.showErrorToastMessage("Old password is required")
+          return;
+        }
+        if(this.newPassword==""){
+          this.showErrorToastMessage("New password is required")
+          return;
+        }
+        if(this.confirmNewPasssord==""){
+          this.showErrorToastMessage("Repeat New password is required")
+          return;
+        }
+        if(this.newPassword!=this.confirmNewPasssord ){
+          this.showErrorToastMessage(" Confirm New Password must be the same with new password")
+          return;
+        }
         const payload={
             oldPassword:this.oldPassword,
             newPassword:this.newPassword
         }
 
         this.$apiClient.post('api/v1/password/changePassword',payload).then((response)=>{
-            console.log("response");
+         
             if(response.data.status===1){
                 this.successMessage=response.data.message;
                 this.showSuccess=true;
