@@ -411,6 +411,9 @@ export default {
       showErrorToast:false,
       succesToastMessage:"",
       errorToastMessage:"",
+
+
+      
       formEmptyEditProfile: false,
       showSuccess:false,
       showError:false,
@@ -434,16 +437,7 @@ export default {
 
 
     this.clientId = this.$route.params.clientId;
-    if (this.$route.query.formEmptyEditProfile === 'true') {
-    this.showSuccessToastMessage("Your Profile Editted Successfully");
-      setTimeout(() => {
-        this.$router.push({
-      path: `/admindashboard/edit-client/${this.clientId}`
-         });
-      }, 2000);
-    }
-
-    console.log("client Id",this.clientId);
+ 
     this.$apiClient
         .get(`/api/v1/users/${this.clientId}`)
         .then((response) => {
@@ -457,7 +451,9 @@ export default {
      });
   },
   methods: {
-
+    reloadPage() {
+    window.location.reload();
+    },
     showSuccessToastMessage(message) {
       this.succesToastMessage = message;
       this.showSuccessToast = true;
@@ -506,12 +502,10 @@ export default {
           console.log("response of client finder",response );
              if(response.data.status===1){
               console.log("response.data is 1")
-              //this.clientProfile = response.data.clientProfile;
-              //this.showSuccess=true;
-             // this.successMessage = "User edited Successfully.";//response.data.message;
-          
-             this.$router.push(`/admindashboard/empty-edit-profile/${this.clientProfile._id}`)
-            
+     
+           this.showSuccessToastMessage("User edited");
+          this.reloadPage();
+
             }
         })
         .catch((error) => {

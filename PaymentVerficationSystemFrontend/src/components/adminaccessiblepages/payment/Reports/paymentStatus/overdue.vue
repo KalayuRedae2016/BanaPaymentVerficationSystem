@@ -40,105 +40,47 @@
             </div>
           </div>
         </div>
-        <div class="overflow-x-auto">
-          <table class="w-full border-b border-indigo-500">
-            <thead>
-              <tr class="bg-gray-200">
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  UserCode
-                </th>
-                <th
-                  class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Full Name
-                </th>
-                <th
-                  class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                >
-                  Overdue Payments
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                v-for="searchPayment in searchedPayments"
-                :key="searchPayment._id"
-              >
-                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                  {{ searchPayment.userCode }}
-                </td>
-
-                <td class="p-3 text-xs text-gray-500 whitespace-nowrap">
-                  {{ searchPayment.fullName }}
-                </td>
-                <td class="p-3 text-xs whitespace-nowrap">
-                  <button
-                    @click="userOverdueDetails(searchPayment.userCode)"
-                    class="flex items-center px-4 py-2 bg-white hover:bg-blue-100 text-blue-500 rounded"
-                  >
-                    <i class="fas fa-times-circle"></i>
-                    <!-- Use Font Awesome class here -->
-                    <span class="ml-2">View All Overdue</span>
-                    <!-- Optional text label -->
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="overflow-x-auto overflow-y-auto h-96 ">
         
-        </div>
-        <div
-            class="flex justify-between items-center mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
+      
+     
+        <table class="table-auto min-w-full border-collapse">
+    <!-- Table Head -->
+    <thead class="bg-blue-50 text-white sticky top-0 z-10">
+      <tr class="text-blue-500 text-xs">
+        <th class="w-24 p-4  font-bold tracking-wide text-left">UserCode</th>
+        <th class="w-36 p-4  font-bold tracking-wide text-left">Full Name</th>
+        <th class="w-24 p-4  font-bold tracking-wide text-left">  Overdue Payments</th>
+     
+      </tr>
+    </thead>
+    <!-- Scrollable Table Body -->
+    <tbody class="divide-y divide-gray-200 bg-gray-50  overflow-y-auto">
+      <tr  @click="userOverdueDetails(searchPayment.userCode)"
+       v-for="searchPayment in searchedPayments"
+                :key="searchPayment._id"
+        class="cursor-pointer bg-white hover:shadow-lg hover:bg-blue-100 rounded-lg p-4"
+      >
+        <td class="p-4 text-xs text-gray-700">
+          <span class="font-bold text-indigo-600">{{ searchPayment.userCode }}</span>
+        </td>
+        <td class="p-4 text-xs text-gray-700 font-bold">
+          {{ searchPayment.fullName }}
+        </td>
+        
+        <td class="p-4">
+          <button
+           @click="userOverdueDetails(searchPayment.userCode)"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded shadow-lg"
+          
           >
-            <!-- Pagination Controls -->
-            <div class="flex items-center">
-              <!-- Select Payments Per Page -->
-              <label
-                for="payments-per-page"
-                class="mr-2 text-gray-600 font-medium hidden"
-                >Show:</label
-              >
-              <select
-                id="payments-per-page"
-                v-model="paymentsPerpage"
-                @change="changePerPageNumber()"
-                class="h-9 border border-gray-300 text-gray-500 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
-              >
-                <option value="" disabled>Show</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="10">10</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-              </select>
-
-              <!-- Previous Page Button -->
-              <button
-                @click="previosPage"
-                class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-l-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
-                :disabled="currentPage === 1"
-              >
-                <i class="fas fa-chevron-left"></i>
-              </button>
-
-              <!-- Current Page Display -->
-              <span
-                class="px-4 py-1.5 bg-indigo-800 text-white font-bold border-t border-b border-gray-300"
-              >
-                {{ currentPage }}
-              </span>
-
-              <!-- Next Page Button -->
-              <button
-                @click="nextPage"
-                class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-r-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
-              >
-                <i class="fas fa-chevron-right"></i>
-              </button>
-            </div>
-          </div>
+            <i class="fas fa-info-circle"></i> View All Overdue
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
       </div>
     </div>
   </div>
@@ -206,7 +148,6 @@ export default {
   mounted() {
     this.displayedItems();
     console.log("payments", this.payments);
-
     const allTimeRange = "allTime";
     this.$apiClient
       .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)

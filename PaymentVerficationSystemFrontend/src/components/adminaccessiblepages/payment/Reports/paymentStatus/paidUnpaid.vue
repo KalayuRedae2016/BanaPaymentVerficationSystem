@@ -51,6 +51,7 @@
       @click="
               paymentHistory(
                 searchPayment.userCode,
+                searchPayment.fullName,
                 searchPayment.activeYear,
                 searchPayment.activeMonth,
                 searchPayment.status
@@ -82,6 +83,7 @@
             @click="
               paymentHistory(
                 searchPayment.userCode,
+                searchPayment.fullName,
                 searchPayment.activeYear,
                 searchPayment.activeMonth,
                 searchPayment.status
@@ -171,6 +173,8 @@ export default {
       day: "",
       payments: [],
       screenSize: "",
+
+
       detailModal: false,
       searchedpayments: [],
 
@@ -226,8 +230,10 @@ export default {
   },
 
   methods: {
-    paymentHistory(userCode, activeYear, activeMonth, status) {
-      //alert(status)
+    paymentHistory(userCode,fullName,activeYear, activeMonth, status) {
+
+      console.log("userCodeFullName in paid unpaid: " ,fullName);
+
       if (status == "confirmed") {
         this.$router.push({
           path: `/admindashboard/payment-history-detail/${userCode}`,
@@ -238,7 +244,13 @@ export default {
         });
       } else {
         this.$router.push({
-          path: `/admindashboard/bank-statement/${userCode}`,
+          path: "/admindashboard/payments1",
+          query:{
+            activeTab:1,
+            userCode:userCode,
+            userSelected:true,
+            fullName:fullName
+          }
         });
       }
     },

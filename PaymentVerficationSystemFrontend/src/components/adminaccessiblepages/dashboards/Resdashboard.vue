@@ -78,11 +78,7 @@
                     >
                       {{ $t("totalPaidCapital") }}
                     </th>
-                    <th
-                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                    >
-                      {{ $t("totalPaidPenality") }}
-                    </th>
+               
                     <th
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
@@ -111,10 +107,7 @@
                       <span v-if="monthlyCapital">{{ monthlyCapital }}</span>
                       <span v-else>0</span>
                     </td>
-                    <td class="px-4 py-2 text-left border border-gray-300">
-                      <span v-if="monthlyCharge">{{ monthlyCharge }}</span>
-                      <span v-else>0</span>
-                    </td>
+                   
                     <td class="px-4 py-2 text-left border border-gray-300">
                       <a
                         href="#"
@@ -128,18 +121,25 @@
               </table>
             </div>
               <div class="w-full mx-auto mt-6">
-              <div class="text-sm font-medium text-gray-700 mb-2">
+              <div v-if="monthlyPaid>0" class="text-sm font-medium text-gray-700 mb-2">
                 {{ monthlyPaid }} of {{ totalClients }} Clients Paid In This
+                Month
+              </div>
+              <div v-else  class="text-sm font-medium text-gray-700 mb-2">
+                0  of {{ totalClients }} Clients Paid In This
                 Month
               </div>
               <div class="relative w-full h-4 bg-gray-200 rounded">
                 <div
                   class="absolute top-0 left-0 h-4 bg-green-500 rounded"
-                  :style="{ width: progressPercentage + '%' }"
+                  :style="{ width: progressPaidPercentage + '%' }"
                 ></div>
               </div>
-              <div class="text-sm text-gray-600 mt-2">
-                {{ progressPercentage.toFixed(1) }}% paid
+              <div v-if="progressPaidPercentage > 0" class="text-sm text-gray-600 mt-2">
+                {{ progressPaidPercentage.toFixed(1) }}% paid
+              </div>
+              <div v-else class="text-sm text-gray-600 mt-2">
+               0 % paid
               </div>
             </div>
             <a
@@ -183,7 +183,7 @@
           </a>
         </div>
         <div class="">
-          <div v-if="totalOvedue>0" class="text-sm font-medium text-gray-700 mb-2">
+          <div v-if="totalOvedue >0 " class="text-sm font-medium text-gray-700 mb-2">
             {{ totalOvedue }} of {{ totalClients }} Clients Have Overdue
             Payments
           </div>
@@ -191,15 +191,19 @@
             0 of {{ totalClients }} Clients Have Overdue
             Payments
           </div>
-          <div class="relative w-full h-4 bg-gray-200 rounded">
-            <div
-              class="absolute top-0 left-0 h-4 bg-red-500 rounded"
-              :style="{ width: progressPercentage + '%' }"
-            ></div>
-          </div>
-          <div class="text-sm text-gray-600 mt-2">
-            {{ progressPercentage.toFixed(1) }}% Overdue
-          </div>
+             <div class="relative w-full h-4 bg-gray-200 rounded">
+                <div
+                  class="absolute top-0 left-0 h-4 bg-green-500 rounded"
+                  :style="{ width: progressOverduePercentage + '%' }"
+                ></div>
+              </div>
+              <div v-if="progressOverduePercentage > 0" class="text-sm text-gray-600 mt-2">
+                {{ progressOverduePercentage.toFixed(1) }}% Overdue
+              </div>
+              <div else class="text-sm text-gray-600 mt-2">
+               0% Overdue
+              </div>
+         
         </div>
       </div>
     </div>
@@ -404,10 +408,14 @@ export default {
       clientLength: 0,
       totalBalance: [],
       totalOrgBalance: {},
+      paidPercentage: NaN, // Replace with actual value
+      overduePercentage: NaN, // Replace with actual value
     };
   },
 
   computed: {
+   
+  
     ...mapGetters(["getToken", "getUserId", "getLocale"]),
     userId() {
       return this.getUserId;
@@ -419,8 +427,23 @@ export default {
       this.$i18n.locale = this.getLocale;
       return this.getLocale;
     },
-    progressPercentage() {
-      return (this.monthlyPaid / this.totalClients) * 100;
+    progressPaidPercentage() {
+      if(this.totalClients > 0 ){
+        console.log("Here")
+        return (this.monthlyPaid/ this.totalClients) * 100;
+      }else{
+        console.log("return zero")
+        return 0;
+      }
+      
+    },
+    progressOverduePercentage() {
+      if(this.totalClients > 0 ){
+        return (this.totalOvedue / this.totalClients) * 100;
+      }else{
+        return 0;
+      }
+      
     },
   },
   created() {
@@ -485,6 +508,9 @@ export default {
   },
 
   methods: {
+    safePercentage(value) {
+      return isNaN(value) ? 0 : value;
+    },
     showSuccessToast(message) {
       this.toastMessage = message;
       this.showToast = true;

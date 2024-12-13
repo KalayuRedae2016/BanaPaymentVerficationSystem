@@ -114,7 +114,7 @@
 
     <!-- Conditional Components -->
     <div class="mt-8">
-      <new-payment v-if="paymentStatus === 'newPayment'" />
+      <new-payment v-if="paymentStatus === 'newPayment'" ref="childComp" />
       <credit-transfer v-else-if="paymentStatus === 'creditTransfer'" />
     </div>
   </div>
@@ -273,6 +273,8 @@ export default {
       activeTab: 0,
       tabs: ["Payment Setting", "New Payment", "All Payments", "Payment Report"],
       clientId: "",
+      userCode:"",
+
     };
   },
   created() {
@@ -281,6 +283,7 @@ export default {
     });
 
     this.clientId = this.$route.params.clientId;
+    this.userCode = this.$route.params.userCode;
     this.fetchClientData(this.clientId);
 
   },
@@ -295,8 +298,12 @@ export default {
 
 
     if (this.$route.query.activeTab == 1) {
+     // alert(this.$route.query.usercode)
       this.activeTab = 1;
       this.paymentStatus = "newPayment";
+      if(this.$route.query.userSelected){
+        this.$refs.childComp.navigateToPayment(this.$route.query.userCode,this.$route.query.fullName);
+      }
     }
 
 
@@ -313,17 +320,6 @@ export default {
         this.paymentReportStatus = "orgLevelReport";
       }
     }
-
-
-
-    //tab1=  
-    //tab2=
-    //tab=
-
-
-
-    //if(this.$route.query.reportLevel == "userLevelReport")
-
   }
   ,
   methods: {

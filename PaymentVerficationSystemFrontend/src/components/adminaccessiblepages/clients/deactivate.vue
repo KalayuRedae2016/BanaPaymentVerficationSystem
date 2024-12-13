@@ -341,6 +341,9 @@ export default {
   },
 
   methods: {
+    reloadPage() {
+    window.location.reload();
+    },
     showSuccessToastMessage(message) {
       this.successToastMessage = message;
       this.showSuccessToast = true;
@@ -360,6 +363,7 @@ export default {
       // Toast will disappear after 3 seconds
     },
     activate(userId) {
+      
       this.showActivationModal = false;
       const payload = {
         userId: userId,
@@ -375,9 +379,7 @@ export default {
           console.log("users", response);
           if (response.data.status === 1) {
             this.showSuccessToastMessage(response.data.message);
-            // this.successMessage = response.data.message;//"Selected user is Activated";//
-            // this.showSuccess=true;
-            // this.displayedItems();
+            this.reloadPage();
           }
         })
         .catch((error) => {

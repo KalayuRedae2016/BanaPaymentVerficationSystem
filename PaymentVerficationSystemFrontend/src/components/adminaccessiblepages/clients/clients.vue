@@ -559,7 +559,9 @@ export default {
 
 
   methods: {
-      
+    reloadPage() {
+    window.location.reload();
+    },
     showSuccessToastMessage(message) {
       this.successToastMessage = message;
       this.showSuccessToast = true;
@@ -621,6 +623,7 @@ export default {
           console.log("users", response.data.message);
           if (response.data.status===1) {
            // this.fetchUsers();
+           this.reloadPage();
             this.showSuccessToastMessage(response.data.message)
             // this.successMessage = response.data.message
             // this.showSuccess=true;

@@ -439,7 +439,10 @@
                 >
                   <i class="fas fa-print text-pink-500 text-xxs"></i> Print
                 </button>
+               
               </div>
+
+              
             </div>
 
             <div class="overflow-x-auto">
@@ -969,6 +972,11 @@
     </div>
   </div>
 </template>
+
+
+
+
+
 
 <script>
 import QRCode from "qrcode";

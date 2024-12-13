@@ -78,8 +78,10 @@
       <tr
       @click="paymentHistory(
               searchPayment.userCode,
+              searchPayment.fullName,
               searchPayment.activeYear,
               searchPayment.activeMonth,
+              
               searchPayment.status
             )"
         v-for="searchPayment in searchedpayments"
@@ -111,6 +113,7 @@
             class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded shadow-lg"
             @click="paymentHistory(
               searchPayment.userCode,
+              searchPayment.fullName,
               searchPayment.activeYear,
               searchPayment.activeMonth,
               searchPayment.status
@@ -250,7 +253,7 @@ export default {
       }
     },
 
-    paymentHistory(userCode, activeYear, activeMonth, status) {
+    paymentHistory(userCode,fullName, activeYear, activeMonth, status) {
       //alert("hii");
       if (status == "confirmed") {
         this.$router.push({
@@ -261,7 +264,15 @@ export default {
           },
         });
       } else {
-        this.$router.push(`/admindashboard/bank-statement/${userCode}`);
+        this.$router.push({
+          path: "/admindashboard/payments1",
+          query:{
+            activeTab:1,
+            userCode:userCode,
+            userSelected:true,
+            fullName:fullName
+          }
+        });
       }
     },
 
