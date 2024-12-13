@@ -130,9 +130,9 @@
                         v-for="account in companyProfile.blockBankAccounts"
                         :key="account._id"
                       >
-                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap"> <i class=""></i>
                           <span
-                            class="p-1.5 text-xs font-medium tracking-wider text-blue-500 rounded-lg bg-blue-50"
+                            class="p-1.5 text-xs font-medium tracking-wider text-green-500 rounded-lg bg-blue-50"
                             >{{ account.bankType }}</span
                           >
                         </td>
@@ -173,7 +173,7 @@
                             class="p-3 text-xs text-gray-700 whitespace-nowrap"
                           >
                             <span
-                              class="p-1.5 text-xs font-medium tracking-wider text-blue-500 rounded-lg bg-blue-50"
+                              class="p-1.5 text-xs font-medium tracking-wider text-green-500 rounded-lg bg-blue-50"
                               >{{ account.bankType }}</span
                             >
                           </td>

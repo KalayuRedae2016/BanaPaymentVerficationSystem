@@ -60,7 +60,7 @@
                       id="companyName"
                       class="custom-input"
                       v-model="companyName"
-                      placeholder="Name"
+                      :placeholder="$t('Name')"
                     />
                   </div>
                   <div class="mb-4">
@@ -106,10 +106,12 @@
                     />
                   </div>
                   <div class="mb-4">
+
                     <label class="custom-label">
                       {{ $t("compAddress") }}
                       <span class="custom-star ml-1">*</span>
                     </label>
+
                     <input
                       type="text"
                       id="companyAddress"
@@ -151,7 +153,7 @@
                       >
                         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                           <span
-                            class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200"
+                            class="p-1.5 text-sm font-medium tracking-wider text-green-500 rounded-lg bg-gray-200"
                             >{{ account.bankType }}</span
                           >
                         </td>
@@ -277,7 +279,7 @@
                       >
                         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                           <span
-                            class="p-1.5 text-sm font-medium tracking-wider text-gray-800 rounded-lg bg-gray-200"
+                            class="p-1.5 text-sm font-medium tracking-wider text-green-500 rounded-lg bg-gray-200"
                             >{{ account.bankType }}</span
                           >
                         </td>
@@ -414,7 +416,7 @@
               <form class="px-5 py-5">
                 <div class="mb-4">
                   <label
-                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-sm"
+                    class="block text-sm font-medium text-green-700 sm:text-base md:text-sm"
                   >
                    {{ $t("bankType") }}
 

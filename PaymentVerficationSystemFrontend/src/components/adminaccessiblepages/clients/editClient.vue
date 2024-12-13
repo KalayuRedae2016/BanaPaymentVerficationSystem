@@ -432,17 +432,11 @@ export default {
   },
 
   mounted(){
-
-   
-
-
     this.clientId = this.$route.params.clientId;
- 
     this.$apiClient
         .get(`/api/v1/users/${this.clientId}`)
         .then((response) => {
           console.log("Response client profile", response);
-
           this.clientProfile = response.data.clientProfile;
           this.imageData = "data:image/jpeg;base64," + response.data.imageData;
         })

@@ -3,12 +3,10 @@
     <div class="">
       <h2 class="w-full border-b border-blue-500 text-blue-800 pt-4 px-4 pb-3 font-bold">
         Dashboard
-       
         <span class=""></span>
       </h2>
 
-      
-      <div v-if="showToast">
+   <div v-if="showToast">
     <!-- Optional overlay for modal effect -->
     <div
       class="fixed inset-0 bg-black bg-opacity-50 z-10"
@@ -92,7 +90,7 @@
                     <td
                       class="px-4 py-2 text-left border border-gray-300 text-blue-800"
                     >
-                      {{ $t("yearMonth") }} (2024-5)
+                      {{ $t("yearMonth") }} {{ activeYear }} -{{ activeMonth }}
                     </td>
 
                     <td class="px-4 py-2 text-left border border-gray-300">
