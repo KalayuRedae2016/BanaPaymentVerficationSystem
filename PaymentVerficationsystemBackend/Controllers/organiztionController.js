@@ -104,7 +104,6 @@ exports.getOrganization = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.updateOrganization = catchAsync(async (req, res,next) => {
   //it is one organization
   const { id } = req.params;
