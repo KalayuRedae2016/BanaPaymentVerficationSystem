@@ -190,7 +190,7 @@
 </template>
 
 <script>
-
+import { mapGetters } from "vuex";
 export default {
   data(){
       return{
@@ -200,11 +200,11 @@ export default {
          showErrorToast:false,
          showSuccessToast:false,
 
-
-         
           oldPassword:'',
           newPassword:'',
           confirmNewPasssord:'',
+
+
           showSuccess:"",
           showWarning:"",
           showError:"",
@@ -213,8 +213,40 @@ export default {
           warningMessage:"",
       }
   },
-  methods:{
 
+  computed: {
+   ...mapGetters(["getToken", "getUserId"]),
+   userId() {
+     return this.getUserId;
+   },
+   token() {
+     return this.getToken;
+   },
+
+  },
+
+
+  methods:{
+    showSuccessToastMessage(message) {
+      this.successToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+       
+        this.showSuccessToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+       
+        this.showErrorToast = false;
+      }, 1000); 
+      
+      // Toast will disappear after 3 seconds
+    },
 
       changePassword(){
         if(this.oldPassword==""){
@@ -234,23 +266,18 @@ export default {
           return;
         }
         const payload={
-            oldPassword:this.oldPassword,
-            newPassword:this.newPassword
+            currentPassword:this.oldPassword,
+            newPassword:this.newPassword,
+            userId:this.userId,
         }
 
-        this.$apiClient.post('api/v1/password/changePassword',payload).then((response)=>{
+        this.$apiClient.patch('api/v1/users/updatePassword',payload).then((response)=>{
          
             if(response.data.status===1){
-                this.successMessage=response.data.message;
-                this.showSuccess=true;
-            }else{
-              this.warningMessage=response.data.message;
-              this.showWarning=true;
+                this.showSuccessToastMessage("Updated Successfully")
             }
-        }).catch((error)=>{
-            console.log("error",error);
-            this.errorMessage=error.response.data.message;
-            this.showError=true;
+        }).catch(()=>{
+                this.showErrorToastMessage("Failed to update password")       
         })
       }
   }

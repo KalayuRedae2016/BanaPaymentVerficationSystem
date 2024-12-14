@@ -795,14 +795,14 @@
                       <p
                         class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
-                        {{ payment.regular.penalty }}
+                        {{ payment.regular.penality }}
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
                         class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
-                        {{ payment.subsidy.penalty }}
+                        {{ payment.subsidy.penality }}
                       </p>
                     </td>
 
@@ -810,7 +810,7 @@
                       <p
                         class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
                       >
-                        {{ payment.urgent.penalty }}
+                        {{ payment.urgent.penality }}
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">

@@ -14,7 +14,7 @@
     <div
       v-if="showSuccessToast"
       class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
+      role="//alert"
     >
       <strong class="font-bold">Success!</strong>
       <span class="block sm:inline">{{ succesToastMessage }}</span>
@@ -32,7 +32,7 @@
     <div
       v-if="showErrorToast"
       class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
+      role="//alert"
     >
       <strong class="font-bold">Error!</strong>
       <span class="block sm:inline">{{ errorToastMessage }}</span>
@@ -128,8 +128,11 @@
                       <i class="fas fa-chevron-right mr-3 text-pink-500"></i>
                       <span class="text-xs"
                         >{{ payment.activeYear }} -
-                        {{ payment.activeMonthInString }}</span
+                        {{ payment.activeMonthInString }} {{payment.status}}</span
                       >
+                      <span class="text-xs ml-5 text-yellow-600" v-if="payment.status==='pending'">{{ payment.status }}</span>
+                      <span class="text-xs ml-5 text-red-500" v-else-if="payment.status==='overdue'">{{payment.status}}</span>
+                      
                     </p>
 
                     <p class="mt-3 text-red-500" v-if="payment.permitSelect">
@@ -1146,7 +1149,7 @@
                         >
                           <input
                             v-if="
-                              payment.regular.penality +
+                                payment.regular.penality +
                                 payment.subsidy.penality +
                                 payment.urgent.penality >
                               0
@@ -1799,98 +1802,98 @@ export default {
     //bank statement
 
     showBlockConfirmUnConfirmText(paymentIndex, conUncon) {
-      // //alert("hhhh")
+      // ////alert("hhhh")
       // Show confirmation text when hovering over the button
       if (conUncon == "conShow") {
         this.blockConfirmedIndex = paymentIndex;
       } else {
-        // //alert("hi");
+        // ////alert("hi");
         this.blockUnconfirmIndex = true;
       }
     },
     hideBlockConfirmUnConfirmText(conUncon) {
-      // //alert("hiding");
+      // ////alert("hiding");
       if (conUncon == "conhide") {
         this.blockConfirmedIndex = null;
       } else {
-        // //alert("hello")
+        // ////alert("hello")
         this.blockUnconfirmIndex = false;
       }
     },
     showSubsidyConfirmUnConfirmText(paymentIndex, conUncon) {
-      // //alert("hhhh")
+      // ////alert("hhhh")
       // Show confirmation text when hovering over the button
       if (conUncon == "conShow") {
         this.subsidyConfirmedIndex = paymentIndex;
       } else {
-        // //alert("hi");
+        // ////alert("hi");
         this.subsidyUnconfirmIndex = true;
       }
     },
     hideSubsidyConfirmUnConfirmText(conUncon) {
-      // //alert("hiding");
+      // ////alert("hiding");
       if (conUncon == "conhide") {
         this.subsidyConfirmedIndex = null;
       } else {
-        // //alert("hello")
+        // ////alert("hello")
         this.subsidyUnconfirmIndex = false;
       }
       
     },
     showUrgentConfirmUnConfirmText(paymentIndex, conUncon) {
-      ////alert("hhhh")
+      //////alert("hhhh")
       // Show confirmation text when hovering over the button
       if (conUncon == "conShow") {
         this.urgentConfirmedIndex = paymentIndex;
       } else {
-        // //alert("hi");
+        // ////alert("hi");
         this.urgentUnconfirmedIndex = true;
       }
     },
     hideUrgentConfirmUnConfirmText(conUncon) {
-      // //alert("hiding");
+      // ////alert("hiding");
       if (conUncon == "conhide") {
         this.urgentConfirmedIndex = null;
       } else {
-        ////alert("hello")
+        //////alert("hello")
         this.urgentUnconfirmedIndex = false;
       }
     },
 
     showServiceConfirmUnConfirmText(paymentIndex, conUncon) {
-      // //alert("hhhh")
+      // ////alert("hhhh")
       // Show confirmation text when hovering over the button
       if (conUncon == "conShow") {
         this.serviceConfirmedIndex = paymentIndex;
       } else {
-        // //alert("hi");
+        // ////alert("hi");
         this.serviceUnconfirmIndex = true;
       }
     },
     hideServiceConfirmUnConfirmText(conUncon) {
-      // //alert("hiding");
+      // ////alert("hiding");
       if (conUncon == "conhide") {
         this.serviceConfirmedIndex = null;
       } else {
-        // //alert("hello")
+        // ////alert("hello")
         this.serviceUnconfirmIndex = false;
       }
     },
     showPenalityConfirmUnConfirmText(paymentIndex, conUncon) {
-      //alert("penality");
+      ////alert("penality");
       if (conUncon == "conShow") {
-        //alert("confirm")
+        ////alert("confirm")
         this.penalityConfirmedIndex = paymentIndex;
       } else {
         this.penalityUnconfirmIndex = true;
       }
     },
     hidePenalityConfirmUnConfirmText(conUncon) {
-      // alert("hiding");
+      // //alert("hiding");
       if (conUncon == "conhide") {
         this.penalityConfirmedIndex = null;
       } else {
-        // //alert("hello")
+        // ////alert("hello")
         this.penalityUnconfirmIndex = false;
       }
     },
@@ -1972,7 +1975,7 @@ export default {
               payment.subsidy.bankType = "";
             }
             if (payment.urgent.bankType == null) {
-              // //alert("urgent is empty");
+              // ////alert("urgent is empty");
               payment.urgent.bankType = "";
               //  console.log("ttn",payment.urgent.TTNumber);
             }
@@ -2382,22 +2385,37 @@ export default {
 
       console.log("confirm modal is", this.showConfirmModal);
       console.log("penality Payment", penalityPayment);
+
       this.paymentType = "penality";
       this.activeYear = activeYear;
       this.activeMonth = activeMonth;
+
+      //first make all false
+      this.payments[paymentIndex].permitSelect = false;
+      this.payments[paymentIndex].verifyPenalityPaymentDate = false;
+      this.payments[paymentIndex].verifyPenalityBankType = false;
+      this.payments[paymentIndex].verifyPenalityTTNumber = false;
+      this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = false;
+      this.paymentUnconfirm = false;
+      this.paymentConfirm = false
+      
+      if (
+        !this.payments[paymentIndex].regular.isPaid ||
+        !this.payments[paymentIndex].subsidy.isPaid ||
+        !this.payments[paymentIndex].urgent.isPaid
+      ) {
+        this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = true;
+        return;
+      } 
       if (paymentIndex > 0) {
         this.payments[paymentIndex].permitSelect = true;
         return;
-      } else {
-        this.payments[paymentIndex].permitSelect = false;
-      }
+      } 
 
-      if (this.payments[paymentIndex].penality.paidAt === null) {
+      if (this.payments[paymentIndex].penality.paidAt === null || this.payments[paymentIndex].penality.paidAt=='') {
         this.payments[paymentIndex].verifyPenalityPaymentDate = true;
         return;
-      } else {
-        this.payments[paymentIndex].verifyPenalityPaymentDate = false;
-      }
+      } 
 
       if (
         this.payments[paymentIndex].penality.bankType === null ||
@@ -2405,49 +2423,20 @@ export default {
       ) {
         this.payments[paymentIndex].verifyPenalityBankType = true;
         return;
-      } else {
-        alert(this.payments[paymentIndex].penality.bankType);
-        this.payments[paymentIndex].verifyPenalityPaymentDate = false;
-        this.payments[paymentIndex].verifyPenalityBankType = false;
       }
-      if (this.payments[paymentIndex].penality.TTNumber === null) {
+      if (this.payments[paymentIndex].penality.TTNumber === null || this.payments[paymentIndex].penality.TTNumber=='') {
         this.payments[paymentIndex].verifyPenalityTTNumber = true;
         return;
-      } else {
-        //alert("how")
-        this.payments[paymentIndex].verifyPenalityPaymentDate = false;
-        this.payments[paymentIndex].verifyPenalityBankType = false;
-        this.payments[paymentIndex].verifyPenalityTTNumber = false;
-      }
-      if (
-        !this.payments[paymentIndex].regular.isPaid ||
-        !this.payments[paymentIndex].subsidy.isPaid ||
-        !this.payments[paymentIndex].urgent.isPaid
-      ) {
-        //alert("confirm first");
-        this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = true;
-        //return;
-      } else {
-        // alert("normal");
-        this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = false;
-      }
-
-      //penalityPayment.isPaid = !penalityPayment.isPaid;
+      } 
 
       penalityPayment.amount =
         Number(regularPenality) +
         Number(subsidyPenality) +
         Number(urgentPenality);
       if (penalityPayment.isPaid) {
-        // alert("if")
         this.paymentUnconfirm = true;
-        this.paymentConfirm = false;
-        //penalityPayment.isPaid = !penalityPayment.isPaid;
       } else {
-        //alert("else");
-        this.paymentUnconfirm = false;
         this.paymentConfirm = true;
-        //penalityPayment.isPaid = !penalityPayment.isPaid;
       }
 
       const payload = {
@@ -2457,11 +2446,11 @@ export default {
 
       this.payload = payload;
       this.penalityPayment = penalityPayment;
-      //alert("i reach here");
+      ////alert("i reach here");
       this.showConfirmModal = true;
     },
     fetchRegularPenality(selectedPayment) {
-      //alert("fetch penality called");
+      ////alert("fetch penality called");
 
       console.log(
         "active year ,month,paid at for regular selected",
@@ -2498,7 +2487,7 @@ export default {
         });
     },
     fetchSubsidyPenality(selectedPayment) {
-      //alert("fetch penality called");
+      ////alert("fetch penality called");
 
       console.log("in fetch subsidy penality", selectedPayment);
 

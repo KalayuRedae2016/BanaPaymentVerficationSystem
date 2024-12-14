@@ -181,7 +181,7 @@
           </a>
         </div>
         <div class="">
-          <div v-if="totalOvedue >0 " class="text-sm font-medium text-gray-700 mb-2">
+          <div v-if="totalOvedue > 0 " class="text-sm font-medium text-gray-700 mb-2">
             {{ totalOvedue }} of {{ totalClients }} Clients Have Overdue
             Payments
           </div>
@@ -191,14 +191,14 @@
           </div>
              <div class="relative w-full h-4 bg-gray-200 rounded">
                 <div
-                  class="absolute top-0 left-0 h-4 bg-green-500 rounded"
+                  class="absolute top-0 left-0 h-4 bg-red-500 rounded"
                   :style="{ width: progressOverduePercentage + '%' }"
                 ></div>
               </div>
               <div v-if="progressOverduePercentage > 0" class="text-sm text-gray-600 mt-2">
                 {{ progressOverduePercentage.toFixed(1) }}% Overdue
               </div>
-              <div else class="text-sm text-gray-600 mt-2">
+              <div v-else class="text-sm text-gray-600 mt-2">
                0% Overdue
               </div>
          
@@ -478,7 +478,7 @@ export default {
     this.$apiClient
       .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
       .then((response) => {
-        console.log("allThe Time", response);
+        console.log("allThe Time now nnn", response);
         this.totalOvedue =
           response.data.items.categorizedPayments.overdue.uniqueUsers;
       })

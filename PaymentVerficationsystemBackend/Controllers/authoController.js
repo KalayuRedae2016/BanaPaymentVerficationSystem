@@ -352,9 +352,12 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  const { currentPassword, newPassword } = req.body;
+  console.log(req.body)
+  const { currentPassword, newPassword,userId } = req.body;
+
   // Fetch the user from the database with the existing password
-  const user = await User.findById(req.user._id).select('+password');
+  //const user = await User.findById(req.user._id).select('+password');
+  const user = await User.findById(userId).select('+password');
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
