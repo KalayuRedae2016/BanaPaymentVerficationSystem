@@ -91,6 +91,7 @@ exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
     message,
   });
 });
+
 exports.searchBills = async (req, res) => {
   try {
     const { keyword } = req.query;
@@ -1196,7 +1197,6 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     payment: formattedPayment, // This already contains the formatted dates
   });
 });
-
 
 exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
   const { seen } = req.query; // Get the `seen` parameter from the query

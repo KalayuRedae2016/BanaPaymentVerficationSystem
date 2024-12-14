@@ -8,6 +8,7 @@ function calculateBalances(payments, org) {
     totalPenalityBalance: 0,
     totalBlockBankAccount: 0,
     totalServiceBankAccount: 0,
+    totalRegistrationFee:0,
     TotalOrgBalance: 0,
     blockTransfered: 0,
     serviceTransfered: 0,
@@ -28,6 +29,8 @@ function calculateBalances(payments, org) {
         totalPayments: new Set(),
         totalExpectedAmount: 0,
         totalRegistrationAmount: 0,
+        totalRegFeeAmountPaid: 0,
+        totalRegFeeAmountNotPaid: 0,
         totalRegularAmountPaid: 0,
         totalRegularAmountNotPaid: 0,
         totalUrgentAmountPaid: 0,
@@ -65,6 +68,8 @@ function calculateBalances(payments, org) {
       totalServiceAmountNotPaid: !payment.service?.isPaid ? payment.service?.amount || 0 : 0,
       totalPenalityAmountPaid: payment.penality?.isPaid ? payment.penality.amount : 0,
       totalPenalityAmountNotPaid: !payment.penality?.isPaid ? payment.penality?.amount || 0 : 0,
+      totalRegFeeAmountPaid: payment.isPaid ? payment.registrationFee : 0,
+      totalRegFeeAmountNotPaid:!payment.isPaid ? payment.registrationFee||0:0,
     };
 
     // Update amounts for the current payment's status
@@ -75,8 +80,8 @@ function calculateBalances(payments, org) {
     statusObj.totalBlockBankAccountPaid += amounts.totalRegularAmountPaid + amounts.totalUrgentAmountPaid + amounts.totalSubsidyAmountPaid;
     statusObj.totalBlockBankAccountNotPaid += amounts.totalRegularAmountNotPaid + amounts.totalUrgentAmountNotPaid + amounts.totalSubsidyAmountNotPaid;
 
-    statusObj.totalServiceBankAccountPaid += amounts.totalServiceAmountPaid + amounts.totalPenalityAmountPaid;
-    statusObj.totalServiceBankAccountNotPaid += amounts.totalServiceAmountNotPaid + amounts.totalPenalityAmountNotPaid;
+    statusObj.totalServiceBankAccountPaid += amounts.totalServiceAmountPaid + amounts.totalPenalityAmountPaid+amounts.totalRegFeeAmountPaid;
+    statusObj.totalServiceBankAccountNotPaid += amounts.totalServiceAmountNotPaid + amounts.totalPenalityAmountNotPaid+amounts.totalRegFeeAmountNotPaid;
 
     const paymentTypes = ['regular', 'urgent', 'subsidy', 'service', 'penality'];
     paymentTypes.forEach((type) => {
@@ -182,8 +187,10 @@ function calculateBalances(payments, org) {
       }
     }
   }
-
-  organization.TotalOrgBalance = organization.totalBlockBankAccount + organization.totalServiceBankAccount;
+  //Ensure valid calculations for ServiceBankAccount and TotalOrgBalance
+  organization.totalServiceBankAccount += organization.totalRegistrationFee || 0; 
+  //organization.totalServiceBankAccount += categorizedPayments.pending?.totalRegistrationAmount || 0;
+  organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
 
   return {
     Organization: organization,
