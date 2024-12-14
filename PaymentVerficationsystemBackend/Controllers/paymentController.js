@@ -642,7 +642,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     };
   });
 
-  console.log("Payment Details:", paymentDetails);
+  // console.log("Payment Details:", paymentDetails);
 
   // Handle cases where paymentDetails array might be empty
   if (!paymentDetails.length) {
@@ -1390,15 +1390,16 @@ exports.exportPayments = catchAsync(async (req, res, next) => {
 
 exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   const { userCode, activeYear } = req.query;
-  if (!userCode || !activeYear) {
-    return next(new AppError('User Code or Active Year has not been provided, please try again.', 400))
+  if (!userCode) {
+    return next(new AppError('User Code has not been provided, please try again.', 400))
   }
-
+// Parse activeYear or default to the current year
+const year = parseInt(activeYear, 10) || new Date().getFullYear();
   const searchPattern = new RegExp(userCode, 'i')
   // Construct filter object for querying payments
   const paymentQuery = {
     userCode: { $regex: searchPattern },
-    activeYear: parseInt(activeYear, 10),
+    ...(year && { activeYear: year }),
     isPaid: true,
     status: 'confirmed'
   };
@@ -1488,16 +1489,16 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
 
   });
 
-  console.log(`UserBalances:${userBalances},payments:${paymentsPerYear}`)
+  // console.log(`UserBalances:${userBalances},payments:${paymentsPerYear}`)
   res.status(200).json({
     status: 'success',
     message: `User balance report generated for userCode: ${userCode}`,
-    userBalances: userBalances,
-    payments: paymentsPerYear
+    userBalances: userBalances,//total userBalance
+    payments: paymentsPerYear//totla userBalance per year
   });
 });
 exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
-  console.log("reqeust for calculated org balances")
+  // console.log("reqeust for calculated org balances")
   const payments = await Payment.find({});
   if (!payments.length) {
     return res.status(404).json({ error: 'No payments found!' });

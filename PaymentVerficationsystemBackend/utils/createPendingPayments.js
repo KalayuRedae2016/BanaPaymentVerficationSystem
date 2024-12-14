@@ -66,6 +66,7 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
   }
 
   const totalExpectedAmount = baseAmount + registrationFee;
+  const totalServiceAmount=serviceAmount+registrationFee
   const billCode = `${user.userCode}-${activeYear}-${activeMonth}-${paymentTypeCode}`;
 
   // Create the payment record
@@ -81,10 +82,11 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
     urgent: { amount: urgentAmount },
     regular: { amount: regularAmount },
     subsidy: { amount: subsidyAmount },
-    service: { amount: serviceAmount },
+    service: { amount:totalServiceAmount},
     penality: { amount: 0 },
     baseAmount,
     totalExpectedAmount,
+  
     daysLate: 0,
     barCode: null,
     confirmedDate: null,

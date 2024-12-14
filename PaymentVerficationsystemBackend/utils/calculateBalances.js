@@ -8,7 +8,7 @@ function calculateBalances(payments, org) {
     totalPenalityBalance: 0,
     totalBlockBankAccount: 0,
     totalServiceBankAccount: 0,
-    totalRegistrationFee:0,
+    // totalRegistrationFee:0,//already included in the service
     TotalOrgBalance: 0,
     blockTransfered: 0,
     serviceTransfered: 0,
@@ -19,8 +19,8 @@ function calculateBalances(payments, org) {
 
   payments.forEach((payment) => {
     const paymentStatus = payment.status || 'Undefined';  // Categorize by status (confirmed, pending, etc.)
-    const userCode = payment.userCode.toString();
-    const billCode = payment.billCode.toString();
+     const userCode = payment.userCode?.toString();
+    const billCode = payment.billCode?.toString();
 
     // Initialize categorizedPayments for the current status (confirmed, pending, etc.)
     if (!categorizedPayments[paymentStatus]) {
