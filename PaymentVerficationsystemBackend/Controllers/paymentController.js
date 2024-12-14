@@ -556,7 +556,7 @@ exports.confirmBills = async (req, res) => {
 };
 
 exports.searchPayments = catchAsync(async (req, res, next) => {
-  const { keyword, isPaid } = req.query;
+  const { keyword, isPaid,activeYear,activeMonth} = req.query;
 
   // Validate keyword
   if (!keyword) {
@@ -576,11 +576,13 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       { lastName: { $regex: searchPattern } },
       { phoneNumber: { $regex: searchPattern } },
     ],
-    isPaid:false,
-    //isPaid: isPaid === undefined ? false : isPaid, // Ensure `isPaid` is handled
+    //isPaid:false,
+    isPaid: isPaid === undefined ? false : isPaid, // Ensure `isPaid` is handled
+   ...(activeYear&&{activeYear}),
+   ...(activeMonth&&{activeMonth})
   };
 
-  console.log("Payment Query:", paymentQuery);
+  //console.log("Payment Query:", paymentQuery);
 
   // Fetch payments
   const payments = await Payment.find(paymentQuery)
@@ -630,6 +632,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       registrationFee: payment.registrationFee || 0,
       totalPenality: payment.penality?.amount || 0,
       totalExpectedAmount: payment.totalExpectedAmount || 0,
+      totalPaidAmount:payment.totalPaidAmount,
       isPaid: payment.isPaid || false,
       status: payment.status || "N/A",
       latest: payment.latest || false,
@@ -664,7 +667,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
 });
 
 exports.confirmPayments = catchAsync(async (req, res, next) => {
-  const { billCode, urgent, regular, subsidy, service, penality } = req.body;
+  const { billCode, urgent, regular, subsidy, service, penality,paymentDate} = req.body;
   if(!billCode){
     return next(new AppError(`billCode is required`))
   }
@@ -682,7 +685,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
     const paidAt = isPaid?(updates.paidAt|| Date.now()) : null;
-
+    // const paidAt = isPaid?(updates.paidAt|| Date.now()) : null;
+    
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
@@ -745,7 +749,6 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
       totalAmount: unpaidBill.totalExpectedAmount,
       confirmedDate: new Date().toISOString(),
     });
-
     const latestPayments = await Payment.find({ latest: true });
     if (latestPayments) {
       for (const payment of latestPayments) {
