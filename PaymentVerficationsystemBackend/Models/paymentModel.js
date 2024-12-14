@@ -103,7 +103,7 @@ const paymentSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'confirmed', 'overdue'],
+      enum: ['pending', 'confirmed', 'overdue',"unknown"],
       default: 'pending',
       index: true, // Frequently filtered
     },
