@@ -1,7 +1,7 @@
 <template>
 <div>
 <div class=" border-b border-blue-500">
-<p class="text-blue-800 font-bold px-4 pb-4 pt-3"> {{ $t('editCleintProfile') }}</p>
+<p class="text-blue-800 font-bold px-4 pb-4 pt-3"> {{ $t('Edit Client Profile') }}</p>
 </div>
 
 
