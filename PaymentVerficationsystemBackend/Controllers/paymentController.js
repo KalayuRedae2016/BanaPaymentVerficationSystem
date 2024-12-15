@@ -91,9 +91,11 @@ exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
     message,
   });
 });
+
 exports.searchBills = async (req, res) => {
   try {
     const { keyword } = req.query;
+    console.log(req.query)
     if (!keyword) {
       return res.status(400).json({ message: 'Keyword is required' });
     }
@@ -127,47 +129,17 @@ exports.searchBills = async (req, res) => {
         message: 'Organization not found',
       });
     }
-
     const items = [];
-
     for (const payment of payments) {
       const paymentTypes = ['regular', 'urgent', 'subsidy', 'service', 'penality'];
-      const paymentSetting = await PaymentSetting.findOne({
-        activeYear: payment.activeYear,
-        activeMonth: payment.activeMonth,
-      });
-
-      let totalPenality = 0; // Initialize totalPenality here
-
       for (const type of paymentTypes) {
         if (payment[type] && payment[type].amount && payment[type].isPaid != true) {
-          const dueDate = new Date(paymentSetting.endingDate);
-          const paymentDate = new Date();
-          const daysLate = Math.max(0, Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24)));
-          const amountToPay = payment[type].amount;
-
-          // Determine penality rate based on late days
-          const penaltyRate = paymentSetting[
-            `penalityLate${daysLate > 10 ? 'Above10' : daysLate > 5 ? '10' : '5'}Days`
-          ] || 0;
-
-          // Calculate penality only if there are late days
-          const penality = amountToPay * (daysLate > 0 ? penaltyRate : 0);
-
-          // Accumulate penality for totalPenality
-          totalPenality += penality;
-
-          // console.log("Penalty:", penality);
-          // console.log("Amount to Pay:", amountToPay);
-          // console.log("Days Late:", daysLate);
-          // console.log("Total Penalty:", totalPenality);
-
           items.push({
             _id: payment._id,
             customerName: payment.user.fullName,
             mobile: payment.user.phoneNumber || '',
-            amount: amountToPay,
-            penality: type === 'service' ? totalPenality : penality || 0, // Use accumulated penality for service type
+            amount: payment[type].amount,
+            penality: type === 'penality' ?payment[type].amount: payment[type].penality||0, // Use accumulated penality for service type
             servicefee: 0,
             billCCY: 'ETB',
             PaymentTerm: `${type} Payment for active month ${payment.activeMonth} is ${payment.status}`,
@@ -184,7 +156,7 @@ exports.searchBills = async (req, res) => {
         }
       }
     }
-
+  console.log(items)
     return res.status(200).json({
       error: false,
       status: 1,
@@ -257,34 +229,8 @@ exports.getMoreBills = async (req, res) => {
 
     // Use for...of loop to handle async/await properly
     for (const bill of unPaidBills) {
-      const paymentSetting = await PaymentSetting.findOne({
-        activeYear: bill.activeYear,
-        activeMonth: bill.activeMonth,
-      });
-
-      let totalPenality = 0; // Initialize totalPenality
-
       for (const type of ['urgent', 'regular', 'subsidy', 'service', 'penality']) {
         const paymentType = bill[type];
-
-        if (paymentType && paymentType.amount) {
-          const dueDate = new Date(paymentSetting.endingDate);
-          const paymentDate = new Date();
-          const daysLate = Math.max(0, Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24)));
-          const amountToPay = paymentType.amount;
-
-          // Determine penality rate based on late days
-          const penaltyRate = paymentSetting[
-            `penalityLate${daysLate > 10 ? 'Above10' : daysLate > 5 ? '10' : '5'}Days`
-          ] || 0;
-
-          // Calculate penality only if there are late days
-          const penality = amountToPay * (daysLate > 0 ? penaltyRate : 0);
-
-          // Accumulate penality for totalPenality
-          totalPenality += penality;
-        }
-
         // Check if paymentType ID matches the request, and it's not paid
         if (paymentType && paymentTypeIdsArray.includes(paymentType._id.toString()) && !paymentType.isPaid) {
           let orgAccountNumber;
@@ -307,10 +253,10 @@ exports.getMoreBills = async (req, res) => {
 
           // Push bill details into the array
           billDetails.push({
-            _id: bill._id,
+            //_id: bill._id,
             customerName: bill.fullName,
             amount: type === 'service'
-              ? paymentType.amount + bill.registrationFee + totalPenality
+              ? paymentType.amount + bill.registrationFee
               : paymentType.amount,
             billCCY: 'ETB',
             paymentTerm: `${type.charAt(0).toUpperCase() + type.slice(1)
@@ -431,31 +377,14 @@ exports.confirmBills = async (req, res) => {
           message: `${subdocumentField} payment is already paid for billCode: ${billCode}`
         });
       }
-      if (subdocumentField === "service") {
-        const serviceAmount = unpaidBill.service.amount
-        const penalityAmount = amount - serviceAmount - unpaidBill.registrationFee;
-
-        console.log(unpaidBill.registrationFee)
-        console.log(serviceAmount)
-        console.log(penalityAmount)
-
-        unpaidBill["service"].amount = serviceAmount;
-        unpaidBill["service"].bankType = bankType;
-        unpaidBill["service"].TTNumber = transactionNumber;
-        unpaidBill["service"].penality = unpaidBill["service"].penality || 0;
-        unpaidBill["service"].isPaid = true;
-        unpaidBill["service"].paidAt = new Date();
-        unpaidBill["service"].daysLate = unpaidBill["service"].daysLate || 0;
-
-        unpaidBill["penality"].amount = penalityAmount;
+      if (subdocumentField === "penality") {
+        const penalityAmount = unpaidBill.penality.amount
+        unpaidBill["penality"].amount = penalityAmount||amount;//check
         unpaidBill["penality"].bankType = bankType;
         unpaidBill["penality"].TTNumber = transactionNumber;
         unpaidBill["penality"].penality = unpaidBill["penality"].penality || 0;
         unpaidBill["penality"].isPaid = true;
         unpaidBill["penality"].paidAt = new Date();
-
-        // Ensure daysLate is always a number
-        unpaidBill["penality"].daysLate = unpaidBill["penality"].daysLate || 0;
       } else {
         // Update fields in the subdocument directly in-memory
         unpaidBill[subdocumentField].amount = amount;
@@ -464,8 +393,6 @@ exports.confirmBills = async (req, res) => {
         unpaidBill[subdocumentField].penality = unpaidBill[subdocumentField].penality || 0;
         unpaidBill[subdocumentField].isPaid = true;
         unpaidBill[subdocumentField].paidAt = new Date();
-        // Ensure daysLate is always a number
-        unpaidBill[subdocumentField].daysLate = unpaidBill[subdocumentField].daysLate || 0;
         // Save the updated bill
       }
       await unpaidBill.save();
@@ -556,7 +483,7 @@ exports.confirmBills = async (req, res) => {
 };
 
 exports.searchPayments = catchAsync(async (req, res, next) => {
-  const { keyword, isPaid } = req.query;
+  const { keyword, isPaid,activeYear,activeMonth} = req.query;
 
   // Validate keyword
   if (!keyword) {
@@ -576,11 +503,13 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       { lastName: { $regex: searchPattern } },
       { phoneNumber: { $regex: searchPattern } },
     ],
-    isPaid:false,
-    //isPaid: isPaid === undefined ? false : isPaid, // Ensure `isPaid` is handled
+    //isPaid:false,
+    isPaid: isPaid === undefined ? false : isPaid, // Ensure `isPaid` is handled
+   ...(activeYear&&{activeYear}),
+   ...(activeMonth&&{activeMonth})
   };
 
-  console.log("Payment Query:", paymentQuery);
+  //console.log("Payment Query:", paymentQuery);
 
   // Fetch payments
   const payments = await Payment.find(paymentQuery)
@@ -630,6 +559,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       registrationFee: payment.registrationFee || 0,
       totalPenality: payment.penality?.amount || 0,
       totalExpectedAmount: payment.totalExpectedAmount || 0,
+      totalPaidAmount:payment.totalPaidAmount,
       isPaid: payment.isPaid || false,
       status: payment.status || "N/A",
       latest: payment.latest || false,
@@ -638,7 +568,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     };
   });
 
-  console.log("Payment Details:", paymentDetails);
+  // console.log("Payment Details:", paymentDetails);
 
   // Handle cases where paymentDetails array might be empty
   if (!paymentDetails.length) {
@@ -664,7 +594,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
 });
 
 exports.confirmPayments = catchAsync(async (req, res, next) => {
-  const { billCode, urgent, regular, subsidy, service, penality } = req.body;
+  const { billCode, urgent, regular, subsidy, service, penality,paymentDate} = req.body;
   if(!billCode){
     return next(new AppError(`billCode is required`))
   }
@@ -682,7 +612,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
     const paidAt = isPaid?(updates.paidAt|| Date.now()) : null;
-
+    // const paidAt = isPaid?(updates.paidAt|| Date.now()) : null;
+    
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
@@ -745,7 +676,6 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
       totalAmount: unpaidBill.totalExpectedAmount,
       confirmedDate: new Date().toISOString(),
     });
-
     const latestPayments = await Payment.find({ latest: true });
     if (latestPayments) {
       for (const payment of latestPayments) {
@@ -1036,7 +966,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({ isPaid: false }); // Fetch only unpaid payments
 
   if (payments.length === 0) {
-    return next(new AppError('No unpaid payments found', 400));
+    return res.status(200).json({message:"Unpaid payments is not found",payments:[]})
   }
 
   const bulkUpdates = [];
@@ -1193,7 +1123,6 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     payment: formattedPayment, // This already contains the formatted dates
   });
 });
-
 
 exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
   const { seen } = req.query; // Get the `seen` parameter from the query
@@ -1387,15 +1316,16 @@ exports.exportPayments = catchAsync(async (req, res, next) => {
 
 exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   const { userCode, activeYear } = req.query;
-  if (!userCode || !activeYear) {
-    return next(new AppError('User Code or Active Year has not been provided, please try again.', 400))
+  if (!userCode) {
+    return next(new AppError('User Code has not been provided, please try again.', 400))
   }
-
+// Parse activeYear or default to the current year
+const year = parseInt(activeYear, 10) || new Date().getFullYear();
   const searchPattern = new RegExp(userCode, 'i')
   // Construct filter object for querying payments
   const paymentQuery = {
     userCode: { $regex: searchPattern },
-    activeYear: parseInt(activeYear, 10),
+    ...(year && { activeYear: year }),
     isPaid: true,
     status: 'confirmed'
   };
@@ -1485,16 +1415,16 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
 
   });
 
-  console.log(`UserBalances:${userBalances},payments:${paymentsPerYear}`)
+  // console.log(`UserBalances:${userBalances},payments:${paymentsPerYear}`)
   res.status(200).json({
     status: 'success',
     message: `User balance report generated for userCode: ${userCode}`,
-    userBalances: userBalances,
-    payments: paymentsPerYear
+    userBalances: userBalances,//total userBalance
+    payments: paymentsPerYear//totla userBalance per year
   });
 });
 exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
-  console.log("reqeust for calculated org balances")
+  // console.log("reqeust for calculated org balances")
   const payments = await Payment.find({});
   if (!payments.length) {
     return res.status(404).json({ error: 'No payments found!' });

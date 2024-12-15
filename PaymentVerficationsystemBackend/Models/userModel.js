@@ -105,10 +105,7 @@ const userSchema = new Schema(
       type: Date,
       default: null
     },
-    hasMadepayment: {
-      type: Boolean,
-      default: false
-    },
+    hasMadepayment: {type: Boolean,default: false},
   },
   {
     timestamps: true,
