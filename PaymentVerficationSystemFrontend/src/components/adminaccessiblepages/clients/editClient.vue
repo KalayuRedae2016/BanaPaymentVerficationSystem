@@ -1,11 +1,18 @@
 <template>
   <div>
+      <div>
+        <!-- Import and Use LoadingIndicator -->
+        <LoadingIndicator :visible="isLoading" />
+      </div>
+  <div v-if="!isLoading">
     <div class="border-b border-blue-500">
       <p class="text-blue-800 font-bold px-4 pb-4 pt-3">
         {{ $t("Edit Client Profile") }}
       </p>
     </div>
-
+    <div>
+  
+    </div>
     <transition
       enter-active-class="transform transition duration-300 ease-out"
       enter-from-class="translate-x-full opacity-0"
@@ -69,95 +76,93 @@
       </button>
     </div>
     <div class="text-sm mx-0 lg:mx-5 mt-5">
-  <div class="flex flex-col lg:flex-row space-x-4 space-y-4 lg:space-y-0">
-    <!-- Image Section -->
- 
-      <div
-        class="mx-auto bg-gray-500 border  border-gray-300 rounded-xl"
-      >
-        <img
-          :src="imageData"
-          alt="User Profile Image"
-          class="h-full w-full lg:w-96  "
-        />
-      </div>
- 
-    <div class=" space-y-5">
-      <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
-        <div class="flex items-center space-x-3">
-          <i class="fas fa-id-badge text-green-500"></i>
-          <span class="font-semibold text-sm">{{ $t("User Code") }}:</span>
-          <span class="text-lg text-gray-800">{{
-            clientProfile.userCode
-          }}</span>
-        </div>
-      </div>
+      <div class="flex flex-col lg:flex-row space-x-4 space-y-4 lg:space-y-0">
+        <!-- Image Section -->
 
-      <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
-        <div class="flex items-center space-x-3">
-          <i class="fas fa-user text-yellow-500"></i>
-          <span class="font-semibold text-sm">{{ $t("Full Name") }}:</span>
-          <span class="text-lg text-gray-800">{{
-            clientProfile.fullName
-          }}</span>
+        <div class="mx-auto bg-gray-500 border border-gray-300 rounded-xl">
+          <img
+            :src="imageData"
+            alt="User Profile Image"
+            class="h-full w-full lg:w-96"
+          />
         </div>
-      </div>
 
-      <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
-        <div class="flex items-center space-x-3">
-          <i class="fas fa-calendar-alt text-red-500"></i>
-          <span class="font-semibold text-sm">{{ $t("Age") }}:</span>
-          <span class="text-lg text-gray-800">{{ clientProfile.age }}</span>
+        <div class="space-y-5">
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-id-badge text-green-500"></i>
+              <span class="font-semibold text-sm">{{ $t("User Code") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.userCode
+              }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-user text-yellow-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Full Name") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.fullName
+              }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-calendar-alt text-red-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Age") }}:</span>
+              <span class="text-lg text-gray-800">{{ clientProfile.age }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-venus-mars text-indigo-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Gender") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.gender
+              }}</span>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
-        <div class="flex items-center space-x-3">
-          <i class="fas fa-venus-mars text-indigo-500"></i>
-          <span class="font-semibold text-sm">{{ $t("Gender") }}:</span>
-          <span class="text-lg text-gray-800">{{
-            clientProfile.gender
-          }}</span>
+        <!-- Right Column (Remaining Items) -->
+        <div class="space-y-4 lg:w-auto">
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-map-marker-alt text-blue-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Address") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.address
+              }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-phone text-purple-500"></i>
+              <span class="font-semibold text-sm"
+                >{{ $t("phoneNumber") }}:</span
+              >
+              <span class="text-lg text-gray-800">{{
+                clientProfile.phoneNumber
+              }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-envelope text-green-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Email") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.email
+              }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-    <!-- Right Column (Remaining Items) -->
-    <div class="space-y-4 lg:w-auto  ">
-      <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
-        <div class="flex items-center space-x-3">
-          <i class="fas fa-map-marker-alt text-blue-500"></i>
-          <span class="font-semibold text-sm">{{ $t("Address") }}:</span>
-          <span class="text-lg text-gray-800">{{
-            clientProfile.address
-          }}</span>
-        </div>
-      </div>
-
-      <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
-        <div class="flex items-center space-x-3">
-          <i class="fas fa-phone text-purple-500"></i>
-          <span class="font-semibold text-sm">{{ $t("phoneNumber") }}:</span>
-          <span class="text-lg text-gray-800">{{
-            clientProfile.phoneNumber
-          }}</span>
-        </div>
-      </div>
-
-      <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
-        <div class="flex items-center space-x-3">
-          <i class="fas fa-envelope text-green-500"></i>
-          <span class="font-semibold text-sm">{{ $t("Email") }}:</span>
-          <span class="text-lg text-gray-800">{{
-            clientProfile.email
-          }}</span>
-        </div>
-      </div>
-    </div>
-   
-  </div>
-</div>
-
 
     <button @click="showEditModal = true" class="custom-button mt-5 mb-5 ml-5">
       <i class="fas fa-edit mr-2"></i>Edit
@@ -422,16 +427,22 @@
       </transition>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import detail from "./profileEdit/detail.vue";
+import LoadingIndicator from "../../Common/LoadingSpinner.vue";
+
 export default {
   components: {
     detail,
+    LoadingIndicator,
   },
   data() {
     return {
+      isLoading: false,
+      data: null,
       showSuccessToast: false,
       showErrorToast: false,
       succesToastMessage: "",
@@ -454,10 +465,12 @@ export default {
   },
 
   mounted() {
+    this.loadingLoader();
     this.clientId = this.$route.params.clientId;
     this.$apiClient
       .get(`/api/v1/users/${this.clientId}`)
       .then((response) => {
+        this.isLoading = false;
         console.log("Response client profile", response);
         this.clientProfile = response.data.clientProfile;
         this.imageData = "data:image/jpeg;base64," + response.data.imageData;
@@ -465,8 +478,22 @@ export default {
       .catch((error) => {
         console.error("Error fetching client datakk:", error);
       });
+    // this.loadingLoader()
   },
   methods: {
+    async loadingLoader() {
+      this.isLoading = true; // Show loading
+      try {
+        // Simulating a fetch call
+        // setTimeout(() => {
+        //   this.data = "Sample Data from Server";
+        //   this.isLoading = false; // Hide loading
+        // }, 2000);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        this.isLoading = false; // Hide loading on error
+      }
+    },
     reloadPage() {
       window.location.reload();
     },
@@ -511,14 +538,14 @@ export default {
       formData.append("gender", this.clientProfile.gender);
 
       console.log("client id", this.clientProfile._id);
-
+      this.isLoading = true;
       this.$apiClient
         .patch(`/api/v1/users/${this.clientProfile._id}`, formData)
         .then((response) => {
           console.log("response of client finder", response);
           if (response.data.status === 1) {
             console.log("response.data is 1");
-
+            this.isLoading = false;
             this.showSuccessToastMessage("User edited");
             this.reloadPage();
           }
