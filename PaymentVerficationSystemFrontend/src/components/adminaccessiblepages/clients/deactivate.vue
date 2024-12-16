@@ -47,37 +47,37 @@
           class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
         >
           <div class="p-4 mt-8">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex-1 mr-4">
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  :placeholder="$t('searchByNameEmailUsername')"
-                  class="custom-input"
-                />
-              </div>
-              <div>
-                <button
-                  class="bg-blue-800 border border-indigo-500 h-12 font-extrabold rounded-lg text-white font-semibold hover:bg-blue-500"
-                  @click="navigateToCreateClient"
-                >
-                  <svg
-                    class="w-10 h-7 mr-2"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M12 5V19M5 12H19"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
+            
+            
+            <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+  <!-- Search Input -->
+  <div class="flex-1 mr-4">
+    <input
+      v-model="searchQuery"
+      type="text"
+      :placeholder="$t('searchByNameEmailUsername')"
+      class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
+    />
+  </div>
+  
+  <!-- Add New Client Button -->
+  <div>
+  
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
             <div class="overflow-x-auto">
               <table class="w-full border-b border-gray-300 bg-white">
                 <thead class="bg-blue-50">

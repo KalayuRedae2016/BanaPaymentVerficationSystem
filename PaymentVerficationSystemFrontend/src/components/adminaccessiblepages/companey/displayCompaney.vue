@@ -45,67 +45,86 @@
 
     <div
       v-if="organizationCreated === 1 || organizationCreated === 2"
-      class="container flex-col mb-96 bg-white border-t border-indigo-800 -mt-1"
+      class="container flex-col bg-white border-t border-indigo-800 -mt-1"
     >
-      <div v-if="organizationCreated === 1" class="flex flex-wrap mx-auto p-4">
+      <div v-if="organizationCreated === 1" class="m-4 flex flex-wrap  p-4 border border-gray-300 rounded-lg">
         <div class="w-full py-8 -mt-8">
           <div class="flex flex-col md:flex-row md:items-center">
             <div
-              class="flex-grow border-t-2 border-b-2 border-blue-500 p-3 rounded-lg bg-white"
+              class="flex-grow  p-3 rounded-lg bg-white"
             >
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-  <div class="flex flex-col space-y-4">
-    <!-- Company Name -->
-    <div class="bg-white border-b border-dotted p-4 rounded-md">
-      <div class="flex items-center space-x-3">
-        <i class="fas fa-building text-indigo-500"></i>
-        <span class="font-semibold text-sm">{{ $t("compName") }}:</span>
-        <span class="text-xs text-gray-800">{{ companyProfile.companyName }}</span>
-      </div>
-    </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                <div class="flex flex-col space-y-4">
+                  <!-- Company Name -->
+                  <div class="bg-white border-b border-dotted p-4 rounded-md">
+                    <div class="flex items-center space-x-3">
+                      <i class="fas fa-building text-indigo-500"></i>
+                      <span class="font-semibold text-sm"
+                        >{{ $t("compName") }}:</span
+                      >
+                      <span class="text-xs text-gray-800">{{
+                        companyProfile.companyName
+                      }}</span>
+                    </div>
+                  </div>
 
-    <!-- Company Prefix Code -->
-    <div class="bg-white border-b border-dotted p-4 rounded-md">
-      <div class="flex items-center space-x-3">
-        <i class="fas fa-code text-blue-500"></i>
-        <span class="font-semibold text-sm">{{ $t("compPrefixCode") }}:</span>
-        <span class="text-xs text-gray-800">{{ companyProfile.companyPrefixCode }}</span>
-      </div>
-    </div>
+                  <!-- Company Prefix Code -->
+                  <div class="bg-white border-b border-dotted p-4 rounded-md">
+                    <div class="flex items-center space-x-3">
+                      <i class="fas fa-code text-blue-500"></i>
+                      <span class="font-semibold text-sm"
+                        >{{ $t("compPrefixCode") }}:</span
+                      >
+                      <span class="text-xs text-gray-800">{{
+                        companyProfile.companyPrefixCode
+                      }}</span>
+                    </div>
+                  </div>
 
-    <!-- Phone Number -->
-    <div class="bg-white border-b border-dotted p-4 rounded-md">
-      <div class="flex items-center space-x-3">
-        <i class="fas fa-phone text-green-500"></i>
-        <span class="font-semibold text-sm">{{ $t("companyPhoneNumber") }}:</span>
-        <span class="text-xs text-gray-800">{{ companyProfile.companyPhoneNumber }}</span>
-      </div>
-    </div>
-  </div>
+                  <!-- Phone Number -->
+                  <div class="bg-white border-b border-dotted p-4 rounded-md">
+                    <div class="flex items-center space-x-3">
+                      <i class="fas fa-phone text-green-500"></i>
+                      <span class="font-semibold text-sm"
+                        >{{ $t("companyPhoneNumber") }}:</span
+                      >
+                      <span class="text-xs text-gray-800">{{
+                        companyProfile.companyPhoneNumber
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
 
-  <div class="flex flex-col space-y-4">
-    <!-- Company Email -->
-    <div class="bg-white border-b border-dotted p-4 rounded-md">
-      <div class="flex items-center space-x-3">
-        <i class="fas fa-envelope text-yellow-500"></i>
-        <span class="font-semibold text-sm">{{ $t("compEmail") }}:</span>
-        <span class="text-xs text-gray-800">{{ companyProfile.companyEmail }}</span>
-      </div>
-    </div>
+                <div class="flex flex-col space-y-4">
+                  <!-- Company Email -->
+                  <div class="bg-white border-b border-dotted p-4 rounded-md">
+                    <div class="flex items-center space-x-3">
+                      <i class="fas fa-envelope text-yellow-500"></i>
+                      <span class="font-semibold text-sm"
+                        >{{ $t("compEmail") }}:</span
+                      >
+                      <span class="text-xs text-gray-800">{{
+                        companyProfile.companyEmail
+                      }}</span>
+                    </div>
+                  </div>
 
-    <!-- Company Address -->
-    <div class="bg-white border-b border-dotted p-4 rounded-md">
-      <div class="flex items-center space-x-3">
-        <i class="fas fa-map-marker-alt text-red-500"></i>
-        <span class="font-semibold text-sm">{{ $t("compAddress") }}:</span>
-        <span class="text-xs text-gray-800">{{ companyProfile.companyAddress }}</span>
-      </div>
-    </div>
-  </div>
-</div>
+                  <!-- Company Address -->
+                  <div class="bg-white border-b border-dotted p-4 rounded-md">
+                    <div class="flex items-center space-x-3">
+                      <i class="fas fa-map-marker-alt text-red-500"></i>
+                      <span class="font-semibold text-sm"
+                        >{{ $t("compAddress") }}:</span
+                      >
+                      <span class="text-xs text-gray-800">{{
+                        companyProfile.companyAddress
+                      }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-
-              <div class="font-bold text-lg mt-4 mb-2 divide-y divide-dashed">
+              <div class="font-bold text-sm  mt-4 mb-2 divide-y divide-dashed">
                 <p class="text-indigo-500 mb-3 mt-4">
                   {{ $t("blockAccounts") }}
                 </p>
@@ -130,13 +149,14 @@
                         v-for="account in companyProfile.blockBankAccounts"
                         :key="account._id"
                       >
-                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap"> <i class=""></i>
+                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                          <i class="fas fa-university mr-3 text-purple-500"></i>
                           <span
-                            class="p-1.5 text-xs font-medium tracking-wider text-green-500 rounded-lg bg-blue-50"
+                            class="p-1.5 text-xs  tracking-wider text-blue-500 rounded-lg bg-blue-50 font-bold"
                             >{{ account.bankType }}</span
                           >
                         </td>
-                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                        <td class="p-3 text-xs text-gray-400 whitespace-nowrap">
                           {{ account.bankAccountNumber }}
                         </td>
                       </tr>
@@ -145,7 +165,7 @@
                 </div>
 
                 <div
-                  class="font-bold text-xs mt-10 mb-4 divide-y divide-dashed text-indigo-500"
+                  class="font-bold text-sm  mt-10 pt-5 mb-4 divide-y divide-dashed text-indigo-500"
                 >
                   {{ $t("serviceAccounts") }}
                   <div class="mt-5">
@@ -169,19 +189,16 @@
                           v-for="account in companyProfile.serviceBankAccounts"
                           :key="account._id"
                         >
-                          <td
-                            class="p-3 text-xs text-gray-700 whitespace-nowrap"
+                        <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                          <i class="fas fa-university mr-3 text-purple-500"></i>
+                          <span
+                            class="p-1.5 text-xs  tracking-wider text-blue-500 rounded-lg bg-blue-50 font-bold"
+                            >{{ account.bankType }}</span
                           >
-                            <span
-                              class="p-1.5 text-xs font-medium tracking-wider text-green-500 rounded-lg bg-blue-50"
-                              >{{ account.bankType }}</span
-                            >
-                          </td>
-                          <td
-                            class="p-3 text-xs text-gray-700 whitespace-nowrap"
-                          >
-                            {{ account.bankAccountNumber }}
-                          </td>
+                        </td>
+                        <td class="p-3 text-xs text-gray-400 whitespace-nowrap">
+                          {{ account.bankAccountNumber }}
+                        </td>
                         </tr>
                       </tbody>
                     </table>

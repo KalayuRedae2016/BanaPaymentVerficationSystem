@@ -3,23 +3,12 @@
     <div class="pb-5 flex flex-col bg-white -mt-2 ">
       <div class=" ">
         <div
-          class="flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-1  bg-white p-4 rounded-lg shadow-md space-y-2 lg:space-x-0"
+          class="mb-5 flex flex-col lg:flex-row space-x-0 lg:space-x-1  bg-white p-4 rounded-lg shadow-md space-y-2 lg:space-x-0"
         >
-          <!-- Search Input -->
-          <div class="flex-1 w-full lg:w-3/4">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search by Name, Email, Username"
-              class=" text-xs w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-            />
-          </div>
-
-          <!-- Payment Type Select -->
           <select
             v-model="paymentType"
             @change="changeSearched(paymentType)"
-            class="w-full lg:w-1/4 text-xs border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            class="w-full  text-xs border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           >
             <option value="" selected disabled>Select Payment Type</option>
             <option value="all">All</option>
@@ -89,7 +78,7 @@
    
   </table>
 
-  <div v-if="!searchedTransferedPayments" class="">No Transfered Payments</div>
+  <div v-if="!searchedTransferedPayments" class="m-5 text-blue-500">No Transfered Payments</div>
 </div>
 
 
