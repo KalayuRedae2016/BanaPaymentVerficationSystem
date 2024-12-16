@@ -1,35 +1,7 @@
 <template>
   <div class="bg-gray-200">
     <div class="relative md:ml-64">
-      <!-- navbar -->
-      <!-- <header v-if="!largerScreen" class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400">
-        <div class="logo">
-          <img
-            src="../../../assets/img/BANA1.PNG"
-            alt="Logo"
-            class="h-8 w-8"
-          />
-        </div>
-       
-          <div class="">
-            <p class="hidden">locale: {{ locale }}</p>
-            <select class="text-md text-indigo-800" @change="changeLanguage">
-              <option value="" disabled selected>
-                {{ $t("Language") }}
-              </option>
-              <option value="tigrigna">{{ $t("Tigrigna") }}</option>
-              <option value="amharic">{{ $t("Amharic") }}</option>
-              <option value="english">English</option>
-            </select>
-          </div>
-        <button
-          class="md:hidden cursor-pointer text-black opacity-50 md:hidden py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
-          type="button"
-          @click="toggleDropdown('sidebar')"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-       </header> -->
+   
 
       <header
         class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400"
@@ -515,46 +487,40 @@
           <div
             class="flex flex-wrap items-center md:justify-between justify-center"
           >
-            <div class="w-full md:w-4/12 px-4">
-              <div class="text-xs text-blueGray-500 font-semibold py-1">
-                Copyright © {{ date }}
-                <a
-                 href="#"
-                  class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1"
-                >
-                  {{ $t('Bana Mall ') }}
-                </a>
-              </div>
-            </div>
+            
             <div class="w-full md:w-8/12 px-4">
               <ul
-                class="flex flex-wrap list-none md:justify-end justify-center"
+                class="flex flex-col lg:flex-row "
               >
+              <li>   Copyright © {{ date }}</li>
+              <li>
+             
+                <a
+                 href="#"
+                  class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1 px-o lg:px-3"
+                >
+                  {{ $t('Grand Technology Solutions ') }}
+                </a>
+              </li>
                 <li>
                   <a
                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
+                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3 "
                   >
                   {{ $t('Bana Mall General Trading') }}
                   </a>
                 </li>
+
                 <li>
                   <a
                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
+                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3"
                   >
                   {{ $t('aboutUs') }}
                   </a>
                 </li>
     
-                <li>
-                  <a
-                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
-                  >
-                  {{ $t('Grand Technology License') }} 
-                  </a>
-                </li>
+              
               </ul>
             </div>
           </div>

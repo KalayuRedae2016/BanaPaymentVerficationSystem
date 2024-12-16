@@ -51,92 +51,130 @@
     </svg>
   </button>
 </div>
+<div class="flex flex-col items-center bg-white rounded-lg px-6 mt-5 mb-5 w-full sm:w-auto">
+  <!-- Profile Image -->
+ 
 
-<div class="">
-      <div class="mb-16">
-        <div class="">
-          <div
-            class="flex flex-col space-x-12 lg:space-x-0 lg:flex-row bg-white rounded-lg p-4 mt-10 w-full sm:w-auto"
-          >
-            <div class="w-full lg:w-1/4 flex justify-center">
-              <img
-                :src="imageData"
-                alt="User Profile Image"
-                class="w-32 h-32 border border-gray-200 p-3 rounded-full"
-              />
-            </div>
-
-            <div class="w-full lg:w-2/3 mt-16 lg:mt-0">
-              <div class="w-full flex flex row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">{{ $t("Usercode") }} </strong>
-                <span class="w-1/2"> {{ clientProfile.userCode }}</span>
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">{{ $t("firstName") }} :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.firstName }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Middle Name :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.middleName }}</span
-                >
-              </div>
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Last Name :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.lastName }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Gender :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.gender }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Age :</strong>
-                <span class="w-1/2 ml-3 text-xs"> {{ clientProfile.age }}</span>
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Address :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.address }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Email :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.email }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Phone Number :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.phoneNumber }}</span
-                >
-              </div>
-            </div>
-            <div class="1/4">
-              <button
-                @click="showEditModal = true"
-                class="text-xs mt-3 h-10 text-indigo-500 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <i class="fas fa-edit mr-2"></i>Edit
-              </button>
-            </div>
+  <!-- User Information -->
+  <div class="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-6">
+    <!-- Column 1 -->
+    
+    <div class="shadow p-4  justify-center items-center ">
+      <div class="mx-auto w-32 h-32 border border-gray-300 p-3 rounded-full mb-6">
+    <img
+      :src="imageData"
+      alt="User Profile Image"
+      class="w-full h-full object-cover rounded-full"
+    />
+  </div>
+      <ul class="space-y-4 text-sm text-gray-700 ">
+        <li
+          class="  border-b border-gray-500 flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-id-badge text-indigo-500"></i>
+            <strong>{{ $t("Usercode") }}:</strong>
           </div>
-        </div>
-      </div>
+          <span class="ml-auto">{{ clientProfile.userCode }}</span>
+        </li>
+
+        <li
+          class="border-b border-gray-500 flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-user text-indigo-500"></i>
+            <strong>{{ $t("firstName") }}:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.firstName }}</span>
+        </li>
+
+        <li
+          class="border-b border-gray-500 flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-user text-indigo-500"></i>
+            <strong>Middle Name:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.middleName }}</span>
+        </li>
+
+        <li
+          class="border-b border-gray-500 flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-user text-indigo-500"></i>
+            <strong>Last Name:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.lastName }}</span>
+        </li>
+
+        <li
+          class=" border-b border-gray-500 flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-venus-mars text-indigo-500"></i>
+            <strong>Gender:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.gender }}</span>
+        </li>
+      </ul>
+   
     </div>
+
+    <!-- Column 2 -->
+    <div class="  shadow p-4">
+      <ul class="space-y-4 text-sm text-gray-700">
+        <li
+          class="border-t border-gray-500 flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-calendar-alt text-indigo-500"></i>
+            <strong>Age:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.age }}</span>
+        </li>
+
+        <li
+          class="border-t border-gray-500  flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-map-marker-alt text-indigo-500"></i>
+            <strong>Address:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.address }}</span>
+        </li>
+
+        <li
+          class="border-t border-gray-500  flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-envelope text-indigo-500"></i>
+            <strong>Email:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.email }}</span>
+        </li>
+
+        <li
+          class="border-t border-gray-500 border-bt border-gray-100  flex justify-between items-center hover:bg-gray-100 p-2 rounded-lg transition"
+        >
+          <div class="flex items-center gap-x-2">
+            <i class="fas fa-phone text-indigo-500"></i>
+            <strong>Phone Number:</strong>
+          </div>
+          <span class="ml-auto">{{ clientProfile.phoneNumber }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+ 
+</div>
+
+   <button
+    @click="showEditModal = true"
+    class="custom-button mb-5 ml-8"
+  >
+    <i class="fas fa-edit mr-2"></i>Edit
+  </button>
 
     <div v-if="showEditModal" style="height: 400px;">
       <transition name="fade" mode="out-in">

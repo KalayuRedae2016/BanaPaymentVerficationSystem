@@ -12,28 +12,7 @@
         </div>
 
         <!-- Right Section: View Clients Link -->
-        <div>
-          <a
-            href="#"
-            @click="viewClients()"
-            class="text-blue-500 font-medium hover:underline"
-          >
-            {{ $t("viewClients") }}
-          </a>
-          <label
-            for="file-upload"
-            class="mt-3 ml-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 py-2 px-4 rounded-lg transition"
-          >
-            <span> {{ $t("importClientFromExcel") }}</span>
-            <input
-              id="file-upload"
-              type="file"
-              class="hidden"
-              ref="fileInputExcel"
-              @change="handleFileInput"
-            />
-          </label>
-        </div>
+     
       </div>
 
 
@@ -73,14 +52,32 @@
       <span class="block sm:inline">{{ errorToastMessage }}</span>
     </div>
   </transition> 
-
-      <div class="flex flex-row z-0">
-        <div class="flex items-center justify-between mb-4">
-          <div class="m-5"></div>
+  <div class="flex flex-row space-x-6 mt-5 ml-5">
+    <label
+            for="file-upload"
+            class="px-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 rounded-lg"
+          >
+            <span> {{ $t("Import users(excel)") }}</span>
+            <input
+              id="file-upload"
+              type="file"
+              class="hidden"
+              ref="fileInputExcel"
+              @change="handleFileInput"
+            />
+          </label>
+          <a
+            href="#"
+            @click="viewClients()"
+            class="text-blue-500 font-medium hover:underline"
+          >
+            {{ $t("viewClients") }}
+          </a>
+        
         </div>
-      </div>
+     
       <div
-        class="flex flex-col mx-4 space-y-3 md:space-y-0 md:flex-row md:space-x-5"
+        class="mt-3 flex flex-col mx-4 space-y-3 md:space-y-0 md:flex-row md:space-x-5 border border-gray-300 p-3 rounded-lg"
       >
         <div class="w-full space-y-3 md:w-1/2">
           <div class="w-full">
