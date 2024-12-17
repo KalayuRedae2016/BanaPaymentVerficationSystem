@@ -1,144 +1,174 @@
 <template>
-<div>
-<div class=" border-b border-blue-500">
-<p class="text-blue-800 font-bold px-4 pb-4 pt-3"> {{ $t('editCleintProfile') }}</p>
-</div>
+  <div>
+      <div>
+        <!-- Import and Use LoadingIndicator -->
+        <LoadingIndicator :visible="isLoading" />
+      </div>
+  <div v-if="!isLoading">
+    <div class="border-b border-blue-500">
+      <p class="text-blue-800 font-bold px-4 pb-4 pt-3">
+        {{ $t("Edit Client Profile") }}
+      </p>
+    </div>
+    <div>
+  
+    </div>
+    <transition
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-from-class="translate-x-full opacity-0"
+      enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transform transition duration-300 ease-in"
+      leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="translate-x-full opacity-0"
+    >
+      <div
+        v-if="showSuccessToast"
+        class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+        role="alert"
+      >
+        <strong class="font-bold">Success!</strong>
+        <span class="block sm:inline">{{ succesToastMessage }}</span>
+      </div>
+    </transition>
 
+    <transition
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-from-class="translate-x-full opacity-0"
+      enter-to-class="translate-x-0 opacity-100"
+      leave-active-class="transform transition duration-300 ease-in"
+      leave-from-class="translate-x-0 opacity-100"
+      leave-to-class="translate-x-full opacity-0"
+    >
+      <div
+        v-if="showErrorToast"
+        class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+        role="alert"
+      >
+        <strong class="font-bold">Error!</strong>
+        <span class="block sm:inline">{{ errorToastMessage }}</span>
+      </div>
+    </transition>
 
-<transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
     <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      v-if="formEmptyEditProfilemmm"
+      class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative"
       role="alert"
     >
       <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ succesToastMessage }}</span>
+      <span class="block sm:inline">User profile edited successfully.</span>
+      <button
+        type="button"
+        class="absolute top-0 bottom-0 right-0 px-4 py-3"
+        aria-label="Close"
+        onclick="this.parentElement.style.display='none'"
+      >
+        <svg
+          class="fill-current h-6 w-6 text-green-700"
+          role="button"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <title>Close</title>
+          <path
+            d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.641a.5.5 0 00.707.707L10 10.707l3.641 3.64a.5.5 0 00.707-.707L10.707 10l3.641-3.641a.5.5 0 000-.707z"
+          />
+        </svg>
+      </button>
     </div>
-  </transition> 
+    <div class="text-sm mx-0 lg:mx-5 mt-5">
+      <div class="flex flex-col lg:flex-row space-x-4 space-y-4 lg:space-y-0">
+        <!-- Image Section -->
 
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
-    </div>
-  </transition> 
+        <div class="mx-auto bg-gray-500 border border-gray-300 rounded-xl">
+          <img
+            :src="imageData"
+            alt="User Profile Image"
+            class="h-full w-full lg:w-96"
+          />
+        </div>
 
-<div v-if="formEmptyEditProfilemmm" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-  <strong class="font-bold">Success!</strong>
-  <span class="block sm:inline">User profile edited successfully.</span>
-  <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" aria-label="Close" onclick="this.parentElement.style.display='none'">
-    <svg class="fill-current h-6 w-6 text-green-700" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <title>Close</title>
-      <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.641a.5.5 0 00.707.707L10 10.707l3.641 3.64a.5.5 0 00.707-.707L10.707 10l3.641-3.641a.5.5 0 000-.707z" />
-    </svg>
-  </button>
-</div>
-
-<div class="">
-      <div class="mb-16">
-        <div class="">
-          <div
-            class="flex flex-col space-x-12 lg:space-x-0 lg:flex-row bg-white rounded-lg p-4 mt-10 w-full sm:w-auto"
-          >
-            <div class="w-full lg:w-1/4 flex justify-center">
-              <img
-                :src="imageData"
-                alt="User Profile Image"
-                class="w-32 h-32 border border-gray-200 p-3 rounded-full"
-              />
+        <div class="space-y-5">
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-id-badge text-green-500"></i>
+              <span class="font-semibold text-sm">{{ $t("User Code") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.userCode
+              }}</span>
             </div>
+          </div>
 
-            <div class="w-full lg:w-2/3 mt-16 lg:mt-0">
-              <div class="w-full flex flex row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">{{ $t("Usercode") }} </strong>
-                <span class="w-1/2"> {{ clientProfile.userCode }}</span>
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">{{ $t("firstName") }} :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.firstName }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Middle Name :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.middleName }}</span
-                >
-              </div>
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Last Name :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.lastName }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Gender :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.gender }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Age :</strong>
-                <span class="w-1/2 ml-3 text-xs"> {{ clientProfile.age }}</span>
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Address :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.address }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Email :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.email }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Phone Number :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.phoneNumber }}</span
-                >
-              </div>
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-user text-yellow-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Full Name") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.fullName
+              }}</span>
             </div>
-            <div class="1/4">
-              <button
-                @click="showEditModal = true"
-                class="text-xs mt-3 h-10 text-indigo-500 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-calendar-alt text-red-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Age") }}:</span>
+              <span class="text-lg text-gray-800">{{ clientProfile.age }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-venus-mars text-indigo-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Gender") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.gender
+              }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column (Remaining Items) -->
+        <div class="space-y-4 lg:w-auto">
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-map-marker-alt text-blue-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Address") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.address
+              }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-phone text-purple-500"></i>
+              <span class="font-semibold text-sm"
+                >{{ $t("phoneNumber") }}:</span
               >
-                <i class="fas fa-edit mr-2"></i>Edit
-              </button>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.phoneNumber
+              }}</span>
+            </div>
+          </div>
+
+          <div class="bg-white border border-gray-300 p-4 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3">
+              <i class="fas fa-envelope text-green-500"></i>
+              <span class="font-semibold text-sm">{{ $t("Email") }}:</span>
+              <span class="text-lg text-gray-800">{{
+                clientProfile.email
+              }}</span>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="showEditModal" style="height: 400px;">
+    <button @click="showEditModal = true" class="custom-button mt-5 mb-5 ml-5">
+      <i class="fas fa-edit mr-2"></i>Edit
+    </button>
+
+    <div v-if="showEditModal" style="height: 400px">
       <transition name="fade" mode="out-in">
         <div
           class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
@@ -171,10 +201,10 @@
                   <img
                     :src="imageData"
                     alt="User Profile Image"
-                    class="w-16 h-16  rounded-full"
+                    class="w-16 h-16 rounded-full"
                   />
                   <input
-                    class="text-xs md:text-lg mb-5  mt-5 lg:mt-16"
+                    class="text-xs md:text-lg mb-5 mt-5 lg:mt-16"
                     type="file"
                     ref="fileInput"
                     accept="image/*"
@@ -311,149 +341,168 @@
       </transition>
     </div>
 
-  <div v-if="showSuccess">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-cyan-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center mb-4 ml-32">
-                <svg
-                  class="w-8 h-8 text-green-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+    <div v-if="showSuccess">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center mb-4 ml-32">
+                  <svg
+                    class="w-8 h-8 text-green-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  <h2 class="text-xs text-green-800">{{ $t("success") }}!</h2>
+                </div>
+                <p class="text-blue-800 text-xs ml-8">
+                  {{ successMessage }}
+                </p>
+                <button
+                  @click="showSuccess = false"
+                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M5 13l4 4L19 7"
-                  ></path>
-                </svg>
-                <h2 class="text-xs text-green-800">{{ $t('success') }}!</h2>
+                  {{ $t("ok") }}
+                </button>
               </div>
-              <p class="text-blue-800 text-xs ml-8">
-                {{ successMessage }}
-              </p>
-              <button
-                @click="showSuccess = false"
-                class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-              {{ $t('ok') }}
-              </button>
             </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
-          <hr class="my-4 md:min-w-full bg-red-500" />
         </div>
-      </div>
-    </transition>
-  </div>
+      </transition>
+    </div>
 
-  <div v-if="showError">
-    <transition name="fade" mode="out-in">
-      <div
-        class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-      >
-        <!-- Modal Content -->
-        <div class="bg-white rounded-lg p-6 border border-red-500">
-          <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-              <div class="flex items-center justify-center mb-4">
-                <svg
-                  class="w-8 h-8 text-red-500 mr-2"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
+    <div v-if="showError">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-red-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-4">
+                  <svg
+                    class="w-8 h-8 text-red-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  <h2 class="text-sm font-bold text-gray-800">
+                    {{ $t("error") }}!
+                  </h2>
+                </div>
+                <p class="text-gray-600 text-sm">
+                  {{ errorMessage }}
+                </p>
+                <button
+                  @click="showError = false"
+                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  ></path>
-                </svg>
-                <h2 class="text-sm font-bold text-gray-800">{{ $t('error') }}!</h2>
+                  {{ $t("ok") }}
+                </button>
               </div>
-              <p class="text-gray-600 text-sm">
-                {{ errorMessage }}
-              </p>
-              <button 
-                @click="showError = false"
-                class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-              >
-              {{ $t('ok') }}
-              </button>
             </div>
+            <hr class="my-4 bg-red-500" />
           </div>
-          <hr class="my-4 bg-red-500" />
         </div>
-      </div>
-    </transition>
+      </transition>
+    </div>
   </div>
 </div>
-
 </template>
 
 <script>
 import detail from "./profileEdit/detail.vue";
+import LoadingIndicator from "../../Common/LoadingSpinner.vue";
+
 export default {
   components: {
     detail,
-   
+    LoadingIndicator,
   },
   data() {
     return {
-      showSuccessToast:false,
-      showErrorToast:false,
-      succesToastMessage:"",
-      errorToastMessage:"",
+      isLoading: false,
+      data: null,
+      showSuccessToast: false,
+      showErrorToast: false,
+      succesToastMessage: "",
+      errorToastMessage: "",
 
-
-      
       formEmptyEditProfile: false,
-      showSuccess:false,
-      showError:false,
-      errorMessage:"",
-      successMessage:"",
+      showSuccess: false,
+      showError: false,
+      errorMessage: "",
+      successMessage: "",
 
-      showEditModal:false,
-      displayDetail:false,
+      showEditModal: false,
+      displayDetail: false,
       imageData: "",
-      imageFile:"",
-      clientId:"",
+      imageFile: "",
+      clientId: "",
 
-      clientProfile:{
-      },
+      clientProfile: {},
     };
   },
 
-  mounted(){
+  mounted() {
+    this.loadingLoader();
     this.clientId = this.$route.params.clientId;
     this.$apiClient
-        .get(`/api/v1/users/${this.clientId}`)
-        .then((response) => {
-          console.log("Response client profile", response);
-          this.clientProfile = response.data.clientProfile;
-          this.imageData = "data:image/jpeg;base64," + response.data.imageData;
-        })
-        .catch((error) => {
-         console.error("Error fetching client datakk:", error);
-     });
+      .get(`/api/v1/users/${this.clientId}`)
+      .then((response) => {
+        this.isLoading = false;
+        console.log("Response client profile", response);
+        this.clientProfile = response.data.clientProfile;
+        this.imageData = "data:image/jpeg;base64," + response.data.imageData;
+      })
+      .catch((error) => {
+        console.error("Error fetching client datakk:", error);
+      });
+    // this.loadingLoader()
   },
   methods: {
+    async loadingLoader() {
+      this.isLoading = true; // Show loading
+      try {
+        // Simulating a fetch call
+        // setTimeout(() => {
+        //   this.data = "Sample Data from Server";
+        //   this.isLoading = false; // Hide loading
+        // }, 2000);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        this.isLoading = false; // Hide loading on error
+      }
+    },
     reloadPage() {
-    window.location.reload();
+      window.location.reload();
     },
     showSuccessToastMessage(message) {
       this.succesToastMessage = message;
       this.showSuccessToast = true;
       setTimeout(() => {
         this.showSuccessToast = false;
-      }, 1000); 
+      }, 1000);
     },
 
     showErrorToastMessage(message) {
@@ -461,7 +510,7 @@ export default {
       this.showErrorToast = true;
       setTimeout(() => {
         this.showErrorToast = false;
-      }, 1000); 
+      }, 1000);
     },
     handleImageInput() {
       const fileInput = this.$refs.fileInput;
@@ -487,34 +536,33 @@ export default {
       formData.append("email", this.clientProfile.email);
       formData.append("phoneNumber", this.clientProfile.phoneNumber);
       formData.append("gender", this.clientProfile.gender);
-      
+
       console.log("client id", this.clientProfile._id);
-      
+      this.isLoading = true;
       this.$apiClient
         .patch(`/api/v1/users/${this.clientProfile._id}`, formData)
         .then((response) => {
-          console.log("response of client finder",response );
-             if(response.data.status===1){
-              console.log("response.data is 1")
-     
-           this.showSuccessToastMessage("User edited");
-          this.reloadPage();
-
-            }
+          console.log("response of client finder", response);
+          if (response.data.status === 1) {
+            console.log("response.data is 1");
+            this.isLoading = false;
+            this.showSuccessToastMessage("User edited");
+            this.reloadPage();
+          }
         })
         .catch((error) => {
-          console.log("error in the updating",error)
-             this.showErrorToastMessage("Something went wrong");
+          console.log("error in the updating", error);
+          this.showErrorToastMessage("Something went wrong");
         });
     },
   },
 };
 </script>
 <style>
- .custom-paragraph {
-    @apply  text-blue-700 text-sm font-bold mt-5 mb-5;
-  }
-  .loader {
+.custom-paragraph {
+  @apply text-blue-700 text-sm font-bold mt-5 mb-5;
+}
+.loader {
   --d: 15px;
   width: 2px;
   height: 2px;

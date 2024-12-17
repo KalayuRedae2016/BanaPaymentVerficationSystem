@@ -80,7 +80,7 @@
           stroke-linejoin="round"
         />
       </svg>
-      <span>{{ $t('addNewClient') }}</span>
+      <span>{{ $t('Add') }}</span>
     </button>
   </div>
 </div>

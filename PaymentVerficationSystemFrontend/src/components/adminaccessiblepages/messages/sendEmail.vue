@@ -3,7 +3,7 @@
   <!-- this is the page to send email -->
   <div class="container mx-auto p-4 flex flex-col">
     <div class="flex flex-row space-x-3">
-      <p class="text-blue-800 text-md font-bold">{{ $t("sendEMessage") }}</p>
+      <p class="text-blue-800 text-md font-bold">{{ $t("Send Message") }}</p>
     </div>
     <transition
     enter-active-class="transform transition duration-300 ease-out"
@@ -502,27 +502,20 @@ export default {
     filteredusersInSearch() {
       //alert("tadios");
       console.log("search", this.searchQuery);
-      if (this.searchQuery !== "") {
-        console.log("this.current pageinsearch", this.currentPage);
-        if (this.currentPage) {
-          const query = this.searchQuery.toLowerCase();
-          return (this.searchedusers = this.users.filter(
-            (client) =>
-              client.firstName.includes(query) ||
-              client.middleName.includes(query) ||
-              client.lastName.includes(query) ||
-              client.userCode.includes(query)
-            // Add more conditions for other table headers
-          ));
+      console.log("this.users",this.users);
 
-        }
-        const query = this.searchQuery.toLowerCase();
-        return (this.searchedusers = this.searchedusers.filter(
-          (client) =>
-            client.name.firstName.includes(query) ||
-            client.name.middleName.includes(query)
-          // Add more conditions for other table headers
-        ));
+      if (this.searchQuery !== "") {
+       
+          const query = this.searchQuery.toLowerCase();
+          this.searchedusers = this.users.filter((client) =>
+          client.fullName.toLowerCase().includes(query) ||
+          client.userCode.toLowerCase().includes(query)
+            // Add more conditions for other table headers
+          );
+          console.log("searched clients: " ,this.searchedusers)
+       return this.searchedusers;
+        
+       
       } else {
         console.log("searchedusers and it is empty", this.searchedusers);
         this.searchedusers = this.users;

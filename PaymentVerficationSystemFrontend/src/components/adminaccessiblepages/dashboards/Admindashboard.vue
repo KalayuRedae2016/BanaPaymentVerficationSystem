@@ -1,35 +1,7 @@
 <template>
   <div class="bg-gray-200">
     <div class="relative md:ml-64">
-      <!-- navbar -->
-      <!-- <header v-if="!largerScreen" class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400">
-        <div class="logo">
-          <img
-            src="../../../assets/img/BANA1.PNG"
-            alt="Logo"
-            class="h-8 w-8"
-          />
-        </div>
-       
-          <div class="">
-            <p class="hidden">locale: {{ locale }}</p>
-            <select class="text-md text-indigo-800" @change="changeLanguage">
-              <option value="" disabled selected>
-                {{ $t("Language") }}
-              </option>
-              <option value="tigrigna">{{ $t("Tigrigna") }}</option>
-              <option value="amharic">{{ $t("Amharic") }}</option>
-              <option value="english">English</option>
-            </select>
-          </div>
-        <button
-          class="md:hidden cursor-pointer text-black opacity-50 md:hidden py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
-          type="button"
-          @click="toggleDropdown('sidebar')"
-        >
-          <i class="fas fa-bars"></i>
-        </button>
-       </header> -->
+   
 
       <header
         class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400"
@@ -40,11 +12,7 @@
             alt="Logo"
             class="h-8 w-8 min-w-8 min-h-8  max-w-8 max-h-8"
           />
-          <!-- <img
-            src="../../../assets/img/sampleProfile.jpg"
-            alt="Logo"
-            class="mt-3 h-4 w-32 min-w-8 min-h-4 max-w-32 max-h-4 rounded-lg"
-          /> -->
+
         </div>
 
         <div class="flex items-center space-x-4">
@@ -60,46 +28,7 @@
             </select>
           </div>
 
-          <!-- <div
-            class="relative mt-3 mr-3 cursor-pointer"
-            @click="toggleDropdown('message')"
-          >
-            <i class="fas fa-envelope text-blue-500 text-xs"></i>
-            <span
-              style="margin-top: 2px"
-              class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full px-1.5"
-            >
-              {{ messageCount }}
-            </span>
-            <ul
-              v-show="showEmailDropdown"
-              class="absolute right-0 mt-2 w-64 bg-white rounded shadow-lg border-t border-b border-blue-400"
-            >
-              <li class="m-6 text-blue-500 font-bold">Messages</li>
-              <li
-                v-for="(message, index) in messages"
-                :key="index"
-                class="border-b last:border-0"
-              >
-                <a
-                  href="#"
-                  class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
-                >
-                  <img
-                    src="../../../assets/img/profile.JPG"
-                    alt="Notification Image"
-                    class="w-10 h-10 rounded-full mr-3"
-                  />
-                  <div class="flex-1">
-                    <p class="text-sm">{{ message.message }}</p>
-                    <p class="text-xs text-gray-500">
-                      {{ formatDate(message.date) }}
-                    </p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div> -->
+   
 
           <div
             class="relative mt-3 cursor-pointer"
@@ -209,7 +138,6 @@
                 <span>{{ $t("dashboard") }}</span>
               </a>
             </li>
-
             <li
               @click="setActive('companyProfile')"
               class="items-center bg-white hover:bg-gray-300"
@@ -246,49 +174,13 @@
               </a>
             </li>
 
-            <li
-              @click="setActive('paymentSetting')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'paymentSetting'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-cogs opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("paymentSetting") }}</span>
-              </a>
-            </li>
+           
 
             <li
-              @click="setActive('newPayment')"
+              @click="setActive('payment')"
               class="items-center bg-white hover:bg-gray-300"
               :class="
-                activeItem === 'newPayment'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-credit-card opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("newPayments") }}</span>
-              </a>
-            </li>
-
-            <li
-              @click="setActive('allPayments')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'allPayments'
+                activeItem === 'payment'
                   ? 'border-r-4 border-indigo-800'
                   : ''
               "
@@ -299,28 +191,11 @@
                 ><i
                   class="fas fa-list-alt opacity-75 mr-2 text-md text-teal-600"
                 ></i>
-                <span>{{ $t("allPayments") }}</span>
+                <span>{{ $t("Payment") }}</span>
               </a>
             </li>
 
-            <li
-              @click="setActive('paymentReports')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'paymentReports'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-file-alt opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("reports") }}</span>
-              </a>
-            </li>
+          
 
             <li
               @click="setActive('idCard')"
@@ -332,9 +207,8 @@
               <a
                 class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
                 href="#"
-                ><i
-                  class="fas fa-id-cardopacity-75 mr-2 text-md text-teal-600"
-                ></i>
+                ><i class="fas fa-id-card opacity-75 mr-2 text-md text-teal-600"></i>
+
                 <span>{{ $t("idCard") }}</span>
               </a>
             </li>
@@ -422,19 +296,7 @@
             </a>
           </li>
 
-          <li
-            v-if="screenSize === 3"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="/userdashboard/Messages"
-              ><i
-                class="fas fa-users opacity-75 mr-2 text-md text-teal-900"
-              ></i>
-              <span> Messages </span>
-            </a>
-          </li>
+          
         </ul>
       </div>
 
@@ -515,46 +377,40 @@
           <div
             class="flex flex-wrap items-center md:justify-between justify-center"
           >
-            <div class="w-full md:w-4/12 px-4">
-              <div class="text-xs text-blueGray-500 font-semibold py-1">
-                Copyright © {{ date }}
+            
+            <div class="w-full">
+              <ul
+                class="flex flex-col lg:flex-row "
+              >
+              <li>   Copyright © {{ date }}</li>
+              <li>
+             
                 <a
                  href="#"
-                  class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1"
+                  class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1 px-o lg:px-3"
                 >
-                  {{ $t('Bana Mall ') }}
+                  {{ $t('Grand Technology Solutions ') }}
                 </a>
-              </div>
-            </div>
-            <div class="w-full md:w-8/12 px-4">
-              <ul
-                class="flex flex-wrap list-none md:justify-end justify-center"
-              >
+              </li>
                 <li>
                   <a
                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
+                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3 "
                   >
                   {{ $t('Bana Mall General Trading') }}
                   </a>
                 </li>
+
                 <li>
                   <a
                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
+                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3"
                   >
                   {{ $t('aboutUs') }}
                   </a>
                 </li>
     
-                <li>
-                  <a
-                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-3"
-                  >
-                  {{ $t('Grand Technology License') }} 
-                  </a>
-                </li>
+              
               </ul>
             </div>
           </div>
@@ -819,18 +675,10 @@ export default {
       } else if (item === "clients") {
         this.clients();
       }
-      else if(item ==="paymentSetting"){
-        this.paymentSetting();
+      else if(item ==="payment"){
+        this.payment();
       }
-      else if(item ==="paymentReports"){
-        this.paymentReports();
-      }
-      else if(item ==="newPayment"){
-        this.newPayment();
-      }
-      else if(item ==="allPayments"){
-        this.allPayments();
-      }
+     
       else if(item ==="idCard"){
         this.idCard();
       }
@@ -847,7 +695,8 @@ export default {
       this.$router.push("/admindashboard");
     },
 
-    paymentSetting() {
+    payment() {
+   
       this.$router.push({
         path: "/admindashboard/payments1",
         query: {
@@ -856,32 +705,7 @@ export default {
       });
     },
 
-    newPayment() {
-      this.$router.push({
-        path: "/admindashboard/payments1",
-        query: {
-          activeTab: 1,
-        },
-      });
-    },
-
-    allPayments() {
-      this.$router.push({
-        path: "/admindashboard/payments1",
-        query: {
-          activeTab: 2,
-        },
-      });
-    },
-    paymentReports() {
-      this.$router.push({
-        path: "/admindashboard/payments1",
-        query: {
-          activeTab: 3,
-          reportLevel: "userLevelReport",
-        },
-      });
-    },
+   
 
     message() {
       this.sendMessageSelected = true;

@@ -54,38 +54,17 @@
       </a>
     </li>
 
-    <!-- Payments (Collapsible) -->
+  
     <li
+      @click="setActive('payment')"
       class="border-t  border-gray-300 items-center bg-white hover:bg-gray-100 transition"
-      :class="paymentMenuOpen ? 'bg-gray-50' : ''"
+      :class="activeItem === 'payment' ? 'border-r-4 border-indigo-600' : ''"
     >
-      <div
-        class="  ml-4 flex items-center justify-between py-3 font-medium text-gray-800 cursor-pointer"
-        @click="togglePayments"
-      >
-        <div class="flex items-center">
-          <i class="fas fa-wallet mr-3 text-teal-600"></i>
-          <span>{{ $t('payments') }}</span>
-        </div>
-        <i :class="paymentMenuOpen ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
-      </div>
-
-      <ul v-show="paymentMenuOpen" class=" ml-6 mt-2 space-y-1">
-        <li
-          v-for="(item, index) in paymentSubmenu"
-          :key="index"
-          @click="setActive(item.key)"
-          class="-ml-3 bg-white hover:bg-gray-100 transition"
-          :class="activeItem === item.key ? 'border-r-4 border-indigo-600' : ''"
-        >
-          <a class="flex items-center text-gray-800 py-2 font-medium" href="#">
-            <i :class="item.icon + ' mr-3 text-blue-600 mx-3'"></i>
-            <span class="">{{ $t(item.label) }}</span>
-          </a>
-        </li>
-      </ul>
+      <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
+        <i class="fas fa-id-card mr-3 text-teal-600"></i>
+        <span>{{ $t('Payment') }}</span>
+      </a>
     </li>
-
     <!-- ID Card -->
     <li
       @click="setActive('idCard')"
@@ -185,18 +164,10 @@
       } else if (item === "clients") {
         this.clients();
       }
-      else if(item ==="paymentSetting"){
-        this.paymentSetting();
+      else if(item ==="payment"){
+        this.payment();
       }
-      else if(item ==="paymentReports"){
-        this.paymentReports();
-      }
-      else if(item ==="newPayment"){
-        this.newPayment();
-      }
-      else if(item ==="allPayments"){
-        this.allPayments();
-      }
+     
       else if(item ==="idCard"){
         this.idCard();
       }
@@ -227,7 +198,7 @@
       this.$router.push("/admindashboard");
     },
 
-    paymentSetting() {
+    payment() {
       this.$router.push({
         path: "/admindashboard/payments1",
         query: {

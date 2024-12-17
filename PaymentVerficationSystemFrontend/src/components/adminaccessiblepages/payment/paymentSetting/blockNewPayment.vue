@@ -352,7 +352,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <!-- Left Column (First 6 Items) -->
               <div class="space-y-4">
-                <div class="bg-white border-b border-dotted p-4 rounded-md">
+                <div class="bg-white border-b border-dotted p-4 rounded-md border-b border-gray-500">
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-money-bill-alt text-green-500"></i>
                     <span class="font-semibold text-sm"
@@ -365,7 +365,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-hand-holding-usd text-yellow-500"></i>
@@ -381,7 +381,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-exclamation-circle text-red-500"></i>
@@ -397,7 +397,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-cogs text-indigo-500"></i>
@@ -411,7 +411,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-percent text-blue-500"></i>
@@ -425,7 +425,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-check text-teal-500"></i>
@@ -442,7 +442,7 @@
               <!-- Right Column (Remaining Items) -->
               <div class="space-y-4">
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-day text-purple-500"></i>
@@ -456,7 +456,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-alt text-orange-500"></i>
@@ -470,7 +470,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-times text-red-500"></i>
@@ -484,7 +484,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-clock text-yellow-500"></i>
@@ -498,7 +498,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-clock text-pink-400"></i>
@@ -512,7 +512,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm"
+                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-clock text-red-500"></i>
