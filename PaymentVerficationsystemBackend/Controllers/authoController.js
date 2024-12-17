@@ -260,7 +260,7 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   //console.log(`Resettoemail:`, resetToken);
   try {
     //const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-    const resetURL = `http://localhost:5173/resetPassword/${resetToken}`
+    const resetURL = `http://49.13.235.6:3000/resetPassword/${resetToken}`
     const message = `Forgot your password? Submit a request with your new password to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
     const email = user.email;
     const subject = 'Your password reset token (valid for 10 minutes)'
