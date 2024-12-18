@@ -1162,7 +1162,7 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
   const searchPattern = new RegExp(keyword, 'i');
   const paymentQuery = {};
   if (isPaid) paymentQuery.isPaid = isPaid
-  console.log(paymentQuery)
+  console.log(paymentQuery,isPaid)
   switch (keyword) {
     case "latestPayments":
       const latestSetting = await PaymentSetting.findOne({ latest: true });
@@ -1203,7 +1203,7 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
     };
   });
 
-  console.log(formattedPayments)
+  //console.log(formattedPayments)
   res.status(200).json({
     status: 'success',
     message: `${keyword} fetched successfully`,
@@ -1472,7 +1472,10 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
+  if(!payments){
+    return next(new AppError(`No confirmed Payments Found`, 400));
 
+  }
   // Calculate the balances
   const bankBalances = calculateBalances(payments, organization);
 
