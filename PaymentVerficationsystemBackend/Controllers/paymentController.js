@@ -10,8 +10,10 @@ const { processPaymentItems } = require('../utils/paymentUtils');
 const { formatDate } = require("../utils/formatDate")
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+
 const createPendingPayments = require("../utils/createPendingPayments")
 const { exportToExcel, importFromExcel, createMulterMiddleware } = require('../utils/excelFileController');
+const { sendEmail } = require('../utils/email');
 const jwt = require('jsonwebtoken');
 
 const fs = require('fs');
@@ -720,7 +722,15 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   const formattedCreatedAt = unpaidBill.createdAt ? formatDate(unpaidBill.createdAt) : null;
   const formattedUpdatedAt = unpaidBill.updatedAt ? formatDate(unpaidBill.updatedAt) : null;
   const formattedConfirmedAt = unpaidBill.confirmedDate ? formatDate(unpaidBill.confirmedDate) : null;
-  
+
+  const user=User.findById(unpaidBill.user)
+  const subject = 'Payment Confirmation';
+    const email = user.email;
+    const message = `Hi ${user.fullName},
+      Your payment for ${unpaidBill.activeYear} in ${activeMonth} has been confirmed.
+      Best regards,
+      The Bana Marketing Group Team;`
+    //await sendEmail({ email, subject, message });
   //console.log(unpaidBill)
   res.status(200).json({
     message: 'Payment types updated successfully',
@@ -1124,33 +1134,63 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
-  const { seen } = req.query; // Get the `seen` parameter from the query
+// exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
+//   const { seen } = req.query; // Get the `seen` parameter from the query
 
-  if (seen === 'false') {
-    // Fetch unseen payments
-    const unseenPayments = await Payment.find({ seen: false, status: 'confirmed' });
+//   if (seen === 'false') {
+//     // Fetch unseen payments
+//     const unseenPayments = await Payment.find({ seen: false, status: 'confirmed' });
 
-    return res.status(200).json({
-      status: 'success',
-      message: 'Unseen payments fetched successfully',
-      payments: unseenPayments,
-    });
-  }
-  else if (seen === 'true') {
-    // Update all unseen payments to seen
-    await Payment.updateMany({ seen: false, status: 'confirmed' }, { seen: true });
-    // Fetch all payments (both seen and unseen)
-    const allPayments = await Payment.find({ status: 'confirmed' });
-    console.log(allPayments)
-    return res.status(200).json({
-      status: 'success',
-      message: 'All payments fetched successfully',
-      payments: allPayments,
-    });
-  } else {
-    return next(new AppError('Invalid query parameter. Use `seen=false` or `seen=true`.', 400));
-  }
+//     return res.status(200).json({
+//       status: 'success',
+//       message: 'Unseen payments fetched successfully',
+//       payments: unseenPayments,
+//     });
+//   }
+//   else if (seen === 'true') {
+//     // Update all unseen payments to seen
+//     await Payment.updateMany({ seen: false, status: 'confirmed' }, { seen: true });
+//     // Fetch all payments (both seen and unseen)
+//     const allPayments = await Payment.find({ status: 'confirmed' });
+//     console.log(allPayments)
+//     return res.status(200).json({
+//       status: 'success',
+//       message: 'All payments fetched successfully',
+//       payments: allPayments,
+//     });
+//   } else {
+//     return next(new AppError('Invalid query parameter. Use `seen=false` or `seen=true`.', 400));
+//   }
+// });
+
+exports.getPaymentNotifications =catchAsync(async (req, res) => {
+    const { userId, admin } = req.query; // Query parameters for user or admin
+
+    if (!userId && !admin) {
+      return next(new AppError('userId or admin parameter is required',400))
+    }
+
+    const filter = userId ?{ userId, seen: false, isPaid: true } // Fetch notifications for a specific user
+      : admin? { adminSeen: false, isPaid: true } // Fetch notifications for admin
+      : {}; // Empty filter if neither provided
+
+    const notifications = await Payment.find(filter).sort({ createdAt: -1 });
+    res.status(200).json({message:notifications });
+})
+exports.markPaymentAsSeen = catchAsync(async (req, res) => {
+    const { paymentId, userId, admin } = req.body; // Parameters from the request body
+
+    if (!paymentId ||!userId ||!admin) {
+      return next(new AppError('userId or admin parameter is required',400))
+    }
+    const update = userId? { seen: true } // User-specific field
+      : admin? { adminSeen: true } // Admin-specific field
+      : {};
+    const payment = await Payment.findByIdAndUpdate(paymentId, update, { new: true });
+
+    if (!payment) return next(new AppError(" 'Payment not found'"),400)
+    
+    res.status(200).json({ message: 'Notification marked as seen.', payment });
 });
 
 exports.getAllPayments = catchAsync(async (req, res, next) => {
@@ -1210,7 +1250,6 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
     payments: formattedPayments
   });
 });
-
 exports.getLatestPayment = catchAsync(async (req, res, next) => {
   let userCode = req.query.userCode
   // const searchPattern = new RegExp(userCode, 'i');
@@ -1269,7 +1308,6 @@ exports.deletePayments = catchAsync(async (req, res, next) => {
     message: `${deletedPayments.deletedCount} Payments Deleted`
   });
 });
-
 exports.generateReceipt = catchAsync(async (req, res, next) => {
   const { billCode } = req.query;
   if (!billCode) {
@@ -1303,7 +1341,6 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
     }
   })
 });
-
 exports.importPayments = catchAsync(async (req, res, next) => {
   const filePath = req.file.path; // Path to the uploaded file
   await importFromExcel(filePath, Payment);

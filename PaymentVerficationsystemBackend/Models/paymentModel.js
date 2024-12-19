@@ -109,7 +109,8 @@ const paymentSchema = new mongoose.Schema(
     },
     isPaid: {type: Boolean,default: false,index: true}, // Frequently filtered},
     latest: {type: Boolean,default: false},
-    seen: { type: Boolean, default: false } // New field for notifications
+    seen: { type: Boolean, default: false }, // User notification
+    adminSeen: { type: Boolean, default: false }, // Admin notification
   },
 {
     timestamps: true,
