@@ -966,7 +966,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({ isPaid: false }); // Fetch only unpaid payments
 
   if (payments.length === 0) {
-    return res.status(200).json({message:"Unpaid payments is not found",payments:[]})
+    return next()
   }
 
   const bulkUpdates = [];
