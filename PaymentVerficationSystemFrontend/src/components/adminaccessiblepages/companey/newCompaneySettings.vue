@@ -488,7 +488,7 @@ export default {
   },
 
   methods: {
-showSuccessToastMessage(message) {
+    showSuccessToastMessage(message) {
       this.successToastMessage = message;
       this.showSuccessToast = true;
       setTimeout(() => {
@@ -550,24 +550,6 @@ showSuccessToastMessage(message) {
           this.showErrorToastMessage("Something went wrong");
 
         });
-
-      // if (this.closepaymentCreated ===false) {
-      //   //console.log("inpost");
-
-      // } else {
-      //   console.log("close data", closeData);
-      //    console.log("in put");
-      //   apiClient
-      //     .put(`/closes/${this.closeId}`, closeData)
-      //     .then((response) => {
-      //       console.log("Update response", response.data);
-      //       // handle the response as needed
-      //     })
-      //     .catch((error) => {
-      //       console.log("Error updating close", error);
-      //       // handle the error as needed
-      //     });
-      // }
     },
 
     addBlockBankAccount() {

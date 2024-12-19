@@ -660,7 +660,7 @@ export default {
     },
 
     register() {
-      this.$reloadPage();
+    
       //  console.log("FamillyMembers", this.familyMembers);
       console.log("register called");
       if (this.firstName === "") {
@@ -779,6 +779,7 @@ export default {
         .then((response) => {
           if (response.data.status === 1) {
            this.showSuccessToastMessage(response.data.message);
+              this.$reloadPage();
           }
         })
         .catch((error) => {

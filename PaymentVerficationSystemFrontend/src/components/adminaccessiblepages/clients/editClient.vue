@@ -76,9 +76,9 @@
 
       <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
         <div
-          class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
+          class="flex flex-col md:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
         >
-          <div class="m-4 w-full h-full lg:w-1/4 h-64 bg-gray-500">
+          <div class="m-4 w-full h-full md:w-1/4 h-64 bg-gray-500">
             <img
               :src="imageData"
               alt="User Profile Image"

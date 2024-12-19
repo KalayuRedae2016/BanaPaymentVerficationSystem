@@ -1,8 +1,22 @@
 import axios from "axios";
-import { reloadPage } from "../utils/utils"; // Adjust the path to match your project structure
+import { reloadPage,showSuccessToastMessage, showErrorToastMessage  } from "../utils/utils"; // Adjust the path to match your project structure
 
 export default {
   async install(app) {
+
+
+    app.config.globalProperties.successToastMessage = "";
+    app.config.globalProperties.errorToastMessage = "";
+    app.config.globalProperties.showSuccessToast = false;
+    app.config.globalProperties.showErrorToast = false;
+
+    // Add global methods
+    app.config.globalProperties.$showSuccessToastMessage = (message) => 
+      showSuccessToastMessage(app, message);
+    app.config.globalProperties.$showErrorToastMessage = (message) => 
+      showErrorToastMessage(app, message);
+
+    
     // Check environment and set base URL
     const isProduction = import.meta.env.MODE === "production";
     const baseUrl = isProduction

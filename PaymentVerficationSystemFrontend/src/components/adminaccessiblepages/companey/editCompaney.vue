@@ -1124,6 +1124,7 @@ export default {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
            this.showSuccessToastMessage(response.data.message)
+           this.$reloadPage();
           }
         })
         .catch((error) => {
@@ -1160,6 +1161,7 @@ export default {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
             this.showSuccessToastMessage(response.data.message)
+            this.$reloadPage();
           }
         })
         .catch((error) => {
@@ -1218,6 +1220,7 @@ export default {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
             this.showSuccessToastMessage(response.data.message);
+            this.$reloadPage();
           }
         })
         .catch((error) => {
@@ -1263,6 +1266,7 @@ export default {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
             this.showSuccessToastMessage(response.data.message);
+            this.$reloadPage();
             //alert(this.successMessage);
           }
         })
@@ -1331,6 +1335,7 @@ export default {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
             this.showSuccessToastMessage(response.data.message);
+            this.$reloadPage();
           }
         })
         .catch((error) => {
@@ -1382,6 +1387,7 @@ export default {
           console.log("response", response);
           if (Number(response.data.status) === 1) {
             this.showSuccessToastMessage(response.data.message);
+            this.$reloadPage();
           }
         })
         .catch((error) => {
@@ -1438,6 +1444,7 @@ export default {
         .then((response) => {
           if (Number(response.data.status) === 1) {
            this.showSuccessToastMessage(response.data.message);
+           this.$reloadPage();
           }
         })
         .catch((error) => {
