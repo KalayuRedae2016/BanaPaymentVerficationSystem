@@ -4,7 +4,6 @@
         <h4 class="text-indigo-800 mt-1">  {{ $t("changePassword") }}</h4>
     </div>
 
-
     <transition
     enter-active-class="transform transition duration-300 ease-out"
     enter-from-class="translate-x-full opacity-0"
@@ -41,8 +40,49 @@
     </div>
   </transition> 
 
-    <div class="border border-gray-300 m-5 p-5 rounded-lg">
-      <form action="">
+    <div class="w-full mt-10 space-y-4 mb-10">
+    <!-- Change Email Section -->
+    <div class="border rounded-lg p-4 shadow-sm mx-5">
+      <div class="flex justify-between items-center cursor-pointer border-b border-gray-300" @click="toggleEmailSection">
+        <h2 class="text-lg  text-gray-500">Change Email</h2>
+        <i
+          :class="showEmailForm ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+          class="text-gray-500"
+        ></i>
+      </div>
+      <!-- Change Email Form -->
+      <div v-show="showEmailForm" class="mt-4">
+        <form action="">
+        <label for="email" class="block text-sm font-medium text-gray-600">New Email</label>
+        <input
+          id="email"
+          type="email"
+          v-model="newEmail"
+          placeholder="Enter your new email"
+          class="w-full h-10 px-3 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          @click.prevent="submitEmail"
+          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Update Email
+        </button>
+      </form>
+      </div>
+    </div>
+
+    <!-- Change Password Section -->
+    <div class="border rounded-lg p-4 shadow-sm mx-5">
+      <div class="border-b border-gray-300 flex justify-between items-center cursor-pointer" @click="togglePasswordSection">
+        <h2 class="text-lg  text-gray-500">Change Password</h2>
+        <i
+          :class="showPasswordForm ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+          class="text-gray-500"
+        ></i>
+      </div>
+      <!-- Change Password Form -->
+      <div v-show="showPasswordForm" class="mt-4 space-y-4">
+        <form action="">
         <div class="md-4" >
              <label for="oldPassword" class="custom-label"> {{ $t("oldPassword") }}</label>
              <input type="password" class="custom-input ml-3 text-xs text-gray-500" v-model="oldPassword" placeholder="Enter Old Password">
@@ -55,9 +95,20 @@
              <label for="confirmnOldPassword" class="custom-label">  {{ $t("confirmNewPassword") }}</label>
              <input type="password" class="custom-input ml-3  text-xs text-gray-500" v-model="confirmNewPasssord" placeholder="Repeat Password">
         </div>
-        <button @click.prevent="changePassword()" class="custom-button mt-5 ml-3">  {{ $t("change") }}</button>
+     
+        <button
+         @click.prevent="changePassword()"
+          class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+        >
+          Update Password
+        </button>
       </form>
+      </div>
     </div>
+  </div>
+
+
+    
   
 </div>
 </template>
@@ -67,6 +118,9 @@ import { mapGetters } from "vuex";
 export default {
   data(){
       return{
+        newEmail:"",
+        showEmailForm: false,
+        showPasswordForm: false,
      successToastMessage:"",
      errorToastMessage:"",
      showErrorToast:false,
@@ -96,6 +150,41 @@ export default {
 
   },
   methods:{
+
+  
+    submitEmail(){
+      if(this.newEmail==""){
+          this.showErrorToastMessage("New email is required")
+          return;
+      }
+      const payload={
+          
+            newEmail:this.newEmail,
+            userId:this.userId,
+        }
+        this.$apiClient.patch('api/v1/users/changeAdminEmail',payload).then((response)=>{
+            console.log("response");
+            if(response.data.status===1){
+              this.showSuccessToastMessage(response.data.message)
+            }else{
+              this.showErrorToastMessage("Something went wrong")
+            }
+        }).catch((error)=>{
+          console.log(error)
+            this.showErrorToastMessage("Incorrect current password")
+           
+         
+        })
+    },
+
+
+    toggleEmailSection() {
+      this.showEmailForm = !this.showEmailForm;
+    },
+    togglePasswordSection() {
+      this.showPasswordForm = !this.showPasswordForm;
+    },
+
     showSuccessToastMessage(message) {
       this.successToastMessage = message;
       this.showSuccessToast = true;

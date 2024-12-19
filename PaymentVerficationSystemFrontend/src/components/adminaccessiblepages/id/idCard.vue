@@ -6,20 +6,22 @@
       </div>
     </div>
     <div class="py-6 -mt-1">
-      <div class="mb-4">
-        <div class="flex flex-col">
-          <div class="flex flex-row space-x-4 text-xs">
-            <input
-              v-model="keyword"
-              id="id-search"
-              type="text"
-              class="custom-input h-10"
-              :placeholder="$t('searchByNameEmailUsername')"
-            />
-          </div>
-          <!-- <p v-if="noUser" class="text-red-500 ml-32"><strong>Hoops! there is no user with this Id <span class="text-blue">{{ currentId }}</span></strong></p> -->
-        </div>
-      </div>
+      
+
+
+
+  <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+  <!-- Search Input -->
+  <div class="flex-1 mr-4">
+    <input
+      v-model="keyword"
+      type="text"
+      :placeholder="$t('searchByNameEmailUsername')"
+      class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
+    />
+  </div>
+
+</div>
 
       <div v-if="showList" class="border-t border-blue-900 border-dotted bg-white h-64 overflow-y-auto ">
         <div
@@ -46,29 +48,39 @@
     <div v-if="showIdCard" class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300 rounded-xl shadow-lg  space-y-6 lg:space-y-0 lg:space-x-8">
     
     <!-- Left Section: Image and Button (Mobile and Desktop) -->
-    <div class="flex flex-col items-center space-y-4 w-full lg:w-1/4 lg:items-start">
-      <img :src="imageData" alt="User Profile" class="h-48 w-48 rounded-full object-cover shadow-xl border-4 border-gray-100" />
+    <div class="flex flex-col items-center space-y-4 w-full lg:w-1/4 lg:items-start rounded-lg">
+      <img :src="imageData" alt="User Profile" class="h-full w-48  object-cover " />
       
-     
+  
     </div>
 
     <!-- Right Section: User Info -->
-    <div class="w-full lg:w-1/3 text-center lg:text-left">
-    
+    <div class="w-full lg:w-1/2 text-center lg:text-left">
       <div class=" text-sm text-gray-500 ml-8">
-        <div class="flex items-center space-x-5">
-          <span class="w-1/3 font-medium text-gray-500">Usercode:</span>
-          <span class="w-2/3 font-medium text-gray-500">{{ selectedUser.userCode }}</span>
-        </div>
-        <div class="mt-3 flex items-center space-x-5">
-          <span class="w-1/3 font-medium text-gray-500">Name:</span>
-          <span class="w-2/3 font-medium text-gray-500">{{ selectedUser.fullName }}</span>
-        </div>
+        <div class="bg-white p-2 rounded-md shadow-sm ">
+              <div class="flex items-center space-x-3 border-b border-gray-300 border-t border-gray-300 py-2">
+                <i class="fas fa-id-badge text-green-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >{{ $t("User Code") }}:{{ selectedUser.userCode }}</span
+                >
+              </div>
+            </div>
+
+            <div class="bg-white p-2 rounded-md shadow-sm">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-user text-yellow-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >Full Name : {{ selectedUser.fullName }}</span
+                >
+              </div>
+            </div>
         <button
-        class="mt-5 flex items-center px-6 py-3 bg-indigo-600 text-white text-base font-medium rounded-full shadow-lg transform transition duration-300 ease-in-out hover:bg-indigo-700 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+        class="border border-gray-300 mt-4 flex items-center px-6 py-3 text-black text-base font-medium rounded-full transform transition duration-300 ease-in-out hover:bg-blue-100 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 hover:text-gray-700"
         @click="downloadReceiptAsPDF"
       >
-        <i class="fas fa-download mr-3"></i>Download ID Card
+        <i class="fas fa-download mr-3"></i>Id Card
       </button>
       </div>
     </div>

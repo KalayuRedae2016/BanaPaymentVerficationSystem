@@ -101,7 +101,7 @@
                     <div class="flex items-center space-x-3">
                       <i class="fas fa-envelope text-yellow-500"></i>
                       <span class="font-semibold text-sm"
-                        >{{ $t("compEmail") }}:</span
+                        >{{ $t("Company Email") }}:</span
                       >
                       <span class="text-xs text-gray-800">{{
                         companyProfile.companyEmail

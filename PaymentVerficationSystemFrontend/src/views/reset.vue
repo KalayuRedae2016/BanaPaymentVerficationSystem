@@ -2,7 +2,7 @@
   <div>
   <div class="flex justify-center">
     <div
-      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md border border-cyan-800 mt-16 rounded-2xl"
+      class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md border border-gray-100 mt-16 rounded-2xl shadow-lg"
     >
       <!-- logo and language -->
 

@@ -85,9 +85,9 @@
               <li>
                 <a
                   href="#"
-                  @click="changePassword()"
+                  @click="accountSetting()"
                   class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                  >{{ $t('changePassword') }}</a
+                  >{{ $t('Account Setting') }}</a
                 >
               </li>
 
@@ -639,7 +639,7 @@ export default {
     },
 
 
-    changePassword() {
+    accountSetting() {
       this.$router.push("/admindashboard/change-password");
     },
     checkScreenSize() {
@@ -718,25 +718,11 @@ export default {
     companyProfile() {
       this.$router.push("/admindashboard/display-companey");
     },
-    //    message() {
-    //   this.$router.push("/admindashboard/send-email");
-    // },
-    // clients() {
-    //   this.$router.push("/admindashboard/clients");
-    // },
-    // reports() {
-    //   this.$router.push("/admindashboard/recent-payment-status-report");
-    // },
-
-    //   payment() {
-    //   this.$router.push("/admindashboard/payments1");
-    // },
-    //  companyProfile() {
-    //   this.$router.push("/admindashboard/display-companey");
-    // },
+   
   
     changeLanguage(event) {
       // alert("alert")
+      this.sidebarVisible=false;
       const selectedLanguage = event.target.value;
       this.$store.dispatch("setLocale", { locale: selectedLanguage });
     },
@@ -745,13 +731,16 @@ export default {
         this.showNotificationDropdown = false;
         this.dropdownVisible = !this.dropdownVisible;
         this.showEmailDropdown = false;
+        this.sidebarVisible = false;
       } else if (target === "notifications") {
         this.dropdownVisible = false;
         this.showEmailDropdown = false;
         this.showNotificationDropdown = !this.showNotificationDropdown;
+        this.sidebarVisible=false;
       } else if (target === "sidebar") {
         this.sidebarVisible = !this.sidebarVisible;
       } else {
+        this.sidebarVisible=false;
         this.dropdownVisible = false;
         this.showNotificationDropdown = false;
         this.showEmailDropdown = !this.showEmailDropdown;
@@ -771,6 +760,8 @@ export default {
       }
     },
     logout() {
+
+     
       this.$store.dispatch("logout");
       this.$router.push("/");
     },

@@ -222,7 +222,7 @@
                         for="fileInput"
                         class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
                       >
-                        <i class="fas fa-upload mr-2"></i>Upload Image
+                        <i class="fas fa-upload mr-2"></i>Choose Image
                       </label>
                       <input
                         id="fileInput"

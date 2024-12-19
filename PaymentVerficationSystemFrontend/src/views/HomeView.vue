@@ -28,6 +28,7 @@
     </svg>
   </button>
 </div>
+
       <div v-if="loginVisible">
         <!-- <h1 class="text-indigo-800 font-semibold text-2xl">
           {{ $t("signIn") }} <span class="text-white"></span>
@@ -113,6 +114,8 @@
             {{ $t('emailRequired') }}
           </p>
         </div>
+
+
         <div
           v-if="notifyToSeeEmail"
           class="mt-7 flex flex-col items-center justify-center p-4 bg-gray-50 border border-blue-300 rounded-3xl text-blue-700"
@@ -144,7 +147,10 @@
             </p>
 
           </div>
+     
         </div>
+        
+
       </div>
     </div>
   </div>
@@ -155,6 +161,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      showError:true,
       errorMessage:"",
       showError:false,
       passwordIsRequired: false,
@@ -173,6 +180,8 @@ export default {
       showForgetPasswordForm: true,
       notifyToSeeEmail: false,
       resetEmailIsRequired:false,
+      emailNotFound:false,
+
     };
   },
   mounted() {
@@ -208,28 +217,46 @@ export default {
       this.forgetPasswordVisible = true;
     },
     sendEmailToServer() {
-      this.showError=false;
+
+    //this.notifyToSeeEmail=true;
+    this.forgetPasswordVisible=true;
+    this.showForgetPasswordForm=true;
+      this.showError=true;
       this.errorMessage="";
       //alert("Sending email to: " + this.resetEmail);
      if(this.resetEmail===''){
       this.showError=true;
-      this.errorMessage="Email is required"
+      this.errorMessage = "Email is required"
        return;
      }
+
+
      const emailData = {
       email:this.resetEmail
 
      };
-      this.notifyToSeeEmail=true;
+ 
       this.showForgetPasswordForm=false;
+
       this.$apiClient
         .post("/api/v1/users/forgetPassword",emailData)
         .then((response) => {
+          if(response.data.status===1){
+            this.notifyToSeeEmail=true;
+            this.successRegister = true;
+          }
           console.log("response during reg", response.data);
           this.successRegister = true;
         })
         .catch((error) => {
           console.log("Error registration", error);
+          this.emailNotFound = true;
+          this.showError=true;
+          this.errorMessage = "Email Not Found"
+          // if(error.response.data.status==401){
+          //   this.emailNotFound=true
+          //   this.showError=true;
+          // }
         });
     },
     changeLanguage(event) {

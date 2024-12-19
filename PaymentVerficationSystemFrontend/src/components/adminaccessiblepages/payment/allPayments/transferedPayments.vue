@@ -2,18 +2,42 @@
   <div class="container mx-auto flex flex-col  ">
     <div class="pb-5 flex flex-col bg-white -mt-2 ">
       <div class=" ">
+
+
+         
+        
         <div
-          class="mb-5 flex flex-col lg:flex-row space-x-0 lg:space-x-1  bg-white p-4 rounded-lg shadow-md space-y-2 lg:space-x-0"
+          class="mb-5 flex flex-col lg:flex-row space-x-0 lg:space-x-3  bg-white p-4 rounded-lg shadow-md space-y-2 lg:space-x-0"
         >
+
+        <div class="w-full lg:w-1/2">
+              <input
+                @keyup.enter="searchUser"
+                v-model="keyword"
+                id="id-search"
+                type="text"
+                class="custom-input h-10 text-xs"
+                placeholder="Search by Bank Name"
+              />
+            </div>
           <select
             v-model="paymentType"
             @change="changeSearched(paymentType)"
             class="w-full  text-xs border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
           >
-            <option value="" selected disabled>Select Payment Type</option>
+            <option value="" selected disabled>Select Account Type</option>
             <option value="all">All</option>
             <option value="block">Block</option>
             <option value="service">Service</option>
+          </select>
+          <select
+          v-model="inOutGoing"
+          @change="changeInOutGoing(inOutGoing)"
+          class="w-full text-xs border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+          >
+          <option value="" selected disabled>Select Transfer Type</option>
+          <option value="outgoing">Outgoing Transfer</option>
+          <option value="incoming">Incoming Transfer</option>
           </select>
         </div>
 
@@ -74,15 +98,10 @@
         </td>
       </tr>
     </tbody>
-
-   
   </table>
 
-  <div v-if="!searchedTransferedPayments" class="m-5 text-blue-500">No Transfered Payments</div>
-</div>
-
-
-    
+       <div v-if="!searchedTransferedPayments" class="m-5 text-blue-500">No Transfered Payments</div>
+      </div>
       </div>
     </div>
   </div>
@@ -92,8 +111,9 @@ export default {
   name: "paymentTransfersView",
   data() {
     return {
+      inOutGoing:"",
       selectMonth: false,
-      paymentType: "all",
+      paymentType:"",
       activeYear: new Date().getFullYear(),
       activeMonth: new Date().getMonth() + 1,
       selectedYear: "",
@@ -181,6 +201,7 @@ export default {
         this.searchedTransferedPayments = this.paymentTransfers;
       }
     },
+    
     changePerPageNumber() {
       this.perPage = this.paymentTransfersPerpage;
       this.displayedItems();

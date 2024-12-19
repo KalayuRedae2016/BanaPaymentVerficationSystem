@@ -202,184 +202,180 @@
           </p>
         </div>
         <div class="overflow-x-auto rounded-lg">
-          <table
-            v-if="reportLength > 0"
-            class="min-w-full divide-y divide-gray-300"
+          <table class="min-w-full divide-y divide-gray-300 text-xs">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              rowspan="3"
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("banks") }}
+            </th>
+            <th
+              colspan="10"
+              class="justify-center items-center text-blue-800  border border-gray-300 py-3"
+            >
+              {{ $t("balance") }}
+            </th>
+          </tr>
+          <tr>
+            <th
+              colspan="4"
+              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
+            >
+              {{ $t("block") }}
+            </th>
+            <th
+              colspan="3"
+              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
+            >
+              {{ $t("service") }}
+            </th>
+            <th
+              rowspan="2"
+              
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("Total Balance") }}
+            </th>
+           
+          </tr>
+          <tr>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("regular") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("subsidy") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("urgent") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("totalBlock") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("penality") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("Monthly Service") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("totalService") }}
+            </th>
+           
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-300">
+          <tr
+            v-for="(balance, bank) in totalBalance.orgBalancesBasedBankType"
+            :key="bank"
           >
-            <thead class="bg-gray-50">
-              <tr>
-                <th
-                  rowspan="3"
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Banks
-                </th>
-                <th
-                  colspan="7"
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Balance
-                </th>
-              </tr>
-              <tr>
-                <th
-                  colspan="4"
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Block
-                </th>
-                <th
-                  colspan="3"
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Service
-                </th>
-              </tr>
-              <tr>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Regular
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Subsidy
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Urgent
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Total Block
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Penality
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  M.service
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  Total Service
-                </th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-300">
-              <tr
-                v-for="(balance, bank) in reports.items.categorizedPayments
-                  .confirmed.bankTypes"
-                :key="bank"
-              >
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ bank }}
-                </td>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ bank }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.regularBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.subsidyBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.urgentBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.totalBlockBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.penalityBalance }}
+            </td>
 
-                <td class="px-4 py-2 text-left border border-gray-300">
-                  {{ balance.regularBalance }}
-                </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.serviceBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.totalServiceBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.totalServiceBalance + balance.totalBlockBalance }}
+            </td>
+          </tr>
 
-                <td class="px-4 py-2 text-left border border-gray-300">
-                  {{ balance.subsidyBalance }}
-                </td>
-                <td class="px-4 py-2 text-left border border-gray-300">
-                  {{ balance.urgentBalance }}
-                </td>
-                <td class="px-4 py-2 text-left border border-gray-300">
-                  {{ balance.totalBlockBalance }}
-                </td>
-                <td class="px-4 py-2 text-left border border-gray-300">
-                  {{ balance.penalityBalance }}
-                </td>
-
-                <td class="px-4 py-2 text-left border border-gray-300">
-                  {{ balance.serviceBalance }}
-                </td>
-                <td class="px-4 py-2 text-left border border-gray-300">
-                  {{ balance.serviceBalance }}
-                </td>
-              </tr>
-              <tr class="font-bold bg-gray-100">
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  Total
-                </td>
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.categorizedPayments.confirmed
-                      .totalRegularAmountPaid
-                  }}
-                </td>
-                <!-- Total Regular -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.categorizedPayments.confirmed
-                      .totalSubsidyAmountPaid
-                  }}
-                </td>
-                <!-- Total Subsidy -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.categorizedPayments.confirmed
-                      .totalUrgentAmountPaid
-                  }}
-                </td>
-                <!-- Total Urgent -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.categorizedPayments.confirmed
-                      .totalBlockBankAccountPaid
-                  }}
-                </td>
-                <!-- Total Urgent -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.categorizedPayments.confirmed
-                      .totalPenalityAmountPaid
-                  }}
-                </td>
-                <!-- Total Block -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.categorizedPayments.confirmed
-                      .totalServiceAmountPaid
-                  }}
-                </td>
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.categorizedPayments.confirmed
-                      .totalServiceBankAccountPaid
-                  }}
-                </td>
-                <!-- Total penality -->
-              </tr>
-            </tbody>
-          </table>
+        
+          <tr class="font-bold bg-gray-100" rowspan="4">
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ $t("total") }}
+            </td>
+          
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalRegularBalance }}
+            </td>
+            <!-- Total Regular -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalSubsidyBalance }}
+            </td>
+            <!-- Total Subsidy -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalUrgentBalance }}
+            </td>
+            <!-- Total Urgent -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalBlockBankAccount }}
+            </td>
+            <!-- Total Urgent -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalPenalityBalance }}
+            </td>
+            <!-- Total Block -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalServiceBalance }}
+            </td>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalServiceBankAccount }}
+            </td>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalServiceBankAccount + totalOrgBalance.totalBlockBankAccount }}
+            </td>
+          </tr>
+         
+          <tr>
+         
+          </tr>
+        </tbody>
+      </table>
         </div>
         <div class="flex flex-row">
           <p
@@ -497,129 +493,55 @@ Date(Day-Month-Year):
       <h2 class="section-title" style="color: #622e2e; font-weight: bold;margin-bottom:15px;">
           Total Balance(Paid In The Gven Time Interval)
       </h2>
-    <table>
-      <thead style="font-size:12px;">
-        <tr>
-          <th rowspan="3">Banks</th>
-          <th colspan="7">Balance</th>
-        </tr>
-        <tr>
-          <th colspan="4">Block</th>
-          <th colspan="3">Service</th>
-        </tr>
-        <tr>
-          <th>Regular</th>
-          <th>Subsidy</th>
-          <th>Urgent</th>
-          <th>Total Block</th>
-          <th>Penalty</th>
-          <th>M. Service</th>
-          <th>Total Service</th>
-        </tr>
-      </thead>
-      <tbody style="background-color:white;font-size:12px;">
-        <tr  v-for="(balance, bank) in reports.items.categorizedPayments
-              .confirmed.bankTypes"
-            :key="bank">
-            <td
-              class=""
-            >
-              {{ bank }}
-            </td>
-            <td class="">
-              {{ balance.regularBalance }}
-            </td>
-            <td class="">
-              {{ balance.subsidyBalance }}
-            </td>
-            <td class="">
-              {{ balance.urgentBalance }}
-            </td>
-            <td class="">
-              {{ balance.totalBlockBalance }}
-            </td>
-            <td class="">
-              {{ balance.penalityBalance }}
-            </td>
+      <table>
+  <thead style="font-size:12px;">
+    <tr>
+      <th rowspan="3" style="text-align: center;">Banks</th>
+      <th colspan="8" style="text-align: center;">Balance</th>
+    </tr>
+    <tr>
+      <th colspan="4" style="text-align: center;">Block</th>
+      <th colspan="3" style="text-align: center;">Service</th>
+      <th colspan="2" rowspan="2" style="text-align: center;">Total Balance</th>
+    </tr>
+    <tr>
+      <th>Regular</th>
+      <th>Subsidy</th>
+      <th>Urgent</th>
+      <th>Total Block</th>
+      <th>Penalty</th>
+      <th>M. Service</th>
+      <th>Total Service</th>
+    </tr>
+  </thead>
+  <tbody style="background-color:white;font-size:12px;">
+    <tr v-for="(balance, bank) in totalBalance.orgBalancesBasedBankType" :key="bank">
+      <td>{{ bank }}</td>
+      <td>{{ balance.regularBalance }}</td>
+      <td>{{ balance.subsidyBalance }}</td>
+      <td>{{ balance.urgentBalance }}</td>
+      <td>{{ balance.totalBlockBalance }}</td>
+      <td>{{ balance.penalityBalance }}</td>
+      <td>{{ balance.serviceBalance }}</td>
+      <td>{{ balance.serviceBalance + balance.penalityBalance }}</td>
+      <td>{{ balance.serviceBalance + balance.totalBlockBalance }}</td>
+    </tr>
 
-            <td class="">
-              {{ balance.serviceBalance }}
-            </td>
-            <td class="">
-              {{ balance.serviceBalance }}
-            </td>
-        </tr>
-       
-        <tr class="highlight">
-          <td
-              class=""
-            >
-              Total
-            </td>
-            <td
-              class=""
-            >
-              {{
-                reports.items.categorizedPayments.confirmed
-                  .totalRegularAmountPaid
-              }}
-            </td>
-            <!-- Total Regular -->
-            <td
-              class=""
-            >
-              {{
-                reports.items.categorizedPayments.confirmed
-                  .totalSubsidyAmountPaid
-              }}
-            </td>
-            <!-- Total Subsidy -->
-            <td
-              class=""
-            >
-              {{
-                reports.items.categorizedPayments.confirmed
-                  .totalUrgentAmountPaid
-              }}
-            </td>
-            <!-- Total Urgent -->
-            <td
-              class=""
-            >
-              {{
-                reports.items.categorizedPayments.confirmed
-                  .totalBlockBankAccountPaid
-              }}
-            </td>
-            <!-- Total Urgent -->
-            <td
-              class=""
-            >
-              {{
-                reports.items.categorizedPayments.confirmed
-                  .totalPenalityAmountPaid
-              }}
-            </td>
-            <!-- Total Block -->
-            <td
-              class=""
-            >
-              {{
-                reports.items.categorizedPayments.confirmed
-                  .totalServiceAmountPaid
-              }}
-            </td>
-            <td
-              class=""
-            >
-              {{
-                reports.items.categorizedPayments.confirmed
-                  .totalServiceBankAccountPaid
-              }}
-            </td>
-        </tr>
-      </tbody>
-    </table>
+    <!-- Total Row -->
+    <tr class="highlight">
+      <td>Total</td>
+      <td>{{ totalOrgBalance.totalRegularBalance }}</td>
+      <td>{{ totalOrgBalance.totalSubsidyBalance }}</td>
+      <td>{{ totalOrgBalance.totalUrgentBalance }}</td>
+      <td>{{ totalOrgBalance.totalBlockBankAccount }}</td>
+      <td>{{ totalOrgBalance.totalPenalityBalance }}</td>
+      <td>{{ totalOrgBalance.totalServiceBalance }}</td>
+      <td>{{ totalOrgBalance.totalServiceBankAccount }}</td>
+      <td>{{ totalOrgBalance.totalServiceBankAccount + totalOrgBalance.totalBlockBankAccount }}</td>
+    </tr>
+  </tbody>
+</table>
+
     <div v-if="reportType === 'monthly'">
       <h2 class="section-title" style="font-size:12px; color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
           Total Confirmed Clients IN This Year(Paid):1850
@@ -709,6 +631,8 @@ export default {
   name: "ReportsView",
   data() {
     return {
+      totalBalance: [],
+      totalOrgBalance: {},
       reportLength: 0,
       pendingLength: 0,
       confirmedLength: 0,
@@ -878,6 +802,23 @@ export default {
     // this.semiAnaualSelected=true;
     //  this.annaualSelected=true;
     this.fetchPayments();
+
+
+    this.$apiClient
+      .get("api/v1/payments/orgBalance")
+      .then((response) => {
+        console.log("response org balance", response);
+        this.totalBalance = response.data.items;
+        this.totalOrgBalance = response.data.items.organizationBalance;
+      })
+      .catch((error) => {
+        console.error(
+          " error fetching org data data:",
+          error.response.data.error
+        );
+      });
+
+
   },
 
   methods: {
