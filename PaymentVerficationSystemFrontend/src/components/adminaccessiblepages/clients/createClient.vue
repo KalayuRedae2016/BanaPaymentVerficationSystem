@@ -660,6 +660,7 @@ export default {
     },
 
     register() {
+      this.$reloadPage();
       //  console.log("FamillyMembers", this.familyMembers);
       console.log("register called");
       if (this.firstName === "") {

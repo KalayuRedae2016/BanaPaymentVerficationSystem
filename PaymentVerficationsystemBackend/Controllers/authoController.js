@@ -248,19 +248,16 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
   //console.log(req.body.email)
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return res.status(404).json({
-      status: 1,
-      message: 'There is no User with the email address',
-    });
+    return next(new AppError('There is no User with the email address', 404));
   }
   //console.log(user)
-
+  
   const resetToken = user.createPasswordResetToken(); //generate token
   await user.save(); // save the update document reset token & time expiration into database
   //console.log(`Resettoemail:`, resetToken);
   try {
     //const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
-    const resetURL = `http://localhost:5173/resetPassword/${resetToken}`
+    const resetURL = `${process.env.BASE_URL}/resetPassword/${resetToken}`
     const message = `Forgot your password? Submit a request with your new password to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
     const email = user.email;
     const subject = 'Your password reset token (valid for 10 minutes)'
