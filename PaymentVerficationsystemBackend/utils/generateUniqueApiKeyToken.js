@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+
 require('dotenv').config();
 
 function generateToken(bankName) {
@@ -11,10 +13,6 @@ function generateToken(bankName) {
     "CBE":"CBE123456789"
     }
 
-  // Parse the JSON string stored in process.env.SECRET_KEYS
-  // const secretKeys = JSON.parse(SECRET_KEYS);
-  // console.log(secretKeys)
-
   const payload = { bankName };
   const secretKey = SECRET_KEYS[bankName.toUpperCase()];
   if (!secretKey) {
@@ -25,6 +23,14 @@ function generateToken(bankName) {
   return token;
 }
 
-// Generate a token for LIB
+// // Generate a token for LIB
 const LIB_Token = generateToken("LIB");
-//console.log("LIB_Token:", LIB_Token);
+// //console.log("LIB_Token:", LIB_Token);
+
+
+// Function to generate a secure, random API key
+function generateUniqueApiKey() {
+  return crypto.randomBytes(32).toString('hex');// Generate a random 32-byte string and encode it as hexadecimal
+}
+
+module.exports = { generateUniqueApiKey};

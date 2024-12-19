@@ -97,7 +97,6 @@ exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
 exports.searchBills = async (req, res) => {
   try {
     const { keyword } = req.query;
-    console.log(req.query)
     if (!keyword) {
       return res.status(400).json({ message: 'Keyword is required' });
     }
@@ -174,26 +173,9 @@ exports.searchBills = async (req, res) => {
 };
 exports.getMoreBills = async (req, res) => {
   try {
-    // Extract the payment type IDs from the request parameters
     const paymentTypeIdsArray = req.params.paymentTypeIds.split('*');
-
-    const token = req.headers['token'];
-    if (!token) {
-      return res
-        .status(400)
-        .json({ error: true, statusCode: 400, message: 'Token is required' });
-    }
-
-    const decoded = jwt.decode(token);
-    if (!decoded) {
-      return res
-        .status(400)
-        .json({ error: true, statusCode: 400, message: 'Invalid token' });
-    }
-
-    const bankType = decoded.bankName;
-
-    // Build the query to search within each embedded payment type
+    const bankType = req.apiKeyData.bankType; 
+  
     const billQuery = {
       isPaid: false,
       $or: paymentTypeIdsArray.map((id) => ({
@@ -207,8 +189,10 @@ exports.getMoreBills = async (req, res) => {
       })),
     };
 
+    console.log(billQuery)
     // Retrieve unpaid bills matching the query
     const unPaidBills = await Payment.find(billQuery).lean();
+    console.log(unPaidBills)
 
     if (!unPaidBills.length) {
       return res.status(404).json({
@@ -293,11 +277,9 @@ exports.getMoreBills = async (req, res) => {
 };
 exports.confirmBills = async (req, res) => {
   try {
-    const { token } = req.headers;
+    const bankType = req.apiKeyData.bankType; 
     const transactions = req.body; // Array of transactions
-    if (!token) {
-      return res.status(400).json({ error: 'Token not provided' });
-    }
+    
     if (!Array.isArray(transactions) || transactions.length === 0) {
       return res.status(400).json({ error: 'No transactions provided' });
     }
@@ -322,14 +304,6 @@ exports.confirmBills = async (req, res) => {
         details: missingFieldsArray
       });
     }
-
-    // Decode token to get bankName
-    const decoded = jwt.decode(token);
-    if (!decoded || !decoded.bankName) {
-      return res.status(400).json({ error: 'Invalid token' });
-    }
-
-    const bankType = decoded.bankName;  // This is the bank from the token
 
     // Process each transaction
     for (const transaction of transactions) {
@@ -398,6 +372,14 @@ exports.confirmBills = async (req, res) => {
         // Save the updated bill
       }
       await unpaidBill.save();
+
+      const calculateTotalPaidAmount = () => {
+        unpaidBill.totalPaidAmount = unpaidBill.registrationFee || 0;
+        ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach(type => {
+          if (unpaidBill[type]?.isPaid) unpaidBill.totalPaidAmount += unpaidBill[type].amount;
+        });
+      };
+      calculateTotalPaidAmount();
 
       // Filter out payment types that have a non-zero amount
       const paymentsToCheck = [
@@ -723,13 +705,13 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   const formattedUpdatedAt = unpaidBill.updatedAt ? formatDate(unpaidBill.updatedAt) : null;
   const formattedConfirmedAt = unpaidBill.confirmedDate ? formatDate(unpaidBill.confirmedDate) : null;
 
-  const user=User.findById(unpaidBill.user)
-  const subject = 'Payment Confirmation';
-    const email = user.email;
-    const message = `Hi ${user.fullName},
-      Your payment for ${unpaidBill.activeYear} in ${activeMonth} has been confirmed.
-      Best regards,
-      The Bana Marketing Group Team;`
+  // const user=User.findById(unpaidBill.user)
+  // const subject = 'Payment Confirmation';
+  //   const email = user.email;
+  //   const message = `Hi ${user.fullName},
+  //     Your payment for ${unpaidBill.activeYear} in ${unpaidBill.activeMonth} has been confirmed.
+  //     Best regards,
+  //     The Bana Marketing Group Team;`
     //await sendEmail({ email, subject, message });
   //console.log(unpaidBill)
   res.status(200).json({
@@ -1163,31 +1145,48 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
 //   }
 // });
 
-exports.getPaymentNotifications =catchAsync(async (req, res) => {
-    const { userId, admin } = req.query; // Query parameters for user or admin
-
-    if (!userId && !admin) {
-      return next(new AppError('userId or admin parameter is required',400))
+exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
+    const { userId,role} = req.query; // Query parameters for user or admin
+    if(!userId||!role){
+      return next(new AppError("Both userId and role must be provided", 400));
     }
-
-    const filter = userId ?{ userId, seen: false, isPaid: true } // Fetch notifications for a specific user
-      : admin? { adminSeen: false, isPaid: true } // Fetch notifications for admin
-      : {}; // Empty filter if neither provided
-
+    const filter={isPaid:true,status:"confirmed"}
+    if(role==="User"){
+      filter.user=userId,
+      filter.seen=false
+    }else if(role==="Admin"){
+      filter.adminSeen=false
+    }else{
+      return next(new AppError("Invalid Role,must be User or Admin"),400)
+    }
     const notifications = await Payment.find(filter).sort({ createdAt: -1 });
-    res.status(200).json({message:notifications });
+   
+    res.status(200).json({
+      length:notifications.length,
+      paymentNotifications:notifications
+     });
 })
-exports.markPaymentAsSeen = catchAsync(async (req, res) => {
-    const { paymentId, userId, admin } = req.body; // Parameters from the request body
+exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
+    const { paymentId,role} = req.query; // Parameters from the request body
 
-    if (!paymentId ||!userId ||!admin) {
-      return next(new AppError('userId or admin parameter is required',400))
+    if (!paymentId ||!role) {
+      return next(new AppError('Either paymentId,userId or role must be required.', 400));
     }
-    const update = userId? { seen: true } // User-specific field
-      : admin? { adminSeen: true } // Admin-specific field
-      : {};
-    const payment = await Payment.findByIdAndUpdate(paymentId, update, { new: true });
+    const update={}
+    const filter={}
+    if(role==="User"){
+      filter.isPaid=true
+      filter.status="confirmed"
+      update.seen=true
+    }else if(role==="Admin"){
+     filter.isPaid=true
+    filter.status="confirmed"
+      update.adminSeen=true
+    }else{
+      return next(new AppError("Invalid Role,should be User or Admin"))
+    }
 
+    const payment = await Payment.findByIdAndUpdate(paymentId, update, { new: true });
     if (!payment) return next(new AppError(" 'Payment not found'"),400)
     
     res.status(200).json({ message: 'Notification marked as seen.', payment });

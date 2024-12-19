@@ -1,6 +1,7 @@
 const { required } = require('joi');
 const mongoose = require('mongoose');
 const validator = require('validator');
+const ApiKey = require('../Models/apiKeyModel');
 
 const bankAccountSchema = new mongoose.Schema({
   bankType: {
@@ -89,5 +90,19 @@ const organizationSchema = new mongoose.Schema({
   
   //add some other specific to the organization
 });
+
+organizationSchema.methods.generateApiKey = async function() {
+  const bankTypes = [...new Set([...this.serviceBankAccounts.map(acc => acc.bankType), ...this.blockBankAccounts.map(acc => acc.bankType)])];
+
+  for (const bankType of bankTypes) {
+    const apiKey = new ApiKey({
+      key: generateUniqueApiKey(),
+      organizationId:this._id,
+      bankType,
+      scope: 'read-only', // default scope
+    });
+    await apiKey.save();
+  }
+};
 
 module.exports = mongoose.model('Organization', organizationSchema);
