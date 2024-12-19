@@ -18,7 +18,7 @@
       <div class="mb-4">
         <div class="flex flex-col">
           <div class="flex flex-row space-x-4">
-            <label for="Search User" class="block text-sm font-medium text-gray-700">Search</label>
+            <label for="Search User" class="mb-5 block text-sm font-medium text-gray-700">Search</label>
             <input
               @keyup.enter="searchUser"
               v-model="keyword"

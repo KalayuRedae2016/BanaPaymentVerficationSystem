@@ -1078,10 +1078,6 @@
 </template>
 
 
-
-
-
-
 <script>
 import QRCode from "qrcode";
 export default {
@@ -1321,14 +1317,7 @@ export default {
           service: this.selectedPayment,
         };
       }
-
-
-      
       console.log("Payload", this.payload);
-
-
-
-
       // Send the PATCH request with JSON payload
       this.$apiClient
         .patch("/api/v1/payments/update", this.payload, {

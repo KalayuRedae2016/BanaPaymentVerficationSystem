@@ -55,13 +55,21 @@
               {{ $t("password") }} <span class="text-red-500">*</span>
             </label>
             <div class="pl-3">
+              <div class="flex flex-row">
               <input
                 class="custom-input"
                 id="password"
-                type="password"
+                :type="showPassword ? 'text' : 'password'"
                 v-model="password"
                 :placeholder="$t('passwordPlaceholder')"
               />
+              <button
+                  @click.prevent="this.showPassword=!this.showPassword"
+                  class="ml-5 text-xs my-2 text-blue-500 underline hover:text-blue-700 focus:outline-none"
+                >
+                  {{ showPassword ? "Hide  " : "Show " }}
+                </button>
+              </div>
             </div>
             <p v-if="passwordIsRequired" class="text-red-500 mb-6 text-center mt-3 text-sm mb-3">{{ $t('passwordRequired') }}</p>
           </div>
@@ -132,10 +140,11 @@
           </svg>
           <div class="flex flex-col items-center">
             <span class="font-semibold mb-1"> {{ $t('checkYourEmail') }}!</span>
-            <span
+
+             <span
               >
                {{ $t('passwordResetEmailSent') }}
-              </span
+            </span
             >
             <p class="mt-4 text-center text-gray-600">
               <router-link
@@ -161,6 +170,7 @@ import { mapGetters } from "vuex";
 export default {
   data() {
     return {
+      showPassword:false,
       showError:true,
       errorMessage:"",
       showError:false,

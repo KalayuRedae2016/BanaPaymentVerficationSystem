@@ -1,12 +1,12 @@
 <template>
   <div class="border border border-gray-400 mt-5">
     <div class="flex flex-col p-4 text-xs">
-      <div class="flex flex-row border-b border-blue-500">
+      <div class="flex flex-row border-b pb-5 border-blue-500">
         <label class="custom-label"> Report Type: </label>
         <select
           v-model="reportType"
           @change="changeReportType()"
-          class="custom-select h-10 border border-blue-500"
+          class="custom-select h-10 "
         >
           <option value="" disabled>Select Report Type</option>
           <option
@@ -18,7 +18,7 @@
           </option>
         </select>
       </div>
-      <div class="flex flex-col">
+      <div class="flex flex-col ">
         <div
           class="mt-5 w-full flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0"
         >
