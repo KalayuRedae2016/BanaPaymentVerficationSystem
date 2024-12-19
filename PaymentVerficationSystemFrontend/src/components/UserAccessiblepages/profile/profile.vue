@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div class="ml-10 mr-5 mb-10">
    
     <p class="text-indigo-800 font-extrabold text-md mb-10 mt-3">Your Profile</p>

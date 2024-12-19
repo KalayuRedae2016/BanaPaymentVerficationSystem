@@ -43,22 +43,18 @@
     <div class="py-4">
       <!-- search and searched users -->
       <div class="pt-6 -mt-1">
-        <!-- //search -->
-        <div class="mb-4">
-          <div class="flex flex-col">
-            <div class="flex flex-row space-x-4 px-5">
-              <input
-                @keyup.enter="searchUser"
-                v-model="keyword"
-                id="id-search"
-                type="text"
-                class="custom-input h-10 text-xs"
-                placeholder="Search by Usercode,Name"
-              />
-            </div>
-            <!-- <p v-if="noUser" class="text-red-500 ml-32"><strong>Hoops! there is no user with this Id <span class="text-blue">{{ currentId }}</span></strong></p> -->
-          </div>
-        </div>
+        <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
+  <!-- Search Input -->
+  <div class="flex-1 mr-4">
+    <input
+      v-model="keyword"
+      type="text"
+      :placeholder="$t('searchByNameEmailUsername')"
+      class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
+    />
+  </div>
+
+</div>
         <!-- //least of searched users -->
         <div
           class="border-t border-blue-900 border-dotted h-64 overflow-y-auto"
@@ -82,15 +78,15 @@
       </div>
     </div>
 
+
+
+
     <div v-if="bankStatement">
       <div class="p-4 text-lg">
-        <!-- //for displaying the Head title  -->
         <h1 class="text-md font-bold mb-4 text-indigo-800">
           Manual Confirmation from bank statement
         </h1>
-        <!-- // the whole functiolality is over here -->
         <div v-if="!nothingToPay" class="py-6 -mt-1 border-t border-blue-500">
-          <!-- for displ;aying the usercode and full name above the table -->
           <div
             class="text-gray-800 font-semibold bg-blue-50 py-4 text-md text-xs"
           >
@@ -188,7 +184,7 @@
                     <tbody>
                       <!-- // this tr is for the regular data -->
                       <tr>
-                        <td
+                        <td style="width: 50px;"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p
@@ -236,7 +232,7 @@
                             v-if="!payment.regular.isPaid"
                             class="custom-select text-xs px-3 py-2.5 leading-tight flex-shrink-0"
                             v-model="payment.regular.bankType"
-                            style="width: 150px"
+                            style="width: 100px"
                           >
                             <option value="" disabled selected>
                               Bank Type
@@ -269,7 +265,7 @@
                             type="text"
                             class="custom-input h-7"
                             v-model="payment.regular.TTNumber"
-                            style="width: 150px"
+                            style="width: 100px"
                           />
                           <p
                             v-if="payment.verifyRegularTTNumber"
@@ -292,7 +288,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="paymentIndex === blockConfirmedIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2rem"
                           >
                             Confirm
@@ -337,7 +333,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="blockUnconfirmIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2.25rem"
                           >
                             Unconfirm
@@ -496,7 +492,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="paymentIndex === subsidyConfirmedIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2rem"
                           >
                             Confirm
@@ -541,7 +537,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="subsidyUnconfirmIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2.25rem"
                           >
                             Unconfirm
@@ -694,7 +690,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="paymentIndex === urgentConfirmedIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2rem"
                           >
                             Confirm
@@ -737,7 +733,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="urgentUnconfirmedIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2.25rem"
                           >
                             Unconfirm
@@ -792,7 +788,7 @@
                             {{ payment.service.amount }}
                           </p>
                           <input
-                            style="width: 150px"
+                            style="width: 100px"
                             v-if="!payment.service.isPaid"
                             type="text"
                             class="custom-input h-7 w-32"
@@ -885,7 +881,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="paymentIndex === serviceConfirmedIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2rem"
                           >
                             Confirm
@@ -930,7 +926,7 @@
                           <!-- Confirmation Text Above Button -->
                           <div
                             v-if="serviceUnconfirmIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2.25rem"
                           >
                             Unconfirm
@@ -1193,7 +1189,7 @@
                         >
                           <div
                             v-if="paymentIndex === penalityConfirmedIndex"
-                            class="absolute top-0 left-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
+                            class="absolute -top-3 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
                             style="margin-top: 0.5rem; margin-left: 2rem"
                           >
                             Confirm

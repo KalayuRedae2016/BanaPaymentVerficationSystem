@@ -49,264 +49,296 @@
     </svg>
   </button>
 </div>
-    <div class="">
-      <div class="mb-16">
-        <div class="">
-          <div
-            class="flex flex-col space-x-12 lg:space-x-0 lg:flex-row bg-white rounded-lg p-4 mt-10 w-full sm:w-auto"
-          >
-            <div class="w-full lg:w-1/4 flex justify-center">
-              <img
-                :src="imageData"
-                alt="User Profile Image"
-                class="w-32 h-32 border border-gray-200 p-3 rounded-full"
-              />
-            </div>
+<div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
+        <div
+          class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
+        >
+          <div class="m-4 w-full h-full lg:w-1/4 h-64 bg-gray-500">
+            <img
+              :src="imageData"
+              alt="User Profile Image"
+              class="h-64 w-full lg:w-64 lg:w-96"
+            />
+          </div>
 
-            <div class="w-full lg:w-2/3 mt-16 lg:mt-0">
-              <div class="w-full flex flex row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">{{ $t("Usercode") }} </strong>
-                <span class="w-1/2"> {{ clientProfile.userCode }}</span>
-              </div>
+          <div class="mt-3 mx-auto lg:w-2/3">
+            <div class="bg-white p-2 rounded-md shadow-sm mt-3">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-id-badge text-green-500"></i>
 
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">{{ $t("firstName") }} :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.firstName }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Middle Name :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.middleName }}</span
-                >
-              </div>
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Last Name :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.lastName }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Gender :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.gender }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Age :</strong>
-                <span class="w-1/2 ml-3 text-xs"> {{ clientProfile.age }}</span>
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Address :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.address }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Email :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.email }}</span
-                >
-              </div>
-
-              <div class="flex flex-row mb-2 text-xs text-gray-600">
-                <strong class="w-1/2">Phone Number :</strong>
-                <span class="w-1/2 ml-3 text-xs">
-                  {{ clientProfile.phoneNumber }}</span
+                <span class="text-sm text-gray-800"
+                  >{{ $t("User Code") }}:{{ clientProfile.userCode }}</span
                 >
               </div>
             </div>
-            <div class="1/4">
-              <button
-                @click="showEditModal = true"
-                class="text-xs mt-3 h-10 text-indigo-500 font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <i class="fas fa-edit mr-2"></i>Edit
-              </button>
+
+            <div class="bg-white p-2 rounded-md shadow-sm">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-user text-yellow-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >Full Name : {{ clientProfile.fullName }}</span
+                >
+              </div>
             </div>
+
+            <div class="bg-white p-2 rounded-md shadow-sm mt-3">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-calendar-alt text-green-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >{{ $t("Age") }}:{{ clientProfile.age }}</span
+                >
+              </div>
+            </div>
+
+            <div class="bg-white p-2 rounded-md shadow-sm">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-venus-mars text-indigo-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >{{ $t("Gender") }}:{{ clientProfile.gender }}</span
+                >
+              </div>
+            </div>
+
+            <div class="bg-white p-2 rounded-md shadow-sm">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-map-marker-alt text-blue-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >{{ $t("Address") }}:{{ clientProfile.address }}</span
+                >
+              </div>
+            </div>
+
+            <div class="bg-white p-2 rounded-md shadow-sm">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-phone text-purple-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >{{ $t("phoneNumber") }}:{{ clientProfile.phoneNumber }}</span
+                >
+              </div>
+            </div>
+
+            <div class="bg-white p-2 rounded-md shadow-sm">
+              <div class="flex items-center space-x-3 border-b border-gray-300">
+                <i class="fas fa-envelope text-green-500"></i>
+
+                <span class="text-sm text-gray-800"
+                  >{{ $t("Email") }}:{{ clientProfile.email }}</span
+                >
+              </div>
+            </div>
+
+            <button
+              @click="showEditModal = true"
+              class="border border-gray-200 mt-5 mb-5 p-2 rounded-lg hover:bg-blue-50 ml-2 text-blue-500"
+            >
+              <i class="fas fa-edit mr-2"></i>Edit
+            </button>
           </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="showEditModal" style="height: 350px ; width: 300px;">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
-            <div class="flex justify-between items-center">
-              <div>Edit User Profile</div>
-              <div>
-                <svg
-                  @click="showEditModal = !showEditModal"
-                  class="w-6 h-6 text-red-500 hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+      <div v-if="showEditModal" style="height: 400px">
+        <transition name="fade" mode="out-in">
+          <div
+            class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+          >
+            <div class="bg-white rounded-lg p-6 border border-cyan-500">
+              <div class="flex justify-between items-center">
+                <div>Edit User Profile</div>
+                <div>
+                  <svg
+                    @click="showEditModal = !showEditModal"
+                    class="w-6 h-6 text-red-500 hover:text-red-700 transition-colors duration-300 cursor-pointer"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
               </div>
+
+              <hr class="my-4 md:bg-red-500" />
+              <div >
+                <form>
+
+                  <div style="height: 350px" class="scroll-y" >
+                  <div 
+                    class="flex flex-col lg:flex-row items-center gap-6 p-4 border border-blue-300 rounded-lg"
+                  >
+                    <!-- Image Container -->
+                    <div class="relative w-32 h-32">
+                      <img
+                        :src="imageData || 'https://via.placeholder.com/128'"
+                        alt="User Profile Image"
+                        class="w-full h-full rounded-lg border-4 border-gray-300 object-cover shadow-md"
+                      />
+                      <!-- Overlay Icon on Hover -->
+                      <div
+                        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 hover:opacity-100 transition duration-300"
+                      >
+                        <i class="fas fa-camera text-white text-3xl"></i>
+                      </div>
+                    </div>
+
+                    <!-- Custom File Input -->
+                    <div class="relative">
+                      <label
+                        for="fileInput"
+                        class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
+                      >
+                        <i class="fas fa-upload mr-2"></i>Choose Image
+                      </label>
+                      <input
+                        id="fileInput"
+                        type="file"
+                        ref="fileInput"
+                        accept="image/*"
+                        @change="handleImageInput"
+                        class="hidden"
+                      />
+                      <p class="text-sm text-gray-500 mt-2">JPG, PNG, or GIF</p>
+                    </div>
+                  </div>
+
+                  <div class="mb-4 mt-10">
+                    <label class="custom-label">
+                      {{ $t("firstName") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="custom-input"
+                      v-model="clientProfile.firstName"
+                      :placeholder="$t('firstName')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("middleName") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="custom-input"
+                      v-model="clientProfile.middleName"
+                      :placeholder="$t('middleName')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("lastName") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.lastName"
+                      :placeholder="$t('lastName')"
+                    />
+                  </div>
+
+                  <div class="w-full">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      Gender
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+
+                    <select
+                      class="mb-3 border border-indigo-800 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-12"
+                      style="padding-left: 16px"
+                      v-model="clientProfile.gender"
+                    >
+                      <option value="" disabled selected>Select gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("age") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.age"
+                      :placeholder="$t('age')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("email") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.email"
+                      :placeholder="$t('email')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("phoneNumber") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.phoneNumber"
+                      :placeholder="$t('phoneNumber')"
+                    />
+                  </div>
+                </div>
+                  <button
+                    @click.prevent="editDetail()"
+                    type="submit"
+                    class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    <i class="fas fa-save"
+                      ><span class="text-xs ml-3">{{ $t("save") }}</span></i
+                    >
+                  </button>
+                </form>
+              </div>
+
+              <hr class="my-4 md:min-w-full bg-red-500" />
             </div>
-
-            <hr class="my-4 md:bg-red-500 text-xxs" />
-            <div class="scroll-y" style="height: 350px">
-              <form>
-                <div class="flex flex-col lg:flex-row">
-                  <img
-                    :src="imageData"
-                    alt="User Profile Image"
-                    class="w-16 h-16  rounded-full"
-                  />
-                  <input
-                    class="text-xs md:text-lg mb-5  mt-5 lg:mt-16"
-                    type="file"
-                    ref="fileInput"
-                    accept="image/*"
-                    @change="handleImageInput"
-                  />
-                </div>
-
-                <div class="mb-4 mt-10">
-                  <label class="custom-label">
-                    {{ $t("firstName") }}
-                    <span class="text-red-500 ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    class="custom-input"
-                    v-model="clientProfile.firstName"
-                    :placeholder="$t('firstName')"
-                  />
-                </div>
-
-                <div class="mb-4">
-                  <label
-                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
-                  >
-                    {{ $t("middleName") }}
-                    <span class="text-red-500 ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    class="custom-input"
-                    v-model="clientProfile.middleName"
-                    :placeholder="$t('middleName')"
-                  />
-                </div>
-
-                <div class="mb-4">
-                  <label
-                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
-                  >
-                    {{ $t("lastName") }}
-                    <span class="text-red-500 ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="closeAmount"
-                    class="custom-input"
-                    v-model="clientProfile.lastName"
-                    :placeholder="$t('lastName')"
-                  />
-                </div>
-
-                <div class="w-full">
-                  <label
-                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
-                  >
-                    Gender
-                    <span class="text-red-500 ml-1">*</span>
-                  </label>
-
-                  <select
-                    class="mb-3 border border-indigo-800 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-12"
-                    style="padding-left: 16px"
-                    v-model="clientProfile.gender"
-                  >
-                    <option value="" disabled selected>Select gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                  </select>
-                </div>
-
-                <div class="mb-4">
-                  <label
-                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
-                  >
-                    {{ $t("age") }}
-                    <span class="text-red-500 ml-1">*</span>
-                  </label>
-                  <input
-                    type="number"
-                    id="closeAmount"
-                    class="custom-input"
-                    v-model="clientProfile.age"
-                    :placeholder="$t('age')"
-                  />
-                </div>
-
-                <div class="mb-4">
-                  <label
-                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
-                  >
-                    {{ $t("email") }}
-                    <span class="text-red-500 ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="closeAmount"
-                    class="custom-input"
-                    v-model="clientProfile.email"
-                    :placeholder="$t('email')"
-                  />
-                </div>
-
-                <div class="mb-4">
-                  <label
-                    class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
-                  >
-                    {{ $t("phoneNumber") }}
-                    <span class="text-red-500 ml-1">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="closeAmount"
-                    class="custom-input"
-                    v-model="clientProfile.phoneNumber"
-                    :placeholder="$t('phoneNumber')"
-                  />
-                </div>
-
-                <button
-                  @click.prevent="editDetail()"
-                  type="submit"
-                  class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  <i class="fas fa-save"
-                    ><span class="text-xs ml-3">{{ $t("save") }}</span></i
-                  >
-                </button>
-              </form>
-            </div>
-
-            <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
-        </div>
-      </transition>
-    </div>
+        </transition>
+      </div>
 
     <div v-if="showSuccess">
       <transition name="fade" mode="out-in">

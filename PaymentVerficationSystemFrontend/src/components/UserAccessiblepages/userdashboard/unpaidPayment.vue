@@ -69,8 +69,8 @@
                      {{ payment.regular.amount }}
                     </td>
                   
-                    <td v-if="!payment.regular.isPaid" class="px-3 text-sm text-gray-700 whitespace-nowrap">
-                      Not calculated
+                    <td v-if="!payment.regular.isPaid" class="px-3 text-sm text-red-700 whitespace-nowrap">
+              {{ payment.regular.penality }} 
         
                     </td>
                     <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
@@ -91,9 +91,9 @@
                     <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                      {{ payment.subsidy.amount }}
                     </td>
-                    <td v-if="!payment.subsidy.isPaid" class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-if="!payment.subsidy.isPaid" class="px-3 text-sm text-red-700 whitespace-nowrap">
                       
-                      Not calculated
+                     {{ payment.subsidy.penality }}
                     </td>
                     <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
                       <!-- {{ payment.subsidy.penality }} -->
@@ -111,11 +111,11 @@
                     <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                      {{ payment.urgent.amount }}
                     </td>
-                    <td v-if="!payment.urgent.isPaid" class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-if="!payment.urgent.isPaid" class="px-3 text-sm text-red-700 whitespace-nowrap">
                      
-                      Not calculated
+                    {{ payment.urgent.penality }}
                     </td>
-                    <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-else class="px-3 text-sm text-red-700 whitespace-nowrap">
                       <!-- {{ payment.urgent.penality }} -->
                       {{ payment.urgent.penality }}
                     </td>
@@ -134,9 +134,9 @@
                       {{ payment.service.penality }}
                  
                     </td>
-                    <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
+                    <td v-else class="px-3 text-sm text-blue-700 whitespace-nowrap">
                       <!-- {{ payment.service.penality }} -->
-                      Not calculated
+                     Not needed
                     </td>
                     <td class="px-3 text-sm text-gray-700 whitespace-nowrap">
                      {{ payment.service.isPaid }}

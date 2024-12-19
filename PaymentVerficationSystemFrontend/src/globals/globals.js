@@ -1,64 +1,67 @@
-import axios from 'axios';
+import axios from "axios";
+import { reloadPage } from "../utils/utils"; // Adjust the path to match your project structure
 
 export default {
-  install(app) {
+  async install(app) {
     // Check environment and set base URL
-    const isProduction = import.meta.env.MODE === 'production';
+    const isProduction = import.meta.env.MODE === "production";
     const baseUrl = isProduction
       ? import.meta.env.VITE_APP_BASE_URL_PRODUCTION
       : import.meta.env.VITE_APP_BASE_URL_LOCAL;
+
     // Create the API client
     const apiClient = axios.create({
       baseURL: baseUrl,
     });
+    console.log('API Client:', apiClient);
+
+    let banks = [];
+    banks = [
+      { value: "LIB", name: "LIB" },
+      { value: "WEGAGEN", name: "WEGAGEN" },
+      { value: "ABSINIA", name: "ABSINIA" },
+      { value: "CBE", name: "CBE" },
+    ];
 
     // Generate the array of years (from now - 5 years up to now + 50 years)
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 56 }, (v, i) => currentYear - 5 + i);
 
-    // Define the months array
     const months = [
-      { value: 1, name: 'January' },
-      { value: 2, name: 'February' },
-      { value: 3, name: 'March' },
-      { value: 4, name: 'April' },
-      { value: 5, name: 'May' },
-      { value: 6, name: 'June' },
-      { value: 7, name: 'July' },
-      { value: 8, name: 'August' },
-      { value: 9, name: 'September' },
-      { value: 10, name: 'October' },
-      { value: 11, name: 'November' },
-      { value: 12, name: 'December' },
-    ];
-
-    const banks = [
-      { value: 'LIB', name: 'LIB' },
-      { value: 'WEGAGEN', name: 'WEGAGEN' },
-      { value: 'ABSINIA', name: 'ABSINIA' },
-      { value: 'CBE', name: 'CBE' },
+      { value: 1, name: "January" },
+      { value: 2, name: "February" },
+      { value: 3, name: "March" },
+      { value: 4, name: "April" },
+      { value: 5, name: "May" },
+      { value: 6, name: "June" },
+      { value: 7, name: "July" },
+      { value: 8, name: "August" },
+      { value: 9, name: "September" },
+      { value: 10, name: "October" },
+      { value: 11, name: "November" },
+      { value: 12, name: "December" },
     ];
 
     const reportTypes = [
-      { value: 'annually', name: 'Annually' },
-      { value: 'semiAnnually', name: 'Semi-Annually' },
-      { value: 'monthly', name: 'Monthly' },
-      { value: 'weekly', name: 'Weekly' },
-      { value: 'daily', name: 'Daily' },
+      { value: "annually", name: "Annually" },
+      { value: "semiAnnually", name: "Semi-Annually" },
+      { value: "monthly", name: "Monthly" },
+      { value: "weekly", name: "Weekly" },
+      { value: "daily", name: "Daily" },
     ];
 
-    // Generate the array of days from 1 to 31
     const days = Array.from({ length: 31 }, (v, i) => i + 1);
 
     // Add the global variables
     const globalProperties = {
       $apiClient: apiClient,
-      $otherVariable: 'othervariable',
+      $otherVariable: "othervariable",
       $years: years,
       $months: months,
       $days: days,
       $banks: banks,
       $reportTypes: reportTypes,
+      $reloadPage: reloadPage, // Register reloadPage globally
     };
 
     // Assign to the global properties in the Vue app

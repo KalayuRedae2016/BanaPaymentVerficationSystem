@@ -233,8 +233,8 @@
               {{ $t("banks") }}
             </th>
             <th
-              colspan="7"
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+              colspan="10"
+              class="justify-center items-center text-blue-800  border border-gray-300 py-3"
             >
               {{ $t("balance") }}
             </th>
@@ -242,16 +242,24 @@
           <tr>
             <th
               colspan="4"
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
             >
               {{ $t("block") }}
             </th>
             <th
               colspan="3"
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
             >
               {{ $t("service") }}
             </th>
+            <th
+              rowspan="2"
+              
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("Total Balance") }}
+            </th>
+           
           </tr>
           <tr>
             <th
@@ -282,13 +290,14 @@
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
-              {{ $t("mService") }}
+              {{ $t("Monthly Service") }}
             </th>
             <th
               class="px-4 py-2 text-blue-800 text-left border border-gray-300"
             >
               {{ $t("totalService") }}
             </th>
+           
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-300">
@@ -323,13 +332,19 @@
             <td class="px-4 py-2 text-left border border-gray-300">
               {{ balance.totalServiceBalance }}
             </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.totalServiceBalance + balance.totalBlockBalance }}
+            </td>
           </tr>
-          <tr class="font-bold bg-gray-100">
+
+        
+          <tr class="font-bold bg-gray-100" rowspan="4">
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
             >
               {{ $t("total") }}
             </td>
+          
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
             >
@@ -370,7 +385,15 @@
             >
               {{ totalOrgBalance.totalServiceBankAccount }}
             </td>
-            <!-- Total penality -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalServiceBankAccount + totalOrgBalance.totalBlockBankAccount }}
+            </td>
+          </tr>
+         
+          <tr>
+         
           </tr>
         </tbody>
       </table>

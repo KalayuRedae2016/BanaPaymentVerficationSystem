@@ -106,7 +106,7 @@
             </div>
             <div class="flex flex-row mx-5">
               <div>
-                <img :src="imageData" alt="" style=" hieght:120px;width:120px;" class="mb-3">
+                <img :src="imageData" alt="" style="height:120px;width:120px;" class="mb-3">
               </div>
               <div class="p-4 space-y-2">
                 <p class="text-xs">ተጠቃሚ ኮድ/Usercode:{{ userCode }}</p>
@@ -161,8 +161,6 @@ export default {
       userPhoneNumber:"",
       userGender:"",
       fullName:this.userCode + " " + "Bana User",
-
-
       user: "",
       userProfile: "",
       imageData: "",
@@ -198,6 +196,7 @@ export default {
       this.fullName = response.data.clientProfile.fullName;
       this.userPhoneNumber = response.data.clientProfile.phoneNumber;
       this.userCode = response.data.clientProfile.userCode;
+      this.imageData = "data:image/jpeg;base64," + response.data.imageData;
 
     })
     .catch((error) => {

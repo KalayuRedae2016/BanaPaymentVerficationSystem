@@ -43,64 +43,70 @@
     </div>
   </transition> 
 
-      
-      <div class="flex flex-wrap mx-auto py-8 border-t border-indigo-800 mt-4">
+      <div class="flex flex-wrap mx-auto pb-8 border-t border-indigo-800 mt-4">
         <div v-if="!closepaymentCreated" class="w-full">
-          <div class="m-4">
-            <form class="mt-8 mr-5">
+          <div class="mx-3">
+            <form class="mt-8 ">
               <div class="flex flex-col md:flex-row md:space-x-12">
                 <div class="flex flex-col md:w-1/2">
                   <div class="mb-4">
                     <label class="custom-label">
                       {{ $t("compName") }}
-                      <span class="custom-star ml-1">*</span>
+                      <span class="custom-star ml-1 ">*</span>
                     </label>
-                    <input
-                      type="text"
-                      id="companyName"
-                      class="custom-input"
-                      v-model="companyName"
-                      :placeholder="$t('Name')"
-                    />
+                   
+                    <input 
+                    type="text"
+                    id="companyName" 
+                    class="custom-input ml-3  text-xs text-gray-500" 
+                    v-model="companyName"
+                    placeholder="Company Name">
+       
                   </div>
+
+
                   <div class="mb-4">
                     <label class="custom-label">
-                      {{ $t("compEmail") }}
+                      {{ $t("Company Email") }}
                       <span class="custom-star ml-1">*</span>
                     </label>
-                    <input
-                      type="text"
-                      id="companyEmail"
-                      class="custom-input"
-                      v-model="companyEmail"
-                      placeholder="Email"
-                    />
+
+
+                    <input 
+                    type="text"
+                    id="companyEmail"
+                    class="custom-input ml-3  text-xs text-gray-500" 
+                    v-model="companyEmail"
+                    placeholder="Email">
                   </div>
+
+
                   <div class="mb-4">
                     <label class="custom-label">
                       {{ $t("companyPhoneNumber") }}
                       <span class="custom-star ml-1">*</span>
                     </label>
-                    <input
-                      type="text"
+                   
+                    <input 
+                     type="text"
                       id="companyPhoneNumber"
-                      class="custom-input"
-                      v-model="companyPhoneNumber"
-                      placeholder="Phone Number"
-                    />
+                    class="custom-input ml-3  text-xs text-gray-500" 
+                   v-model="companyPhoneNumber"
+                      placeholder="Phone Number">
+                  
                   </div>
                 </div>
 
                 <div class="flex flex-col md:w-1/2">
                   <div class="mb-4">
                     <label class="custom-label">
-                      {{ $t("compPrefixCode") }}
+                      {{ $t("Company PrefixCode") }}
                       <span class="custom-star ml-1">*</span>
                     </label>
                     <input
                       type="text"
                       id="companyPrefixCode"
-                      class="custom-input"
+                      class="custom-input ml-3  text-xs text-gray-500" 
                       v-model="companyPrefixCode"
                       placeholder="Prefix Code"
                     />
@@ -115,7 +121,7 @@
                     <input
                       type="text"
                       id="companyAddress"
-                      class="custom-input"
+                      class="custom-input ml-3  text-xs text-gray-500" 
                       v-model="companyAddress"
                       placeholder="Address"
                     />
@@ -123,26 +129,26 @@
                 </div>
               </div>
 
-              <div class="rounded-lg px-3 py-3 mt-5">
+              <div class="rounded-lg  py-3 mt-5">
                 <label class="custom-label"> {{ $t("blockAccounts") }} </label>
-                <div class="border border-gray-300">
+                <div class="border border-gray-300  overflow-x-auto">
                   <table class="w-full border-b border-gray-300">
                     <thead>
                       <tr class="bg-gray-200">
                         <th
-                          class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 p-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           {{ $t("bankType") }}
                         </th>
                         <th
-                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 p-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           {{ $t("bankAccount") }}
                         </th>
                         <th
-                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 p-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
-                          {{ $t("detail") }}
+                          {{ $t("Actions") }}
                         </th>
                       </tr>
                     </thead>
@@ -151,20 +157,26 @@
                         v-for="account in blockBankAccounts"
                         :key="account._id"
                       >
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+
+
+                       <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                          <i class="fas fa-university mr-3 text-purple-500"></i>
                           <span
-                            class="p-1.5 text-sm font-medium tracking-wider text-green-500 rounded-lg bg-gray-200"
+                            class="p-1.5 text-xs  tracking-wider text-blue-500 rounded-lg bg-blue-50 font-bold"
                             >{{ account.bankType }}</span
                           >
                         </td>
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <td class="p-3 text-xs text-gray-400 whitespace-nowrap">
                           {{ account.bankAccountNumber }}
                         </td>
+
+
                         <td class="p-3 text-sm whitespace-nowrap">
                           <i
                             @click="editBlockAccountModal(account)"
                             class="fas fa-edit mr-2 text-blue-700"
                           ></i>
+
                           <i
                             @click="confirmDeleteBlockAccount(account)"
                             class="fas fa-trash-alt custom-star"
@@ -176,8 +188,10 @@
                   <div
                     v-for="(account, index) in addedBlockBankAccounts"
                     :key="index"
-                    class="flex flex-col items-center space-y-3 m-5 md:flex-row md:space-x-5 md:space-y-0"
+                    class="flex flex-row space-x-3 lg:space-x-0 items-center space-y-3 m-5 md:flex-row md:space-x-5 md:space-y-0"
                   >
+
+                  <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-0 space-x-0 lg:space-x-3">
                     <select
                       v-model="account.bankType"
                       class="custom-select"
@@ -203,6 +217,8 @@
                       :placeholder="$t('bankAccountNumber')"
                       class="custom-input"
                     />
+                  </div>
+
                     <button
                       @click.prevent="removeBlockBankAccount(index)"
                       class="text-pink-500 mb-5"
@@ -246,27 +262,27 @@
                 </div>
               </div>
 
-              <div class="rounded-lg px-3 py-3 mt-5">
+              <div class="rounded-lg  py-3 mt-5">
                 <label class="custom-label">
                   {{ $t("serviceAccounts") }}
                 </label>
 
-                <div class="border border-gray-300">
+                <div class="border border-gray-300 overflow-x-auto">
                   <table class="w-full border-b border-gray-300">
                     <thead>
                       <tr class="bg-gray-200">
                         <th
-                          class="w-24 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 p-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           {{ $t("bankType") }}
                         </th>
                         <th
-                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 p-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           {{ $t("bankAccountNumber") }}
                         </th>
                         <th
-                          class="w-32 p-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 p-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           {{ $t("detail") }}
                         </th>
@@ -277,15 +293,18 @@
                         v-for="account in serviceBankAccounts"
                         :key="account._id"
                       >
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                      <td class="p-3 text-xs text-gray-700 whitespace-nowrap">
+                          <i class="fas fa-university mr-3 text-purple-500"></i>
                           <span
-                            class="p-1.5 text-sm font-medium tracking-wider text-green-500 rounded-lg bg-gray-200"
+                            class="p-1.5 text-xs  tracking-wider text-blue-500 rounded-lg bg-blue-50 font-bold"
                             >{{ account.bankType }}</span
                           >
                         </td>
-                        <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
+                        <td class="p-3 text-xs text-gray-400 whitespace-nowrap">
                           {{ account.bankAccountNumber }}
                         </td>
+
+
                         <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                           <i
                             @click="editServiceAccountModal(account)"
@@ -299,11 +318,14 @@
                       </tr>
                     </tbody>
                   </table>
+
+
                   <div
                     v-for="(account, index) in addedServiceBankAccounts"
                     :key="index"
-                    class="flex flex-col items-center space-y-5 m-5 md:flex-row md:space-y-0"
+                    class="flex flex-row space-x-2 items-center space-y-5 m-5 md:flex-row md:space-y-0"
                   >
+                  <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-0">
                     <select
                       v-model="account.bankType"
                       class="custom-select"
@@ -328,9 +350,9 @@
                       type="text"
                       v-model="account.bankAccountNumber"
                       :placeholder="$t('bankAccountNumber')"
-                      class="custom-input ml-5"
+                      class="custom-input ml-0 lg:ml-5"
                     />
-
+                   </div>
                     <button
                       @click.prevent="removeServiceBankAccount(index)"
                       class="text-pink-500 mb-5"
