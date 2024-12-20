@@ -1,6 +1,8 @@
 const Organization = require('../Models/organizationModel');
+const ApiKey = require('../Models/apiKeyModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const { generateUniqueApiKey } = require('../utils/generateUniqueApiKeyToken');
 const {formatDate}=require("../utils/formatDate")
 
 exports.createOrganization = catchAsync(async (req, res, next) => {
@@ -47,30 +49,6 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     organization,
   });
 });
-// exports.getOrganization = catchAsync(async (req, res,next) => {
-//   // console.log('Organization is displayed');
-//   const organization = await Organization.findOne();
-
-//   // If paymentTransfers exist, format the transfer date of each transfer
-//   const paymentTransfers = organization.paymentTransfers.map((transfer) => {
-//     return {
-//       ...transfer._doc,  // Spread the original transfer details
-//       formattedTransferDate: transfer.transferDate ? formatDate(transfer.transferDate) : null
-//     };
-//   });
-
-
-//   console.log(organization)
-
-
-//   res.status(200).json({
-//     status: 1,
-//     organization: {
-//       ...organization._doc,
-//       paymentTransfers
-//     }
-//   });
-// });
 
 exports.getOrganization = catchAsync(async (req, res, next) => {
   // Fetch the organization from the database
@@ -190,7 +168,17 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
   // Save the updated organization
   await organization.save();
 
-  console.log(newBankAccount)
+  // Generate API key for the new bank type if it's not already created
+  const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });
+  if (!existingApiKey) {
+    const apiKey = new ApiKey({
+      key: generateUniqueApiKey(), // Function to generate unique API key
+      organizationId: organization._id,
+      bankType,
+      scope: 'read-only', // Default scope, you can change it based on the logic
+    });
+    await apiKey.save();
+  }
   // Send a success response
   res.status(200).json({
     status: 1,

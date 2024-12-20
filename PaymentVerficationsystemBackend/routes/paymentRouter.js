@@ -4,6 +4,8 @@ const multer = require('multer');
 const path = require('path');
 const authoController = require('../Controllers/authoController');
 const verifyToken = require('../Middlware/verifyToken');
+const authenticateApiKey=require('../Middlware/verifyApiKey')
+
 const paymentController = require('../Controllers/paymentController');
 
 const router = express.Router();
@@ -22,9 +24,9 @@ router.use(paymentController.updateStatusAndPenality);//define for all routes bu
 router.route('/create/bills').post(paymentController.createUnconfirmedPayments);
 
 // =====Routes for managing payments via integrated 3rd party BankAPI========
-router.route('/search/bills') .get(paymentController.searchBills);//search payments
-router.route('/query_more_bill/:paymentTypeIds').get(paymentController.getMoreBills);//getMoreBills
-router.route('/c2b-payment-validation-request').post(paymentController.confirmBills);//confirm payment
+router.route('/search/bills') .get(authenticateApiKey,paymentController.searchBills);//search payments
+router.route('/query_more_bill/:paymentTypeIds').get(authenticateApiKey,paymentController.getMoreBills);//getMoreBills
+router.route('/c2b-payment-validation-request').post(authenticateApiKey,paymentController.confirmBills);//confirm payment
 
 // ========== Routes for managing payments via the system ==========
 router.route('/search').get(paymentController.searchPayments);//search Bank Statement payment
@@ -41,7 +43,10 @@ router.route('/transferFunds').post(paymentController.transferFunds); // Transfe
 
 // ========== Routes for Reporting ,reciept and Notifications ==========
 router.route('/paymentbyMonth').get(paymentController.getPaymentByMonth); // Payments grouped by month (for reports)
-router.get('/paymentnotifications', paymentController.handlePaymentNotifications); // Handle payment notifications
+// router.get('/paymentnotifications', paymentController.handlePaymentNotifications); // Handle payment notifications
+router.route('/getNotifications').get(paymentController.getPaymentNotifications); 
+router.route('/markPaymentAsSeen').put(paymentController.markPaymentAsSeen); 
+
 router.route('/reports').get(paymentController.reports); // Generate various reports
 router.route('/reciept').get(paymentController.generateReceipt); // Generate receipts
 

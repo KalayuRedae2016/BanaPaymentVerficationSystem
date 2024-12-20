@@ -10,8 +10,10 @@ const { processPaymentItems } = require('../utils/paymentUtils');
 const { formatDate } = require("../utils/formatDate")
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+
 const createPendingPayments = require("../utils/createPendingPayments")
 const { exportToExcel, importFromExcel, createMulterMiddleware } = require('../utils/excelFileController');
+const { sendEmail } = require('../utils/email');
 const jwt = require('jsonwebtoken');
 
 const fs = require('fs');
@@ -95,7 +97,6 @@ exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
 exports.searchBills = async (req, res) => {
   try {
     const { keyword } = req.query;
-    console.log(req.query)
     if (!keyword) {
       return res.status(400).json({ message: 'Keyword is required' });
     }
@@ -172,26 +173,9 @@ exports.searchBills = async (req, res) => {
 };
 exports.getMoreBills = async (req, res) => {
   try {
-    // Extract the payment type IDs from the request parameters
     const paymentTypeIdsArray = req.params.paymentTypeIds.split('*');
-
-    const token = req.headers['token'];
-    if (!token) {
-      return res
-        .status(400)
-        .json({ error: true, statusCode: 400, message: 'Token is required' });
-    }
-
-    const decoded = jwt.decode(token);
-    if (!decoded) {
-      return res
-        .status(400)
-        .json({ error: true, statusCode: 400, message: 'Invalid token' });
-    }
-
-    const bankType = decoded.bankName;
-
-    // Build the query to search within each embedded payment type
+    const bankType = req.apiKeyData.bankType; 
+  
     const billQuery = {
       isPaid: false,
       $or: paymentTypeIdsArray.map((id) => ({
@@ -205,8 +189,10 @@ exports.getMoreBills = async (req, res) => {
       })),
     };
 
+    console.log(billQuery)
     // Retrieve unpaid bills matching the query
     const unPaidBills = await Payment.find(billQuery).lean();
+    console.log(unPaidBills)
 
     if (!unPaidBills.length) {
       return res.status(404).json({
@@ -291,11 +277,9 @@ exports.getMoreBills = async (req, res) => {
 };
 exports.confirmBills = async (req, res) => {
   try {
-    const { token } = req.headers;
+    const bankType = req.apiKeyData.bankType; 
     const transactions = req.body; // Array of transactions
-    if (!token) {
-      return res.status(400).json({ error: 'Token not provided' });
-    }
+    
     if (!Array.isArray(transactions) || transactions.length === 0) {
       return res.status(400).json({ error: 'No transactions provided' });
     }
@@ -320,14 +304,6 @@ exports.confirmBills = async (req, res) => {
         details: missingFieldsArray
       });
     }
-
-    // Decode token to get bankName
-    const decoded = jwt.decode(token);
-    if (!decoded || !decoded.bankName) {
-      return res.status(400).json({ error: 'Invalid token' });
-    }
-
-    const bankType = decoded.bankName;  // This is the bank from the token
 
     // Process each transaction
     for (const transaction of transactions) {
@@ -396,6 +372,14 @@ exports.confirmBills = async (req, res) => {
         // Save the updated bill
       }
       await unpaidBill.save();
+
+      const calculateTotalPaidAmount = () => {
+        unpaidBill.totalPaidAmount = unpaidBill.registrationFee || 0;
+        ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach(type => {
+          if (unpaidBill[type]?.isPaid) unpaidBill.totalPaidAmount += unpaidBill[type].amount;
+        });
+      };
+      calculateTotalPaidAmount();
 
       // Filter out payment types that have a non-zero amount
       const paymentsToCheck = [
@@ -720,7 +704,15 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   const formattedCreatedAt = unpaidBill.createdAt ? formatDate(unpaidBill.createdAt) : null;
   const formattedUpdatedAt = unpaidBill.updatedAt ? formatDate(unpaidBill.updatedAt) : null;
   const formattedConfirmedAt = unpaidBill.confirmedDate ? formatDate(unpaidBill.confirmedDate) : null;
-  
+
+  // const user=User.findById(unpaidBill.user)
+  // const subject = 'Payment Confirmation';
+  //   const email = user.email;
+  //   const message = `Hi ${user.fullName},
+  //     Your payment for ${unpaidBill.activeYear} in ${unpaidBill.activeMonth} has been confirmed.
+  //     Best regards,
+  //     The Bana Marketing Group Team;`
+    //await sendEmail({ email, subject, message });
   //console.log(unpaidBill)
   res.status(200).json({
     message: 'Payment types updated successfully',
@@ -1124,33 +1116,80 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
-  const { seen } = req.query; // Get the `seen` parameter from the query
+// exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
+//   const { seen } = req.query; // Get the `seen` parameter from the query
 
-  if (seen === 'false') {
-    // Fetch unseen payments
-    const unseenPayments = await Payment.find({ seen: false, status: 'confirmed' });
+//   if (seen === 'false') {
+//     // Fetch unseen payments
+//     const unseenPayments = await Payment.find({ seen: false, status: 'confirmed' });
 
-    return res.status(200).json({
-      status: 'success',
-      message: 'Unseen payments fetched successfully',
-      payments: unseenPayments,
-    });
-  }
-  else if (seen === 'true') {
-    // Update all unseen payments to seen
-    await Payment.updateMany({ seen: false, status: 'confirmed' }, { seen: true });
-    // Fetch all payments (both seen and unseen)
-    const allPayments = await Payment.find({ status: 'confirmed' });
-    console.log(allPayments)
-    return res.status(200).json({
-      status: 'success',
-      message: 'All payments fetched successfully',
-      payments: allPayments,
-    });
-  } else {
-    return next(new AppError('Invalid query parameter. Use `seen=false` or `seen=true`.', 400));
-  }
+//     return res.status(200).json({
+//       status: 'success',
+//       message: 'Unseen payments fetched successfully',
+//       payments: unseenPayments,
+//     });
+//   }
+//   else if (seen === 'true') {
+//     // Update all unseen payments to seen
+//     await Payment.updateMany({ seen: false, status: 'confirmed' }, { seen: true });
+//     // Fetch all payments (both seen and unseen)
+//     const allPayments = await Payment.find({ status: 'confirmed' });
+//     console.log(allPayments)
+//     return res.status(200).json({
+//       status: 'success',
+//       message: 'All payments fetched successfully',
+//       payments: allPayments,
+//     });
+//   } else {
+//     return next(new AppError('Invalid query parameter. Use `seen=false` or `seen=true`.', 400));
+//   }
+// });
+
+exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
+    const { userId,role} = req.query; // Query parameters for user or admin
+    if(!userId||!role){
+      return next(new AppError("Both userId and role must be provided", 400));
+    }
+    const filter={isPaid:true,status:"confirmed"}
+    if(role==="User"){
+      filter.user=userId,
+      filter.seen=false
+    }else if(role==="Admin"){
+      filter.adminSeen=false
+    }else{
+      return next(new AppError("Invalid Role,must be User or Admin"),400)
+    }
+    const notifications = await Payment.find(filter).sort({ createdAt: -1 });
+   
+    res.status(200).json({
+      length:notifications.length,
+      paymentNotifications:notifications
+     });
+})
+exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
+    const { paymentId,role} = req.query; // Parameters from the request body
+
+    if (!paymentId ||!role) {
+      return next(new AppError('Either paymentId,userId or role must be required.', 400));
+    }
+    const update={}
+    const filter={}
+    if(role==="User"){
+      filter.isPaid=true
+      filter.status="confirmed"
+      update.seen=true
+    }else if(role==="Admin"){
+     filter.isPaid=true
+    filter.status="confirmed"
+      update.adminSeen=true
+    }else{
+      return next(new AppError("Invalid Role,should be User or Admin"))
+    }
+
+    const payment = await Payment.findByIdAndUpdate(paymentId, update, { new: true });
+    if (!payment) return next(new AppError(" 'Payment not found'"),400)
+    
+    res.status(200).json({ message: 'Notification marked as seen.', payment });
 });
 
 exports.getAllPayments = catchAsync(async (req, res, next) => {
@@ -1210,7 +1249,6 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
     payments: formattedPayments
   });
 });
-
 exports.getLatestPayment = catchAsync(async (req, res, next) => {
   let userCode = req.query.userCode
   // const searchPattern = new RegExp(userCode, 'i');
@@ -1269,7 +1307,6 @@ exports.deletePayments = catchAsync(async (req, res, next) => {
     message: `${deletedPayments.deletedCount} Payments Deleted`
   });
 });
-
 exports.generateReceipt = catchAsync(async (req, res, next) => {
   const { billCode } = req.query;
   if (!billCode) {
@@ -1303,7 +1340,6 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
     }
   })
 });
-
 exports.importPayments = catchAsync(async (req, res, next) => {
   const filePath = req.file.path; // Path to the uploaded file
   await importFromExcel(filePath, Payment);
