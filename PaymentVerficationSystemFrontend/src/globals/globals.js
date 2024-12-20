@@ -1,28 +1,12 @@
 import axios from "axios";
-import { reloadPage,showSuccessToastMessage, showErrorToastMessage  } from "../utils/utils"; // Adjust the path to match your project structure
-
+import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch } from "../utils/utils"; // Adjust the path to match your project structure
 export default {
   async install(app) {
-
-
-    app.config.globalProperties.successToastMessage = "";
-    app.config.globalProperties.errorToastMessage = "";
-    app.config.globalProperties.showSuccessToast = false;
-    app.config.globalProperties.showErrorToast = false;
-
-    // Add global methods
-    app.config.globalProperties.$showSuccessToastMessage = (message) => 
-      showSuccessToastMessage(app, message);
-    app.config.globalProperties.$showErrorToastMessage = (message) => 
-      showErrorToastMessage(app, message);
-
-    
     // Check environment and set base URL
     const isProduction = import.meta.env.MODE === "production";
     const baseUrl = isProduction
       ? import.meta.env.VITE_APP_BASE_URL_PRODUCTION
       : import.meta.env.VITE_APP_BASE_URL_LOCAL;
-
     // Create the API client
     const apiClient = axios.create({
       baseURL: baseUrl,
@@ -65,8 +49,6 @@ export default {
     ];
 
     const days = Array.from({ length: 31 }, (v, i) => i + 1);
-
-    // Add the global variables
     const globalProperties = {
       $apiClient: apiClient,
       $otherVariable: "othervariable",
@@ -75,7 +57,12 @@ export default {
       $days: days,
       $banks: banks,
       $reportTypes: reportTypes,
-      $reloadPage: reloadPage, // Register reloadPage globally
+      $reloadPage: reloadPage,
+      $apiGet:apiGet,
+      $apiGetById:apiGetById,
+      $apiPost:apiPost,
+      $apiPut:apiPut,
+      $apiPatch:apiPatch
     };
 
     // Assign to the global properties in the Vue app

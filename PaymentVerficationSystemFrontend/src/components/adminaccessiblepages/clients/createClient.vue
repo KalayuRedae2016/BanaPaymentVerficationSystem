@@ -1,59 +1,18 @@
 <template>
   <div>
+    <Toast ref="toast" />
     <div class="" style="">
       <div
         class="flex items-center justify-between p-3 bg-white border-b border-blue-500"
-      >
-        <!-- Left Section: Register Client Title and Import Excel -->
+        >
         <div class="flex items-center space-x-6">
           <h1 class="text-xl text-indigo-800 font-bold">
             {{ $t("registerClient") }}
           </h1>
         </div>
-
-        <!-- Right Section: View Clients Link -->
-     
       </div>
-
-
-
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ succesToastMessage }}</span>
-    </div>
-  </transition> 
-
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
-    </div>
-  </transition> 
-  <div class="flex flex-row space-x-6 mt-5 ml-5">
-    <label
+      <div class="flex flex-row space-x-6 mt-5 ml-5">
+         <label
             for="file-upload"
             class="px-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 rounded-lg"
           >
@@ -434,9 +393,10 @@
 </template>
 
 <script>
+import Toast from '../../Common/Toast.vue';
 export default {
   components: {
-    //Phone
+    Toast,
   },
   data() {
     return {
@@ -588,6 +548,8 @@ export default {
         this.showErrorToast = false;
       }, 1000); 
     },
+
+    
     viewClients() {
       this.$router.push("/admindashboard/clients");
     },
@@ -774,11 +736,13 @@ export default {
       formData.append("profileImage", this.imageFile);
       formData.append("fullName", this.fullName);
       console.log("image", this.imageFile);
+      
+      
       this.$apiClient
         .post("/api/v1/users/signup", formData)
         .then((response) => {
           if (response.data.status === 1) {
-           this.showSuccessToastMessage(response.data.message);
+            this.$refs.toast.showSuccessToastMessage('This is a success message!');
               this.$reloadPage();
           }
         })
@@ -786,6 +750,8 @@ export default {
           console.log("error register", error);
           this.showErrorToastMessage("Some error occurred");
         });
+
+
     },
   },
 };

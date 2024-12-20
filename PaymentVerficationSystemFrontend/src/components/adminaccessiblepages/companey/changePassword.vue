@@ -252,6 +252,20 @@ export default {
 
       // Toast will disappear after 3 seconds
     },
+
+
+    showWarningToastMessage(message) {
+      this.warningToastMessage = message;
+      this.showWarningToast = true;
+      setTimeout(() => {
+        this.showWarningToast = false;
+      }, 1000);
+      // Toast will disappear after 3 seconds
+    },
+
+
+
+    
     changePassword() {
       if (this.oldPassword == "") {
         this.showErrorToastMessage("Old password is required");
