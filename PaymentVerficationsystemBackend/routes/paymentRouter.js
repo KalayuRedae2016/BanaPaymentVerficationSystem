@@ -45,7 +45,7 @@ router.route('/transferFunds').post(paymentController.transferFunds); // Transfe
 router.route('/paymentbyMonth').get(paymentController.getPaymentByMonth); // Payments grouped by month (for reports)
 // router.get('/paymentnotifications', paymentController.handlePaymentNotifications); // Handle payment notifications
 router.route('/getNotifications').get(paymentController.getPaymentNotifications); 
-router.route('/markPaymentAsSeen/:payemntId').put(paymentController.markPaymentAsSeen); 
+router.route('/markPaymentAsSeen/:paymentId').put(paymentController.markPaymentAsSeen); 
 
 router.route('/reports').get(paymentController.reports); // Generate various reports
 router.route('/reciept').get(paymentController.generateReceipt); // Generate receipts
