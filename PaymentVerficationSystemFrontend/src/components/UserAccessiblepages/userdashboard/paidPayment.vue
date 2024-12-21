@@ -790,9 +790,6 @@ export default {
   watch: {},
 
   mounted() {
-   this.userCode;
-
-   
     this.$apiClient
       .get("/api/v1/organization")
       .then((response) => {

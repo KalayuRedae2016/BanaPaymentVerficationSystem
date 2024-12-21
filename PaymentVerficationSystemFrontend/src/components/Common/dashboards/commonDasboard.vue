@@ -108,13 +108,13 @@
                 @click="navigateToPayment(notification)"
               >
                 <img
-                  :src="profileData || 'https://via.placeholder.com/128'"
+                  :src="'data:image/jpeg;base64,'+ notification.imageData || 'https://via.placeholder.com/128'"
                   alt="Notification Image"
                   class="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
                   <p class="text-sm font-medium text-gray-800">
-                    {{ notification.message }}
+                    Paid for {{ notification.activeYear}} - {{ notification.activeMonth }}
                   </p>
                   <p class="text-xs text-gray-500">
                     {{ notification.createdAt }}
@@ -506,24 +506,16 @@ export default {
     },
 
     fetchNotifications() {
-      const keyword = "allPayments";
       const params = {
-        keyword: keyword,
-        unSeen: true,
         userId: this.userId,
         role: this.role,
       };
       this.$apiGet("/api/v1/payments/getNotifications", params)
         .then((response) => {
-          console.log("response", response);
-
           console.log("response from the api payments notfications", response);
-         
-         
           this.notifications = response.paymentNotifications;
           this.notificationLength = response.length;
-
-          //this.imageData = "data:image/jpeg;base64," + response.imageData;
+           this.imageData = "data:image/jpeg;base64," + response.imageData;
         })
         .catch((error) => {
           console.log(error);
@@ -533,31 +525,43 @@ export default {
         });
     },
 
-    navigateToPayment(paymentId, userCode) {
+    navigateToPayment(notification) {
+    console.log("notification",notification._id)
       const payload = {
         role: this.role,
-        paymentId: paymentId,
+        paymentId: notification._id,
       };
 
-      this.$apiPut("/api/v1/payments/markPaymentAsSeen", paymentId, payload)
+      this.$apiPut("/api/v1/payments/markPaymentAsSeen", notification._id, payload)
         .then((response) => {
           console.log("response for payment update", response);
         })
         .catch((error) => {
           console.log("Error: ", error);
         })
-        .finally(() => {});
+        .finally(() => {
+          console.log("finally done");
+       });
 
-      if (this.role === "Admin") {
-        this.$router.push({
-          path: `/admindashboard/payment-history-detail/${userCode}`,
-          query: {
-            year: activeYear,
-            month: activeMonth,
-          },
-        });
-      } else {
-      }
+      // if (this.role === "Admin") {
+      //   alert("hii")
+      //   this.$router.push({
+      //     path: `/admindashboard/payment-history-detail/${notification.userCode}`,
+      //     query: {
+      //       year: notification.activeYear,
+      //       month: notification.activeMonth,
+      //     },
+      //   });
+      // } else {
+      //   this.$router.push({
+      //     path: "/userdashboard/",
+      //     query: {
+      //       year: notification.activeYear,
+      //       month: notification.activeMonth,
+      //     },
+      //   });
+       
+      // }
     },
 
     firstPaymentLength() {

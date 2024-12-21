@@ -3,14 +3,12 @@
     class="bg-white shadow-lg md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl flex flex-wrap items-center justify-between relative md:w-64 z-10 px-6 shadow-md"
     style="margin-top: 67px"
   >
-    <div class="-ml-5 -mr-5">
+    <div class="-ml-5 -mr-5 ">
       <div
         v-if="sidebarVisible"
         class="md:flex md:flex-col md:items-stretch md:opacity-100 md:relative sm:-mt-4 md:mt-0 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded"
       >
-        <div class="flex flex-col space-y-4 bg-white">
-          
-
+        <div class="flex flex-col space-y-4 bg-gray-500">
           <h1 class="ml-10 text-md mt-3 text-indigo-800 font-extrabold">
             {{ $t("Payment Management") }}
           </h1>
@@ -21,7 +19,7 @@
     <!-- Dashboard -->
     <li
       @click="setActive('dashboard')"
-      class="items-center bg-white hover:bg-gray-100 transition"
+      class="items-center bg-white hover:bg-gray-500 transition"
       :class="activeItem === 'dashboard' ? 'border-r-4 border-indigo-600' : ''"
     >
       <a class="ml-4 flex items-center text-gray-800 py-3 font-medium" href="#">
