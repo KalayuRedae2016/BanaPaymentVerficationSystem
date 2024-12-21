@@ -1204,18 +1204,20 @@ exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
     const update={}
     const filter={}
     if(role==="User"){
+      filter._id=paymentId
       filter.isPaid=true
       filter.status="confirmed"
       update.seen=true
     }else if(role==="Admin"){
-     filter.isPaid=true
-    filter.status="confirmed"
+      filter._id=paymentId
+      filter.isPaid=true
+      filter.status="confirmed"
       update.adminSeen=true
     }else{
       return next(new AppError("Invalid Role,should be User or Admin"))
     }
-
-    const payment = await Payment.findByIdAndUpdate(paymentId, update, { new: true });
+    console.log(filter,update)
+    const payment = await Payment.findByIdAndUpdate(filter, update, { new: true });
     if (!payment) return next(new AppError(" 'Payment not found'"),400)
     
     res.status(200).json({ message: 'Notification marked as seen.', payment });
