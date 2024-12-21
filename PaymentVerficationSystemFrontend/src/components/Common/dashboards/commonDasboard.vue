@@ -1,115 +1,6 @@
 <template>
   <div class="bg-gray-200">
     <div class="relative md:ml-64">
-      <!-- <header v-if="displaythat"
-          class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400"
-        >
-          <div class="logo flex flex-col lg:flex-row">
-            <img
-              src="../../../assets/img/banamall1.jpg"
-              alt="Logo"
-              class="h-8 w-8 min-w-8 min-h-8 max-w-8 max-h-8"
-            />
-          </div>
-  
-          <div class="flex items-center space-x-4">
-            <div class="flex flex-row mr-4">
-              <p class="hidden">locale: {{ locale }}</p>
-              <select class="text-md text-indigo-800" @change="changeLanguage">
-                <option value="" disabled selected>
-                  {{ $t("Language") }}
-                </option>
-                <option value="tigrigna">{{ $t("Tigrigna") }}</option>
-                <option value="amharic">{{ $t("Amharic") }}</option>
-                <option value="english">English</option>
-              </select>
-            </div>
-  
-            <div
-              class="relative mt-3 cursor-pointer "
-              @click="toggleDropdown('notifications')"
-            >
-              <i class="fas fa-bell text-blue-500 text-xs"></i>
-              <span
-                v-if="notificationCount > 0"
-                @click="notificationCliked()"
-                style="margin-top: 2px ;"
-                class="absolute transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full px-1.5"
-              >
-                {{ notificationCount }}
-              </span>
-              <ul style="margin-right:-75px; margin-top:14px;"
-                v-show="showNotificationDropdown"
-                class="border border-gray-300 absolute right-0 mt-2 w-64 bg-white rounded shadow-lg border-t border-b border-blue-400"
-              >
-                <li class="m-6 text-blue-500 font-bold">
-                  {{ $t("notifications") }}
-                </li>
-                <li
-                  v-for="(notification, index) in notifications"
-                  :key="index"
-                  class="border-b last:border-0"
-                >
-                  <a
-                    @click="navigateToPayment(notification)"
-                    href="#"
-                    class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
-                  >
-                    <img
-                      src="../../../assets/img/banamall1.jpg"
-                      alt="Notification Image"
-                      class="w-10 h-10 rounded-full mr-3 bg-red-500"
-                    />
-                    <div class="flex-1">
-                      <p class="text-sm">{{ notification.message }}</p>
-                      <p class="text-xs text-gray-500">
-                        {{ formatDate(notification.date) }}
-                      </p>
-                    </div>
-                  </a>
-                </li>
-              </ul>
-            </div>
-  
-            <div class="relative -mt-1" @click="toggleDropdown('profile')">
-              <img
-                src="../../../assets/img/sampleProfile.jpg"
-                alt="User Profile"
-                class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
-              />
-              <ul
-                v-show="dropdownVisible"
-                class="absolute right-0 mt-4 w-48 bg-white rounded shadow-lg border-t border-b border-blue-400"
-              >
-                <li>
-                  <a
-                    href="#"
-                    @click="accountSetting()"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                    >{{ $t("Account Setting") }}</a
-                  >
-                </li>
-  
-                <li>
-                  <a
-                    href="#"
-                    class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                    @click="logout"
-                    >{{ $t("logout") }}</a
-                  >
-                </li>
-              </ul>
-            </div>
-          </div>
-          <button
-            class="md:hidden cursor-pointer text-black opacity-50 md:hidden py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
-            type="button"
-            @click="toggleDropdown('sidebar')"
-          >
-            <i class="fas fa-bars" v-if="!sidebarVisible"></i>
-            <i class="fas fa-x text-red-500" v-if="sidebarVisible"></i>
-          </button>
-        </header> -->
 
       <header
         class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-md px-4 border-b border-gray-200"
@@ -217,7 +108,7 @@
                 @click="navigateToPayment(notification)"
               >
                 <img
-                  src="../../../assets/img/banamall1.jpg"
+                  :src="profileData || 'https://via.placeholder.com/128'"
                   alt="Notification Image"
                   class="w-10 h-10 rounded-full mr-3"
                 />
@@ -226,11 +117,13 @@
                     {{ notification.message }}
                   </p>
                   <p class="text-xs text-gray-500">
-                    {{ formatDate(notification.date) }}
+                    {{ notification.createdAt }}
                   </p>
                 </div>
               </a>
             </li>
+
+            
           </ul>
         </div>
       </header>
@@ -578,10 +471,6 @@ export default {
     window.addEventListener("resize", this.checkScreenSize);
     this.checkScreenSize();
 
-
-
-
-
     this.$apiGetById("/api/v1/users", this.userId)
       .then((response) => {
         console.log("response in the edit client mounted: ", response);
@@ -609,7 +498,7 @@ export default {
        // console.log("finally");
       });
     this.fetchNotifications();
-    setInterval(this.fetchNotifications, 5000);
+    //setInterval(this.fetchNotifications, 5000);
   },
   methods: {
     closeDropDownSidebar() {
@@ -624,13 +513,15 @@ export default {
         userId: this.userId,
         role: this.role,
       };
-      this.$apiGet("/api/v1/payments/getAllPayments", params)
+      this.$apiGet("/api/v1/payments/getNotifications", params)
         .then((response) => {
           console.log("response", response);
 
-          console.log("response from the api payments", response);
-          this.notifications = response.payments;
-          this.notificationLength = response.payments.length;
+          console.log("response from the api payments notfications", response);
+         
+         
+          this.notifications = response.paymentNotifications;
+          this.notificationLength = response.length;
 
           //this.imageData = "data:image/jpeg;base64," + response.imageData;
         })
