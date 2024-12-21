@@ -18,6 +18,11 @@ router.use(function (req, res, next) {
   next();
 });
 
+// Protect all routes after this middleware
+//router.use(authoController.authenticationJwt);
+
+//router.use(authoController.requiredRole('admin'));
+
 router.use(paymentController.updateStatusAndPenality);//define for all routes but you can use for specific routes//
 
 // Route to create unconfirmed payments (initiated but not yet confirmed)
