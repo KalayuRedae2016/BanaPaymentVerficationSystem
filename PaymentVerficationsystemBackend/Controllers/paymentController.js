@@ -1150,6 +1150,26 @@ exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
     if(!userId||!role){
       return next(new AppError("Both userId and role must be provided", 400));
     }
+
+    const user=await User.findById(userId)
+    if(!user){
+      return next(new AppError(`User with ID: ${userId} is not found`),400)
+    }
+    const encoding = 'base64';
+      // If the user has a profile image, attempt to read it
+      if (user.profileImage) {
+        const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
+    
+        try {
+          // Try reading the image file
+          imageData = fs.readFileSync(imageFilePath, encoding);
+        } catch (err) {
+          // If the file doesn't exist, log the error and set imageData to null
+          console.error(`Error reading image file: ${imageFilePath}`, err.message);
+          imageData = null;
+        }
+      }
+
     const filter={isPaid:true,status:"confirmed"}
     if(role==="User"){
       filter.user=userId,
@@ -1159,11 +1179,15 @@ exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
     }else{
       return next(new AppError("Invalid Role,must be User or Admin"),400)
     }
+
     const notifications = await Payment.find(filter).sort({ createdAt: -1 });
    
     res.status(200).json({
       length:notifications.length,
-      paymentNotifications:notifications
+      paymentNotifications:{
+        ...notifications,
+        imageData
+      }
      });
 })
 exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
