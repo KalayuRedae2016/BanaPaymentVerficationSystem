@@ -1193,9 +1193,10 @@ exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
      });
 })
 exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
+  console.log(req.params,req.body)
     const {paymentId} = req.params; 
     const {role} = req.body;
-
+  
     if (!paymentId ||!role) {
       return next(new AppError('Either paymentId or role must be required.', 400));
     }
