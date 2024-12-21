@@ -1197,7 +1197,7 @@ exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
     const {role} = req.body;
 
     if (!paymentId ||!role) {
-      return next(new AppError('Either paymentId,userId or role must be required.', 400));
+      return next(new AppError('Either paymentId or role must be required.', 400));
     }
     const update={}
     const filter={}
