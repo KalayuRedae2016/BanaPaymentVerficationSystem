@@ -1162,7 +1162,7 @@ exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
     }
 
     const notifications = await Payment.find(filter).sort({ createdAt: -1 });
-    
+
     //Fetch user details for each notification and attach imageData
     const paymentNotifications = await Promise.all(
         notifications.map(async (notification) => {
@@ -1193,7 +1193,8 @@ exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
      });
 })
 exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
-    const { paymentId,role} = req.query; // Parameters from the request body
+    const {paymentId} = req.params; 
+    const {role} = req.body;
 
     if (!paymentId ||!role) {
       return next(new AppError('Either paymentId,userId or role must be required.', 400));
