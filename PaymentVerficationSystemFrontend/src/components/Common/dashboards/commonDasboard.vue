@@ -528,8 +528,8 @@ export default {
     navigateToPayment(notification) {
     console.log("notification",notification._id)
       const payload = {
-        role: this.role,
         paymentId: notification._id,
+        role: this.role,
       };
 
       this.$apiPut("/api/v1/payments/markPaymentAsSeen", notification._id, payload)
