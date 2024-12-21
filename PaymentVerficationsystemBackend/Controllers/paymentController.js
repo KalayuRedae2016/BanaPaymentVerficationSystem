@@ -1151,25 +1151,6 @@ exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
       return next(new AppError("Both userId and role must be provided", 400));
     }
 
-    const user=await User.findById(userId)
-    if(!user){
-      return next(new AppError(`User with ID: ${userId} is not found`),400)
-    }
-    const encoding = 'base64';
-      // If the user has a profile image, attempt to read it
-      if (user.profileImage) {
-        const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
-    
-        try {
-          // Try reading the image file
-          imageData = fs.readFileSync(imageFilePath, encoding);
-        } catch (err) {
-          // If the file doesn't exist, log the error and set imageData to null
-          console.error(`Error reading image file: ${imageFilePath}`, err.message);
-          imageData = null;
-        }
-      }
-
     const filter={isPaid:true,status:"confirmed"}
     if(role==="User"){
       filter.user=userId,
@@ -1181,13 +1162,34 @@ exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
     }
 
     const notifications = await Payment.find(filter).sort({ createdAt: -1 });
+    
+    //Fetch user details for each notification and attach imageData
+    const paymentNotifications = await Promise.all(
+        notifications.map(async (notification) => {
+            const user = await User.findById(notification.user);
+            let imageData = null;
+
+            if (user && user.profileImage) {
+                const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
+
+                try {
+                    imageData = fs.readFileSync(imageFilePath, 'base64');
+                } catch (err) {
+                    console.error(`Error reading image file: ${imageFilePath}`, err.message);
+                }
+            }
+
+            return {
+                ...notification.toObject(),
+                user: user ? { _id: user._id, name: user.name, email: user.email } : null,
+                imageData,
+            };
+        })
+    );
    
     res.status(200).json({
       length:notifications.length,
-      paymentNotifications:{
-        ...notifications,
-        imageData
-      }
+      paymentNotifications:paymentNotifications
      });
 })
 exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
