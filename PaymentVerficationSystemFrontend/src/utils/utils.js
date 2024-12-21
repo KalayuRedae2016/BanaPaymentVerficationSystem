@@ -138,13 +138,19 @@ export async function apiPut(url, id, data, customHeaders = {}) {
 
 // Function to make a PATCH request
 export async function apiPatch(url, id, data, customHeaders = {}) {
+   
+    console.log("in api patch url,id,data",url,id,data);
+
     const apiClient = getApiClient(); // Get the API client instance
     try {
         const headers = getDefaultHeaders(customHeaders);
         const response = await apiClient.patch(`${url}/${id}`, data, { headers });
+        console.log("response: " , response)
         return response.data;
     } catch (error) {
+        console.log("error in patch,")
         const handledError = handleApiError(error); // Handle error
+        console.log("error in patch", handledError)
         throw handledError; // Re-throw the error so the caller can catch it
     }
 }

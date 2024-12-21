@@ -3,13 +3,19 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import reset from "../views/reset.vue";
 import accessDenied from "../views/accessDenied.vue";
+
+
+import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
+import changeCommonPassword from '../components/Common/Setting/changePassword.vue'
 // Admin components
-import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
+// import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
+
+
 import resDash from "../components/adminaccessiblepages/dashboards/Resdashboard.vue";
 import newCompneySettings from "../components/adminaccessiblepages/companey/newCompaneySettings.vue";
 import displayCompaney from "../components/adminaccessiblepages/companey/displayCompaney.vue";
 import editCompaney from "../components/adminaccessiblepages/companey/editCompaney.vue";
-import companyChangePassword from "../components/adminaccessiblepages/companey/changePassword.vue";
+//import companyChangePassword from "../components/adminaccessiblepages/companey/changePassword.vue";
 import payment1 from "../components/adminaccessiblepages/payment/payments1.vue";
 import regular from "../components/adminaccessiblepages/payment/paymentSetting/blockNewPayment.vue";
 import clients from "../components/adminaccessiblepages/clients/clients.vue";
@@ -37,24 +43,12 @@ import emptyCompaney from "../components/adminaccessiblepages/commonFiles/emptyC
 import emptyClient from "../components/adminaccessiblepages/commonFiles/emptyClient.vue";
 
 // User components
-import userdashboard from "../components/UserAccessiblepages/userdashboard/Userdashboard.vue";
+//import userdashboard from "../components/UserAccessiblepages/userdashboard/Userdashboard.vue";
 import userdashboardFirst from "../components/UserAccessiblepages/userdashboard/Userdashboardfirst.vue";
-import blockPayment from "../components/UserAccessiblepages/payments/block.vue";
-import servicePayment from "../components/UserAccessiblepages/payments/service.vue";
-import subsidyPayment from "../components/UserAccessiblepages/payments/subsidy.vue";
-import argentPayment from "../components/UserAccessiblepages/payments/argent.vue";
 import profile from "../components/UserAccessiblepages/profile/editProfile.vue";
-import emptyEditUserProfile from "../components/UserAccessiblepages/profile/emptyEditProfile.vue";
-
-import allNewPayment from "../components/UserAccessiblepages/payments/allNewPayment.vue";
-import emptyUserPage from "../components/UserAccessiblepages/emptyUserPage.vue";
-import receiptPage from "../components/UserAccessiblepages/receipts/receipt.vue";
 import idCard from "../components/UserAccessiblepages/idCard/idCard.vue";
-
 import infoPayment from "../components/UserAccessiblepages/information/info.vue";
-import messages from "../components/UserAccessiblepages/messages/message.vue";
 import changePassword from "../components/UserAccessiblepages/profile/changePassword.vue";
-
 
 const routes = [
   {
@@ -82,7 +76,7 @@ const routes = [
   },
   {
     path: "/admindashboard",
-    component: Admindashboard,
+    component: commonDashboard,
      meta: { requiresAuth: true, role: 'Admin' },
    // meta: { requiresGuest: true },
     children: [
@@ -93,7 +87,7 @@ const routes = [
       { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },
       { path: "display-companey", name: "display-companey", component: displayCompaney },
       { path: "edit-companey", name: "edit-companey", component: editCompaney },
-      { path: "change-password", name: "change-password", component: companyChangePassword },
+      { path: "change-password", name: "change-password", component: changeCommonPassword  },
       { path: "payments1", name: "payments1", component: payment1 },
       { path: "regular-new-setting", name: "regular-new-setting", component: regular }, 
       { path: "clients", component: clients },
@@ -122,27 +116,16 @@ const routes = [
   },
   {
     path: "/userdashboard",
-    component: userdashboard,
+    component: commonDashboard,
     meta: { requiresAuth: true, role: 'User' },
     //meta: { requiresGuest: true },
     children: [
-      // User routes
-      { path: "", component: userdashboardFirst },
-      { path: "empty/:clientId", component: emptyUserPage },
-      { path: "block-payment", component: blockPayment },
+      { path: "", component: userdashboardFirst },  
       { path: "info", component: infoPayment },
-      { path: "service-pay", component: servicePayment },
-      { path: "receipt", component: receiptPage },
-      { path: "messages", component: messages },
-      { path: "subsidy-payment", component: subsidyPayment },
-      { path: "argent-payment", component: argentPayment },
       { path: "profile", component: profile },
-     
-    
-      { path: "empty-edit-user-profile/:clientId", component:  emptyEditUserProfile },
-       { path: "all-new-payment", component: allNewPayment },
-      { path: "change-password", component:changePassword},
+      { path: "change-password", component:changeCommonPassword },
       { path: "id-card", component:idCard},
+            // { path: "receipt", component: receiptPage },
     ],
   },
 ];

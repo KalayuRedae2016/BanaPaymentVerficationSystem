@@ -408,8 +408,7 @@ export default {
           this.errorMessage = error.message;
           this.pageReload = true; // Set page reload flag
           console.log("error catch: ", error.message);
-        })
-        .finally(() => {
+        }).finally(() => {
           if (this.showCurrentPage) {
             // If the page has been loaded successfully
 

@@ -285,12 +285,13 @@ export default {
 
     async fetchPayments() {
       const keyword = "allPayments";
+      const params={
+        keyword: keyword,
+      }
       this.$apiClient
-        .get("/api/v1/payments/getAllPayments", {
-          params: {
-            keyword: keyword,
-          },
-        })
+        .get("/api/v1/payments/getAllPayments", 
+          params
+        )
         .then((response) => {
           console.log("response in the all payment nnnnnnn ", response);
           this.payments = response.data.payments;

@@ -44,7 +44,7 @@
                 id="username"
                 type="text"
                 v-model="username"
-                :placeholder="$t('enterEmailPassword')"
+                placeholder="Enter User Code"
               />
             </div>
             <p v-if="usernameIsRequired" class="text-red-500 mb-6 text-center mt-3 text-sm mb-3">{{ $t('usernameRequired') }}</p>

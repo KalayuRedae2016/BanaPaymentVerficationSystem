@@ -427,11 +427,11 @@
 </template>
     
     <script>
-import detail from "./profileEdit/detail.vue";
+
 import { mapGetters } from "vuex";
 export default {
   components: {
-    detail,
+    
   },
   data() {
     return {
@@ -558,7 +558,10 @@ export default {
           console.log("response from the update: " ,response);
           if (response.data.status === 1) {
             this.clientProfile =response.data.updatedUser;
-            this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
+           
+            this.$reloadPage();
+
+           // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
            // this.imageData = "data:image/jpeg;base64," + this.imageFile;
            // this.showSuccess = true;
            // this.successMessage = response.data.message;
