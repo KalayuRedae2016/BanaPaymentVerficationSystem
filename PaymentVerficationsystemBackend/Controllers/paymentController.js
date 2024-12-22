@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Organization = require('../Models/organizationModel');
 const PaymentSetting = require('../Models/paymentSettingModel');
 const User = require('../Models/userModel');
@@ -175,7 +176,7 @@ exports.getMoreBills = async (req, res) => {
   try {
     const paymentTypeIdsArray = req.params.paymentTypeIds.split('*');
     const bankType = req.apiKeyData.bankType; 
-  
+
     const billQuery = {
       isPaid: false,
       $or: paymentTypeIdsArray.map((id) => ({
@@ -189,10 +190,7 @@ exports.getMoreBills = async (req, res) => {
       })),
     };
 
-    console.log(billQuery)
-    // Retrieve unpaid bills matching the query
-    const unPaidBills = await Payment.find(billQuery).lean();
-    console.log(unPaidBills)
+    const unPaidBills = await Payment.find(billQuery);
 
     if (!unPaidBills.length) {
       return res.status(404).json({
@@ -244,16 +242,16 @@ exports.getMoreBills = async (req, res) => {
             amount: type === 'service'
               ? paymentType.amount + bill.registrationFee
               : paymentType.amount,
-            billCCY: 'ETB',
             paymentTerm: `${type.charAt(0).toUpperCase() + type.slice(1)
               } Payment for active month ${bill.activeMonth} is ${bill.status}`,
+            paymentCode:(type === "service" || type === "penality") ? "Service-Payment" : "Block_payment",
             isPaid: paymentType.isPaid,
             orgId: organization._id,
             orgName: organization.companyName,
             customer: bill.user,
             customerOrgId: 0,
             billCode: paymentType._id,
-            orgAccountNumber: orgAccountNumber.bankAccountNumber,
+            orgAccountNumber: orgAccountNumber.bankAccountNumber,//check on third party library
           });
         }
       }
