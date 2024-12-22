@@ -108,9 +108,10 @@
     <!-- Scrollable Table Body -->
     <tbody class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto">
       <tr
+       @click="selectDeselectEmail(searchClient.email)"
         v-for="(searchClient, index) in searchedusers"
         :key="searchClient._id"
-        class="bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg p-4"
+        class="cursor-pointer bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg p-4"
       >
       <td class="p-4 text-md text-gray-700">
           <input
@@ -120,16 +121,16 @@
             @change="selectDeselectEmail(searchClient.email)"
           />
         </td>
-      <td class="p-4 text-md text-gray-700  hidden">
+      <td class="p-4 text-md text-gray-700  hidden" >
           <span class="font-bold text-indigo-600">{{index +1  }}</span>
         </td>
-        <td class="p-4 text-md text-gray-700">
+        <td class="p-4 text-md text-gray-700" >
           <span class="font-bold text-indigo-600">{{ searchClient.userCode }}</span>
         </td>
-        <td class="p-4 text-md text-gray-700 font-bold">
+        <td class="p-4 text-md text-gray-700 font-bold" >
           {{ searchClient.fullName }}
         </td>
-        <td class="p-4 text-md text-gray-700 font-bold">
+        <td class="p-4 text-md text-gray-700 font-bold" >
           {{ searchClient.email }}
         </td>
        

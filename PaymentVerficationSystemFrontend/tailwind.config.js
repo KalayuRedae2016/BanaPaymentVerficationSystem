@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: 'class', 
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
@@ -16,6 +17,8 @@ export default {
         tertiary: '#c7d2fe',
         background: '#f0f4f8',
         default: '#fff',
+        'custom-dark': '#1e1e1e',
+        'custom-light': '#ffffff',
       },
       fontFamily: {//font-sans
         sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
@@ -134,6 +137,12 @@ export default {
         outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
         none: 'none',
       },
+      scale:{
+         '101': '1.01',
+         '102': '1.02',
+         '103': '1.03',
+         '104': '1.04'
+      }
     },
   },
   plugins: [],

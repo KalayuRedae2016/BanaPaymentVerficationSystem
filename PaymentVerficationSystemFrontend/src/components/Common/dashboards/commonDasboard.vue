@@ -1,7 +1,6 @@
 <template>
   <div class="bg-gray-200">
     <div class="relative md:ml-64">
-
       <header
         class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-md px-4 border-b border-gray-200"
       >
@@ -37,8 +36,8 @@
             >
               <i class="fas fa-bell text-xl"></i>
               <span
-                v-if="notificationCount > 0"
-                class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-0.5"
+                v-if="notificationLength > 0"
+                class="absolute -top-3 -right-2 bg-blue-500 text-white text-xs rounded-full px-2 py-0.5"
               >
                 {{ notificationLength }}
               </span>
@@ -96,6 +95,7 @@
           <div class="bg-blue-500 text-white font-semibold px-4 py-2">
             {{ $t("Notifications") }}
           </div>  
+          <div v-if="notificationLength ===0" class="mx-10 mt-5 text-blue-500 border border-gray-100 p-5">No notifications</div>
           <ul>
             <li
               v-for="(notification, index) in notifications"
@@ -108,13 +108,13 @@
                 @click="navigateToPayment(notification)"
               >
                 <img
-                  :src="profileData || 'https://via.placeholder.com/128'"
+                  :src="'data:image/jpeg;base64,'+ notification.imageData || 'https://via.placeholder.com/128'"
                   alt="Notification Image"
                   class="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
                   <p class="text-sm font-medium text-gray-800">
-                    {{ notification.message }}
+                    Paid for {{ notification.activeYear}} - {{ notification.activeMonth }}
                   </p>
                   <p class="text-xs text-gray-500">
                     {{ notification.createdAt }}
@@ -498,7 +498,7 @@ export default {
        // console.log("finally");
       });
     this.fetchNotifications();
-    //setInterval(this.fetchNotifications, 5000);
+   // setInterval(this.fetchNotifications, 5000);
   },
   methods: {
     closeDropDownSidebar() {
@@ -506,57 +506,62 @@ export default {
     },
 
     fetchNotifications() {
-      const keyword = "allPayments";
       const params = {
-        keyword: keyword,
-        unSeen: true,
         userId: this.userId,
         role: this.role,
       };
       this.$apiGet("/api/v1/payments/getNotifications", params)
         .then((response) => {
-          console.log("response", response);
-
           console.log("response from the api payments notfications", response);
-         
-         
           this.notifications = response.paymentNotifications;
           this.notificationLength = response.length;
-
-          //this.imageData = "data:image/jpeg;base64," + response.imageData;
+           this.imageData = "data:image/jpeg;base64," + response.imageData;
         })
         .catch((error) => {
           console.log(error);
         })
         .finally(() => {
           console.log("finally completed");
-        });
+      });
     },
 
-    navigateToPayment(paymentId, userCode) {
+    navigateToPayment(notification) {
+      this.showNotificationDropdown=false;
+    console.log("notification",notification._id)
       const payload = {
+        paymentId: notification._id,
         role: this.role,
-        paymentId: paymentId,
       };
 
-      this.$apiPut("/api/v1/payments/markPaymentAsSeen", paymentId, payload)
+      this.$apiPut("/api/v1/payments/markPaymentAsSeen", notification._id, payload)
         .then((response) => {
           console.log("response for payment update", response);
         })
         .catch((error) => {
           console.log("Error: ", error);
         })
-        .finally(() => {});
+        .finally(() => {
+          console.log("finally done");
+       });
 
       if (this.role === "Admin") {
+        
         this.$router.push({
-          path: `/admindashboard/payment-history-detail/${userCode}`,
+          path: `/admindashboard/payment-history-detail/${notification.userCode}`,
           query: {
-            year: activeYear,
-            month: activeMonth,
+            year: notification.activeYear,
+            month: notification.activeMonth,
           },
         });
       } else {
+        this.$router.push({
+          path: "/userdashboard/",
+          query: {
+            year: notification.activeYear,
+            month: notification.activeMonth,
+          },
+        });
+       
       }
     },
 

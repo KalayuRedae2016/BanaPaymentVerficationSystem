@@ -56,7 +56,7 @@
           <!-- Change Email Form -->
           <div v-show="showEmailForm" class="mt-4">
             <form action="">
-              <label for="email" class="block text-sm font-medium text-gray-600"
+              <label for="email" class="custom-label"
                 >New Email</label
               >
               <input
@@ -64,7 +64,7 @@
                 type="email"
                 v-model="newEmail"
                 placeholder="Enter your new email"
-                class="w-full h-10 px-3 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                class="custom-input"
               />
               <button
                 @click.prevent="submitEmail"
