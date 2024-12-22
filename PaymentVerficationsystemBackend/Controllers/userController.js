@@ -6,6 +6,7 @@ const PaymentSetting = require("../Models/paymentSettingModel")
 const fs = require('fs');
 const path = require('path');
 const validator = require('validator'); // Ensure you have this library installed
+const xlsx = require('xlsx'); //for import user from excel
 
 const { sendEmail } = require('../utils/email');
 const catchAsync = require('../utils/catchAsync');
@@ -257,56 +258,77 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.importUsers = catchAsync(async (req, res, next) => {
-  // console.log('Uploaded File:', req.file); // Debug log
+  const filePath = req.file.path;
 
-  // Transform function to add user code and hashed password
   const transformUserData = async (data) => {
+    console.log("Processing Row Data:", data); // Log input data for debugging
+  
     const organization = await Organization.findOne();
     if (!organization) throw new AppError('Organization not found', 404);
 
     const prefixCode = organization.companyPrefixCode;
-    const length = 4; // Length of user code
+    const length = 4; // Length for the generated userCode
 
     const requiredFields = ['firstName', 'middleName', 'lastName', 'email', 'tigrignaName', 'phoneNumber', 'role', 'gender', 'age'];
-    const missingFields = requiredFields.filter((field) => !data[field]);
+    const missingFields = requiredFields.filter(field => !data[field]);
     if (missingFields.length > 0) {
-      console.log("m",missingFields)
-      throw new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400);
+      console.error(`Row skipped. Missing fields: ${missingFields.join(', ')}`);
+      throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
     }
 
     const user = new User(data);
-    user.userCode = await user.generateUserCode(prefixCode, length);
-    const password = await user.generateRandomPassword();
-    user.password = await bcrypt.hash(password, 12);
-    // console.log(user)
-    return user; // Return the transformed user instance
+    user.userCode = await user.generateUserCode(prefixCode, length); // Assuming generateUserCode is a method in User model
+    const password = await user.generateRandomPassword(); // Assuming generateRandomPassword is a method in User model
+    user.password = await bcrypt.hash(password, 12); // Hash the password for security
+
+    console.log("Transformed User Data:", user); // Log the transformed user data for debugging
+    return user;
   };
 
-  const filePath = req.file.path; // Path to the uploaded file
-  let importedUsers = await importFromExcel(filePath, User, transformUserData);// Use the utility function to import data from the Excel file
-  console.log("l1",importedUsers.length)
-  importedUsers = Array.isArray(importedUsers) ? importedUsers : [];// Ensure importedUsers is always an array
-  console.log(importedUsers)
-  console.log("L2",importedUsers.length)
+  const importFromExcel = async (filePath, Model, transformFn) => {
+    const workbook = xlsx.readFile(filePath);
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = xlsx.utils.sheet_to_json(worksheet); // Convert the sheet to JSON
+    if (!Array.isArray(jsonData) || jsonData.length === 0) {
+      throw new AppError("Excel file is empty or data is not in the correct format.", 400);
+    }
+
+    const importedData = [];
+    for (const [index, data] of jsonData.entries()) {
+      try {
+        const userDocument = await transformFn(data);
+        const savedUser = await userDocument.save(); // Save the user to the database
+        importedData.push(savedUser); // Push the saved user to the imported data array
+      } catch (error) {
+        console.error(`Error processing row ${index + 1}: ${error.message}`);
+        continue; // Continue processing the next row if there's an error
+      }
+    }
+    return importedData; // Return the list of saved users
+  };
+
+  let importedUsers = await importFromExcel(filePath, User, transformUserData);
+  console.log("After calling importFromExcel:", importedUsers);
+
+  importedUsers = Array.isArray(importedUsers) ? importedUsers : [];
+  console.log("Final Imported Users after validation:", importedUsers);
+
   if (importedUsers.length === 0) {
     return next(new AppError('No valid users were imported from the file.', 400));
   }
-  console.log("IU",importedUsers)
-  // Find the payment setting marked as latest
+
   const latestSetting = await PaymentSetting.findOne({ latest: true });
   if (!latestSetting) {
     return next(new AppError('No active payment setting found.', 404));
   }
 
-  // Create pending payments for all imported users
   for (const user of importedUsers) {
-    if (!user.isActive || user.role !== 'User') continue;
-    await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
+    if (user.isActive && user.role === 'User') {
+      await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
+    }
   }
 
-  // Optionally clean up the uploaded file after processing
-  fs.unlinkSync(filePath);
-
+  // fs.unlinkSync(filePath);
   res.status(200).json({
     status: 1,
     message: 'Data imported successfully',
