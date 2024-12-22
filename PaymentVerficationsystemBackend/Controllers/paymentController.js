@@ -276,6 +276,7 @@ exports.getMoreBills = async (req, res) => {
 exports.confirmBills = async (req, res) => {
   try {
     const bankType = req.apiKeyData.bankType; 
+    // console.log(req.apiKeyData.id)
     const transactions = req.body; // Array of transactions
     
     if (!Array.isArray(transactions) || transactions.length === 0) {
@@ -439,6 +440,8 @@ exports.confirmBills = async (req, res) => {
         unpaidBill.status = 'confirmed';
         unpaidBill.confirmedDate = new Date();
         unpaidBill.latest = true;
+        unpaidBill.confirmedID=req.apiKeyData.id,
+        unpaidBill.confirmationMethod="Bank-confirmed"
       }
 
       // Save the updated bill
@@ -702,8 +705,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.status = 'confirmed';
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
-    unpaidBill.confirmedBy=userId,
-    unpaidBill.confirmedDetail="admin-confirmed"
+    unpaidBill.confirmedID=userId,
+    unpaidBill.confirmationMethod="Admin-confirmed"
 
   }
 
