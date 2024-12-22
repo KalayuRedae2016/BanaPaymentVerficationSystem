@@ -44,8 +44,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     const organization = await Organization.findOne()
     console.log("org",organization)
     if (!organization) {
-      return next(new AppError("Organization is not found", 400))
+      return next(new AppError("Organization is not found", 400));
     }
+    
     const prefixCode = organization.companyPrefixCode;
     const length = 4;
     

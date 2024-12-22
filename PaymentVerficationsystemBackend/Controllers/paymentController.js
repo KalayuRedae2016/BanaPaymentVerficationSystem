@@ -588,6 +588,9 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   if(!user){
     return next(new AppError("User is not found"),400)
   }
+  
+  console.log(user.fullName)
+  console.log(user.role)
   // Find the unpaid bill by billCode
   const unpaidBill = await Payment.findOne({ isPaid: false, billCode });
   if (!unpaidBill) {
@@ -661,6 +664,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
       fullName: unpaidBill.fullName,
       totalAmount: unpaidBill.totalExpectedAmount,
       confirmedDate: new Date().toISOString(),
+      
     });
     const latestPayments = await Payment.find({ latest: true });
     if (latestPayments) {
@@ -671,7 +675,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     }
     // Generate QR code as data URL
     const qrCodeDataUrl = await QRCode.toDataURL(qrContent);
-
+    
     // Convert data URL to a buffer
     const base64Data = qrCodeDataUrl.replace(/^data:image\/png;base64,/, '');
     const buffer = Buffer.from(base64Data, 'base64');
@@ -698,6 +702,9 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.status = 'confirmed';
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
+    unpaidBill.confirmedBy=userId,
+    unpaidBill.confirmedDetail="admin-confirmed"
+
   }
 
   // Save the updated bill
