@@ -576,13 +576,17 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
 });
 
 exports.confirmPayments = catchAsync(async (req, res, next) => {
-  const { billCode, urgent, regular, subsidy, service, penality,paymentDate} = req.body;
-  if(!billCode){
-    return next(new AppError(`billCode is required`))
+  const { billCode,userId,urgent, regular, subsidy, service, penality,paymentDate} = req.body;
+  if(!billCode||!userId){
+    return next(new AppError(`billCode or UserId is required`))
   }
   if (!urgent && !regular && !subsidy && !service&& !penality) {
     return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",))
 
+  }
+  const user=await User.findById(userId)
+  if(!user){
+    return next(new AppError("User is not found"),400)
   }
   // Find the unpaid bill by billCode
   const unpaidBill = await Payment.findOne({ isPaid: false, billCode });

@@ -1,116 +1,37 @@
 const mongoose = require('mongoose');
 const paymentTypeSchema = new mongoose.Schema({
-  amount: {
-    type: Number,
-    required: true,
-  },
-  bankType: {
-    type: String,
-    default: null,
-  },
-  TTNumber: {
-    type: String,
-    default: null,
-  },
-  penality: {
-    type: Number,
-    default: 0,
-  },
-  isPaid: {
-    type: Boolean,
-    default: false,
-  },
-  paidAt: {
-    type: Date,
-    default: null,
-  },
-  daysLate: {
-    type: Number,
-    default: null,
-  },
+  amount: {type: Number, required: true},
+  bankType: {type: String,default: null},
+  TTNumber: {type: String,default: null},
+  penality: {type: Number,default: 0},
+  isPaid: {type: Boolean,default: false},
+  paidAt: {type: Date,default: null},
+  daysLate: {type: Number,default: null},
 });
 
 const paymentSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',//Reference to the User Model
-      required: true,
-      index: true
-    },
-    paymentSetting: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'PaymentSetting', // Reference to the paymentsetting model
-      required: true,
-    },
-    userCode: {
-      type: String,
-      required: true,
-    },
-    fullName: {
-      type: String,
-      required: true,
-      default: null,
-    },
-    billCode: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    activeYear: {
-      type: Number,
-      default: new Date().getFullYear(),
-    },
-    activeMonth: {
-      type: Number,
-      required: true,
-      default: new Date().getMonth(),
-    },
-    registrationFee: {
-      type: Number,
-      default: 0,
-    },
+    user: {type: mongoose.Schema.Types.ObjectId,ref: 'User',required: true,index: true},
+    paymentSetting: {type: mongoose.Schema.Types.ObjectId,ref: 'PaymentSetting', required: true},
+    userCode: {type: String,required: true,},
+    fullName: {type: String,required: true,default: null},
+    billCode: {type: String,required: true,unique: true},
+    activeYear: {type: Number,default: new Date().getFullYear()},
+    activeMonth: {type: Number,required: true,default: new Date().getMonth()},
+    registrationFee: {type: Number,default: 0},
     urgent: paymentTypeSchema,
     regular: paymentTypeSchema,
     subsidy: paymentTypeSchema,
     service: paymentTypeSchema,
     penality: paymentTypeSchema,
     baseAmount: { type: Number, default: 0, required: true },
-    totalExpectedAmount: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    totalPaidAmount: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    confirmedDate: {
-      type: Date,
-      default: null,
-    },
-    confirmedDetail:{
-      type:String,
-      enum: ['imported_Old Data', `bank-confirmed`, `admin-confirmed`], 
-      required: true,
-      default:`admin-confirmed`
-    },
-    confirmedBy:{
-      type:String, 
-      required: true,
-      default:`admin`
-    },
-    barCode: {
-      type: String,
-      default: null,
-    },
-    status: {
-      type: String,
-      enum: ['pending', 'confirmed', 'overdue',"unknown"],
-      default: 'pending',
-      index: true, // Frequently filtered
-    },
+    totalExpectedAmount: {type: Number,default: 0,required: true},
+    totalPaidAmount: {type: Number,default: 0,required: true},
+    confirmedDate: {type: Date,default: null},
+    confirmedDetail:{type:String,enum: ['imported_Old Data',`bank-confirmed`,`admin-confirmed`],default:null},
+    confirmedBy:{type:String,default:null },
+    barCode: {type: String,default: null},
+    status: {type: String,enum: ['pending', 'confirmed', 'overdue',"unknown"],default: 'pending',index: true},
     isPaid: {type: Boolean,default: false,index: true}, // Frequently filtered},
     latest: {type: Boolean,default: false},
     seen: { type: Boolean, default: false }, // User notification

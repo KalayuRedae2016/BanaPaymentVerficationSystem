@@ -42,11 +42,13 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 exports.signup = catchAsync(async (req, res, next) => {
   try {
     const organization = await Organization.findOne()
-    const prefixCode = organization.companyPrefixCode;
-    const length = 4;
+    console.log("org",organization)
     if (!organization) {
       return next(new AppError("Organization is not found", 400))
     }
+    const prefixCode = organization.companyPrefixCode;
+    const length = 4;
+    
     const user = new User({
       ...req.body,
       isActive: true,
