@@ -1,136 +1,106 @@
 <template>
   <div class="container flex-col">
+    <Toasst ref="toast" />
     <div class="px-4 py-2">
       <h2 class="text-md font-bold mt-2 text-indigo-800 font-bold">
         {{ $t("companyProfile") }}
       </h2>
     </div>
 
- 
-    <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ succesToastMessage }}</span>
-    </div>
-  </transition> 
-
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
-    </div>
-  </transition> 
-
-
     <div
       class="border-t border-indigo-50 mt-1 py-4 md:border-t md:border-indigo-800 px-4"
     >
-      <form 
+      <form
         @submit.prevent="insertCompanyProfile()"
         class="border border-gray-300 rounded-lg py-5"
       >
-    <div class="flex flex-col ml-5 mr-5 md:flex-row md:space-x-8 md: mr-8  md:ml-8">
-      <div class="flex flex-col w-full md:w-1/2">
-        <div class="mb-4">
-          <label class="custom-label" for="username"> {{ $t("compName") }} </label>
-          <input
-            class="custom-input"
-            id="comp-name"
-            type="text"
-            :placeholder=" $t('compName')"
-            v-model="companyName"
-          />
+        <div
+          class="flex flex-col ml-5 mr-5 md:flex-row md:space-x-8 md: mr-8 md:ml-8"
+        >
+          <div class="flex flex-col w-full md:w-1/2">
+            <div class="mb-4">
+              <label class="custom-label" for="username">
+                {{ $t("compName") }} 
+              </label>
+              <input
+                class="custom-input"
+                id="comp-name"
+                type="text"
+                :placeholder="$t('compName')"
+                v-model="companyName"
+              />
+              <p  v-if="companyNameIsRequired" class="text-red-500 text-xs">Compnay Name is required</p>
+
+            </div>
+
+            <div class="mb-4">
+              <label class="custom-label" for="username">
+                {{ $t("compPhoneNumber")
+                }}<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                class="custom-input"
+                id="phone-nu,ber"
+                type="text"
+                :placeholder="$t('compPhoneNumber')"
+                v-model="companyPhoneNumber"
+              />
+
+              <p  v-if="companyPhoneNumberIsRequired" class="text-red-500 text-xs">Phone Number is required</p>
+
+            </div>
+
+            <div class="mb-4">
+              <label class="custom-label" for="email">
+                {{ $t("compEmail") }}<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                class="custom-input"
+                id="email"
+                type="text"
+                :placeholder="$t('compEmail')"
+                v-model="companyEmail"
+              />
+              <p  v-if="companyEmailIsRequired" class="text-red-500 text-xs">Email is required</p>
+
+            </div>
+          </div>
+          <div class="flex flex-col w-full md:w-1/2">
+            <div class="mb-4">
+              <label class="custom-label" for="comp-address">
+                {{ $t("compAddress") }}<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                class="custom-input"
+                id="comp-address"
+                type="text"
+                :placeholder="$t('compAddress')"
+                v-model="companyAddress"
+              />
+              <p  v-if="companyAddressIsRequired" class="text-red-500 text-xs">Address is required</p>
+
+            </div>
+            <div class="mb-4">
+              <label class="custom-label" for="prifex-code">
+                {{ $t("compPrefixCode")
+                }}<span class="text-red-500 ml-1">*</span>
+              </label>
+              <input
+                class="custom-input"
+                id="prifex-code"
+                type="text"
+                :placeholder="$t('compPrefixCode')"
+                v-model="companyPrefixCode"
+              />
+              <p  v-if="companyPrefixCodeIsRequired" class="text-red-500 text-xs">Prefix Code is required</p>
+
+            </div>
+          </div>
         </div>
 
-        <div class="mb-4">
-          <label class="custom-label" for="username">
-            {{ $t("compPhoneNumber") }}<span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            class="custom-input"
-            id="phone-nu,ber"
-            type="text"
-            :placeholder="$t('compPhoneNumber') "
-            v-model="companyPhoneNumber"
-          />
-        </div>
-
-        <div class="mb-4">
-          <label class="custom-label" for="email">
-            {{ $t("compEmail") }}<span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            class="custom-input"
-            id="email"
-            type="text"
-            :placeholder="$t('compEmail')"
-            v-model="companyEmail"
-          />
-        </div>
-      </div>
-       <div class="flex flex-col w-full md:w-1/2">
-        <div class="mb-4">
-          <label
-            class="custom-label"
-            for="comp-address"
-          >
-          {{ $t("compAddress") }}<span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            class="custom-input"
-            id="comp-address"
-            type="text"
-            :placeholder="$t('compAddress')"
-            v-model="companyAddress"
-          />
-        </div>
-        <div class="mb-4">
-          <label
-            class="custom-label"
-            for="prifex-code"
-          >
-          {{ $t("compPrefixCode") }}<span class="text-red-500 ml-1">*</span>
-          </label>
-          <input
-            class="custom-input"
-            id="prifex-code"
-            type="text"
-            :placeholder="$t('compPrefixCode')"
-            v-model="companyPrefixCode"
-          />
-        </div>
-       </div>
-  
-      </div>
-        
-
-        <div class="rounded-lg-lg px-3 py-3 mt-5">
-          <label
-            class="custom-label"
-          >
-          {{ $t("blockAccounts") }}
+        <div class="rounded-lg mx-3 px-3 py-3 mt-5">
+          <label class="custom-label">
+            {{ $t("blockAccounts") }} 
             <span class="text-red-500 ml-1">*</span>
           </label>
           <div class="border border-gray-300 rounded-lg">
@@ -140,10 +110,7 @@
               class="flex flex-row"
             >
               <div class="m-4 flex flex-col w-3/4 md: flex-row">
-                <select
-                  v-model="bank.bankType"
-                  class="custom-select mb-5"
-                >
+                <select v-model="bank.bankType" class="custom-select mb-5">
                   <option value="" disabled>{{ $t("selectBankType") }}</option>
                   <option value="CBE">{{ $t("cbe") }}</option>
                   <option value="WEGAGEN">{{ $t("wegagen") }}</option>
@@ -201,11 +168,9 @@
             </button>
           </div>
         </div>
-        <div class="rounded-lg-lg px-3 py-3 mt-5">
-          <label
-            class="custom-label"
-          >
-          {{ $t("serviceAccounts") }}
+        <div class="rounded-lg-lg mx-3 px-3 py-3 mt-5">
+          <label class="custom-label">
+            {{ $t("serviceAccounts") }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <div class="border border-gray-300 rounded-lg">
@@ -215,11 +180,8 @@
               class="flex flex-row"
             >
               <div class="m-4 flex flex-col w-3/4 md: flex-row">
-                <select
-                  v-model="bank.bankType"
-                  class="custom-select  mb-5"
-                >
-                 <option value="" disabled>{{ $t("selectBankType") }}</option>
+                <select v-model="bank.bankType" class="custom-select mb-5">
+                  <option value="" disabled>{{ $t("selectBankType") }}</option>
                   <option value="CBE">{{ $t("cbe") }}</option>
                   <option value="WEGAGEN">{{ $t("wegagen") }}</option>
                   <option value="LIB">{{ $t("enat") }}</option>
@@ -229,12 +191,11 @@
                 </select>
                 <input
                   type="text"
-                  v-model="bank. bankAccountNumber"
+                  v-model="bank.bankAccountNumber"
                   :placeholder="$t('bankAccountNumber')"
                   class="custom-input"
                 />
               </div>
-
               <button
                 @click.prevent="removeServiceBankAccount(index)"
                 class="text-pink-500 mb-5"
@@ -276,11 +237,8 @@
             </button>
           </div>
         </div>
-        <button
-          type="submit"
-          class="custom-button ml-3 mr-3"
-        >
-        {{ $t("submit") }}
+        <button type="submit" class="custom-button ml-3 mr-3">
+          {{ $t("submit") }}
         </button>
       </form>
     </div>
@@ -308,11 +266,13 @@
                       d="M5 13l4 4L19 7"
                     ></path>
                   </svg>
-                  <h2 class="text-sm font-bold text-gray-800">{{ $t("success") }}</h2>
+                  <h2 class="text-sm font-bold text-gray-800">
+                    {{ $t("success") }}
+                  </h2>
                 </div>
                 <p class="text-gray-600 text-sm">
                   <!-- Your Comany Profile Created successfully -->
-                   {{ successMessage }}
+                  {{ successMessage }}
                 </p>
                 <button
                   @click="
@@ -321,7 +281,7 @@
                   "
                   class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg-full focus:outline-none focus:ring-2 focus:ring-green-500"
                 >
-            {{ $t('ok') }}
+                  {{ $t("ok") }}
                 </button>
               </div>
             </div>
@@ -332,132 +292,138 @@
     </div>
 
     <div v-if="showWarning">
-  <transition name="fade" mode="out-in">
-    <div
-      class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-    >
-      <!-- Modal Content -->
-      <div class="bg-white rounded-lg p-6 border border-yellow-500">
-        <div class="fixed inset-0 flex items-center justify-center z-50">
-          <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-            <div class="flex items-center justify-center mb-4">
-              <svg
-                class="w-8 h-8 text-yellow-500 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 8v4m0 4h.01"
-                ></path>
-              </svg>
-              <h2 class="text-sm font-bold text-gray-800">{{ $t("warning") }}</h2>
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-yellow-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-4">
+                  <svg
+                    class="w-8 h-8 text-yellow-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M12 8v4m0 4h.01"
+                    ></path>
+                  </svg>
+                  <h2 class="text-sm font-bold text-gray-800">
+                    {{ $t("warning") }}
+                  </h2>
+                </div>
+                <p class="text-gray-600 text-sm">
+                  {{ warningMessage }}
+                </p>
+                <button
+                  @click="showWarning = false"
+                  class="mt-6 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  {{ $t("ok") }}
+                </button>
+              </div>
             </div>
-            <p class="text-gray-600 text-sm">
-              {{ warningMessage }}
-            </p>
-            <button
-              @click="showWarning = false"
-              class="mt-6 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            >
-            {{ $t("ok") }}
-            </button>
+            <hr class="my-4 bg-yellow-500" />
           </div>
         </div>
-        <hr class="my-4 bg-yellow-500" />
-      </div>
+      </transition>
     </div>
-  </transition>
-</div>
-<div v-if="showError">
-  <transition name="fade" mode="out-in">
-    <div
-      class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-    >
-      <!-- Modal Content -->
-      <div class="bg-white rounded-lg p-6 border border-red-500">
-        <div class="fixed inset-0 flex items-center justify-center z-50">
-          <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-            <div class="flex items-center justify-center mb-4">
-              <svg
-                class="w-8 h-8 text-red-500 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
-              </svg>
-              <h2 class="text-sm font-bold text-gray-800">{{ $t("error") }}</h2>
+    <div v-if="showError">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-red-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-4">
+                  <svg
+                    class="w-8 h-8 text-red-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  <h2 class="text-sm font-bold text-gray-800">
+                    {{ $t("error") }}
+                  </h2>
+                </div>
+                <p class="text-gray-600 text-sm">
+                  {{ errorMessage }}
+                </p>
+                <button
+                  @click="showError = false"
+                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  {{ $t("ok") }}
+                </button>
+              </div>
             </div>
-            <p class="text-gray-600 text-sm">
-              {{ errorMessage }}
-            </p>
-            <button
-              @click="showError = false"
-              class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-            >
-            {{ $t("ok") }}
-            </button>
+            <hr class="my-4 bg-red-500" />
           </div>
         </div>
-        <hr class="my-4 bg-red-500" />
-      </div>
+      </transition>
     </div>
-  </transition>
-</div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import Toast from "../../Common/Toast.vue";
 export default {
   name: "paymentsView",
+  components: {
+    Toast,
+  },
   data() {
     return {
+      successToastMessage: "",
+      errorToastMessage: "",
+      showErrorToast: false,
+      showSuccessToast: false,
 
-     successToastMessage:"",
-     errorToastMessage:"",
-     showErrorToast:false,
-     showSuccessToast:false,
-
-      showError:false,
-      showWarning :false,
-      warningMessage:"",
-      errorMessage:"",
-      successMessage:"",
+      showError: false,
+      showWarning: false,
+      warningMessage: "",
+      errorMessage: "",
+      successMessage: "",
       isInputFocused: false,
       isInputFocused1: false,
       isInputFocused2: false,
       isInputFocused3: false,
       isInputFocused4: false,
 
+      companyNameIsRequired: false,
+      companyPhoneNumberIsRequired: false,
+      companyEmailIsRequired: false,
+      companyPrefixCodeIsRequired: false,
+      companyAddressIsRequired: false,
+      blockBankAccountsAreRequired: false,
+      serviceBankAccountsAreRequired: false,
 
-        companyNameIsRequired:false,
-        companyPhoneNumberIsRequired:false,
-        companyEmailIsRequired:false,
-        companyPrefixCodeIsRequired:false,
-        companyAddressIsRequired:false,
-        blockBankAccountsAreRequired:false,
-        serviceBankAccountsAreRequired:false,
-
-      createdSuccessfully:false,
+      createdSuccessfully: false,
       companyName: "",
       companyPhoneNumber: "",
       companyEmail: "",
       companyPrefixCode: "",
-      blockBankAccounts: [{ bankType: "",  bankAccountNumber: "" }],
+      blockBankAccounts: [{ bankType: "", bankAccountNumber: "" }],
       serviceBankAccounts: [
         {
           bankType: "",
-           bankAccountNumber: "",
+          bankAccountNumber: "",
         },
       ],
       companyAddress: "",
@@ -466,20 +432,6 @@ export default {
     };
   },
   mounted() {
-    // this.apiClient.get("/closes").then((response) => {
-    //   console.log("closes", response.data);
-    //   if (response.data === null) {
-    //     this.closepaymentCreated = false;
-    //   } else {
-    //     this.closepaymentCreated = true;
-    //     this.close_setting_data = response.data;
-    //     for (let i = 0; i < 1; i++) {
-    //       this.single_close_setting_data = this.close_setting_data[i];
-    //       this.closeId = this.close_setting_data[i]._id;
-    //       console.log("closeId", this.close_chargeId);
-    //     }
-    //   }
-    // });
   },
   created() {
     this.apiClient = axios.create({
@@ -488,40 +440,46 @@ export default {
   },
 
   methods: {
-    showSuccessToastMessage(message) {
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-       
-        this.showSuccessToast = false;
-      }, 1000); 
-      
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-       
-        this.showErrorToast = false;
-      }, 1000); 
-      
-      // Toast will disappear after 3 seconds
-    },
-    
-
-    
     routeToDisplay() {
       this.createdSuccessfully = false;
       this.$router.push("/admindashboard/display-companey");
-     },
+    },
 
     insertCompanyProfile() {
-     if(this.companyName===null ||this.companyPhoneNumber===null ||this.companyEmail===null ||this.companyPrefixCode===null ||this.companyAddress===null || this.blockBankAccounts.length===0 || this.serviceBankAccounts.length===0){
-       this.showWarning = true;
-       
-       return;
-     }
+      this.companyNameIsRequired = false;
+      this.companyEmailIsRequired = false;
+      this.companyPhoneNumberIsRequired = false;
+      this.companyAddressIsRequired = false;
+      this.companyPrefixCodeIsRequired = false;
+
+      if (this.companyName ==="" || this.companyName === null) {
+        
+        //alert("hii");
+
+        this.companyNameIsRequired=true;
+        return;
+      }
+      if (this.companyEmail ==="" || this.companyEmail === null) {
+        this.companyEmailIsRequired=true;
+        return;
+      }
+
+      if (this.companyPhoneNumber ==="" || this.companyPhoneNumber === null) {
+        this.companyPhoneNumberIsRequired=true;
+        return;
+      }
+      
+
+      if ((this.companyAddress ==="" || this.companyAddress === null)) {
+          this.companyAddressIsRequired=true;
+          return;
+      }
+      if (this.companyPrefixCode == "" || this.companyPrefixCode === null) {
+        this.companyPrefixCodeIsRequired=true;
+        return;
+      }
+
+
       const companeyProfileData = {
         companyName: this.companyName,
         companyPhoneNumber: this.companyPhoneNumber,
@@ -538,29 +496,27 @@ export default {
         .post("/api/v1/organization", companeyProfileData)
         .then((response) => {
           console.log("response", response);
-          if (Number(response.data.status)===1) {
+          if (Number(response.data.status) === 1) {
             this.$router.push("/admindashboard/empty-companey");
-          }else{
-          this.showErrorToastMessage("Something went wrong");
+          } else {
+            this.showErrorToastMessage("Something went wrong");
           }
         })
         .catch((error) => {
-
           console.log(error);
           this.showErrorToastMessage("Something went wrong");
-
         });
     },
 
     addBlockBankAccount() {
-      this.blockBankAccounts.push({  bankAccountNumber: "", bankType: "" });
+      this.blockBankAccounts.push({ bankAccountNumber: "", bankType: "" });
     },
     removeBlockBankAccount(index) {
       this.blockBankAccounts.splice(index, 1);
     },
 
     addServiceBankAccount() {
-      this.serviceBankAccounts.push({  bankAccountNumber: "", bankType: "" });
+      this.serviceBankAccounts.push({ bankAccountNumber: "", bankType: "" });
     },
     removeServiceBankAccount(index) {
       this.serviceBankAccounts.splice(index, 1);

@@ -47,7 +47,7 @@
         <div v-if="!closepaymentCreated" class="w-full">
           <div class="mx-3">
             <form class="mt-8 ">
-              <div class="flex flex-col md:flex-row md:space-x-12">
+              <div class="flex flex-col md:flex-row md:space-x-5 px-4">
                 <div class="flex flex-col md:w-1/2">
                   <div class="mb-4">
                     <label class="custom-label">
@@ -191,7 +191,7 @@
                     class="flex flex-row space-x-3 lg:space-x-0 items-center space-y-3 m-5 md:flex-row md:space-x-5 md:space-y-0"
                   >
 
-                  <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-0 space-x-0 lg:space-x-3">
+                  <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-2 space-x-0 lg:space-x-3">
                     <select
                       v-model="account.bankType"
                       class="custom-select"
@@ -313,19 +313,18 @@
                           <i
                             @click="confirmDeleteServiceAccount(account)"
                             class="fas fa-trash-alt custom-star"
-                          ></i>
+                          >
+                         </i>
                         </td>
                       </tr>
                     </tbody>
                   </table>
-
-
                   <div
                     v-for="(account, index) in addedServiceBankAccounts"
                     :key="index"
                     class="flex flex-row space-x-2 items-center space-y-5 m-5 md:flex-row md:space-y-0"
                   >
-                  <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-0">
+                  <div class="flex flex-col lg:flex-row space-y-2 lg:space-y-2">
                     <select
                       v-model="account.bankType"
                       class="custom-select"
@@ -624,13 +623,13 @@
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="fixed inset-0 flex items-center justify-center z-50">
               <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex flex-row space-x-32">
+                <div class="flex flex-row">
                   <h1 class="mb-5 text-indigo-800 text-md font-bold">
-                    {{ $t("addServiceAccount") }}
+                    {{ $t("Add Service Account") }}
                   </h1>
                   <svg
                     @click="otherServiceSelected = !otherServiceSelected"
-                    class="w-8 h-10 text-red-500 mr-2"
+                    class="ml-20 w-8 h-10 text-red-500 mr-2"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -945,12 +944,10 @@ export default {
   name: "paymentsView",
   data() {
     return {
-     successToastMessage:"",
-     errorToastMessage:"",
-     showErrorToast:false,
-     showSuccessToast:false,
-
-
+      successToastMessage:"",
+      errorToastMessage:"",
+      showErrorToast:false,
+      showSuccessToast:false,
       newBlockBankType: "",
       newBlockBankAccountNumber: "",
 

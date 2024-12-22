@@ -27,7 +27,7 @@
   }
 
   .custom-select {
-    @apply text-xs ml-2 mr-2 w-full h-10 px-3 mt-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ease-in-out bg-gray-50;
+    @apply text-xs  w-full h-10 px-3 mt-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ease-in-out bg-gray-50;
   }
   .custom-select::placeholder {
     @apply text-gray-500  text-xs;
