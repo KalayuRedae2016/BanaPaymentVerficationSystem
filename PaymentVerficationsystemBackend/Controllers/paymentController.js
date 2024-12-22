@@ -1008,7 +1008,13 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
       // Helper function to calculate penalties
       const calculatePenalty = (paymentType, amount) => {
-        if (!paymentType || paymentType.isPaid === true) return { penality: 0, daysLate: 0 }; // Skip if the payment type is marked as paid
+        // If the payment type is paid, return the existing penalty and daysLate values
+        if (!paymentType || paymentType.isPaid === true) {
+          return {
+            penality: paymentType?.penality || 0,
+            daysLate: paymentType?.daysLate || 0,
+          };
+        }
 
         const dueDate = new Date(endingDate);
         let daysLate = Math.ceil((paymentDate - dueDate) / (1000 * 3600 * 24));
