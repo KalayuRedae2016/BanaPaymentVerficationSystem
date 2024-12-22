@@ -1,11 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-
-const Organization = require('./organizationModel');
-const PaymentSetting =require('./paymentSettingModel');
-
-const User = require('./userModel');
-
 const paymentTypeSchema = new mongoose.Schema({
   amount: {
     type: Number,
@@ -97,6 +90,17 @@ const paymentSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    confirmedDetail:{
+      type:String,
+      enum: ['imported_Old Data', `bank-confirmed`, `admin-confirmed`], 
+      required: true,
+      default:`admin-confirmed`
+    },
+    confirmedBy:{
+      type:String, 
+      required: true,
+      default:`admin`
+    },
     barCode: {
       type: String,
       default: null,
@@ -111,6 +115,7 @@ const paymentSchema = new mongoose.Schema(
     latest: {type: Boolean,default: false},
     seen: { type: Boolean, default: false }, // User notification
     adminSeen: { type: Boolean, default: false }, // Admin notification
+
   },
 {
     timestamps: true,
