@@ -193,7 +193,7 @@
 
                     <div class="mb-4">
                       <label
-                        class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                        class="custom-label"
                       >
                         {{ $t("middleName") }}
                         <span class="text-red-500 ml-1">*</span>
@@ -208,7 +208,7 @@
 
                     <div class="mb-4">
                       <label
-                        class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                        class="custom-label"
                       >
                         {{ $t("lastName") }}
                         <span class="text-red-500 ml-1">*</span>
@@ -224,14 +224,14 @@
 
                     <div class="w-full">
                       <label
-                        class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                        class="custom-label"
                       >
                         Gender
                         <span class="text-red-500 ml-1">*</span>
                       </label>
 
                       <select
-                        class="mb-3 border border-indigo-800 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-12"
+                        class="custom-select"
                         style="padding-left: 16px"
                         v-model="clientProfile.gender"
                       >
@@ -245,7 +245,7 @@
 
                     <div class="mb-4">
                       <label
-                        class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                        class="custom-label"
                       >
                         {{ $t("age") }}
                         <span class="text-red-500 ml-1">*</span>
@@ -261,7 +261,7 @@
 
                     <div class="mb-4">
                       <label
-                        class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                        class="custom-label"
                       >
                         {{ $t("email") }}
                         <span class="text-red-500 ml-1">*</span>
@@ -277,7 +277,7 @@
 
                     <div class="mb-4">
                       <label
-                        class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                        class="custom-label"
                       >
                         {{ $t("phoneNumber") }}
                         <span class="text-red-500 ml-1">*</span>

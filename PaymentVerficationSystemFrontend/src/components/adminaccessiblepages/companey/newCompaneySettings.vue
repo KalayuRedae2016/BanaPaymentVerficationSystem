@@ -45,11 +45,11 @@
 
 
     <div
-      class="border-t border-indigo-50 mt-1 py-4 md:border-t md:border-indigo-800 "
+      class="border-t border-indigo-50 mt-1 py-4 md:border-t md:border-indigo-800 px-4"
     >
-      <form
+      <form 
         @submit.prevent="insertCompanyProfile()"
-        class=""
+        class="border border-gray-300 rounded-lg py-5"
       >
     <div class="flex flex-col ml-5 mr-5 md:flex-row md:space-x-8 md: mr-8  md:ml-8">
       <div class="flex flex-col w-full md:w-1/2">

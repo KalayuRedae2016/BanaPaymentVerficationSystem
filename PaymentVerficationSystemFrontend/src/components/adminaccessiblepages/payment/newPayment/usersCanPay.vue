@@ -3,41 +3,7 @@
 
 
 
-    <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="//alert"
-    >
-      <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ succesToastMessage }}</span>
-    </div>
-  </transition> 
-
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="//alert"
-    >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
-    </div>
-  </transition> 
+    <Toast ref="toast" />
 
 
     <div class="py-4">
@@ -124,10 +90,10 @@
                       <i class="fas fa-chevron-right mr-3 text-pink-500"></i>
                       <span class="text-xs"
                         >{{ payment.activeYear }} -
-                        {{ payment.activeMonthInString }} {{payment.status}}</span
+                        {{ payment.activeMonthInString }}</span
                       >
-                      <span class="text-xs ml-5 text-yellow-600" v-if="payment.status==='pending'">{{ payment.status }}</span>
-                      <span class="text-xs ml-5 text-red-500" v-else-if="payment.status==='overdue'">{{payment.status}}</span>
+                      <span class="text-xs ml-5 text-yellow-600 bg-blue-500 rounded-lg px-3 pb-1" v-if="payment.status==='pending'">{{ payment.status }}</span>
+                      <span class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg px-3 pb-1" v-else-if="payment.status==='overdue'">{{payment.status}}</span>
                       
                     </p>
 
@@ -1565,7 +1531,15 @@
 </template>
 
 <script>
+import Toast from '../../../Common/Toast.vue';
+
+
+
 export default {
+  components:{
+  
+    Toast,
+  },
   data() {
     return {
       successToastMessage:"",
@@ -1682,49 +1656,32 @@ export default {
     // this.changeMonthIntoString(1);
   },
   methods: {
-    showSuccessToastMessage(message) {
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-       
-        this.showSuccessToast = false;
-      }, 1000); 
-      
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-       
-        this.showErrorToast = false;
-      }, 1000); 
-      
-      // Toast will disappear after 3 seconds
-    },
-    toggleUserSelection(userIndex) {
-      this.filteredUsers.forEach((user) => (user.userselected = false));
-      this.filteredUsers[userIndex].userselected = true;
-      this.filteredUsers.forEach((user) => {
-        if (!user.userselected) {
-          user.payments.forEach((payment) => {
-            if (payment.selected) {
-              payment.selected = false;
-              payment.bankSelected = true;
-            }
-          });
-        }
-      });
+  
+    // toggleUserSelection(userIndex) {
 
-      if (this.previosSelected !== userIndex) {
-        this.selectedPayments = [];
-      }
-      this.previosSelected = userIndex;
-      console.log(this.selectedPayments);
-    },
+    //   alert("hiii")
+    //   this.filteredUsers.forEach((user) => (user.userselected = false));
+    //   this.filteredUsers[userIndex].userselected = true;
+    //   this.filteredUsers.forEach((user) => {
+    //     if (!user.userselected) {
+    //       user.payments.forEach((payment) => {
+    //         if (payment.selected) {
+    //           payment.selected = false;
+    //           payment.bankSelected = true;
+    //         }
+    //       });
+    //     }
+    //   });
+
+    //   if (this.previosSelected !== userIndex) {
+    //     this.selectedPayments = [];
+    //   }
+    //   this.previosSelected = userIndex;
+    //   console.log(this.selectedPayments);
+    // },
 
     navigateToPayment(userCode,fullName) {
-      
+    
       console.log("this.fullname = " ,fullName);
       this.fullName = fullName;
       // console.log("userCode", userCode);
@@ -1750,21 +1707,21 @@ export default {
 
       console.log("filtered users", this.filteredUsers);
     },
-    sendToDataBase() {
-      console.log("paymentsb", this.selectedPayments);
-      if (this.selectedPayments.length === 0) {
-        this.paymentVerified = false;
-        console.log("length===0");
-      } else {
-        this.paymentVerified = true;
-        this.selectedPayments.forEach((payment) => {
-          if (payment.bankType === null || payment.bankType === "") {
-            this.paymentVerified = false;
-          }
-        });
-      }
-      console.log("paymentsafter", this.selectedPayments);
-    },
+    // sendToDataBase() {
+    //   console.log("paymentsb", this.selectedPayments);
+    //   if (this.selectedPayments.length === 0) {
+    //     this.paymentVerified = false;
+    //     console.log("length===0");
+    //   } else {
+    //     this.paymentVerified = true;
+    //     this.selectedPayments.forEach((payment) => {
+    //       if (payment.bankType === null || payment.bankType === "") {
+    //         this.paymentVerified = false;
+    //       }
+    //     });
+    //   }
+    //   console.log("paymentsafter", this.selectedPayments);
+    // },
 
     confirmDetails() {
       console.log("current id", this.searchId);
@@ -2016,7 +1973,7 @@ export default {
         })
         .then((response) => {
           console.log("this reponse after confirmation", response.data);
-
+          this.$refs.toast.showSuccessToastMessage("Regular Payment updated");
           if (response.data.items.isPaid) {
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
@@ -2026,12 +1983,18 @@ export default {
               },
             });
           } else {
+          
             this.fetchUnPaid();
           }
         })
         .catch((error) => {
           console.log("Error regular confirming", error);
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
         });
+
+
+
+
     },
     sendSubsidyToDb() {
       this.payload.subsidy.isPaid = true;
@@ -2043,6 +2006,7 @@ export default {
           },
         })
         .then((response) => {
+          this.$refs.toast.showSuccessToastMessage("Subsidy Payment updated");
           if (response.data.items.isPaid) {
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
@@ -2057,6 +2021,7 @@ export default {
         })
         .catch((error) => {
           console.log("Error service confirming", error);
+          this.$refs.toast.showErrorToastMessage("Something went wrong ");
         });
     },
     sendUrgentToDb() {
@@ -2070,6 +2035,7 @@ export default {
           },
         })
         .then((response) => {
+          this.$refs.toast.showSuccessToastMessage("Urgent Payment updated");
           if (response.data.items.isPaid) {
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
@@ -2084,6 +2050,7 @@ export default {
         })
         .catch((error) => {
           console.log("Error service confirming", error);
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
         });
     },
     sendServiceToDb() {
@@ -2097,6 +2064,7 @@ export default {
           },
         })
         .then((response) => {
+          this.$refs.toast.showSuccessToastMessage("Service Payment updated");
           if (response.data.items.isPaid) {
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
@@ -2111,6 +2079,7 @@ export default {
         })
         .catch((error) => {
           console.log("Error service confirming", error);
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
         });
     },
     sendPenalityToDb() {
@@ -2124,6 +2093,7 @@ export default {
           },
         })
         .then((response) => {
+          this.$refs.toast.showSuccessToastMessage("Penality Paid Successfully");
           if (response.data.items.isPaid) {
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
@@ -2138,6 +2108,7 @@ export default {
         })
         .catch((error) => {
           console.log("Error service confirming", error);
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
         });
     },
     confirmUnconfirmRegular(
@@ -2548,20 +2519,8 @@ export default {
         }
       });
     },
-    goToSearcUser() {
-      console.log("pressed");
-      this.$router.push("admindashboard/user-for-bank-statement");
-    },
-    sendToDataBase() {
-      const year = new Date().getFullYear();
-      const month = new Date().getMonth() + 1;
-      const userId = "bana0001";
-      const instant = true;
-      this.$router.push({
-        path: "/admindashboard/general-receipt",
-        query: { year, month, userId, instant },
-      });
-    },
+
+  
     openModal() {
       this.showPaymentDetailModal = true;
     },

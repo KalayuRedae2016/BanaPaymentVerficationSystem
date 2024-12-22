@@ -75,13 +75,14 @@
           </div>
           <div class="flex justify-end">
             <p class="mt-4 text-center text-gray-600">
-              <router-link
-                to="#"
-                class="text-blue-500 hover:underline"
-                @click="forgetPassword()"
-                >{{ $t('forgotPassword') }}</router-link
-              >
-            </p>
+  <a
+    class="text-blue-500 hover:underline cursor-pointer"
+    @click="forgetPassword()"
+  >
+    {{ $t('forgotPassword') }}
+  </a>
+</p>
+
           </div>
           <button
             @click.prevent="login()"
@@ -92,16 +93,16 @@
         </form>
       </div>
 
-      <div v-if="forgetPasswordVisible">
+      <div v-if="forgetPasswordVisible" class="pt-5">
         <div v-if="showForgetPasswordForm">
-          <p class="text-gray-600 mb-6 text-center mt-5">
+          <!-- <p class="text-gray-600 mb-6 text-center mt-5">
           {{$t('enterEmailMessage') }}
-          </p>
+          </p> -->
           <input
             v-model="resetEmail"
             type="email"
             :placeholder="$t('enterYourEmail')"
-            class="custom-input mb-5"
+            class="custom-input mb-5 "
           />
           <button
             @click="sendEmailToServer()"
@@ -187,7 +188,8 @@ export default {
       resetPasswordVisible: false,
       resetEmail: "",
     
-      showForgetPasswordForm: true,
+      showForgetPasswordForm: false,
+
       notifyToSeeEmail: false,
       resetEmailIsRequired:false,
       emailNotFound:false,
@@ -214,6 +216,7 @@ export default {
   },
   methods: {
     makeLoginVissible() {
+      this.notifyToSeeEmail=false;
       this.loginVisible = true;
       this.forgetPasswordVisible = false;
       console.log(
@@ -225,15 +228,14 @@ export default {
     forgetPassword() {
       this.loginVisible = false;
       this.forgetPasswordVisible = true;
+      this.showForgetPasswordForm=true;
     },
-    sendEmailToServer() {
 
-    //this.notifyToSeeEmail=true;
-    this.forgetPasswordVisible=true;
-    this.showForgetPasswordForm=true;
-      this.showError=true;
-      this.errorMessage="";
-      //alert("Sending email to: " + this.resetEmail);
+
+
+    sendEmailToServer() {
+    
+
      if(this.resetEmail===''){
       this.showError=true;
       this.errorMessage = "Email is required"
@@ -245,29 +247,28 @@ export default {
       email:this.resetEmail
 
      };
- 
-      this.showForgetPasswordForm=false;
 
+ 
       this.$apiClient
         .post("/api/v1/users/forgetPassword",emailData)
         .then((response) => {
-          if(response.data.status===1){
-            this.notifyToSeeEmail=true;
-            this.successRegister = true;
-          }
           console.log("response during reg", response.data);
-          this.successRegister = true;
-        })
-        .catch((error) => {
+          if(response.data.status===1){
+            //alert("hhhh")
+            this.notifyToSeeEmail=true;
+            this,this.showError=false;
+            this.showForgetPasswordForm=false;
+            this.forgetPasswordVisible=true;
+
+          }
+        }).catch((error) => {
           console.log("Error registration", error);
-          this.emailNotFound = true;
           this.showError=true;
           this.errorMessage = "Email Not Found"
-          // if(error.response.data.status==401){
-          //   this.emailNotFound=true
-          //   this.showError=true;
-          // }
-        });
+          this.showForgetPasswordForm=true;
+          this.forgetPasswordVisible=true;
+      });
+
     },
     changeLanguage(event) {
       console.log("event", event.target.value);
@@ -276,7 +277,7 @@ export default {
       console.log("local is changed =", this.locale);
     },
     login() {
-
+    
       this.showError=false;
       this.errorMessage="";
     // alert("Login", this.username, this.password);

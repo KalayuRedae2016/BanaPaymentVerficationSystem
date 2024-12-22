@@ -1,52 +1,17 @@
 <template>
   <div>
     <!-- //start of transtion -->
-
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showSuccessToast"
-        class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Success!</strong>
-        <span class="block sm:inline">{{ this.successToastMessage }}</span>
-      </div>
-    </transition>
-
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showErrorToast"
-        class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Error!</strong>
-        <span class="block sm:inline">{{ errorToastMessage }}</span>
-      </div>
-    </transition>
+     <Toast ref="toast" />
 
     <!-- //end of transtion -->
-    <div class="flex-col border-t border-gray-300 rounded-lg mt-5 mx-3">
+    <div class="flex-col border-t border-gray-300 rounded-lg mt-5 ">
       <div class="flex flex-wrap">
         <div
           v-if="paymentSettingCreated === 0"
           class="mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
         ></div>
         
-        <div v-if="paymentSettingCreated === 2" class="w-full">
+        <div v-if="paymentSettingCreated === 2" class="w-full border border-gray-300 rounded-lg">
           <div class="m-4">
             <form action="">
               <div class=" flex flex-col lg:flex-row lg:space-x-12">
@@ -65,7 +30,7 @@
                     />
                     <p
                       v-if="regularIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Regular amount is required *
                     </p>
@@ -112,7 +77,7 @@
                     />
                     <p
                       v-if="serviceIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Service amount is required *
                     </p>
@@ -147,7 +112,7 @@
                     </select>
                     <p
                       v-if="activeYearIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Active Year is required *
                     </p>
@@ -177,7 +142,7 @@
                     </select>
                     <p
                       v-if="activeMonthIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Active Month is required *
                     </p>
@@ -202,20 +167,20 @@
                     />
                     <p
                       v-if="startingDateIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Starting Date is required *
                     </p>
                     <p
                       v-if="start_date_less_than_activeMonth"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Starting date should in the interval of the selected month
                     </p>
 
                     <p
                       v-if="startDateLessEndDate"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Starting Date Can Not be greated then ending date
                     </p>
@@ -235,13 +200,13 @@
                     />
                     <p
                       v-if="endingDateIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Ending Date is required *
                     </p>
                     <p
                       v-if="end_date_less_than_activeMonth"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Ending date should in the interval of the selected month
                     </p>
@@ -261,13 +226,13 @@
                     />
                     <p
                       v-if="penality5DayIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Penality for late 5 days is required *
                     </p>
                     <p
                       v-if="fiveDayLessTenDay"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Penality 5 days Can not be Greater than charge 10 day
                     </p>
@@ -287,13 +252,13 @@
                     />
                     <p
                       v-if="penality10DayIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Penality for late 10 days is required *
                     </p>
                     <p
                       v-if="tenDayLessAboveTenDay"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Penality 10 for days Can not be Greater than charge above
                       10 days
@@ -313,7 +278,7 @@
                     />
                     <p
                       v-if="penalityAbove10DayIsRequired"
-                      class="text-red-500 text-xxs mt-2"
+                      class="text-red-500 text-xs mt-2 mb-5"
                     >
                       Penality for late above 10 days is required *
                     </p>
@@ -331,6 +296,9 @@
               {{ $t("submit") }}
             </button>
           </form>
+
+
+
           </div>
         </div>
 
@@ -548,7 +516,7 @@
     <div v-if="showPaymentEditingActivating" class="">
       <transition name="fade" mode="out-in">
         <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-75 p-4 "
         >
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="flex flex-row items-center">
@@ -578,10 +546,10 @@
               </div>
             </div>
 
-            <hr class="my-4 md:min-w-full bg-red-500" />
+            <hr class="my-4 md:min-w-full bg-red-500 " />
             <div class="">
-              <form action.prevent="" class="py-5 scroll-y h-96">
-                <div class="flex flex-col md:flex-row md:space-x-5">
+              <form action.prevent="" class="py-5 h-96 ">
+                <div class="flex flex-col md:flex-row md:space-x-5 scroll-y h-64" >
                   <div class="flex flex-col">
                     <div class="mb-4">
                       <label class="custom-label" for="amount">
@@ -595,12 +563,7 @@
                         v-model="paymentSetting.regularAmount"
                         value="600"
                       />
-                      <p
-                        v-if="regularIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Regular amount is required *
-                      </p>
+                     
                     </div>
                     <div class="mb-4">
                       <label class="custom-label" for="amount">
@@ -641,12 +604,7 @@
                         v-model="paymentSetting.serviceAmount"
                         value="600"
                       />
-                      <p
-                        v-if="serviceIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Service amount is required *
-                      </p>
+                     
                     </div>
                     <div class="mb-4">
                       <label class="custom-label" for="amount">
@@ -679,12 +637,7 @@
                           {{ year }}
                         </option>
                       </select>
-                      <p
-                        v-if="activeYearIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Active Year is required *
-                      </p>
+                      
                     </div>
                   </div>
 
@@ -698,7 +651,7 @@
                         v-model="paymentSetting.activeMonth"
                         class="custom-select"
                       >
-                        <option value="">Select Active Month</option>
+                        <option value="" disabled>Select Active Month</option>
                         <option
                           v-for="month in $months"
                           :key="month"
@@ -709,7 +662,7 @@
                       </select>
                       <p
                         v-if="activeMonthIsRequired"
-                        class="text-red-500 text-xxs mt-2"
+                        class="text-red-500 text-xs mt-2 mb-5"
                       >
                         Active Month is required *
                       </p>
@@ -725,26 +678,8 @@
                         class="custom-input"
                         v-model="paymentSetting.formattedStartDate"
                       />
-                      <p
-                        v-if="startingDateIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Starting Date is required *
-                      </p>
-                      <p
-                        v-if="start_date_less_than_activeMonth"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Starting date should in the interval of the selected
-                        month
-                      </p>
 
-                      <p
-                        v-if="startDateLessEndDate"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Starting Date Can Not be greated then ending date
-                      </p>
+                      
                     </div>
                     <div class="mb-4">
                       <label for="endingDate" class="custom-label"
@@ -758,24 +693,8 @@
                         v-model="paymentSetting.formattedEndDate"
                       />
 
-                      <p
-                        v-if="endingDateIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Ending Date is required *
-                      </p>
-                      <p
-                        v-if="endingDateIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Ending Date is required *
-                      </p>
-                      <p
-                        v-if="end_date_less_than_activeMonth"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Ending date should in the interval of the selected month
-                      </p>
+
+                   
                     </div>
                     <div class="mb-4">
                       <label class="custom-label">
@@ -789,18 +708,8 @@
                         v-model="paymentSetting.penalityLate5Days"
                       />
 
-                      <p
-                        v-if="penality5DayIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Penality for late 5 days is required *
-                      </p>
-                      <p
-                        v-if="fiveDayLessTenDay"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Penality 5 days Can not be Greater than charge 10 day
-                      </p>
+
+                     
                     </div>
                     <div class="mb-4">
                       <label class="custom-label">
@@ -813,19 +722,7 @@
                         class="custom-input"
                         v-model="paymentSetting.penalityLate10Days"
                       />
-                      <p
-                        v-if="penality10DayIsRequired"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Penality for late 10 days is required *
-                      </p>
-                      <p
-                        v-if="tenDayLessAboveTenDay"
-                        class="text-red-500 text-xxs mt-2"
-                      >
-                        Penality 10 for days Can not be Greater than charge
-                        above 10 days
-                      </p>
+                      
                     </div>
 
                     <div class="mb-4">
@@ -840,31 +737,128 @@
                         v-model="paymentSetting.penalityLateAbove10Days"
                       />
                     </div>
-                    <p
-                      v-if="penalityAbove10DayIsRequired"
-                      class="text-red-500 text-xxs mt-2"
-                    >
-                      Penality for above 10 days is required *
-                    </p>
+                    
                   </div>
                 </div>
 
+                <div class="flex flex-col">
+
+                     <p
+                        v-if="regularIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Regular amount is required *
+                      </p>
+                      <p
+                        v-if="serviceIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Service amount is required *
+                      </p>
+                      <p
+                        v-if="activeYearIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Active Year is required *
+                      </p>
+                      <p
+                        v-if="startingDateIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Starting Date is required *
+                      </p>
+                      <p
+                        v-if="start_date_less_than_activeMonth"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Starting date should in the interval of the selected
+                        month
+                      </p>
+
+                      <p
+                        v-if="startDateLessEndDate"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Starting Date Can Not be greated then ending date
+                      </p>
+                      <p
+                        v-if="endingDateIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Ending Date is required *
+                      </p>
+                      <p
+                        v-if="endingDateIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Ending Date is required *
+                      </p>
+                      <p
+                        v-if="end_date_less_than_activeMonth"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Ending date should in the interval of the selected month
+                      </p>
+                      <p
+                        v-if="penality5DayIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Penality for late 5 days is required *
+                      </p>
+                      <p
+                        v-if="fiveDayLessTenDay"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Penality 5 days Can not be Greater than charge 10 day
+                      </p>
+                      <p
+                        v-if="penality10DayIsRequired"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Penality for late 10 days is required *
+                      </p>
+                      <p
+                        v-if="tenDayLessAboveTenDay"
+                        class="text-red-500 text-xs mt-2 mb-5"
+                      >
+                        Penality 10 for days Can not be Greater than charge
+                        above 10 days
+                      </p>
+
+                      <p
+                      v-if="penalityAbove10DayIsRequired"
+                      class="text-red-500 text-xs mt-2 mb-5"
+                    >
+                      Penality for above 10 days is required *
+                    </p>
+                     <p
+                      v-if="settingAlreadyExists"
+                      class="text-red-500 text-xs mt-2 mb-5 mb-5"
+                    >
+                      Payment Setting  is already exist for the selected month and can not be activated
+                    </p>
+
+              
                 <button
                   v-if="!paymentActivate"
                   @click.prevent="editPaymentSetting()"
                   type="submit"
-                  class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                  class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded mt-5 "
                 >
                   {{ $t("update") }}
+
+
                 </button>
                 <button
                   v-if="paymentActivate"
                   @click.prevent="activatePaymentSetting()"
                   type="submit"
-                  class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded"
+                  class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded mt-5"
                 >
                   {{ $t("activate") }}
                 </button>
+                </div>
+                
               </form>
             </div>
           </div>
@@ -960,7 +954,11 @@
 </template>
 
 <script>
+import Toast from "../../../Common/Toast.vue"
 export default {
+  components:{
+     Toast,
+  },
   name: "paymentsView",
   data() {
     return {
@@ -975,7 +973,7 @@ export default {
       showPaymentEditingActivating: false,
       successMessage: "Payment Setting Activated Successfully",
       errorMessage: "There is error during activation. Please try again",
-
+      settingAlreadyExists :false,
       start_date_less_than_activeMonth: false,
       end_date_less_than_activeMonth: false,
       edit_activate_start_date_less_than_activeMonth: false,
@@ -1077,26 +1075,6 @@ export default {
   },
 
   methods: {
-    showSuccessToastMessage(message) {
-      this.successToastMessage = message;
-
-      console.log("Message is ", this.successToastMessage);
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
     createRegularPayment() {
       console.log(
         this.paymentSetting.subsidyAmount,
@@ -1257,23 +1235,23 @@ export default {
           if (response.data.status === 1) {
             //this.paymentSetting=response.data.paymentSetting;
 
-            this.showSuccessToastMessage(response.data.message);
+            this.$refs.toast.showSuccessToastMessage(response.data.message);
 
             this.paymentSettingCreated = 1;
           } else {
-            this.showSuccessToastMessage(response.data.message);
+            this.$refs.toast.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
           console.log(error);
 
           if (error.response) {
-            this.showErrorToastMessage("Something went wrong with response");
+            this.$refs.toast.showErrorToastMessage("Something went wrong with response");
           }
           if (error.request) {
-            this.showErrorToastMessage(error.response.message);
+            this.$refs.toast.showErrorToastMessage(error.response.message);
           } else {
-            this.showErrorToastMessage("Something went wrong");
+            this.$refs.toast.showErrorToastMessage("Something went wrong");
           }
         });
     },
@@ -1295,27 +1273,27 @@ export default {
 
       if (this.paymentSetting.regularAmount == "") {
         this.regularIsRequired = true;
-        this.showErrorToastMessage("Regular amount is required");
+      
         return;
       }
       if (this.paymentSetting.serviceAmount == "") {
         this.serviceIsRequired = true;
-        this.showErrorToastMessage("Service amount is required");
+        
         return;
       }
       if (this.paymentSetting.activeYear == "") {
         this.activeYearIsRequired = true;
-        this.showErrorToastMessage("Active Year is required");
+       
         return;
       }
       if (this.paymentSetting.activeMonth == "") {
         this.activeMonthIsRequired = true;
-        this.showErrorToastMessage("Active Month is required");
+      
         return;
       }
       if (this.paymentSetting.formattedStartDate == "") {
         this.startingDateIsRequired = true;
-        this.showErrorToastMessage("Starting Date is required");
+      
         return;
       }
 
@@ -1323,15 +1301,13 @@ export default {
 
       if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
         this.start_date_less_than_activeMonth = true;
-        this.showErrorToastMessage(
-          "Starting date should be in the interval of selected month"
-        );
+       
         return;
       }
 
       if (this.paymentSetting.formattedEndDate == "") {
         this.endingDateIsRequired = true;
-        this.showErrorToastMessage("ending Date is required");
+       
         return;
       }
 
@@ -1340,9 +1316,7 @@ export default {
         const date = new Date(this.paymentSetting.formattedEndDate);
         if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
           this.end_date_less_than_activeMonth = true;
-          this.showErrorToastMessage(
-            "Ending date Should be in the interval of the selected month"
-          );
+        
           return;
         } else {
           this.end_date_less_than_activeMonth = false;
@@ -1354,21 +1328,19 @@ export default {
         new Date(this.paymentSetting.formattedEndDate)
       ) {
         this.startDateLessEndDate = true;
-        this.showErrorToastMessage(
-          "Starting date should be lesser than Ending date"
-        );
+        
         return;
       }
 
       if (this.paymentSetting.penalityLate5Days == "") {
         this.penality5DayIsRequired = true;
-        this.showErrorToastMessage("Penality Late 5 Days  is required");
+       
         return;
       }
 
       if (this.paymentSetting.penalityLate10Days == "") {
         this.penality10DayIsRequired = true;
-        this.showErrorToastMessage("Penality Late 10 Days  is required");
+       
         return;
       }
 
@@ -1377,15 +1349,13 @@ export default {
         Number(this.paymentSetting.penalityLate10Days)
       ) {
         this.fiveDayLessTenDay = true;
-        this.showErrorToastMessage(
-          "Penality for late 5 days should be less than penality for 10 days"
-        );
+       
         return;
       }
 
       if (this.paymentSetting.penalityLateAbove10Days == "") {
         this.penalityAbove10DayIsRequired = true;
-        this.showErrorToastMessage("penality Late above 10 Days  is required");
+       
         return;
       }
 
@@ -1394,9 +1364,7 @@ export default {
         Number(this.paymentSetting.penalityLateAbove10Days)
       ) {
         this.tenDayLessAboveTenDay = true;
-        this.showErrorToastMessage(
-          "Penality for late 10 days should be less than penality for above 10 days"
-        );
+       
         return;
       }
 
@@ -1425,7 +1393,7 @@ export default {
           console.log("response is now=", response);
           if (response.data.status === 1) {
             console.log("response.data.message", response.data.message);
-            this.showSuccessToastMessage(response.data.message);
+            this.$refs.toast.showSuccessToastMessage(response.data.message);
 
             this.showPaymentEditingActivating =
               !this.showPaymentEditingActivating;
@@ -1434,14 +1402,18 @@ export default {
         .catch((error) => {
           if (error.response) {
             if (error.response.data.message) {
-              this.showErrorToastMessage(error.response.data.message);
+              console.log("error",error);
+              //this.showErrorToastMessage(error.response.data.message);
             } else {
-              this.showErrorToastMessage("Something went wrong,in response");
+              console.log("error",error);
+              //this.$refs.toast.showErrorToastMessage("Something went wrong,in response");
             }
           } else if (error.request) {
-            this.showErrorToastMessage("Something went wrong For the Request ");
+            console.log("error",error);
+            //this.$refs.toast.showErrorToastMessage("Something went wrong For the Request ");
           } else {
-            this.showErrorToastMessage("Something went wrong");
+            console.log("error",error);
+           // this.$refs.toast.showErrorToastMessage("Something went wrong");
           }
         });
     },
@@ -1460,30 +1432,30 @@ export default {
       this.startDateLessEndDate = false;
       this.fiveDayLessTenDay = false;
       this.tenDayLessAboveTenDay = false;
-
+      this.settingAlreadyExists = false;
       if (this.paymentSetting.regularAmount == "") {
         this.regularIsRequired = true;
-        this.showErrorToastMessage("Regular amount is required");
+       
         return;
       }
       if (this.paymentSetting.serviceAmount == "") {
         this.serviceIsRequired = true;
-        this.showErrorToastMessage("Service amount is required");
+        
         return;
       }
       if (this.paymentSetting.activeYear == "") {
         this.activeYearIsRequired = true;
-        this.showErrorToastMessage("Active Year is required");
+       
         return;
       }
       if (this.paymentSetting.activeMonth == "") {
         this.activeMonthIsRequired = true;
-        this.showErrorToastMessage("Active Month is required");
+        
         return;
       }
       if (this.paymentSetting.formattedStartDate == "") {
         this.startingDateIsRequired = true;
-        this.showErrorToastMessage("Starting Date is required");
+       
         return;
       }
 
@@ -1491,15 +1463,13 @@ export default {
 
       if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
         this.start_date_less_than_activeMonth = true;
-        this.showErrorToastMessage(
-          "Starting date should be in the interval of selected month"
-        );
+        
         return;
       }
 
       if (this.paymentSetting.formattedEndDate == "") {
         this.endingDateIsRequired = true;
-        this.showErrorToastMessage("ending Date is required");
+       
         return;
       }
 
@@ -1508,9 +1478,7 @@ export default {
         const date = new Date(this.paymentSetting.formattedEndDate);
         if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
           this.end_date_less_than_activeMonth = true;
-          this.showErrorToastMessage(
-            "Ending date Should be in the interval of the selected month"
-          );
+          
           return;
         } else {
           this.end_date_less_than_activeMonth = false;
@@ -1522,21 +1490,19 @@ export default {
         new Date(this.paymentSetting.formattedEndDate)
       ) {
         this.startDateLessEndDate = true;
-        this.showErrorToastMessage(
-          "Starting date should be lesser than Ending date"
-        );
+       
         return;
       }
 
       if (this.paymentSetting.penalityLate5Days == "") {
         this.penality5DayIsRequired = true;
-        this.showErrorToastMessage("Penality Late 5 Days  is required");
+       
         return;
       }
 
       if (this.paymentSetting.penalityLate10Days == "") {
         this.penality10DayIsRequired = true;
-        this.showErrorToastMessage("Penality Late 10 Days  is required");
+      
         return;
       }
 
@@ -1545,15 +1511,13 @@ export default {
         Number(this.paymentSetting.penalityLate10Days)
       ) {
         this.fiveDayLessTenDay = true;
-        this.showErrorToastMessage(
-          "Penality for late 5 days should be less than penality for 10 days"
-        );
+        
         return;
       }
 
       if (this.paymentSetting.penalityLateAbove10Days == "") {
         this.penalityAbove10DayIsRequired = true;
-        this.showErrorToastMessage("penality Late above 10 Days  is required");
+        
         return;
       }
 
@@ -1562,13 +1526,13 @@ export default {
         Number(this.paymentSetting.penalityLateAbove10Days)
       ) {
         this.tenDayLessAboveTenDay = true;
-        this.showErrorToastMessage(
-          "Penality for late 10 days should be less than penality for above 10 days"
-        );
+        
         return;
       }
 
       console.log("paymentId inc lose", this.paymentId);
+
+
       const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
         subsidyAmount: this.paymentSetting.subsidyAmount,
@@ -1591,9 +1555,7 @@ export default {
           this.edit_activate_start_date_less_than_activeMonth = true;
           this.showPaymentEditingActivating = true;
           console.log("it enters to return start ");
-          this.showErrorToastMessage(
-            "Start date should in the Interval of the selected month"
-          );
+         
           return;
         } else {
           this.edit_activate_start_date_less_than_activeMonth = false;
@@ -1606,22 +1568,23 @@ export default {
           console.log("it enters to return end ");
           this.edit_activate_end_date_less_than_activeMonth = true;
 
-          this.showErrorToastMessage(
-            "End date should in the Interval of the selected month"
-          );
+         
           return;
         } else {
           this.edit_activate_end_date_less_than_activeMonth = false;
         }
       }
 
+
       console.log("it will go the server");
+
+
       this.$apiClient
         .post("/api/v1/paymentSetting", regularData)
         .then((response) => {
           console.log("Update response", response.data);
           if (response.data.status === 1) {
-            this.showSuccessToastMessage(response.data.message);
+            this.$refs.toast.showSuccessToastMessage(response.data.message);
             this.paymentActivate = false;
             this.paymentSettingCreated = 1;
             this.showPaymentEditingActivating = false;
@@ -1630,14 +1593,18 @@ export default {
         .catch((error) => {
           if (error.response) {
             if (error.response.data.message) {
-              this.showErrorToastMessage(error.response.data.message);
+              this.settingAlreadyExists = true;
+              //this.$refs.toast.showErrorToastMessage(error.response.data.message);
             } else {
-              this.showErrorToastMessage("Something went wrong,in response");
+              console.log("occured error",error)
+              //this.$refs.toast.showErrorToastMessage("Something went wrong,in response");
             }
           } else if (error.request) {
-            this.showErrorToastMessage("Something went wrong For the Request ");
+           // this.$refs.toast.showErrorToastMessage("Something went wrong For the Request ");
+           console.log("occured error",error)
           } else {
-            this.showErrorToastMessage("Something went wrong");
+            //this.$refs.toast.showErrorToastMessage("Something went wrong");
+            console.log("occured error",error)
           }
         });
     },

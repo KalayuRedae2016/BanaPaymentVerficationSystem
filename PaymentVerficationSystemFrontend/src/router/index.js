@@ -77,8 +77,8 @@ const routes = [
   {
     path: "/admindashboard",
     component: commonDashboard,
-     meta: { requiresAuth: true, role: 'Admin' },
-   // meta: { requiresGuest: true },
+    meta: { requiresAuth: true, role: 'Admin' },
+    //meta: { requiresGuest: true },
     children: [
       // Admin routes
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
