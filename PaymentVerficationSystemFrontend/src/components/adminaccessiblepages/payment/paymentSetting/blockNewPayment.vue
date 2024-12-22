@@ -497,15 +497,10 @@
 
             <!-- Edit Button -->
             <div class="flex mt-6">
-              <button
-                @click="
+              <button    @click="
                   showPaymentEditingActivating = !showPaymentEditingActivating
-                "
-                class="h-8 flex items-center px-4 border border-indigo-800 rounded hover:bg-gray-100 transition duration-200"
-              >
-                <span class="text-gray-600 hover:text-gray-800 font-bold">
-                  <i class="fas fa-edit text-pink-500"></i> {{ $t("edit") }}
-                </span>
+                " class="custom-button w-1/2 hover:scale-105">
+                <i class="fas fa-edit text-pink-500 mr-2 "></i>{{ $t("Edit") }}
               </button>
             </div>
           </div>
@@ -843,9 +838,9 @@
                   v-if="!paymentActivate"
                   @click.prevent="editPaymentSetting()"
                   type="submit"
-                  class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded mt-5 "
+                  class="hover:scale-105 bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded mt-5 "
                 >
-                  {{ $t("update") }}
+                  <i class="fas fa-save mr-3 text-pink-500"></i>{{ $t("update") }}
 
 
                 </button>

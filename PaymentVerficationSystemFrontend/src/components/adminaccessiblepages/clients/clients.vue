@@ -17,7 +17,7 @@
               class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
             >
               <!-- Search Input -->
-              <div class="flex-1 mr-4">
+              <div class="flex-1 mx-4">
                 <input
                   v-model="searchQuery"
                   type="text"
@@ -51,7 +51,7 @@
               </div>
             </div>
 
-            <div class="overflow-x-auto bg-gray-50 rounded-md">
+            <div class="overflow-x-auto bg-gray-50 rounded-md ">
               <table class="w-full border-collapse bg-white rounded-md">
                 <thead>
                   <tr class="bg-blue-50 text-blue-500">
@@ -69,6 +69,11 @@
                       class="p-3 text-sm font-semibold tracking-wide text-left"
                     >
                       {{ $t("fullName") }}
+                    </th>
+                    <th
+                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                    >
+                      {{ $t("email") }}
                     </th>
                     <th
                       class="p-3 text-sm font-semibold tracking-wide text-left"
@@ -122,6 +127,12 @@
                       @click="navigateToInClient(searchClient._id)"
                     >
                       {{ searchClient.fullName }}
+                    </td>
+                    <td
+                      class="p-3 text-sm text-gray-500 whitespace-nowrap"
+                      @click="navigateToInClient(searchClient._id)"
+                    >
+                      {{ searchClient.email }}
                     </td>
                     <td
                       class="p-3 text-sm text-gray-500 whitespace-nowrap"

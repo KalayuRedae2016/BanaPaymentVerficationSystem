@@ -71,10 +71,8 @@
         
         <paid-payment></paid-payment>
       </div>
-      <div  v-show="activeTab === 1" class="border border-gray-300 ">
-        
+       <div  v-show="activeTab === 1" class="border border-gray-300 ">
         <unpaid-payment></unpaid-payment>
-        
       </div>
       
     </div>

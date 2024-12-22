@@ -1,26 +1,22 @@
 <template>
   <div>
-
-
-
     <Toast ref="toast" />
-
-
     <div class="py-4">
       <!-- search and searched users -->
       <div class="pt-6 -mt-1">
-        <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
-  <!-- Search Input -->
-  <div class="flex-1 mr-4">
-    <input
-      v-model="keyword"
-      type="text"
-      :placeholder="$t('searchByNameEmailUsername')"
-      class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
-    />
-  </div>
-
-</div>
+        <div
+          class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
+        >
+          <!-- Search Input -->
+          <div class="flex-1 mr-4">
+            <input
+              v-model="keyword"
+              type="text"
+              :placeholder="$t('searchByNameEmailUsername')"
+              class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
+            />
+          </div>
+        </div>
         <!-- //least of searched users -->
         <div
           class="border-t border-blue-900 border-dotted h-64 overflow-y-auto"
@@ -31,7 +27,7 @@
             v-for="(user, userIndex) in filteredUsers"
             :key="userIndex"
             :class="['bg-white p-4 border-b cursor-pointer hover:bg-blue-100']"
-            @click="navigateToPayment(user.userCode,user.fullName)"
+            @click="navigateToPayment(user.userCode, user.fullName)"
           >
             <div
               class="text-xs flex flex-row space-x-5 md:space-x-12 text-gray-500"
@@ -43,9 +39,6 @@
         </div>
       </div>
     </div>
-
-
-
 
     <div v-if="bankStatement">
       <div class="p-4 text-lg">
@@ -92,9 +85,16 @@
                         >{{ payment.activeYear }} -
                         {{ payment.activeMonthInString }}</span
                       >
-                      <span class="text-xs ml-5 text-yellow-600 bg-blue-500 rounded-lg px-3 pb-1" v-if="payment.status==='pending'">{{ payment.status }}</span>
-                      <span class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg px-3 pb-1" v-else-if="payment.status==='overdue'">{{payment.status}}</span>
-                      
+                      <span
+                        class="text-xs ml-5 text-yellow-600 bg-blue-500 rounded-lg px-3 pb-1"
+                        v-if="payment.status === 'pending'"
+                        >{{ payment.status }}</span
+                      >
+                      <span
+                        class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg px-3 pb-1"
+                        v-else-if="payment.status === 'overdue'"
+                        >{{ payment.status }}</span
+                      >
                     </p>
 
                     <p class="mt-3 text-red-500" v-if="payment.permitSelect">
@@ -150,7 +150,8 @@
                     <tbody>
                       <!-- // this tr is for the regular data -->
                       <tr>
-                        <td style="width: 50px;"
+                        <td
+                          style="width: 50px"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p
@@ -162,7 +163,6 @@
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
-                   
                           <p>{{ payment.regular.amount }}</p>
                         </td>
                         <td
@@ -1043,7 +1043,8 @@
                             "
                           />
 
-                          <p v-if="
+                          <p
+                            v-if="
                               payment.regular.penality +
                                 payment.subsidy.penality +
                                 payment.urgent.penality >
@@ -1052,7 +1053,8 @@
                           >
                             {{ payment.penality.paidAt }}
                           </p>
-                          <p v-if="
+                          <p
+                            v-if="
                               payment.regular.penality +
                                 payment.subsidy.penality +
                                 payment.urgent.penality ==
@@ -1111,7 +1113,7 @@
                         >
                           <input
                             v-if="
-                                payment.regular.penality +
+                              payment.regular.penality +
                                 payment.subsidy.penality +
                                 payment.urgent.penality >
                               0
@@ -1531,21 +1533,19 @@
 </template>
 
 <script>
-import Toast from '../../../Common/Toast.vue';
-
-
+import Toast from "../../../Common/Toast.vue";
+import { mapGetters } from "vuex";
 
 export default {
-  components:{
-  
+  components: {
     Toast,
   },
   data() {
     return {
-      successToastMessage:"",
-      errorToastMessage:"",
-      showErrorToast:false,
-      showSuccessToast:false,
+      successToastMessage: "",
+      errorToastMessage: "",
+      showErrorToast: false,
+      showSuccessToast: false,
 
       showUserList: false,
       paymentStatus: "newPayment",
@@ -1616,9 +1616,15 @@ export default {
     this.$store.dispatch("fetchBanks");
   },
   computed: {
+    ...mapGetters(["getToken", "getUserId", "getLocale", "getRole"]),
+    userId() {
+      return this.getUserId;
+    },
+
     serviceBanks() {
       return this.$store.getters.serviceBanks;
     },
+
     blockBanks() {
       return this.$store.getters.blockBanks;
     },
@@ -1656,7 +1662,6 @@ export default {
     // this.changeMonthIntoString(1);
   },
   methods: {
-  
     // toggleUserSelection(userIndex) {
 
     //   alert("hiii")
@@ -1680,9 +1685,8 @@ export default {
     //   console.log(this.selectedPayments);
     // },
 
-    navigateToPayment(userCode,fullName) {
-    
-      console.log("this.fullname = " ,fullName);
+    navigateToPayment(userCode, fullName) {
+      console.log("this.fullname = ", fullName);
       this.fullName = fullName;
       // console.log("userCode", userCode);
       //this.$router.push(`/admindashboard/bank-statement/${userCode}`);
@@ -1791,7 +1795,6 @@ export default {
         // ////alert("hello")
         this.subsidyUnconfirmIndex = false;
       }
-      
     },
     showUrgentConfirmUnConfirmText(paymentIndex, conUncon) {
       //////alert("hhhh")
@@ -1898,15 +1901,13 @@ export default {
             if (response.data.items.length === 0) {
               this.nothingToPay = true;
               //this.showSuccessToastMessage("Nothing To Pay");
-            } else{
+            } else {
               this.nothingToPay = false;
-              this.bankStatement=true;
-
+              this.bankStatement = true;
             }
           }
           if (this.includePending) {
             this.payments = response.data.items;
-         
           } else {
             this.payments = this.payments.filter(
               (payment) => payment.status == "overdue"
@@ -1983,7 +1984,7 @@ export default {
               },
             });
           } else {
-          
+            //this.$reloadPage();
             this.fetchUnPaid();
           }
         })
@@ -1991,10 +1992,6 @@ export default {
           console.log("Error regular confirming", error);
           this.$refs.toast.showErrorToastMessage("Something went wrong");
         });
-
-
-
-
     },
     sendSubsidyToDb() {
       this.payload.subsidy.isPaid = true;
@@ -2016,6 +2013,7 @@ export default {
               },
             });
           } else {
+            this.$reloadPage();
             this.fetchUnPaid();
           }
         })
@@ -2045,6 +2043,7 @@ export default {
               },
             });
           } else {
+            this.$reloadPage();
             this.fetchUnPaid();
           }
         })
@@ -2074,6 +2073,7 @@ export default {
               },
             });
           } else {
+            this.$reloadPage();
             this.fetchUnPaid();
           }
         })
@@ -2093,7 +2093,9 @@ export default {
           },
         })
         .then((response) => {
-          this.$refs.toast.showSuccessToastMessage("Penality Paid Successfully");
+          this.$refs.toast.showSuccessToastMessage(
+            "Penality Paid Successfully"
+          );
           if (response.data.items.isPaid) {
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
@@ -2103,6 +2105,7 @@ export default {
               },
             });
           } else {
+            this.$reloadPage();
             this.fetchUnPaid();
           }
         })
@@ -2133,8 +2136,11 @@ export default {
       if (paymentIndex > 0) {
         this.payments[paymentIndex].permitSelect = true;
         return;
-      } 
-      if (this.payments[paymentIndex].regular.paidAt === null || this.payments[paymentIndex].regular.paidAt=='') {
+      }
+      if (
+        this.payments[paymentIndex].regular.paidAt === null ||
+        this.payments[paymentIndex].regular.paidAt == ""
+      ) {
         this.payments[paymentIndex].verifyRegularPaymentDate = true;
         return;
       } else if (this.payments[paymentIndex].regular.bankType === null) {
@@ -2153,6 +2159,7 @@ export default {
       const payload = {
         billCode: billcode,
         regular: regularPayment,
+        userId: this.userId,
       };
       this.payload = payload;
       this.regularPayment = regularPayment;
@@ -2208,6 +2215,7 @@ export default {
       }
 
       const payload = {
+        userId: this.userId,
         billCode: billcode,
         subsidy: subsidyPayment,
       };
@@ -2269,6 +2277,7 @@ export default {
       }
 
       const payload = {
+        userId: this.userId,
         billCode: billcode,
         urgent: urgentPayment,
       };
@@ -2329,6 +2338,7 @@ export default {
 
       servicePayment.daysLate = null;
       const payload = {
+        userId: this.userId,
         billCode: billcode,
         service: servicePayment,
         activeMonth: activeMonth,
@@ -2364,8 +2374,8 @@ export default {
       this.payments[paymentIndex].verifyPenalityTTNumber = false;
       this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = false;
       this.paymentUnconfirm = false;
-      this.paymentConfirm = false
-      
+      this.paymentConfirm = false;
+
       if (
         !this.payments[paymentIndex].regular.isPaid ||
         !this.payments[paymentIndex].subsidy.isPaid ||
@@ -2373,16 +2383,19 @@ export default {
       ) {
         this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = true;
         return;
-      } 
+      }
       if (paymentIndex > 0) {
         this.payments[paymentIndex].permitSelect = true;
         return;
-      } 
+      }
 
-      if (this.payments[paymentIndex].penality.paidAt === null || this.payments[paymentIndex].penality.paidAt=='') {
+      if (
+        this.payments[paymentIndex].penality.paidAt === null ||
+        this.payments[paymentIndex].penality.paidAt == ""
+      ) {
         this.payments[paymentIndex].verifyPenalityPaymentDate = true;
         return;
-      } 
+      }
 
       if (
         this.payments[paymentIndex].penality.bankType === null ||
@@ -2391,10 +2404,13 @@ export default {
         this.payments[paymentIndex].verifyPenalityBankType = true;
         return;
       }
-      if (this.payments[paymentIndex].penality.TTNumber === null || this.payments[paymentIndex].penality.TTNumber=='') {
+      if (
+        this.payments[paymentIndex].penality.TTNumber === null ||
+        this.payments[paymentIndex].penality.TTNumber == ""
+      ) {
         this.payments[paymentIndex].verifyPenalityTTNumber = true;
         return;
-      } 
+      }
 
       penalityPayment.amount =
         Number(regularPenality) +
@@ -2407,6 +2423,7 @@ export default {
       }
 
       const payload = {
+        userId: this.userId,
         billCode: billcode,
         penality: penalityPayment,
       };
@@ -2520,7 +2537,6 @@ export default {
       });
     },
 
-  
     openModal() {
       this.showPaymentDetailModal = true;
     },

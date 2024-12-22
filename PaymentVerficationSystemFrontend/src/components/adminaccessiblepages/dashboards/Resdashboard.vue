@@ -435,8 +435,6 @@ export default {
   },
 
   computed: {
-   
-  
     ...mapGetters(["getToken", "getUserId", "getLocale"]),
     userId() {
       return this.getUserId;

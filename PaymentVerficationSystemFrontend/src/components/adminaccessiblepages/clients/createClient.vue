@@ -4,7 +4,7 @@
     <div class="" style="">
       <div
         class="flex items-center justify-between p-3 bg-white border-b border-blue-500"
-        >
+      >
         <div class="flex items-center space-x-6">
           <h1 class="text-xl text-indigo-800 font-bold">
             {{ $t("registerClient") }}
@@ -12,29 +12,28 @@
         </div>
       </div>
       <div class="flex flex-row space-x-6 mt-5 ml-5">
-         <label
-            for="file-upload"
-            class="px-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 rounded-lg"
-          >
-            <span> {{ $t("Import users(excel)") }}</span>
-            <input
-              id="file-upload"
-              type="file"
-              class="hidden"
-              ref="fileInputExcel"
-              @change="handleFileInput"
-            />
-          </label>
-          <a
-            href="#"
-            @click="viewClients()"
-            class="text-blue-500 font-medium hover:underline"
-          >
-            {{ $t("viewClients") }}
-          </a>
-        
-        </div>
-     
+        <label
+          for="file-upload"
+          class="px-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 rounded-lg"
+        >
+          <span> {{ $t("Import users(excel)") }}</span>
+          <input
+            id="file-upload"
+            type="file"
+            class="hidden"
+            ref="fileInputExcel"
+            @change="handleFileInput"
+          />
+        </label>
+        <a
+          href="#"
+          @click="viewClients()"
+          class="text-blue-500 font-medium hover:underline"
+        >
+          {{ $t("viewClients") }}
+        </a>
+      </div>
+
       <div
         class="mt-3 flex flex-col mx-4 space-y-3 md:space-y-0 md:flex-row md:space-x-5 border border-gray-300 p-3 rounded-lg"
       >
@@ -52,13 +51,6 @@
               style="padding-left: 16px"
               v-model="firstName"
             />
-
-            <p
-              v-if="firstNameIsRequired"
-              class="text-red-500 text-sm mt-1 ml-10"
-            >
-              {{ $t("firstNameRequired") }}
-            </p>
           </div>
           <div class="w-full">
             <label class="custom-label" for="middleName">
@@ -73,13 +65,6 @@
               style="padding-left: 16px"
               v-model="middleName"
             />
-
-            <p
-              v-if="middleNameIsRequired"
-              class="text-red-500 text-sm mt-1 ml-10"
-            >
-             {{ $t("middleNameRequired") }}
-            </p>
           </div>
 
           <div class="w-full">
@@ -95,12 +80,6 @@
               style="padding-left: 16px"
               v-model="lastName"
             />
-            <p
-              v-if="lastNameIsRequired"
-              class="text-red-500 text-sm mt-1 ml-10"
-            >
-              {{ $t("lastNameRequired") }}
-            </p>
           </div>
           <div class="w-full">
             <label class="custom-label" for="lastName">
@@ -115,12 +94,6 @@
               style="padding-left: 16px"
               v-model="fullName"
             />
-            <p
-              v-if="fullNameIsRequired"
-              class="text-red-500 text-sm mt-1 ml-10"
-            >
-              {{ $t("fullNameRequired") }}
-            </p>
           </div>
 
           <div class="w-full">
@@ -138,9 +111,6 @@
               <option value="Male">{{ $t("male") }}</option>
               <option value="Female">{{ $t("female") }}</option>
             </select>
-            <p v-if="genderIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-              {{ $t("genderRequired") }}
-            </p>
           </div>
 
           <div class="w-full">
@@ -155,9 +125,6 @@
               v-model="age"
             />
           </div>
-          <p v-if="ageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-            {{ $t("ageRequired") }}
-          </p>
         </div>
 
         <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
@@ -174,9 +141,6 @@
               style="padding-left: 16px"
               v-model="address"
             />
-            <p v-if="addressIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-              {{ $t("addressRequired") }}
-            </p>
           </div>
           <div class="w-full">
             <label class="custom-label" for="email">
@@ -200,10 +164,10 @@
               {{ $t("phoneNumber") }}
               <span class="text-red-500">*</span>
             </label>
-            <div class="flex flex-row">
+            <div class="flex flex-row ">
               <select
                 v-model="phoneNumberCode"
-                class="text-xs rounded-lg h-12 mt-3 w-16 block border-t border-l border-b border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                class="custom-select w-1/4"
               >
                 <option
                   v-for="country in countries"
@@ -215,19 +179,13 @@
               </select>
               <input
                 type="text"
-                class="rounded-sm custom-input h-12 mt-3 text-xs"
+                class="rounded-sm custom-input h-12 mt-5 text-xs ml-2 w-3/4"
                 required
                 :placeholder="$t('phoneNumber')"
                 style="padding-left: 16px"
                 v-model="phoneNumber"
               />
             </div>
-            <p
-              v-if="phoneNumberIsRequired"
-              class="text-red-500 text-sm mt-1 ml-10"
-            >
-              {{ $t("phoneNumberRequired") }}
-            </p>
           </div>
 
           <div class="w-full">
@@ -242,12 +200,41 @@
               accept="image/*"
               @change="handleImageInput"
             />
-            <p v-if="imageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
-              {{ $t("profileImageRequired") }}
-            </p>
           </div>
         </div>
+
+        <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("firstNameRequired") }}
+        </p>
+        <p v-if="middleNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("middleNameRequired") }}
+        </p>
+        <p v-if="lastNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("lastNameRequired") }}
+        </p>
+        <p v-if="fullNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("fullNameRequired") }}
+        </p>
+        <p v-if="genderIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("genderRequired") }}
+        </p>
+        <p v-if="ageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("ageRequired") }}
+        </p>
+        <p v-if="addressIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("addressRequired") }}
+        </p>
+        <p v-if="phoneNumberIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("phoneNumberRequired") }}
+        </p>
+        <p v-if="imageIsRequired" class="text-red-500 text-sm mt-1 ml-10">
+          {{ $t("profileImageRequired") }}
+        </p>
+        <p v-if="showErrorMessage" class="text-red-500 text-sm mt-1 ml-10">
+          {{ errorMessage }}
+        </p>
       </div>
+
       <div class="ml-4 mr-8">
         <div class="w-1/2">
           <button
@@ -393,26 +380,15 @@
 </template>
 
 <script>
-import Toast from '../../Common/Toast.vue';
+import Toast from "../../Common/Toast.vue";
 export default {
   components: {
     Toast,
   },
   data() {
     return {
-
-      showSuccessToast:false,
-      showErrorToast:false,
-      succesToastMessage:"",
-      errorToastMessage:"",
-
-
-
-      showSuccess: false,
-      showError: false,
-      errorMessage: "",
-      successMessage: "",
-
+      errorMessage:"",
+      showErrorMessage: false,
       duplicateEmailError: false,
       duplicateEntry: false,
       errorRegister: false,
@@ -532,24 +508,6 @@ export default {
     // });
   },
   methods: {
-
-    showSuccessToastMessage(message) {
-      this.succesToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000); 
-    },
-
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000); 
-    },
-
-    
     viewClients() {
       this.$router.push("/admindashboard/clients");
     },
@@ -565,12 +523,12 @@ export default {
           .then((response) => {
             console.log("import response", response);
             if (response.data.success === 1) {
-              this.showSuccessToastMessage(response.data.message)
+              this.showSuccessToastMessage(response.data.message);
             }
           })
           .catch((error) => {
             console.log("import error", error);
-            this.showErrorToastMessage("Something went wrong")
+            this.showErrorToastMessage("Something went wrong");
           });
       }
     },
@@ -594,7 +552,6 @@ export default {
         // Rest of your code to handle the file
       } else {
         this.showErrorToastMessage("No file selected,Or Invalid format");
-        
       }
     },
 
@@ -622,93 +579,56 @@ export default {
     },
 
     register() {
-    
+      this.showErrorMessage = false;
+      this.firstNameIsRequired = false;
+      this.middleNameIsRequired = false;
+      this.lastNameIsRequired = false;
+      this.genderIsRequired = false;
+      this.ageIsRequired = false;
+      this.addressIsRequired = false;
+      this.emailIsRequired = false;
+      this.phoneNumberIsRequired = false;
+      this.imageIsRequired = false;
       //  console.log("FamillyMembers", this.familyMembers);
       console.log("register called");
       if (this.firstName === "") {
         this.firstNameIsRequired = true;
-        this.showErrorToastMessage("First name is required")
         return;
       }
 
       if (this.middleName === "") {
-        this.firstNameIsRequired = false;
         this.middleNameIsRequired = true;
-        this.showErrorToastMessage("Middle name is required")
         return;
       }
 
       if (this.lastName === "") {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
         this.lastNameIsRequired = true;
-        this.showErrorToastMessage("Last name is required")
         return;
       }
 
       if (this.gender === "") {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
-        this.lastNameIsRequired = false;
         this.genderIsRequired = true;
-        this.showErrorToastMessage("Gender is required")
         return;
       }
 
       if (this.age === "") {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
-        this.lastNameIsRequired = false;
-        this.genderIsRequired = false;
         this.ageIsRequired = true;
-        this.showErrorToastMessage("Age is required")
         return;
       }
 
       if (this.address === "") {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
-        this.lastNameIsRequired = false;
-        this.genderIsRequired = false;
-        this.ageIsRequired = false;
         this.addressIsRequired = true;
-        this.showErrorToastMessage("Address is required")
         return;
       }
 
       if (this.email === "") {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
-        this.lastNameIsRequired = false;
-        this.genderIsRequired = false;
-        this.ageIsRequired = false;
-        this.addressIsRequired = false;
         this.emailIsRequired = true;
-        this.showErrorToastMessage("Email is required")
         return;
       }
 
       if (this.phoneNumber === "") {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
-        this.lastNameIsRequired = false;
-        this.genderIsRequired = false;
-        this.ageIsRequired = false;
-        this.addressIsRequired = false;
-        this.emailIsRequired = false;
         this.phoneNumberIsRequired = true;
-        this.showErrorToastMessage("Phone Number is required")
         return;
-      } else {
-        this.firstNameIsRequired = false;
-        this.middleNameIsRequired = false;
-        this.lastNameIsRequired = false;
-        this.genderIsRequired = false;
-        this.ageIsRequired = false;
-        this.addressIsRequired = false;
-        this.emailIsRequired = false;
-        this.phoneNumberIsRequired = false;
-        this.imageIsRequired = false;
       }
 
       const fullPhoneNumber = this.phoneNumberCode + this.phoneNumber;
@@ -736,22 +656,22 @@ export default {
       formData.append("profileImage", this.imageFile);
       formData.append("fullName", this.fullName);
       console.log("image", this.imageFile);
-      
-      
+
       this.$apiClient
         .post("/api/v1/users/signup", formData)
         .then((response) => {
           if (response.data.status === 1) {
-            this.$refs.toast.showSuccessToastMessage('This is a success message!');
-              this.$reloadPage();
+            this.$refs.toast.showSuccessToastMessage(
+              "This is a success message!"
+            );
+            this.$reloadPage();
           }
         })
         .catch((error) => {
-          console.log("error register", error);
-          this.showErrorToastMessage("Some error occurred");
+          console.log("error",error);
+          this.showErrorMessage=true;
+          this.errorMessage=error.response.data.message;
         });
-
-
     },
   },
 };

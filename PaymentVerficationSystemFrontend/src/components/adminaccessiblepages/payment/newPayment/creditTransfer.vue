@@ -105,6 +105,8 @@
               {{ bank.bankType }}
             </option>
           </template>
+
+          
           <template v-else-if="transferType === 'service'">
             <option
               v-for="(bank, index) in serviceBanks"

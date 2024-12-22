@@ -70,7 +70,7 @@
                     </td>
                   
                     <td v-if="!payment.regular.isPaid" class="px-3 text-sm text-red-700 whitespace-nowrap">
-              {{ payment.regular.penality }} 
+                     {{ payment.regular.penality }} 
         
                     </td>
                     <td v-else class="px-3 text-sm text-gray-700 whitespace-nowrap">
