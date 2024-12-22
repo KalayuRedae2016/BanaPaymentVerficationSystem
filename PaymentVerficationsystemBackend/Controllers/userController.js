@@ -256,28 +256,42 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.importUsers = catchAsync(async (req, res) => {
-  console.log('Uploaded File:', req.file); // Debug log
+exports.importUsers = catchAsync(async (req, res, next) => {
+  // console.log('Uploaded File:', req.file); // Debug log
+
   // Transform function to add user code and hashed password
   const transformUserData = async (data) => {
-    const organization = await Organization.findOne()
-    const prefixCode = organization.companyPrefixCode
+    const organization = await Organization.findOne();
+    if (!organization) throw new AppError('Organization not found', 404);
+
+    const prefixCode = organization.companyPrefixCode;
     const length = 4; // Length of user code
 
-    if (!data.firstName || !data.middleName || !data.lastName || !data.email || !data.tigrignaName || !data.phoneNumber) {
-      throw new Error('Required fields are missing.');
+    const requiredFields = ['firstName', 'middleName', 'lastName', 'email', 'tigrignaName', 'phoneNumber', 'role', 'gender', 'age'];
+    const missingFields = requiredFields.filter((field) => !data[field]);
+    if (missingFields.length > 0) {
+      console.log("m",missingFields)
+      throw new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400);
     }
+
     const user = new User(data);
     user.userCode = await user.generateUserCode(prefixCode, length);
     const password = await user.generateRandomPassword();
     user.password = await bcrypt.hash(password, 12);
+    // console.log(user)
     return user; // Return the transformed user instance
   };
+
   const filePath = req.file.path; // Path to the uploaded file
-
-  // Use the utility function to import data from the Excel file
-  const importedUsers = await importFromExcel(filePath, User, transformUserData);
-
+  let importedUsers = await importFromExcel(filePath, User, transformUserData);// Use the utility function to import data from the Excel file
+  console.log("l1",importedUsers.length)
+  importedUsers = Array.isArray(importedUsers) ? importedUsers : [];// Ensure importedUsers is always an array
+  console.log(importedUsers)
+  console.log("L2",importedUsers.length)
+  if (importedUsers.length === 0) {
+    return next(new AppError('No valid users were imported from the file.', 400));
+  }
+  console.log("IU",importedUsers)
   // Find the payment setting marked as latest
   const latestSetting = await PaymentSetting.findOne({ latest: true });
   if (!latestSetting) {
@@ -286,18 +300,20 @@ exports.importUsers = catchAsync(async (req, res) => {
 
   // Create pending payments for all imported users
   for (const user of importedUsers) {
-    if (!user.isActive || !user.role === "User") continue;
+    if (!user.isActive || user.role !== 'User') continue;
     await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
   }
-  // Clean up the file after processing
-  //fs.unlinkSync(filePath);
-  // Optionally: Schedule a task or set up logic to manage file cleanup later
+
+  // Optionally clean up the uploaded file after processing
+  fs.unlinkSync(filePath);
 
   res.status(200).json({
     status: 1,
     message: 'Data imported successfully',
+    data: { importedUsers },
   });
 });
+
 exports.exportUsers = catchAsync(async (req, res) => {
   const users = await User.find({}); // Fetching data from MongoDB
   await exportToExcel(users, 'Users', 'userData.xlsx', res);

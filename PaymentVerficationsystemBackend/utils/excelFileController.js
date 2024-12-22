@@ -4,33 +4,28 @@ const xlsx = require('xlsx'); //for import user from excel
 const ExcelJS = require('exceljs'); //for export users into excel
 
 const multer = require('multer');
+const catchAsync = require('./catchAsync');
+const AppError = require('./appError');
 
-exports.importFromExcel = async (filePath, Model, transformFn) => {
-  try {
-    // Read the Excel file
-    const workbook = xlsx.readFile(filePath);
-    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-    const jsonData = xlsx.utils.sheet_to_json(worksheet); // Ensure this returns an array
-
-    if (!Array.isArray(jsonData)) {
-      throw new Error("Excel file is empty or data is not in the correct format");
-    }
-
-    const importedUsers = []; // Initialize an array to store the saved documents
-
-    // Transform and save each row of data
-    for (const data of jsonData) {
-      const document = transformFn ? await transformFn(data) : new Model(data);
-      const savedDocument = await document.save(); // Save to MongoDB
-      importedUsers.push(savedDocument); // Collect saved documents
-    }
-
-    return importedUsers; // Return the array of imported/saved documents
-
-  } catch (err) {
-    throw new Error(`Error during import: ${err.message}`);
+exports.importFromExcel = catchAsync(async (filePath, Model, transformFn,next) => {
+  const workbook = xlsx.readFile(filePath);
+  const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+  const jsonData = xlsx.utils.sheet_to_json(worksheet);
+  console.log(jsonData)
+  if (!Array.isArray(jsonData) || jsonData.length === 0) {
+    return next(new AppError('Excel file is empty or data is not in the correct format.', 400));
   }
-};
+  const importedData = []; // Collect successfully imported documents
+  for (const [index, data] of jsonData.entries()) {
+      const document = transformFn ? await transformFn(data) : new Model(data);//Apply the transform function or directly create the model instance
+      // console.log("doc",document)
+      const savedDocument = await document.save(); // Save document to MongoDB
+      importedData.push(savedDocument); // Add to the importedData array
+  }
+  // console.log(importedData)
+  // console.log("ll",importedData.length)
+  return importedData.length > 0 ? importedData : []; // Return an empty array if no documents were successfully imported
+});
 
 // Utility function to export data to Excel
 exports.exportToExcel = async (data, sheetName, fileName, res) => {
