@@ -27,7 +27,6 @@ const paymentSettingSchema = new mongoose.Schema(
     },
     regFeeRate:{
       type:Number,
-      required:true,
       default:0
     },
     urgentAmount:{
