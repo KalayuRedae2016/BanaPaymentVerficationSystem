@@ -19,7 +19,7 @@ function calculateBalances(payments, org) {
 
   payments.forEach((payment) => {
     const paymentStatus = payment.status || 'Undefined';  // Categorize by status (confirmed, pending, etc.)
-     const userCode = payment.userCode?.toString();
+    const userCode = payment.userCode?.toString();
     const billCode = payment.billCode?.toString();
 
     // Initialize categorizedPayments for the current status (confirmed, pending, etc.)
@@ -28,6 +28,7 @@ function calculateBalances(payments, org) {
         uniqueUsers: new Set(),
         totalPayments: new Set(),
         totalExpectedAmount: 0,
+        totalPaidAmount: 0,
         totalRegistrationAmount: 0,
         totalRegFeeAmountPaid: 0,
         totalRegFeeAmountNotPaid: 0,
@@ -55,6 +56,7 @@ function calculateBalances(payments, org) {
     statusObj.uniqueUsers.add(userCode);
     statusObj.totalPayments.add(billCode);
     statusObj.totalExpectedAmount += payment.totalExpectedAmount || 0;
+    statusObj.totalPaidAmount += payment.totalPaidAmount || 0;
     statusObj.totalRegistrationAmount += payment.registrationFee || 0;
 
     const amounts = {
@@ -109,8 +111,8 @@ function calculateBalances(payments, org) {
             };
           }
         }
-
         const bankDetails = statusObj.bankTypes[bankType];
+        console.log("bankDetails",bankDetails)
         if (paymentType.isPaid) {
           bankDetails[`${type}Balance`] += paymentType.amount || 0;
           organization[`total${type.charAt(0).toUpperCase() + type.slice(1)}Balance`] += paymentType.amount || 0;
@@ -199,7 +201,9 @@ function calculateBalances(payments, org) {
       confirmed: categorizedPayments.confirmed || {},
       pending: categorizedPayments.pending || {},
       overdue: categorizedPayments.overdue || {},
+      // totalPaidBalance: categorizedPayments.totalPaidBalance|| {},
     },
+    
   };
 }
  

@@ -1663,7 +1663,6 @@ exports.reports = catchAsync(async (req, res, next) => {
   }
 
   paymentQuery.createdAt = { $gte: startDate, $lt: endDate };
-  console.log(paymentQuery)
   const payments = await Payment.find(paymentQuery).populate('user', 'phoneNumber').lean()
   if (!payments.length) {
     return res.status(404).json({ error: 'No payments found for the given criteria' });
@@ -1671,7 +1670,7 @@ exports.reports = catchAsync(async (req, res, next) => {
   const organization = await Organization.findOne()
   const categorizedPayments = calculateBalances(payments, organization);
 
-  console.log(categorizedPayments)
+  // console.log(categorizedPayments)
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${timeRange}`,
