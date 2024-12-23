@@ -8,7 +8,6 @@
 // Import the necessary styles for Font Awesome
 import '@fortawesome/fontawesome-free/css/all.css';
 
-import axios from 'axios';
 
 export default {
   data() {

@@ -43,8 +43,8 @@
     </div>
   </transition> 
 
-      <div class="flex flex-wrap mx-auto pb-8 border-t border-indigo-800 mt-4">
-        <div v-if="!closepaymentCreated" class="w-full">
+      <div class="flex flex-wrap mx-auto pb-8 border-t border-indigo-800 mt-4 p-4">
+        <div v-if="!closepaymentCreated" class="w-full border border-gray-300 rounded-lg">
           <div class="mx-3">
             <form class="mt-8 ">
               <div class="flex flex-col md:flex-row md:space-x-5 px-4">
@@ -395,7 +395,7 @@
                 </div>
               </div>
 
-              <button @click.prevent="seeChange()" class="custom-button ml-3">
+              <button @click.prevent="seeChange()" class="custom-button  mb-5">
                 <i class="fas fa-save text-pink-500 mr-2"></i>{{ $t("save") }}
               </button>
             </form>

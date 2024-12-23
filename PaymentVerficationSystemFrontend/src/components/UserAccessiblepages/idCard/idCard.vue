@@ -262,10 +262,6 @@ export default {
     },
 
     async downloadReceiptAsPDF() {
-
-
-
-
       //  await generateQRCodeImage();
 
       // Clone the printable area

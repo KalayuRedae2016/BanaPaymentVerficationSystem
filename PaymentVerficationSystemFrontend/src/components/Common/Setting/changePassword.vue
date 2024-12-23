@@ -1,48 +1,14 @@
 <template>
     <div>
+      <Toast ref="toast" />
       <div class="p-3 border-b border-blue-800">
         <h4 class="text-indigo-800 mt-1">{{ $t("changePassword") }}</h4>
       </div>
   
-      <transition
-        enter-active-class="transform transition duration-300 ease-out"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
-        leave-active-class="transform transition duration-300 ease-in"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
-      >
-        <div
-          v-if="showSuccessToast"
-          class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-          role="alert"
-        >
-          <strong class="font-bold">Success!</strong>
-          <span class="block sm:inline">{{ succesToastMessage }}</span>
-        </div>
-      </transition>
-  
-      <transition
-        enter-active-class="transform transition duration-300 ease-out"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
-        leave-active-class="transform transition duration-300 ease-in"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
-      >
-        <div
-          v-if="showErrorToast"
-          class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-          role="alert"
-        >
-          <strong class="font-bold">Error!</strong>
-          <span class="block sm:inline">{{ errorToastMessage }}</span>
-        </div>
-      </transition>
-  
+
       <div class="w-full mt-10 space-y-4 mb-10">
         <!-- Change Email Section -->
-        <div class="border rounded-lg p-4 shadow-sm mx-5">
+        <div  v-if="role==='Admin'" class="border rounded-lg p-4 shadow-sm mx-5">
           <div
             class="flex justify-between items-center cursor-pointer border-b border-gray-300"
             @click="toggleEmailSection"
@@ -66,8 +32,10 @@
                 placeholder="Enter your new email"
                 class="custom-input"
               />
+
+              <p v-if="emailIsRequired" class="text-red-500">Email is required</p>
               <button
-                @click.prevent="submitEmail"
+                @click.prevent="editEmail"
                 class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
               >
                 Update Email
@@ -78,7 +46,7 @@
   
         <!-- Change Password Section -->
         <div class="border rounded-lg p-4 shadow-sm mx-5">
-          <div
+          <div 
             class="border-b border-gray-300 flex justify-between items-center cursor-pointer"
             @click="togglePasswordSection"
           >
@@ -150,7 +118,12 @@
                   </button>
                 </div>
               </div>
-  
+
+                <p v-if="oldPasswordIsRequired" class="text-red-500">Old password is required</p>
+                <p v-if="newPasswordIsRequired" class="text-red-500">New password is required</p>
+                <p v-if="confirmNewPasssordIsRequired" class="text-red-500">Confirm password is required</p>
+                <p v-if="mismachPassword" class="text-red-500">Password Missmach Occured</p>
+                  
               <button
                 @click.prevent="changePassword()"
                 class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -166,66 +139,73 @@
   
   <script>
   import { mapGetters } from "vuex";
+  import Toast from '../Toast.vue'
   export default {
+    components:{
+      Toast,
+    },
     data() {
       return {
         showOldPassword: false,
         showNewPassword: false,
         showConfirmNewPassword: false,
-  
         newEmail: "",
+
+        emailIsRequired:false,
+        oldPasswordIsRequired:false,
+        newPasswordIsRequired:false,
+        confirmNewPasssordIsRequired:false,
+        mismachPassword:false,
+
+
+
         showEmailForm: false,
         showPasswordForm: false,
-        successToastMessage: "",
-        errorToastMessage: "",
-        showErrorToast: false,
-        showSuccessToast: false,
         oldPassword: "",
         newPassword: "",
         confirmNewPasssord: "",
-        showSuccess: "",
-        showWarning: "",
-        showError: "",
-        successMessage: "",
+       
         errorMessage: "",
-        warningMessage: "",
       };
     },
   
     computed: {
-      ...mapGetters(["getToken", "getUserId"]),
+      ...mapGetters(["getToken", "getUserId","getRole"]),
       userId() {
         return this.getUserId;
       },
       token() {
         return this.getToken;
       },
+      role() {
+      return this.getRole;
+    },
     },
     methods: {
-      submitEmail() {
-        if (this.newEmail == "") {
-          this.showErrorToastMessage("New email is required");
-          return;
+
+      editEmail() {
+       if(this.role=="Admin"){
+        if(this.newEmail==null || this.newEmail=="") {
+          this.emailIsRequired=true;
+          return
         }
-        const payload = {
-          newEmail: this.newEmail,
-          userId: this.userId,
-        };
-        this.$apiClient
-          .patch("api/v1/users/changeAdminEmail", payload)
-          .then((response) => {
-            console.log("response");
-            if (response.data.status === 1) {
-              this.showSuccessToastMessage(response.data.message);
-            } else {
-              this.showErrorToastMessage("Something went wrong");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            this.showErrorToastMessage("Incorrect current password");
-          });
-      },
+        const payload={
+          email: this.newEmail,
+        }
+      this.$apiPatch("/api/v1/users", this.userId, payload)
+        .then(() => {
+          this.$refs.toast.showSuccessToastMessage("User updated");
+        })
+        .catch((error) => {
+          console.log("error",error);
+          this.showError=true;
+          this.errorMessage="Something went wrong"
+        }).finally(() => {
+         console.log("error finally");
+        });
+      }
+    },
+   
   
       toggleEmailSection() {
         this.showEmailForm = !this.showEmailForm;
@@ -234,55 +214,31 @@
         this.showPasswordForm = !this.showPasswordForm;
       },
   
-      showSuccessToastMessage(message) {
-        this.successToastMessage = message;
-        this.showSuccessToast = true;
-        setTimeout(() => {
-          this.showSuccessToast = false;
-        }, 1000);
-  
-        // Toast will disappear after 3 seconds
-      },
-      showErrorToastMessage(message) {
-        this.errorToastMessage = message;
-        this.showErrorToast = true;
-        setTimeout(() => {
-          this.showErrorToast = false;
-        }, 1000);
-  
-        // Toast will disappear after 3 seconds
-      },
-  
-  
-      showWarningToastMessage(message) {
-        this.warningToastMessage = message;
-        this.showWarningToast = true;
-        setTimeout(() => {
-          this.showWarningToast = false;
-        }, 1000);
-        // Toast will disappear after 3 seconds
-      },
-  
+     
   
   
       
       changePassword() {
-        if (this.oldPassword == "") {
-          this.showErrorToastMessage("Old password is required");
+
+        this.oldPasswordIsRequired=false;
+        this.newPasswordIsRequired=false;
+        this.confirmNewPasssordIsRequired=false;
+        this.mismachPassword=false;
+
+        if (this.oldPassword == "" ||this.oldPassword==null) {
+          this.oldPasswordIsRequired=true
           return;
         }
-        if (this.newPassword == "") {
-          this.showErrorToastMessage("New password is required");
+        if (this.newPassword == "" || this.newPassword==null) {
+         this.newPasswordIsRequired=true;
           return;
         }
-        if (this.confirmNewPasssord == "") {
-          this.showErrorToastMessage("Repeat New password is required");
+        if (this.confirmNewPasssord == "" ||this.confirmNewPasssord==null) {
+          this.confirmNewPasssordIsRequired=true;
           return;
         }
         if (this.newPassword != this.confirmNewPasssord) {
-          this.showErrorToastMessage(
-            " Confirm New Password must be the same with new password"
-          );
+          this.mismachPassword=true;
           return;
         }
   
@@ -295,16 +251,16 @@
         this.$apiClient
           .patch("api/v1/users/updatePassword", payload)
           .then((response) => {
-            console.log("response");
+            console.log("response",response);
             if (response.data.status === 1) {
-              this.showSuccessToastMessage(response.data.message);
+              this.$refs.toast.showSuccessToastMessage(response.data.message);
             } else {
-              this.showErrorToastMessage("Something went wrong");
+              //this.$refs.toast.showErrorToastMessage("Something went wrong");
             }
           })
           .catch((error) => {
             console.log(error);
-            this.showErrorToastMessage("Incorrect current password");
+            //this.showErrorToastMessage("Incorrect current password");
           });
       },
     },

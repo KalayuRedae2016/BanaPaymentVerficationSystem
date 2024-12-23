@@ -18,7 +18,7 @@
       <div class="mb-4">
         <div class="flex flex-col">
           <div class="flex flex-row space-x-4">
-            <label for="Search User" class="mb-5 block text-sm font-medium text-gray-700">Search</label>
+            <label for="Search User" class="block text-sm font-medium text-gray-700">Search</label>
             <input
               @keyup.enter="searchUser"
               v-model="keyword"
@@ -40,7 +40,7 @@
             'p-4 border-b cursor-pointer bg-white hover:bg-blue-100',
            
           ]"
-          @click="toggleUserSelection(user.userCode)"
+          @click="toggleUserSelection(user.userCode,user.fullName)"
         >
           <div class="flex flex-row space-x-5 md:space-x-12 text-xs text-gray-500">
             <p class="font-bold text-blue-800 ">{{ user.userCode }}</p>
@@ -98,8 +98,8 @@
       </tbody>
     </table>
   </div>
-   <div v-if="showPaymentNotFound" class="text-red-500 my-5 mx-5">
-     {{userCode}} has no paid payment in the selected year.
+   <div v-if="showPaymentNotFound" class="text-blue-500 my-5 mx-5 font-bold">
+   <span class="text-blue-800 font-extrabold">{{fullName}}({{userCode}})</span>   has no paid payment in the selected year.
    </div>
 
   </div>
@@ -184,7 +184,9 @@ userCode:this.userCode,
 
 }
 },
-toggleUserSelection(userCode) {
+toggleUserSelection(userCode,fullName) {
+
+  this.fullName=fullName
   //alert("toggle selection");
   console.log("usercode is",this.userCode)
    this.showList=false;

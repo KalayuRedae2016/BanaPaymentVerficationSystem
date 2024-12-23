@@ -857,7 +857,6 @@ this.$apiClient
     },
     async viewReceiptAsPDF(selectedPayment) {
       console.log("Selected payment:", selectedPayment);
-
       // Update the selected payment
       this.selectedPayment = selectedPayment;
       await this.generateQRCodeImage();
@@ -958,7 +957,6 @@ this.$apiClient
     },
 
     getData() {
-
       console.log("this.usercode is",this.userCode);
       this.$apiClient
         .get(
