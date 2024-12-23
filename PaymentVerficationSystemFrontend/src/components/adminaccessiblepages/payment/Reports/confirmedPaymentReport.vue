@@ -6,7 +6,7 @@
         <select
           v-model="reportType"
           @change="changeReportType()"
-          class="custom-select h-10 "
+          class="custom-select h-10"
         >
           <option value="" disabled>Select Report Type</option>
           <option
@@ -18,7 +18,7 @@
           </option>
         </select>
       </div>
-      <div class="flex flex-col ">
+      <div class="flex flex-col">
         <div
           class="mt-5 w-full flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0"
         >
@@ -182,16 +182,18 @@
             class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
           >
             <span
-              >All Confirmed Payments:
+              >All Paid Capital Report(
+              <span class="text-blue-500">Fully/Partially Paid</span>)
               <span class="text-blue-500">{{ value }}</span></span
             >
-            <button
+            <!-- <button @click="seeAllPaid()" class="cursor-pointer bg-blue-100 px-4 py-1 rounded-lg text-green-800" >See Detail</button > -->
+            <!-- <button
               class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
               @click="exportConfirmedToExcel()"
             >
               <i class="fas fa-download"></i>
               <span class="text-xs">Excel</span>
-            </button>
+            </button> -->
 
             <button
               @click="printDiv()"
@@ -203,202 +205,296 @@
         </div>
         <div class="overflow-x-auto rounded-lg">
           <table class="min-w-full divide-y divide-gray-300 text-xs">
-        <thead class="bg-gray-50">
-          <tr>
-            <th
-              rowspan="3"
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  rowspan="3"
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("banks") }}
+                </th>
+                <th
+                  colspan="10"
+                  class="justify-center items-center text-blue-800 border border-gray-300 py-3"
+                >
+                  {{ $t("balance") }}
+                </th>
+              </tr>
+              <tr>
+                <th
+                  colspan="4"
+                  class="py-2 justify-center items-center text-blue-800 border border-gray-300"
+                >
+                  {{ $t("block") }}
+                </th>
+                <th
+                  colspan="3"
+                  class="py-2 justify-center items-center text-blue-800 border border-gray-300"
+                >
+                  {{ $t("service") }}
+                </th>
+                <th
+                  rowspan="2"
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("Total Balance") }}
+                </th>
+              </tr>
+              <tr>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("regular") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("subsidy") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("urgent") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("totalBlock") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("penality") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("Monthly Service") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("totalService") }}
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="bg-white divide-y divide-gray-300"
+              v-if="
+                confirmedLength > 0 || pendingLength > 0 || overdueLength > 0
+              "
             >
-              {{ $t("banks") }}
-            </th>
-            <th
-              colspan="10"
-              class="justify-center items-center text-blue-800  border border-gray-300 py-3"
-            >
-              {{ $t("balance") }}
-            </th>
-          </tr>
-          <tr>
-            <th
-              colspan="4"
-              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
-            >
-              {{ $t("block") }}
-            </th>
-            <th
-              colspan="3"
-              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
-            >
-              {{ $t("service") }}
-            </th>
-            <th
-              rowspan="2"
+              <tr
+                v-for="(bank, index) in reports.items.categorizedPayments
+                  .confirmed.bankTypes"
+                :key="index"
+              >
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ index }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, index) => {
+                          console.log(
+                            "Bank regularBalance:",
+                            index.regularBalance || 0
+                          );
+                          return sum + (bank.regularBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.subsidyBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum) => {
+                          return sum + (index.urgentBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum,index) => {
+                          return sum + (index.totalBlockBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.penalityBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.serviceBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.totalServiceBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return (
+                            sum +
+                            (bank.totalBlockBalance +
+                              bank.totalServiceBalance || 0)
+                          );
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
               
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("Total Balance") }}
-            </th>
-           
-          </tr>
-          <tr>
-            <th
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("regular") }}
-            </th>
-            <th
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("subsidy") }}
-            </th>
-            <th
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("urgent") }}
-            </th>
-            <th
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("totalBlock") }}
-            </th>
-            <th
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("penality") }}
-            </th>
-            <th
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("Monthly Service") }}
-            </th>
-            <th
-              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-            >
-              {{ $t("totalService") }}
-            </th>
-           
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-300">
-          <tr
-            v-for="(balance, bank) in totalBalance.orgBalancesBasedBankType"
-            :key="bank"
-          >
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ bank }}
-            </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.regularBalance }}
-            </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.subsidyBalance }}
-            </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.urgentBalance }}
-            </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.totalBlockBalance }}
-            </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.penalityBalance }}
-            </td>
+              </tr>
 
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.serviceBalance }}
-            </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.totalServiceBalance }}
-            </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
-              {{ balance.totalServiceBalance + balance.totalBlockBalance }}
-            </td>
-          </tr>
+              <tr class="font-bold bg-gray-100" rowspan="4">
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ $t("total") }}
+                </td>
 
-        
-          <tr class="font-bold bg-gray-100" rowspan="4">
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ $t("total") }}
-            </td>
-          
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalRegularBalance }}
-            </td>
-            <!-- Total Regular -->
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalSubsidyBalance }}
-            </td>
-            <!-- Total Subsidy -->
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalUrgentBalance }}
-            </td>
-            <!-- Total Urgent -->
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalBlockBankAccount }}
-            </td>
-            <!-- Total Urgent -->
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalPenalityBalance }}
-            </td>
-            <!-- Total Block -->
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalServiceBalance }}
-            </td>
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalServiceBankAccount }}
-            </td>
-            <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-            >
-              {{ totalOrgBalance.totalServiceBankAccount + totalOrgBalance.totalBlockBankAccount }}
-            </td>
-          </tr>
-         
-          <tr>
-         
-          </tr>
-        </tbody>
-      </table>
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalRegularBalance }}
+                </td>
+                <!-- Total Regular -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalSubsidyBalance }}
+                </td>
+                <!-- Total Subsidy -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalUrgentBalance }}
+                </td>
+                <!-- Total Urgent -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalBlockBankAccount }}
+                </td>
+                <!-- Total Urgent -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalPenalityBalance }}
+                </td>
+                <!-- Total Block -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalServiceBalance }}
+                </td>
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalServiceBankAccount }}
+                </td>
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{
+                    reports.items.Organization.totalBlockBankAccount +
+                    reports.items.Organization.totalServiceBankAccount
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="flex flex-row">
-          <p
-            v-if="reportLength > 0"
-            class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
-          >
-            <span
-              >All Pending Payments:
-              <span v-if="pendingLength > 0" class="text-blue-500">{{
-                reports.items.categorizedPayments.pending.uniqueUsers
-              }}</span>
-              <span v-else class="text-blue-500">0</span>
-            </span>
-            <button
-              v-if="pendingLength > 0"
-              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
-              @click="exportPendingToExcel()"
-            >
-              <i class="fas fa-download"></i>
-              <span class="text-xs">Excel</span>
-            </button>
-          </p>
-        </div>
+
         <div class="flex flex-row">
           <p
             v-if="reportLength > 0"
@@ -412,6 +508,11 @@
               }}</span>
               <span v-else class="text-cyan-500">0</span>
             </span>
+            <a
+              @click="seeAllOverdue"
+              class="cursor-pointer bg-blue-100 px-4 py-1 rounded-lg text-green-800"
+              >See Detail</a
+            >
 
             <button
               v-if="overdueLength > 0"
@@ -428,188 +529,438 @@
       <div></div>
     </div>
 
-  
-
     <div class="report-table hidden" id="printable-area">
-
-             
-  <!-- <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:5px; display: flex; align-items: center;">
+      <!-- <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:5px; display: flex; align-items: center;">
     <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
    <h1 style="margin: 0;">Bana Mall Report </h1>
  </div>  -->
 
-
       <div style="width: 90%; max-width: 100%; min-width: 100%">
-          <img
-            src="../../../../assets/img/banaReport.jpg"
-            alt=""
-            style="max-width: 100%; height: auto; display: block"
-          />
-        </div>
+        <img
+          src="../../../../assets/img/banaReport.jpg"
+          alt=""
+          style="max-width: 100%; height: auto; display: block"
+        />
+      </div>
 
-        <div
-  style="
-    display: flex;
-    justify-content: flex-end;
-    color: blue;
-    font-size: 10px;
-    margin-top:10px;
-  "
->
-  <div>
-    Report Type: Monthly
-  </div>
-</div>
-<div
-  style="
-    display: flex;
-    justify-content: flex-end;
-    color: blue;
-    font-size: 10px;
-  "
->
-Date(Day-Month-Year):
-              <!-- <span
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          color: blue;
+          font-size: 10px;
+          margin-top: 10px;
+        "
+      >
+        <div>Report Type: Monthly</div>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          color: blue;
+          font-size: 10px;
+        "
+      >
+        Date(Day-Month-Year):
+        <!-- <span
                 >{{ new endDate.getDate() }}-{{
                   changeMonthIntoString(receiptDate.getMonth() + 1)
                 }}-{{ receiptDate.getFullYear() }}</span
               > -->
-</div>
-<div
-  style="
-    display: flex;
-    justify-content: flex-end;
-    color: blue;
-    font-size: 10px;
-  "
->
-  <div>
-    Reported Date:2024-12-3
-  </div>
-</div>
+      </div>
+      <div
+        style="
+          display: flex;
+          justify-content: flex-end;
+          color: blue;
+          font-size: 10px;
+        "
+      >
+        <div>Reported Date:2024-12-3</div>
+      </div>
 
-        
-       
-      <h2 class="section-title" style="color: #622e2e; font-weight: bold;margin-bottom:15px;">
-          Total Balance(Paid In The Gven Time Interval)
+      <h2
+        class="section-title"
+        style="color: #622e2e; font-weight: bold; margin-bottom: 15px"
+      >
+        Total Balance(Paid In The Gven Time Interval)
       </h2>
       <table>
-  <thead style="font-size:12px;">
-    <tr>
-      <th rowspan="3" style="text-align: center;">Banks</th>
-      <th colspan="8" style="text-align: center;">Balance</th>
-    </tr>
-    <tr>
-      <th colspan="4" style="text-align: center;">Block</th>
-      <th colspan="3" style="text-align: center;">Service</th>
-      <th colspan="2" rowspan="2" style="text-align: center;">Total Balance</th>
-    </tr>
-    <tr>
-      <th>Regular</th>
-      <th>Subsidy</th>
-      <th>Urgent</th>
-      <th>Total Block</th>
-      <th>Penalty</th>
-      <th>M. Service</th>
-      <th>Total Service</th>
-    </tr>
-  </thead>
-  <tbody style="background-color:white;font-size:12px;">
-    <tr v-for="(balance, bank) in totalBalance.orgBalancesBasedBankType" :key="bank">
-      <td>{{ bank }}</td>
-      <td>{{ balance.regularBalance }}</td>
-      <td>{{ balance.subsidyBalance }}</td>
-      <td>{{ balance.urgentBalance }}</td>
-      <td>{{ balance.totalBlockBalance }}</td>
-      <td>{{ balance.penalityBalance }}</td>
-      <td>{{ balance.serviceBalance }}</td>
-      <td>{{ balance.serviceBalance + balance.penalityBalance }}</td>
-      <td>{{ balance.serviceBalance + balance.totalBlockBalance }}</td>
-    </tr>
+        <thead style="font-size: 12px">
+          <tr>
+            <th rowspan="3" style="text-align: center">Banks</th>
+            <th colspan="8" style="text-align: center">Balance</th>
+          </tr>
+          <tr>
+            <th colspan="4" style="text-align: center">Block</th>
+            <th colspan="3" style="text-align: center">Service</th>
+            <th colspan="2" rowspan="2" style="text-align: center">
+              Total Balance
+            </th>
+          </tr>
+          <tr>
+            <th>Regular</th>
+            <th>Subsidy</th>
+            <th>Urgent</th>
+            <th>Total Block</th>
+            <th>Penalty</th>
+            <th>M. Service</th>
+            <th>Total Service</th>
+          </tr>
+        </thead>
+        <tbody style="background-color: white; font-size: 12px" v-if="confirmedLength>0 || pendingLength>0 ||overdueLength>0">
+          <tr
+                v-for="(bank, index) in reports.items.categorizedPayments
+                  .confirmed.bankTypes"
+                :key="index"
+              >
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ index }}
+                </td>
 
-    <!-- Total Row -->
-    <tr class="highlight">
-      <td>Total</td>
-      <td>{{ totalOrgBalance.totalRegularBalance }}</td>
-      <td>{{ totalOrgBalance.totalSubsidyBalance }}</td>
-      <td>{{ totalOrgBalance.totalUrgentBalance }}</td>
-      <td>{{ totalOrgBalance.totalBlockBankAccount }}</td>
-      <td>{{ totalOrgBalance.totalPenalityBalance }}</td>
-      <td>{{ totalOrgBalance.totalServiceBalance }}</td>
-      <td>{{ totalOrgBalance.totalServiceBankAccount }}</td>
-      <td>{{ totalOrgBalance.totalServiceBankAccount + totalOrgBalance.totalBlockBankAccount }}</td>
-    </tr>
-  </tbody>
-</table>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          console.log(
+                            "Bank regularBalance:",
+                            bank.regularBalance || 0
+                          );
+                          return sum + (bank.regularBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
 
-    <div v-if="reportType === 'monthly'">
-      <h2 class="section-title" style="font-size:12px; color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.subsidyBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.urgentBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.totalBlockBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.penalityBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.serviceBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return sum + (bank.totalServiceBalance || 0);
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    categories.reduce((grandTotal, category) => {
+                      const bankTypes =
+                        reports.items.categorizedPayments[category]
+                          ?.bankTypes || {};
+                      const categoryTotal = Object.values(bankTypes).reduce(
+                        (sum, bank) => {
+                          return (
+                            sum +
+                            (bank.totalBlockBalance +
+                              bank.totalServiceBalance || 0)
+                          );
+                        },
+                        0
+                      );
+                      return grandTotal + categoryTotal;
+                    }, 0)
+                  }}
+                </td>
+              
+              </tr>
+
+              <tr class="font-bold bg-gray-100" rowspan="4">
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ $t("total") }}
+                </td>
+
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalRegularBalance }}
+                </td>
+                <!-- Total Regular -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalSubsidyBalance }}
+                </td>
+                <!-- Total Subsidy -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalUrgentBalance }}
+                </td>
+                <!-- Total Urgent -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalBlockBankAccount }}
+                </td>
+                <!-- Total Urgent -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalPenalityBalance }}
+                </td>
+                <!-- Total Block -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalServiceBalance }}
+                </td>
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalServiceBankAccount }}
+                </td>
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{
+                    reports.items.Organization.totalBlockBankAccount +
+                    reports.items.Organization.totalServiceBankAccount
+                  }}
+                </td>
+              </tr>
+        </tbody>
+      </table>
+
+      <div v-if="reportType === 'monthly'">
+        <h2
+          class="section-title"
+          style="
+
+          
+            font-size: 12px;
+            color: #622e2e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           Total Confirmed Clients IN This Year(Paid):1850
-      </h2>
+        </h2>
 
-      <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+        <h2
+          class="section-title"
+          style="
+            font-size: 12px;
+            color: #622e2e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           Total Un Paid Clients(Deadline Not Passed):125
-      </h2>
-      <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+        </h2>
+        <h2
+          class="section-title"
+          style="
+            font-size: 12px;
+            color: #622e2e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           Total Overdue(Deadline Passes and Still Unpaid):25
-      </h2>
-  </div>
+        </h2>
+      </div>
 
-  <div v-if="reportType === 'annually'">
-      <h2 class="section-title" style="font-size:12px;color: red; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+      <div v-if="reportType === 'annually'">
+        <h2
+          class="section-title"
+          style="
+            font-size: 12px;
+            color: red;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           Total Overdue(Monthly Deadline Passed and Still Unpaid):25
-      </h2>
-         <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+        </h2>
+        <h2
+          class="section-title"
+          style="
+            font-size: 12px;
+            color: #622e2e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           No Overdue clients: 25
-      </h2>
-      <!-- <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+        </h2>
+        <!-- <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
           Total Pending In This Month: 25
       </h2>
       <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
           Total Confirmed(Paid) In This Month: 25
       </h2> -->
-  </div>
+      </div>
 
-  <div v-if="reportType === 'semiAnnually'">
-      <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+      <div v-if="reportType === 'semiAnnually'">
+        <h2
+          class="section-title"
+          style="
+            font-size: 12px;
+            color: #622e2e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           Total Overdue(Passed Deadline and Still Unpaid):25
-      </h2>
-  </div>
-  <div v-if="reportType === 'weekly'">
-    <h2 class="section-title" style="font-size:12px; color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+        </h2>
+      </div>
+      <div v-if="reportType === 'weekly'">
+        <h2
+          class="section-title"
+          style="
+            font-size: 12px;
+            color: #622e2e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           Total Confirmed Clients In This Week(Paid):1850
-      </h2>
-  </div>
-  <div v-if="reportType === 'daily'">
-      <h2 class="section-title" style="font-size:12px; color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
+        </h2>
+      </div>
+      <div v-if="reportType === 'daily'">
+        <h2
+          class="section-title"
+          style="
+            font-size: 12px;
+            color: #622e2e;
+            font-weight: bold;
+            margin-bottom: 15px;
+            margin-left: 20px;
+          "
+        >
           Total Confirmed Clients(Paid):1850
-      </h2>
-  </div>
-    <!-- <div class="footer-info">
+        </h2>
+      </div>
+      <!-- <div class="footer-info">
       <div>Confirmed Clients: 2000</div>
       <div>Unconfirmed Clients: 2000</div>
     </div> -->
-    <div style="position: relative; width: 100%; height: 150px">
-            <div
-             
-              id="qrCodeImageContainer"
-              style="
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                top: 40px;
-                background-color: lightgray;
-              "
-            >
-              QR Code
-            </div>
-          </div>
+      <div style="position: relative; width: 100%; height: 150px">
+        <div
+          id="qrCodeImageContainer"
+          style="
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 40px;
+            background-color: lightgray;
+          "
+        >
+          QR Code
+        </div>
+      </div>
 
-          <div style="width:200px ;height:200px; color:white">
-            <h1>Hii</h1>
-          </div>
+      <div style="width: 200px; height: 200px; color: white">
+        <h1>Hii</h1>
+      </div>
 
-  <!-- <div style="margin-top:100px;display: flex; align-items: center; justify-content: center; width: 100%;; height: 100px;">
+      <!-- <div style="margin-top:100px;display: flex; align-items: center; justify-content: center; width: 100%;; height: 100px;">
  
     <div id="qrCodeImageContainer" style="background-color: lightgray; padding: 10px; margin-right: 20px; height:200px;width:200px;">
         QR Code
@@ -620,8 +971,7 @@ Date(Day-Month-Year):
        
     </div>
 </div> -->
-
-  </div>
+    </div>
   </div>
 </template>
 <script>
@@ -631,6 +981,7 @@ export default {
   name: "ReportsView",
   data() {
     return {
+      categories: ["confirmed", "pending", "overdue"],
       totalBalance: [],
       totalOrgBalance: {},
       reportLength: 0,
@@ -667,119 +1018,6 @@ export default {
         endDate: "2024-12-30",
         totalAllPayments: 41,
         reports: [],
-        items: {
-          Organization: {
-            totalRegularBalance: 15000,
-            totalSubsidyBalance: 1000,
-            totalUrgentBalance: 40000,
-
-            totalServiceBalance: 600,
-            totalPenalityBalance: 0,
-            totalBlockBankAccount: 56000,
-            totalServiceBankAccount: 600,
-            TotalOrgBalance: 56600,
-          },
-          categorizedPayments: {
-            confirmed: {
-              uniqueUsers: 2,
-              totalPayments: 2,
-              totalExpectedAmount: 56020,
-              totalRegistrationAmount: 4620,
-              totalRegularAmountPaid: 10000,
-              totalUrgentAmountPaid: 40000,
-              totalSubsidyAmountPaid: 1000,
-              totalServiceAmountPaid: 400,
-              totalPenalityAmountPaid: 0,
-
-              totalBlockAmountPaid: 41100,
-              totalServicePenalityAmountPaid: 400,
-
-              bankTypes: {
-                CBE: {
-                  regularBalance: 5000,
-                  urgentBalance: 0,
-                  subsidyBalance: 0,
-                  serviceBalance: 200,
-                  penalityBalance: 0,
-                  totalBlock: 5000,
-                  totalService: 200,
-                },
-                LIB: {
-                  regularBalance: 5000,
-                  urgentBalance: 0,
-                  subsidyBalance: 1000,
-                  serviceBalance: 200,
-                  penalityBalance: 0,
-                  totalBlock: 6000,
-                  totalService: 200,
-                },
-                WEGAGEN: {
-                  regularBalance: 0,
-                  urgentBalance: 40000,
-                  subsidyBalance: 0,
-                  serviceBalance: 0,
-                  penalityBalance: 0,
-                  totalBlock: 40000,
-                  totalService: 0,
-                },
-              },
-              payments: [
-                {
-                  user: "66cb29b7379bc12bdfc7649c",
-                  billCode: "BM 0001-2024-2-RE-SE",
-                  status: "confirmed",
-                },
-                {
-                  user: "66d002a91d9c058352291274",
-                  billCode: "BM 0008-2024-1-RE-SE-EM-SU",
-                  status: "confirmed",
-                },
-              ],
-            },
-            pending: {
-              uniqueUsers: 20,
-              totalPayments: 39,
-              totalExpectedAmount: 1064960,
-              totalRegistrationAmount: 83160,
-              totalRegularAmountPaid: 5000,
-              totalRegularAmountNotPaid: 190000,
-              totalUrgentAmountPaid: 0,
-              totalUrgentAmountNotPaid: 760000,
-              totalSubsidyAmountPaid: 0,
-              totalSubsidyAmountNotPaid: 19000,
-              totalServiceAmountPaid: 200,
-              totalServiceAmountNotPaid: 7600,
-              totalPenalityAmountPaid: 0,
-              totalPenalityAmountNotPaid: 0,
-              bankTypes: {
-                CBE: {
-                  regularBalance: 5000,
-                  urgentBalance: 0,
-                  subsidyBalance: 0,
-                  serviceBalance: 200,
-                  penalityBalance: 0,
-                },
-                unpaidBalances: {
-                  regular: 190000,
-                  urgent: 760000,
-                  subsidy: 19000,
-                  service: 7600,
-                  penality: 0,
-                },
-              },
-              payments: [
-                {
-                  user: "66cb29b7379bc12bdfc7649c",
-                  billCode: "BM 0001-2024-1-RE-SE-EM-SU",
-                  status: "pending",
-                },
-                // Additional payment objects as needed
-              ],
-            },
-            overdue: {},
-            Undefined: {},
-          },
-        },
       },
     };
   },
@@ -803,7 +1041,6 @@ export default {
     //  this.annaualSelected=true;
     this.fetchPayments();
 
-
     this.$apiClient
       .get("api/v1/payments/orgBalance")
       .then((response) => {
@@ -817,11 +1054,27 @@ export default {
           error.response.data.error
         );
       });
-
-
   },
 
   methods: {
+    seeAllPaid() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 2,
+          status: "confirmed",
+        },
+      });
+    },
+    seeAllOverdue() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 2,
+          status: "overdue",
+        },
+      });
+    },
     exportConfirmedToExcel() {
       // Prepare the data for the Excel file
       console.log("payments");
@@ -837,16 +1090,12 @@ export default {
             Subsidy: item.subsidy.amount,
             Urgent: item.urgent.amount,
             "Total Block":
-              item.regular.amount +
-              item.subsidy.amount +
-              item.urgent.amount,
+              item.regular.amount + item.subsidy.amount + item.urgent.amount,
             "Reg Fee": item.registrationFee,
             "Monthly Service": item.service.amount,
             Penality: item.penality.amount,
             "Total Service":
-              item.service.amount +
-              item.penality.amount +
-              item.registrationFee,
+              item.service.amount + item.penality.amount + item.registrationFee,
             Status: "Paid",
           })
         );
@@ -874,16 +1123,12 @@ export default {
           Subsidy: item.subsidy.amount,
           Urgent: item.urgent.amount,
           "Total Block":
-            item.regular.amount +
-            item.subsidy.amount +
-            item.urgent.amount,
+            item.regular.amount + item.subsidy.amount + item.urgent.amount,
           "Reg Fee": item.registrationFee,
           "Monthly Service": item.service.amount,
           Penality: item.penality.amount,
           "Total Service":
-            item.service.amount +
-            item.penality.amount +
-            item.registrationFee,
+            item.service.amount + item.penality.amount + item.registrationFee,
           Status: "Unpaid",
         })
       );
@@ -911,16 +1156,12 @@ export default {
           Subsidy: item.subsidy.amount,
           Urgent: item.urgent.amount,
           "Total Block":
-            item.regular.amount +
-            item.subsidy.amount +
-            item.urgent.amount,
+            item.regular.amount + item.subsidy.amount + item.urgent.amount,
           "Reg Fee": item.registrationFee,
           "Monthly Service": item.service.amount,
           Penality: item.penality.amount,
           "Total Service":
-            item.service.amount +
-            item.penality.amount +
-            item.registrationFee,
+            item.service.amount + item.penality.amount + item.registrationFee,
           Status: "Overdue/Unpaid",
         })
       );
@@ -1021,8 +1262,6 @@ export default {
     },
 
     fetchPayments() {
-
-
       if (this.reportType == "annually") {
         //alert("annually")
         this.fetchYearlyPayments();
@@ -1110,11 +1349,12 @@ export default {
           `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}`
         )
         .then((response) => {
-          console.log("report type for year is for year",this.year,response)
-      
+          console.log("report type for year is for year", this.year, response);
+
           ////alert("response");
           console.log("yearly report is =", response.data);
           this.reports = response.data;
+
           this.reportLength =
             response.data.items.categorizedPayments.confirmed.uniqueUsers;
           this.confirmedLength =
@@ -1141,7 +1381,7 @@ export default {
       this.selectYear = false;
       this.selectMonth = false;
       (this.selectWeek = false), (this.selectDay = false);
-      this.selectReportType=false;
+      this.selectReportType = false;
 
       if (this.year == "") {
         this.selectYear = true;
@@ -1153,11 +1393,18 @@ export default {
         return;
       }
 
-      this.$apiClient.get(`/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}$semiYear=${this.semiYear}`
+      this.$apiClient
+        .get(
+          `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}$semiYear=${this.semiYear}`
         )
         .then((response) => {
-          console.log("report type for semiyearly is for for year,semiyear",this.year,this.semiYear,response)
-      
+          console.log(
+            "report type for semiyearly is for for year,semiyear",
+            this.year,
+            this.semiYear,
+            response
+          );
+
           this.reports = response.data;
           this.reportLength =
             response.data.items.categorizedPayments.confirmed.uniqueUsers;
@@ -1173,7 +1420,12 @@ export default {
           this.confirmedLength = 0;
           this.pendingCount = 0;
           this.overdueLength = 0;
-          console.error("Error fetching client data for semi year in year,semiyeae:",this.year,this.semiYear, error);
+          console.error(
+            "Error fetching client data for semi year in year,semiyeae:",
+            this.year,
+            this.semiYear,
+            error
+          );
         });
     },
     fetchMonthlyPayments() {
@@ -1181,7 +1433,7 @@ export default {
       this.selectYear = false;
       this.selectMonth = false;
       (this.selectWeek = false), (this.selectDay = false);
-      this.selectReportType=false;
+      this.selectReportType = false;
 
       if (this.year == "") {
         this.selectYear = true;
@@ -1205,8 +1457,13 @@ export default {
           `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}&month=${this.month}`
         )
         .then((response) => {
-          console.log("report type for monthly is for year,month",this.year,this.month,response)
-      
+          console.log(
+            "report type for monthly is for year,month",
+            this.year,
+            this.month,
+            response
+          );
+
           this.reports = response.data;
           this.reportLength =
             response.data.items.categorizedPayments.confirmed.uniqueUsers;
@@ -1222,7 +1479,12 @@ export default {
           this.confirmedLength = 0;
           this.pendingCount = 0;
           this.overdueLength = 0;
-          console.error("Error fetching client data monthly year,month", this.year,this.month,error);
+          console.error(
+            "Error fetching client data monthly year,month",
+            this.year,
+            this.month,
+            error
+          );
         });
     },
     fetchWeeklyPayments() {
@@ -1231,7 +1493,7 @@ export default {
       this.selectSemiYear = false;
       this.selectWeek = false;
       this.selectDay = false;
-      this.selectReportType=false;
+      this.selectReportType = false;
       if (this.year == "") {
         this.selectYear = true;
         return;
@@ -1249,8 +1511,14 @@ export default {
           `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}&month=${this.month}&week=${this.week}`
         )
         .then((response) => {
-          console.log("report type for weekly is for year,month,week",this.year,this.month,this.week,response)
-      
+          console.log(
+            "report type for weekly is for year,month,week",
+            this.year,
+            this.month,
+            this.week,
+            response
+          );
+
           this.reports = response.data;
           this.reportLength =
             response.data.items.categorizedPayments.confirmed.uniqueUsers;
@@ -1266,11 +1534,16 @@ export default {
           this.confirmedLength = 0;
           this.pendingCount = 0;
           this.overdueLength = 0;
-          console.error("Error fetching client data weekly is for year,month,week:",this.year,this.month,this.week,error);
+          console.error(
+            "Error fetching client data weekly is for year,month,week:",
+            this.year,
+            this.month,
+            this.week,
+            error
+          );
         });
     },
     fetchDailyPayments() {
-
       this.selectYear = false;
       this.selectMonth = false;
       this.selectYear = false;
@@ -1294,7 +1567,13 @@ export default {
           `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}&month=${this.month}&day=${this.day}`
         )
         .then((response) => {
-          console.log("report type for daily is for year,month,day",this.year,this.month,this.day,response)
+          console.log(
+            "report type for daily is for year,month,day",
+            this.year,
+            this.month,
+            this.day,
+            response
+          );
           this.reports = response.data;
           this.reportLength =
             response.data.items.categorizedPayments.confirmed.uniqueUsers;
@@ -1310,20 +1589,26 @@ export default {
           this.confirmedLength = 0;
           this.pendingCount = 0;
           this.overdueLength = 0;
-          console.error("Error fetching client data for a daaily anmd for year,month,day:",this.year,this.month,this.day, error);
+          console.error(
+            "Error fetching client data for a daaily anmd for year,month,day:",
+            this.year,
+            this.month,
+            this.day,
+            error
+          );
         });
     },
 
     thisYear() {
       ////alert("this year")
 
-      this.semiAnaualSelected=false;
-      this.monthlySelected=false;
-      this.weeklySelected=false;
-      this.dailySelected=false;
+      this.semiAnaualSelected = false;
+      this.monthlySelected = false;
+      this.weeklySelected = false;
+      this.dailySelected = false;
 
       console.log("this year is called");
-     
+
       const timeRange = "annually";
       this.year = new Date().getFullYear();
       this.$apiClient
@@ -1331,50 +1616,55 @@ export default {
           `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.year}`
         )
         .then((response) => {
-          console.log("report type for monthly is this year",this.year,response)
+          console.log(
+            "report type for monthly is this year",
+            this.year,
+            response
+          );
           this.reports = response.data;
           this.reportLength =
             response.data.items.categorizedPayments.confirmed.uniqueUsers;
         })
         .catch((error) => {
           this.reportLength = 0;
-          console.error("Error fetching yearly reports for this year:", this.year,error);
+          console.error(
+            "Error fetching yearly reports for this year:",
+            this.year,
+            error
+          );
         });
     },
     thisSemi() {
-
-      this.annaualSelected=true;
-      this.semiAnaualSelected=true;
-      this.monthlySelected=false;
-      this.weeklySelected=false;
-      this.dailySelected=false;
+      this.annaualSelected = true;
+      this.semiAnaualSelected = true;
+      this.monthlySelected = false;
+      this.weeklySelected = false;
+      this.dailySelected = false;
       this.reportType = "semiAnnually";
       this.year = new Date().getFullYear();
       this.semiYear = this.getCurrentHalf();
       this.fetchSemiYearlyPayments();
     },
 
-    
     thisMonth() {
-      this.annaualSelected=true;
-      this.semiAnaualSelected=false;
-      this.monthlySelected=true;
-      this.weeklySelected=false;
-      this.dailySelected=false;
+      this.annaualSelected = true;
+      this.semiAnaualSelected = false;
+      this.monthlySelected = true;
+      this.weeklySelected = false;
+      this.dailySelected = false;
       this.year = new Date().getFullYear();
       this.month = new Date().getMonth() + 1;
       this.reportType = "monthly";
       this.fetchPayments();
     },
     thisWeek() {
+      this.annaualSelected = true;
+      this.monthlySelected = true;
+      this.weeklySelected = true;
 
-      this.annaualSelected=true;
-      this.monthlySelected=true;
-      this.weeklySelected=true;
+      this.semiAnaualSelected = false;
+      this.dailySelected = false;
 
-      this.semiAnaualSelected=false;
-      this.dailySelected=false;
-  
       this.year = new Date().getFullYear();
       this.reportType = "weekly";
       const today = new Date();
@@ -1383,12 +1673,12 @@ export default {
       this.fetchPayments();
     },
     thisDay() {
-      this.annaualSelected=true;
-      this.monthlySelected=true;
-      this.dailySelected=true;
+      this.annaualSelected = true;
+      this.monthlySelected = true;
+      this.dailySelected = true;
 
-      this.weeklySelected=false;
-      this.semiAnaualSelected=false; 
+      this.weeklySelected = false;
+      this.semiAnaualSelected = false;
 
       this.day = new Date().getDate();
       this.year = new Date().getFullYear();
@@ -1455,8 +1745,8 @@ export default {
       }
     },
     getCurrentHalf() {
-       const month = new Date().getMonth();
-       return month < 6 ? "1st" : "2nd";
+      const month = new Date().getMonth();
+      return month < 6 ? "1st" : "2nd";
     },
 
     async generateQRCodeImage() {

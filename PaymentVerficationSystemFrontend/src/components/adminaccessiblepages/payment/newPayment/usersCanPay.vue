@@ -1973,7 +1973,7 @@ export default {
           },
         })
         .then((response) => {
-          console.log("this reponse after confirmation", response.data);
+         // console.log("this reponse after confirmation", response.data);
           this.$refs.toast.showSuccessToastMessage("Regular Payment updated");
           if (response.data.items.isPaid) {
             this.$router.push({
@@ -1984,7 +1984,7 @@ export default {
               },
             });
           } else {
-            //this.$reloadPage();
+            this.$reloadPage();
             this.fetchUnPaid();
           }
         })

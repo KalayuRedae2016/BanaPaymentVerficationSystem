@@ -200,25 +200,36 @@ export default {
     this.day = this.$route.query.day;
   },
 
-  mounted() {
-    this.displayedItems(); //for the table
-    this.$apiClient
-      .get("/api/v1/paymentSetting/latest")
-      .then((response) => {
-        if (response.data.status === 1) {
-          this.activeMonth = response.data.paymentSetting.activeMonth;
-          this.activeYear = response.data.paymentSetting.activeYear;
-          console.log("activeMonth", this.activeMonth, this.activeYear);
-        }
-      })
-      .catch((error) => {
-        console.error(
-          "An error occurred while fetching payment sfettings:",
-          error
-        );
-      });
-    this.fetchPayments();
-  },
+  async mounted() {
+  this.displayedItems(); // Initialize table data
+
+  try {
+    const response = await this.$apiClient.get("/api/v1/paymentSetting/latest");
+    if (response.data.status === 1) {
+      this.activeMonth = response.data.paymentSetting.activeMonth;
+      this.activeYear = response.data.paymentSetting.activeYear;
+      console.log("activeMonth", this.activeMonth, this.activeYear);
+    }
+  } catch (error) {
+    console.error(
+      "An error occurred while fetching payment settings:",
+      error
+    );
+  }
+
+  // First, fetch payments
+  await this.fetchPayments();
+
+  // Then evaluate conditions based on the query status
+  if (this.$route.query.status === "confirmed") {
+    this.paymentStatus = "paid";
+    this.changeSearched(this.paymentStatus);
+  } else if (this.$route.query.status === "overdue") {
+    this.paymentStatus = "overdue";
+    this.changeSearched(this.paymentStatus);
+  }
+},
+
 
   methods: {
     exportToExcel() {
@@ -285,7 +296,7 @@ export default {
 
     async fetchPayments() {
       const keyword = "allPayments";
-      this.$apiClient
+     await  this.$apiClient
         .get("/api/v1/payments/getAllPayments", 
           {
             params:{
@@ -304,6 +315,7 @@ export default {
         });
     },
     async changeSearched(paymentStatus) {
+      //alert("hiiii")
       if (paymentStatus == "all" || paymentStatus == "") {
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(
@@ -333,6 +345,7 @@ export default {
         //console.log("this ser payments in other year", this.searchedpayments)
         return;
       } else if (paymentStatus == "paid") {
+       // alert("paid")
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(
             (payment) => payment.isPaid == true && payment.status == "confirmed"
@@ -383,6 +396,8 @@ export default {
           }
         }
       } else {
+       // alert("overdue")
+        console.log("payments",this.payments);
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(
             (payment) => payment.isPaid == false && payment.status == "overdue"
