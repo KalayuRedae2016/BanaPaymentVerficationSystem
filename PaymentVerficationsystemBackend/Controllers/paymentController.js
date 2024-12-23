@@ -1517,10 +1517,15 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
     return res.status(404).json({ error: 'No payments found!' });
   }
   const organization = await Organization.findOne()
+  if(!organization){
+    return next(new AppError("Organization is not found",400))
+  }
   const bankBalances = calculateBalances(payments, organization);
   const organizationBalance = bankBalances.Organization
+  const orgBalancesBasedBankType=bankBalances.totalBalanceBankType
+
   // Get the bank type balances for the organization
-  const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
+  // const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
   console.log(organizationBalance)
   console.log(orgBalancesBasedBankType)
   res.status(200).json({
