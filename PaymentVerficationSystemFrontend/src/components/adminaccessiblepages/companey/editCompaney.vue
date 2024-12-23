@@ -200,13 +200,13 @@
                       <option value="" disabled>
                         {{ $t("selectBankType") }}
                       </option>
-                      <option value="CBE">{{ $t("CBE") }}</option>
-                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
-                      <option value="Enat">{{ $t("Enat") }}</option>
-                      <option value="Dashen">{{ $t("Dashen") }}</option>
-                      <option value="Lion">{{ $t("Lion") }}</option>
-                      <option value="Oromia">{{ $t("Oromia") }}</option>
-                      <option value="Absinia">{{ $t("Absinia") }}</option>
+                        
+                      <option value="CBE">{{ $t("cbe") }}</option>
+                      <option value="WEGAGEN">{{ $t("wegagen") }}</option>
+                      <option value="LIB">{{ $t("enat") }}</option>
+                      <option value="DASHEN">{{ $t("dashin") }}</option>
+                      <option value="OROMIA">{{ $t("oromia") }}</option>
+                      <option value="ABSINIA">{{ $t("absinia") }}</option>
                       <option value="other" class="text-indigo-800 font-bold">
                         {{ $t("other") }}
                       </option>
@@ -457,13 +457,12 @@
                         {{ $t("selectBankType") }}
                       </option>
                     <option value="CBE">{{ $t("CBE") }}</option>
-                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
-                      <option value="Enat">{{ $t("Enat") }}</option>
-                      <option value="Dashen">{{ $t("Dashen") }}</option>
-                      <option value="Lion">{{ $t("Lion") }}</option>
-                      <option value="Oromia">{{ $t("Oromia") }}</option>
-                      <option value="Absinia">{{ $t("Absinia") }}</option>
-            
+                    <option value="CBE">{{ $t("cbe") }}</option>
+                  <option value="WEGAGEN">{{ $t("wegagen") }}</option>
+                  <option value="LIB">{{ $t("enat") }}</option>
+                  <option value="DASHEN">{{ $t("dashin") }}</option>
+                  <option value="OROMIA">{{ $t("oromia") }}</option>
+                  <option value="ABSINIA">{{ $t("absinia") }}</option>
                   </select>
                 </div>
 
@@ -768,13 +767,12 @@
                     <option value="" disabled>
                         {{ $t("selectBankType") }}
                       </option>
-                      <option value="CBE">{{ $t("CBE") }}</option>
-                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
-                      <option value="Enat">{{ $t("Enat") }}</option>
-                      <option value="Dashen">{{ $t("Dashen") }}</option>
-                      <option value="Lion">{{ $t("Lion") }}</option>
-                      <option value="Oromia">{{ $t("Oromia") }}</option>
-                      <option value="Absinia">{{ $t("Absinia") }}</option>
+                      <option value="CBE">{{ $t("cbe") }}</option>
+                      <option value="WEGAGEN">{{ $t("wegagen") }}</option>
+                      <option value="LIB">{{ $t("enat") }}</option>
+                      <option value="DASHEN">{{ $t("dashin") }}</option>
+                      <option value="OROMIA">{{ $t("oromia") }}</option>
+                      <option value="ABSINIA">{{ $t("absinia") }}</option>
                       <option value="other" class="text-indigo-800 font-bold">
                         {{ $t("other") }}
                       </option>

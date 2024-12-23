@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
-const Payment = require('./paymentModel');
 
 const paymentSettingSchema = new mongoose.Schema(
   {

@@ -7,24 +7,28 @@ const multer = require('multer');
 const catchAsync = require('./catchAsync');
 const AppError = require('./appError');
 
-exports.importFromExcel = catchAsync(async (filePath, Model, transformFn,next) => {
+exports.importFromExcel = catchAsync(async (filePath, Model, transformFn) => {
   const workbook = xlsx.readFile(filePath);
   const worksheet = workbook.Sheets[workbook.SheetNames[0]];
   const jsonData = xlsx.utils.sheet_to_json(worksheet);
-  console.log(jsonData)
+
   if (!Array.isArray(jsonData) || jsonData.length === 0) {
-    return next(new AppError('Excel file is empty or data is not in the correct format.', 400));
+    throw new AppError("Excel file is empty or data is not in the correct format.", 400);
   }
-  const importedData = []; // Collect successfully imported documents
+
+  const importedData = [];
   for (const [index, data] of jsonData.entries()) {
-      const document = transformFn ? await transformFn(data) : new Model(data);//Apply the transform function or directly create the model instance
-      // console.log("doc",document)
-      const savedDocument = await document.save(); // Save document to MongoDB
-      importedData.push(savedDocument); // Add to the importedData array
+    try {
+      const document = transformFn ? await transformFn(data) : new Model(data);
+      const savedDocument = await document.save();
+      importedData.push(savedDocument);
+    } catch (error) {
+      console.error(`Error processing row ${index + 1}: ${error.message}`);
+      continue; // Ensure processing continues for subsequent rows
+    }
   }
-  // console.log(importedData)
-  // console.log("ll",importedData.length)
-  return importedData.length > 0 ? importedData : []; // Return an empty array if no documents were successfully imported
+
+  return importedData; // Always return an array
 });
 
 // Utility function to export data to Excel

@@ -178,7 +178,7 @@
       <div>
         <div class="flex flex-row">
           <p
-            v-if="reportLength > 0"
+           
             class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
           >
             <span
@@ -289,149 +289,134 @@
                   .confirmed.bankTypes"
                 :key="index"
               >
-                <td class="border border-gray-300 px-4 py-2">
-                  {{ index }}
+              <td class="border border-gray-300 px-4 py-2">
+                  {{ index}}
                 </td>
-
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, index) => {
-                          console.log(
-                            "Bank regularBalance:",
-                            index.regularBalance || 0
-                          );
-                          return sum + (bank.regularBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.regularBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.regularBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.regularBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.subsidyBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum) => {
-                          return sum + (index.urgentBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum,index) => {
-                          return sum + (index.totalBlockBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.penalityBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.subsidyBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.subsidyBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.subsidyBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.serviceBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.urgentBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.urgentBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.urgentBalance || 0)
+                        )
+                      : 0
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                
+
+                  {{
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0)
+                        )
+                      : 0
+                  }}
+
+
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.penalityBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.penalityBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.penalityBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.totalServiceBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.serviceBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.serviceBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.serviceBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
+                
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return (
-                            sum +
-                            (bank.totalBlockBalance +
-                              bank.totalServiceBalance || 0)
-                          );
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0) 
+                        )
+                      : 0
+                  }}
+                </td>
+
+ 
               
               </tr>
 
@@ -552,7 +537,7 @@
           margin-top: 10px;
         "
       >
-        <div>Report Type: Monthly</div>
+        <div>Report Type: {{ reportType }}</div>
       </div>
       <div
         style="
@@ -561,8 +546,8 @@
           color: blue;
           font-size: 10px;
         "
-      >
-        Date(Day-Month-Year):
+      > 
+        Date(Day-Month-Year): {{ this.year  }} <p v-if="month">-{{this.month}}</p>
         <!-- <span
                 >{{ new endDate.getDate() }}-{{
                   changeMonthIntoString(receiptDate.getMonth() + 1)
@@ -577,7 +562,7 @@
           font-size: 10px;
         "
       >
-        <div>Reported Date:2024-12-3</div>
+        <div>Reported Date:{{new Date().toLocaleDateString()}}</div>
       </div>
 
       <h2
@@ -595,7 +580,7 @@
           <tr>
             <th colspan="4" style="text-align: center">Block</th>
             <th colspan="3" style="text-align: center">Service</th>
-            <th colspan="2" rowspan="2" style="text-align: center">
+            <th colspan="1" rowspan="2" style="text-align: center">
               Total Balance
             </th>
           </tr>
@@ -615,152 +600,136 @@
                   .confirmed.bankTypes"
                 :key="index"
               >
-                <td class="border border-gray-300 px-4 py-2">
-                  {{ index }}
+              <td class="border border-gray-300 px-4 py-2">
+                  {{ index}}
                 </td>
-
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          console.log(
-                            "Bank regularBalance:",
-                            bank.regularBalance || 0
-                          );
-                          return sum + (bank.regularBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.regularBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.regularBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.regularBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.subsidyBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.urgentBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.totalBlockBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.penalityBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.subsidyBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.subsidyBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.subsidyBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.serviceBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.urgentBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.urgentBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.urgentBalance || 0)
+                        )
+                      : 0
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                
+
+                  {{
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0)
+                        )
+                      : 0
+                  }}
+
+
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.penalityBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.penalityBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.penalityBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return sum + (bank.totalServiceBalance || 0);
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.serviceBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.serviceBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.serviceBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
+                
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    categories.reduce((grandTotal, category) => {
-                      const bankTypes =
-                        reports.items.categorizedPayments[category]
-                          ?.bankTypes || {};
-                      const categoryTotal = Object.values(bankTypes).reduce(
-                        (sum, bank) => {
-                          return (
-                            sum +
-                            (bank.totalBlockBalance +
-                              bank.totalServiceBalance || 0)
-                          );
-                        },
-                        0
-                      );
-                      return grandTotal + categoryTotal;
-                    }, 0)
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0)
+                        )
+                      : 0
                   }}
                 </td>
-              
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
+                      ? (
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0) +
+                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
+                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0) 
+                        )
+                      : 0
+                  }}
+                </td>
+
+           
+    
               </tr>
-
               <tr class="font-bold bg-gray-100" rowspan="4">
                 <td
                   class="px-4 py-2 text-left border border-gray-300 text-blue-800"
@@ -1021,7 +990,6 @@ export default {
       },
     };
   },
-
   computed: {
     selectableYears() {
       const currentYear = new Date().getFullYear()();
@@ -1030,7 +998,6 @@ export default {
       for (let year = startYear; year <= currentYear; year++) {
         years.push(year);
       }
-
       return years;
     },
   },
@@ -1057,6 +1024,24 @@ export default {
   },
 
   methods: {
+    methods: {
+  calculateSum(array) {
+    if (!Array.isArray(array)) {
+      console.error('Invalid input: Expected an array');
+      return 0;
+    }
+
+    return array.reduce((sum, value) => {
+      if (typeof value === 'number') {
+        return sum + value;
+      } else {
+        console.warn(`Skipping non-numeric value: ${value}`);
+        return sum;
+      }
+    }, 0);
+  }
+ }
+,
     seeAllPaid() {
       this.$router.push({
         path: "/admindashboard/payments1",
@@ -1601,6 +1586,10 @@ export default {
 
     thisYear() {
       ////alert("this year")
+     this.reportType="annually"
+     this.month='';
+     this.week='';
+     this.day='';
 
       this.semiAnaualSelected = false;
       this.monthlySelected = false;
