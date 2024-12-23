@@ -842,20 +842,9 @@
             margin-left: 20px;
           "
         >
-          Total Overdue(Monthly Deadline Passed and Still Unpaid):25
+          Total Overdue(Monthly Deadline Passed and Still Unpaid):{{ reports.items.categorizedPayments.overdue.uniqueUsers }}
         </h2>
-        <h2
-          class="section-title"
-          style="
-            font-size: 12px;
-            color: #622e2e;
-            font-weight: bold;
-            margin-bottom: 15px;
-            margin-left: 20px;
-          "
-        >
-          No Overdue clients: 25
-        </h2>
+       
         <!-- <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
           Total Pending In This Month: 25
       </h2>
@@ -925,9 +914,7 @@
         </div>
       </div>
 
-      <div style="width: 200px; height: 200px; color: white">
-        <h1>Hii</h1>
-      </div>
+
 
       <!-- <div style="margin-top:100px;display: flex; align-items: center; justify-content: center; width: 100%;; height: 100px;">
  
