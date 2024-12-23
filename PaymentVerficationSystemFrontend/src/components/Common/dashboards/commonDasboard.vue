@@ -498,7 +498,7 @@ export default {
        // console.log("finally");
       });
     this.fetchNotifications();
-   // setInterval(this.fetchNotifications, 5000);
+    setInterval(this.fetchNotifications, 5000);
   },
   methods: {
     closeDropDownSidebar() {

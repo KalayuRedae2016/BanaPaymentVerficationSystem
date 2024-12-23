@@ -1984,7 +1984,7 @@ export default {
               },
             });
           } else {
-            this.$reloadPage();
+            
             this.fetchUnPaid();
           }
         })
@@ -2013,7 +2013,7 @@ export default {
               },
             });
           } else {
-            this.$reloadPage();
+            
             this.fetchUnPaid();
           }
         })
@@ -2043,7 +2043,7 @@ export default {
               },
             });
           } else {
-            this.$reloadPage();
+            
             this.fetchUnPaid();
           }
         })
@@ -2073,7 +2073,7 @@ export default {
               },
             });
           } else {
-            this.$reloadPage();
+           
             this.fetchUnPaid();
           }
         })
@@ -2105,7 +2105,7 @@ export default {
               },
             });
           } else {
-            this.$reloadPage();
+            
             this.fetchUnPaid();
           }
         })

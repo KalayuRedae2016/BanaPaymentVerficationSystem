@@ -12,7 +12,6 @@
           <option  v-for="year in $years" :key="year" :value="year">{{ year }}</option>
         </select>
     </div>
-<!-- //search user -->
 
     <div class=" -mt-1 text-xs">
       <div class="mb-4">
