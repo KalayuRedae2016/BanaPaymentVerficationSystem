@@ -1517,10 +1517,15 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
     return res.status(404).json({ error: 'No payments found!' });
   }
   const organization = await Organization.findOne()
+  if(!organization){
+    return next(new AppError("Organization is not found",400))
+  }
   const bankBalances = calculateBalances(payments, organization);
   const organizationBalance = bankBalances.Organization
+  const orgBalancesBasedBankType=bankBalances.totalBalanceBankType
+
   // Get the bank type balances for the organization
-  const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
+  // const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
   console.log(organizationBalance)
   console.log(orgBalancesBasedBankType)
   res.status(200).json({
@@ -1663,7 +1668,6 @@ exports.reports = catchAsync(async (req, res, next) => {
   }
 
   paymentQuery.createdAt = { $gte: startDate, $lt: endDate };
-  console.log(paymentQuery)
   const payments = await Payment.find(paymentQuery).populate('user', 'phoneNumber').lean()
   if (!payments.length) {
     return res.status(404).json({ error: 'No payments found for the given criteria' });
@@ -1671,7 +1675,7 @@ exports.reports = catchAsync(async (req, res, next) => {
   const organization = await Organization.findOne()
   const categorizedPayments = calculateBalances(payments, organization);
 
-  console.log(categorizedPayments)
+  // console.log(categorizedPayments)
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${timeRange}`,

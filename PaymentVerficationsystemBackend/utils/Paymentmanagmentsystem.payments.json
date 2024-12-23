@@ -1,0 +1,320 @@
+[{
+  "_id": {
+    "$oid": "676918f74f6cf67d8243bfde"
+  },
+  "user": {
+    "$oid": "6768692eef8e84baf50aec26"
+  },
+  "paymentSetting": {
+    "$oid": "676918f74f6cf67d8243bfd9"
+  },
+  "userCode": "BM0001",
+  "fullName": "Kaleb Tesheme Wuneh",
+  "billCode": "BM0001-2024-11-RE-SE-EM-SU",
+  "activeYear": 2024,
+  "activeMonth": 11,
+  "registrationFee": 0,
+  "urgent": {
+    "amount": 1000,
+    "bankType": "LIB",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:03:47.788Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676919634f6cf67d8243c00d"
+    }
+  },
+  "regular": {
+    "amount": 2000,
+    "bankType": "CBE",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:03:23.859Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "6769194b4f6cf67d8243c004"
+    }
+  },
+  "subsidy": {
+    "amount": 1000,
+    "bankType": "Wegagen",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:04:06.434Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676919764f6cf67d8243c016"
+    }
+  },
+  "service": {
+    "amount": 1000,
+    "bankType": "CBE",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:04:26.579Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "6769198a4f6cf67d8243c01f"
+    }
+  },
+  "penality": {
+    "amount": 1000,
+    "bankType": "CBE",
+    "TTNumber": "TTTT",
+    "penality": 0,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:04:55.038Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676918f74f6cf67d8243bfe3"
+    }
+  },
+  "baseAmount": 8200,
+  "totalExpectedAmount": 8500,
+  "totalPaidAmount": 6000,
+  "confirmedDate": {
+    "$date": "2024-12-23T08:04:55.293Z"
+  },
+  "confirmationMethod": "Admin-confirmed",
+  "confirmedID": {
+    "$oid": "6768692eef8e84baf50aec26"
+  },
+  "barCode": "/qr_codes/qr_BM0001-2024-11-RE-SE-EM-SU.png",
+  "status": "confirmed",
+  "isPaid": true,
+  "latest": false,
+  "seen": false,
+  "adminSeen": false,
+  "createdAt": {
+    "$date": "2024-12-23T08:01:59.514Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-23T08:06:18.967Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "676918f74f6cf67d8243bfe7"
+  },
+  "user": {
+    "$oid": "6768692fef8e84baf50aec2c"
+  },
+  "paymentSetting": {
+    "$oid": "676918f74f6cf67d8243bfd9"
+  },
+  "userCode": "BM0002",
+  "fullName": "Demoz Tesfu Tesfay",
+  "billCode": "BM0002-2024-11-RE-SE-EM-SU",
+  "activeYear": 2024,
+  "activeMonth": 11,
+  "registrationFee": 0,
+  "urgent": {
+    "amount": 1000,
+    "bankType": "CBE",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:05:32.947Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676919cc4f6cf67d8243c038"
+    }
+  },
+  "regular": {
+    "amount": 1000,
+    "bankType": "CBE",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:05:41.347Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676919d54f6cf67d8243c040"
+    }
+  },
+  "subsidy": {
+    "amount": 1000,
+    "bankType": "LIB",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:05:57.374Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676919e54f6cf67d8243c048"
+    }
+  },
+  "service": {
+    "amount": 1000,
+    "bankType": "LIB",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:06:08.861Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676919f04f6cf67d8243c050"
+    }
+  },
+  "penality": {
+    "amount": 1000,
+    "bankType": "LIB",
+    "TTNumber": "TTTT",
+    "penality": 0,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:06:18.961Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "676918f74f6cf67d8243bfec"
+    }
+  },
+  "baseAmount": 8200,
+  "totalExpectedAmount": 8500,
+  "totalPaidAmount": 5000,
+  "confirmedDate": {
+    "$date": "2024-12-23T08:06:19.350Z"
+  },
+  "confirmationMethod": "Admin-confirmed",
+  "confirmedID": {
+    "$oid": "6768692eef8e84baf50aec26"
+  },
+  "barCode": "/qr_codes/qr_BM0002-2024-11-RE-SE-EM-SU.png",
+  "status": "confirmed",
+  "isPaid": true,
+  "latest": true,
+  "seen": false,
+  "adminSeen": false,
+  "createdAt": {
+    "$date": "2024-12-23T08:01:59.585Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-23T08:06:19.355Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "676918f74f6cf67d8243bff0"
+  },
+  "user": {
+    "$oid": "6768692fef8e84baf50aec32"
+  },
+  "paymentSetting": {
+    "$oid": "676918f74f6cf67d8243bfd9"
+  },
+  "userCode": "BM0003",
+  "fullName": "Abadi Tadesse Abay",
+  "billCode": "BM0003-2024-11-RE-SE-EM-SU",
+  "activeYear": 2024,
+  "activeMonth": 11,
+  "registrationFee": 0,
+  "urgent": {
+    "amount": 1000,
+    "bankType": "CBE",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:06:57.860Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "67691a214f6cf67d8243c067"
+    }
+  },
+  "regular": {
+    "amount": 1000,
+    "bankType": "LIB",
+    "TTNumber": "TTTT",
+    "penality": 100,
+    "isPaid": true,
+    "paidAt": {
+      "$date": "2024-12-23T08:06:48.126Z"
+    },
+    "daysLate": 3,
+    "_id": {
+      "$oid": "67691a184f6cf67d8243c060"
+    }
+  },
+  "subsidy": {
+    "amount": 2000,
+    "bankType": null,
+    "TTNumber": null,
+    "penality": 200,
+    "isPaid": false,
+    "paidAt": null,
+    "daysLate": 24,
+    "_id": {
+      "$oid": "676918f74f6cf67d8243bff3"
+    }
+  },
+  "service": {
+    "amount": 200,
+    "bankType": null,
+    "TTNumber": null,
+    "penality": 0,
+    "isPaid": false,
+    "paidAt": null,
+    "daysLate": null,
+    "_id": {
+      "$oid": "676918f74f6cf67d8243bff4"
+    }
+  },
+  "penality": {
+    "amount": 400,
+    "bankType": null,
+    "TTNumber": null,
+    "penality": 0,
+    "isPaid": false,
+    "paidAt": null,
+    "daysLate": null,
+    "_id": {
+      "$oid": "676918f74f6cf67d8243bff5"
+    }
+  },
+  "baseAmount": 8200,
+  "totalExpectedAmount": 8600,
+  "totalPaidAmount": 2000,
+  "confirmedDate": null,
+  "confirmationMethod": null,
+  "confirmedID": null,
+  "barCode": null,
+  "status": "overdue",
+  "isPaid": false,
+  "latest": false,
+  "seen": false,
+  "adminSeen": false,
+  "createdAt": {
+    "$date": "2024-12-23T08:01:59.601Z"
+  },
+  "updatedAt": {
+    "$date": "2024-12-23T08:13:53.966Z"
+  },
+  "__v": 0
+}]
