@@ -9,5 +9,5 @@ router.route('/')
     
 router.route('/:id').patch(organizationController.updateOrganization)
 router.route('/:id/bankAccounts').post(organizationController.addBankAccount)
-router.route('/deleteOrgs').delete(organizationController.deleteOrgs);// Delete payments
+// router.route('/deleteOrgs').delete(organizationController.deleteOrgs);// Delete payments
 module.exports=router
