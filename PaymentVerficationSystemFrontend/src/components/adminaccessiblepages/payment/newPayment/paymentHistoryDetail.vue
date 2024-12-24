@@ -933,12 +933,13 @@
                     class="custom-select"
                   >
                     <option value="">Select Bank Type</option>
-                    <option value="CBE">CBE</option>
-                    <option value="WEGAGEN">Wegagen</option>
-                    <option value="LIB">LIB</option>
-                    <option value="Dashen">Dashen</option>
-                    <option value="Oromia">Oromia</option>
-                    <option value="Absinia">Absinia</option>
+                    <option
+                  v-for="(bank, index) in blockBanks"
+                  :key="'block-' + index"
+                  :value="bank.bankType"
+                >
+                  {{ bank.bankType }}
+                </option>
                   </select>
                 </div>
 
@@ -974,106 +975,7 @@
       </transition>
     </div>
     
-    <div v-if="showEditModall">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-#d1d5db bg-opacity-50"
-        >
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
-            <div class="flex flex-row">
-              <div>Edit Payment Detail</div>
-              <div class="ml-64">
-                <svg
-                  @click="showEditModal = !showEditModal"
-                  class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </div>
-            </div>
 
-            <hr class="my-4 md:min-w-full bg-red-500" />
-
-            <div class="">
-              <form class="px-5 py-5">
-                <div class="mb-4">
-                  <label
-                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
-                  >
-                    Payment Date
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-
-                  <input
-                    @change="fetchPenality(paymentType, paidt)"
-                    type="date"
-                    class="w-full px-4 py-2 border border-gray-400 rounded"
-                    placeholder="Payment Date"
-                    v-model="paidAt"
-                  />
-                </div>
-                <div class="mb-4">
-                  <label
-                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
-                  >
-                    Bank Type
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-
-                  <select
-                    v-model="bankType"
-                    class="border border-gray-400 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-xs md:text-base h-10"
-                  >
-                    <option value="">Select Bank Type</option>
-                    <option value="CBE">CBE</option>
-                    <option value="WEGAGEN">Wegagen</option>
-                    <option value="LIB">LIB</option>
-                    <option value="Dashen">Dashen</option>
-                    <option value="Oromia">Oromia</option>
-                    <option value="Absinia">Absinia</option>
-                  </select>
-                </div>
-
-                <div class="mb-4">
-                  <label
-                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
-                  >
-                    TTNNumber
-                    <span class="custom-star ml-1">*</span>
-                  </label>
-
-                  <input
-                    type="TTNumber"
-                    class="w-full px-4 py-2 border border-gray-400 rounded"
-                    placeholder="TTNumber"
-                    v-model="TTNumber"
-                  />
-                </div>
-                <button
-                  @click.prevent="saveChanges()"
-                  type="submit"
-                  class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  <i class="fas fa-save"
-                    ><span class="text-md ml-3">Save Changes</span></i
-                  >
-                </button>
-              </form>
-            </div>
-
-            <hr class="my-4 md:min-w-full bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
   </div>
 </template>
 
@@ -1219,6 +1121,14 @@ export default {
       .catch((error) => {
         console.log(error);
       });
+  },
+  computed: {
+    serviceBanks() {
+      return this.$store.getters.serviceBanks;
+    },
+    blockBanks() {
+      return this.$store.getters.blockBanks;
+    },
   },
 
   methods: {

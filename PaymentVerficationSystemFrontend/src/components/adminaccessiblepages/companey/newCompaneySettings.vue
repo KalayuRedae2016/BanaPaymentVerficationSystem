@@ -115,9 +115,9 @@
                   <option value="CBE">{{ $t("cbe") }}</option>
                   <option value="WEGAGEN">{{ $t("wegagen") }}</option>
                   <option value="LIB">{{ $t("enat") }}</option>
-                  <option value="Dashen">{{ $t("dashin") }}</option>
-                  <option value="Oromia">{{ $t("oromia") }}</option>
-                  <option value="Absinia">{{ $t("absinia") }}</option>
+                  <option value="DASHEN">{{ $t("dashin") }}</option>
+                  <option value="OROMIA">{{ $t("oromia") }}</option>
+                  <option value="ABSINIA">{{ $t("absinia") }}</option>
                 </select>
                 <input
                   type="text"
@@ -185,9 +185,9 @@
                   <option value="CBE">{{ $t("cbe") }}</option>
                   <option value="WEGAGEN">{{ $t("wegagen") }}</option>
                   <option value="LIB">{{ $t("enat") }}</option>
-                  <option value="Dashen">{{ $t("dashin") }}</option>
-                  <option value="Oromia">{{ $t("oromia") }}</option>
-                  <option value="Absinia">{{ $t("absinia") }}</option>
+                  <option value="DASHEN">{{ $t("dashin") }}</option>
+                  <option value="OROMIA">{{ $t("oromia") }}</option>
+                  <option value="ABSINIA">{{ $t("absinia") }}</option>
                 </select>
                 <input
                   type="text"
