@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 let corsOptions;
 if (process.env.NODE_ENV === 'production') {
   corsOptions = {
-    origin: ['https://49.13.235.6','https://banapvs.com'], // Allowed origin for production
+    origin: ['https://49.13.235.6', 'https://banapvs.com'], // Allowed origin for production
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     credentials: true, // Enable credentials like cookies
@@ -52,7 +52,7 @@ if (process.env.NODE_ENV === 'production') {
         callback(new Error('Not allowed by CORS'));
       }
     },
-    methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH', 'OPTIONS'], // Allowed HTTP methods
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allowed HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
     credentials: true, // Enable credentials like cookies
   };
