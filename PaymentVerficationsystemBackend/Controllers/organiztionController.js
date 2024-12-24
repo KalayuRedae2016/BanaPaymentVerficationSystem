@@ -186,3 +186,14 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
     data: newBankAccount,
   });
 });
+
+exports.deleteOrgs = catchAsync(async (req, res, next) => {
+  const deletedOrg = await Organization.deleteMany({});  // Deletes all documents
+  if (deletedOrg.deletedCount === 0) {
+    return next(new AppError("No Org found to delete", 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    message: `${deletedOrg.deletedCount} Settings Deleted`
+  });
+});

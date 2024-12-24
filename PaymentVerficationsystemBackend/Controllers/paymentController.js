@@ -1392,9 +1392,30 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
   })
 });
 exports.importPayments = catchAsync(async (req, res, next) => {
+  if (!req.file) {
+    return next(new AppError('No file uploaded', 400));
+  }
   const filePath = req.file.path; // Path to the uploaded file
-  await importFromExcel(filePath, Payment);
-  res.status(200).send('Data Imported Successfully');
+  try {
+    const result = await importFromExcel(filePath, Payment);
+    console.log(result)
+    if (!result || result.length === 0) {
+      return next(new AppError('No valid payment data found in the file', 400));
+    }
+
+    fs.unlinkSync(filePath);// Clean up the file after successful processing
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Data imported successfully',
+      importedRecords: result.length,
+    });
+  } catch (error) {
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+    return next(error);
+  }
 });
 exports.exportPayments = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({});
