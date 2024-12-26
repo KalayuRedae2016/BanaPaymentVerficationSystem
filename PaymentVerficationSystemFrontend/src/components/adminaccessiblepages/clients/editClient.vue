@@ -111,7 +111,7 @@
       <div v-if="showEditModal" style="height: 400px">
         <transition name="fade" mode="out-in">
           <div
-            class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+            class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-80"
           >
             <div class="bg-white rounded-lg p-6 border border-cyan-500">
               <div class="flex justify-between items-center">

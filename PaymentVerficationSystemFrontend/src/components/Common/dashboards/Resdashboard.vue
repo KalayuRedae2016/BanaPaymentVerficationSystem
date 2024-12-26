@@ -471,10 +471,8 @@ export default {
     this.latestPaymentSetting();
   },
 
-  mounted() {
-
+  async mounted() {
     if (this.$route.query.loginSuccess === 'true') {
-      
       const activeItem="dashboard";
       this.$store.dispatch("commitActiveItem", { activeItem });
 
@@ -483,8 +481,10 @@ export default {
         this.$router.push('/admindashboard');
       }, 2000);
     }
+
+
     //finding users
-    this.$apiClient
+    await this.$apiClient
       .get("/api/v1/users")
       .then((response) => {
         console.log("response clients", response);
@@ -498,7 +498,7 @@ export default {
 
     //overdue payments
     const allTimeRange = "allTime";
-    this.$apiClient
+    await this.$apiClient
       .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
       .then((response) => {
         console.log("allThe Time now nnn", response);
@@ -513,7 +513,7 @@ export default {
     //get the users
 
     //orgbalances
-    this.$apiClient
+    await this.$apiClient
       .get("api/v1/payments/orgBalance")
       .then((response) => {
         console.log("response org balance", response);
@@ -540,9 +540,6 @@ export default {
       setTimeout(() => {
         this.showToast = false;
       }, 1000); 
-      
-      
-      
       // Toast will disappear after 3 seconds
     },
     paidUnPaidOverdue() {

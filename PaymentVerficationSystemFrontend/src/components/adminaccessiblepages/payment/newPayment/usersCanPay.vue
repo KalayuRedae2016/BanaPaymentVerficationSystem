@@ -1,9 +1,9 @@
 <template>
   <div>
     <Toast ref="toast" />
-    <div class="py-4">
+    <div class="">
       <!-- search and searched users -->
-      <div class="pt-6 -mt-1">
+      <div class="">
         <div
           class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
         >
@@ -1547,7 +1547,7 @@ export default {
       showErrorToast: false,
       showSuccessToast: false,
 
-      showUserList: false,
+      showUserList: true,
       paymentStatus: "newPayment",
       noSelectionCount: 0,
       previosSelected: -1,
@@ -1644,6 +1644,7 @@ export default {
         if (response.data !== null) {
           this.users = response.data.users;
           this.searchedClients = this.users;
+          this.filteredUsers=this.users;
           console.log("this users", this.users);
         }
       })

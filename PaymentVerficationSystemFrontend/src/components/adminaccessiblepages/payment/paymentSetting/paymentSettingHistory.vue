@@ -1,8 +1,10 @@
 <template>
-  <div class="border border-gray-300 rounded-lg p-4 mt-3">
-    <div class=" space-x-0  flex flex-col lg:flex-rowlg:space-x-5">
-      <div class="flex flex-row  w-full lg:w-1/2 space-x-3 mt-5">
-        <label for="month" class="w-1/4 block text-sm font-medium text-gray-700"
+ 
+  <div class=" rounded-lg py-2 ">
+    <hr class="border border-gray-300 ">
+    <div class="flex flex-col mx-auto  ">
+      <div class="flex flex-row  w-full lg:w-1/2  mt-5 px-4">
+        <label for="month" class="custom-label mt-5 w-1/4"
           >{{ $t('year') }}</label
         >
         <select
@@ -17,8 +19,8 @@
           </option>
         </select>
       </div>
-      <div class="flex flex-row w-full lg:w-1/2 space-x-3 mt-5">
-        <label for="month" class="w-1/4 block text-sm font-medium text-gray-700"
+      <div class="flex flex-row w-full lg:w-1/2   px-4">
+        <label for="month" class="custom-label mt-5 w-1/4"
           >  {{ $t('month') }}</label
         >
         <select
@@ -34,21 +36,21 @@
         </select>
       </div>
     </div>
-    <div class="p-4">
+    <div class="py-2 ">
       <p v-if="selectYear" class="text-red-500">{{ $t('pleaseSelectYear') }}</p>
       <p v-if="selectMonth" class="text-blue-500">{{ $t('pleaseSelectMonth') }}</p>
     </div>
 
-    <div v-if="!noSettingOpened" class="grid grid-cols-1 gap-4 border-t  border-gray-300 -mt-5 rounded-lg " >
+    <div v-if="!noSettingOpened" class="mt-1 mx-4 px-3 grid grid-cols-1 gapy-2  border-t  border-gray-300 -mt-5 rounded-lg " >
    
-      <div  class="w-full m-4">
+      <div  class="w-full ">
 
 
-  <div >
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div  >
+    <div class="grid grid-cols-1 md:grid-cols-2  ">
       <!-- Left Column (First 6 Items) -->
-      <div class="space-y-4">
-        <div class="bg-white border-b border-dotted p-4 rounded-md border-b border-gray-500 ">
+      <div class="mt-3">
+        <div class="bg-white border-b border-dotted  rounded-md border-b border-gray-500 ">
           <div class="flex items-center space-x-3">
             <i class="fas fa-money-bill-alt text-green-500"></i>
             <span class="font-semibold text-sm">{{ $t('regularAmount') }}:</span>
@@ -56,7 +58,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-hand-holding-usd text-yellow-500"></i>
             <span class="font-semibold text-sm">{{ $t('subsidyAmount') }}:</span>
@@ -64,7 +66,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-exclamation-circle text-red-500"></i>
             <span class="font-semibold text-sm">{{ $t('urgentAmount') }}:</span>
@@ -72,7 +74,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-cogs text-indigo-500"></i>
             <span class="font-semibold text-sm">{{ $t('serviceAmount') }}:</span>
@@ -80,7 +82,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-percent text-blue-500"></i>
             <span class="font-semibold text-sm">{{ $t('registrationFee') }} %:</span>
@@ -88,7 +90,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-calendar-check text-teal-500"></i>
             <span class="font-semibold text-sm">{{ $t('activeYear') }}:</span>
@@ -98,8 +100,8 @@
       </div>
 
       <!-- Right Column (Remaining Items) -->
-      <div class="space-y-4">
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+      <div class="">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-calendar-day text-purple-500"></i>
             <span class="font-semibold text-sm">{{ $t('activeMonth') }}:</span>
@@ -107,7 +109,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-calendar-alt text-orange-500"></i>
             <span class="font-semibold text-sm">{{ $t('startingDay') }}:</span>
@@ -115,7 +117,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-calendar-times text-red-500"></i>
             <span class="font-semibold text-sm">{{ $t('endingDay') }}:</span>
@@ -123,7 +125,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-clock text-yellow-500"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerFiveDaysPercentage') }}:</span>
@@ -131,7 +133,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-clock text-yellow-500"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerTenDaysPercentage') }}:</span>
@@ -139,7 +141,7 @@
           </div>
         </div>
 
-        <div class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500">
+        <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-clock text-red-500"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerAboveTenDaysPercentage') }}:</span>

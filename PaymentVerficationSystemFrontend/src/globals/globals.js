@@ -1,5 +1,7 @@
 import axios from "axios";
-import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch } from "../utils/utils"; // Adjust the path to match your project structure
+import Toast from '../components/Common/Toast.vue';
+import { createApp } from "vue";
+import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch,isStrongPassword,validateField} from "../utils/utils"; // Adjust the path to match your project structure
 export default {
   async install(app) {
     // Check environment and set base URL
@@ -11,6 +13,11 @@ export default {
     const apiClient = axios.create({
       baseURL: baseUrl,
     });
+
+    const toastContainer = document.createElement("div");
+    document.body.appendChild(toastContainer);
+    const toastApp = createApp(Toast);
+    const toastInstance = toastApp.mount(toastContainer);
     console.log('API Client:', apiClient);
 
     let banks = [];
@@ -62,9 +69,15 @@ export default {
       $apiGetById:apiGetById,
       $apiPost:apiPost,
       $apiPut:apiPut,
-      $apiPatch:apiPatch
+      $apiPatch:apiPatch,
+      $isStrongPassword:isStrongPassword,
+      $validateField:validateField,      
+      $toast: {
+        success: toastInstance.showSuccessToastMessage,
+        error: toastInstance.showErrorToastMessage,
+        warning: toastInstance.showWarningToastMessage,
+      },
     };
-
     // Assign to the global properties in the Vue app
     app.config.globalProperties = {
       ...app.config.globalProperties,

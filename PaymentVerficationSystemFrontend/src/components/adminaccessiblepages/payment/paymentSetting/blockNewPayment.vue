@@ -4,7 +4,8 @@
      <Toast ref="toast" />
 
     <!-- //end of transtion -->
-    <div class="flex-col border-t border-gray-300 rounded-lg mt-5 ">
+  <hr class="border border-gray-300 ">
+    <div class="flex-col rounded-lg  ">
       <div class="flex flex-wrap">
         <div
           v-if="paymentSettingCreated === 0"
@@ -291,7 +292,7 @@
             <button
               @click.prevent="createRegularPayment()"
               type="submit"
-              class="mb-10 ml-1 bg-indigo-800 hover:bg-indigo-500 text-white py-2 px-4 rounded"
+              class="mb-10 ml-1 bg-indigo-800 hover:bg-indigo-500 text-white py-2 py-2 px-4rounded"
             >
               {{ $t("submit") }}
             </button>
@@ -312,15 +313,15 @@
               @click="showPaymentEditingActivating = true"
               class="custom-button m-4"
             >
-              {{ $t("activate") }}
+              <i class="fa fa-toggle-on mr-2"></i>{{ $t("activate") }}
             </button>
           </div>
 
           <div v-if="!paymentActivate">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 ">
               <!-- Left Column (First 6 Items) -->
-              <div class="space-y-4">
-                <div class="bg-white border-b border-dotted p-4 rounded-md border-b border-gray-500">
+              <div class="">
+                <div class="bg-white border-b border-dotted py-2  rounded-md border-b border-gray-500">
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-money-bill-alt text-green-500"></i>
                     <span class="font-semibold text-sm"
@@ -333,14 +334,14 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500"
                 >
-                  <div class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-3 ">
                     <i class="fas fa-hand-holding-usd text-yellow-500"></i>
                     <span class="font-semibold text-sm"
                       >{{ $t("subsidyAmount") }}:</span
                     >
-                    <span class="text-lg text-gray-800">{{
+                    <span class="text-xs text-gray-800">{{
                       paymentSetting.subsidyAmount > 0
                         ? paymentSetting.subsidyAmount
                         : "0"
@@ -348,8 +349,8 @@
                   </div>
                 </div>
 
-                <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                 <div
+                  class="bg-white border-b border-dotted py-2 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-exclamation-circle text-red-500"></i>
@@ -364,8 +365,10 @@
                   </div>
                 </div>
 
+                
+
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted py-2 px-4rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-cogs text-indigo-500"></i>
@@ -379,7 +382,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted py-2 px-4rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-percent text-blue-500"></i>
@@ -393,7 +396,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted py-2 px-4rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-check text-teal-500"></i>
@@ -408,23 +411,23 @@
               </div>
 
               <!-- Right Column (Remaining Items) -->
-              <div class="space-y-4">
+              <div class="space-y-4 mt-1">
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted py-2 rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-day text-purple-500"></i>
                     <span class="font-semibold text-sm"
                       >{{ $t("activeMonth") }}:</span
                     >
-                    <span class="text-lg text-gray-800">{{
+                    <span class="text-xs text-gray-800">{{
                       paymentSetting.activeMonth
                     }}</span>
                   </div>
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-alt text-orange-500"></i>
@@ -438,7 +441,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted px-4rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-calendar-times text-red-500"></i>
@@ -452,7 +455,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted px-4rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-clock text-yellow-500"></i>
@@ -466,7 +469,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted px-4rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-clock text-pink-400"></i>
@@ -480,7 +483,7 @@
                 </div>
 
                 <div
-                  class="bg-white border-b border-dotted p-4 rounded-md shadow-sm border-b border-gray-500"
+                  class="bg-white border-b border-dotted px-4rounded-md shadow-sm border-b border-gray-500"
                 >
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-clock text-red-500"></i>
@@ -499,8 +502,8 @@
             <div class="flex mt-6">
               <button    @click="
                   showPaymentEditingActivating = !showPaymentEditingActivating
-                " class="custom-button w-1/2 hover:scale-105">
-                <i class="fas fa-edit text-pink-500 mr-2 "></i>{{ $t("Edit") }}
+                " class="custom-button  hover:scale-105">
+                <i class="fas fa-edit text-white mr-2 "></i>{{ $t("Edit") }}
               </button>
             </div>
           </div>
@@ -511,12 +514,12 @@
     <div v-if="showPaymentEditingActivating" class="">
       <transition name="fade" mode="out-in">
         <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-75 p-4 "
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-80 px-4 "
         >
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
-            <div class="flex flex-row items-center">
+          <div class="bg-white rounded-lg  border border-cyan-500 px-3 py-6 lg:p-6  ">
+            <div class="flex flex-row items-center ">
               <!-- Text on the left -->
-              <div>Edit Regular Payment</div>
+              <div>Edit  Payment Setting</div>
 
               <!-- Icon on the right -->
               <div
@@ -542,10 +545,11 @@
             </div>
 
             <hr class="my-4 md:min-w-full bg-red-500 " />
-            <div class="">
-              <form action.prevent="" class="py-5 h-96 ">
-                <div class="flex flex-col md:flex-row md:space-x-5 scroll-y h-64" >
-                  <div class="flex flex-col">
+
+            <div class="w-full">
+              <form action.prevent="" class="w-96  ">
+               
+                  <div class="flex flex-col h-96 overflow-y-auto ">
                     <div class="mb-4">
                       <label class="custom-label" for="amount">
                         {{ $t("regularAmount") }}
@@ -634,9 +638,9 @@
                       </select>
                       
                     </div>
-                  </div>
+              
 
-                  <div class="flex flex-col">
+              
                     <div class="mb-4">
                       <label class="custom-label" for="activeMonth">
                         {{ $t("activeMonth") }}
@@ -702,9 +706,6 @@
                         class="custom-input"
                         v-model="paymentSetting.penalityLate5Days"
                       />
-
-
-                     
                     </div>
                     <div class="mb-4">
                       <label class="custom-label">
@@ -732,8 +733,6 @@
                         v-model="paymentSetting.penalityLateAbove10Days"
                       />
                     </div>
-                    
-                  </div>
                 </div>
 
                 <div class="flex flex-col">
@@ -832,26 +831,25 @@
                     >
                       Payment Setting  is already exist for the selected month and can not be activated
                     </p>
-
-              
                 <button
                   v-if="!paymentActivate"
                   @click.prevent="editPaymentSetting()"
-                  type="submit"
-                  class="hover:scale-105 bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded mt-5 "
+                
+                  class="custom-button w-1/2 mt-5 "
                 >
-                  <i class="fas fa-save mr-3 text-pink-500"></i>{{ $t("update") }}
+                  <i class="fas fa-save text-white mr-2"></i>{{ $t("update") }}
 
 
                 </button>
+
                 <button
-                  v-if="paymentActivate"
+              v-if="paymentActivate"
                   @click.prevent="activatePaymentSetting()"
-                  type="submit"
-                  class="bg-indigo-800 hover:bg-blue-700 text-white py-2 px-4 rounded mt-5"
-                >
-                  {{ $t("activate") }}
-                </button>
+              class="custom-button  w-1/2"
+            >
+              <i class="fa fa-check mr-2"></i>{{ $t("Confirm") }}
+            </button>
+         
                 </div>
                 
               </form>
@@ -891,7 +889,7 @@
                 </p>
                 <button
                   @click="showSuccess = false"
-                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 py-2 px-4rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   {{ $t("ok") }}
                 </button>
@@ -934,7 +932,7 @@
                 </p>
                 <button
                   @click="showError = false"
-                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 py-2 px-4rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
                 >
                   {{ $t("ok") }}
                 </button>

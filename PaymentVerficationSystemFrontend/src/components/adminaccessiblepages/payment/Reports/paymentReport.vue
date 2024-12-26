@@ -1,23 +1,11 @@
 
 <template>
   <div class="p-4 border border-gray-300 mt-5">
-         <!-- // slect year year -->
-    <div class="flex flex-row mb-6 space-x-3">
-        <label for="month" class="block text-sm font-medium text-gray-700">Year</label>
-        <select
-         @change="getPaymentBasedOnYear()"
-          v-model="year"
-          class="custom-select"
-        >
-          <option  v-for="year in $years" :key="year" :value="year">{{ year }}</option>
-        </select>
-    </div>
-
-    <div class=" -mt-1 text-xs">
-      <div class="mb-4">
+    <div class="flex flex-col lg:flex-row w-full space-x-0 lg:space-x-4 mb-5 lg:mb-0">
+      <div class="mb-4  w-full lg:w-1/2">
         <div class="flex flex-col">
           <div class="flex flex-row space-x-4">
-            <label for="Search User" class="block text-sm font-medium text-gray-700">Search</label>
+            <label for="Search User" class="custom-label mt-4">Search</label>
             <input
               @keyup.enter="searchUser"
               v-model="keyword"
@@ -30,6 +18,22 @@
           <!-- <p v-if="noUser" class="text-red-500 ml-32"><strong>Hoops! there is no user with this Id <span class="text-blue">{{ currentId }}</span></strong></p> -->
         </div>
       </div>
+      <div class="flex flex-row w-full lg: w-1/2 space-x-4">
+        <label for="month" class="custom-label mt-3 ">Year</label>
+        <select
+         @change="getPaymentBasedOnYear()"
+          v-model="year"
+          class="custom-select"
+        >
+          <option  v-for="year in $years" :key="year" :value="year">{{ year }}</option>
+        </select>
+    </div>
+    </div>
+   
+
+
+   
+
       <div v-if="showList" class="border-t-4 border-b-4 border-pink-900 border-dotted h-64 overflow-y-auto" id="">
         <div
           class="bg-white px-4 border-b border-blue-900 border-dotted cursor-pointer"
@@ -47,7 +51,7 @@
           </div>
         </div>
       </div>
-    </div>
+  
 
     <!-- //table  -->
      <div class="overflow-x-auto text-xs ">
@@ -108,7 +112,7 @@
 export default {
   data() {
     return {
-      showList:false,
+      showList:true,
       showTable: false,
       showPaymentNotFound:false,
       selectYear:false,

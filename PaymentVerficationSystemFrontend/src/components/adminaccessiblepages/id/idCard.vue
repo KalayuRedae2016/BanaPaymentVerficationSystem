@@ -2,7 +2,7 @@
   <div class="mb-10 px-2 py-2">
     <div class="border-b border-indigo-800 mb-5">
       <div class="flex flex-row mb-5">
-        <h1 class="font-extrabold text-indigo-800">{{ $t("idCard") }}</h1>
+        <h1 class="font-extrabold text-blue-500">{{ $t("idCard") }}</h1>
       </div>
     </div>
     <div class="py-6 -mt-1">
@@ -28,21 +28,18 @@
           class="p-4 border-b border-blue-900 border-dotted cursor-pointer text-gray-500 text-sm"
           v-for="(user, userIndex) in filteredUsers"
           :key="userIndex"
-          :class="[
-            'p-4 border-b cursor-pointer bg-white hover:bg-blue-100 text-bold',
-            {
-              ' ': user.userselected, // Background color when selected
-              '': !user.userselected, // Default background color
-            },
-          ]"
+         
           @click="toggleUserSelection(user)"
         >
-          <div class="flex flex-row space-x-5 md:space-x-12 font-bold ">
-            <p class="text-blue-800 ">{{ user.userCode }}</p>
-            <p class="text-gray-600">{{ user.fullName }}</p>
+          <div class="flex flex-row font-bold ">
+            <p class="text-blue-800 w-1/4">{{ user.userCode }}</p>
+            <p class="text-gray-600 w-2/3">{{ user.fullName }}</p>
+            <p class="text-gray-600 w-2/3">{{ user.email }}</p>
           </div>
         </div>
       </div>
+
+
     </div>
 
     <div v-if="showIdCard" class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300 rounded-xl shadow-lg  space-y-6 lg:space-y-0 lg:space-x-8">
@@ -250,7 +247,7 @@ import html2pdf from "html2pdf.js";
 export default {
   data() {
     return {
-      showList:false,
+      showList:true,
       imageData: "",
       selectedUser: "",
       showIdCard: false,
@@ -268,6 +265,9 @@ export default {
       Tel: "0967740501",
       Address: "Mekelle Kedemay Weyane",
       City: "Mekelle",
+      filteredUsers:{
+
+      }
     };
   },
   watch: {
@@ -276,8 +276,9 @@ export default {
       this.searchUsers(this.keyword);
     },
   },
-  mounted() {
-    this.$apiClient
+  
+ mounted() {
+     this.$apiClient
       .get("/api/v1/users/", {
         params: {
           isActive: true,
@@ -286,10 +287,9 @@ export default {
       .then((response) => {
         console.log("response data", response.data);
         if (response.data !== null) {
+          //alert(this.users)
           this.users = response.data.users;
-          this.searchedClients = this.users;
-          console.log("this users", this.users);
-          console.log("this.imageData", this.imageData);
+          this.filteredUsers = this.users;
         }
       })
       .catch((error) => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-  <div class="flex justify-center">
+  <div class="flex justify-center mt-16">
     <div
       class="w-full max-w-md sm:max-w-lg py-8 px-4 sm:px-20 md border border-gray-100 mt-16 rounded-2xl shadow-lg"
     >
@@ -9,12 +9,12 @@
       <div class="grid place-items-center">
         <div>
           <img
-            src="../assets/img/bana.PNG"
+             src="../assets/img/banamall1.jpg"
             class="mb-5"
             style="height: 100px; width: 100px"
           />
         </div>
-        <h1>Banapvs.com</h1>
+      
       </div>
 
       <div v-if="showError" class=" mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
@@ -31,12 +31,9 @@
 
       <div v-if="resetPasswordVisible" class="">
         <div class="">
-          <h2 class="text-2xl font-bold mb-4 text-center text-blue-800">
+          <h2 class="text-lg font-bold mb-4 text-center text-blue-800">
             Change Your Password
           </h2>
-          <p class="text-gray-600 mb-6 text-center">
-            Enter your New password to update your account.
-          </p>
           <input
             v-model="password"
             type="password"
@@ -51,7 +48,7 @@
           />
           <button
             @click.prevent="changePassword()"
-            class="mt-5 w-full bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            class="custom-button w-full mt-6"
           >
             {{ $t("Reset Password") }}
           </button>
@@ -59,8 +56,6 @@
       </div>
     </div>
   </div>
-
-  
 </div>
 </template>
 <script>

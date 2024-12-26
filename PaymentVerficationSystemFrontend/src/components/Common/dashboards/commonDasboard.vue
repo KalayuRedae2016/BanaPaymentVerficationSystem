@@ -1,5 +1,6 @@
 <template>
   <div class="bg-gray-200">
+   <commonSmoozer ref="smoozer"/>
     <div class="relative md:ml-64">
       <header
         class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-md px-4 border-b border-gray-200"
@@ -11,14 +12,14 @@
             alt="Logo"
             class="h-10 w-10 rounded-full"
           />
-          <span class="text-lg font-semibold text-gray-700">Bana</span>
+          <span class="text-lg font-semibold text-blue-500">Bana</span>
         </div>
 
         <!-- Right Section -->
         <div class="flex items-center space-x-6">
           <p class="hidden">locale: {{ locale }}</p>
           <select
-            class="w-16 md:w-32 text-sm text-indigo-800 border border-gray-300 rounded-md px-2 py-1 focus:ring focus:ring-blue-300"
+            class="w-16 md:w-32 text-sm text-blue-500 border border-gray-300 rounded-md px-2 py-1 focus:ring focus:ring-blue-300"
             @change="changeLanguage"
           >
             <option value="" disabled selected>{{ $t("Language") }}</option>
@@ -30,7 +31,7 @@
           <!-- Notifications -->
           <div class="relative">
             <button
-              class="relative text-gray-700 hover:text-blue-500 focus:outline-none"
+              class="relative text-blue-500 hover:text-blue-500 focus:outline-none"
               aria-label="Notifications"
               @click="toggleDropdown('notifications')"
             >
@@ -60,7 +61,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  class="block px-4 py-2 text-blue-500 hover:bg-gray-100"
                   @click="accountSetting"
                 >
                   {{ $t("Account Setting") }}
@@ -69,7 +70,7 @@
               <li>
                 <a
                   href="#"
-                  class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  class="block px-4 py-2 text-blue-500 hover:bg-gray-100"
                   @click="logout"
                 >
                   {{ $t("logout") }}
@@ -80,7 +81,7 @@
 
           <!-- Sidebar Toggle -->
           <button
-            class="md:hidden text-xl text-gray-700 focus:outline-none"
+            class="md:hidden text-xl text-blue-500 focus:outline-none"
             @click="toggleDropdown('sidebar')"
           >
             <i class="fas" :class="[sidebarVisible ? '' : 'fa-bars']"></i>
@@ -113,7 +114,7 @@
                   class="w-10 h-10 rounded-full mr-3"
                 />
                 <div>
-                  <p class="text-sm font-medium text-gray-800">
+                  <p class="text-sm font-bold text-blue-500">
                     Paid for {{ notification.activeYear}} - {{ notification.activeMonth }}
                   </p>
                   <p class="text-xs text-gray-500">
@@ -158,7 +159,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-tachometer-alt mr-3 text-teal-600"></i>
@@ -176,7 +177,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-building mr-3 text-teal-600"></i>
@@ -193,7 +194,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-users mr-3 text-teal-600"></i>
@@ -210,7 +211,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-id-card mr-3 text-teal-600"></i>
@@ -227,7 +228,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-id-card mr-3 text-teal-600"></i>
@@ -244,7 +245,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-envelope mr-3 text-teal-600"></i>
@@ -263,7 +264,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-tachometer-alt mr-3 text-teal-600"></i>
@@ -280,7 +281,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-building mr-3 text-teal-600"></i>
@@ -297,7 +298,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-users mr-3 text-teal-600"></i>
@@ -314,7 +315,7 @@
                 }"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <i class="fas fa-id-card mr-3 text-teal-600"></i>
@@ -326,7 +327,7 @@
                 class="mb-32 border-t border-gray-300 items-center bg-white hover:bg-gray-100 transition"
               >
                 <a
-                  class="ml-4 flex items-center text-gray-800 py-3 font-medium"
+                  class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                   href="#"
                 >
                   <span></span>
@@ -393,11 +394,14 @@
 </template>
   <script>
 import SidebarComponent from "../layouts/Sidebar.vue";
+import commonSmoozer from "../commonSmoozer.vue"
 import { mapGetters } from "vuex";
+
 export default {
   name: "dashboard-page",
   components: {
     SidebarComponent,
+    commonSmoozer
   },
   data() {
     return {
@@ -467,11 +471,20 @@ export default {
     },
   },
 
-  mounted() {
+ async  mounted() {
+
+//await this.$refs.smoozer.startSmoothReload();
+
+// setTimeout(() => {
+//   this.$store.dispatch("commitReloading", false);
+//   this.$refs.smoozer.startSmoothReload();
+// }, 2000);
+
+
     window.addEventListener("resize", this.checkScreenSize);
     this.checkScreenSize();
 
-    this.$apiGetById("/api/v1/users", this.userId)
+   await  this.$apiGetById("/api/v1/users", this.userId)
       .then((response) => {
         console.log("response in the edit client mounted: ", response);
         this.profileData = "data:image/jpeg;base64," + response.imageData;
@@ -497,15 +510,23 @@ export default {
         }
        // console.log("finally");
       });
-    this.fetchNotifications();
-    setInterval(this.fetchNotifications, 5000);
+    await this.fetchNotifications();
+
+    this.showToast();
+   // setInterval(this.fetchNotifications, 5000);
   },
   methods: {
+    showToast(){
+      //alert("toast")
+      this.$toast.success("This is a success message!");
+    },
     closeDropDownSidebar() {
       this.sidebarVisible = false;
     },
 
     fetchNotifications() {
+      this.$toast.success("This is a success message!");
+
       const params = {
         userId: this.userId,
         role: this.role,

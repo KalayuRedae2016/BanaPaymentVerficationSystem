@@ -1,5 +1,5 @@
 import axios from "axios"; // Import apiClient and baseUrl from globals
-
+import { formSchema } from "./formSchema";
 export function reloadPage() {
     setTimeout(() => {
         window.location.reload();
@@ -153,4 +153,96 @@ export async function apiPatch(url, id, data, customHeaders = {}) {
         console.log("error in patch", handledError)
         throw handledError; // Re-throw the error so the caller can catch it
     }
+    // Define this function in a file like utils.js or directly in your Vue app setup
+
+  
+  // Export for reuse in other file
 }
+export function isStrongPassword(password) {
+    const minLength = 8; // Minimum length requirement
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    
+    if (!password || password.length < minLength) {
+      return {
+        valid: false,
+        message: `Password must be at least ${minLength} characters long`,
+      };
+    }
+  
+    if (!regex.test(password)) {
+      return {
+        valid: false,
+        message: 'Password must include uppercase, lowercase, number, and special character',
+      };
+    }
+  
+    return {
+      valid: true,
+      message: 'Password is strong',
+    };
+  }
+
+  // utils/validation.js
+// utils/validate.js
+
+
+
+// utils/validation.js
+
+// Assuming this is the 'validateField.js' file
+export function validateField(formName, fieldName, value, formSchema) {
+    const fieldSchema = formSchema[formName]?.fields[fieldName];
+  
+    if (!fieldSchema) {
+      console.error('No schema found for this field');
+      return { valid: true, message: '' };
+    }
+  
+    // Default error message handler
+    const generateErrorMessage = (rule) => {
+      switch (rule) {
+        case 'required':
+          return `${fieldName} is required`;
+        case 'minLength':
+          return `${fieldName} must be at least ${fieldSchema.minLength} characters long`;
+        case 'maxLength':
+          return `${fieldName} cannot exceed ${fieldSchema.maxLength} characters`;
+        case 'pattern':
+          return `Please enter a valid ${fieldName}`;
+        case 'match':
+          return `${fieldName} must match the password`;
+        default:
+          return `${fieldName} is invalid`;
+      }
+    };
+  
+    // Validation: Required
+    if (fieldSchema.rules.required && !value) {
+      return { valid: false, message: generateErrorMessage('required') };
+    }
+  
+    // Validation: Min Length
+    if (fieldSchema.rules.minLength && value.length < fieldSchema.rules.minLength) {
+      return { valid: false, message: generateErrorMessage('minLength') };
+    }
+  
+    // Validation: Max Length
+    if (fieldSchema.rules.maxLength && value.length > fieldSchema.rules.maxLength) {
+      return { valid: false, message: generateErrorMessage('maxLength') };
+    }
+  
+    // Validation: Pattern (Regex)
+    if (fieldSchema.rules.pattern && !fieldSchema.rules.pattern.test(value)) {
+      return { valid: false, message: generateErrorMessage('pattern') };
+    }
+  
+    // Validation: Match (for fields like confirmPassword)
+    if (fieldSchema.rules.match && value !== fieldSchema.rules.match) {
+      return { valid: false, message: generateErrorMessage('match') };
+    }
+  
+    // If all validations pass
+    return { valid: true, message: '' };
+  }
+  
+  

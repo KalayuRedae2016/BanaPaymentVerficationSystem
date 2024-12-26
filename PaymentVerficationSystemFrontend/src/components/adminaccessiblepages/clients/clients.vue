@@ -29,7 +29,7 @@
               <!-- Add New Client Button -->
               <div>
                 <button
-                  class="bg-blue-800 border border-indigo-500 h-12 px-4 flex items-center text-white font-semibold rounded-lg shadow-sm transition-transform transform hover:bg-blue-500 hover:-translate-y-0.5"
+                  class="bg-blue-800 border border-indigo-500 h-12 px-4 flex items-center text-white font-bold rounded-lg shadow-sm transition-transform transform hover:bg-blue-500 hover:-translate-y-0.5"
                   @click="navigateToCreateClient"
                 >
                   <svg
@@ -54,51 +54,52 @@
             <div class="overflow-x-auto bg-gray-50 rounded-md ">
               <table class="w-full border-collapse bg-white rounded-md">
                 <thead>
-                  <tr class="bg-blue-50 text-blue-500">
+                  <tr class="bg-blue-50 text-blue-500 ">
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-extraboldbold tracking-wide text-left"
                     >
                       {{ $t("number") }}
                     </th>
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
                       {{ $t("userCode") }}
                     </th>
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
                       {{ $t("fullName") }}
                     </th>
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
                       {{ $t("email") }}
                     </th>
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
                       {{ $t("createdAt") }}
                     </th>
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
                       {{ $t("updatedAt") }}
                     </th>
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
-                      {{ $t("deactivate") }}
+                      {{ $t("detail") }}
                     </th>
+                   
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
                       {{ $t("resetPassword") }}
                     </th>
                     <th
-                      class="p-3 text-sm font-semibold tracking-wide text-left"
+                      class="p-3 text-sm font-bold tracking-wide text-left"
                     >
-                      {{ $t("detail") }}
+                      {{ $t("deactivate") }}
                     </th>
                   </tr>
                 </thead>
@@ -148,16 +149,14 @@
                     </td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                       <button
-                        @click="
-                          showDeactivateModal = !showDeactivateModal;
-                          userIdToBeDeactivated = searchClient._id;
-                        "
-                        class="flex items-center px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full"
+                        @click="navigateToInClient(searchClient._id)"
+                        class="flex items-center px-3 py-1 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full"
                       >
-                        <i class="fas fa-user-times mr-2"></i>
+                        <i class="fas fa-eye mr-2"></i>
                         {{ $t("") }}
                       </button>
                     </td>
+                  
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                       <button
                         @click="
@@ -172,10 +171,13 @@
                     </td>
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                       <button
-                        @click="navigateToInClient(searchClient._id)"
-                        class="flex items-center px-3 py-1 bg-cyan-500 hover:bg-cyan-600 text-white rounded-full"
+                        @click="
+                          showDeactivateModal = !showDeactivateModal;
+                          userIdToBeDeactivated = searchClient._id;
+                        "
+                        class="flex items-center px-3 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full"
                       >
-                        <i class="fas fa-eye mr-2"></i>
+                        <i class="fas fa-user-times mr-2"></i>
                         {{ $t("") }}
                       </button>
                     </td>

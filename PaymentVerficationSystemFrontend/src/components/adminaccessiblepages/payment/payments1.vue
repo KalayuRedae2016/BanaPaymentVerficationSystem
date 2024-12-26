@@ -1,7 +1,7 @@
 <template>
   <div class="root div">
     <div class="px-3 md:px-4 py-3">
-      <h1 class="text-indigo-800 font-bold">{{ $t("paymentSettings") }}</h1>
+      <h1 class="text-blue-500 font-bold text-xl">{{ $t("Payment Management") }}</h1>
     </div>
 
     <div class="border-t border-indigo-800 mt-1 py-4">
@@ -12,8 +12,8 @@
             :key="index"
             :class="` py-2 px-2 mb-2 mr-2 ${
               activeTab === index
-                ? 'bg-gray-300 border-b-4 border-blue-500 text-blue-500 font-bold text-md'
-                : 'bg-gray-100 text-indigo-700  font-bold text-md'
+                ? 'bg-gray-100 border-b-4 border-blue-500 text-blue-500 font-bold text-md'
+                : 'text-blue-500  font-semibold text-md'
             } `"
             @click="activateTab(index)"
           >
@@ -21,14 +21,14 @@
           </button>
         </div>
 
-        <div class="border-t border-blue-800">
+        <div class="border-t border-blue-800  ">
           <div v-show="activeTab === 0" class="">
             <div class="">
               <!-- Payment Settings Options -->
               <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
-                <div class="flex flex-col sm:flex-row gap-6">
+                <div class="flex flex-col sm:flex-row gap-6 ">
                   <!-- Current Payment Setting -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4 ">
                     <input
                      @click="consistentRadio('currentSetting')"
                       v-model="paymentSettingStatus"
@@ -39,7 +39,7 @@
                     />
                     <label
                       for="current-setting"
-                      class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+                      class="ml-3 text-sm font-medium  hover:text-indigo-600 transition"
                     >
                       <i class="fas fa-cog mr-2 text-indigo-500"></i
                       >{{ $t("currentPaymentSetting") }}
@@ -47,7 +47,7 @@
                   </div>
 
                   <!-- Payment Setting History -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4">
                     <input
                     @click="consistentRadio('paymentSettingHistory')"
                       v-model="paymentSettingStatus"
@@ -87,7 +87,7 @@
               <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
                   <!-- Confirm New Payment -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4">
                     <input
                      @click="consistentRadio('newPayment')"
                       v-model="paymentStatus"
@@ -108,7 +108,7 @@
                   </div>
 
                   <!-- Credit Transfer -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4">
                     <input
                     @click="consistentRadio('creditTransfer')"
                       v-model="paymentStatus"
@@ -147,7 +147,7 @@
               <div class="bg-white shadow-sm border border-gray-200 pt-6 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
                   <!-- All Payments -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4">
                     <input
                     @click="consistentRadio('allPayments')"
                       v-model="allPaymentsAndTransferedPayments"
@@ -166,7 +166,7 @@
                   </div>
 
                   <!-- Transferred Payments -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4 ">
                     <input
                     @click="consistentRadio('transferedPayments')"
                       v-model="allPaymentsAndTransferedPayments"
@@ -206,7 +206,7 @@
               <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
                   <!-- User Level Report -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4">
                     <input
                     @click="consistentRadio('userLevelReport')"
                       v-model="paymentReportStatus"
@@ -225,7 +225,7 @@
                   </div>
 
                   <!-- Org Level Report -->
-                  <div class="flex items-center">
+                  <div class="flex items-center mx-4">
                     <input
                      @click="consistentRadio('orgLevelReport')"
                       v-model="paymentReportStatus"
