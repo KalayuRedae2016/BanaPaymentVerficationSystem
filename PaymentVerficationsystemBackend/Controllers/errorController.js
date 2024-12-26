@@ -75,6 +75,7 @@ const sendErrorProd = (err, req, res) => {
   // B) RENDERED WEBSITE
   // A) Operational, trusted error: send message to client
   if (err.isOperational) {
+    console.log("ee",err.message)
     return res.status(err.statusCode).render('error', {
       title: 'Something went wrong!',
       msg: err.message
@@ -107,7 +108,7 @@ module.exports = (err, req, res, next) => {
     if (error.name === 'ValidationError') error = handleValidationErrorDB(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
     if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
-
+    console.log(error)
     sendErrorProd(error, req, res);
   }
 };

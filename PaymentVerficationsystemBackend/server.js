@@ -7,7 +7,7 @@ connectDB();
 const PORT = process.env.PORT || 8081;
 
 const server=app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on https://localhost:${PORT}`);
 });
 
 //handle unhandled promise rejections
