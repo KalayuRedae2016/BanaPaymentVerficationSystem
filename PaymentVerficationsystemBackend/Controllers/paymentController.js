@@ -3,12 +3,10 @@ const Organization = require('../Models/organizationModel');
 const PaymentSetting = require('../Models/paymentSettingModel');
 const User = require('../Models/userModel');
 const Payment = require('../Models/paymentModel');
-const PaymentLog = require('../Models/paymentLog'); // Import the PaymentLog model
 
 const { calculateBalances } = require('../utils/calculateBalances')
-const { fetchAndProcessPayments } = require('../utils/paymentUtils');
-const { processPaymentItems } = require('../utils/paymentUtils');
 const { formatDate } = require("../utils/formatDate")
+const {calculateTotalPaidAndPenalityAmount}=require('../utils/calculateTotalPaidAndPenalityAmount')
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
@@ -141,7 +139,7 @@ exports.searchBills = async (req, res) => {
             customerName: payment.user.fullName,
             mobile: payment.user.phoneNumber || '',
             amount: payment[type].amount,
-            penality: type === 'penality' ?payment[type].amount: payment[type].penality||0, // Use accumulated penality for service type
+            penality: type === 'penality' ? payment[type].amount : payment[type].penality || 0, // Use accumulated penality for service type
             servicefee: 0,
             billCCY: 'ETB',
             PaymentTerm: `${type} Payment for active month ${payment.activeMonth} is ${payment.status}`,
@@ -158,7 +156,7 @@ exports.searchBills = async (req, res) => {
         }
       }
     }
-  console.log(items)
+    console.log(items)
     return res.status(200).json({
       error: false,
       status: 1,
@@ -175,7 +173,7 @@ exports.searchBills = async (req, res) => {
 exports.getMoreBills = async (req, res) => {
   try {
     const paymentTypeIdsArray = req.params.paymentTypeIds.split('*');
-    const bankType = req.apiKeyData.bankType; 
+    const bankType = req.apiKeyData.bankType;
 
     const billQuery = {
       isPaid: false,
@@ -244,7 +242,7 @@ exports.getMoreBills = async (req, res) => {
               : paymentType.amount,
             paymentTerm: `${type.charAt(0).toUpperCase() + type.slice(1)
               } Payment for active month ${bill.activeMonth} is ${bill.status}`,
-            paymentCode:(type === "service" || type === "penality") ? "Service-Payment" : "Block_payment",
+            paymentCode: (type === "service" || type === "penality") ? "Service-Payment" : "Block_payment",
             isPaid: paymentType.isPaid,
             orgId: organization._id,
             orgName: organization.companyName,
@@ -275,10 +273,10 @@ exports.getMoreBills = async (req, res) => {
 };
 exports.confirmBills = async (req, res) => {
   try {
-    const bankType = req.apiKeyData.bankType; 
+    const bankType = req.apiKeyData.bankType;
     // console.log(req.apiKeyData.id)
     const transactions = req.body; // Array of transactions
-    
+
     if (!Array.isArray(transactions) || transactions.length === 0) {
       return res.status(400).json({ error: 'No transactions provided' });
     }
@@ -354,7 +352,7 @@ exports.confirmBills = async (req, res) => {
       }
       if (subdocumentField === "penality") {
         const penalityAmount = unpaidBill.penality.amount
-        unpaidBill["penality"].amount = penalityAmount||amount;//check
+        unpaidBill["penality"].amount = penalityAmount || amount;//check
         unpaidBill["penality"].bankType = bankType;
         unpaidBill["penality"].TTNumber = transactionNumber;
         unpaidBill["penality"].penality = unpaidBill["penality"].penality || 0;
@@ -440,8 +438,8 @@ exports.confirmBills = async (req, res) => {
         unpaidBill.status = 'confirmed';
         unpaidBill.confirmedDate = new Date();
         unpaidBill.latest = true;
-        unpaidBill.confirmedID=req.apiKeyData.id,
-        unpaidBill.confirmationMethod="Bank-confirmed"
+        unpaidBill.confirmedID = req.apiKeyData.id,
+          unpaidBill.confirmationMethod = "Bank-confirmed"
       }
 
       // Save the updated bill
@@ -468,7 +466,7 @@ exports.confirmBills = async (req, res) => {
 };
 
 exports.searchPayments = catchAsync(async (req, res, next) => {
-  const { keyword, isPaid,activeYear,activeMonth} = req.query;
+  const { keyword, isPaid, activeYear, activeMonth } = req.query;
 
   // Validate keyword
   if (!keyword) {
@@ -490,8 +488,8 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     ],
     //isPaid:false,
     isPaid: isPaid === undefined ? false : isPaid, // Ensure `isPaid` is handled
-   ...(activeYear&&{activeYear}),
-   ...(activeMonth&&{activeMonth})
+    ...(activeYear && { activeYear }),
+    ...(activeMonth && { activeMonth })
   };
 
   //console.log("Payment Query:", paymentQuery);
@@ -544,7 +542,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       registrationFee: payment.registrationFee || 0,
       totalPenality: payment.penality?.amount || 0,
       totalExpectedAmount: payment.totalExpectedAmount || 0,
-      totalPaidAmount:payment.totalPaidAmount,
+      totalPaidAmount: payment.totalPaidAmount,
       isPaid: payment.isPaid || false,
       status: payment.status || "N/A",
       latest: payment.latest || false,
@@ -579,38 +577,35 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
 });
 
 exports.confirmPayments = catchAsync(async (req, res, next) => {
-  const { billCode,userId,urgent, regular, subsidy, service, penality,paymentDate} = req.body;
-  if(!billCode||!userId){
+  const { billCode, userId, urgent, regular, subsidy, service, penality, paymentDate } = req.body;
+  if (!billCode || !userId) {
     return next(new AppError(`billCode or UserId is required`))
   }
-  if (!urgent && !regular && !subsidy && !service&& !penality) {
+  if (!urgent && !regular && !subsidy && !service && !penality) {
     return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",))
 
   }
-  const user=await User.findById(userId)
-  if(!user){
-    return next(new AppError("User is not found"),400)
+  const user = await User.findById(userId)
+  if (!user) {
+    return next(new AppError("User is not found"), 400)
   }
-  
-  console.log(user.fullName)
-  console.log(user.role)
   // Find the unpaid bill by billCode
-  const unpaidBill = await Payment.findOne({ isPaid: false, billCode });
+  let unpaidBill = await Payment.findOne({ isPaid:false, billCode });
   if (!unpaidBill) {
-    return next(new AppError(`No unpaid bill found for billCode->${billCode}`,400))
+    return next(new AppError(`No unpaid bill found for billCode->${billCode}`, 400))
   }
 
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
-    const paidAt = isPaid?(updates.paidAt|| Date.now()) : null;
+    const paidAt = isPaid ? (updates.paidAt || Date.now()) : null;
     // const paidAt = isPaid?(updates.paidAt|| Date.now()) : null;
-    
+
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
       TTNumber: isPaid ? updates.TTNumber ?? existing.TTNumber : null,
-      penality: updates.penality?? existing.penality, // Updating penality amount
+      penality: updates.penality ?? existing.penality, // Updating penality amount
       isPaid,
       paidAt,
       daysLate: updates.daysLate ?? existing.daysLate,
@@ -622,29 +617,24 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   if (regular) unpaidBill.regular = updatePaymentField(unpaidBill.regular, regular);
   if (subsidy) unpaidBill.subsidy = updatePaymentField(unpaidBill.subsidy, subsidy);
   if (service) unpaidBill.service = updatePaymentField(unpaidBill.service, service);
-  if(penality&&penality.amount>0){
-    const requiredPayments=['urgent','regular','subsidy','service']
-    const unpaidTypes=requiredPayments.filter(type=>unpaidBill[type]?.amount&&!unpaidBill[type]?.isPaid)
+  if (penality && penality.amount > 0) {
+    const requiredPayments = ['urgent', 'regular', 'subsidy', 'service']
+    const unpaidTypes = requiredPayments.filter(type => unpaidBill[type]?.amount && !unpaidBill[type]?.isPaid)
     console.log(unpaidTypes.length)
-    if (unpaidTypes.length>0){
-      return next(new AppError(`Cannot pay penality. The following payment types must be fully paid first: ${unpaidTypes.join(', ')}`,400))
+    if (unpaidTypes.length > 0) {
+      return next(new AppError(`Cannot pay penality. The following payment types must be fully paid first: ${unpaidTypes.join(', ')}`, 400))
     }
-    unpaidBill.penality.amount=penality.amount,
-    unpaidBill.penality.bankType=penality.bankType,
-    unpaidBill.penality.TTNumber=penality.TTNumber,
-    unpaidBill.penality.penality=0
-    unpaidBill.penality.isPaid=penality.isPaid,
-    unpaidBill.penality.paidAt=penality.paidAt||Date.now()||null
-    unpaidBill.penality.daysLate=penality.daysLate||null
+    unpaidBill.penality.amount = penality.amount,
+      unpaidBill.penality.bankType = penality.bankType,
+      unpaidBill.penality.TTNumber = penality.TTNumber,
+      unpaidBill.penality.penality = 0
+    unpaidBill.penality.isPaid = penality.isPaid,
+      unpaidBill.penality.paidAt = penality.paidAt || Date.now() || null
+    unpaidBill.penality.daysLate = penality.daysLate || null
 
   }
-  const calculateTotalPaidAmount = () => {
-    unpaidBill.totalPaidAmount = unpaidBill.registrationFee || 0;
-    ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach(type => {
-      if (unpaidBill[type]?.isPaid) unpaidBill.totalPaidAmount += unpaidBill[type].amount;
-    });
-  };
-  calculateTotalPaidAmount();
+  
+  unpaidBill=calculateTotalPaidAndPenalityAmount(unpaidBill);// Use the utility function to calculate TotalPaidAmount & Penality
   // Filter out payment types that have a non-zero amount
   const paymentsToCheck = [
     unpaidBill.urgent,
@@ -667,7 +657,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
       fullName: unpaidBill.fullName,
       totalAmount: unpaidBill.totalExpectedAmount,
       confirmedDate: new Date().toISOString(),
-      
+
     });
     const latestPayments = await Payment.find({ latest: true });
     if (latestPayments) {
@@ -678,9 +668,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     }
     // Generate QR code as data URL
     const qrCodeDataUrl = await QRCode.toDataURL(qrContent);
-    
-    // Convert data URL to a buffer
-    const base64Data = qrCodeDataUrl.replace(/^data:image\/png;base64,/, '');
+    const base64Data = qrCodeDataUrl.replace(/^data:image\/png;base64,/, '');// Convert data URL to a buffer
     const buffer = Buffer.from(base64Data, 'base64');
 
     // Directory to save QR code images
@@ -705,14 +693,14 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.status = 'confirmed';
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
-    unpaidBill.confirmedID=userId,
-    unpaidBill.confirmationMethod="Admin-confirmed"
+    unpaidBill.confirmedID = userId,
+      unpaidBill.confirmationMethod = "Admin-confirmed"
 
   }
 
   // Save the updated bill
   await unpaidBill.save();
-  
+
   const formattedCreatedAt = unpaidBill.createdAt ? formatDate(unpaidBill.createdAt) : null;
   const formattedUpdatedAt = unpaidBill.updatedAt ? formatDate(unpaidBill.updatedAt) : null;
   const formattedConfirmedAt = unpaidBill.confirmedDate ? formatDate(unpaidBill.confirmedDate) : null;
@@ -724,7 +712,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   //     Your payment for ${unpaidBill.activeYear} in ${unpaidBill.activeMonth} has been confirmed.
   //     Best regards,
   //     The Bana Marketing Group Team;`
-    //await sendEmail({ email, subject, message });
+  //await sendEmail({ email, subject, message });
   //console.log(unpaidBill)
   res.status(200).json({
     message: 'Payment types updated successfully',
@@ -737,22 +725,17 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.updatePayments = catchAsync(async (req, res, next) => {
-  const { billCode, urgent, regular, subsidy, service, penality} = req.body;
-  if(!billCode){
+  const { billCode, urgent, regular, subsidy, service, penality } = req.body;
+  if (!billCode) {
     return next(new AppError(`billCode is required to update Confirmed Payment`))
   }
-  if (!urgent && !regular && !subsidy && !service&& !penality) {
+  if (!urgent && !regular && !subsidy && !service && !penality) {
     return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",))
 
   }
-  // Find the unpaid bill by billCode
-  const unpaidBill = await Payment.findOne({ isPaid: false, billCode });
-  if (!unpaidBill) {
-    return next(new AppError(`No unpaid bill found for billCode->${billCode}`,400))
-  }
 
-  // Find the unpaid bill by billCode
-  const payment = await Payment.findOne({ isPaid: true, billCode });
+  // Find the uPaid bill by billCode
+  let payment = await Payment.findOne({ isPaid: true, billCode });
   if (!payment) {
     return res.status(404).json({ error: 'No Paid bill found' });
   }
@@ -778,6 +761,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
   if (service) payment.service = updatePaymentField(payment.service, service);
   if (penality) payment.penality = updatePaymentField(payment.penality, penality);
 
+  payment=calculateTotalPaidAndPenalityAmount(payment)
   // Filter out payment types that have a non-zero amount
   const paymentsToCheck = [
     payment.urgent,
@@ -976,7 +960,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const bulkUpdates = [];
 
   for (let payment of payments) {
-    const { _id: paymentId, paymentSetting: settingId, regular, urgent, subsidy,baseAmount,registrationFee} = payment;
+    const { _id: paymentId, paymentSetting: settingId, regular, urgent, subsidy, baseAmount, registrationFee } = payment;
 
     // Fetch related PaymentSetting
     const paymentSetting = await PaymentSetting.findById(settingId);
@@ -1045,8 +1029,8 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
         'urgent.daysLate': urgentPenalty.daysLate,
         'subsidy.penality': subsidyPenalty.penality,
         'subsidy.daysLate': subsidyPenalty.daysLate,
-        'penality.amount':totalPenaltyAmount,
-        'totalExpectedAmount':baseAmount+registrationFee+totalPenaltyAmount
+        'penality.amount': totalPenaltyAmount,
+        'totalExpectedAmount': baseAmount + registrationFee + totalPenaltyAmount
       };
     }
 
@@ -1069,7 +1053,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
 exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   const { userCode, activeYear, activeMonth } = req.query;
-  
+
 
   if (!userCode || !activeYear || !activeMonth) {
     return next(new AppError("either userCode or activeYear or activeMonth is missed, please try again.", 400));
@@ -1087,7 +1071,7 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   };
   console.log(req.query)
   const paymentsWithYear = await Payment.findOne(paymentQueryWithYear);
-  const user=await User.findOne({userCode:searchPattern})
+  const user = await User.findOne({ userCode: searchPattern })
   console.log(user.fullName)
 
   if (!paymentsWithYear) {
@@ -1163,84 +1147,84 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
 //   }
 // });
 
-exports.getPaymentNotifications =catchAsync(async (req, res,next) => {
-    const { userId,role} = req.query; // Query parameters for user or admin
-    if(!userId||!role){
-      return next(new AppError("Both userId and role must be provided", 400));
-    }
+exports.getPaymentNotifications = catchAsync(async (req, res, next) => {
+  const { userId, role } = req.query; // Query parameters for user or admin
+  if (!userId || !role) {
+    return next(new AppError("Both userId and role must be provided", 400));
+  }
 
-    const filter={isPaid:true,status:"confirmed"}
-    if(role==="User"){
-      filter.user=userId,
-      filter.seen=false
-    }else if(role==="Admin"){
-      filter.adminSeen=false
-    }else{
-      return next(new AppError("Invalid Role,must be User or Admin"),400)
-    }
+  const filter = { isPaid: true, status: "confirmed" }
+  if (role === "User") {
+    filter.user = userId,
+      filter.seen = false
+  } else if (role === "Admin") {
+    filter.adminSeen = false
+  } else {
+    return next(new AppError("Invalid Role,must be User or Admin"), 400)
+  }
 
-    const notifications = await Payment.find(filter).sort({ createdAt: -1 });
+  const notifications = await Payment.find(filter).sort({ createdAt: -1 });
 
-    //Fetch user details for each notification and attach imageData
-    const paymentNotifications = await Promise.all(
-        notifications.map(async (notification) => {
-            const user = await User.findById(notification.user);
-            let imageData = null;
+  //Fetch user details for each notification and attach imageData
+  const paymentNotifications = await Promise.all(
+    notifications.map(async (notification) => {
+      const user = await User.findById(notification.user);
+      let imageData = null;
 
-            if (user && user.profileImage) {
-                const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
+      if (user && user.profileImage) {
+        const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
 
-                try {
-                    imageData = fs.readFileSync(imageFilePath, 'base64');
-                } catch (err) {
-                    console.error(`Error reading image file: ${imageFilePath}`, err.message);
-                }
-            }
+        try {
+          imageData = fs.readFileSync(imageFilePath, 'base64');
+        } catch (err) {
+          console.error(`Error reading image file: ${imageFilePath}`, err.message);
+        }
+      }
 
-            return {
-                ...notification.toObject(),
-                user: user ? { _id: user._id, name: user.name, email: user.email } : null,
-                imageData,
-            };
-        })
-    );
-   
-    res.status(200).json({
-      length:notifications.length,
-      paymentNotifications:paymentNotifications
-     });
+      return {
+        ...notification.toObject(),
+        user: user ? { _id: user._id, name: user.name, email: user.email } : null,
+        imageData,
+      };
+    })
+  );
+
+  res.status(200).json({
+    length: notifications.length,
+    paymentNotifications: paymentNotifications
+  });
 })
-exports.markPaymentAsSeen = catchAsync(async (req, res,next) => {
-    const {paymentId} = req.params; 
-    const {role} = req.body;
+exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
+  const { paymentId } = req.params;
+  const { role } = req.body;
 
-    if (!paymentId ||!role) {
-      return next(new AppError('Either paymentId or role must be required.', 400));
-    }
+  if (!paymentId || !role) {
+    return next(new AppError('Either paymentId or role must be required.', 400));
+  }
 
-    const update={}
-    const filter={}
-    if(role==="User"){
-      filter._id=paymentId
-      filter.isPaid=true
-      filter.status="confirmed"
-      update.seen=true
-    }else if(role==="Admin"){
-      filter._id=paymentId
-      filter.isPaid=true
-      filter.status="confirmed"
-      update.adminSeen=true
-    }else{
-      return next(new AppError("Invalid Role,should be User or Admin"))
-    }
-   
-    const payment = await Payment.findByIdAndUpdate(filter, update, { new: true });
-    if (!payment) return next(new AppError(" 'Payment not found'"),400)
-    
-    res.status(200).json({ 
-      message: 'Notification marked as seen.',
-      payment 
-    });
+  const update = {}
+  const filter = {}
+  if (role === "User") {
+    filter._id = paymentId
+    filter.isPaid = true
+    filter.status = "confirmed"
+    update.seen = true
+  } else if (role === "Admin") {
+    filter._id = paymentId
+    filter.isPaid = true
+    filter.status = "confirmed"
+    update.adminSeen = true
+  } else {
+    return next(new AppError("Invalid Role,should be User or Admin"))
+  }
+
+  const payment = await Payment.findByIdAndUpdate(filter, update, { new: true });
+  if (!payment) return next(new AppError(" 'Payment not found'"), 400)
+
+  res.status(200).json({
+    message: 'Notification marked as seen.',
+    payment
+  });
 });
 
 exports.getAllPayments = catchAsync(async (req, res, next) => {
@@ -1252,7 +1236,7 @@ exports.getAllPayments = catchAsync(async (req, res, next) => {
   const searchPattern = new RegExp(keyword, 'i');
   const paymentQuery = {};
   if (isPaid) paymentQuery.isPaid = isPaid
-  console.log(paymentQuery,isPaid)
+  console.log(paymentQuery, isPaid)
   switch (keyword) {
     case "latestPayments":
       const latestSetting = await PaymentSetting.findOne({ latest: true });
@@ -1308,14 +1292,14 @@ exports.getLatestPayment = catchAsync(async (req, res, next) => {
   if (!userCode) {
     return next(new AppError('User code is missed, please try again.', 400))
   }
-  userCode=userCode.toUpperCase()
-  const user=await User.findOne({userCode:userCode})
-  if(!user){
+  userCode = userCode.toUpperCase()
+  const user = await User.findOne({ userCode: userCode })
+  if (!user) {
     return next(new AppError(`User is not found,Make sure userCode->${userCode} is Correct`, 400))
   }
 
-  const paymentQuery = { userCode: userCode, isPaid: true, status: 'confirmed',latest:true };
-  const latestPayment= await Payment.findOne(paymentQuery);
+  const paymentQuery = { userCode: userCode, isPaid: true, status: 'confirmed', latest: true };
+  const latestPayment = await Payment.findOne(paymentQuery);
   if (!latestPayment) {
     return res.status(200).json({ status: 1, message: `${user.fullName} has no Latest confirmed Payments -> userCode: ${userCode}`, payment: null });
   }
@@ -1324,7 +1308,7 @@ exports.getLatestPayment = catchAsync(async (req, res, next) => {
   const formattedUpdatedAt = latestPayment.updatedAt ? formatDate(latestPayment.updatedAt) : null;
   const formattedConfirmedAt = latestPayment.confirmedDate ? formatDate(latestPayment.confirmedDate) : null;
 
-  console.log("latestPayment",latestPayment)
+  console.log("latestPayment", latestPayment)
   res.status(200).json({
     status: 'success',
     message: `Latest Payment for ${user.fullName} has fetched successfully ->userCode:${userCode}`,
@@ -1427,8 +1411,8 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   if (!userCode) {
     return next(new AppError('User Code has not been provided, please try again.', 400))
   }
-// Parse activeYear or default to the current year
-const year = parseInt(activeYear, 10) || new Date().getFullYear();
+  // Parse activeYear or default to the current year
+  const year = parseInt(activeYear, 10) || new Date().getFullYear();
   const searchPattern = new RegExp(userCode, 'i')
   // Construct filter object for querying payments
   const paymentQuery = {
@@ -1538,12 +1522,12 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
     return res.status(404).json({ error: 'No payments found!' });
   }
   const organization = await Organization.findOne()
-  if(!organization){
-    return next(new AppError("Organization is not found",400))
+  if (!organization) {
+    return next(new AppError("Organization is not found", 400))
   }
   const bankBalances = calculateBalances(payments, organization);
   const organizationBalance = bankBalances.Organization
-  const orgBalancesBasedBankType=bankBalances.totalBalanceBankType
+  const orgBalancesBasedBankType = bankBalances.totalBalanceBankType
 
   // Get the bank type balances for the organization
   // const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
@@ -1585,7 +1569,7 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
-  if(!payments){
+  if (!payments) {
     return next(new AppError(`No confirmed Payments Found`, 400));
 
   }
@@ -1637,8 +1621,8 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
 exports.reports = catchAsync(async (req, res, next) => {
   const { paymentType, userCode, fullName, isPaid, status, bankType, year, month, timeRange } = req.query;
   const paymentQuery = {};
-  if(!timeRange){
-    return next (new AppError("Time Range is required"),400)
+  if (!timeRange) {
+    return next(new AppError("Time Range is required"), 400)
   }
 
   if (paymentType) paymentQuery.paymentType = new RegExp(paymentType, 'i');

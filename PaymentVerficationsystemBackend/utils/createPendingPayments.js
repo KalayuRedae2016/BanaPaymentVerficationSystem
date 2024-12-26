@@ -97,5 +97,4 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
   // Save the payment record to the database
   await payment.save();
 };
-
 module.exports = createPendingPayments;

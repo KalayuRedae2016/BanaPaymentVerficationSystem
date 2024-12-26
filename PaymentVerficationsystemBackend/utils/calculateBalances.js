@@ -1,6 +1,6 @@
 const { formatDate } = require("../utils/formatDate");
-const payments = require("../utils/Paymentmanagmentsystem.payments.json");
-const org = require("../Models/organizationModel");
+// const payments = require("../utils/Paymentmanagmentsystem.payments.json");
+// const org = require("../Models/organizationModel");
 
 function calculateBalances(payments, org) {
   const organization = {
