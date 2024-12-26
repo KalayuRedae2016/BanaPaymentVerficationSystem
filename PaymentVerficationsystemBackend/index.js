@@ -36,13 +36,15 @@ app.set('views', path.join(__dirname, 'views'));
 let corsOptions;
 if (process.env.NODE_ENV === 'production') {
   corsOptions = {
-    origin: ['https://49.13.235.6', 'https://banapvs.com','http://49.13.235.6'], // Allowed origin for production
+    origin: ['http://49.13.235.6', 'https://banapvs.com','https://49.13.235.6'], // Allowed origin for production
     credentials: true, // Enable credentials like cookies
+    methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], // Add allowed methods
   };
 } else {
   corsOptions = {
     origin: '*', // Allow all origins for development
     credentials: true, // Enable credentials like cookies
+    methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], // Add allowed methods
   };
 }
 
@@ -54,6 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Security HTTP Headers
 app.use(helmet());
+app.use(compression());
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
@@ -105,7 +108,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(compression());
+
 
 // #2 Routers
 app.use('/api/v1/organization', organizationRoutes);

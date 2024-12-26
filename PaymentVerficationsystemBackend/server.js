@@ -6,6 +6,11 @@ dotenv.config();
 connectDB();
 const PORT = process.env.PORT || 8081;
 
+app.get('/', (req, res) => {
+  res.send('Welcome to the Payment Verification System API');
+});
+
+
 const server=app.listen(PORT, () => {
   console.log(`Server is running on https://localhost:${PORT}`);
 });

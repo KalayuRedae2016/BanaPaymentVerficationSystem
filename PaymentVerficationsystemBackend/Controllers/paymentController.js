@@ -6,7 +6,7 @@ const Payment = require('../Models/paymentModel');
 
 const { calculateBalances } = require('../utils/calculateBalances')
 const { formatDate } = require("../utils/formatDate")
-const {calculateTotalPaidAndPenalityAmount}=require('../utils/calculateTotalPaidAndPenalityAmount')
+const {calculateTotalPaidAndPenalityAmount}=require('../utils/calculateTotalPaidAndPenalityAMount')
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 

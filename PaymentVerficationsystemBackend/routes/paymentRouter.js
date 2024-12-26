@@ -1,13 +1,11 @@
 const express = require('express');
 const app = express();
-const multer = require('multer');
 const path = require('path');
 const authoController = require('../Controllers/authoController');
 const verifyToken = require('../Middlware/verifyToken');
 const authenticateApiKey=require('../Middlware/verifyApiKey')
 
 const paymentController = require('../Controllers/paymentController');
-
 const router = express.Router();
 
 router.use(function (req, res, next) {
