@@ -251,16 +251,6 @@
                           v-if="!payment.regular.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="paymentIndex === blockConfirmedIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2rem"
-                          >
-                            Confirm
-                          </div>
-
-                          <!-- Confirm Button -->
                           <button
                             @click="
                               confirmUnconfirmRegular(
@@ -271,24 +261,10 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showBlockConfirmUnConfirmText(
-                                paymentIndex,
-                                'conShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideBlockConfirmUnConfirmText('conhide')
-                            "
+                            class="w-32 custom-button flex items-center p-2 rounded hover:bg-blue-600"
+                          
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <!-- Circular white background -->
-                              <i class="fas fa-check-circle text-pink-500"></i>
-                              <!-- Pink check icon -->
-                            </span>
+                            <i class="fas fa-check-circle mr-2"></i> Confirm
                           </button>
                         </td>
 
@@ -296,43 +272,18 @@
                           v-if="payment.regular.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="blockUnconfirmIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2.25rem"
-                          >
-                            Unconfirm
-                          </div>
-
                           <!-- Confirm Button -->
                           <button
                             @click="
-                              confirmUnconfirmRegular(
-                                payment.regular,
+                             showEditModalDetail(
                                 payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
+                                payment.regular,
+                               'regular'
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showBlockConfirmUnConfirmText(
-                                paymentIndex,
-                                'unconShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideBlockConfirmUnConfirmText('unconhide')
-                            "
+                            class="w-32 custom-button flex items-center py-2 rounded hover:bg-blue-600 mt-3"
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <i class="fas fa-times text-pink-500"></i>
-                              <!-- Change icon color to pink -->
-                            </span>
+                            <i class="fas fa-edit mr-2"></i> Edit
                           </button>
                         </td>
                       </tr>
@@ -455,16 +406,6 @@
                           v-if="!payment.subsidy.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="paymentIndex === subsidyConfirmedIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2rem"
-                          >
-                            Confirm
-                          </div>
-
-                          <!-- Confirm Button -->
                           <button
                             @click="
                               confirmUnconfirmSubsidy(
@@ -475,42 +416,16 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showSubsidyConfirmUnConfirmText(
-                                paymentIndex,
-                                'conShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideSubsidyConfirmUnConfirmText('conhide')
-                            "
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <!-- Circular white background -->
-                              <i class="fas fa-check-circle text-pink-500"></i>
-                              <!-- Pink check icon -->
-                            </span>
+                            <i class="fas fa-check-circle mr-2"></i>Confirm
                           </button>
                         </td>
 
                         <td
                           v-if="payment.subsidy.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
-                        >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="subsidyUnconfirmIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2.25rem"
-                          >
-                            Unconfirm
-                          </div>
-
-                          <!-- Confirm Button -->
-                          <button
+                        ><button
                             @click="
                               confirmUnconfirmSubsidy(
                                 payment.subsidy,
@@ -520,27 +435,14 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showSubsidyConfirmUnConfirmText(
-                                paymentIndex,
-                                'unconShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideSubsidyConfirmUnConfirmText('unconhide')
-                            "
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <i class="fas fa-times text-pink-500"></i>
-                              <!-- Change icon color to pink -->
-                            </span>
+                            <i class="fas fa-edit mr-2"></i>Edit
                           </button>
                         </td>
                       </tr>
-                      <!-- //for the urgent data -->
+
+
                       <tr v-if="payment.urgent.amount > 0">
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
@@ -653,15 +555,7 @@
                           v-if="!payment.urgent.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="paymentIndex === urgentConfirmedIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2rem"
-                          >
-                            Confirm
-                          </div>
-                          <!-- Confirm Button -->
+                         
                           <button
                             @click="
                               confirmUnconfirmUrgent(
@@ -672,38 +566,18 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showUrgentConfirmUnConfirmText(
-                                paymentIndex,
-                                'conShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideUrgentConfirmUnConfirmText('conhide')
-                            "
+                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                    
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <!-- Circular white background -->
-                              <i class="fas fa-check-circle text-pink-500"></i>
-                              <!-- Pink check icon -->
-                            </span>
+                              <i class="fas fa-check-circle mr-2"></i>Confirm
+             
                           </button>
                         </td>
                         <td
                           v-if="payment.urgent.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="urgentUnconfirmedIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2.25rem"
-                          >
-                            Unconfirm
-                          </div>
+                        
 
                           <!-- Confirm Button -->
                           <button
@@ -716,23 +590,12 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showUrgentConfirmUnConfirmText(
-                                paymentIndex,
-                                'unconShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideUrgentConfirmUnConfirmText('unconhide')
-                            "
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                    
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <i class="fas fa-times text-pink-500"></i>
-                              <!-- Change icon color to pink -->
-                            </span>
+                           
+                              <i class="fas fa-edit mr-2"></i>Edit
+                            
                           </button>
                         </td>
                       </tr>
@@ -844,16 +707,6 @@
                           v-if="!payment.service.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="paymentIndex === serviceConfirmedIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2rem"
-                          >
-                            Confirm
-                          </div>
-
-                          <!-- Confirm Button -->
                           <button
                             @click="
                               confirmUnconfirmService(
@@ -864,24 +717,12 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showServiceConfirmUnConfirmText(
-                                paymentIndex,
-                                'conShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideServiceConfirmUnConfirmText('conhide')
-                            "
+                     class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                           
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <!-- Circular white background -->
-                              <i class="fas fa-check-circle text-pink-500"></i>
-                              <!-- Pink check icon -->
-                            </span>
+                            
+                              <i class="fas fa-check-circle mr-2"></i> Confirm
+
                           </button>
                         </td>
 
@@ -889,16 +730,7 @@
                           v-if="payment.service.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirmation Text Above Button -->
-                          <div
-                            v-if="serviceUnconfirmIndex"
-                            class="absolute top-0 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2.25rem"
-                          >
-                            Unconfirm
-                          </div>
-
-                          <!-- Confirm Button -->
+                        
                           <button
                             @click="
                               confirmUnconfirmService(
@@ -909,23 +741,11 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showServiceConfirmUnConfirmText(
-                                paymentIndex,
-                                'unconShow'
-                              )
-                            "
-                            @mouseleave="
-                              hideServiceConfirmUnConfirmText('unconhide')
-                            "
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                          
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <i class="fas fa-times text-pink-500"></i>
-                              <!-- Change icon color to pink -->
-                            </span>
+                              <i class="fas fa-edit  mr-2"></i> Edit
+                        
                           </button>
                         </td>
                       </tr>
@@ -1071,7 +891,7 @@
                           </p>
                         </td>
 
-                        <td
+                      <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
                           <select
@@ -1155,13 +975,7 @@
                           v-if="!payment.penality.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <div
-                            v-if="paymentIndex === penalityConfirmedIndex"
-                            class="absolute -top-3 right-1/2 transform -translate-x-1/2 mb-1 bg-blue-800 text-white text-xs px-2 py-1 rounded"
-                            style="margin-top: 0.5rem; margin-left: 2rem"
-                          >
-                            Confirm
-                          </div>
+                    
                           <button
                             v-if="
                               payment.regular.penality +
@@ -1181,23 +995,12 @@
                                 paymentIndex
                               )
                             "
-                            class="custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                            @mouseenter="
-                              showPenalityConfirmUnConfirmText(
-                                paymentIndex,
-                                'conShow'
-                              )
-                            "
-                            @mouseleave="
-                              hidePenalityConfirmUnConfirmText('conhide')
-                            "
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                           
                           >
-                            <span
-                              class="flex items-center justify-center bg-white rounded-full p-1"
-                            >
-                              <i class="fas fa-check-circle text-pink-500"></i>
-                              <!-- Pink check icon -->
-                            </span>
+                           
+                              <i class="fas fa-check-circle mr-2 "></i>Confirm
+                          
                           </button>
                           <p
                             v-else
@@ -1529,6 +1332,132 @@
         </transition>
       </div>
     </div>
+
+    <div v-if="showEditModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="flex flex-row">
+              <div>{{ $t("editBlockAccount") }}</div>
+              <div class="ml-32 lg:ml-64">
+                <svg
+                  @click="showEditModal = !showEditModal"
+                  class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            <hr class="my-4 md:min-w-full bg-red-500" />
+
+            <div class="">
+              <form class="px-5 py-5">
+                <div class="mb-4">
+                  <label
+                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
+                  >
+                    Payment Date
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+
+                  <input
+                    @change="fetchPenality(paymentType, paidt)"
+                    type="date"
+                    class="custom-input"
+                    placeholder="Payment Date"
+                    v-model="paidAt"
+                  />
+                </div>
+                <div class="mb-4">
+                  <label
+                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
+                  >
+                    Bank Type
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+
+                  <select  v-if="paymentType!='service'" v-model="bankType" class="custom-select">
+                    <option value="">Select Bank Type</option>
+                    <option 
+                     
+                      v-for="(bank, index) in blockBanks"
+                      :key="'block-' + index"
+                      :value="bank.bankType"
+                    >
+                      {{ bank.bankType }}
+                    </option>
+                  </select>
+                  <select v-else v-model="bankType" class="custom-select">
+                    <option value="">Select Bank Type</option>
+                    <option 
+                     
+                      v-for="(bank, index) in serviceBanks"
+                      :key="'block-' + index"
+                      :value="bank.bankType"
+                    >
+                      {{ bank.bankType }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="mb-4">
+                  <label
+                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
+                  >
+                    TTNNumber
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+
+                  <input
+                    type="TTNumber"
+                    class="custom-input"
+                    placeholder="TTNumber"
+                    v-model="TTNumber"
+                  />
+                </div>
+
+                <div class="mb-4 flex flex-row space-x-3">
+                  <input
+                    type="checkbox"
+                    :checked="!isPaid"
+                    @change="toggleIsPaid"
+                  />
+                  <label
+                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
+                  >
+                    Make unpaid
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+                </div>
+
+                <button
+                  @click.prevent="saveChanges()"
+                  type="submit"
+                  class="custom-button"
+                >
+                  <i class="fas fa-save"
+                    ><span class="text-md ml-3"></span></i
+                  >
+                  Save Changes
+                </button>
+              </form>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -1542,6 +1471,17 @@ export default {
   },
   data() {
     return {
+
+      paidAt: null,
+      TTNumber: "",
+      bankType: "",
+      paymentType: "",
+      penality: "",
+      isPaid:true,
+      billCode: "",
+      showEditModal:false,
+
+
       successToastMessage: "",
       errorToastMessage: "",
       showErrorToast: false,
@@ -1644,7 +1584,7 @@ export default {
         if (response.data !== null) {
           this.users = response.data.users;
           this.searchedClients = this.users;
-          this.filteredUsers=this.users;
+          this.filteredUsers = this.users;
           console.log("this users", this.users);
         }
       })
@@ -1652,39 +1592,130 @@ export default {
         console.error("Error fetching users:", error);
       });
     console.log("These are the users please", this.users);
-
-    //bank statement
-    //  this.userCode = this.$route.params.userCode;
-    //  if (this.$route.query.pending == 0) {
-    //    this.includePending = true;
-    //  }
-    //  console.log("usercode is from routre is ", this.userCode);
-    //  this.fetchUnPaid();
-    // this.changeMonthIntoString(1);
   },
   methods: {
-    // toggleUserSelection(userIndex) {
 
-    //   alert("hiii")
-    //   this.filteredUsers.forEach((user) => (user.userselected = false));
-    //   this.filteredUsers[userIndex].userselected = true;
-    //   this.filteredUsers.forEach((user) => {
-    //     if (!user.userselected) {
-    //       user.payments.forEach((payment) => {
-    //         if (payment.selected) {
-    //           payment.selected = false;
-    //           payment.bankSelected = true;
-    //         }
-    //       });
-    //     }
-    //   });
 
-    //   if (this.previosSelected !== userIndex) {
-    //     this.selectedPayments = [];
-    //   }
-    //   this.previosSelected = userIndex;
-    //   console.log(this.selectedPayments);
-    // },
+    toggleIsPaid(event) {
+      this.isPaid = !event.target.checked;
+    },
+    changeMonthIntoString(month) {
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      console.log("month of month", months[month]);
+
+      if (month >= 1 && month <= 12) {
+        return months[month - 1];
+      }
+      return "Invalid month";
+    },
+    fetchPenality(paymentType, paidAt) {
+      this.$apiClient
+        .get("api/v1/payments/penality", {
+          params: {
+            activeYear: this.selectedPayment.activeYear,
+            activeMonth: this.selectedPayment.activeMonth,
+            paymentType: paymentType,
+            paymentDate: paidAt,
+          },
+        })
+        .then((response) => {
+          this.payment.paymentTpe.penality = response.data.message;
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+
+    showEditModalDetail(
+      billCode,
+      payment,
+      paymentType,
+    ) {
+      console.log("payment type: ", paymentType);
+      this.bankType = payment.bankType;
+      this.TTNumber = payment.TTNumber;
+      this.paidAt = payment.paidAt;
+      this.paymentType = paymentType;
+      this.billCode = billCode;
+      this.isPaid = payment.isPaid;
+
+      this.showEditModal = true;
+    },
+
+    saveChanges() {
+
+      const payment={
+        paymentType: this.paymentType,
+        paidAt: this.paidAt,
+        bankType: this.bankType,
+        TTNumber: this.TTNumber,
+        isPaid: this.isPaid,
+      }
+      if (this.paymentType === "regular") {
+   
+        this.payload = {
+          billCode: this.billCode,
+          regular: payment,
+        };
+      }
+      if (this.paymentType === "subsidy") {
+        this.payload = {
+          billCode: this.billCode,
+          subsidy:payment,
+        };
+      }
+      if (this.paymentType === "urgent") {
+        this.payload = {
+          billCode: this.billCode,
+          urgent: payment,
+        };
+      }
+      if (this.paymentType === "service") {
+        this.payload = {
+          billCode: this.billCode,
+          service:payment,
+        };
+      }
+
+
+      if (this.paymentType === "penality") {
+        this.payload = {
+          billCode: this.billCode,
+          penality: payment,
+        };
+      }
+
+      
+      console.log("ppppPayload", this.payload);
+
+      this.$apiClient
+        .patch("/api/v1/payments/update", this.payload, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          console.log("Response from service confirming", response.data);
+        })
+        .catch((error) => {
+          console.log("Error confirming", error);
+        });
+
+      this.showEditModal = false;
+    },
 
     navigateToPayment(userCode, fullName) {
       console.log("this.fullname = ", fullName);
@@ -1712,21 +1743,7 @@ export default {
 
       console.log("filtered users", this.filteredUsers);
     },
-    // sendToDataBase() {
-    //   console.log("paymentsb", this.selectedPayments);
-    //   if (this.selectedPayments.length === 0) {
-    //     this.paymentVerified = false;
-    //     console.log("length===0");
-    //   } else {
-    //     this.paymentVerified = true;
-    //     this.selectedPayments.forEach((payment) => {
-    //       if (payment.bankType === null || payment.bankType === "") {
-    //         this.paymentVerified = false;
-    //       }
-    //     });
-    //   }
-    //   console.log("paymentsafter", this.selectedPayments);
-    // },
+    
 
     confirmDetails() {
       console.log("current id", this.searchId);
@@ -1757,104 +1774,7 @@ export default {
       }
     },
 
-    //bank statement
-
-    showBlockConfirmUnConfirmText(paymentIndex, conUncon) {
-      // ////alert("hhhh")
-      // Show confirmation text when hovering over the button
-      if (conUncon == "conShow") {
-        this.blockConfirmedIndex = paymentIndex;
-      } else {
-        // ////alert("hi");
-        this.blockUnconfirmIndex = true;
-      }
-    },
-    hideBlockConfirmUnConfirmText(conUncon) {
-      // ////alert("hiding");
-      if (conUncon == "conhide") {
-        this.blockConfirmedIndex = null;
-      } else {
-        // ////alert("hello")
-        this.blockUnconfirmIndex = false;
-      }
-    },
-    showSubsidyConfirmUnConfirmText(paymentIndex, conUncon) {
-      // ////alert("hhhh")
-      // Show confirmation text when hovering over the button
-      if (conUncon == "conShow") {
-        this.subsidyConfirmedIndex = paymentIndex;
-      } else {
-        // ////alert("hi");
-        this.subsidyUnconfirmIndex = true;
-      }
-    },
-    hideSubsidyConfirmUnConfirmText(conUncon) {
-      // ////alert("hiding");
-      if (conUncon == "conhide") {
-        this.subsidyConfirmedIndex = null;
-      } else {
-        // ////alert("hello")
-        this.subsidyUnconfirmIndex = false;
-      }
-    },
-    showUrgentConfirmUnConfirmText(paymentIndex, conUncon) {
-      //////alert("hhhh")
-      // Show confirmation text when hovering over the button
-      if (conUncon == "conShow") {
-        this.urgentConfirmedIndex = paymentIndex;
-      } else {
-        // ////alert("hi");
-        this.urgentUnconfirmedIndex = true;
-      }
-    },
-    hideUrgentConfirmUnConfirmText(conUncon) {
-      // ////alert("hiding");
-      if (conUncon == "conhide") {
-        this.urgentConfirmedIndex = null;
-      } else {
-        //////alert("hello")
-        this.urgentUnconfirmedIndex = false;
-      }
-    },
-
-    showServiceConfirmUnConfirmText(paymentIndex, conUncon) {
-      // ////alert("hhhh")
-      // Show confirmation text when hovering over the button
-      if (conUncon == "conShow") {
-        this.serviceConfirmedIndex = paymentIndex;
-      } else {
-        // ////alert("hi");
-        this.serviceUnconfirmIndex = true;
-      }
-    },
-    hideServiceConfirmUnConfirmText(conUncon) {
-      // ////alert("hiding");
-      if (conUncon == "conhide") {
-        this.serviceConfirmedIndex = null;
-      } else {
-        // ////alert("hello")
-        this.serviceUnconfirmIndex = false;
-      }
-    },
-    showPenalityConfirmUnConfirmText(paymentIndex, conUncon) {
-      ////alert("penality");
-      if (conUncon == "conShow") {
-        ////alert("confirm")
-        this.penalityConfirmedIndex = paymentIndex;
-      } else {
-        this.penalityUnconfirmIndex = true;
-      }
-    },
-    hidePenalityConfirmUnConfirmText(conUncon) {
-      // //alert("hiding");
-      if (conUncon == "conhide") {
-        this.penalityConfirmedIndex = null;
-      } else {
-        // ////alert("hello")
-        this.penalityUnconfirmIndex = false;
-      }
-    },
-
+  
     changeMonthIntoString(month) {
       const months = [
         "January",
@@ -1974,7 +1894,7 @@ export default {
           },
         })
         .then((response) => {
-         // console.log("this reponse after confirmation", response.data);
+          // console.log("this reponse after confirmation", response.data);
           this.$refs.toast.showSuccessToastMessage("Regular Payment updated");
           if (response.data.items.isPaid) {
             this.$router.push({
@@ -1985,7 +1905,6 @@ export default {
               },
             });
           } else {
-            
             this.fetchUnPaid();
           }
         })
@@ -2014,7 +1933,6 @@ export default {
               },
             });
           } else {
-            
             this.fetchUnPaid();
           }
         })
@@ -2044,7 +1962,6 @@ export default {
               },
             });
           } else {
-            
             this.fetchUnPaid();
           }
         })
@@ -2074,7 +1991,6 @@ export default {
               },
             });
           } else {
-           
             this.fetchUnPaid();
           }
         })
@@ -2106,7 +2022,6 @@ export default {
               },
             });
           } else {
-            
             this.fetchUnPaid();
           }
         })

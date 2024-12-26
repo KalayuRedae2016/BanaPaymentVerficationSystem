@@ -14,7 +14,7 @@
         class="z-20 fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
         role="alert"
       >
-        <strong class="font-bold">Success!</strong>
+        <strong class="font-bold"></strong>
         <span class="block sm:inline">{{ successToastMessage }}</span>
       </div>
     </transition>
