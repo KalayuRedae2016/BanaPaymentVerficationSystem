@@ -735,7 +735,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
   }
 
   // Find the uPaid bill by billCode
-  let payment = await Payment.findOne({ isPaid: true, billCode });
+  let payment = await Payment.findOne({billCode });
   if (!payment) {
     return res.status(404).json({ error: 'No Paid bill found' });
   }
