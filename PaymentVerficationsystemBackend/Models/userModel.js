@@ -9,6 +9,7 @@ const userSchema = new Schema(
   {
     firstName: {
       type: String,
+      required:true,
       default: null
     },
     middleName: {
