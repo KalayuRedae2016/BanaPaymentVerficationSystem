@@ -1168,7 +1168,7 @@
                     type="date"
                     class="custom-input"
                     placeholder="Payment Date"
-                    v-model="paidAt"
+                    v-model="selectedPayment.paidAt"
                   />
                 </div>
                 <div class="mb-4">
@@ -1179,7 +1179,7 @@
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <select v-model="bankType" class="custom-select">
+                  <select v-model="selectedPayment.bankType" class="custom-select">
                     <option value="">Select Bank Type</option>
                     <option
                       v-for="(bank, index) in blockBanks"
@@ -1203,14 +1203,14 @@
                     type="TTNumber"
                     class="custom-input"
                     placeholder="TTNumber"
-                    v-model="TTNumber"
+                    v-model="selectedPayment.TTNumber"
                   />
                 </div>
 
                 <div class="mb-4 flex flex-row space-x-3">
                   <input
                     type="checkbox"
-                    :checked="!isPaid"
+                    :checked="!selectedPayment.isPaid"
                     @change="toggleIsPaid"
                   />
                   <label
@@ -1458,6 +1458,7 @@ export default {
 
     saveChanges() {
       if (this.paymentType === "regular") {
+        alert('kk')
         this.payload = {
           billCode: this.billCode,
           regular: this.selectedPayment,
