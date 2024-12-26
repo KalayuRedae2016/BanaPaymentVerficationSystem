@@ -10,12 +10,6 @@
           margin-left: 10px;
         "
       >
-        <!-- 
-  <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
-  <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
-  <h1 style="margin: 0;">Bana Mall Official Receipt</h1>
-</div> -->
-
         <div style="width: 90%; max-width: 100%; min-width: 100%">
           <img
             src="../../../../assets/img/banaReceipt1.jpg"
@@ -649,7 +643,7 @@
 
     <div class="">
       <div class="py-3 -mt-1 border-t border-blue-500">
-        <p class="text-indigo-800 font-bold px-4">View and Get Receipt</p>
+        <p class="text-blue-500 font-bold px-4">View and Get Receipt</p>
         <div class="border-t border-blue-900 ml-5 mt-5 px-3">
           <div class="mt-4 flex flex-col space-y-5">
             <div class="flex flex-row w-full bg-blue-100">
@@ -688,14 +682,13 @@
                   >
                 </p>
               </div>
-
               <!-- Right Column: Print Button -->
               <div class="ml-auto">
                 <button
                   @click="printDiv()"
-                  class="custom-button mt-8 mr-5 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
+                  class="custom-button mt-8 text-xs mr-16 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
                 >
-                  <i class="fas fa-print text-pink-500 text-xxs"></i> Print
+                  <i class="fas fa-print text-xs"></i> Print
                 </button>
               </div>
             </div>
@@ -784,14 +777,12 @@
                           payment.billCode,
                           payment.regular,
                           'regular',
-                          payment.activeMonth,
-                          payment.activeYear
                         )
                       "
                       class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button class="custom-button">
-                        <i class="fas fa-edit text-pink-500"></i>
+                        <i class="fas fa-edit "></i> Edit
                       </button>
                     </td>
                   </tr>
@@ -848,13 +839,11 @@
                             payment.billCode,
                             payment.subsidy,
                             'subsidy',
-                            payment.activeMonth,
-                            payment.activeYear
                           )
                         "
                         class="custom-button"
                       >
-                        <i class="fas fa-edit text-pink-500"></i>
+                        <i class="fas fa-edit "></i> Edit
                       </button>
                     </td>
 
@@ -913,13 +902,11 @@
                             payment.billCode,
                             payment.urgent,
                             'urgent',
-                            payment.activeMonth,
-                            payment.activeYear
                           )
                         "
                         class="custom-button"
                       >
-                        <i class="fas fa-edit text-pink-500"></i>
+                        <i class="fas fa-edit"></i>Edit
                       </button>
                     </td>
 
@@ -967,15 +954,14 @@
                           payment.billCode,
                           payment.service,
                           'service',
-                          payment.activeMonth,
-                          payment.activeYear
                         )
                       "
                       class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button class="custom-button">
-                        <i class="fas fa-edit text-pink-500"></i>
+                        <i class="fas fa-edit"></i>Edit
                       </button>
+
                     </td>
                   </tr>
                 </tbody>
@@ -1106,14 +1092,12 @@
                           payment.billCode,
                           payment.penality,
                           'penality',
-                          payment.activeMonth,
-                          payment.activeYear
                         )
                       "
                       class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
                       <button class="custom-button">
-                        <i class="fas fa-edit text-pink-500"></i>
+                        <i class="fas fa-edit "></i> Edit
                       </button>
                     </td>
                   </tr>
@@ -1168,7 +1152,7 @@
                     type="date"
                     class="custom-input"
                     placeholder="Payment Date"
-                    v-model="selectedPayment.paidAt"
+                    v-model="paidAt"
                   />
                 </div>
                 <div class="mb-4">
@@ -1179,10 +1163,22 @@
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <select v-model="selectedPayment.bankType" class="custom-select">
+                  <select  v-if="paymentType!='service'" v-model="bankType" class="custom-select">
                     <option value="">Select Bank Type</option>
-                    <option
+                    <option 
+                     
                       v-for="(bank, index) in blockBanks"
+                      :key="'block-' + index"
+                      :value="bank.bankType"
+                    >
+                      {{ bank.bankType }}
+                    </option>
+                  </select>
+                  <select v-else v-model="bankType" class="custom-select">
+                    <option value="">Select Bank Type</option>
+                    <option 
+                     
+                      v-for="(bank, index) in serviceBanks"
                       :key="'block-' + index"
                       :value="bank.bankType"
                     >
@@ -1203,32 +1199,33 @@
                     type="TTNumber"
                     class="custom-input"
                     placeholder="TTNumber"
-                    v-model="selectedPayment.TTNumber"
+                    v-model="TTNumber"
                   />
                 </div>
 
                 <div class="mb-4 flex flex-row space-x-3">
                   <input
                     type="checkbox"
-                    :checked="!selectedPayment.isPaid"
+                    :checked="!isPaid"
                     @change="toggleIsPaid"
                   />
                   <label
                     class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
                   >
                     Make unpaid
-                    <span class="custom-star ml-1">*</span>
+                  
                   </label>
                 </div>
 
                 <button
                   @click.prevent="saveChanges()"
                   type="submit"
-                  class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  class="custom-button"
                 >
                   <i class="fas fa-save"
-                    ><span class="text-md ml-3">Save Changes</span></i
+                    ><span class="text-md ml-3"></span></i
                   >
+                  Save Changes
                 </button>
               </form>
             </div>
@@ -1253,11 +1250,15 @@ export default {
       errorMessage: "",
       successMessage: "",
       selectedPayment: "",
+
       paidAt: null,
       TTNumber: "",
       bankType: "",
       paymentType: "",
       penality: "",
+      isPaid:true,
+      billCode: "",
+
       showEditModal: false,
 
       payload: "",
@@ -1265,7 +1266,7 @@ export default {
       userCode: "",
       activeYear: "",
       activeMonth: "",
-      billCode: "",
+   
 
       // we will try from db then. but now from static
       paymentTerm: "monthly",
@@ -1436,8 +1437,6 @@ export default {
       billCode,
       payment,
       paymentType,
-      activeMonth,
-      activeYear
     ) {
       console.log("payment type: ", paymentType);
       this.bankType = payment.bankType;
@@ -1445,51 +1444,57 @@ export default {
       this.paidAt = payment.paidAt;
       this.paymentType = paymentType;
       this.billCode = billCode;
-
-      this.activeMonth = activeMonth;
-      this.activeYear = activeYear;
-
-      this.selectedPayment = payment;
-      this.selectedPayment.activeMonth = activeMonth;
-      this.selectedPayment.activeYear = activeYear;
+      this.isPaid = payment.isPaid;
 
       this.showEditModal = true;
     },
 
     saveChanges() {
+
+      const payment={
+        paymentType: this.paymentType,
+        paidAt: this.paidAt,
+        bankType: this.bankType,
+        TTNumber: this.TTNumber,
+        isPaid: this.isPaid,
+      }
       if (this.paymentType === "regular") {
-        alert('kk')
+   
         this.payload = {
           billCode: this.billCode,
-          regular: this.selectedPayment,
+          regular: payment,
         };
       }
       if (this.paymentType === "subsidy") {
         this.payload = {
           billCode: this.billCode,
-          subsidy: this.selectedPayment,
+          subsidy:payment,
         };
       }
       if (this.paymentType === "urgent") {
         this.payload = {
           billCode: this.billCode,
-          urgent: this.selectedPayment,
+          urgent: payment,
         };
       }
       if (this.paymentType === "service") {
         this.payload = {
           billCode: this.billCode,
-          service: this.selectedPayment,
+          service:payment,
         };
       }
+
+
       if (this.paymentType === "penality") {
         this.payload = {
           billCode: this.billCode,
-          service: this.selectedPayment,
+          penality: payment,
         };
       }
-      console.log("Payload", this.payload);
-      // Send the PATCH request with JSON payload
+
+      
+      console.log("ppppPayload", this.payload);
+
       this.$apiClient
         .patch("/api/v1/payments/update", this.payload, {
           headers: {

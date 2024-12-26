@@ -27,8 +27,7 @@
             <option value="amharic">{{ $t("Amharic") }}</option>
             <option value="english">English</option>
           </select>
-
-          <!-- Notifications -->
+    
           <div class="relative">
             <button
               class="relative text-blue-500 hover:text-blue-500 focus:outline-none"
@@ -472,8 +471,7 @@ export default {
   },
 
  async  mounted() {
- // this.$toast.success("This is a success message!");
-//await this.$refs.smoozer.startSmoothReload();
+ 
 
 // setTimeout(() => {
 //   this.$store.dispatch("commitReloading", false);
@@ -516,10 +514,7 @@ export default {
    // setInterval(this.fetchNotifications, 5000);
   },
   methods: {
-    showToast(){
-      //alert("toast")
-      
-    },
+   
     closeDropDownSidebar() {
       this.sidebarVisible = false;
     },

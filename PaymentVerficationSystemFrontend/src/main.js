@@ -10,6 +10,8 @@ import amharicMessages from '../locales/amharic.json';
 import englishMessages from '../locales/english.json';
 import tigrignaMessages from '../locales/tigrigna.json';
 import apiClientPlugin from "./store/plugins/apiClientPlugin";
+
+
 //import toast from './components/Common/Toast.vue';
 
 
