@@ -1,7 +1,15 @@
 <template>
   <div>
     <div class="container hidden" id="printable-area">
-      <div class="receipt" style="margin-right:10px;margin-top: 10px;margin-bottom: 10px;margin-left: 10px;">
+      <div
+        class="receipt"
+        style="
+          margin-right: 10px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          margin-left: 10px;
+        "
+      >
         <!-- 
   <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
   <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
@@ -70,64 +78,185 @@
           Payment Information
         </h2>
         <table class="table">
-  <tr style="border-bottom: 1px solid #d1d5db; border-top: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">FullName</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.fullName }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">UserCode</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.userCode }}</td>
-  </tr>
+          <tr
+            style="
+              border-bottom: 1px solid #d1d5db;
+              border-top: 1px solid #d1d5db;
+            "
+          >
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              FullName
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.fullName }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              UserCode
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.userCode }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Payment Term</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ paymentTerm }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">RegFee</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.registrationFee }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Regular Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.regular.amount }}</td>
-  </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Payment Term
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ paymentTerm }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              RegFee
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.registrationFee }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Regular Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.regular.amount }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Subsidy Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.subsidy.amount }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Urgent Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.urgent.amount }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Service Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.service.amount }}</td>
-  </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Subsidy Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.subsidy.amount }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Urgent Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.urgent.amount }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Service Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.service.amount }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Penality</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.penality.amount }}</td>
-  </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Penality
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.penality.amount }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Block</td>
-    <td style=" padding-right: 20px; text-align: right;">
-      {{
-        payment.regular.amount +
-        payment.subsidy.amount +
-        payment.urgent.amount
-      }}
-    </td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Service</td>
-    <td style=" padding-right: 20px; text-align: right;">
-      {{ payment.penality.amount + payment.service.amount }}
-    </td>
-  </tr>
-</table>
-
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Total Block
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{
+                payment.regular.amount +
+                payment.subsidy.amount +
+                payment.urgent.amount
+              }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Total Service
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.penality.amount + payment.service.amount }}
+            </td>
+          </tr>
+        </table>
 
         <div
           class="signature-section"
@@ -191,12 +320,21 @@
             reserved.
           </div>
         </div>
-
-        
       </div>
-   <div class="vertical-line" style="width: 2px; border-left: 2px dotted #d1d5db; height: 100%; margin-right: 10px;"></div>
+      <div
+        class="vertical-line"
+        style="
+          width: 2px;
+          border-left: 2px dotted #d1d5db;
+          height: 100%;
+          margin-right: 10px;
+        "
+      ></div>
 
-      <div class="receipt" style="margin-right:10px;margin-top: 10px;margin-bottom: 10px;">
+      <div
+        class="receipt"
+        style="margin-right: 10px; margin-top: 10px; margin-bottom: 10px"
+      >
         <!-- 
   <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
   <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
@@ -265,63 +403,185 @@
           Payment Information
         </h2>
         <table class="table">
-  <tr style="border-bottom: 1px solid #d1d5db; border-top: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">FullName</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.fullName }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">UserCode</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.userCode }}</td>
-  </tr>
+          <tr
+            style="
+              border-bottom: 1px solid #d1d5db;
+              border-top: 1px solid #d1d5db;
+            "
+          >
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              FullName
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.fullName }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              UserCode
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.userCode }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Payment Term</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ paymentTerm }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">RegFee</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.registrationFee }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Regular Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.regular.amount }}</td>
-  </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Payment Term
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ paymentTerm }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              RegFee
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.registrationFee }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Regular Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.regular.amount }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Subsidy Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.subsidy.amount }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Urgent Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.urgent.amount }}</td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Service Amount</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.service.amount }}</td>
-  </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Subsidy Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.subsidy.amount }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Urgent Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.urgent.amount }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Service Amount
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.service.amount }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Penality</td>
-    <td style=" padding-right: 20px; text-align: right;">{{ payment.penality.amount }}</td>
-  </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Penality
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.penality.amount }}
+            </td>
+          </tr>
 
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Block</td>
-    <td style=" padding-right: 20px; text-align: right;">
-      {{
-        payment.regular.amount +
-        payment.subsidy.amount +
-        payment.urgent.amount
-      }}
-    </td>
-  </tr>
-  <tr style="border-bottom: 1px solid #d1d5db;">
-    <td style="color: #333; font-weight: bold; padding-left: 20px; text-align: left;">Total Service</td>
-    <td style=" padding-right: 20px; text-align: right;">
-      {{ payment.penality.amount + payment.service.amount }}
-    </td>
-  </tr>
-</table>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Total Block
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{
+                payment.regular.amount +
+                payment.subsidy.amount +
+                payment.urgent.amount
+              }}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #d1d5db">
+            <td
+              style="
+                color: #333;
+                font-weight: bold;
+                padding-left: 20px;
+                text-align: left;
+              "
+            >
+              Total Service
+            </td>
+            <td style="padding-right: 20px; text-align: right">
+              {{ payment.penality.amount + payment.service.amount }}
+            </td>
+          </tr>
+        </table>
         <div
           class="signature-section"
           style="color: #622e2e; font-weight: bold"
@@ -384,8 +644,6 @@
             reserved.
           </div>
         </div>
-
-        
       </div>
     </div>
 
@@ -439,10 +697,7 @@
                 >
                   <i class="fas fa-print text-pink-500 text-xxs"></i> Print
                 </button>
-               
               </div>
-
-              
             </div>
 
             <div class="overflow-x-auto">
@@ -870,9 +1125,6 @@
       </div>
     </div>
 
-
-
-
     <div v-if="showEditModal">
       <transition name="fade" mode="out-in">
         <div
@@ -880,8 +1132,7 @@
         >
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="flex flex-row">
-              <div>{{ $t("editBlockAccount") }} 
-              </div>
+              <div>{{ $t("editBlockAccount") }}</div>
               <div class="ml-32 lg:ml-64">
                 <svg
                   @click="showEditModal = !showEditModal"
@@ -917,7 +1168,7 @@
                     type="date"
                     class="custom-input"
                     placeholder="Payment Date"
-                    v-model="paidAt"
+                    v-model="selectedPayment.paidAt"
                   />
                 </div>
                 <div class="mb-4">
@@ -928,18 +1179,15 @@
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <select
-                    v-model="bankType"
-                    class="custom-select"
-                  >
+                  <select v-model="selectedPayment.bankType" class="custom-select">
                     <option value="">Select Bank Type</option>
                     <option
-                  v-for="(bank, index) in blockBanks"
-                  :key="'block-' + index"
-                  :value="bank.bankType"
-                >
-                  {{ bank.bankType }}
-                </option>
+                      v-for="(bank, index) in blockBanks"
+                      :key="'block-' + index"
+                      :value="bank.bankType"
+                    >
+                      {{ bank.bankType }}
+                    </option>
                   </select>
                 </div>
 
@@ -955,9 +1203,24 @@
                     type="TTNumber"
                     class="custom-input"
                     placeholder="TTNumber"
-                    v-model="TTNumber"
+                    v-model="selectedPayment.TTNumber"
                   />
                 </div>
+
+                <div class="mb-4 flex flex-row space-x-3">
+                  <input
+                    type="checkbox"
+                    :checked="!selectedPayment.isPaid"
+                    @change="toggleIsPaid"
+                  />
+                  <label
+                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
+                  >
+                    Make unpaid
+                    <span class="custom-star ml-1">*</span>
+                  </label>
+                </div>
+
                 <button
                   @click.prevent="saveChanges()"
                   type="submit"
@@ -974,8 +1237,6 @@
         </div>
       </transition>
     </div>
-    
-
   </div>
 </template>
 
@@ -986,6 +1247,7 @@ export default {
   data() {
     return {
       //for editing error and success
+      isPaid:true,
       showSuccess: false,
       showError: false,
       errorMessage: "",
@@ -1074,10 +1336,6 @@ export default {
   },
 
   created() {
-
-
-
-
     console.log("In the payment history page");
     this.userCode = this.$route.params.userCode || "Default UserCode";
     this.year = this.$route.query.year || "Default Year";
@@ -1103,7 +1361,6 @@ export default {
         console.log("Error", error.message);
         this.organizationCreated = 0;
       });
-
 
     this.$apiClient
       .get("/api/v1/payments/paymentbyMonth", {
@@ -1132,6 +1389,9 @@ export default {
   },
 
   methods: {
+    toggleIsPaid(event) {
+      this.isPaid = !event.target.checked;
+    },
     changeMonthIntoString(month) {
       const months = [
         "January",
@@ -1198,6 +1458,7 @@ export default {
 
     saveChanges() {
       if (this.paymentType === "regular") {
+        alert('kk')
         this.payload = {
           billCode: this.billCode,
           regular: this.selectedPayment,
