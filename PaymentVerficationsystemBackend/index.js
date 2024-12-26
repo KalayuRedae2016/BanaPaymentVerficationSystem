@@ -36,7 +36,7 @@ app.set('views', path.join(__dirname, 'views'));
 let corsOptions;
 if (process.env.NODE_ENV === 'production') {
   corsOptions = {
-    origin: ['https://49.13.235.6', 'https://banapvs.com','http://49.13.235.6'], // Allowed origin for production
+    origin: ['http://49.13.235.6', 'https://banapvs.com','https://49.13.235.6'], // Allowed origin for production
     credentials: true, // Enable credentials like cookies
   };
 } else {

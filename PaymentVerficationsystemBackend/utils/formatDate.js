@@ -1,52 +1,54 @@
-  function formatDate(dateString) {
-    if (!dateString) return null;
-    
-    const d = new Date(dateString);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero
-    const day = String(d.getDate()).padStart(2, '0'); // Add leading zero
-    
-    return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
-  }
+const dateString = "2024-12-26";  // Example date input
+
+function formatDate(dateString) {
+  if (!dateString) return null;
+  console.log("Input date string: ", dateString);
   
+  const gregorianDate = new Date(dateString);
+  let year = gregorianDate.getFullYear();
+  let month = gregorianDate.getMonth() + 1; // JavaScript months are 0-based, so add 1
+  let day = gregorianDate.getDate();
+
+  const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+  let ethiopianYear = year - (isLeapYear ? 8 : 7);
+
+  let ethiopianMonth = month - 8;  // Ethiopian year starts in September
+  if (ethiopianMonth <= 0) {
+    ethiopianMonth += 12;  // Adjust for months before September (e.g., January-August)
+    ethiopianYear -= 1;  // Adjust Ethiopian year for months before September
+  }
+
+  if (isLeapYear && month === 3 && day <= 1) {
+    day -= 1; // Adjust for leap years before March 2nd
+  }
+
+  const formattedMonth = String(ethiopianMonth).padStart(2, '0');
+  const formattedDay = String(day).padStart(2, '0');
+  
+  console.log(`Ethiopian Date: ${ethiopianYear}-${formattedMonth}-${formattedDay}`);
+  return `${ethiopianYear}-${formattedMonth}-${formattedDay}`; // Return as YYYY-MM-DD
+}
+
+formatDate(dateString);
 
 module.exports = {
   formatDate
 };
 
-// function formatEthiopianDate(dateString) {
-//   if (!dateString) return null;
 
-//   const gregorianDate = new Date(dateString);
-//   let year = gregorianDate.getFullYear();
-//   let month = gregorianDate.getMonth() + 1; // Months are 0-indexed in JavaScript
-//   let day = gregorianDate.getDate();
-
-//   // Determine if the Gregorian year is a leap year
-//   const isLeapYear = (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
-
-//   // Convert Gregorian year to Ethiopian year
-//   let ethiopianYear = year - (isLeapYear ? 8 : 7);
-
-//   // Adjust for Ethiopian month start
-//   let ethiopianMonth = month + 1;
-//   if (ethiopianMonth > 13) {
-//     ethiopianMonth -= 13; // Ethiopian calendar has 13 months
-//     ethiopianYear += 1; // Increment Ethiopian year when months wrap around
+//   function formatDate(dateString) {
+//     if (!dateString) return null;
+    
+//     const d = new Date(dateString);
+//     const year = d.getFullYear();
+//     const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero
+//     const day = String(d.getDate()).padStart(2, '0'); // Add leading zero
+    
+//     return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
 //   }
-
-//   // If Gregorian year is a leap year and day is affected, adjust day
-//   if (isLeapYear && month === 3 && day <= 1) {
-//     day -= 1; // Adjust only for dates before March 2nd in leap years
-//   }
-
-//   // Format Ethiopian date with leading zeros for month and day
-//   const formattedMonth = String(ethiopianMonth).padStart(2, '0');
-//   const formattedDay = String(day).padStart(2, '0');
-
-//   return `${ethiopianYear}-${formattedMonth}-${formattedDay}`; // Format as YYYY-MM-DD
-// }
+  
 
 // module.exports = {
-//   formatEthiopianDate
+//   formatDate
 // };
+
