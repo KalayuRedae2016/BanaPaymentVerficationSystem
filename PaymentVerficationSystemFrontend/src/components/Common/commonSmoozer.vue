@@ -1,16 +1,15 @@
 <template>
+  
     <div
       v-if="isReloading"
       class="fixed inset-0 flex items-center justify-center bg-white z-50 transition-opacity duration-1000 ease-in-out"
       :class="{ 'opacity-0': isFading, 'opacity-100': !isFading }"
     >
       <div class="flex flex-col items-center space-y-6">
-        <!-- Modern spinner -->
         <div class="relative w-12 h-12 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
-        
-    
       </div>
     </div>
+
   </template>
   
   <script>
@@ -24,14 +23,12 @@
     methods: {
       startSmoothReload() {
         this.isReloading = true;
-  
         // Start fade-out effect after a short delay
         setTimeout(() => {
           this.isFading = true;
-          // Reload the page after the fade completes
           setTimeout(() => {
-            console.log("Reloading");
-           window.location.reload();
+            this.isReloading=false;
+            this.isFading = false;
           }, 1000); // Match fade duration
         }, 500); // Optional delay before fade starts
       },

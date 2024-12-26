@@ -36,9 +36,9 @@
       </div>
     </transition>
 
-    <div class="border border-gray-300 mt-5 p-5">
-      <div class="mb-4">
-        <label class="custom-label"> Transfer Type: </label>
+    <div class="border border-gray-300 mt-5 p-5 mx-0  rounded-lg">
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32 ">
+        <label class="custom-label w-1/3 mt-3"> Transfer Type: </label>
         <select
           name="type"
           id=""
@@ -54,8 +54,8 @@
         </p>
       </div>
 
-      <div class="mb-4">
-        <label class="custom-label"> Transfer From: </label>
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
+        <label class="custom-label w-1/3 mt-3"> Transfer From: </label>
         <select
           name="type"
           id=""
@@ -87,8 +87,8 @@
           Please select a bank from where to be transfer!
         </p>
       </div>
-      <div class="mb-4">
-        <label class="custom-label"> Transfer to: </label>
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
+        <label class="custom-label w-1/3 mt-3"> Transfer to: </label>
         <select
           name="type"
           id=""
@@ -126,8 +126,8 @@
         </p>
       </div>
 
-      <div class="mb-4">
-        <label class="custom-label"> Amount: </label>
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32 ">
+        <label class="custom-label w-1/3 mt-3"> Amount: </label>
         <input
           type="number"
           class="custom-input text-xs"
@@ -141,8 +141,8 @@
           Amount can not be zero!
         </p>
       </div>
-      <div class="mb-4">
-        <label class="custom-label"> Transfer Date: </label>
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
+        <label class="custom-label w-1/3 mt-3"> Transfer Date: </label>
         <input
           type="date"
           class="custom-input text-xs"
@@ -153,19 +153,23 @@
           Please Enter Transfer Date!
         </p>
       </div>
-      <div class="mb-4">
-        <label class="custom-label"> Reason: </label>
-        <input
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
+        <label class="custom-label w-1/3 mt-3"> Reason: </label>
+        <div class="flex flex-col w-full space-y-5">
+          <input
           type="text"
           class="custom-input text-xs"
           v-model="reason"
           placeholder="Reason"
         />
+          <button @click.prevent="addCreditTransfer()" class="custom-button w-full lg:w-1/4">
+      <i class="fa fa-arrow-right"></i>  Submit
+      </button>
+        </div>
+       
       </div>
 
-      <button @click.prevent="addCreditTransfer()" class="custom-button">
-        Submit
-      </button>
+      
     </div>
 
     <div v-if="showSuccess">

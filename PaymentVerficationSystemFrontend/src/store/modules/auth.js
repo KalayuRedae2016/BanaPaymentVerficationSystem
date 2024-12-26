@@ -5,9 +5,12 @@ const state = {
   name: localStorage.getItem('name') || null,
   role: localStorage.getItem('role') || null,
   userCode: localStorage.getItem('userCode') || null,
+  email: localStorage.getItem('email') || null,
+  reloading: localStorage.getItem('reloading') ||null,
   activeItem: localStorage.getItem('activeItem') || 'dashboard', // Default to 'dashboard'
   serviceBanks: localStorage.getItem('serviceBanks') || [],
   blockBanks:localStorage.getItem('blockBanks') || [],
+
 };
 
 const mutations = {
@@ -48,16 +51,30 @@ const mutations = {
     state.role = role;
     localStorage.setItem('role', role);
   },
+  setRole(state, email) {
+    console.log("role in mutation", email);
+    state.email = email;
+    localStorage.setItem('email', email);
+  },
   setActiveItem(state, activeItem) { // Mutation to set activeItem
     state.activeItem = activeItem;
     localStorage.setItem('activeItem', activeItem); // Save activeItem in localStorage
   },
+
+  setReloading(state, reloading) {
+    state.reloading = reloading;
+    localStorage.setItem('reloading', reloading);
+  },
+
+
   logout(state) {
     state.userCode = null;
     state.name = null;
     state.userId = null;
     state.token = null;
     state.role = null;
+    state.email=null;
+    state.reloading = null;
     state.activeItem = 'dashboard'; // Reset to default when logging out
     localStorage.removeItem('activeItem'); // Clear from localStorage
   },
@@ -106,6 +123,7 @@ const actions = {
     commit('setName', name);
     localStorage.setItem('name', name);
   },
+
   setLocale({ commit }, { locale }) {
     commit('setLocale', locale);
   },
@@ -114,9 +132,19 @@ const actions = {
     commit('setRole', role);
     localStorage.setItem('role', role);
   },
+  commitEmail({ commit }, { email}) {
+    console.log("commit role is called", email);
+    commit('setEmail', email);
+    localStorage.setItem('email', email);
+  },
   commitActiveItem({ commit }, { activeItem }) { // Action to commit activeItem
     console.log("commit activeItem is called", activeItem);
     commit('setActiveItem', activeItem);
+  },
+
+  commitReloading({ commit }, { reloading }) { // Action to commit activeItem
+    console.log("commit reloading is called", reloading);
+    commit('setReloading', reloading);
   },
 
   logout({ commit }) {
@@ -128,7 +156,8 @@ const actions = {
     localStorage.removeItem('locale');
     localStorage.removeItem('token');
     localStorage.removeItem('serviceBanks'),
-    localStorage.removeItem('blockBanks')
+    localStorage.removeItem('blockBanks'),
+    localStorage.removeItem('reloading');
   },
 };
 
@@ -157,12 +186,21 @@ const getters = {
   getRole(state) {
     return state.role;
   },
+
+  getEmail(state) {
+    return state.email;
+  },
+  
   getLocale(state) {
     return state.locale;
   },
   getActiveItem(state) { // Getter to retrieve activeItem
     return state.activeItem;
   },
+  getReloading(state) {
+    return state.reloading;
+  },
+ // getters, // If you have other getters in your module, include them here
 };
 
 export default {

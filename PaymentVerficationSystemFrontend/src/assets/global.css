@@ -17,13 +17,49 @@
 }
 
   
+
+.custom-input-error {
+  @apply w-full h-10 px-4 py-2 mt-2 border border-red-500 rounded-lg shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
+}
+
+.custom-input-error::placeholder {
+  @apply text-gray-500  text-xs;
+}
+
+.custom-input-error:hover {
+  @apply border-blue-400;
+}
+
+.custom-input-error:focus {
+  @apply bg-blue-100 border-blue-600 shadow-lg ring-2 ring-blue-300 transform scale-101 text-blue-500;
+}
+
+
+.custom-text-area {
+  @apply w-full h-20 px-4 py-2 mt-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
+}
+
+.custom-text-area::placeholder {
+  @apply text-gray-500  text-xs;
+}
+
+.custom-text-area:hover {
+  @apply border-blue-400;
+}
+
+.custom-text-area:focus {
+  @apply bg-blue-100 border-blue-600 shadow-lg ring-2 ring-blue-300 transform scale-101 text-blue-500;
+}
+
   .custom-button {
-    @apply bg-blue-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline;
+    @apply bg-blue-500 hover:scale-105 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ;
   }
-  
+  .custom-icon {
+    @apply text-white w-5 h-5 mr-2 hover:scale-105;
+  }
   /* Custom Label Style */
   .custom-label {
-    @apply block text-sm font-semibold text-blue-600 
+    @apply block text-sm  text-blue-700 
   }
 
   .custom-select {

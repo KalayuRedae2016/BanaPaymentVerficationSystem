@@ -16,7 +16,7 @@ node_modules
 .idea
 .DS_Store
 *.suo
-*.ntvs*
+*.ntvs*wss
 *.njsproj
 *.sln
 *.sw?
