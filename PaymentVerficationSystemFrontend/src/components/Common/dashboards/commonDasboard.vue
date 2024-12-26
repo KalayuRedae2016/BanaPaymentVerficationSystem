@@ -472,7 +472,7 @@ export default {
   },
 
  async  mounted() {
-
+ // this.$toast.success("This is a success message!");
 //await this.$refs.smoozer.startSmoothReload();
 
 // setTimeout(() => {
@@ -512,13 +512,13 @@ export default {
       });
     await this.fetchNotifications();
 
-    this.showToast();
+    //this.showToast();
    // setInterval(this.fetchNotifications, 5000);
   },
   methods: {
     showToast(){
       //alert("toast")
-      this.$toast.success("This is a success message!");
+      
     },
     closeDropDownSidebar() {
       this.sidebarVisible = false;

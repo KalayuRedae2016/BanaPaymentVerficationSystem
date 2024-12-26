@@ -12,7 +12,7 @@
           class="mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
         ></div>
         
-        <div v-if="paymentSettingCreated === 2" class="w-full border border-gray-300 rounded-lg">
+        <div v-if="paymentSettingCreated === 2" class="w-full border border-gray-300 rounded-lg mt-5">
           <div class="m-4">
             <form action="">
               <div class=" flex flex-col lg:flex-row lg:space-x-12">
@@ -24,7 +24,7 @@
                     </label>
                     <input
                       type="number"
-                      id="amount"
+                      id="regularAmount"
                       class="w-full custom-input"
                       v-model="paymentSetting.regularAmount"
                       placeholder="Amount"
@@ -43,7 +43,7 @@
                     </label>
                     <input
                       type="number"
-                      id="amount"
+                     id="subsidyAmount"
                       class="custom-input"
                       v-model="paymentSetting.subsidyAmount"
                       placeholder="Amount"
@@ -57,7 +57,7 @@
                     </label>
                     <input
                       type="number"
-                      id="amount"
+                      id="urgentAmount"
                       class="custom-input"
                       v-model="paymentSetting.urgentAmount"
                       placeholder="Amount"
@@ -71,7 +71,7 @@
                     </label>
                     <input
                       type="number"
-                      id="amount"
+                      id="serviceAmount"
                       class="custom-input"
                       v-model="paymentSetting.serviceAmount"
                       placeholder="Amount"
@@ -91,7 +91,7 @@
                     </label>
                     <input
                       type="number"
-                      id="amount"
+                     id="regFee"
                       class="custom-input"
                       v-model="paymentSetting.regFeeRate"
                       placeholder="Percentage"
@@ -103,6 +103,7 @@
                       <span class="custom-star ml-1">*</span>
                     </label>
                     <select
+                    id="activeYear"
                       v-model="paymentSetting.activeYear"
                       class="custom-select"
                     >
@@ -1098,11 +1099,31 @@ export default {
       this.fiveDayLessTenDay = false;
       this.tenDayLessAboveTenDay = false;
 
-      if (this.paymentSetting.regularAmount == "") {
-        this.regularIsRequired = true;
-        this.showErrorToastMessage("Regular amount is required");
-        return;
-      }
+      if (this.paymentSetting.regularAmount === "") {
+  this.regularIsRequired = true;
+  this.showErrorToastMessage("Regular amount is required");
+
+  const field = document.getElementById('regularAmount');
+  if (field) {
+    // Ensure that the whole page scrolls
+    setTimeout(() => {
+      field.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      // After the scroll is complete, focus on the field
+      setTimeout(() => {
+        field.focus();
+      }, 500);  // A delay to ensure the focus happens after the scroll
+
+    }, 0);  // Ensure the scroll happens immediately
+
+  }
+
+  return;
+}
+
+
+
+
       if (this.paymentSetting.serviceAmount == "") {
         this.serviceIsRequired = true;
         this.showErrorToastMessage("Service amount is required");
