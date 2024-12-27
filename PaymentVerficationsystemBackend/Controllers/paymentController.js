@@ -1399,7 +1399,8 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
     const registrationAmount = payment.registrationFee || 0;
 
     const blockBankAccountPaid = regularAmount + urgentAmount + subsidyAmount;
-    const serviceBankAccountPaid = serviceAmount + penalityAmount + registrationAmount;
+    const serviceBankAccountPaid = serviceAmount + penalityAmount;
+    // const serviceBankAccountPaid = serviceAmount + penalityAmount + registrationAmount;
     const totalAmountPaid = blockBankAccountPaid + serviceBankAccountPaid;
     return {
       userCode: payment.userCode,
