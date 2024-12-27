@@ -1053,14 +1053,10 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
 exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   const { userCode, activeYear, activeMonth } = req.query;
-
-
   if (!userCode || !activeYear || !activeMonth) {
     return next(new AppError("either userCode or activeYear or activeMonth is missed, please try again.", 400));
   }
-
   const searchPattern = new RegExp(userCode, 'i');
-
   // Construct filter object for querying payments
   const paymentQueryWithYear = {
     userCode: { $regex: searchPattern },
@@ -1069,13 +1065,10 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     isPaid: true,
     status: 'confirmed'
   };
-  console.log(req.query)
   const paymentsWithYear = await Payment.findOne(paymentQueryWithYear);
-  const user = await User.findOne({ userCode: searchPattern })
-  console.log(user.fullName)
-
+    
   if (!paymentsWithYear) {
-    return next(new AppError(`${user.fullName} has No Paid payment for Year ${activeYear}-Month ${activeMonth}`, 400));
+    return next(new AppError(`${paymentsWithYear.fullName} has No Paid payment for Year ${activeYear}-Month ${activeMonth}`, 400));
   }
 
   // Convert Mongoose document to plain JavaScript object
@@ -1113,39 +1106,10 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   // Respond with the found payments
   res.status(200).json({
     status: 'success',
-    message: `${user.fullName}'s payment records for Year ${activeYear}, Month ${activeMonth} were retrieved successfully.`,
+    message: `${paymentsWithYear.fullName}'s payment records for Year ${activeYear}, Month ${activeMonth} were retrieved successfully.`,
     payment: formattedPayment, // This already contains the formatted dates
   });
 });
-
-// exports.handlePaymentNotifications = catchAsync(async (req, res, next) => {
-//   const { seen } = req.query; // Get the `seen` parameter from the query
-
-//   if (seen === 'false') {
-//     // Fetch unseen payments
-//     const unseenPayments = await Payment.find({ seen: false, status: 'confirmed' });
-
-//     return res.status(200).json({
-//       status: 'success',
-//       message: 'Unseen payments fetched successfully',
-//       payments: unseenPayments,
-//     });
-//   }
-//   else if (seen === 'true') {
-//     // Update all unseen payments to seen
-//     await Payment.updateMany({ seen: false, status: 'confirmed' }, { seen: true });
-//     // Fetch all payments (both seen and unseen)
-//     const allPayments = await Payment.find({ status: 'confirmed' });
-//     console.log(allPayments)
-//     return res.status(200).json({
-//       status: 'success',
-//       message: 'All payments fetched successfully',
-//       payments: allPayments,
-//     });
-//   } else {
-//     return next(new AppError('Invalid query parameter. Use `seen=false` or `seen=true`.', 400));
-//   }
-// });
 
 exports.getPaymentNotifications = catchAsync(async (req, res, next) => {
   const { userId, role } = req.query; // Query parameters for user or admin

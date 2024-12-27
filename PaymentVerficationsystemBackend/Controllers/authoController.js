@@ -12,7 +12,6 @@ const catchAsync = require('../utils/catchAsync');
 const { sendEmail } = require('../utils/email');
 const { deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
 
-
 const signInToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
@@ -218,7 +217,6 @@ exports.authenticationJwt = catchAsync(async (req, _, next) => {
     next();
   });
 });
-
 // Only for rendered pages, no errors!
 // exports.isLoggedIn = async (req, res, next) => {
 //   if (req.cookies.jwt) {
