@@ -11,7 +11,7 @@ import changeCommonPassword from '../components/Common/Setting/changePassword.vu
 // import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
 
 
-import adminDashboard from "../components/adminaccessiblepages/dashboards/adminDashboard.vue";
+import adminDashboard from "../components/adminaccessiblepages/dashboards/adminDashboard1.vue";
 
 
 import newCompneySettings from "../components/adminaccessiblepages/companey/newCompaneySettings.vue";
