@@ -66,8 +66,8 @@
           <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Subsidy</th>
           <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Urgent</th>
           <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Total Block</th>
-          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Service</th>
-          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Registration Fee</th>
+          <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Service(+ Reg Fee)</th>
+
           <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Penalty</th>
           <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Total Service</th>
           <th class="w-32 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">Detail</th>
@@ -85,7 +85,7 @@
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.urgentAmountPaid }}</td>
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.blockBankAccountPaid }}</td>
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.serviceAmountPaid }}</td>
-          <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.registrationFee }}</td>
+
   
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.penalityAmountPaid }}</td>
           <td class="p-3 text-md text-gray-700 whitespace-nowrap">{{ payment.serviceBankAccountPaid }}</td>
