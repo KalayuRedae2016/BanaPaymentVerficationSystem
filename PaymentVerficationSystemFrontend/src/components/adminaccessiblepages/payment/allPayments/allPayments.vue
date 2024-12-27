@@ -230,7 +230,6 @@ export default {
   }
 },
 
-
   methods: {
     exportToExcel() {
       if (this.searchedpayments.length > 0) {

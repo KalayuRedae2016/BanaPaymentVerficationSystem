@@ -666,7 +666,7 @@ export default {
             this.$refs.toast.showSuccessToastMessage(
               "This is a success message!"
             );
-            //this.$reloadPage();
+            this.$reloadPage();
           }
         })
         .catch((error) => {
