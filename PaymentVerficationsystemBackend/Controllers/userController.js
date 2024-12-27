@@ -198,6 +198,28 @@ exports.updateUser = catchAsync(async (req, res) => {
   }
 });
 
+exports.deleteUser = catchAsync(async (req, res, next) => {
+  //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
+  const deleteUser = await User.findByIdAndDelete(req.query.id)
+  if (!deleteUser) {
+    return next(new AppError("user entry not found", 404))
+  }
+  res.status(200).json({
+    status: 'success',
+    //data: null,
+    message: `User Deleted`
+  });
+});
+exports.deleteUsers = catchAsync(async (req, res, next) => {
+  const deletedUsers= await User.deleteMany({});  // Deletes all documents
+  if (this.deleteUsers.deletedCount === 0) {
+    return next(new AppError("No User entries found to delete", 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    message: `${this.deleteUsers.deletedCount} Users Deleted`
+  });
+});
 exports.activateDeactiveUser = catchAsync(async (req, res) => {
   console.log(req.body)
   const { userId, isActive, reason } = req.body;
