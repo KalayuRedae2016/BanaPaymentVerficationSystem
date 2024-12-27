@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto flex flex-col">
-    <p class="text-md mx-5 mb-5 mt-4 text-indigo-800 font-bold">
+    <p class="text-md mx-5 mb-5 mt-4 text-blue-500 font-bold">
       Overdue Users
     </p>
     <div

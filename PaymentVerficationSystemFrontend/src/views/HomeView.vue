@@ -49,7 +49,7 @@
             {{ field.label }}
             <span class="text-red-500" v-if="field.rules.required">*</span>
           </label>
-
+         
           <input
             v-bind="getInputProps(field)"
             v-model="formSchema.login.fields[key].value"
@@ -59,7 +59,7 @@
             }"
             @blur="validateFields()"
           />
-
+    
           <p v-if="errors[key]" class="text-red-500 text-sm mt-2 ml-5">
             {{ errors[key] }}
           </p>

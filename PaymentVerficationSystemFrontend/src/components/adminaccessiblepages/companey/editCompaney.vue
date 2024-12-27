@@ -2,7 +2,7 @@
   <div>
     <div class="container flex-col bg-white">
       <div class="flex flex-row">
-        <h2 class="text-md font-bold text-primary mt-3 ml-4">
+        <h2 class="text-md font-bold text-blue-500 mt-3 ml-4">
           {{ $t("editCompanyProfile") }}
         </h2>
       </div>
@@ -43,7 +43,7 @@
     </div>
   </transition> 
 
-      <div class="flex flex-wrap mx-auto pb-8 border-t border-indigo-800 mt-4 p-4">
+      <div class="flex flex-wrap mx-auto pb-8 border-t border-blue-500 mt-4 p-4">
         <div v-if="!closepaymentCreated" class="w-full border border-gray-300 rounded-lg">
           <div class="mx-3">
             <form class="mt-8 ">

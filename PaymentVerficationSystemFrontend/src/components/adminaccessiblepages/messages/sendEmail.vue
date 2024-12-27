@@ -41,7 +41,7 @@
         </div>
       </transition>
 
-      <div class="border-t border-indigo-800 mt-3 text-xs">
+      <div class="border-t border-blue-500 mt-3 text-xs">
         <div
           class="border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
         >
@@ -117,6 +117,8 @@
                 <tbody
                   class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto max-h-96"
                 >
+
+
                   <tr
                     @click="selectDeselectEmail(searchClient.email)"
                     v-for="(searchClient, index) in searchedusers"
@@ -131,23 +133,25 @@
                         @change="selectDeselectEmail(searchClient.email)"
                       />
                     </td>
-                    <td class="p-0 text-md text-gray-700 hidden h-8">
+                    <td class="p-4 text-md text-gray-700 hidden h-8">
                       <span class="font-bold text-indigo-600">{{
                         index + 1
                       }}</span>
                     </td>
-                    <td class="p-0 text-md text-gray-700 h-6">
+                    <td class="p-4 text-md text-gray-700 h-6">
                       <span class="font-bold text-indigo-600">{{
                         searchClient.userCode
                       }}</span>
                     </td>
-                    <td class="p-0 text-md text-gray-700 font-bold h-6">
+                    <td class="p-4 text-md text-gray-700 font-bold h-6">
                       {{ searchClient.fullName }}
                     </td>
-                    <td class="p-0 text-md text-gray-700 font-bold h-6">
+                    <td class="p-4 text-md text-gray-700 font-bold h-6">
                       {{ searchClient.email }}
                     </td>
                   </tr>
+
+
                 </tbody>
               </table>
             </div>
