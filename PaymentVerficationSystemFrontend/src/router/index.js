@@ -11,7 +11,7 @@ import changeCommonPassword from '../components/Common/Setting/changePassword.vu
 // import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
 
 
-import resDash from "../components/adminaccessiblepages/dashboards/adminDashboard.vue";
+import adminDashboard from "../components/adminaccessiblepages/dashboards/adminDashboard1.vue";
 
 
 import newCompneySettings from "../components/adminaccessiblepages/companey/newCompaneySettings.vue";
@@ -83,8 +83,8 @@ const routes = [
     children: [
       // Admin routes
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
-      { path: "", component: resDash },
-      { path: "res-dash", component: resDash },
+      { path: "", component: adminDashboard },
+      { path: "res-dash", component: adminDashboard },
       { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },
       { path: "display-companey", name: "display-companey", component: displayCompaney },
       { path: "edit-companey", name: "edit-companey", component: editCompaney },
