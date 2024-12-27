@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto flex flex-col">
     <p class="text-md mx-5 mb-5 mt-4 text-blue-500 font-bold">
-      See Payment Detail
+      See Payment Detail(Only Current Month {{ activeYear }} - {{ activeMonth }})
     </p>
     <div
       class="border-t border-blue-500  pb-5 flex flex-col bg-white -mt-2"
@@ -105,52 +105,6 @@
     </tbody>
   </table>
 </div>
-
-
-<!-- //paging -->
-        <!-- <div
-          class="flex justify-between items-center mt-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
-        >
-       
-          <div class="flex items-center">
-            <select
-              id="payments-per-page"
-              v-model="paymentsPerpage"
-              @change="changePerPageNumber()"
-              class="h-9 border border-gray-300text-gray-500 rounded-lg shadow-sm px-3 mr-4 focus:outline-none focus:ring focus:border-pink-500"
-            >
-              <option value="" disabled>Show</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="10">10</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </select>
-
-            <button
-              @click="previosPage"
-              class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-l-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
-              :disabled="currentPage === 1"
-            >
-              <i class="fas fa-chevron-left"></i>
-            </button>
-
-       
-            <span
-              class="px-4 py-1.5 bg-indigo-800 text-white font-bold border-t border-b border-gray-300"
-            >
-              {{ currentPage }}
-            </span>
-
-       
-            <button
-              @click="nextPage"
-              class="px-3 py-1.5 text-gray-600 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-r-lg shadow-sm focus:outline-none focus:ring focus:border-pink-500 transition"
-            >
-              <i class="fas fa-chevron-right"></i>
-            </button>
-          </div>
-        </div> -->
       </div>
     </div>
   </div>
