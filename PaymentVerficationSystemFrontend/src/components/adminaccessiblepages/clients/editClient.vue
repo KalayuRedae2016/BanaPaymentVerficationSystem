@@ -453,17 +453,7 @@ export default {
       clientId: "",
 
       clientProfile: {
-        firstName: "Tadesse",
-        middleName: "Gebremicheal",
-        lastName: "Berhe",
-        age: "27",
-        gender: "male",
-        address: "mekelle",
-        email: "tadiosgb26@gmail.com",
-        phoneNumber: "0967740501",
-        userCode: "BM0001",
-        imageData: "",
-        _id: "",
+        
       },
     };
   },
@@ -486,15 +476,8 @@ export default {
   },
   mounted() {
 
-    // if (this.$route.query.formEmptyEditProfile === 'true') {
-    // this.showSuccessToastMessage("Your Profile Editted Successfully");
-    //   setTimeout(() => {
-    //     this.$router.push('/admindasboard/profile');
-    //   }, 2000);
-    // }
 
-
-    this.clientId = this.userId;
+    this.clientId = this.$route.params.clientId;
 
     console.log("client Id", this.clientId);
 

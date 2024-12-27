@@ -338,6 +338,7 @@ export default {
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
+                 console.log("role is given from the server",role);
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" } });
               } else if (role.includes("User")) {
