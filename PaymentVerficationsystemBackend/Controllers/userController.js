@@ -118,10 +118,6 @@ exports.getUser = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = catchAsync(async (req, res) => {
-
- 
-
-
   try {
     const userId = req.params.id;
     console.log(userId)
@@ -212,12 +208,12 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 });
 exports.deleteUsers = catchAsync(async (req, res, next) => {
   const deletedUsers= await User.deleteMany({});  // Deletes all documents
-  if (this.deleteUsers.deletedCount === 0) {
+  if (this.deletedUsers.deletedCount === 0) {
     return next(new AppError("No User entries found to delete", 404));
   }
   res.status(200).json({
     status: 'success',
-    message: `${this.deleteUsers.deletedCount} Users Deleted`
+    message: `${this.deletedUsers.deletedCount} Users Deleted`
   });
 });
 exports.activateDeactiveUser = catchAsync(async (req, res) => {
