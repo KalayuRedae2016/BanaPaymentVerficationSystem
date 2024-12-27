@@ -388,7 +388,7 @@
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
             >
-              {{ totalOrgBalance.totalServiceBankAccount + totalOrgBalance.totalBlockBankAccount }}
+            {{ (totalOrgBalance.totalServiceBankAccount || 0) + (totalOrgBalance.totalBlockBankAccount || 0) }}
             </td>
           </tr>
          
