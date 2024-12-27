@@ -532,6 +532,8 @@ export default {
           });
       }
     },
+
+
     handleImageInput() {
       const fileInput = this.$refs.fileInput;
       console.log("fileInput", fileInput);
@@ -656,7 +658,7 @@ export default {
       formData.append("profileImage", this.imageFile);
       formData.append("fullName", this.fullName);
       console.log("image", this.imageFile);
-
+      console.log("formData", formData);
       this.$apiClient
         .post("/api/v1/users/signup", formData)
         .then((response) => {
@@ -664,7 +666,7 @@ export default {
             this.$refs.toast.showSuccessToastMessage(
               "This is a success message!"
             );
-            this.$reloadPage();
+            //this.$reloadPage();
           }
         })
         .catch((error) => {

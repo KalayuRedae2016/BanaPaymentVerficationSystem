@@ -40,6 +40,7 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
+  console.log("singup requestbody pro: " , req.body.profileImage);
   try {
     const organization = await Organization.findOne()
     console.log("org",organization)
