@@ -120,8 +120,8 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
+  console.log("ss",req.body)
   const { userCode, password } = req.body
-  // Input validation
   if (!userCode || !password) {
     return res.status(200).json({
       status: 0,
@@ -147,7 +147,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!correct) {
     //If password doesn't match, increment failedLoginAttempts
     user.failedLoginAttempts += 1;
-    if (user.failedLoginAttempts >= 5) {
+    if (user.failedLoginAttempts >= 20) {
       user.lockUntil = new Date(Date.now() + 60 * 60 * 1000); // Lock the account for 1 hour
     }
 
@@ -164,9 +164,21 @@ exports.login = catchAsync(async (req, res, next) => {
   user.failedLoginAttempts = 0;
   user.lockUntil = null;
   await user.save();
+  
   const token = signInToken(user._id);
-
-  res.status(200).json({
+  //If user is an admin and the password is still the default, ask for a password change
+  if (user.role === 'Admin' && password === 'admin1234') {
+    return res.status(200).json({
+      status: 1,
+      token:token,
+      role: user.role,
+      userId: user._id,
+      userCode:user.userCode,
+      message: 'Please change your password',
+      changePassword: true,  // Indicating that the frontend should redirect to the password change page
+    });
+  }
+   res.status(200).json({
     status: 1,
     token: token,
     role: user.role,

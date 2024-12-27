@@ -9,6 +9,7 @@ const userSchema = new Schema(
   {
     firstName: {
       type: String,
+      required:true,
       default: null
     },
     middleName: {
@@ -43,8 +44,8 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      //required: [true, 'Please provide a password'],
-      //minlength: [8, 'Password must be more than 8 characters'],
+      required: [true, 'Please provide a password'],
+      minlength: [8, 'Password must be more than 8 characters'],
       select: false,
     },
     isActive: {
