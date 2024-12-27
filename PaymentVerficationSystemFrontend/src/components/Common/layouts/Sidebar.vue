@@ -19,7 +19,7 @@
             <!-- //admin navigations  -->
                                <!-- Dashboard -->
             <li
-              v-if="role === 'Admin'"
+              v-if="role=== 'Admin'"
               @click="setActive('dashboard')"
               class="items-center bg-white hover:bg-gray-100 transition "
               :class="
@@ -233,23 +233,29 @@ export default {
       collapseShow: "hidden",
       screenSize: "",
       isOpen: false,
+      role:localStorage.getItem("role"),
     };
   },
 
 
   computed: {
-    ...mapGetters(["getToken", "getUserId", "getLocale", "getRole"]),
+    ...mapGetters(["getToken", "getUserId", "getLocale"]),
     userId() {
       return this.getUserId;
     },
-    role() {
-      return this.getRole;
-    },
+    
     activeItem() {
       return this.$store.getters.getActiveItem;
     },
   },
   mounted() {
+
+
+    this.role=localStorage.getItem("role");
+    console.log("role in mouinted",localStorage.getItem("role"))
+
+
+  
     // Add resize event listener
     window.addEventListener("resize", this.checkScreenSize);
     // Initial check on mountss
@@ -261,6 +267,7 @@ export default {
     window.removeEventListener("resize", this.checkScreenSize);
   },
   created() {
+    this.role=localStorage.getItem("role");
     this.setScreenSize();
     window.addEventListener("resize", this.setScreenSize);
   },

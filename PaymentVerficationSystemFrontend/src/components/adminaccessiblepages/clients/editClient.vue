@@ -1,25 +1,59 @@
 <template>
-  <div>
-    <div>
-      <!-- Import and Use LoadingIndicator -->
-
-      <Toast ref="toast" />
-      <ReloadPage :visible="pageReload" :message="errorMessage" />
-      <LoadingSpinner :visible="isLoading" />
-      <CommonSmoozer ref="smoother" />
+  <div class="pb-20 shadow-lg">
+    <div class="border-b border-blue-500">
+      <p class="text-blue-500 font-bold px-4 pb-4 pt-3">Edit Client Profile</p>
     </div>
-    <div v-if="showCurrentPage">
-      <div class="border-b border-blue-500">
-        <p class="text-blue-800 font-bold px-4 pb-4 pt-3">
-          {{ $t("Edit Client Profile") }}
-        </p>
-      </div>
+    <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showSuccessToast"
+      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">{{ succesToastMessage }}</span>
+    </div>
+  </transition> 
 
-      <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
+      <transition
+    enter-active-class="transform transition duration-300 ease-out"
+    enter-from-class="translate-x-full opacity-0"
+    enter-to-class="translate-x-0 opacity-100"
+    leave-active-class="transform transition duration-300 ease-in"
+    leave-from-class="translate-x-0 opacity-100"
+    leave-to-class="translate-x-full opacity-0"
+  >
+    <div
+      v-if="showErrorToast"
+      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
+      role="alert"
+    >
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline">{{ errorToastMessage }}</span>
+    </div>
+  </transition> 
+    
+<div v-if="formEmptyEditProfile" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
+  <strong class="font-bold">Success!</strong>
+  <span class="block sm:inline">User profile edited successfully.</span>
+  <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" aria-label="Close" onclick="this.parentElement.style.display='none'">
+    <svg class="fill-current h-6 w-6 text-green-700" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <title>Close</title>
+      <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.641a.5.5 0 00.707.707L10 10.707l3.641 3.64a.5.5 0 00.707-.707L10.707 10l3.641-3.641a.5.5 0 000-.707z" />
+    </svg>
+  </button>
+</div>
+<div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
         <div
-          class="flex flex-col md:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
+          class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
         >
-          <div class="m-4 w-full h-full md:w-1/4 h-64 bg-gray-500">
+          <div class="m-4 w-full h-full lg:w-1/4 h-64 bg-gray-500">
             <img
               :src="imageData"
               alt="User Profile Image"
@@ -111,7 +145,7 @@
       <div v-if="showEditModal" style="height: 400px">
         <transition name="fade" mode="out-in">
           <div
-            class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-80"
+            class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
           >
             <div class="bg-white rounded-lg p-6 border border-cyan-500">
               <div class="flex justify-between items-center">
@@ -135,162 +169,159 @@
               </div>
 
               <hr class="my-4 md:bg-red-500" />
-              <div>
+              <div >
                 <form>
-                  <div style="height: 350px" class="scroll-y">
-                    <div
-                      class="flex flex-col lg:flex-row items-center gap-6 p-4 border border-blue-300 rounded-lg"
-                    >
-                      <!-- Image Container -->
-                      <div class="relative w-32 h-32">
-                        <img
-                          :src="imageData || 'https://via.placeholder.com/128'"
-                          alt="User Profile Image"
-                          class="w-full h-full rounded-lg border-4 border-gray-300 object-cover shadow-md"
-                        />
-                        <!-- Overlay Icon on Hover -->
-                        <div
-                          class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 hover:opacity-100 transition duration-300"
-                        >
-                          <i class="fas fa-camera text-white text-3xl"></i>
-                        </div>
-                      </div>
 
-                      <!-- Custom File Input -->
-                      <div class="relative">
-                        <label
-                          for="fileInput"
-                          class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
-                        >
-                          <i class="fas fa-upload mr-2"></i>Choose Image
-                        </label>
-                        <input
-                          id="fileInput"
-                          type="file"
-                          ref="fileInput"
-                          accept="image/*"
-                          @change="handleImageInput"
-                          class="hidden"
-                        />
-                        <p class="text-sm text-gray-500 mt-2">
-                          JPG, PNG, or GIF
-                        </p>
+                  <div style="height: 350px" class="scroll-y" >
+                  <div 
+                    class="flex flex-col lg:flex-row items-center gap-6 p-4 border border-blue-300 rounded-lg"
+                  >
+                    <!-- Image Container -->
+                    <div class="relative w-32 h-32">
+                      <img
+                        :src="imageData || 'https://via.placeholder.com/128'"
+                        alt="User Profile Image"
+                        class="w-full h-full rounded-lg border-4 border-gray-300 object-cover shadow-md"
+                      />
+                      <!-- Overlay Icon on Hover -->
+                      <div
+                        class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 hover:opacity-100 transition duration-300"
+                      >
+                        <i class="fas fa-camera text-white text-3xl"></i>
                       </div>
                     </div>
 
-                    <div class="mb-4 mt-10">
-                      <label class="custom-label">
-                        {{ $t("firstName") }}
-                        <span class="text-red-500 ml-1">*</span>
+                    <!-- Custom File Input -->
+                    <div class="relative">
+                      <label
+                        for="fileInput"
+                        class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300"
+                      >
+                        <i class="fas fa-upload mr-2"></i>Choose Image
                       </label>
                       <input
-                        type="text"
-                        class="custom-input"
-                        v-model="clientProfile.firstName"
-                        :placeholder="$t('firstName')"
+                        id="fileInput"
+                        type="file"
+                        ref="fileInput"
+                        accept="image/*"
+                        @change="handleImageInput"
+                        class="hidden"
                       />
-                    </div>
-
-                    <div class="mb-4">
-                      <label
-                        class="custom-label"
-                      >
-                        {{ $t("middleName") }}
-                        <span class="text-red-500 ml-1">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        class="custom-input"
-                        v-model="clientProfile.middleName"
-                        :placeholder="$t('middleName')"
-                      />
-                    </div>
-
-                    <div class="mb-4">
-                      <label
-                        class="custom-label"
-                      >
-                        {{ $t("lastName") }}
-                        <span class="text-red-500 ml-1">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="closeAmount"
-                        class="custom-input"
-                        v-model="clientProfile.lastName"
-                        :placeholder="$t('lastName')"
-                      />
-                    </div>
-
-                    <div class="w-full">
-                      <label
-                        class="custom-label"
-                      >
-                        Gender
-                        <span class="text-red-500 ml-1">*</span>
-                      </label>
-
-                      <select
-                        class="custom-select"
-                        style="padding-left: 16px"
-                        v-model="clientProfile.gender"
-                      >
-                        <option value="" disabled selected>
-                          Select gender
-                        </option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                      </select>
-                    </div>
-
-                    <div class="mb-4">
-                      <label
-                        class="custom-label"
-                      >
-                        {{ $t("age") }}
-                        <span class="text-red-500 ml-1">*</span>
-                      </label>
-                      <input
-                        type="number"
-                        id="closeAmount"
-                        class="custom-input"
-                        v-model="clientProfile.age"
-                        :placeholder="$t('age')"
-                      />
-                    </div>
-
-                    <div class="mb-4">
-                      <label
-                        class="custom-label"
-                      >
-                        {{ $t("email") }}
-                        <span class="text-red-500 ml-1">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="closeAmount"
-                        class="custom-input"
-                        v-model="clientProfile.email"
-                        :placeholder="$t('email')"
-                      />
-                    </div>
-
-                    <div class="mb-4">
-                      <label
-                        class="custom-label"
-                      >
-                        {{ $t("phoneNumber") }}
-                        <span class="text-red-500 ml-1">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        id="closeAmount"
-                        class="custom-input"
-                        v-model="clientProfile.phoneNumber"
-                        :placeholder="$t('phoneNumber')"
-                      />
+                      <p class="text-sm text-gray-500 mt-2">JPG, PNG, or GIF</p>
                     </div>
                   </div>
+
+                  <div class="mb-4 mt-10">
+                    <label class="custom-label">
+                      {{ $t("firstName") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="custom-input"
+                      v-model="clientProfile.firstName"
+                      :placeholder="$t('firstName')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("middleName") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      class="custom-input"
+                      v-model="clientProfile.middleName"
+                      :placeholder="$t('middleName')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("lastName") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.lastName"
+                      :placeholder="$t('lastName')"
+                    />
+                  </div>
+
+                  <div class="w-full">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      Gender
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+
+                    <select
+                      class="mb-3 border border-indigo-800 w-full rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-base h-12"
+                      style="padding-left: 16px"
+                      v-model="clientProfile.gender"
+                    >
+                      <option value="" disabled selected>Select gender</option>
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("age") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="number"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.age"
+                      :placeholder="$t('age')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("email") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.email"
+                      :placeholder="$t('email')"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label
+                      class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg"
+                    >
+                      {{ $t("phoneNumber") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="closeAmount"
+                      class="custom-input"
+                      v-model="clientProfile.phoneNumber"
+                      :placeholder="$t('phoneNumber')"
+                    />
+                  </div>
+                </div>
                   <button
                     @click.prevent="editDetail()"
                     type="submit"
@@ -308,78 +339,186 @@
           </div>
         </transition>
       </div>
+
+    <div v-if="showSuccess">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center mb-4 ml-32">
+                  <svg
+                    class="w-8 h-8 text-green-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M5 13l4 4L19 7"
+                    ></path>
+                  </svg>
+                  <h2 class="text-xs text-green-800">Success!</h2>
+                </div>
+                <p class="text-blue-800 text-xs ml-8">
+                  {{ successMessage }}
+                </p>
+                <button
+                  @click="showSuccess = false"
+                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="showError">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-red-500">
+            <div class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
+                <div class="flex items-center justify-center mb-4">
+                  <svg
+                    class="w-8 h-8 text-red-500 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M6 18L18 6M6 6l12 12"
+                    ></path>
+                  </svg>
+                  <h2 class="text-sm font-bold text-gray-800">Error!</h2>
+                </div>
+                <p class="text-gray-600 text-sm">
+                  {{ errorMessage }}
+                </p>
+                <button
+                  @click="showError = false"
+                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+            <hr class="my-4 bg-red-500" />
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
+    
+    <script>
 
-<script>
-import LoadingSpinner from "../../Common/LoadingSpinner.vue";
-import Toast from "../../Common/Toast.vue";
-import ReloadPage from "../../Common/reloadPage.vue";
-import CommonSmoozer from "../../Common/commonSmoozer.vue";
-
+import { mapGetters } from "vuex";
 export default {
   components: {
-    Toast,
-    LoadingSpinner,
-    ReloadPage,
-    CommonSmoozer
+    
   },
   data() {
     return {
-      smoozeReload:false,
-      showCurrentPage: false,
-      pageReload: false,
-      isLoading: false,
-      data: null,
+
+      showSuccessToast:false,
+      showErrorToast:false,
+      succesToastMessage:"",
+      errorToastMessage:"",
+
+      showSuccess: false,
+      showError: false,
       errorMessage: "",
+      successMessage: "",
+
       showEditModal: false,
+      displayDetail: false,
       imageData: "",
       imageFile: "",
       clientId: "",
-      clientProfile: {},
+
+      clientProfile: {
+        
+      },
     };
   },
+  computed: {
+    ...mapGetters(["getToken", "getUserId", "getLocale", "getName"]),
+    userId() {
+      return this.getUserId;
+    },
+    token() {
+      return this.getToken;
+    },
 
+    locale() {
+      this.$i18n.locale = this.getLocale;
+      return this.getLocale;
+    },
+    name() {
+      return this.getName;
+    },
+  },
   mounted() {
-    this.isLoading = true;
-    this.pageReload = false; // Start with the page not being reloaded
+
 
     this.clientId = this.$route.params.clientId;
-    console.log("client id: ", this.clientId);
 
-    this.$apiGetById("/api/v1/users", this.clientId)
+    console.log("client Id", this.clientId);
+
+    this.$apiClient
+      .get(`/api/v1/users/${this.clientId}`)
       .then((response) => {
-        console.log("response in the edit client mounted: ", response);
-        // this.$refs.toast.showSuccessToastMessage(response.message);
-        this.clientProfile = response.clientProfile;
-        this.imageData = "data:image/jpeg;base64," + response.imageData;
-        this.showCurrentPage = true; // Page is successfully loaded
+        console.log("Response client profile", response);
+        this.clientProfile = response.data.clientProfile;
+        this.imageData = "data:image/jpeg;base64," + response.data.imageData;
       })
       .catch((error) => {
-        this.errorMessage = error.message;
-        this.pageReload = true; // Set page reload flag
-        console.log("error catch: ", error.message);
-      })
-      .finally(() => {
-        if (this.showCurrentPage) {
-          console.log("finally true");
-          // If the page has been loaded successfully
-          this.isLoading = false;
-          this.pageReload = false; // Hide the reload page
-        } else {
-          console.log("finally false");
-          // If no response, show the reload page
-          this.isLoading = false;
-         // this.smoozeReload=true;
-          this.pageReload = true;
-          this.errorMessage = "Something went wrong, please try again."; // Generic error message
-        }
-       // console.log("finally");
+        console.error("Error fetching client datakk:", error);
       });
   },
-
   methods: {
+    showSuccessToastMessage(message) {
+      this.succesToastMessage = message;
+      this.showSuccessToast = true;
+      setTimeout(() => {
+        this.showSuccessToast = false;
+      }, 1000); 
+    },
+
+    showErrorToastMessage(message) {
+      this.errorToastMessage = message;
+      this.showErrorToast = true;
+      setTimeout(() => {
+        this.showErrorToast = false;
+      }, 1000); 
+    },
+
+
+    handleImageInput() {
+      const fileInput = this.$refs.fileInput;
+      console.log("fileInput", fileInput);
+      if (fileInput && fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        this.imageFile = file;
+        // Rest of your code to handle the file
+      }
+    },
     editDetail() {
       //alert("mmm");
       this.showEditModal = false;
@@ -395,41 +534,31 @@ export default {
       formData.append("email", this.clientProfile.email);
       formData.append("phoneNumber", this.clientProfile.phoneNumber);
       formData.append("gender", this.clientProfile.gender);
+      this.$apiClient
+        .patch(`/api/v1/users/${this.clientProfile._id}`, formData)
+        .then((response) => {
+          console.log("response from the update: " ,response);
+          if (response.data.status === 1) {
+            this.clientProfile =response.data.updatedUser;
+           
+            this.$reloadPage();
 
-      console.log("client id", this.clientProfile._id);
-      this.isLoading = true;
-
-      this.$apiPatch("/api/v1/users", this.clientProfile._id, formData)
-        .then(() => {
-          this.$refs.toast.showSuccessToastMessage("User updated");
-          this.showCurrentPage = true;
+           // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
+           // this.imageData = "data:image/jpeg;base64," + this.imageFile;
+           // this.showSuccess = true;
+           // this.successMessage = response.data.message;
+            
+          }
         })
         .catch((error) => {
-          this.errorMessage = error.message;
-          this.pageReload = true; // Set page reload flag
-          console.log("error catch: ", error.message);
-        }).finally(() => {
-          if (this.showCurrentPage) {
-            // If the page has been loaded successfully
-
-            this.isLoading = false;
-            this.pageReload = false; // Hide the reload page
-            this.$refs.smoother.startSmoothReload();
-            console.log("finally true");
-          } else {
-            console.log("finally false");
-            // If no response, show the reload page
-            this.isLoading = false;
-            this.pageReload = true;
-            this.errorMessage = "Something went wrong, please try again."; // Generic error message
-          }
-        
+          console.log(error);
+          this.showErrorToastMessage("Somthing went wrong!!");
         });
     },
   },
 };
 </script>
-<style>
+    <style>
 .custom-paragraph {
   @apply text-blue-700 text-sm font-bold mt-5 mb-5;
 }

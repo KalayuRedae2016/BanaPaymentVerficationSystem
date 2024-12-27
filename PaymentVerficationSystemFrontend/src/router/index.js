@@ -11,7 +11,9 @@ import changeCommonPassword from '../components/Common/Setting/changePassword.vu
 // import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
 
 
-import resDash from "../components/adminaccessiblepages/dashboards/Resdashboard.vue";
+import resDash from "../components/adminaccessiblepages/dashboards/adminDashboard.vue";
+
+
 import newCompneySettings from "../components/adminaccessiblepages/companey/newCompaneySettings.vue";
 import displayCompaney from "../components/adminaccessiblepages/companey/displayCompaney.vue";
 import editCompaney from "../components/adminaccessiblepages/companey/editCompaney.vue";
@@ -48,7 +50,6 @@ import userdashboardFirst from "../components/UserAccessiblepages/userdashboard/
 import profile from "../components/UserAccessiblepages/profile/editProfile.vue";
 import idCard from "../components/UserAccessiblepages/idCard/idCard.vue";
 import infoPayment from "../components/UserAccessiblepages/information/info.vue";
-import changePassword from "../components/UserAccessiblepages/profile/changePassword.vue";
 
 const routes = [
   {

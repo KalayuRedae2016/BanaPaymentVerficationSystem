@@ -118,6 +118,10 @@ exports.getUser = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = catchAsync(async (req, res) => {
+
+ 
+
+
   try {
     const userId = req.params.id;
     console.log(userId)

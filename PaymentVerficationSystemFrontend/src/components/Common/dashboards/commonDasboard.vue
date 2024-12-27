@@ -167,7 +167,7 @@
               </li>
 
               <li
-                v-if="role === 'Admin'"
+                v-if="role=== 'Admin'"
                 @click="setActive('companyProfile')"
                 class="items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -416,6 +416,7 @@ export default {
       dropdownVisible: false,
       showEmailDropdown: false,
       sidebarVisible: false,
+      role:localStorage.getItem("role"),
       messages: [
         {
           message: "You have a new friend request.",
@@ -440,6 +441,7 @@ export default {
     };
   },
   created() {
+    this.role=localStorage.getItem("role");
     this.setScreenSize();
     window.addEventListener("resize", this.setScreenSize);
     //this.firstPaymentLength();
@@ -454,7 +456,7 @@ export default {
     window.removeEventListener("resize", this.setScreenSize);
   },
   computed: {
-    ...mapGetters(["getToken", "getUserId", "getLocale", "getRole"]),
+    ...mapGetters(["getToken", "getUserId", "getLocale"]),
     userId() {
       return this.getUserId;
     },
@@ -465,13 +467,10 @@ export default {
       this.$i18n.locale = this.getLocale;
       return this.getLocale;
     },
-    role() {
-      return this.getRole;
-    },
+ 
   },
 
  async  mounted() {
- 
 
 // setTimeout(() => {
 //   this.$store.dispatch("commitReloading", false);

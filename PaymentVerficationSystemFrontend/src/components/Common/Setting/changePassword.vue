@@ -10,7 +10,7 @@
       <div class="mx-5">
         <div class="mt-4  py-4 ml-0 lg:ml-10">
           <form action="flex flex-col">
-            <div class="flex flex-col lg:flex-row mb-4" v-if="role=='Admin'">
+            <div class="flex flex-col lg:flex-row mb-4" v-if="role==='Admin'">
               <label for="" class="custom-label w-full lg:w-1/3 mt-3"
                 >New Email</label
               >
@@ -126,6 +126,7 @@ export default {
   },
   data() {
     return {
+      role:"",
       showOldPassword: false,
       showNewPassword: false,
       showConfirmNewPassword: false,
@@ -158,6 +159,9 @@ export default {
     role() {
       return this.getRole;
     },
+  },
+  created(){
+    this.role=localStorage.getItem("role")
   },
 
   methods: {

@@ -115,7 +115,7 @@
   "successMessage": "Your company profile was created successfully.",
   "bankType":"Bank Type",
 
-  "CBE": "Commercial Bank of Ethiopia (CBE)",
+  "CBE": "CBE",
   "Wegagen": "Wegagen Bank",
   "Enat": "Enat Bank",
   "Dashen": "Dashen Bank",
@@ -434,5 +434,7 @@
   "viewDetails": "View Details",
   "welcome": "Welcome",
   "yourEmailOrUsername": "Your email or username",
-  "verifyPayment":"verifyPayment"
+  "verifyPayment":"verifyPayment",
+  "paidClients":"Confirmed Clients",
+  "unpaidClinets":"Unpaid Clients"
 }

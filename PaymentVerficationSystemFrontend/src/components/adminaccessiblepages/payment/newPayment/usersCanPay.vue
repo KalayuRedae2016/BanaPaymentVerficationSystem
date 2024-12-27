@@ -13,7 +13,7 @@
               v-model="keyword"
               type="text"
               :placeholder="$t('searchByNameEmailUsername')"
-              class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
+              class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-500 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
             />
           </div>
         </div>
@@ -110,38 +110,38 @@
                       <!-- // head of the tables -->
                       <tr class="bg-gray-200">
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Metric
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           Amount
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Payment Date
                         </th>
 
                         <th
-                          class="w-32 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           Bank Type
                         </th>
                         <th
-                          class="w-32 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           TT Number
                         </th>
                         <th
-                          class="w-32 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           Paid
                         </th>
                         <th
-                          class="w-32 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
                         >
                           Action
                         </th>
@@ -149,7 +149,7 @@
                     </thead>
                     <tbody>
                       <!-- // this tr is for the regular data -->
-                      <tr>
+                      <tr class="border-b border-t border-gray-500">
                         <td
                           style="width: 50px"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
@@ -244,7 +244,18 @@
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
-                          <p>{{ payment.regular.isPaid }}</p>
+                          <span
+                            v-if="payment.regular.isPaid"
+                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Paid
+                          </span>
+                          <span
+                            v-else-if="!payment.regular.isPaid"
+                            class="bg-yellow-500 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Unpaid
+                          </span>
                         </td>
 
                         <td
@@ -262,7 +273,6 @@
                               )
                             "
                             class="w-32 custom-button flex items-center p-2 rounded hover:bg-blue-600"
-                          
                           >
                             <i class="fas fa-check-circle mr-2"></i> Confirm
                           </button>
@@ -275,10 +285,10 @@
                           <!-- Confirm Button -->
                           <button
                             @click="
-                             showEditModalDetail(
+                              showEditModalDetail(
                                 payment.billCode,
                                 payment.regular,
-                               'regular'
+                                'regular'
                               )
                             "
                             class="w-32 custom-button flex items-center py-2 rounded hover:bg-blue-600 mt-3"
@@ -288,7 +298,7 @@
                         </td>
                       </tr>
                       <!-- // for the subsidy -->
-                      <tr v-if="payment.subsidy.amount > 0">
+                      <tr v-if="payment.subsidy.amount > 0" class="border-b border-t border-gray-500">
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
@@ -400,7 +410,18 @@
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
-                          <p>{{ payment.subsidy.isPaid }}</p>
+                          <span
+                            v-if="payment.subsidy.isPaid"
+                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Paid
+                          </span>
+                          <span
+                            v-else-if="!payment.subsidy.isPaid"
+                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Unpaid
+                          </span>
                         </td>
                         <td
                           v-if="!payment.subsidy.isPaid"
@@ -425,14 +446,13 @@
                         <td
                           v-if="payment.subsidy.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
-                        ><button
+                        >
+                          <button
                             @click="
-                              confirmUnconfirmSubsidy(
-                                payment.subsidy,
+                              showEditModalDetail(
                                 payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
+                                payment.subsidy,
+                                'subsidy'
                               )
                             "
                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
@@ -442,8 +462,7 @@
                         </td>
                       </tr>
 
-
-                      <tr v-if="payment.urgent.amount > 0">
+                      <tr v-if="payment.urgent.amount > 0" class="border-b border-t border-gray-500">
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
@@ -549,37 +568,23 @@
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
-                          <p>{{ payment.urgent.isPaid }}</p>
+                          <span
+                            v-if="payment.urgent.isPaid"
+                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Paid
+                          </span>
+                          <span
+                            v-else-if="!payment.urgent.isPaid"
+                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Unpaid
+                          </span>
                         </td>
                         <td
                           v-if="!payment.urgent.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                         
-                          <button
-                            @click="
-                              confirmUnconfirmUrgent(
-                                payment.urgent,
-                                payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
-                              )
-                            "
-                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                    
-                          >
-                              <i class="fas fa-check-circle mr-2"></i>Confirm
-             
-                          </button>
-                        </td>
-                        <td
-                          v-if="payment.urgent.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
-                        >
-                        
-
-                          <!-- Confirm Button -->
                           <button
                             @click="
                               confirmUnconfirmUrgent(
@@ -591,16 +596,31 @@
                               )
                             "
                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                    
                           >
-                           
-                              <i class="fas fa-edit mr-2"></i>Edit
-                            
+                            <i class="fas fa-check-circle mr-2"></i>Confirm
+                          </button>
+                        </td>
+                        <td
+                          v-if="payment.urgent.isPaid"
+                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                        >
+                          <!-- Confirm Button -->
+                          <button
+                            @click="
+                              showEditModalDetail(
+                                payment.billCode,
+                                payment.urgent,
+                                'urgent'
+                              )
+                            "
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                          >
+                            <i class="fas fa-edit mr-2"></i>Edit
                           </button>
                         </td>
                       </tr>
                       <!-- for the service data -->
-                      <tr>
+                      <tr class="border-b border-t border-gray-500">
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
@@ -701,7 +721,18 @@
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
-                          <p>{{ payment.service.isPaid }}</p>
+                          <span
+                            v-if="payment.service.isPaid"
+                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Paid
+                          </span>
+                          <span
+                            v-else-if="!payment.service.isPaid"
+                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Unpaid
+                          </span>
                         </td>
                         <td
                           v-if="!payment.service.isPaid"
@@ -717,12 +748,9 @@
                                 paymentIndex
                               )
                             "
-                     class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                           
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
-                            
-                              <i class="fas fa-check-circle mr-2"></i> Confirm
-
+                            <i class="fas fa-check-circle mr-2"></i> Confirm
                           </button>
                         </td>
 
@@ -730,22 +758,17 @@
                           v-if="payment.service.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                        
                           <button
                             @click="
-                              confirmUnconfirmService(
-                                payment.service,
+                              showEditModalDetail(
                                 payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
+                                payment.service,
+                                'service'
                               )
                             "
                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                          
                           >
-                              <i class="fas fa-edit  mr-2"></i> Edit
-                        
+                            <i class="fas fa-edit mr-2"></i> Edit
                           </button>
                         </td>
                       </tr>
@@ -758,59 +781,59 @@
                     <thead>
                       <tr class="bg-gray-200">
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Metric
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Regular Penality
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Subsidy Penality
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Urgent Penality
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Total Penality
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Payment Date
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Bank Type
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           TTNumber
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Paid
                         </th>
                         <th
-                          class="w-24 px-3 text-xxs font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Action
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr class="border-b border-t border-gray-500">
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
@@ -891,7 +914,7 @@
                           </p>
                         </td>
 
-                      <td
+                        <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
                           <select
@@ -955,27 +978,31 @@
                           </p>
                         </td>
 
+                       
+
                         <td
                           class="px-3 text-xs text-gray-700 whitespace-nowrap"
                         >
-                          <p
-                            v-if="
-                              payment.regular.amount +
-                                payment.subsidy.penality +
-                                payment.urgent.penality >
-                              0
-                            "
+               
+                        
+                          <span
+                            v-if="payment.penality.isPaid"
+                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
                           >
-                            {{ payment.penality.isPaid }}
-                          </p>
-                          <p v-else>--------</p>
+                            Paid
+                          </span>
+                          <span
+                            v-else-if="!payment.penality.isPaid"
+                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                          >
+                            Unpaid
+                          </span>
                         </td>
 
                         <td
                           v-if="!payment.penality.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                    
                           <button
                             v-if="
                               payment.regular.penality +
@@ -996,11 +1023,8 @@
                               )
                             "
                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
-                           
                           >
-                           
-                              <i class="fas fa-check-circle mr-2 "></i>Confirm
-                          
+                            <i class="fas fa-check-circle mr-2"></i>Confirm
                           </button>
                           <p
                             v-else
@@ -1009,6 +1033,7 @@
                             Action Not Needed
                           </p>
                         </td>
+
                         <td
                           v-if="payment.penality.isPaid"
                           class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
@@ -1039,7 +1064,7 @@
           class="py-6 -mt-1 border-t border-blue-500 w-full mb-64"
         >
           <div
-            class="flex flex-col md:flex-row relative p-2 bg-blue-50 border border-gray-300 rounded-lg shadow-md flex justify-between items-center"
+            class="flex flex-col md:flex-row relative p-2 bg-blue-50 border border-gray-500 rounded-lg shadow-md flex justify-between items-center"
           >
             <span
               class="w-full lg:w-1/2 text-green-800 font-semibold text-lg text-xs"
@@ -1188,144 +1213,146 @@
             class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
           >
             <!-- Modal Content -->
-            <div
-              class="bg-white rounded-lg p-6 border border-cyan-800 shadow-lg w-96"
-            >
-              <!-- Modal Header -->
+            <div class="bg-white rounded-lg p-1 shadow-lg w-96">
               <div
-                class="flex items-center justify-between bg-indigo-800 text-white rounded-t-lg px-4 py-2"
+                class="border border-gray-700 rounded-lg p-3 bg-gray-500 text-white"
               >
-                <h2 class="text-lg font-semibold">Payment Confirmation</h2>
-                <i
-                  class="fas fa-times cursor-pointer"
-                  @click="showConfirmModal = false"
-                ></i>
-              </div>
+                <div
+                  class="border border-gray-500 flex items-center justify-between text-white rounded-t-lg px-4 py-2"
+                >
+                  <h2 class="text-lg font-semibold">Do You want to confirm</h2>
+                  <i
+                    class="fas fa-times cursor-pointer"
+                    @click="showConfirmModal = false"
+                  ></i>
+                </div>
 
-              <!-- Modal Body -->
-              <div class="p-6">
-                <p class="text-blue-500" v-if="paymentConfirm">
-                  Do you want to confirm this payment with the following
-                  details?
-                </p>
-                <p class="text-red-500" v-if="paymentUnconfirm">
-                  Do you want to unconfirm this payment with the following
-                  details?
-                </p>
+                <!-- Modal Body -->
+                <div class="">
+                  <div class="mt-4">
+                    <div v-if="paymentType === 'regular'" class="space-y-5">
+                      <p class="">
+                        <i class="fas fa-coins text-yellow-500 mr-2"></i>
+                        Regular Amount:
+                        <span> {{ regularPayment.amount }}</span>
+                      </p>
+                      <p>
+                        <i class="fas fa-hashtag text-blue-500 mr-2"></i>
+                        Regular TTNumber:
+                        <span>{{ regularPayment.TTNumber }}</span>
+                      </p>
+                      <p>
+                        <i class="fas fa-university text-green-500 mr-2"></i>
+                        Regular Bank Type: {{ regularPayment.bankType }}
+                      </p>
+                      <p>
+                        <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
+                        Regular Payment Date: {{ regularPayment.paidAt }}
+                      </p>
+                    </div>
 
-                <div class="ml-4 mt-4">
-                  <div v-if="paymentType === 'regular'" class="space-y-2">
-                    <p>
-                      <i class="fas fa-coins text-yellow-500"></i> Regular
-                      Amount:
-                      {{ regularPayment.amount }}
-                    </p>
-                    <p>
-                      <i class="fas fa-hashtag text-blue-500"></i> Regular
-                      TTNumber: {{ regularPayment.TTNumber }}
-                    </p>
-                    <p>
-                      <i class="fas fa-university text-green-500"></i> Regular
-                      Bank Type: {{ regularPayment.bankType }}
-                    </p>
-                    <p>
-                      <i class="fas fa-calendar-alt text-purple-500"></i>
-                      Regular Payment Date: {{ regularPayment.paidAt }}
-                    </p>
-                  </div>
-                  <div v-else-if="paymentType === 'subsidy'" class="space-y-2">
-                    <p>
-                      <i class="fas fa-coins text-yellow-500"></i> Subsidy
-                      Amount:
-                      {{ subsidyPayment.amount }}
-                    </p>
-                    <p>
-                      <i class="fas fa-hashtag text-blue-500"></i> Subsidy
-                      TTNumber: {{ subsidyPayment.TTNumber }}
-                    </p>
-                    <p>
-                      <i class="fas fa-university text-green-500"></i> Subsidy
-                      Bank Type: {{ subsidyPayment.bankType }}
-                    </p>
-                    <p>
-                      <i class="fas fa-calendar-alt text-purple-500"></i>
-                      Subsidy Payment Date: {{ subsidyPayment.paymentDate }}
-                    </p>
-                  </div>
-                  <div v-else-if="paymentType === 'urgent'" class="space-y-2">
-                    <p>
-                      <i class="fas fa-coins text-yellow-500"></i> Urgent
-                      Amount:
-                      {{ urgentPayment.amount }}
-                    </p>
-                    <p>
-                      <i class="fas fa-hashtag text-blue-500"></i> Urgent
-                      TTNumber: {{ urgentPayment.TTNumber }}
-                    </p>
-                    <p>
-                      <i class="fas fa-university text-green-500"></i> Urgent
-                      Bank Type: {{ urgentPayment.bankType }}
-                    </p>
-                    <p>
-                      <i class="fas fa-calendar-alt text-purple-500"></i> Urgent
-                      Payment Date: {{ urgentPayment.paidAt }}
-                    </p>
-                  </div>
-                  <div v-else-if="paymentType === 'service'" class="space-y-2">
-                    <p>
-                      <i class="fas fa-coins text-yellow-500"></i> Service
-                      Amount:
-                      {{ servicePayment.amount }}
-                    </p>
-                    <p>
-                      <i class="fas fa-hashtag text-blue-500"></i> Service
-                      TTNumber: {{ servicePayment.TTNumber }}
-                    </p>
-                    <p>
-                      <i class="fas fa-university text-green-500"></i> Service
-                      Bank Type: {{ servicePayment.bankType }}
-                    </p>
-                    <p>
-                      <i class="fas fa-calendar-alt text-purple-500"></i>
-                      Service Payment Date: {{ servicePayment.paidAt }}
-                    </p>
-                  </div>
-                  <div v-else-if="paymentType === 'penality'" class="space-y-2">
-                    <p>
-                      <i class="fas fa-coins text-yellow-500"></i> Penalty
-                      Amount:
-                      {{ penalityPayment.amount }}
-                    </p>
-                    <p>
-                      <i class="fas fa-hashtag text-blue-500"></i> Penalty
-                      TTNumber: {{ penalityPayment.TTNumber }}
-                    </p>
-                    <p>
-                      <i class="fas fa-university text-green-500"></i> Penalty
-                      Bank Type: {{ penalityPayment.bankType }}
-                    </p>
-                    <p>
-                      <i class="fas fa-calendar-alt text-purple-500"></i>
-                      Penalty Payment Date: {{ penalityPayment.paidAt }}
-                    </p>
+                    <div
+                      v-else-if="paymentType === 'subsidy'"
+                      class="space-y-2"
+                    >
+                      <p>
+                        <i class="fas fa-coins text-yellow-500 mr-2"></i>
+                        Subsidy Amount:
+                        {{ subsidyPayment.amount }}
+                      </p>
+                      <p>
+                        <i class="fas fa-hashtag text-blue-500 mr-2"></i>
+                        Subsidy TTNumber: {{ subsidyPayment.TTNumber }}
+                      </p>
+                      <p>
+                        <i class="fas fa-university text-green-500 mr-2"></i>
+                        Subsidy Bank Type: {{ subsidyPayment.bankType }}
+                      </p>
+                      <p>
+                        <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
+                        Subsidy Payment Date: {{ subsidyPayment.paymentDate }}
+                      </p>
+                    </div>
+                    <div v-else-if="paymentType === 'urgent'" class="space-y-2">
+                      <p>
+                        <i class="fas fa-coins text-yellow-500 mr-2"></i> Urgent
+                        Amount:
+                        {{ urgentPayment.amount }}
+                      </p>
+                      <p>
+                        <i class="fas fa-hashtag text-blue-500 mr-2"></i> Urgent
+                        TTNumber: {{ urgentPayment.TTNumber }}
+                      </p>
+                      <p>
+                        <i class="fas fa-university text-green-500 mr-2"></i>
+                        Urgent Bank Type: {{ urgentPayment.bankType }}
+                      </p>
+                      <p>
+                        <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
+                        Urgent Payment Date: {{ urgentPayment.paidAt }}
+                      </p>
+                    </div>
+                    <div
+                      v-else-if="paymentType === 'service'"
+                      class="space-y-2"
+                    >
+                      <p>
+                        <i class="fas fa-coins text-yellow-500 mr-2"></i>
+                        Service Amount:
+                        {{ servicePayment.amount }}
+                      </p>
+                      <p>
+                        <i class="fas fa-hashtag text-blue-500 mr-2"></i>
+                        Service TTNumber: {{ servicePayment.TTNumber }}
+                      </p>
+                      <p>
+                        <i class="fas fa-university text-green-500 mr-2"></i>
+                        Service Bank Type: {{ servicePayment.bankType }}
+                      </p>
+                      <p>
+                        <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
+                        Service Payment Date: {{ servicePayment.paidAt }}
+                      </p>
+                    </div>
+                    <div
+                      v-else-if="paymentType === 'penality'"
+                      class="space-y-2"
+                    >
+                      <p>
+                        <i class="fas fa-coins text-yellow-500 mr-2"></i>
+                        Penalty Amount:
+                        {{ penalityPayment.amount }}
+                      </p>
+                      <p>
+                        <i class="fas fa-hashtag text-blue-500 mr-2"></i>
+                        Penalty TTNumber: {{ penalityPayment.TTNumber }}
+                      </p>
+                      <p>
+                        <i class="fas fa-university text-green-500 mr-2"></i>
+                        Penalty Bank Type: {{ penalityPayment.bankType }}
+                      </p>
+                      <p>
+                        <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
+                        Penalty Payment Date: {{ penalityPayment.paidAt }}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <!-- Modal Footer -->
-              <div class="flex justify-end space-x-4 mt-6">
-                <button
-                  @click="yesConfirmed()"
-                  class="bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center"
-                >
-                  <i class="fas fa-check mr-2"></i> OK
-                </button>
-                <button
-                  @click="showConfirmModal = false"
-                  class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 flex items-center"
-                >
-                  <i class="fas fa-times mr-2"></i> Cancel
-                </button>
+                <div class="flex space-x-4 mt-6 ml-5">
+                  <button
+                    @click="yesConfirmed()"
+                    class="bg-blue-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center"
+                  >
+                    <i class="fas fa-check mr-2"></i> Yes
+                  </button>
+                  <button
+                    @click="showConfirmModal = false"
+                    class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 flex items-center"
+                  >
+                    <i class="fas fa-times mr-2"></i> Cancel
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -1387,10 +1414,13 @@
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <select  v-if="paymentType!='service'" v-model="bankType" class="custom-select">
+                  <select
+                    v-if="paymentType != 'service'"
+                    v-model="bankType"
+                    class="custom-select"
+                  >
                     <option value="">Select Bank Type</option>
-                    <option 
-                     
+                    <option
                       v-for="(bank, index) in blockBanks"
                       :key="'block-' + index"
                       :value="bank.bankType"
@@ -1400,8 +1430,7 @@
                   </select>
                   <select v-else v-model="bankType" class="custom-select">
                     <option value="">Select Bank Type</option>
-                    <option 
-                     
+                    <option
                       v-for="(bank, index) in serviceBanks"
                       :key="'block-' + index"
                       :value="bank.bankType"
@@ -1446,9 +1475,7 @@
                   type="submit"
                   class="custom-button"
                 >
-                  <i class="fas fa-save"
-                    ><span class="text-md ml-3"></span></i
-                  >
+                  <i class="fas fa-save"><span class="text-md ml-3"></span></i>
                   Save Changes
                 </button>
               </form>
@@ -1471,16 +1498,14 @@ export default {
   },
   data() {
     return {
-
       paidAt: null,
       TTNumber: "",
       bankType: "",
       paymentType: "",
       penality: "",
-      isPaid:true,
+      isPaid: true,
       billCode: "",
-      showEditModal:false,
-
+      showEditModal: false,
 
       successToastMessage: "",
       errorToastMessage: "",
@@ -1570,6 +1595,20 @@ export default {
     },
   },
   mounted() {
+    if (this.$route.query.activeTab == 1) {
+      this.activeTab = 0;
+
+      if (this.$route.query.bankStatement) {
+        //alert("true")
+        this.bankStatement = true;
+        this.navigateToPayment(
+          this.$route.query.userCode,
+          this.$route.query.fullName
+        );
+      } else {
+        // alert("false")
+      }
+    }
     console.log("service banks are", this.serviceBanks);
     console.log("block banks are", this.blockBanks);
     //this.filteredUsers=this.users;
@@ -1594,8 +1633,6 @@ export default {
     console.log("These are the users please", this.users);
   },
   methods: {
-
-
     toggleIsPaid(event) {
       this.isPaid = !event.target.checked;
     },
@@ -1639,11 +1676,7 @@ export default {
         });
     },
 
-    showEditModalDetail(
-      billCode,
-      payment,
-      paymentType,
-    ) {
+    showEditModalDetail(billCode, payment, paymentType) {
       console.log("payment type: ", paymentType);
       this.bankType = payment.bankType;
       this.TTNumber = payment.TTNumber;
@@ -1656,16 +1689,14 @@ export default {
     },
 
     saveChanges() {
-
-      const payment={
+      const payment = {
         paymentType: this.paymentType,
         paidAt: this.paidAt,
         bankType: this.bankType,
         TTNumber: this.TTNumber,
         isPaid: this.isPaid,
-      }
+      };
       if (this.paymentType === "regular") {
-   
         this.payload = {
           billCode: this.billCode,
           regular: payment,
@@ -1674,7 +1705,7 @@ export default {
       if (this.paymentType === "subsidy") {
         this.payload = {
           billCode: this.billCode,
-          subsidy:payment,
+          subsidy: payment,
         };
       }
       if (this.paymentType === "urgent") {
@@ -1686,10 +1717,9 @@ export default {
       if (this.paymentType === "service") {
         this.payload = {
           billCode: this.billCode,
-          service:payment,
+          service: payment,
         };
       }
-
 
       if (this.paymentType === "penality") {
         this.payload = {
@@ -1698,7 +1728,6 @@ export default {
         };
       }
 
-      
       console.log("ppppPayload", this.payload);
 
       this.$apiClient
@@ -1709,6 +1738,18 @@ export default {
         })
         .then((response) => {
           console.log("Response from service confirming", response.data);
+          // if(response.data.payment.isPaid){
+          //   this.$router.push({
+          //     path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
+          //     query: {
+          //       year: this.activeYear,
+          //       month: this.activeMonth,
+          //     },
+          //   });
+          // }else{
+
+          // }
+          //   this.fetchUnPaid();
         })
         .catch((error) => {
           console.log("Error confirming", error);
@@ -1722,6 +1763,17 @@ export default {
       this.fullName = fullName;
       // console.log("userCode", userCode);
       //this.$router.push(`/admindashboard/bank-statement/${userCode}`);
+
+      this.$router.push({
+        path: `/admindashboard/payments1/`,
+        query: {
+          bankStatement: true,
+          activeTab: 1,
+          userCode: userCode,
+          fullName: fullName,
+        },
+      });
+
       this.bankStatement = true;
       this.showUserList = false;
       console.log("userCode", userCode);
@@ -1743,7 +1795,6 @@ export default {
 
       console.log("filtered users", this.filteredUsers);
     },
-    
 
     confirmDetails() {
       console.log("current id", this.searchId);
@@ -1774,7 +1825,6 @@ export default {
       }
     },
 
-  
     changeMonthIntoString(month) {
       const months = [
         "January",
