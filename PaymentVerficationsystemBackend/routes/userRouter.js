@@ -30,11 +30,13 @@ router.patch('/updateMe',authoController.uploadUserImage,userController.updateMe
 
 router.patch('/resetPasswordByAdmin',authoController.resetPasswordByAdmin);
 
-router.route('/').get(userController.getAllUsers);
+router.route('/')
+      .get(userController.getAllUsers)
+      .delete(userController.deleteUsers)
 router.route('/:id')
   .get(userController.getUser)
   .patch(authoController.uploadUserImage,userController.updateUser)
-  //.delete(userController.deleteUser);
+  .delete(userController.deleteUser);
 
 router.route('/active-deactive').put(userController.activateDeactiveUser);
 router.route('/sendEmails').post(userController.sendEmailMessages)
