@@ -128,7 +128,8 @@ exports.login = catchAsync(async (req, res, next) => {
       message: 'Please provide userCode or password',
     });
   }
-  const user = await User.findOne({ userCode }).select('+password');
+  const Upper_userCode = userCode.toUpperCase();
+  const user = await User.findOne({ userCode:Upper_userCode }).select('+password');
   if (!user) {
     return res.status(200).json({
       status: 0,
@@ -158,7 +159,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
     await sendEmail({ email, message, subject })
     await user.save()
-    return res.status(401).json({ message: 'Invalid email or password' });
+    return res.status(401).json({ message: 'Invalid UserCode or password' });
   }
 
   user.failedLoginAttempts = 0;
