@@ -83,7 +83,7 @@ const routes = [
     children: [
       // Admin routes
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
-      { path: "", component: resDash },
+      { path: "", component: adminDashboard },
       { path: "res-dash", component: adminDashboard },
       { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },
       { path: "display-companey", name: "display-companey", component: displayCompaney },
