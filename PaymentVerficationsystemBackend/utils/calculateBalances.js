@@ -183,6 +183,8 @@ function calculateBalances(payments, org) {
     }
   }
 
+  console.log(org.paymentTransfers)
+
   // Calculate totalBalanceBankType based on all statuses
   Object.values(categorizedPayments).forEach((statusObj) => {
     Object.entries(statusObj.bankTypes).forEach(([bankType, bankDetails]) => {

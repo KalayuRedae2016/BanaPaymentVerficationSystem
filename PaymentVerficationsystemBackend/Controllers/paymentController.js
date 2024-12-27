@@ -92,7 +92,6 @@ exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
     message,
   });
 });
-
 exports.searchBills = async (req, res) => {
   try {
     const { keyword } = req.query;
@@ -464,7 +463,6 @@ exports.confirmBills = async (req, res) => {
     });
   }
 };
-
 exports.searchPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid, activeYear, activeMonth } = req.query;
 
@@ -575,7 +573,6 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     items: paymentDetails,
   });
 });
-
 exports.confirmPayments = catchAsync(async (req, res, next) => {
   const { billCode, userId, urgent, regular, subsidy, service, penality, paymentDate } = req.body;
   if (!billCode || !userId) {
@@ -858,7 +855,6 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
   });
 
 });
-
 exports.getPenality = catchAsync(async (req, res, next) => {
   const { paymentType, activeYear, activeMonth, paymentDate } = req.query;
 
@@ -948,7 +944,6 @@ exports.getPenality = catchAsync(async (req, res, next) => {
     amount,
   });
 });
-
 exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const paymentDate = req.query.paymentDate ? new Date(req.query.paymentDate) : new Date(); // User-provided or current date
   const payments = await Payment.find({ isPaid: false }); // Fetch only unpaid payments
@@ -1050,7 +1045,6 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
   next(); // Proceed to the next middleware
 });
-
 exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   const { userCode, activeYear, activeMonth } = req.query;
   if (!userCode || !activeYear || !activeMonth) {
@@ -1110,7 +1104,6 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     payment: formattedPayment, // This already contains the formatted dates
   });
 });
-
 exports.getPaymentNotifications = catchAsync(async (req, res, next) => {
   const { userId, role } = req.query; // Query parameters for user or admin
   if (!userId || !role) {
@@ -1190,7 +1183,6 @@ exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
     payment
   });
 });
-
 exports.getAllPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid } = req.query;
   if (!keyword) {
@@ -1369,7 +1361,6 @@ exports.exportPayments = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({});
   await exportToExcel(payments, 'Payments', 'paymentData.xlsx', res);
 });
-
 exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   const { userCode, activeYear } = req.query;
   if (!userCode) {
@@ -1507,29 +1498,24 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
   });
 });
 exports.transferFunds = catchAsync(async (req, res, next) => {
-  console.log(req.body)
-  const { transferType, fromBankType, toBankType, amount, reason, transferDate } = req.body;
-
-  // Validate input
-  if (!transferType || !fromBankType || !toBankType || !amount || !reason || !transferDate) {
+  const { transferType, fromBankType, toBankType, amount, reason} = req.body;
+  if (!transferType || !fromBankType || !toBankType || !amount || !reason) {
     return next(new AppError('Missing required fields for transfer', 400));
   }
-
-  // Validate amount is a positive number
   if (typeof amount !== 'number' || amount <= 0) {
     return next(new AppError('Amount must be a positive number', 400));
   }
+  const transferDate = req.body.transferDate? new Date(req.body.transferDate) : new Date();
 
-  // Validate transferDate is a valid date (optional)
   if (isNaN(new Date(transferDate).getTime())) {
     return next(new AppError('Invalid transfer date', 400));
   }
 
-  // Fetch the organization document
   const organization = await Organization.findOne();
+  if(!organization){
+    return next(new AppError("Organization is not found",400))
+  }
 
-  // Determine which transfer type it is (block or service)
-  //const transferCollection = transferType === 'block' ? 'blockTransfers' : 'serviceTransfers';
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
@@ -1537,23 +1523,15 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError(`No confirmed Payments Found`, 400));
 
   }
-  // Calculate the balances
   const bankBalances = calculateBalances(payments, organization);
-
-  // Get the bank type balances for the transfer type
   const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
-
-  // Determine the balance type to check based on the transfer type
   const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
   console.log(bankTypes[fromBankType]?.[balanceType])
 
   const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
 
-  // Check if `fromBankType and toBankType` exists in the `blockBankAccounts`
   const fromBankExists = banks.some(account => account.bankType === fromBankType);
   const toBankExists = banks.some(account => account.bankType === toBankType);
-
-  // If either doesn't exist, return a specific error message
   if (!fromBankExists) {
     return next(new AppError(`Invalid bank type: ${fromBankType} does not exist`, 400));
   }
@@ -1561,11 +1539,9 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
   if (!toBankExists) {
     return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
   }
-  // Check if there are sufficient funds in fromBankType
   if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
     return next(new AppError('Insufficient funds', 400));
   }
-  // Add the transfer to the organization's transfer collection
   organization[transferCollection].push({
     transferType,
     fromBankType,
