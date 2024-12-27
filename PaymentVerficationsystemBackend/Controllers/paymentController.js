@@ -98,7 +98,7 @@ exports.searchBills = async (req, res) => {
     if (!keyword) {
       return res.status(400).json({ message: 'Keyword is required' });
     }
-
+  console.log("keyword",keyword)
     const searchPattern = new RegExp(keyword, 'i');
     const paymentQuery = {
       $or: [

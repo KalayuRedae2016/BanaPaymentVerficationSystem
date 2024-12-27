@@ -3,7 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 const authenticateApiKey = catchAsync(async (req, res, next) => {
-   
+  
     console.log("headers",req.headers)
     // console.log("query",req.query)
     //const apiKey = req.headers['authorization'] ? req.headers['authorization'].split(' ')[1] : req.query.apiKey;
