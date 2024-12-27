@@ -207,12 +207,12 @@
 
                 <div class="flex mt-5">
                   <button
-                    class="bg-white text-blue-500 hover:bg-blue-100 rounded-full p-2"
+                    class="custom-button"
                     @click="goToEditPage()"
                   >
-                    <i class="fas fa-edit"
-                      ><span class="text-xxs">Edit</span></i
-                    >
+                    <i class="fas fa-edit mr-2"
+                      ></i
+                    >Edit
                   </button>
                 </div>
               </div>

@@ -201,12 +201,12 @@
                         {{ $t("selectBankType") }}
                       </option>
                         
-                      <option value="CBE">{{ $t("cbe") }}</option>
-                      <option value="WEGAGEN">{{ $t("wegagen") }}</option>
-                      <option value="LIB">{{ $t("enat") }}</option>
-                      <option value="DASHEN">{{ $t("dashin") }}</option>
-                      <option value="OROMIA">{{ $t("oromia") }}</option>
-                      <option value="ABSINIA">{{ $t("absinia") }}</option>
+                      <option value="CBE">{{ $t("CBE") }}</option>
+                  <option value="WEGAGEN">{{ $t("WEGAGEN") }}</option>
+                  <option value="LIB">{{ $t("LIB") }}</option>
+                  <option value="DASHEN">{{ $t("DASHEN") }}</option>
+                  <option value="OROMIA">{{ $t("OROMIA") }}</option>
+                  <option value="ABYSSINIA">{{ $t("ABYSSINIA") }}</option>
                       <option value="other" class="text-indigo-800 font-bold">
                         {{ $t("other") }}
                       </option>
@@ -334,12 +334,11 @@
                         {{ $t("selectBankType") }}
                       </option>
                       <option value="CBE">{{ $t("CBE") }}</option>
-                      <option value="Wegagen">{{ $t("Wegagen") }}</option>
-                      <option value="Enat">{{ $t("Enat") }}</option>
-                      <option value="Dashen">{{ $t("Dashen") }}</option>
-                      <option value="Lion">{{ $t("Lion") }}</option>
-                      <option value="Oromia">{{ $t("Oromia") }}</option>
-                      <option value="Absinia">{{ $t("Absinia") }}</option>
+                      <option value="WEGAGEN">{{ $t("WEGAGEN") }}</option>
+                      <option value="LIB">{{ $t("LIB") }}</option>
+                      <option value="DASHEN">{{ $t("DASHEN") }}</option>
+                      <option value="OROMIA">{{ $t("OROMIA") }}</option>
+                      <option value="ABYSSINIA">{{ $t("ABYSSINIA") }}</option>
                       <option value="other" class="text-indigo-800 font-bold">
                         {{ $t("other") }}
                       </option>
@@ -372,31 +371,21 @@
                       </svg>
                     </button>
                   </div>
+                   <div class="flex flex-row">
 
                   <button
                     @click.prevent="addServiceBankAccount()"
-                    class="ml-10 mt-3 mb-5 flex items-center justify-center bg-pink-500 text-white rounded-full w-6 h-6"
+                    class="custom-button m-5"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-6 w-6"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 4v16m8-8H4"
-                      />
-                    </svg>
+                   <i class="fa fa-add"></i> Add Bank
                   </button>
+                  
+                </div>
                 </div>
               </div>
 
               <button @click.prevent="seeChange()" class="custom-button  mb-5">
-                <i class="fas fa-save text-pink-500 mr-2"></i>{{ $t("save") }}
+                <i class="fas fa-save 0 mr-2"></i>{{ $t("update") }}
               </button>
             </form>
           </div>

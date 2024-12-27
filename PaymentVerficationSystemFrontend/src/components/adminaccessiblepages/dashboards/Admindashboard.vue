@@ -1,574 +1,439 @@
 <template>
-  <div class="bg-gray-200">
-    <div class="relative md:ml-64">
-   
+  <div>
+    <div class="">
+      <h2 class="w-full border-b border-blue-500 text-blue-500 pt-4 px-4 pb-3 font-bold">
+        Dashboard
+        <span class=""></span>
+      </h2>
 
-      <header
-        class="z-10 fixed top-0 left-0 right-0 h-16 flex items-center justify-between bg-white shadow-lg px-4 border-b border-gray-400"
+   <div v-if="showToast">
+    <!-- Optional overlay for modal effect -->
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50 z-10"
+      @click="closeToast"
+    ></div>
+
+    <transition
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-from-class="translate-y-full opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transform transition duration-300 ease-in"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="translate-y-full opacity-0"
+    >
+      <div
+        class="z-20 fixed inset-0 flex items-center justify-center"
+        role="alert"
       >
-        <div class="logo flex flex-col lg:flex-row">
-          <img
-            src="../../../assets/img/banamall1.jpg"
-            alt="Logo"
-            class="h-8 w-8 min-w-8 min-h-8  max-w-8 max-h-8"
-          />
-
-        </div>
-
-        <div class="flex items-center space-x-4">
-          <div class="flex flex-row mr-4">
-            <p class="hidden">locale: {{ locale }}</p>
-            <select class="text-md text-indigo-800" @change="changeLanguage">
-              <option value="" disabled selected>
-                {{ $t("Language") }}
-              </option>
-              <option value="tigrigna">{{ $t("Tigrigna") }}</option>
-              <option value="amharic">{{ $t("Amharic") }}</option>
-              <option value="english">English</option>
-            </select>
-          </div>
-
-   
-
-          <div
-            class="relative mt-3 cursor-pointer"
-            @click="toggleDropdown('notifications')"
-          >
-            <i class="fas fa-bell text-blue-500 text-xs"></i>
-            <span v-if="notificationCount>0" @click="notificationCliked()"
-              style="margin-top: 2px"
-              class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-xs rounded-full px-1.5"
-            >
-              {{ notificationCount }}
-            </span>
-            <ul  
-              v-show="showNotificationDropdown"
-              class=" absolute right-0 mt-2 w-64 bg-white rounded shadow-lg border-t border-b border-blue-400"
-            >
-              <li class="m-6 text-blue-500 font-bold">{{ $t('notifications') }}</li>
-              <li
-                v-for="(notification, index) in notifications"
-                :key="index"
-                class="border-b last:border-0"
-              >
-                <a
-                  @click="navigateToPayment(notification)"
-                  href="#"
-                  class="flex items-start px-4 py-2 text-gray-800 hover:bg-gray-200"
-                >
-                  <img
-                    src="../../../assets/img/banamall1.jpg"
-                    alt="Notification Image"
-                    class="w-10 h-10 rounded-full mr-3 bg-red-500"
-                  />
-                  <div class="flex-1">
-                    <p class="text-sm">{{ notification.message }}</p>
-                    <p class="text-xs text-gray-500">
-                      {{ formatDate(notification.date) }}
-                    </p>
-                  </div>
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div class="relative -mt-1" @click="toggleDropdown('profile')">
-            <img
-              src="../../../assets/img/sampleProfile.jpg"
-              alt="User Profile"
-              class="h-6 w-6 min-w-6 min-h-6 max-w-6 max-h-6 rounded-full cursor-pointer"
-            />
-            <ul
-              v-show="dropdownVisible"
-              class="absolute right-0 mt-4 w-48 bg-white rounded shadow-lg border-t border-b border-blue-400"
-            >
-              <li>
-                <a
-                  href="#"
-                  @click="accountSetting()"
-                  class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                  >{{ $t('Account Setting') }}</a
-                >
-              </li>
-
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 text-gray-800 hover:bg-gray-200"
-                  @click="logout"
-                  >{{ $t('logout') }}</a
-                >
-              </li>
-            </ul>
-          </div>
-        </div>
-        <button
-          class="md:hidden cursor-pointer text-black opacity-50 md:hidden py-1 text-xl leading-none bg-transparent rounded border border-solid border-transparent"
-          type="button"
-          @click="toggleDropdown('sidebar')"
-        >
-          <i class="fas fa-bars" v-if="!sidebarVisible"></i>
-          <i class="fas fa-x text-red-500" v-if="sidebarVisible"></i>
-        </button>
-      </header>
-
-      <transition name="fade" mode="out-in">
         <div
-          v-show="sidebarVisible"
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-          style="margin-top: 67px"
+          class="bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg text-center max-w-md"
         >
-          <ul
-            class="absolute left-0 top-0 shadow-lg right-0 w-full bg-white border-t border-blue-500"
-            style="margin-top: -3px; margin-left: 0px"
-          >
-          <li
-              @click="setActive('dashboard')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'dashboard' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("dashboard") }}</span>
-              </a>
-            </li>
-            <li
-              @click="setActive('companyProfile')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'companyProfile'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("companyProfile") }}</span>
-              </a>
-            </li>
-
-            <li
-              @click="setActive('clients')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'clients' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("clientProfile") }}</span>
-              </a>
-            </li>
-
-           
-
-            <li
-              @click="setActive('payment')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'payment'
-                  ? 'border-r-4 border-indigo-800'
-                  : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-list-alt opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("Payment") }}</span>
-              </a>
-            </li>
-
+          <strong class="font-bold">Success!</strong>
+          <p class="mt-2">{{ toastMessage }}</p>
           
-
-            <li
-              @click="setActive('idCard')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'idCard' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i class="fas fa-id-card opacity-75 mr-2 text-md text-teal-600"></i>
-
-                <span>{{ $t("idCard") }}</span>
-              </a>
-            </li>
-
-            <li
-              @click="setActive('message')"
-              class="items-center bg-white hover:bg-gray-300"
-              :class="
-                activeItem === 'message' ? 'border-r-4 border-indigo-800' : ''
-              "
-            >
-              <a
-                class="ml-4 text-indigo-800 text-2lg py-3 font-bold block"
-                href="#"
-                ><i
-                  class="fas fa-envelope opacity-75 mr-2 text-md text-teal-600"
-                ></i>
-                <span>{{ $t("sendMessage") }}</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </transition>
-
-      <sidebar-component class="border-r border-gray-300"></sidebar-component>
-      <div v-if="leftsidebardropdown" class="md:hidden flex flex-col space-y-4">
-        <ul
-          class="border border-gray-200 md:flex-col md:min-w-full flex flex-col list-none ml-0 mr-0 mt-0"
-        >
-          <li
-            @click="dashboard()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fa fa-tachometer opacity-75 mr-2 text-md text-teal-600"
-              ></i>
-
-              <span> Dashboard </span>
-            </a>
-          </li>
-
-          <li
-            @click="companyProfile()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fas fa-money-bill-wave opacity-75 mr-2 text-md text-teal-600"
-              ></i>
-
-              <span> Company Profile </span>
-            </a>
-          </li>
-          <li
-            @click="clients()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fas fa-users opacity-75 mr-2 text-md text-teal-600"
-              ></i>
-
-              <span> Clients Profile </span>
-            </a>
-          </li>
-          <li
-            @click="paymentSettings()"
-            class="items-center bg-white hover:border-r-4 border-indigo-800 hover:bg-gray-300"
-          >
-            <a
-              class="ml-4 text-indigo-800 text-xs py-3 font-bold block"
-              href="#"
-              ><i
-                class="fa fa-credit-card opacity-75 mr-2 text-md text-teal-600"
-              >
-              </i>
-              <span> Payment Settings </span>
-            </a>
-          </li>
-
-          
-        </ul>
-      </div>
-
-      <div class="flex flex-row rightsidbar">
-        <main
-          class="shadow-1g bg-white w-full border-t border-gray-200 ml-0 mr-0 sm:ml-0 sm:mr-0 md:ml-0 md:ml-[6px] lg:mt-[67px] lg: md:mt-[67px] md:mr-[23 px] xl:mt-[67px] transition-all"
-        >
-          <router-view />
-        </main>
-        <div
-          v-if="screenSize === 9"
-          class="overflow-y:auto fixed top-16 right-0 h-full bg-gray-100 shadow-xl p-4 border-l border-gray-300 w-[250px] mt-[3px]"
-        >
-          <div class="p-4">
-            <h1 class="text-2xl text-indigo-800 font-bold">
-              {{ $t("Client Feedbacks") }}
-            </h1>
-
-            <hr class="my-4 md:min-w-full bg-pink-500" />
-            <div class="flex flex-col space-y-4">
-              <!-- Message 1 -->
-              <div class="flex items-start">
-                <img
-                  src="../../../assets/img/profile.JPG"
-                  class="w-8 h-8 rounded-full"
-                  alt="Avatar"
-                />
-                <div class="bg-gray-200 rounded-lg p-3 ml-5">
-                  <p class="text-gray-800">
-                    I have Sent A Payment Request but still i am not confirmed
-                  </p>
-                  <span class="text-indigo-500 text-xl font-semibold"
-                    >Sentt by John</span
-                  >
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <img
-                  src="../../../assets/img/profile.JPG"
-                  class="w-8 h-8 rounded-full"
-                  alt="Avatar"
-                />
-                <div class="bg-gray-200 rounded-lg p-3 ml-5">
-                  <p class="text-gray-800">Do we have Metting This week</p>
-                  <span class="text-indigo-500 text-xl font-semibold"
-                    >Sent by Tadios</span
-                  >
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <img
-                  src="../../../assets/img/profile.JPG"
-                  class="w-8 h-8 rounded-full"
-                  alt="Avatar"
-                />
-                <div class="bg-gray-200 rounded-lg p-3 ml-5">
-                  <p class="text-gray-800">
-                    When will be the celebration please?
-                  </p>
-                  <span class="text-indigo-500 text-xl font-semibold"
-                    >Sent By Gidey</span
-                  >
-                </div>
-              </div>
-            </div>
-            <hr class="my-4 md:min-w-full bg-pink-500" />
-          </div>
         </div>
       </div>
+    </transition>
+  </div>
 
-      <footer
-        class="block py-4 lg:ml-100 md:ml-[85px] md:mr-[15px] lg:mr-350 ml-0 mr-0 xl:mr-[350px] xl:ml-[85px]"
-      >
-        <div class="container mx-auto px-4">
-          <hr class="mb-4 border-b-1 border-blueGray-200" />
+
+
+      <div class="">
+        <div class="mx-4 text-xs">
           <div
-            class="flex flex-wrap items-center md:justify-between justify-center"
+            class="mt-5 mb-5 flex flex-col w-full border border-gray-300 p-4 rounded-lg"
           >
-            
-            <div class="w-full">
-              <ul
-                class="flex flex-col lg:flex-row "
-              >
-              <li>   Copyright © {{ date }}</li>
-              <li>
-             
-                <a
-                 href="#"
-                  class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1 px-o lg:px-3"
-                >
-                  {{ $t('Grand Technology Solutions ') }}
-                </a>
-              </li>
-                <li>
-                  <a
-                   href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3 "
-                  >
-                  {{ $t('Bana Mall General Trading') }}
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                   href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3"
-                  >
-                  {{ $t('aboutUs') }}
-                  </a>
-                </li>
-    
+            <div class="flex flex-row space-x-3">
+              <p class="text-blue-800 mb-5 text-sm">
+               
+                {{ $t("Current Month Report") }} ( ({{ activeYear }} -{{ activeMonth }}))
+               
+               
+              </p>
               
-              </ul>
             </div>
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-300 text-xs">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
+                      {{ $t("metric") }}
+                    </th>
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
+                      {{ $t("paidClients") }}
+                    </th>
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
+                      {{ $t("unPaidClients") }}
+                    </th>
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
+                      {{ $t("totalPaidCapital") }}
+                    </th>
+               
+                    <th
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
+                      {{ $t("detail") }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-300">
+                  <!-- Data Rows -->
+                  <tr>
+                    <td
+                      class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                    >
+                      {{ $t("yearMonth") }} {{ activeYear }} -{{ activeMonth }}
+                    </td>
+
+                    <td class="px-4 py-2 text-left border border-gray-300">
+                      <span v-if="monthlyPaid">{{ monthlyPaid }}</span>
+                      <span v-else>0</span>
+                    </td>
+                    <td class="px-4 py-2 text-left border border-gray-300">
+                      <span v-if="monthlyPending">{{ monthlyPending }}</span>
+                      <span v-else>0</span>
+                    </td>
+                    <td class="px-4 py-2 text-left border border-gray-300">
+                      <span v-if="monthlyCapital">{{ monthlyCapital }}</span>
+                      <span v-else>0</span>
+                    </td>
+                   
+                    <td class="px-4 py-2 text-left border border-gray-300">
+                      <a
+                        href="#"
+                        class="text-blue-800 hover:underline font-semibold text-sm underline"
+                        @click="viewPaidUnPaid"
+                        ><h1 class="">{{ $t("view") }}</h1>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+              <div class="w-full mx-auto mt-6">
+              <div v-if="monthlyPaid>0" class="text-sm font-medium text-gray-700 mb-2">
+                {{ monthlyPaid }} of {{ totalClients }} Clients Paid In This
+                Month
+              </div>
+              <div v-else  class="text-sm font-medium text-gray-700 mb-2">
+                0  of {{ totalClients }} Clients Paid In This
+                Month
+              </div>
+              <div class="relative w-full h-4 bg-gray-200 rounded">
+                <div
+                  class="absolute top-0 left-0 h-4 bg-green-500 rounded"
+                  :style="{ width: progressPaidPercentage + '%' }"
+                ></div>
+              </div>
+              <div v-if="progressPaidPercentage > 0" class="text-sm text-gray-600 mt-2">
+                {{ progressPaidPercentage.toFixed(1) }}% paid
+              </div>
+              <div v-else class="text-sm text-gray-600 mt-2">
+               0 % paid
+              </div>
+            </div>
+            <a
+            href="#"
+            class="mt-5 text-blue-800 hover:underline font-semibold text-sm italic"
+            @click="paidUnPaidOverdue()"
+            ><h1 class="underline text-xs italic">{{ $t("All Payments") }}</h1>
+          </a>
           </div>
+        
         </div>
-      </footer>
+
+
+        
+     
+
+        <!-- <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
+          <Chart class="-ml-5 mr-5 lg: ml-0 mr-0"></Chart>
+          
+        </div> -->
+      </div>
+    </div>
+
+    <!-- overdue section -->
+    <div class="mx-4 text-xs">
+      <div class="flex flex-col w-full border border-gray-300 p-4 rounded-lg">
+        <div class="flex flex-row space-x-3">
+          <p class="text-blue-800 mb-5 text-sm">
+            <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
+            {{ $t("allOverdueClients") }}
+            <span v-if="totalOvedue" class="text-red-500">{{
+              totalOvedue
+            }}</span>
+            <span v-else>0</span>
+          </p>
+          <a
+            href="#"
+            class="text-blue-800 hover:underline font-semibold text-sm italic"
+            @click="goAllOverDue()"
+            ><h1 v-if="totalOvedue > 0" class="underline text-xs italic">{{ $t("view") }}</h1>
+          </a>
+        </div>
+        <div class="">
+          <div v-if="totalOvedue > 0 " class="text-sm font-medium text-gray-700 mb-2">
+            {{ totalOvedue }} of {{ totalClients }} Clients Have Overdue
+            Payments
+          </div>
+          <div v-else>
+            0 of {{ totalClients }} Clients Have Overdue
+            Payments
+          </div>
+             <div class="relative w-full h-4 bg-gray-200 rounded">
+                <div
+                  class="absolute top-0 left-0 h-4 bg-red-500 rounded"
+                  :style="{ width: progressOverduePercentage + '%' }"
+                ></div>
+              </div>
+              <div v-if="progressOverduePercentage > 0" class="text-sm text-gray-600 mt-2">
+                {{ progressOverduePercentage.toFixed(1) }}% Overdue
+              </div>
+              <div v-else class="text-sm text-gray-600 mt-2">
+               0% Overdue
+              </div>
+         
+        </div>
+      </div>
+    </div>
+    <!-- //all years confirmed payments -->
+
+    <div
+      class="border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto"
+    >
+      <div class="flex flex-row space-x-4 m-4">
+        <h2 class="text-blue-800 text-xs">
+          <i class="fas fa-check-circle text-green-500 text-xs"></i>
+          {{ $t("allYearsConfirmedReport") }}<span class=""></span>
+        </h2>
+        <a
+          href="#"
+          class="text-blue-800 hover:underline font-semibold text-sm underline"
+          @click="viewPaymentsReport()"
+          ><h1 class="text-xs">{{ $t("allReportDetails") }}</h1>
+        </a>
+      </div>
+
+      <table class="min-w-full divide-y divide-gray-300 text-xs">
+        <thead class="bg-gray-50">
+          <tr>
+            <th
+              rowspan="3"
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("banks") }}
+            </th>
+            <th
+              colspan="10"
+              class="justify-center items-center text-blue-800  border border-gray-300 py-3"
+            >
+              {{ $t("balance") }}
+            </th>
+          </tr>
+          <tr>
+            <th
+              colspan="4"
+              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
+            >
+              {{ $t("block") }}
+            </th>
+            <th
+              colspan="3"
+              class="py-2 justify-center items-center text-blue-800  border border-gray-300"
+            >
+              {{ $t("service") }}
+            </th>
+            <th
+              rowspan="2"
+              
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("Total Balance") }}
+            </th>
+           
+          </tr>
+          <tr>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("regular") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("subsidy") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("urgent") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("totalBlock") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("penality") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("Monthly Service") }}
+            </th>
+            <th
+              class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+            >
+              {{ $t("totalService") }}
+            </th>
+           
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-300">
+          <tr
+            v-for="(balance, bank) in totalBalance.orgBalancesBasedBankType"
+            :key="bank"
+          >
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ bank }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.regularBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.subsidyBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.urgentBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.totalBlockBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.penalityBalance }}
+            </td>
+
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.serviceBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.totalServiceBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300">
+              {{ balance.totalServiceBalance + balance.totalBlockBalance }}
+            </td>
+          </tr>
+
+        
+          <tr class="font-bold bg-gray-100" rowspan="4">
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ $t("total") }}
+            </td>
+          
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalRegularBalance }}
+            </td>
+            <!-- Total Regular -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalSubsidyBalance }}
+            </td>
+            <!-- Total Subsidy -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalUrgentBalance }}
+            </td>
+            <!-- Total Urgent -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalBlockBankAccount }}
+            </td>
+            <!-- Total Urgent -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalPenalityBalance }}
+            </td>
+            <!-- Total Block -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalServiceBalance }}
+            </td>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalServiceBankAccount }}
+            </td>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ totalOrgBalance.totalServiceBankAccount + totalOrgBalance.totalBlockBankAccount }}
+            </td>
+          </tr>
+         
+          <tr>
+         
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </template>
 <script>
-import SidebarComponent from "../layouts/Sidebar.vue";
+
+import Chart from "../payment/Reports/charts/charts.vue";
 import { mapGetters } from "vuex";
 export default {
-  name: "dashboard-page",
   components: {
-    SidebarComponent,
+    Chart,
   },
+  name: "CapitalReport",
   data() {
     return {
-      previosPaymentsLength:0,
-      payments: "",
-      previousPostsCount: 0,
-      intervalId: null,
-      largerScreen: false,
-      showNotificationDropdown: false,
-      dropdownVisible: false,
-      showEmailDropdown: false,
-      sidebarVisible: false,
-      messages: [
-        {
-          message: "You have a new friend request.",
-          image: "assets/img/profile.JPG",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          date: new Date(),
-        },
-      ],
-      notifications: [
-        {
-          message: "You have a new friend request.",
-          image: "assets/img/profile.JPG",
-          userCode:"123",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        {
-          message: "Your post has been liked.",
-          image: "assets/img/profile.JPG",
-          userCode:"321",
-          activeYear:"",
-          activeMonth:"",
-          date: new Date(),
-        },
-        
-      ],
-      notificationCount: 2,
-      messageCount: 5, // Example count, replace with your data
-      notificationCount: 5, // Example count, replace with your data
-      date: new Date().getFullYear(),
-      screenSize: "",
-      leftsidebardropdown: false,
+      showToast:false,
+      paidClients: 1, // Number of clients who have paid
+      totalClients: 2000, // Total number of client
+      monthlyPaid: "",
+      monthlyPending: "",
+      monthlyCapital: "",
+      monthlyCharge: "",
+      totalOvedue: "",
+
+      activeYear: "",
+      activeMonth: "",
+      allOverDueClients: 54,
+      internetConnected: false,
+      activeTab: 0,
+      tabs: ["This Month Payment", "This Month Capital", "This Month Charge"],
+      clientLength: 0,
+      totalBalance: [],
+      totalOrgBalance: {},
+      paidPercentage: NaN, // Replace with actual value
+      overduePercentage: NaN, // Replace with actual value
     };
   },
-  created() {
-    this.setScreenSize();
-    window.addEventListener("resize", this.setScreenSize);
-    //this.firstPaymentLength();
-  },
-  mounted() {
-    // Add resize event listener
-    window.addEventListener("resize", this.checkScreenSize);
-    // Initial check on mountss
-    this.checkScreenSize();
-    //this.startFetching();
-  },
-  beforeDestroy() {
-    // Remove resize event listener
-    window.removeEventListener("resize", this.checkScreenSize);
-  },
 
-  unmounted() {
-    window.removeEventListener("resize", this.setScreenSize);
-  },
   computed: {
     ...mapGetters(["getToken", "getUserId", "getLocale"]),
     userId() {
@@ -581,200 +446,200 @@ export default {
       this.$i18n.locale = this.getLocale;
       return this.getLocale;
     },
-
-  
+    progressPaidPercentage() {
+      if(this.totalClients > 0 ){
+        console.log("Here")
+        return (this.monthlyPaid/ this.totalClients) * 100;
+      }else{
+        console.log("return zero")
+        return 0;
+      }
+      
+    },
+    progressOverduePercentage() {
+      if(this.totalClients > 0 ){
+        return (this.totalOvedue / this.totalClients) * 100;
+      }else{
+        return 0;
+      }
+      
+    },
   },
-  methods: {
+  created() {
+    this.latestPaymentSetting();
+  },
+
+  async mounted() {
+
+    if (this.$route.query.loginSuccess === 'true') {
+      const activeItem="dashboard";
+      this.$store.dispatch("commitActiveItem", { activeItem });
+
+    this.showSuccessToast("Successfully Login in to your dashboard");
+      setTimeout(() => {
+        this.$router.push('/admindashboard');
+      }, 2000);
+    }
 
 
-    notificationCliked(){
-      this.notificationCount=0;
-    },
-   
-   
-   //this is to show the new notification;
-
-
-    navigateToPayment(notification){
-      alert("in navigate");
-      console.log("the notification is",notification)
-        this.$router.push(`/admindashboard/bank-statement/${notification.userCode}`,{
-          params:{
-         }
+    //finding users
+    await this.$apiClient
+      .get("/api/v1/users")
+      .then((response) => {
+        console.log("response clients", response);
+        this.clientProfile = response.data;
+        this.totalClients = response.data.result;
+        console.log("clientlength", this.clientLength);
       })
-    },
-
-    firstPaymentLength() {
-      this.$apiClient
-        .get("api/v1/payments")
-        .then((response) => {
-          this.previosPaymentsLength = response.data.length;
-        })
-        .catch((error) => {
-          console.log("error in the catch", error);
-       });
-    },
+      .catch((error) => {
+        console.error("Error fetching client data:", error.response.data.error);
+      });
 
 
-    async fetchPayments() {
-      this.$apiClient
-        .get("api/v1/payments")
-        .then((response) => {
-           console.log("respanse", response);
-          if (response.data.length > this.previosPaymentsLength) {
-           this.notifications=response.data.payments.slice(0, response.data.lenght-this.previosPaymentsLength);
-          }
-            this.payments = response.data.payments;
-            this.previosPaymentsLength = response.data.length;
-        })
-        .catch((error) => {
-          console.log("error in the catch", error);
-       });
-    },
+
+    //overdue payments
+    const allTimeRange = "allTime";
+    await this.$apiClient
+      .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
+      .then((response) => {
+        console.log("allThe Time now nnn", response);
+        this.totalOvedue =
+          response.data.items.categorizedPayments.overdue.uniqueUsers;
+      })
+      .catch((error) => {
+        console.log("Error fetching total overdue", error.response.data.error);
+      });
+
+//finding org balance
+
+    await this.$apiClient
+      .get("api/v1/payments/orgBalance")
+      .then((response) => {
+        console.log("response org balance", response);
+        this.totalBalance = response.data.items;
+        this.totalOrgBalance = response.data.items.organizationBalance;
+      })
+      .catch((error) => {
+        console.error(
+          " error fetching org data data:",
+          error.response.data.error
+        );
+      });
 
 
-    startFetching() {
-      this.fetchPayments(); // Initial fetch
-      this.intervalId = setInterval(() => this.fetchPayments(), 1000);
-    },
+  },
 
+  methods: {
+    safePercentage(value) {
+      return isNaN(value) ? 0 : value;
+    },
+    showSuccessToast(message) {
+      this.toastMessage = message;
+      this.showToast = true;
 
-    accountSetting() {
-      this.$router.push("/admindashboard/change-password");
+      // Hide toast after 3 seconds
+      setTimeout(() => {
+        this.showToast = false;
+      }, 1000); 
+      
+      
+      
+      // Toast will disappear after 3 seconds
     },
-    checkScreenSize() {
-      if (window.innerWidth >= 768) {
-        this.sidebarVisible = false;
-        this.largerScreen = true;
-      } else {
-        this.largerScreen = false;
-      }
-    },
-    formatDate(date) {
-      const options = {
-        hour: "2-digit",
-        minute: "2-digit",
-        month: "short",
-        day: "numeric",
-      };
-      return new Date(date).toLocaleDateString(undefined, options);
-    },
-
-    
-    getFullImagePath(image) {
-      return `../../../${image}`;
-    },
-    setActive(item) {
-      this.$store.dispatch('commitActiveItem', { activeItem: item });
-      // Update the active item
-      // You can also handle route navigation here if needed
-      if (item === "dashboard") {
-       this.dashboard();
-      } else if (item === "companyProfile") {
-       this.companyProfile();
-      } else if (item === "clients") {
-        this.clients();
-      }
-      else if(item ==="payment"){
-        this.payment();
-      }
-     
-      else if(item ==="idCard"){
-        this.idCard();
-      }
-      else if(item ==="message"){
-       this.message();
-      }
-       
-      // Add more navigation handling as needed
-    },
-    idCard() {
-      this.$router.push("/admindashboard/id-card");
-    },
-    dashboard() {
-      this.$router.push("/admindashboard");
-    },
-
-    payment() {
-   
+    paidUnPaidOverdue() {
       this.$router.push({
         path: "/admindashboard/payments1",
         query: {
-          activeTab: 0,
+          activeTab: 2,
         },
       });
     },
+    //latest payment month and active year
+    latestPaymentSetting() {
+      this.$apiClient
+        .get("/api/v1/paymentSetting/latest")
+        .then((response) => {
+          console.log("latest month response:", response);
 
-   
-
-    message() {
-      this.sendMessageSelected = true;
-      this.$router.push("/admindashboard/send-email");
+          if (response.data.status === 1) {
+            this.activeMonth = response.data.paymentSetting.activeMonth;
+            this.activeYear = response.data.paymentSetting.activeYear;
+            this.monthlyPayment();
+          }
+        })
+        .catch((error) => {
+          console.error(
+            "An error occurred while fetching Payment settings:",
+            error
+          );
+        });
     },
-    clients() {
+    //monthly payment
+    monthlyPayment() {
+      const timeRange = "monthly";
+      this.$apiClient
+        .get(
+          `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.activeYear}&month=${this.activeMonth}`
+        )
+        .then((response) => {
+          console.log("active month ", this.activeMonth);
+          console.log("monthly report in the dashboard", response);
+          this.monthlyReport = response.data.items;
+          this.monthlyPaid =
+            response.data.items.categorizedPayments.confirmed.uniqueUsers;
+          console.log("confirmed", this.monthlyPaid);
+
+          this.monthlyPending =
+            response.data.items.categorizedPayments.pending.uniqueUsers;
+          console.log("pending", this.monthlyPending);
+
+  this.monthlyCapital = 
+    (response.data.items.categorizedPayments.confirmed?.totalBlockBankAccountPaid || 0) +
+    (response.data.items.categorizedPayments.confirmed?.totalServiceBankAccountPaid || 0) +
+    (response.data.items.categorizedPayments.pending?.totalBlockBankAccountPaid || 0) +
+    (response.data.items.categorizedPayments.pending?.totalServiceBankAccountPaid || 0) +
+    (response.data.items.categorizedPayments.overdue?.totalBlockBankAccountPaid || 0) +
+    (response.data.items.categorizedPayments.overdue?.totalServiceBankAccountPaid || 0);
+
+
+        })
+        .catch((error) => {
+          console.log(
+            "active month and year in catch",
+            this.activeMonth,
+            this.activeYear
+          );
+          console.log("Error fetching reports:", error.response.data.error);
+        });
+    },
+
+    viewPaidUnPaid() {
+      console.log("Button clicked!"); // Test log
+      this.$router.push("/admindashboard/paid-unpaid");
+    },
+    goAllOverDue() {
+      this.$router.push("/admindashboard/overdue");
+    },
+    viewCapitalReport() {
+      this.$router.push("/admindashboard/recent-capital-charge-report");
+    },
+    viewPaymentsReport() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 3,
+        },
+      });
+    },
+    viewChargeslReport() {
+      this.$router.push("/admindashboard/charges");
+    },
+    viewClients() {
       this.$router.push("/admindashboard/clients");
     },
-
-    companyProfile() {
-      this.$router.push("/admindashboard/display-companey");
-    },
-   
-  
-    changeLanguage(event) {
-      // alert("alert")
-      this.sidebarVisible=false;
-      const selectedLanguage = event.target.value;
-      this.$store.dispatch("setLocale", { locale: selectedLanguage });
-    },
-    toggleDropdown(target) {
-      if (target === "profile") {
-        this.showNotificationDropdown = false;
-        this.dropdownVisible = !this.dropdownVisible;
-        this.showEmailDropdown = false;
-        this.sidebarVisible = false;
-      } else if (target === "notifications") {
-        this.dropdownVisible = false;
-        this.showEmailDropdown = false;
-        this.showNotificationDropdown = !this.showNotificationDropdown;
-        this.sidebarVisible=false;
-      } else if (target === "sidebar") {
-        this.sidebarVisible = !this.sidebarVisible;
-      } else {
-        this.sidebarVisible=false;
-        this.dropdownVisible = false;
-        this.showNotificationDropdown = false;
-        this.showEmailDropdown = !this.showEmailDropdown;
-      }
-    },
-
-    setScreenSize() {
-      const screenWidth = window.innerWidth;
-      if (screenWidth < 640) {
-        this.screenSize = 1; //sm;
-      } else if (screenWidth < 768) {
-        this.screenSize = 2; //md;
-      } else if (screenWidth < 1024) {
-        this.screenSize = 3; //lg;
-      } else {
-        this.screenSize = 4; //xl;
-      }
-    },
-    logout() {
-
-     
-      this.$store.dispatch("logout");
-      this.$router.push("/");
+    activateTab(index) {
+      this.activeTab = index;
     },
   },
 };
 </script>
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s ease;
-}
-.fade-enter,
-.fade-leave-to {
-  opacity: 0.5;
-}
-</style>

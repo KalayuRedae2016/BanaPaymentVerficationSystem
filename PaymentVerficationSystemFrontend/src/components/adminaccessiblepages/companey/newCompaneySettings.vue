@@ -112,12 +112,12 @@
               <div class="m-4 flex flex-col w-3/4 md: flex-row">
                 <select v-model="bank.bankType" class="custom-select mb-5">
                   <option value="" disabled>{{ $t("selectBankType") }}</option>
-                  <option value="CBE">{{ $t("cbe") }}</option>
-                  <option value="WEGAGEN">{{ $t("wegagen") }}</option>
-                  <option value="LIB">{{ $t("enat") }}</option>
-                  <option value="DASHEN">{{ $t("dashin") }}</option>
-                  <option value="OROMIA">{{ $t("oromia") }}</option>
-                  <option value="ABSINIA">{{ $t("absinia") }}</option>
+                  <option value="CBE">{{ $t("CBE") }}</option>
+                  <option value="WEGAGEN">{{ $t("WEGAGEN") }}</option>
+                  <option value="LIB">{{ $t("LIB") }}</option>
+                  <option value="DASHEN">{{ $t("DASHEN") }}</option>
+                  <option value="OROMIA">{{ $t("OROMIA") }}</option>
+                  <option value="ABYSSINIA">{{ $t("ABYSSINIA") }}</option>
                 </select>
                 <input
                   type="text"
@@ -182,12 +182,12 @@
               <div class="m-4 flex flex-col w-3/4 md: flex-row">
                 <select v-model="bank.bankType" class="custom-select mb-5">
                   <option value="" disabled>{{ $t("selectBankType") }}</option>
-                  <option value="CBE">{{ $t("cbe") }}</option>
-                  <option value="WEGAGEN">{{ $t("wegagen") }}</option>
-                  <option value="LIB">{{ $t("enat") }}</option>
-                  <option value="DASHEN">{{ $t("dashin") }}</option>
-                  <option value="OROMIA">{{ $t("oromia") }}</option>
-                  <option value="ABSINIA">{{ $t("absinia") }}</option>
+                  <option value="CBE">{{ $t("CBE") }}</option>
+                  <option value="WEGAGEN">{{ $t("WEGAGEN") }}</option>
+                  <option value="LIB">{{ $t("LIB") }}</option>
+                  <option value="DASHEN">{{ $t("DASHEN") }}</option>
+                  <option value="OROMIA">{{ $t("OROMIA") }}</option>
+                  <option value="ABYSSINIA">{{ $t("ABYSSINIA") }}</option>
                 </select>
                 <input
                   type="text"
@@ -237,8 +237,8 @@
             </button>
           </div>
         </div>
-        <button type="submit" class="custom-button ml-3 mr-3">
-          {{ $t("submit") }}
+        <button type="submit" class="custom-button ml-6 mr-3">
+          <i class="fa fa-arrow-right"></i> {{ $t("submit") }}
         </button>
       </form>
     </div>

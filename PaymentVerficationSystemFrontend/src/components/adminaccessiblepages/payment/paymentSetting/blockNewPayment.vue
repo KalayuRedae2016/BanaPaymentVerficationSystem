@@ -290,13 +290,13 @@
 
               </div>
           
-            <button
-              @click.prevent="createRegularPayment()"
-              type="submit"
-              class="mb-10 ml-1 bg-indigo-800 hover:bg-indigo-500 text-white py-2 py-2 px-4rounded"
-            >
-              {{ $t("submit") }}
-            </button>
+              <button
+  @click.prevent="createRegularPayment()"
+  type="submit"
+  class="custom-button"
+>
+<i class="fa fa-arrow-right"></i> {{ $t("submit") }} 
+</button>
           </form>
 
 
