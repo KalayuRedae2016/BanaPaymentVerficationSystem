@@ -1215,12 +1215,12 @@
             <!-- Modal Content -->
             <div class="bg-white rounded-lg p-1 shadow-lg w-96">
               <div
-                class="border border-gray-700 rounded-lg p-3 bg-gray-500 text-white"
+                class="border border-gray-300 rounded-lg p-3 bg-white text-black"
               >
                 <div
-                  class="border border-gray-500 flex items-center justify-between text-white rounded-t-lg px-4 py-2"
+                  class="bg-blue-500 border border-gray-500 flex items-center justify-between text-white rounded-t-lg px-4 py-2"
                 >
-                  <h2 class="text-lg font-semibold">Do You want to confirm</h2>
+                  <h2 class="text-lg font-semibold  ">Do You want to confirm</h2>
                   <i
                     class="fas fa-times cursor-pointer"
                     @click="showConfirmModal = false"
@@ -1228,7 +1228,7 @@
                 </div>
 
                 <!-- Modal Body -->
-                <div class="">
+                <div class="font-bold">
                   <div class="mt-4">
                     <div v-if="paymentType === 'regular'" class="space-y-5">
                       <p class="">

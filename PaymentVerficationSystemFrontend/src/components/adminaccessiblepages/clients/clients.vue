@@ -1,14 +1,15 @@
 <template>
   <div>
-    <Toast ref="toast"/>
+    <Toast ref="toast" />
     <div class="container mx-auto p-4 flex flex-col">
-      <div class="flex flex-row space-x-3">
-        <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
-        <button class="text-cyan-500" @click="showDeactivatedUsers()">
+      <div class="flex flex-row w-full">
+        <p class="text-blue-500 text-md font-bold">{{ $t("Active Clients") }}</p>
+        <button class="text-blue-500 ml-auto font-bold" @click="showDeactivatedUsers()">
           {{ $t("viewDeactivatedUsers") }}
         </button>
       </div>
-      <div class="border-t border-indigo-800 mt-3">
+
+      <div class="border-t border-blue-500 mt-3">
         <div
           class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
         >
@@ -51,54 +52,38 @@
               </div>
             </div>
 
-            <div class="overflow-x-auto bg-gray-50 rounded-md ">
+            <div class="overflow-x-auto bg-gray-50 rounded-md">
               <table class="w-full border-collapse bg-white rounded-md">
                 <thead>
-                  <tr class="bg-blue-50 text-blue-500 ">
+                  <tr class="bg-blue-50 text-blue-500">
                     <th
                       class="p-3 text-sm font-extraboldbold tracking-wide text-left"
                     >
                       {{ $t("number") }}
                     </th>
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("userCode") }}
                     </th>
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("fullName") }}
                     </th>
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("email") }}
                     </th>
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("createdAt") }}
                     </th>
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("updatedAt") }}
                     </th>
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("detail") }}
                     </th>
-                   
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("resetPassword") }}
                     </th>
-                    <th
-                      class="p-3 text-sm font-bold tracking-wide text-left"
-                    >
+                    <th class="p-3 text-sm font-bold tracking-wide text-left">
                       {{ $t("deactivate") }}
                     </th>
                   </tr>
@@ -156,7 +141,7 @@
                         {{ $t("") }}
                       </button>
                     </td>
-                  
+
                     <td class="p-3 text-sm text-gray-700 whitespace-nowrap">
                       <button
                         @click="
@@ -473,7 +458,7 @@
 </template>
 
 <script>
-import Toast from '../../Common/Toast.vue';
+import Toast from "../../Common/Toast.vue";
 export default {
   name: "ClientsView",
   components: {
@@ -562,7 +547,6 @@ export default {
   },
 
   methods: {
-
     showSuccessToastMessage(message) {
       this.successToastMessage = message;
       this.showSuccessToast = true;
@@ -581,8 +565,6 @@ export default {
 
       // Toast will disappear after 3 seconds
     },
-
-
 
     resetPassword(user) {
       console.log("userId is", user._id);
@@ -657,12 +639,9 @@ export default {
       this.displayedItems();
     },
 
- 
-
     navigateToInClient(clientId) {
       this.$router.push(`/admindashboard/edit-client/${clientId}`);
     },
-
 
     filteredClientsInSearch() {
       console.log("this users=", this.clients);

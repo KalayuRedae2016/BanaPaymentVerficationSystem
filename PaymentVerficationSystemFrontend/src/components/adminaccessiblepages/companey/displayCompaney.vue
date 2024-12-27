@@ -40,12 +40,12 @@
       class="loader mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
     ></div>
     <div v-if="organizationCreated === 1" class="p-4">
-      <h1 class="text-indigo-800 font-bold">Details</h1>
+      <h1 class="text-blue-500 font-bold">Company Details</h1>
     </div>
 
     <div
       v-if="organizationCreated === 1 || organizationCreated === 2"
-      class="container flex-col bg-white border-t border-indigo-800 -mt-1"
+      class="container flex-col bg-white border-t border-blue-500 -mt-1"
     >
       <div v-if="organizationCreated === 1" class="m-4 flex flex-wrap  p-4 border border-gray-300 rounded-lg">
         <div class="w-full py-8 -mt-8">

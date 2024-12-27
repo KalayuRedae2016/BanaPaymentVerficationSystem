@@ -1,13 +1,15 @@
 <template>
   <div>
     <div class="container mx-auto p-4 flex flex-col">
-      <div class="flex flex-row space-x-3">
-        <p class="text-blue-800 text-md font-bold">{{ $t("clients") }}</p>
+     
 
-        <button class="text-cyan-500" @click="showActiveUsers()">
-          {{ $t("viewActiveUsers") }}
+      <div class="flex flex-row w-full">
+        <p class="text-blue-500 text-md font-bold">{{ $t("Deactivated Clients") }}</p>
+        <button class="text-blue-500 ml-auto font-bold" @click="showActiveUsers()">
+          {{ $t("View Activated Users") }}
         </button>
       </div>
+
       <transition
         enter-active-class="transform transition duration-300 ease-out"
         enter-from-class="translate-x-full opacity-0"
@@ -42,7 +44,7 @@
           <span class="block sm:inline">{{ errorToastMessage }}</span>
         </div>
       </transition>
-      <div class="border-t border-indigo-800 mt-3">
+      <div class="border-t border-blue-500 mt-3">
         <div
           class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
         >

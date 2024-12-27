@@ -319,20 +319,20 @@
             <td class="px-4 py-2 text-left border border-gray-300">
               {{ balance.urgentBalance }}
             </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
+            <td class="px-4 py-2 text-left border border-gray-300 bg-gray-300">
               {{ balance.totalBlockBalance }}
             </td>
             <td class="px-4 py-2 text-left border border-gray-300">
               {{ balance.penalityBalance }}
             </td>
 
-            <td class="px-4 py-2 text-left border border-gray-300">
+            <td class="px-4 py-2 text-left border border-gray-300 ">
               {{ balance.serviceBalance }}
             </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
+            <td class="px-4 py-2 text-left border-r border-gray-500 bg-gray-300">
               {{ balance.totalServiceBalance }}
             </td>
-            <td class="px-4 py-2 text-left border border-gray-300">
+            <td class="px-4 py-2 text-left border border-gray-300 bg-gray-300">
               {{ balance.totalServiceBalance + balance.totalBlockBalance }}
             </td>
           </tr>
@@ -364,29 +364,29 @@
             </td>
             <!-- Total Urgent -->
             <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800 bg-gray-300"
             >
               {{ totalOrgBalance.totalBlockBankAccount }}
             </td>
             <!-- Total Urgent -->
             <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+              class="px-4 py-2 text-left border-r border-gray-300 text-blue-800"
             >
               {{ totalOrgBalance.totalPenalityBalance }}
             </td>
             <!-- Total Block -->
             <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800 "
             >
               {{ totalOrgBalance.totalServiceBalance }}
             </td>
             <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+              class="px-4 py-2 text-left border-r border-gray-500 text-blue-800 bg-gray-300"
             >
               {{ totalOrgBalance.totalServiceBankAccount }}
             </td>
             <td
-              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800 bg-gray-300"
             >
             {{ (totalOrgBalance.totalServiceBankAccount || 0) + (totalOrgBalance.totalBlockBankAccount || 0) }}
             </td>
