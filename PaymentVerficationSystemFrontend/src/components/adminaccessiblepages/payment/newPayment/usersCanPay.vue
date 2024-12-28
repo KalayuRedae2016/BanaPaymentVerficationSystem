@@ -86,12 +86,12 @@
                         {{ payment.activeMonthInString }}</span
                       >
                       <span
-                        class="text-xs ml-5 text-yellow-600 bg-blue-500 rounded-lg px-3 pb-1"
+                        class="text-xs ml-5 text-yellow-500 bg-blue-500 rounded-lg  pb-1"
                         v-if="payment.status === 'pending'"
                         >{{ payment.status }}</span
                       >
                       <span
-                        class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg px-3 pb-1"
+                        class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg  pb-1"
                         v-else-if="payment.status === 'overdue'"
                         >{{ payment.status }}</span
                       >
@@ -110,38 +110,38 @@
                       <!-- // head of the tables -->
                       <tr class="bg-gray-200">
                         <th
-                          class="w-24 px-3 text-sm tracking-wide text-left text-indigo-800"
+                          class="w-24 pl-1 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Metric
                         </th>
                         <th
-                          class="w-24 px-3 text-sm  tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Amount
                         </th>
                         <th
-                          class="w-24 px-3 text-sm tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Payment Date
                         </th>
 
                         <th
-                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
+                          class="w-32 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Bank Type
                         </th>
                         <th
-                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
+                          class="w-32 text-sm tracking-wide text-left text-indigo-800"
                         >
-                          TT Number
+                          TTNNumber
                         </th>
                         <th
-                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
+                          class="w-32 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Paid
                         </th>
                         <th
-                          class="w-32 px-3 text-sm  tracking-wide text-left text-indigo-800"
+                          class="w-32 text-sm tracking-wide text-left text-indigo-800"
                         >
                           Action
                         </th>
@@ -149,118 +149,117 @@
                     </thead>
                     <tbody>
                       <!-- // this tr is for the regular data -->
-                      <tr class="border-b border-t border-gray-500">
+                      <tr class="border-b border-t border-gray-300 pb-2 ">
+                        <!-- Payment Type -->
                         <td
-                          style="width: 50px"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p
-                            class="bg-blue-100 px-2 text-indigo-800 font-extrabold rounded-lg"
-                          >
-                            Regular
-                          </p>
-                        </td>
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p>{{ payment.regular.amount }}</p>
-                        </td>
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p v-if="payment.regular.isPaid">
-                            {{ payment.regular.paidAt }}
-                          </p>
-                          <input
-                            v-if="!payment.regular.isPaid"
-                            type="Date"
-                            class="custom-input h-7"
-                            @change="fetchRegularPenality(payment)"
-                            :value="payment.regular.paidAt"
-                            @input="
-                              payment.regular.paidAt = $event.target.value
-                            "
-                          />
-
-                          <p
-                            v-if="payment.verifyRegularPaymentDate"
-                            class="text-red-500 text-xs"
-                          >
-                            Payment Date is required
-                          </p>
-                        </td>
-
-                        <td class="px-3 text-xs text-gray-700">
-                          <p v-if="payment.regular.isPaid">
-                            {{ payment.regular.bankType }}
-                          </p>
-                          <select
-                            v-if="!payment.regular.isPaid"
-                            class="custom-select text-xs px-3 py-2.5 leading-tight flex-shrink-0"
-                            v-model="payment.regular.bankType"
-                            style="width: 100px"
-                          >
-                            <option value="" disabled selected>
-                              Bank Type
-                            </option>
-                            <option
-                              v-for="(bank, index) in blockBanks"
-                              :key="index"
-                              :value="bank.bankType"
-                            >
-                              {{ bank.bankType }}
-                            </option>
-                          </select>
-
-                          <p
-                            v-if="payment.verifyRegularBankType"
-                            class="text-red-500 text-xs"
-                          >
-                            Bank Type is required
-                          </p>
-                        </td>
-
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p v-if="payment.regular.isPaid">
-                            {{ payment.regular.TTNumber }}
-                          </p>
-                          <input
-                            v-if="!payment.regular.isPaid"
-                            type="text"
-                            class="custom-input h-7"
-                            v-model="payment.regular.TTNumber"
-                            style="width: 100px"
-                          />
-                          <p
-                            v-if="payment.verifyRegularTTNumber"
-                            class="text-red-500 text-xs"
-                          >
-                            TTNumber is required
-                          </p>
-                        </td>
-
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap w-12"
                         >
                           <span
+                            class="bg-blue-100 px-2 py-1 text-indigo-800 font-bold rounded-lg"
+                          >
+                            Regular
+                          </span>
+                        </td>
+
+                        <!-- Payment Amount -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          {{ payment.regular.amount }}
+                        </td>
+
+                        <!-- Payment Date -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          <template v-if="payment.regular.isPaid">
+                            {{ payment.regular.paidAt }}
+                          </template>
+                          <template v-else>
+                            <input
+                              type="date"
+                              class="custom-input h-8 px-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
+                              @change="fetchRegularPenality(payment)"
+                              :value="payment.regular.paidAt"
+                              @input="
+                                payment.regular.paidAt = $event.target.value
+                              "
+                            />
+                            <p
+                              v-if="payment.verifyRegularPaymentDate"
+                              class="text-red-500 text-xs mt-1"
+                            >
+                              Payment date is required.
+                            </p>
+                          </template>
+                        </td>
+
+                        <!-- Bank Type -->
+                        <td class="text-xs text-gray-700 w-32">
+                          <template v-if="payment.regular.isPaid">
+                            {{ payment.regular.bankType }}
+                          </template>
+                          <template v-else>
+                            <select
+                              class="custom-select text-xs rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
+                              v-model="payment.regular.bankType"
+                            >
+                              <option value="" disabled selected>
+                                Select Bank Type
+                              </option>
+                              <option
+                                v-for="(bank, index) in blockBanks"
+                                :key="index"
+                                :value="bank.bankType"
+                              >
+                                {{ bank.bankType }}
+                              </option>
+                            </select>
+                            <p
+                              v-if="payment.verifyRegularBankType"
+                              class="text-red-500 text-xs mt-1"
+                            >
+                              Bank type is required.
+                            </p>
+                          </template>
+                        </td>
+
+                        <!-- TT Number -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          <template v-if="payment.regular.isPaid">
+                            {{ payment.regular.TTNumber }}
+                          </template>
+                          <template v-else>
+                            <input
+                              type="text"
+                              class="custom-input h-8 px-2 rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
+                              v-model="payment.regular.TTNumber"
+                            />
+                            <p
+                              v-if="payment.verifyRegularTTNumber"
+                              class="text-red-500 text-xs mt-1"
+                            >
+                              TT Number is required.
+                            </p>
+                          </template>
+                        </td>
+
+                        <!-- Payment Status -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          <span
                             v-if="payment.regular.isPaid"
-                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                            class="bg-green-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Paid
                           </span>
                           <span
-                            v-else-if="!payment.regular.isPaid"
-                            class="bg-yellow-500 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                            v-else
+                            class="bg-yellow-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Unpaid
                           </span>
                         </td>
 
+                        <!-- Confirm Button -->
                         <td
                           v-if="!payment.regular.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap"
                         >
                           <button
                             @click="
@@ -272,17 +271,17 @@
                                 paymentIndex
                               )
                             "
-                            class="w-32 custom-button flex items-center p-2 rounded hover:bg-blue-600"
+                            class="w-32 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 flex items-center justify-center shadow-sm"
                           >
                             <i class="fas fa-check-circle mr-2"></i> Confirm
                           </button>
                         </td>
 
+                        <!-- Edit Button -->
                         <td
                           v-if="payment.regular.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap"
                         >
-                          <!-- Confirm Button -->
                           <button
                             @click="
                               showEditModalDetail(
@@ -291,141 +290,126 @@
                                 'regular'
                               )
                             "
-                            class="w-32 custom-button flex items-center py-2 rounded hover:bg-blue-600 mt-3"
+                            class="w-32 bg-gray-500 text-white py-1 px-4 rounded hover:bg-gray-600 flex items-center justify-center shadow-sm mt-3"
                           >
                             <i class="fas fa-edit mr-2"></i> Edit
                           </button>
                         </td>
                       </tr>
+
                       <!-- // for the subsidy -->
-                      <tr v-if="payment.subsidy.amount > 0" class="border-b border-t border-gray-500">
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p
-                            class="bg-cyan-100 px-2 text-indingo-800 font-extrabold rounded-lg"
+                      <tr
+                        v-if="payment.subsidy.amount > 0"
+                        class="bg-white hover:bg-gray-50 transition-colors duration-300 shadow-sm rounded-lg"
+                      >
+                        <!-- Subsidy Type -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          <span
+                            class="bg-cyan-100 text-cyan-800 font-bold px-2 py-1 rounded-lg"
                           >
                             Subsidy
-                          </p>
+                          </span>
                         </td>
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
+
+                        <!-- Subsidy Amount -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           {{ payment.subsidy.amount }}
                         </td>
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p v-if="payment.subsidy.isPaid">
+
+                        <!-- Payment Date -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          <template v-if="payment.subsidy.isPaid">
                             {{ payment.subsidy.paidAt }}
-                          </p>
-
-                          <input
-                            v-if="
-                              payment.subsidy.amount > 0 &&
-                              !payment.subsidy.isPaid
-                            "
-                            type="Date"
-                            class="custom-input h-7"
-                            @change="fetchSubsidyPenality(payment)"
-                            :value="payment.subsidy.paidAt"
-                            @input="
-                              payment.subsidy.paidAt = $event.target.value
-                            "
-                          />
-
-                          <p
-                            v-if="payment.verifySubsidyPaymentDate"
-                            class="text-red-500"
-                          >
-                            Payment Date is required
-                          </p>
-
-                          <p v-if="payment.subsidy.amount == 0">
-                            -------------------------
-                          </p>
-                        </td>
-
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p v-if="payment.subsidy.isPaid">
-                            {{ payment.subsidy.bankType }}
-                          </p>
-                          <select
-                            v-if="
-                              payment.subsidy.amount > 0 &&
-                              !payment.subsidy.isPaid
-                            "
-                            class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
-                            v-model="payment.subsidy.bankType"
-                          >
-                            <option value="" disabled selected>
-                              Bank Type
-                            </option>
-                            <option
-                              v-for="(bank, index) in blockBanks"
-                              :key="index"
-                              :value="bank.bankType"
+                          </template>
+                          <template v-else>
+                            <input
+                              type="date"
+                              class="custom-input h-8 px-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
+                              @change="fetchSubsidyPenality(payment)"
+                              :value="payment.subsidy.paidAt"
+                              @input="
+                                payment.subsidy.paidAt = $event.target.value
+                              "
+                            />
+                            <p
+                              v-if="payment.verifySubsidyPaymentDate"
+                              class="text-red-500 text-xs mt-1"
                             >
-                              {{ bank.bankType }}
-                            </option>
-                          </select>
-                          <p
-                            v-if="payment.verifySubsidyBankType"
-                            class="text-red-500"
-                          >
-                            Bank Type is required
-                          </p>
-                          <p v-if="payment.subsidy.amount == 0">
-                            -------------------------
-                          </p>
+                              Payment Date is required
+                            </p>
+                          </template>
                         </td>
 
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
-                          <p v-if="payment.subsidy.isPaid">
-                            {{ payment.subsidy.TTNumber }}
-                          </p>
-                          <input
-                            v-if="
-                              payment.subsidy.amount > 0 &&
-                              !payment.subsidy.isPaid
-                            "
-                            type="text"
-                            class="custom-input h-7"
-                            v-model="payment.subsidy.TTNumber"
-                          />
-                          <p
-                            v-if="payment.verifySubsidyTTNumber"
-                            class="text-red-500"
-                          >
-                            TTNumber is required
-                          </p>
-                          <p v-if="payment.subsidy.amount == 0">
-                            -------------------------
-                          </p>
+                        <!-- Bank Type -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          <template v-if="payment.subsidy.isPaid">
+                            {{ payment.subsidy.bankType }}
+                          </template>
+                          <template v-else>
+                            <select
+                              class="custom-select text-xs rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
+                              v-model="payment.subsidy.bankType"
+                            >
+                              <option value="" disabled selected>
+                                Bank Type
+                              </option>
+                              <option
+                                v-for="(bank, index) in blockBanks"
+                                :key="index"
+                                :value="bank.bankType"
+                              >
+                                {{ bank.bankType }}
+                              </option>
+                            </select>
+                            <p
+                              v-if="payment.verifySubsidyBankType"
+                              class="text-red-500 text-xs mt-1"
+                            >
+                              Bank Type is required
+                            </p>
+                          </template>
                         </td>
-                        <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                        >
+
+                        <!-- TT Number -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
+                          <template v-if="payment.subsidy.isPaid">
+                            {{ payment.subsidy.TTNumber }}
+                          </template>
+                          <template v-else>
+                            <input
+                              type="text"
+                              class="custom-input h-8 px-2 rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
+                              v-model="payment.subsidy.TTNumber"
+                            />
+                            <p
+                              v-if="payment.verifySubsidyTTNumber"
+                              class="text-red-500 text-xs mt-1"
+                            >
+                              TTNumber is required
+                            </p>
+                          </template>
+                        </td>
+
+                        <!-- Payment Status -->
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
                             v-if="payment.subsidy.isPaid"
-                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                            class="bg-green-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Paid
                           </span>
                           <span
-                            v-else-if="!payment.subsidy.isPaid"
-                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                            v-else
+                            class="bg-red-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Unpaid
                           </span>
                         </td>
+
+                        <!-- Confirm Button -->
                         <td
                           v-if="!payment.subsidy.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap"
                         >
                           <button
                             @click="
@@ -437,15 +421,16 @@
                                 paymentIndex
                               )
                             "
-                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                            class="w-32 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 flex items-center justify-center shadow-sm"
                           >
-                            <i class="fas fa-check-circle mr-2"></i>Confirm
+                            <i class="fas fa-check-circle mr-2"></i> Confirm
                           </button>
                         </td>
 
+                        <!-- Edit Button -->
                         <td
                           v-if="payment.subsidy.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap"
                         >
                           <button
                             @click="
@@ -455,16 +440,20 @@
                                 'subsidy'
                               )
                             "
-                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                            class="w-32 bg-gray-500 text-white py-1 px-4 rounded hover:bg-gray-600 flex items-center justify-center shadow-sm"
                           >
-                            <i class="fas fa-edit mr-2"></i>Edit
+                            <i class="fas fa-edit mr-2"></i> Edit
                           </button>
                         </td>
                       </tr>
 
-                      <tr v-if="payment.urgent.amount > 0" class="border-b border-t border-gray-500">
+                      <tr
+                        v-if="payment.urgent.amount > 0"
+                        class="border-b border-t border-gray-300 pb-2"
+                      >
+                        <!-- Urgent Label -->
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p
                             class="bg-pink-100 px-2 text-indigo-800 font-extrabold rounded-lg"
@@ -472,23 +461,25 @@
                             Urgent
                           </p>
                         </td>
+
+                        <!-- Payment Amount -->
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
-                          <p>
-                            {{ payment.urgent.amount }}
-                          </p>
+                          <p>{{ payment.urgent.amount }}</p>
                         </td>
+
+                        <!-- Payment Date -->
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p v-if="payment.urgent.isPaid">
                             {{ payment.urgent.paidAt }}
                           </p>
                           <input
                             v-if="!payment.urgent.isPaid"
-                            type="Date"
-                            class="custom-input h-7"
+                            type="date"
+                            class="custom-input h-7 mb-2"
                             @change="fetchUrgentPenality(payment)"
                             :value="payment.urgent.paidAt"
                             @input="payment.urgent.paidAt = $event.target.value"
@@ -504,8 +495,9 @@
                           </p>
                         </td>
 
+                        <!-- Bank Type -->
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p v-if="payment.urgent.isPaid">
                             {{ payment.urgent.bankType }}
@@ -515,7 +507,7 @@
                               payment.urgent.amount > 0 &&
                               !payment.urgent.isPaid
                             "
-                            class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
+                            class="custom-select w-64 text-xs  py-2.5 leading-tight"
                             v-model="payment.urgent.bankType"
                           >
                             <option value="" disabled selected>
@@ -540,8 +532,9 @@
                           </p>
                         </td>
 
+                        <!-- TTNumber -->
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p v-if="payment.urgent.isPaid">
                             {{ payment.urgent.TTNumber }}
@@ -565,8 +558,10 @@
                             -------------------------
                           </p>
                         </td>
+
+                        <!-- Payment Status -->
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <span
                             v-if="payment.urgent.isPaid"
@@ -581,9 +576,11 @@
                             Unpaid
                           </span>
                         </td>
+
+                        <!-- Confirm / Edit Actions -->
                         <td
                           v-if="!payment.urgent.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class=" text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             @click="
@@ -602,9 +599,8 @@
                         </td>
                         <td
                           v-if="payment.urgent.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class=" text-xs text-gray-700 whitespace-nowrap relative"
                         >
-                          <!-- Confirm Button -->
                           <button
                             @click="
                               showEditModalDetail(
@@ -619,19 +615,20 @@
                           </button>
                         </td>
                       </tr>
+
                       <!-- for the service data -->
-                      <tr class="border-b border-t border-gray-500">
+                      <tr class="border-b border-t border-gray-300">
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p
                             class="bg-yellow-100 px-2 text-indigo-800 font-extrabold rounded-lg"
                           >
-                            Service(+ Reg Fee)
+                            Ser(+ RF)
                           </p>
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.amount }}
@@ -648,7 +645,7 @@
                           />
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.paidAt }}
@@ -656,7 +653,7 @@
                           <input
                             v-if="!payment.service.isPaid"
                             type="Date"
-                            class="custom-input h-7"
+                            class="custom-input h-7 mb-2"
                             :value="payment.service.paidAt"
                             @input="
                               payment.service.paidAt = $event.target.value
@@ -670,14 +667,14 @@
                           </p>
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.bankType }}
                           </p>
                           <select
                             v-if="!payment.service.isPaid"
-                            class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
+                            class="custom-select w-64 text-xs  py-2.5 leading-tight"
                             v-model="payment.service.bankType"
                           >
                             <option value="" disabled selected>
@@ -700,7 +697,7 @@
                         </td>
 
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.TTNumber }}
@@ -719,7 +716,7 @@
                           </p>
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <span
                             v-if="payment.service.isPaid"
@@ -736,7 +733,7 @@
                         </td>
                         <td
                           v-if="!payment.service.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class=" text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             @click="
@@ -756,7 +753,7 @@
 
                         <td
                           v-if="payment.service.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class=" text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             @click="
@@ -781,61 +778,61 @@
                     <thead>
                       <tr class="bg-gray-200">
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Metric
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
-                          Regular Penality
+                          RegP
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
-                          Subsidy Penality
+                          SubR
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
-                          Urgent Penality
+                          UrgP
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
-                          Total Penality
+                          TP
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Payment Date
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Bank Type
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           TTNumber
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Paid
                         </th>
                         <th
-                          class="w-24 px-3 text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Action
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr class="border-b border-t border-gray-500">
+                      <tr class="border-b border-t border-gray-300">
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <p
                             class="bg-red-200 px-2 text-indigo-800 font-extrabold rounded-lg"
@@ -844,22 +841,22 @@
                           </p>
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           {{ payment.regular.penality }}
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           {{ payment.subsidy.penality }}
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           {{ payment.urgent.penality }}
                         </td>
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           {{
                             payment.regular.penality +
@@ -869,7 +866,7 @@
                         </td>
 
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <input
                             v-if="
@@ -879,7 +876,7 @@
                                 0 && !payment.penality.isPaid
                             "
                             type="Date"
-                            class="custom-input h-7"
+                            class="custom-input h-7 mb-2"
                             v-model="payment.penality.paidAt"
                             @input="
                               payment.penality.paidAt = $event.target.value
@@ -915,7 +912,7 @@
                         </td>
 
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <select
                             v-if="
@@ -924,7 +921,7 @@
                                 payment.urgent.penality >
                               0
                             "
-                            class="custom-select w-64 text-xs px-3 py-2.5 leading-tight"
+                            class="custom-select w-64 text-xs  py-2.5 leading-tight"
                             v-model="payment.penality.bankType"
                             @input="
                               payment.penality.bankType = $event.target.value
@@ -952,7 +949,7 @@
                         </td>
 
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
                           <input
                             v-if="
@@ -978,13 +975,9 @@
                           </p>
                         </td>
 
-                       
-
                         <td
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap"
+                          class=" text-xs text-gray-700 whitespace-nowrap"
                         >
-               
-                        
                           <span
                             v-if="payment.penality.isPaid"
                             class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
@@ -1001,7 +994,7 @@
 
                         <td
                           v-if="!payment.penality.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class=" text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             v-if="
@@ -1036,7 +1029,7 @@
 
                         <td
                           v-if="payment.penality.isPaid"
-                          class="px-3 text-xs text-gray-700 whitespace-nowrap relative"
+                          class=" text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <p
                             class="bg-pink-100 text-indigo-800 p-1 font-extrabold"
@@ -1220,7 +1213,7 @@
                 <div
                   class="bg-blue-500 border border-gray-500 flex items-center justify-between text-white rounded-t-lg px-4 py-2"
                 >
-                  <h2 class="text-lg font-semibold  ">Do You want to confirm</h2>
+                  <h2 class="text-lg font-semibold">Do You want to confirm</h2>
                   <i
                     class="fas fa-times cursor-pointer"
                     @click="showConfirmModal = false"

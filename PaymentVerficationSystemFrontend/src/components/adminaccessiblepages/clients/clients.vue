@@ -57,11 +57,11 @@
                 <thead>
                   <tr class="bg-blue-50 text-blue-500">
                     <th
-                      class="p-3 text-sm font-extraboldbold tracking-wide text-left"
+                      class="text-sm font-extraboldbold tracking-wide text-left pl-2"
                     >
-                      {{ $t("number") }}
+                      {{ $t("no.") }}
                     </th>
-                    <th class="p-3 text-sm font-bold tracking-wide text-left">
+                    <th class=" text-sm font-bold tracking-wide text-left">
                       {{ $t("userCode") }}
                     </th>
                     <th class="p-3 text-sm font-bold tracking-wide text-left">
