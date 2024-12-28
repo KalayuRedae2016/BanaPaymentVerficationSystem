@@ -1013,7 +1013,6 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
   next(); // Proceed to the next middleware
 });
-
 exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   const { userCode, activeYear, activeMonth } = req.query;
   if (!userCode || !activeYear || !activeMonth) {
