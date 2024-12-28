@@ -3,7 +3,7 @@ const dateString2="2024-11-01"
 function formatDate(dateString) {
     if (!dateString) return null;
   
-    console.log("Input date string: ", dateString);
+    // console.log("Input date string: ", dateString);
     const gregorianDate = new Date(dateString);
     let gYear = gregorianDate.getFullYear();
     let gMonth = gregorianDate.getMonth() + 1;
@@ -197,7 +197,7 @@ function formatDate(dateString) {
       }
     }
   
-    console.log(`Ethiopian Date: ${eYear}-${eMonth}-${eDay}`);
+    // console.log(`Ethiopian Date: ${eYear}-${eMonth}-${eDay}`);
     return `${eYear}-${String(eMonth).padStart(2, '0')}-${String(eDay).padStart(2, '0')}`;
   }
 

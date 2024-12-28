@@ -194,6 +194,6 @@ exports.deleteOrgs = catchAsync(async (req, res, next) => {
   }
   res.status(200).json({
     status: 'success',
-    message: `${deletedOrg.deletedCount} Settings Deleted`
+    message: `${deletedOrg.deletedCount} Organization Deleted`
   });
 });
