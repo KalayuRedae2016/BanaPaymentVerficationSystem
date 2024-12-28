@@ -30,7 +30,7 @@
               <!-- Add New Client Button -->
               <div>
                 <button
-                  class="bg-blue-800 border border-indigo-500 h-12 px-4 flex items-center text-white font-bold rounded-lg shadow-sm transition-transform transform hover:bg-blue-500 hover:-translate-y-0.5"
+                  class="custom-button border border-indigo-500 h-12 px-4 flex items-center text-white font-bold rounded-lg shadow-sm transition-transform transform hover:bg-blue-500 hover:-translate-y-0.5"
                   @click="navigateToCreateClient"
                 >
                   <svg

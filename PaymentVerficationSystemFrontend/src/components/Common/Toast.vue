@@ -11,7 +11,7 @@
     >
       <div
         v-if="showSuccessToast"
-        class="z-20 fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
+        class="z-20 fixed top-5 right-5 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg"
         role="alert"
       >
         <strong class="font-bold"></strong>
