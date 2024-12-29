@@ -7,11 +7,9 @@ const bankAccountSchema = new mongoose.Schema({
   bankType: {
     type: String,
     unique: true,
-    required: true,
   },
   bankAccountNumber: {
     type: String,
-    required: true,
     unique: true,
   },
   balance: {
