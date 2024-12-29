@@ -29,8 +29,7 @@
                 :placeholder="$t('compName')"
                 v-model="companyName"
               />
-              <p  v-if="companyNameIsRequired" class="text-red-500 text-xs">Compnay Name is required</p>
-
+      
             </div>
 
             <div class="mb-4">
@@ -46,8 +45,7 @@
                 v-model="companyPhoneNumber"
               />
 
-              <p  v-if="companyPhoneNumberIsRequired" class="text-red-500 text-xs">Phone Number is required</p>
-
+      
             </div>
 
             <div class="mb-4">
@@ -61,8 +59,7 @@
                 :placeholder="$t('compEmail')"
                 v-model="companyEmail"
               />
-              <p  v-if="companyEmailIsRequired" class="text-red-500 text-xs">Email is required</p>
-
+      
             </div>
           </div>
           <div class="flex flex-col w-full md:w-1/2">
@@ -77,8 +74,7 @@
                 :placeholder="$t('compAddress')"
                 v-model="companyAddress"
               />
-              <p  v-if="companyAddressIsRequired" class="text-red-500 text-xs">Address is required</p>
-
+    
             </div>
             <div class="mb-4">
               <label class="custom-label" for="prifex-code">
@@ -92,7 +88,6 @@
                 :placeholder="$t('compPrefixCode')"
                 v-model="companyPrefixCode"
               />
-              <p  v-if="companyPrefixCodeIsRequired" class="text-red-500 text-xs">Prefix Code is required</p>
 
             </div>
           </div>
@@ -237,146 +232,21 @@
             </button>
           </div>
         </div>
+             <div class="mx-8 my-5">
+              <p  v-if="companyPrefixCodeIsRequired" class="text-red-500 text-xs">Prefix Code is required</p>
+              <p  v-if="companyEmailIsRequired" class="text-red-500 text-xs">Email is required</p>
+              <p  v-if="companyAddressIsRequired" class="text-red-500 text-xs">Address is required</p>
+              <p  v-if="companyPhoneNumberIsRequired" class="text-red-500 text-xs">Phone Number is required</p>
+              <p  v-if="companyNameIsRequired" class="text-red-500 text-xs">Compnay Name is required</p>
+              <p  v-if="showError" class="text-red-500 text-xs">{{ errorMessage}}</p>
+            
+            </div>
         <button type="submit" class="custom-button ml-6 mr-3">
           <i class="fa fa-arrow-right"></i> {{ $t("submit") }}
         </button>
       </form>
     </div>
 
-    <div v-if="createdSuccessfully">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg-lg p-6 border border-cyan-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-green-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">
-                    {{ $t("success") }}
-                  </h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  <!-- Your Comany Profile Created successfully -->
-                  {{ successMessage }}
-                </p>
-                <button
-                  @click="
-                    createdSuccessfully = !createdSuccessfully;
-                    routeToDisplay();
-                  "
-                  class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 md:min-w-full bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
-
-    <div v-if="showWarning">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-yellow-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-yellow-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 8v4m0 4h.01"
-                    ></path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">
-                    {{ $t("warning") }}
-                  </h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  {{ warningMessage }}
-                </p>
-                <button
-                  @click="showWarning = false"
-                  class="mt-6 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                >
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 bg-yellow-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
-    <div v-if="showError">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-red-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-red-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">
-                    {{ $t("error") }}
-                  </h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  {{ errorMessage }}
-                </p>
-                <button
-                  @click="showError = false"
-                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
   </div>
 </template>
 
@@ -459,21 +329,23 @@ export default {
         this.companyNameIsRequired=true;
         return;
       }
-      if (this.companyEmail ==="" || this.companyEmail === null) {
-        this.companyEmailIsRequired=true;
-        return;
-      }
-
       if (this.companyPhoneNumber ==="" || this.companyPhoneNumber === null) {
         this.companyPhoneNumberIsRequired=true;
         return;
       }
       
+      if (this.companyEmail ==="" || this.companyEmail === null) {
+        this.companyEmailIsRequired=true;
+        return;
+      }
+
+
 
       if ((this.companyAddress ==="" || this.companyAddress === null)) {
           this.companyAddressIsRequired=true;
           return;
       }
+
       if (this.companyPrefixCode == "" || this.companyPrefixCode === null) {
         this.companyPrefixCodeIsRequired=true;
         return;
@@ -503,8 +375,11 @@ export default {
           }
         })
         .catch((error) => {
+          if(error.response.data){
+            this.showError=true;
+            this.errorMessage = error.response.data.message;
+          }
           console.log(error);
-          this.showErrorToastMessage("Something went wrong");
         });
     },
 
