@@ -238,7 +238,7 @@ export default {
   },
 
   name: "paymentsView",
-  
+
   data() {
     return {
       successToastMessage: "",
@@ -289,7 +289,7 @@ export default {
     this.$apiClient
       .get("/api/v1/organization")
       .then((response) => {
-        console.log("Org response", response);
+        console.log("Org response ", response);
         if (response.data.status === 1) {
           if (response.data.organization.length == 0) {
             this.organizationCreated = 2;

@@ -289,12 +289,9 @@ export default {
       companyPhoneNumber: "",
       companyEmail: "",
       companyPrefixCode: "",
-      blockBankAccounts: [{ bankType: "", bankAccountNumber: "" }],
+      blockBankAccounts: [],
       serviceBankAccounts: [
-        {
-          bankType: "",
-          bankAccountNumber: "",
-        },
+       
       ],
       companyAddress: "",
       paymentType: "block",
