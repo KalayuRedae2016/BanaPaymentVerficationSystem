@@ -117,29 +117,39 @@ exports.updateOrganization = catchAsync(async (req, res, next) => {
     return next(new AppError('Organizational Profile not found', 404));
   }
 
-  // Collect existing bank types for comparison
-  const existingBankTypes = new Set([
-    ...organization.serviceBankAccounts.map((account) => account.bankType),
-    ...organization.blockBankAccounts.map((account) => account.bankType),
-  ]);
+  const existingBankTypesInService = new Set(organization.serviceBankAccounts.map((account) => account.bankType));
+  const existingBankTypesInBlock = new Set(organization.blockBankAccounts.map((account) => account.bankType));
 
-  // Collect new bank types from the update request
-  const newBankTypes = new Set([
-    ...serviceBankAccounts.map((account) => account.bankType),
-    ...blockBankAccounts.map((account) => account.bankType),
-  ]);
+  const newBankTypesInService = serviceBankAccounts.map((account) => account.bankType);
+  const newBankTypesInBlock = blockBankAccounts.map((account) => account.bankType);
 
-  // Determine which bank types are newly added
-  const addedBankTypes = Array.from(newBankTypes).filter(
-    (bankType) => !existingBankTypes.has(bankType)
+  const duplicateServiceBankTypes = newBankTypesInService.filter(
+    (bankType, index, self) => self.indexOf(bankType) !== index
+  );
+  const duplicateBlockBankTypes = newBankTypesInBlock.filter(
+    (bankType, index, self) => self.indexOf(bankType) !== index
   );
 
-  // Update the organization's details
-  organization.companyName = companyName || organization.companyName;
-  organization.companyEmail = companyEmail || organization.companyEmail;
-  organization.companyPhoneNumber = companyPhoneNumber || organization.companyPhoneNumber;
-  organization.companyPrefixCode = companyPrefixCode || organization.companyPrefixCode;
-  organization.companyAddress = companyAddress || organization.companyAddress;
+  if (duplicateServiceBankTypes.length > 0) {
+    return next(new AppError(
+      `Duplicate bank types found in serviceBankAccounts: ${duplicateServiceBankTypes.join(', ')}`, 
+      400
+    ));
+  }
+
+  if (duplicateBlockBankTypes.length > 0) {
+    return next(new AppError(
+      `Duplicate bank types found in blockBankAccounts: ${duplicateBlockBankTypes.join(', ')}`, 
+      400
+    ));
+  }
+
+  // If the bank types in serviceBankAccounts and blockBankAccounts are not duplicates, proceed with updating
+  if(companyName)organization.companyName = companyName || organization.companyName;
+  if(companyEmail)organization.companyEmail = companyEmail || organization.companyEmail;
+  if(companyPhoneNumber) organization.companyPhoneNumber = companyPhoneNumber || organization.companyPhoneNumber;
+  if(companyPrefixCode) organization.companyPrefixCode = companyPrefixCode || organization.companyPrefixCode;
+  if(companyAddress) organization.companyAddress = companyAddress || organization.companyAddress;
 
   if (serviceBankAccounts.length > 0) {
     organization.serviceBankAccounts = serviceBankAccounts;
@@ -148,11 +158,13 @@ exports.updateOrganization = catchAsync(async (req, res, next) => {
   if (blockBankAccounts.length > 0) {
     organization.blockBankAccounts = blockBankAccounts;
   }
-
-  // Save the updated organization
   await organization.save();
 
-  // Generate API keys for newly added bank types
+  const addedBankTypes = [
+    ...newBankTypesInService.filter(bankType => !existingBankTypesInService.has(bankType)),
+    ...newBankTypesInBlock.filter(bankType => !existingBankTypesInBlock.has(bankType))
+  ];
+
   for (const bankType of addedBankTypes) {
     const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });
     if (!existingApiKey) {
@@ -218,7 +230,6 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
     organization.serviceBankAccounts.push(newBankAccount);
   }
 
-  // Save the updated organization
   await organization.save();
 
   // Generate API key for the new bank type if it's not already created
