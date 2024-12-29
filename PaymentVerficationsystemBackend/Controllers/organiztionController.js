@@ -12,8 +12,8 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     companyPhoneNumber, 
     companyPrefixCode, 
     companyAddress, 
-    serviceBankAccounts, 
-    blockBankAccounts 
+    serviceBankAccounts = [], 
+    blockBankAccounts = [] 
   } = req.body;
 
   // Check for required fields
@@ -23,7 +23,6 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
 
   // Check if an organization already exists
   const existingOrganization = await Organization.findOne({});
-  
   if (existingOrganization) {
     return res.status(409).json({
       status: 0,
@@ -31,18 +30,37 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     });
   }
 
+  // Extract all unique bank types from both arrays
+  const allBankTypes = new Set([
+    ...serviceBankAccounts.map((account) => account.bankType),
+    ...blockBankAccounts.map((account) => account.bankType),
+  ]);
+
   // Create and save the new organization
   const organization = await Organization.create({
-    companyName, 
-    companyEmail, 
-    companyPhoneNumber, 
-    companyPrefixCode, 
-    companyAddress, 
-    serviceBankAccounts, 
-    blockBankAccounts
+    companyName,
+    companyEmail,
+    companyPhoneNumber,
+    companyPrefixCode,
+    companyAddress,
+    serviceBankAccounts,
+    blockBankAccounts,
   });
 
-  console.log(organization)
+  // Generate API keys for unique bank types
+  for (const bankType of allBankTypes) {
+    const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });
+    if (!existingApiKey) {
+      const apiKey = new ApiKey({
+        key: generateUniqueApiKey(), // Function to generate unique API key
+        organizationId: organization._id,
+        bankType,
+        scope: 'read-only', // Default scope, can be adjusted as needed
+      });
+      await apiKey.save();
+    }
+  }
+
   res.status(201).json({
     status: 1,
     message: 'Organizational Profile created successfully',
@@ -75,6 +93,8 @@ exports.getOrganization = catchAsync(async (req, res, next) => {
   // Respond with the organization details
   res.status(200).json({
     status: 1,
+    serviceLength:organization.serviceBankAccounts.length,
+    blockLength:organization.blockBankAccounts.length,
     organization: {
       ...organization._doc, // Spread the organization details
       paymentTransfers,     // Include processed payment transfers
@@ -82,39 +102,89 @@ exports.getOrganization = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateOrganization = catchAsync(async (req, res,next) => {
-  //it is one organization
-  const { id } = req.params;
-  const {
-    companyName,
-    companyPhoneNumber,
-    companyEmail,
-    companyPrefixCode,
-    companyAddress,
-    blockBankAccounts,
-    serviceBankAccounts,
+exports.updateOrganization = catchAsync(async (req, res, next) => {
+  const { 
+    companyName, 
+    companyEmail, 
+    companyPhoneNumber, 
+    companyPrefixCode, 
+    companyAddress, 
+    serviceBankAccounts = [], 
+    blockBankAccounts = [] 
   } = req.body;
 
-  const organization = await Organization.findById(id);
+  // Check if organization exists
+  const organization = await Organization.findOne({});
   if (!organization) {
-    return next(new AppError('Organization not found', 404));
+    return next(new AppError('Organizational Profile not found', 404));
   }
-  // Update only provided fields
-  if (companyName) organization.companyName = companyName;
-  if (companyPhoneNumber) organization.companyPhoneNumber = companyPhoneNumber;
-  if (companyEmail) organization.companyEmail = companyEmail;
-  if (companyPrefixCode) organization.companyPrefixCode = companyPrefixCode;
-  if (companyAddress) organization.companyAddress = companyAddress;
-  if (blockBankAccounts) organization.blockBankAccounts = blockBankAccounts;
-  if (serviceBankAccounts) organization.serviceBankAccounts = serviceBankAccounts;
 
+  const existingBankTypesInService = new Set(organization.serviceBankAccounts.map((account) => account.bankType));
+  const existingBankTypesInBlock = new Set(organization.blockBankAccounts.map((account) => account.bankType));
+
+  const newBankTypesInService = serviceBankAccounts.map((account) => account.bankType);
+  const newBankTypesInBlock = blockBankAccounts.map((account) => account.bankType);
+
+  const duplicateServiceBankTypes = newBankTypesInService.filter(
+    (bankType, index, self) => self.indexOf(bankType) !== index
+  );
+  const duplicateBlockBankTypes = newBankTypesInBlock.filter(
+    (bankType, index, self) => self.indexOf(bankType) !== index
+  );
+
+  if (duplicateServiceBankTypes.length > 0) {
+    return next(new AppError(
+      `Duplicate bank types found in serviceBankAccounts: ${duplicateServiceBankTypes.join(', ')}`, 
+      400
+    ));
+  }
+
+  if (duplicateBlockBankTypes.length > 0) {
+    return next(new AppError(
+      `Duplicate bank types found in blockBankAccounts: ${duplicateBlockBankTypes.join(', ')}`, 
+      400
+    ));
+  }
+
+  // If the bank types in serviceBankAccounts and blockBankAccounts are not duplicates, proceed with updating
+  if(companyName)organization.companyName = companyName || organization.companyName;
+  if(companyEmail)organization.companyEmail = companyEmail || organization.companyEmail;
+  if(companyPhoneNumber) organization.companyPhoneNumber = companyPhoneNumber || organization.companyPhoneNumber;
+  if(companyPrefixCode) organization.companyPrefixCode = companyPrefixCode || organization.companyPrefixCode;
+  if(companyAddress) organization.companyAddress = companyAddress || organization.companyAddress;
+
+  if (serviceBankAccounts.length > 0) {
+    organization.serviceBankAccounts = serviceBankAccounts;
+  }
+
+  if (blockBankAccounts.length > 0) {
+    organization.blockBankAccounts = blockBankAccounts;
+  }
   await organization.save();
-  console.log(organization)
+
+  const addedBankTypes = [
+    ...newBankTypesInService.filter(bankType => !existingBankTypesInService.has(bankType)),
+    ...newBankTypesInBlock.filter(bankType => !existingBankTypesInBlock.has(bankType))
+  ];
+
+  for (const bankType of addedBankTypes) {
+    const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });
+    if (!existingApiKey) {
+      const apiKey = new ApiKey({
+        key: generateUniqueApiKey(), // Generate a unique API key
+        organizationId: organization._id,
+        bankType,
+        scope: 'read-only', // Default scope
+      });
+      await apiKey.save();
+    }
+  }
+
   res.status(200).json({
     status: 1,
-    message: 'Organization updated',
+    message: 'Organizational Profile updated successfully',
+    organization,
   });
-  //finally the modified data must be stored into the database for reference
 });
 
 exports.addBankAccount = catchAsync(async (req, res, next) => {
@@ -145,10 +215,7 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
   ).find(account => account.bankType === bankType);
 
   if (existingAccount) {
-    return res.status(400).json({
-      status: 0,
-      error: `Bank type '${bankType}' already exists in ${accountType} accounts`,
-    });
+    return next(new AppError(`Bank type '${bankType}' already exists in ${accountType} accounts`,400))
   }
 
   // Create a new bank account object
@@ -165,7 +232,6 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
     organization.serviceBankAccounts.push(newBankAccount);
   }
 
-  // Save the updated organization
   await organization.save();
 
   // Generate API key for the new bank type if it's not already created
