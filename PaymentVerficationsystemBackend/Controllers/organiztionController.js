@@ -30,6 +30,10 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     });
   }
 
+console.log('Service Bank Accounts:', serviceBankAccounts);
+console.log('Block Bank Accounts:', blockBankAccounts);
+
+
   // Extract all unique bank types from both arrays
   const allBankTypes = new Set([
     ...serviceBankAccounts.map((account) => account.bankType),
