@@ -3,14 +3,25 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const ApiKey = require('../Models/apiKeyModel');
 
+const validateUniqueBankTypes = (accounts) => {
+  const bankTypeSet = new Set();
+  for (const { bankType } of accounts) {
+    if (bankTypeSet.has(bankType)) {
+      return false; // Duplicate bankType found
+    }
+    bankTypeSet.add(bankType);
+  }
+  return true;
+};
+
 const bankAccountSchema = new mongoose.Schema({
   bankType: {
     type: String,
-    unique: true,
+    unique: [true, 'Bank type is unique'],
   },
   bankAccountNumber: {
     type: String,
-    unique: true,
+    unique: [true, 'Bank type is unique'],
   },
   balance: {
     type: Number,
@@ -68,12 +79,27 @@ const organizationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  blockBankAccounts:[bankAccountSchema],
+
+  serviceBankAccounts: {
+    type: [bankAccountSchema],
+    validate: {
+      validator: validateUniqueBankTypes,
+      message: 'Duplicate bankType found in serviceBankAccounts',
+    },
+  },
+  
+  blockBankAccounts: {
+    type: [bankAccountSchema],
+    validate: {
+      validator: validateUniqueBankTypes,
+      message: 'Duplicate bankType found in blockBankAccounts',
+    },
+  },
+
   blockBalance:{
     type:Number,
     default:0
   },
-  serviceBankAccounts:[bankAccountSchema],
   serviceBalance:{
     type:Number,
     default:0

@@ -12,8 +12,8 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     companyPhoneNumber, 
     companyPrefixCode, 
     companyAddress, 
-    serviceBankAccounts, 
-    blockBankAccounts 
+    serviceBankAccounts = [], 
+    blockBankAccounts = [] 
   } = req.body;
 
   // Check for required fields
@@ -23,7 +23,6 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
 
   // Check if an organization already exists
   const existingOrganization = await Organization.findOne({});
-  
   if (existingOrganization) {
     return res.status(409).json({
       status: 0,
@@ -31,18 +30,37 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     });
   }
 
+  // Extract all unique bank types from both arrays
+  const allBankTypes = new Set([
+    ...serviceBankAccounts.map((account) => account.bankType),
+    ...blockBankAccounts.map((account) => account.bankType),
+  ]);
+
   // Create and save the new organization
   const organization = await Organization.create({
-    companyName, 
-    companyEmail, 
-    companyPhoneNumber, 
-    companyPrefixCode, 
-    companyAddress, 
-    serviceBankAccounts, 
-    blockBankAccounts
+    companyName,
+    companyEmail,
+    companyPhoneNumber,
+    companyPrefixCode,
+    companyAddress,
+    serviceBankAccounts,
+    blockBankAccounts,
   });
 
-  console.log(organization)
+  // Generate API keys for unique bank types
+  for (const bankType of allBankTypes) {
+    const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });
+    if (!existingApiKey) {
+      const apiKey = new ApiKey({
+        key: generateUniqueApiKey(), // Function to generate unique API key
+        organizationId: organization._id,
+        bankType,
+        scope: 'read-only', // Default scope, can be adjusted as needed
+      });
+      await apiKey.save();
+    }
+  }
+
   res.status(201).json({
     status: 1,
     message: 'Organizational Profile created successfully',
@@ -82,39 +100,77 @@ exports.getOrganization = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.updateOrganization = catchAsync(async (req, res,next) => {
-  //it is one organization
-  const { id } = req.params;
-  const {
-    companyName,
-    companyPhoneNumber,
-    companyEmail,
-    companyPrefixCode,
-    companyAddress,
-    blockBankAccounts,
-    serviceBankAccounts,
+exports.updateOrganization = catchAsync(async (req, res, next) => {
+  const { 
+    companyName, 
+    companyEmail, 
+    companyPhoneNumber, 
+    companyPrefixCode, 
+    companyAddress, 
+    serviceBankAccounts = [], 
+    blockBankAccounts = [] 
   } = req.body;
 
-  const organization = await Organization.findById(id);
+  // Check if organization exists
+  const organization = await Organization.findOne({});
   if (!organization) {
-    return next(new AppError('Organization not found', 404));
+    return next(new AppError('Organizational Profile not found', 404));
   }
-  // Update only provided fields
-  if (companyName) organization.companyName = companyName;
-  if (companyPhoneNumber) organization.companyPhoneNumber = companyPhoneNumber;
-  if (companyEmail) organization.companyEmail = companyEmail;
-  if (companyPrefixCode) organization.companyPrefixCode = companyPrefixCode;
-  if (companyAddress) organization.companyAddress = companyAddress;
-  if (blockBankAccounts) organization.blockBankAccounts = blockBankAccounts;
-  if (serviceBankAccounts) organization.serviceBankAccounts = serviceBankAccounts;
 
+  // Collect existing bank types for comparison
+  const existingBankTypes = new Set([
+    ...organization.serviceBankAccounts.map((account) => account.bankType),
+    ...organization.blockBankAccounts.map((account) => account.bankType),
+  ]);
+
+  // Collect new bank types from the update request
+  const newBankTypes = new Set([
+    ...serviceBankAccounts.map((account) => account.bankType),
+    ...blockBankAccounts.map((account) => account.bankType),
+  ]);
+
+  // Determine which bank types are newly added
+  const addedBankTypes = Array.from(newBankTypes).filter(
+    (bankType) => !existingBankTypes.has(bankType)
+  );
+
+  // Update the organization's details
+  organization.companyName = companyName || organization.companyName;
+  organization.companyEmail = companyEmail || organization.companyEmail;
+  organization.companyPhoneNumber = companyPhoneNumber || organization.companyPhoneNumber;
+  organization.companyPrefixCode = companyPrefixCode || organization.companyPrefixCode;
+  organization.companyAddress = companyAddress || organization.companyAddress;
+
+  if (serviceBankAccounts.length > 0) {
+    organization.serviceBankAccounts = serviceBankAccounts;
+  }
+
+  if (blockBankAccounts.length > 0) {
+    organization.blockBankAccounts = blockBankAccounts;
+  }
+
+  // Save the updated organization
   await organization.save();
-  console.log(organization)
+
+  // Generate API keys for newly added bank types
+  for (const bankType of addedBankTypes) {
+    const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });
+    if (!existingApiKey) {
+      const apiKey = new ApiKey({
+        key: generateUniqueApiKey(), // Generate a unique API key
+        organizationId: organization._id,
+        bankType,
+        scope: 'read-only', // Default scope
+      });
+      await apiKey.save();
+    }
+  }
+
   res.status(200).json({
     status: 1,
-    message: 'Organization updated',
+    message: 'Organizational Profile updated successfully',
+    organization,
   });
-  //finally the modified data must be stored into the database for reference
 });
 
 exports.addBankAccount = catchAsync(async (req, res, next) => {
@@ -145,10 +201,7 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
   ).find(account => account.bankType === bankType);
 
   if (existingAccount) {
-    return res.status(400).json({
-      status: 0,
-      error: `Bank type '${bankType}' already exists in ${accountType} accounts`,
-    });
+    return next(new AppError(`Bank type '${bankType}' already exists in ${accountType} accounts`,400))
   }
 
   // Create a new bank account object
