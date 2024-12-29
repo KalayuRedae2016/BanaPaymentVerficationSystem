@@ -145,7 +145,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr
+                      <tr  
                         v-for="account in companyProfile.blockBankAccounts"
                         :key="account._id"
                       >
@@ -232,11 +232,13 @@
 import newCompanyProfile from "./newCompaneySettings.vue";
 import { mapGetters } from "vuex";
 export default {
+
   components: {
     newCompanyProfile,
   },
 
   name: "paymentsView",
+  
   data() {
     return {
       successToastMessage: "",
