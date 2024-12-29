@@ -47,8 +47,9 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     blockBankAccounts,
   });
 
-  // Generate API keys for unique bank types
-  for (const bankType of allBankTypes) {
+ if(allBankTypes.length!=0){
+   // Generate API keys for unique bank types
+   for (const bankType of allBankTypes) {
     const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });
     if (!existingApiKey) {
       const apiKey = new ApiKey({
@@ -60,6 +61,7 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
       await apiKey.save();
     }
   }
+ }
 
   res.status(201).json({
     status: 1,
