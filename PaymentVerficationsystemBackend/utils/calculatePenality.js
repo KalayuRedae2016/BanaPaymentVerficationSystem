@@ -19,3 +19,4 @@ const calculatePenalty = (paymentSetting,paymentType, amount,paymentDate) => {
 
     return { penality, daysLate };
   };
+  module.exports = { calculatePenalty };
