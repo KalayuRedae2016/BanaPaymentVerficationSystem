@@ -666,6 +666,7 @@
                       v-model="newBlockBankAccountNumber"
                     />
                   </div>
+                  <p class="text-red-500">Bank is already exist</p>
                   <button
                     @click.prevent="saveNewBlockBank"
                     class="custom-button bg-blue-500 text-white px-4 py-2 rounded flex items-center space-x-2"
@@ -883,18 +884,12 @@ export default {
       companyPrefixCode: "",
 
       blockBankAccounts: [
-        {
-          bankAccountNumber: "",
-          bankType: "",
-        },
+      
       ],
       addedBlockBankAccounts: [{ bankAccountNumber: "", bankType: "" }],
 
       serviceBankAccounts: [
-        {
-          bankAccountNumber: "",
-          bankType: "",
-        },
+       
       ],
       addedServiceBankAccounts: [{ bankAccountNumber: "", bankType: "" }],
 
