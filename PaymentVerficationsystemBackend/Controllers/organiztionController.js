@@ -93,6 +93,8 @@ exports.getOrganization = catchAsync(async (req, res, next) => {
   // Respond with the organization details
   res.status(200).json({
     status: 1,
+    serviceLength:organization.serviceBankAccounts.length,
+    blockLength:organization.blockBankAccounts.length,
     organization: {
       ...organization._doc, // Spread the organization details
       paymentTransfers,     // Include processed payment transfers
