@@ -974,7 +974,6 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
       status = 'pending';
     } else if (paymentDate > new Date(endingDate)) {
       status = 'overdue';
-
       // Calculate penalties for each payment type
       const regularPenalty = calculatePenalty(paymentSetting,regular, regularAmount,paymentDate);
       const urgentPenalty = calculatePenalty(paymentSetting,urgent, urgentAmount,paymentDate);
@@ -989,7 +988,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
         'subsidy.penality': subsidyPenalty.penality,
         'subsidy.daysLate': subsidyPenalty.daysLate,
         'penality.amount': totalPenalityAmount,
-        'totalExpectedAmount': parseFloat((baseAmount + registrationFee + totalPenaltyAmount).toFixed(2)),
+        'totalExpectedAmount': parseFloat((baseAmount + registrationFee + totalPenalityAmount).toFixed(2)),
       };
 
     }
