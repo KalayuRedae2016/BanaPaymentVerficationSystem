@@ -1,44 +1,11 @@
 <template>
   <div>
+    <Toast ref="toast"/>
     <div class="p-3 border-b border-blue-800">
       <h4 class="text-indigo-800 mt-1">{{ $t("changePassword") }}</h4>
     </div>
 
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showSuccessToast"
-        class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Success!</strong>
-        <span class="block sm:inline">{{ succesToastMessage }}</span>
-      </div>
-    </transition>
-
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showErrorToast"
-        class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Error!</strong>
-        <span class="block sm:inline">{{ errorToastMessage }}</span>
-      </div>
-    </transition>
+   
 
     <div class="w-full mt-10 space-y-4 mb-10">
       <!-- Change Email Section -->
@@ -166,7 +133,9 @@
 
 <script>
 import { mapGetters } from "vuex";
+import Toast from '../../Common/Toast.vue';
 export default {
+  components: { Toast },
   data() {
     return {
       showOldPassword: false,
@@ -234,37 +203,7 @@ export default {
       this.showPasswordForm = !this.showPasswordForm;
     },
 
-    showSuccessToastMessage(message) {
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-
-
-    showWarningToastMessage(message) {
-      this.warningToastMessage = message;
-      this.showWarningToast = true;
-      setTimeout(() => {
-        this.showWarningToast = false;
-      }, 1000);
-      // Toast will disappear after 3 seconds
-    },
-
-
-
+   
     
     changePassword() {
       if (this.oldPassword == "") {
@@ -297,14 +236,14 @@ export default {
         .then((response) => {
           console.log("response");
           if (response.data.status === 1) {
-            this.showSuccessToastMessage(response.data.message);
+            this.$refs.toast.showSuccessToastMessage(response.data.message);
           } else {
-            this.showErrorToastMessage("Something went wrong");
+            this.$refs.toast.showErrorToastMessage("Something went wrong");
           }
         })
         .catch((error) => {
           console.log(error);
-          this.showErrorToastMessage("Incorrect current password");
+          this.$refs.toast.showErrorToastMessage("Incorrect current password");
         });
     },
   },

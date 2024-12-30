@@ -1,119 +1,163 @@
 <template>
   <div>
     <Toast ref="toast" />
-    <div class="p-3 border-b border-blue-800">
-      <h4 class="text-indigo-800 mt-1">{{ $t("changePassword") }}</h4>
+    <div class="p-3 border-b border-blue-300">
+      <h4 class="text-blue-500 mt-1">{{ $t("Change Setting") }}</h4>
     </div>
-
-    <div class="w-full lg:w-3/4 lg:mx-auto mt-10 space-y-4 mb-10">
-      <!-- Change Password Section -->
-      <div class="mx-5">
-        <div class="mt-4  py-4 ml-0 lg:ml-10">
-          <form action="flex flex-col">
-            <div class="flex flex-col lg:flex-row mb-4" v-if="role==='Admin'">
-              <label for="" class="custom-label w-full lg:w-1/3 mt-3"
-                >New Email</label
-              >
-              <div class="w-full flex flex-col">
-                <input
-                  type="email"
-                  class="w-full custom-input ml-3 text-xs text-gray-500"
-                  v-model="newEmail"
-                />
-
-                <p
-                  v-if="newEmailIsRequired"
-                  class="text-red-500 text-xs ml-3 mt-2"
-                >
-                  NewEmail is required
-                </p>
-              </div>
-            </div>
-
-            <div class="mb-4">
-              <div class="flex flex-col lg:flex-row">
-                <label for="" class="custom-label w-full lg:w-1/3 mt-3"
-                  >Old Password</label
-                >
-                <div class="flex flex-col w-full">
-                  <input
-                    :type="showOldPassword ? 'text' : 'password'"
-                    class="custom-input ml-3 text-xs text-gray-500"
-                    v-model="oldPassword"
-                  />
-                  <p
-                    v-if="oldPasswordIsRequired"
-                    class="text-red-500 ml-3 text-xs"
-                  >
-                    Old password is required
-                  </p>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="mb-4">
-              <div class="flex flex-col lg:flex-row">
-                <label for="" class="custom-label w-full lg:w-1/3 mt-3"
-                  >New Password</label
-                >
-                <div class="w-full flex flex-col">
-                  <input
-                    type="password"
-                    class="custom-input ml-3 text-xs text-gray-500"
-                    v-model="newPassword"
-                  />
-                  <p
-                    v-if="newPasswordIsRequired"
-                    class="text-red-500 text-xs ml-3"
-                  >
-                    New password is required
-                  </p>
-                </div>
-              </div>
-            </div>
-
-
-            <div class="mb-4">
-              <div class="flex flex-col lg:flex-row">
-                <label for="" class="custom-label w-full lg:w-1/3"
-                  >Confirm Password</label
-                >
-                <div class="flex flex-col w-full ml-4 ">
-                  <input
-                    type="password"
-                    class="custom-input text-xs text-gray-500 "
-                    v-model="confirmNewPasssord"
-                  />
-                  <p
-                    v-if="confirmNewPasssordIsRequired"
-                    class="text-red-500 ml-3 text-xs"
-                  >
-                    Confirm password is required
-                  </p>
-
-                  <p
-                    v-if="mismachPassword"
-                    class="text-red-500 text-red-500 text-xs ml-3"
-                  >
-                    Password Missmach Occured
-                  </p>
-
-                  <button
-                    @click.prevent="changeSetting()"
-                    class="custom-button w-1/4 mt-5 "
-                  >
-                    <i class="fas fa-eye-slash custom-icon"></i>
-                    Update
-                  </button>
-                </div>
-              </div>
-            </div>
-         
-          </form>
+    <div class="w-full   mt-10 space-y-4 mb-10">
+    <!-- Change Email Section -->
+    <div class="mx-5">
+      <div class="mt-4 py-4 ml-0  border border-gray-300 rounded-lg">
+        <div
+          @click="toggleSection('email')"
+          class="flex justify-between items-center cursor-pointer p-4"
+          :class="emailVisible ? 'border-b border-gray-300 text-blue-800' : 'border-gray-300 text-gray-500'"
+        >
+          <label class="text-gray-700 font-medium custom-label">Change Email</label>
+          <i
+            :class="emailVisible ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+            class="text-gray-500"
+          ></i>
         </div>
+        <form
+          v-if="emailVisible"
+          class="flex flex-col  rounded-lg p-5 mt-2"
+        >
+          <div class="flex flex-col lg:flex-row mb-4" v-if="role === 'Admin'">
+            <label for="newEmail" class="custom-label w-full lg:w-1/3 mt-3">
+            Email
+            </label>
+            <div class="w-full flex flex-col">
+              <input
+                id="newEmail"
+                type="email"
+                class="w-full custom-input ml-3 text-xs text-gray-500"
+                v-model="newEmail"
+              />
+              <button class="custom-button my-5 w-full lg:w-32 ml-3 text-xs " @click.prevent="changeEmail()">
+                <i class="fa fa-edit mr-2"></i>Update</button>
+              <p
+                v-if="newEmailIsRequired"
+                class="text-red-500 text-xs ml-3 mt-2"
+              >
+                New Email is required
+              </p>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
+
+    <!-- Change Password Section -->
+    <div class="mx-5">
+      <div class="mt-4 py-4 ml-0 border border-gray-300 rounded-lg">
+        <div
+          @click="toggleSection('password')"
+          class="flex justify-between items-center cursor-pointer p-4  "
+          :class="passwordVisible ? 'border-b border-gray-300 text-blue-800' : 'border-gray-300 text-gray-500'"
+        >
+        <label class="text-gray-700 font-medium custom-label">Change Password</label>
+          <i
+            :class="passwordVisible ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
+            class="text-gray-500"
+          ></i>
+        </div>
+        <form
+          v-if="passwordVisible"
+          class="flex flex-col  rounded-lg p-5 mt-2"
+        >
+          <div class="mb-4">
+            <div class="flex flex-col lg:flex-row">
+              <label for="oldPassword" class="custom-label w-full lg:w-1/3 mt-3">
+                Old Password
+              </label>
+              <div class="flex flex-col w-full">
+                <input
+                  id="oldPassword"
+                  :type="showOldPassword ? 'text' : 'password'"
+                  class="custom-input ml-3 text-xs text-gray-500"
+                  v-model="oldPassword"
+                />
+               
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="flex flex-col lg:flex-row">
+              <label for="newPassword" class="custom-label w-full lg:w-1/3 mt-3">
+                New Password
+              </label>
+              <div class="w-full flex flex-col">
+                <input
+                  id="newPassword"
+                  type="password"
+                  class="custom-input ml-3 text-xs text-gray-500"
+                  v-model="newPassword"
+                />
+              
+              </div>
+            </div>
+          </div>
+          <div class="mb-4">
+            <div class="flex flex-col lg:flex-row">
+              <label
+                for="confirmNewPassword"
+                class="custom-label w-full lg:w-1/3"
+              >
+                Confirm Password
+              </label>
+              <div class="flex flex-col w-full ml-4">
+                <input
+                  id="confirmNewPassword"
+                  type="password"
+                  class="custom-input text-xs text-gray-500"
+                  v-model="confirmNewPasssord"
+                />
+                <p
+                  v-if="oldPasswordIsRequired"
+                  class="text-red-500 ml-3 text-xs"
+                >
+                  Old password is required
+                </p>
+                <p
+                  v-if="confirmNewPasssordIsRequired"
+                  class="text-red-500 ml-3 text-xs"
+                >
+                  Confirm password is required
+                </p>
+
+                <p
+                  v-if="mismatchPassword"
+                  class="text-red-500 text-red-500 text-xs ml-3"
+                >
+                  Password mismatch occurred
+                </p>
+
+                <p
+                  v-if="newPasswordIsRequired"
+                  class="text-red-500 text-xs ml-3"
+                >
+                  New password is required
+                </p>
+                <p
+                  v-if="showError"
+                  class="text-red-500 text-xs ml-3"
+                >
+                  {{ errorMessage }}
+                </p>
+                <button
+                  @click.prevent="changeSetting()"
+                   class="custom-button w-full lg:w-32 mt-5 text-xs"
+                >
+                <i class="fa fa-edit mr-2"></i>  Update
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
   </div>
 </template>
   
@@ -126,7 +170,8 @@ export default {
   },
   data() {
     return {
-      
+      emailVisible: false,
+      passwordVisible: false,
       role:"",
       showOldPassword: false,
       showNewPassword: false,
@@ -137,13 +182,15 @@ export default {
       oldPasswordIsRequired: false,
       newPasswordIsRequired: false,
       confirmNewPasssordIsRequired: false,
-      mismachPassword: false,
+      mismatchPassword: false,
 
       showEmailForm: false,
       showPasswordForm: false,
       oldPassword: "",
       newPassword: "",
       confirmNewPasssord: "",
+
+      showError:false,
 
       errorMessage: "",
     };
@@ -171,11 +218,41 @@ export default {
   },
 
   methods: {
-    toggleEmailSection() {
-      this.showEmailForm = !this.showEmailForm;
+    // toggleEmailSection() {
+    //   this.showEmailForm = !this.showEmailForm;
+    // },
+    // togglePasswordSection() {
+    //   this.showPasswordForm = !this.showPasswordForm;
+    // },
+    toggleSection(section) {
+      if (section === "email") this.emailVisible = !this.emailVisible;
+      if (section === "password") this.passwordVisible = !this.passwordVisible;
     },
-    togglePasswordSection() {
-      this.showPasswordForm = !this.showPasswordForm;
+
+    changeEmail() {
+      const formData = new FormData();
+      if(this.newEmail=='' || this.newEmail==null){
+        this.newEmailIsRequired=true;
+        return;
+      } 
+
+      formData.append("email", this.newEmail);
+      this.$apiClient
+        .patch(`/api/v1/users/${this.userId}`, formData)
+        .then((response) => {
+          console.log("response from the update: " ,response);
+          if (response.data.status === 1) {
+            const email=response.data.updatedUser.email;
+            this.newEmail=response.data.updatedUser.email;
+            this.$store.dispatch("commitEmail", {  email});
+            this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
+            this.$reloadPage();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          this.$refs.toast.showErrorToastMessage("Somthing went wrong!!");
+        });
     },
 
     changeSetting() {
@@ -183,22 +260,21 @@ export default {
       this.newPasswordIsRequired = false;
       this.confirmNewPasssordIsRequired = false;
       this.mismachPassword = false;
-      this.newEmailIsRequired = false;
-    if(this.role==='Admin'){
-      if (this.newEmail == null || this.newEmail == "") {
-        this.newEmailIsRequired = true;
-        return;
-      }
-
-    }
+      this.showError = false;
 
 
       if (this.oldPassword == "" || this.oldPassword == null) {
         this.oldPasswordIsRequired = true;
         return;
       }
+
       if (this.newPassword == "" || this.newPassword == null) {
         this.newPasswordIsRequired = true;
+        return;
+      }
+      if(this.newPassword.length<8){
+        this.errorMessage="Password should be at least 8 characters long";
+        this.showError=true;
         return;
       }
       if (this.confirmNewPasssord == "" || this.confirmNewPasssord == null) {
@@ -206,7 +282,8 @@ export default {
         return;
       }
       if (this.newPassword != this.confirmNewPasssord) {
-        this.mismachPassword = true;
+      // alert("hhh")
+        this.mismatchPassword = true;
         return;
       }
 
@@ -222,15 +299,18 @@ export default {
           console.log("response", response);
           if (response.data.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.data.message);
-
             this.$reloadPage();
-
           } else {
             //this.$refs.toast.showErrorToastMessage("Something went wrong");
           }
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error.data);
+          if(error.response.data.message){
+            this.errorMessage=error.response.data.message;
+            this.showError=true;
+          }
+
           //this.showErrorToastMessage("Incorrect current password");
         });
     },

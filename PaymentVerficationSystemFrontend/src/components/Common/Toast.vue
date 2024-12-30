@@ -11,7 +11,7 @@
     >
       <div
         v-if="showSuccessToast"
-        class="z-20 flex fixed top-5 right-5 items-center p-4 mb-4 text-sm text-blue-500 bg-green-50 border border-green-300 rounded-lg"
+        class="z-20 flex fixed bottom-96 right-5 items-center p-4 mb-4 text-sm text-green-500 bg-blue-50 border border-green-300 rounded-lg"
         role="alert"
       >
         <svg
