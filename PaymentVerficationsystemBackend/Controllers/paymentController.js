@@ -5,7 +5,7 @@ const User = require('../Models/userModel');
 const Payment = require('../Models/paymentModel');
 
 const { calculateBalances } = require('../utils/calculateBalances')
-const { formatDate } = require("../utils/formatDate")
+const { formatDate, formatDateGC } = require("../utils/formatDate")
 const { calculatePenalty } = require("../utils/calculatePenality")
 const { calculateTotalPaidAndPenalityAmount } = require('../utils/calculateTotalPaidAndPenalityAMount')
 const catchAsync = require('../utils/catchAsync');
@@ -517,6 +517,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     TTNumber: payment[type]?.TTNumber || null,
     isPaid: payment[type]?.isPaid || false,
     paidAt: payment[type]?.paidAt ? formatDate(payment[type].paidAt) : null,
+    paidAtGC: payment[type]?.paidAt ? formatDateGC(payment[type].paidAt) : null,
   });
 
   // Process payment details
@@ -543,7 +544,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
       totalExpectedAmount: payment.totalExpectedAmount || 0,
       totalPaidAmount: payment.totalPaidAmount,
       isPaid: payment.isPaid || false,
-      status: payment.status || "N/A",
+      status: payment.status || "Unknown",
       latest: payment.latest || false,
       createdAt: payment.createdAt ? formatDate(payment.createdAt) : null,
       updatedAt: payment.updatedAt ? formatDate(payment.updatedAt) : null,
@@ -740,7 +741,8 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
-    const paidAt = isPaid ? formatDate(existing.paidAt) || Date.now() : null;
+    const paidAt = isPaid ? formatDate(existing.paidAt) || formatDate(Date.now()) : null;
+    const paidAtGC= isPaid ? formatDateGC(existing.paidAt) || formatDateGC(Date.now()) : null;
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
@@ -748,6 +750,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
       penality: updates.penality ?? existing.penality,
       isPaid,
       paidAt,
+      paidAtGC,
       daysLate: updates.daysLate ?? existing.daysLate,
     };
   };

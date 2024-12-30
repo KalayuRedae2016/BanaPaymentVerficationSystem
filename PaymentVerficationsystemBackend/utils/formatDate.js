@@ -1,8 +1,19 @@
 const dateString1 = "2024-12-26"; 
 const dateString2="2024-11-01"
+function formatDateGC(dateString){
+  if (!dateString) return null;
+  const d = new Date(dateString);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero
+  const day = String(d.getDate()).padStart(2, '0'); // Add leading zero
+  return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
+
+}
+// // Format date fields to 'YYYY-MM-DD'
+// const formatDate = (date) => date.toISOString().split('T')[0];
+
 function formatDate(dateString) {
     if (!dateString) return null;
-  
     // console.log("Input date string: ", dateString);
     const gregorianDate = new Date(dateString);
     let gYear = gregorianDate.getFullYear();
@@ -200,28 +211,10 @@ function formatDate(dateString) {
     // console.log(`Ethiopian Date: ${eYear}-${eMonth}-${eDay}`);
     return `${eYear}-${String(eMonth).padStart(2, '0')}-${String(eDay).padStart(2, '0')}`;
   }
-
-formatDate(dateString1);
-formatDate(dateString2);
+// formatDate(dateString1);
+// formatDate(dateString2);
 
 module.exports = {
-  formatDate
+  formatDate,formatDateGC
 };
-
-
-//   function formatDate(dateString) {
-//     if (!dateString) return null;
-    
-//     const d = new Date(dateString);
-//     const year = d.getFullYear();
-//     const month = String(d.getMonth() + 1).padStart(2, '0'); // Add leading zero
-//     const day = String(d.getDate()).padStart(2, '0'); // Add leading zero
-    
-//     return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
-//   }
-  
-
-// module.exports = {
-//   formatDate
-// };
 

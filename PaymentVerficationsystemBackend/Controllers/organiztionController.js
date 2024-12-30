@@ -3,7 +3,7 @@ const ApiKey = require('../Models/apiKeyModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { generateUniqueApiKey } = require('../utils/generateUniqueApiKeyToken');
-const {formatDate}=require("../utils/formatDate")
+const {formatDate,formatDateGC}=require("../utils/formatDate")
 
 exports.createOrganization = catchAsync(async (req, res, next) => {
   const { 
@@ -30,10 +30,6 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     });
   }
 
-console.log('Service Bank Accounts:', serviceBankAccounts);
-console.log('Block Bank Accounts:', blockBankAccounts);
-
-
   // Extract all unique bank types from both arrays
   const allBankTypes = new Set([
     ...serviceBankAccounts.map((account) => account.bankType),
@@ -51,7 +47,8 @@ console.log('Block Bank Accounts:', blockBankAccounts);
     blockBankAccounts,
   });
 
- if(allBankTypes.length!=0){
+console.log("all size",allBankTypes.size)
+ if(allBankTypes.size!=0){
    // Generate API keys for unique bank types
    for (const bankType of allBankTypes) {
     const existingApiKey = await ApiKey.findOne({ bankType, status: 'active' });

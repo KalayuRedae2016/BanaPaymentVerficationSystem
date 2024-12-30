@@ -6,8 +6,9 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(paymentSettingController.getOnePaymentSettings)
+  .get(paymentSettingController.getPaymentSetting)
   .post(paymentSettingController.createPaymentSetting)
+  .delete(paymentSettingController.deleteSettings);
 
   router
   .route('/latest')
@@ -15,8 +16,6 @@ router
 router
   .route('/:id')
   .put(paymentSettingController.updatePaymentSettingBYId)
-
-  router.route('/deleteSetting/:id').delete(paymentSettingController.deleteSetting);// Delete setting
-  router.route('/deleteSettings').delete(paymentSettingController.deleteSettings);// Delete settings
+  .delete(paymentSettingController.deleteSetting);
 
 module.exports = router;

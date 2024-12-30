@@ -5,7 +5,7 @@ const catchAsync = require('../utils/catchAsync');
 
 const User=require("../Models/userModel")
 const createPendingPayments=require("../utils/createPendingPayments")
-const {formatDate}=require("../utils/formatDate")
+const {formatDate,formatDateGC}=require("../utils/formatDate")
 
 
 const normalizePenalties = (data) => {
@@ -81,7 +81,7 @@ exports.createPaymentSetting = catchAsync(async (req, res,next) => {
 
 });
 
-exports.getOnePaymentSettings = catchAsync(async (req, res, next) => {
+exports.getPaymentSetting = catchAsync(async (req, res, next) => {
   const { activeYear, activeMonth } = req.query;
   const settingQuery = {};
 
@@ -109,9 +109,8 @@ exports.getOnePaymentSettings = catchAsync(async (req, res, next) => {
   // Format the starting and ending dates
   const formattedStartDate = paymentSettings.startingDate ? formatDate(paymentSettings.startingDate) : null;
   const formattedEndDate = paymentSettings.endingDate ? formatDate(paymentSettings.endingDate) : null;
-  
+
   console.log(paymentSettings)
-  // Respond with the payment setting if found
   res.status(200).json({
     status: 1,
     message: paymentSettings.activeYear && paymentSettings.activeMonth
@@ -119,8 +118,11 @@ exports.getOnePaymentSettings = catchAsync(async (req, res, next) => {
       : "Latest payment setting fetched successfully.",
     paymentSetting: {
       ...paymentSettings._doc,
+      startingDate:formatDateGC(paymentSettings.startingDate),
+      endingDate:formatDateGC(paymentSettings.endingDate),
       formattedStartDate,
-      formattedEndDate}
+      formattedEndDate
+    }
   });
 });
 
@@ -154,6 +156,8 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
         message: "Latest setting fetched successfullyyyyy.",
         paymentSetting: {
           ...latestPaymentSetting._doc,
+          startingDate:formatDateGC(paymentSetting.startingDate),
+          endingDate:formatDateGC(paymentSetting.endingDate),
           formattedStartDate,
           formattedEndDate
         }
@@ -197,6 +201,8 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res,next) => {
       message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
       paymentSetting:{
         ...paymentSetting._doc,
+        startingDate:formatDateGC(paymentSetting.startingDate),
+        endingDate:formatDateGC(paymentSetting.endingDate),
         formattedStartDate,
         formattedEndDate
       }
