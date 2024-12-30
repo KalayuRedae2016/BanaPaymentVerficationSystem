@@ -11,15 +11,25 @@
     >
       <div
         v-if="showSuccessToast"
-        class="z-20 fixed top-5 right-5 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg"
+        class="z-20 flex fixed top-5 right-5 items-center p-4 mb-4 text-sm text-blue-500 bg-green-50 border border-green-300 rounded-lg"
         role="alert"
       >
-        <strong class="font-bold"></strong>
-        <span class="block sm:inline">{{ successToastMessage }}</span>
+        <svg
+          aria-hidden="true"
+          class="w-5 h-5 mr-3"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <span class="font-medium"></span> {{ successToastMessage }}
       </div>
     </transition>
-
-    <!-- Error Toast -->
     <transition
       enter-active-class="transform transition duration-300 ease-out"
       enter-from-class="translate-x-full opacity-0"
@@ -63,9 +73,9 @@
 export default {
   data() {
     return {
-      successToastMessage: '',
-      errorToastMessage: '',
-      warningToastMessage: '',
+      successToastMessage: "",
+      errorToastMessage: "",
+      warningToastMessage: "",
       showSuccessToast: false,
       showErrorToast: false,
       showWarningToast: false,
