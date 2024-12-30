@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch,isStrongPassword,validateField} from "../utils/utils"; // Adjust the path to match your project structure
+import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch,isStrongPassword,validateField,gregorianToEthiopian} from "../utils/utils"; // Adjust the path to match your project structure
 export default {
   async install(app) {
     // Check environment and set base URL
@@ -66,7 +66,8 @@ export default {
       $apiPut:apiPut,
       $apiPatch:apiPatch,
       $isStrongPassword:isStrongPassword,
-      $validateField:validateField,      
+      $validateField:validateField,
+      $gcEthio:gregorianToEthiopian,      
     
     };
     // Assign to the global properties in the Vue app

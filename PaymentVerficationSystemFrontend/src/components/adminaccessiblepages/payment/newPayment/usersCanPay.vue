@@ -53,6 +53,10 @@
               <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1"></i>
               User Code:<span class="text-blue-900 ml-1">{{ userCode }} </span>
             </p>
+            <!-- <p>
+              <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1"></i>
+              gcEthio:<span class="text-blue-900 ml-1">{{ gcEthio }} </span>
+            </p> -->
             <p class="">
               <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1"></i>
 
@@ -165,8 +169,6 @@
                         <td class="text-xs text-gray-700 whitespace-nowrap">
                           {{ payment.regular.amount }}
                         </td>
-
-                        <!-- Payment Date -->
                         <td class="text-xs text-gray-700 whitespace-nowrap">
                           <template v-if="payment.regular.isPaid">
                             {{ payment.regular.paidAt }}
@@ -189,8 +191,6 @@
                             </p>
                           </template>
                         </td>
-
-                        <!-- Bank Type -->
                         <td class="text-xs text-gray-700 w-32">
                           <template v-if="payment.regular.isPaid">
                             {{ payment.regular.bankType }}
@@ -290,7 +290,7 @@
                                 'regular'
                               )
                             "
-                            class="w-32 bg-gray-500 text-white py-1 px-4 rounded hover:bg-gray-600 flex items-center justify-center shadow-sm mt-3"
+                            class="w-32 custom-button"
                           >
                             <i class="fas fa-edit mr-2"></i> Edit
                           </button>
@@ -440,7 +440,7 @@
                                 'subsidy'
                               )
                             "
-                            class="w-32 bg-gray-500 text-white py-1 px-4 rounded hover:bg-gray-600 flex items-center justify-center shadow-sm"
+                            class="w-32 custom-button"
                           >
                             <i class="fas fa-edit mr-2"></i> Edit
                           </button>
@@ -1110,94 +1110,7 @@
             </div>
           </transition>
         </div>
-        <!-- //showing the confirmed success message for the adminstrator of the system -->
-        <div v-if="confirmedSuccessfully">
-          <transition name="fade" mode="out-in">
-            <div
-              class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-            >
-              <!-- Modal Content -->
-              <div class="bg-white rounded-lg-lg p-6 border border-cyan-500">
-                <div
-                  class="fixed inset-0 flex items-center justify-center z-50"
-                >
-                  <div class="bg-white rounded-lg-lg shadow-lg p-8 w-96">
-                    <div class="flex items-center justify-center mb-4">
-                      <svg
-                        class="w-8 h-8 text-green-500 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 13l4 4L19 7"
-                        ></path>
-                      </svg>
-                      <h2 class="text-xs font-bold text-gray-800">Success!</h2>
-                    </div>
-                    <p class="text-gray-600 text-xs">
-                      Your {{ paymentType }} confirmed successfully
-                    </p>
-                    <button
-                      @click="confirmedSuccessfully = !confirmedSuccessfully"
-                      class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
-                <hr class="my-4 md:min-w-full bg-red-500" />
-              </div>
-            </div>
-          </transition>
-        </div>
-        <!-- //this is also for success message -->
-        <div v-if="allPaymentSuccess">
-          <transition name="fade" mode="out-in">
-            <div
-              class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-            >
-              <!-- Modal Content -->
-              <div class="bg-white rounded-lg-lg p-6 border border-cyan-500">
-                <div
-                  class="fixed inset-0 flex items-center justify-center z-50"
-                >
-                  <div class="bg-white rounded-lg-lg shadow-lg p-8 w-96">
-                    <div class="flex items-center justify-center mb-4">
-                      <svg
-                        class="w-8 h-8 text-green-500 mr-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 13l4 4L19 7"
-                        ></path>
-                      </svg>
-                      <h2 class="text-xs font-bold text-gray-800">Success!</h2>
-                    </div>
-                    <p class="text-gray-600 text-xs">
-                      Your {{ paymentType }} confirmed successfully
-                    </p>
-                    <button
-                      @click="callGetReceipt()"
-                      class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
-                <hr class="my-4 md:min-w-full bg-red-500" />
-              </div>
-            </div>
-          </transition>
-        </div>
+
       </div>
       <!-- // this is also for the confirming modal for the system administrator -->
       <div v-if="showConfirmModal">
@@ -1240,7 +1153,7 @@
                       </p>
                       <p>
                         <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
-                        Regular Payment Date: {{ regularPayment.paidAt }}
+                        Regular Payment Date: {{ regularPayment.paidAt}}
                       </p>
                     </div>
 
@@ -1263,7 +1176,7 @@
                       </p>
                       <p>
                         <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
-                        Subsidy Payment Date: {{ subsidyPayment.paymentDate }}
+                        Subsidy Payment Date: {{ subsidyPayment.paidAt }}
                       </p>
                     </div>
                     <div v-else-if="paymentType === 'urgent'" class="space-y-2">
@@ -1396,7 +1309,7 @@
                     type="date"
                     class="custom-input"
                     placeholder="Payment Date"
-                    v-model="paidAt"
+                    v-model="paidAtGC"
                   />
                 </div>
                 <div class="mb-4">
@@ -1491,7 +1404,9 @@ export default {
   },
   data() {
     return {
+      gcEthio:this.$gcEthio(new Date()),
       paidAt: null,
+      paidAtGC:null,
       TTNumber: "",
       bankType: "",
       paymentType: "",
@@ -1677,6 +1592,7 @@ export default {
       this.paymentType = paymentType;
       this.billCode = billCode;
       this.isPaid = payment.isPaid;
+      this.paidAtGC = payment.paidAtGC;
 
       this.showEditModal = true;
     },
@@ -1684,10 +1600,11 @@ export default {
     saveChanges() {
       const payment = {
         paymentType: this.paymentType,
-        paidAt: this.paidAt,
+        paidAt: this.paidAtGC,
         bankType: this.bankType,
         TTNumber: this.TTNumber,
         isPaid: this.isPaid,
+        paidAtGC: this.paidAtGC,
       };
       if (this.paymentType === "regular") {
         this.payload = {

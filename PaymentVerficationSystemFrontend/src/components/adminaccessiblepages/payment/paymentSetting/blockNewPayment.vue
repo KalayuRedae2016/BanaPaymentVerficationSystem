@@ -837,8 +837,6 @@
         </div>
       </transition>
     </div>
-
-
   </div>
 </template>
 
@@ -915,50 +913,29 @@ export default {
     },
   },
   mounted() {
+    this.paymentActivated = true;
     this.$apiClient
       .get("/api/v1/paymentSetting/latest")
       .then((response) => {
         console.log("response latest setting", response);
+      
         if (response.data.status === 1) {
+          this.paymentSettingCreated = 1;
           if (response.data.paymentSetting) {
-            console.log("");
-            this.paymentSettingCreated = 1;
-            const endingDate = new Date(
-              response.data.paymentSetting.endingDate
-            );
-           // const today = new Date();
-
-            const today = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth() + 1, // Months are 0-indexed, so add 1
-  day: new Date().getDate(),
-};
-console.log("today",today);
-
-          //  today.toISOString();
-
-           
-            endingDate.setHours(0, 0, 0, 0);
-            if (today > endingDate) {
-              console.log("today is greater than ending date");
-              this.paymentActivate = true;
-            } else {
-              console.log("today is not greater than ending date");
-            }
-
-            // this.paymentSetting={};
+        
             this.paymentSetting = response.data.paymentSetting;
-
-            // this.paymentSetting.startingDate =
-            //   this.paymentSetting.startingDate;
-
-            // this.paymentSetting.endingDate =
-            //   this.paymentSetting.endingDate;
-
-            console.log("response setttinghh h ", response.data);
+            //alert("hh")
+             if(this.paymentSetting.activate==true){
+              this.paymentActivate = true;
+             }else{
+              this.paymentActivate = false;
+             }
+      
           } else {
             this.paymentSettingCreated = 2;
           }
+        }else{
+          this.paymentSettingCreated = 2;
         }
       })
       .catch((error) => {
@@ -1138,8 +1115,6 @@ console.log("today",today);
         endingDate: this.paymentSetting.endingDate,
       };
 
-      
-
       this.paymentSetting = {};
       console.log(regularData);
       console.log("payment Dataaa", regularData);
@@ -1303,9 +1278,7 @@ console.log("today",today);
         id: this.paymentSetting._id,
       };
 
-
       console.log("to be edit data", regularData);
-
 
       this.$apiClient
         .put(`/api/v1/paymentSetting/${this.paymentSetting._id}`, regularData)
@@ -1339,12 +1312,7 @@ console.log("today",today);
         });
     },
 
-
-
     activatePaymentSetting() {
-
-
-
       this.regularIsRequired = false;
       this.serviceIsRequired = false;
       this.activeYearIsRequired = false;
@@ -1359,7 +1327,6 @@ console.log("today",today);
       this.fiveDayLessTenDay = false;
       this.tenDayLessAboveTenDay = false;
       this.settingAlreadyExists = false;
-
 
       if (this.paymentSetting.regularAmount == "") {
         this.regularIsRequired = true;
@@ -1459,10 +1426,6 @@ console.log("today",today);
       }
 
       console.log("paymentId inc lose", this.paymentId);
-
-  
-
-
 
       const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
