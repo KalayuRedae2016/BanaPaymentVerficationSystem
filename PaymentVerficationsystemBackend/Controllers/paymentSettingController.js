@@ -128,29 +128,20 @@ exports.getPaymentSetting = catchAsync(async (req, res, next) => {
 
 exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
     // Find the payment setting marked as latest
-    const paymentSetting = await PaymentSetting.findOne();
-    if (!paymentSetting) {
-        return res.status(200).json({
-          status: 1,
-          message: "No Payment setting,Please create first.",
-          paymentSetting: null
-      });
-    }
-    // Find the payment setting marked as latest
   const latestPaymentSetting = await PaymentSetting.findOne({ latest: true });
     if (!latestPaymentSetting) {
         return res.status(200).json({
             status: 1,
             message: "No latest payment setting found.",
-            paymentSetting: null
+            latestPaymentSetting: null
         });
     }
-    
+
   const formattedStartDate = latestPaymentSetting.startingDate ? formatDate(latestPaymentSetting.startingDate) : null;
   const formattedEndDate = latestPaymentSetting.endingDate ? formatDate(latestPaymentSetting.endingDate) : null;
   let activate=false
   const today=new Date()
-  if(today>paymentSetting.endingDate){
+  if(today>latestPaymentSetting.endingDate){
     activate=true
   }
 
@@ -160,8 +151,8 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
         message: "Latest setting fetched successfullyyyyy.",
         paymentSetting: {
           ...latestPaymentSetting._doc,
-          startingDate:formatDateGC(paymentSetting.startingDate),
-          endingDate:formatDateGC(paymentSetting.endingDate),
+          startingDate:formatDateGC(latestPaymentSetting.startingDate),
+          endingDate:formatDateGC(latestPaymentSetting.endingDate),
           formattedStartDate,
           formattedEndDate,
           activate
