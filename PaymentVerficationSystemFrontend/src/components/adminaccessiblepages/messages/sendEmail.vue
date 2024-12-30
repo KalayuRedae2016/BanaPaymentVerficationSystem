@@ -1,45 +1,12 @@
 <template>
   <div>
+    <Toast ref="toast"/>
     <!-- this is the page to send email -->
     <div class="container mx-auto p-4 flex flex-col">
       <div class="flex flex-row space-x-3">
         <p class="text-blue-500 text-md font-bold">{{ $t("Send Message") }}</p>
       </div>
-      <transition
-        enter-active-class="transform transition duration-300 ease-out"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
-        leave-active-class="transform transition duration-300 ease-in"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
-      >
-        <div
-          v-if="showSuccessToast"
-          class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-          role="alert"
-        >
-          <strong class="font-bold">Success!</strong>
-          <span class="block sm:inline">{{ succesToastMessage }}</span>
-        </div>
-      </transition>
-
-      <transition
-        enter-active-class="transform transition duration-300 ease-out"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
-        leave-active-class="transform transition duration-300 ease-in"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
-      >
-        <div
-          v-if="showErrorToast"
-          class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-          role="alert"
-        >
-          <strong class="font-bold">Error!</strong>
-          <span class="block sm:inline">{{ errorToastMessage }}</span>
-        </div>
-      </transition>
+ 
 
       <div class="border-t border-blue-500 mt-3 text-xs">
         <div
@@ -117,8 +84,6 @@
                 <tbody
                   class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto max-h-96"
                 >
-
-
                   <tr
                     @click="selectDeselectEmail(searchClient.email)"
                     v-for="(searchClient, index) in searchedusers"
@@ -163,6 +128,14 @@
                 emails.length
               }}</span>
             </div>
+
+            <p class="text-red-500" v-if="subjectIsRequired">Subject is required</p>
+            <p class="text-red-500" v-if="messageIsRequired">Message is required</p>
+            <p class="text-red-500" v-if="showError">{{ errorMessage }}</p>
+            <p class="text-red-500" v-if="selectAtLeastOneEmail">Please Select At least one email to send the message</p>
+
+
+
             <button
               @click.prevent="sendMessage()"
               class="my-4 w-full lg:w-1/4 custom-button text-lg"
@@ -173,102 +146,25 @@
         </div>
       </div>
     </div>
-    <div v-if="showSuccess">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center mb-4 ml-32">
-                  <svg
-                    class="w-8 h-8 text-green-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <h2 class="text-md text-green-800">{{ $t("success") }}!</h2>
-                </div>
-                <p class="text-blue-800 text-md ml-8">
-                  {{ successMessage }}
-                </p>
-                <button
-                  @click="showSuccess = false"
-                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 md:min-w-full bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
 
-    <div v-if="showError">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-red-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-red-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">
-                    {{ $t("error") }}!
-                  </h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  {{ errorMessage }}
-                </p>
-                <button
-                  @click="showError = false"
-                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
+
+
   </div>
 </template>
 
 <script>
+import Toast from '../../Common/Toast.vue'
 export default {
   name: "usersView",
   components: {
-    //usersForm,
+    Toast,
   },
   data() {
     return {
+      selectAtLeastOneEmail:false,
+      subjectIsRequired:false,
+      messageIsRequired:false,
+      
       successToastMessage: "",
       errorToastMessage: "",
       showErrorToast: false,
@@ -293,30 +189,7 @@ export default {
       clientId: "",
       emails: [],
       users: [
-        // {
-        //   _id: "1",
-        //   userCode:"bana01",
-        //   firstName: "John",
-        //   middleName: "A.",
-        //   lastName: "Doe",
-        //   email: "bruhtesheme@gmail.com",
-        // },
-        // {
-        //   _id: "2",
-        //   userCode:"bana02",
-        //   firstName: "Jane",
-        //   middleName: "B.",
-        //   lastName: "Smith",
-        //   email: "tadiosgb26@gmail.com",
-        // },
-        // {
-        //   _id: "3",
-        //   userCode:"bana03",
-        //   firstName: "Emily",
-        //   middleName: "C.",
-        //   lastName: "Jones",
-        //   email: "hailomasegede@gmail.com",
-        // },
+       
       ],
       showMoreChanged: false,
       filteredCleints: [],
@@ -366,24 +239,8 @@ export default {
   },
 
   methods: {
-    showSuccessToastMessage(message) {
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000);
+    
 
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
     selectDeselectEmail(email) {
       console.log("selectDeselectEmail", email);
       const index = this.emails.indexOf(email);
@@ -409,16 +266,26 @@ export default {
       }
     },
     sendMessage() {
-      if (this.subject == "") {
-        this.showErrorToastMessage("Subject is required");
+
+      this.showError=false;
+      this.subjectIsRequired=false;
+      this.messageIsRequired=false;
+      this.selectAtLeastOneEmail=false;
+
+      if (this.subject == "" || this.subject==null) {
+        this.subjectIsRequired=true;
+
+        //this.showErrorToastMessage("Subject is required");
         return;
       }
-      if (this.message == "") {
-        this.showErrorToastMessage("Message is required");
+      if (this.message == "" || this.message == null) {
+        this.messageIsRequired=true;
+        //this.showErrorToastMessage("Message is required");
         return;
       }
-      if (this.emails == "") {
-        this.showErrorToastMessage("Please select users to send message");
+      if (this.emails == "" || this.emails.length===0) {
+        this.selectAtLeastOneEmail=true;
+        //this.showErrorToastMessage("Please select users to send message");
         return;
       }
       const emailList = {
@@ -435,10 +302,10 @@ export default {
           if (response.data.status === 1) {
             this.searchedusers = this.users; //response.data.message;
             this.displayedItems();
-            this.showSuccessToastMessage("Email sent successfully");
-            // this.showSuccess=true;
-            // this.successMessage = response.data.message;
-            this.selectAll = false;
+            this.$refs.toast.showSuccessToastMessage("Email sent successfully");
+
+            this.$reloadPage();
+            
           }
         })
         .catch((error) => {
@@ -565,7 +432,8 @@ export default {
       this.$router.push("/admindashboard"); // Navigates back to the previous page
     },
   },
-};
+  }
+
 </script>
 
 <style>

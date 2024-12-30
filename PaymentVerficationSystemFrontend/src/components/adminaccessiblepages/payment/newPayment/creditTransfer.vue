@@ -1,43 +1,8 @@
 <template>
   <div>
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showSuccessToast"
-        class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Success!</strong>
-        <span class="block sm:inline">{{ successToastMessage }}</span>
-      </div>
-    </transition>
-
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showErrorToast"
-        class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Error!</strong>
-        <span class="block sm:inline">{{ errorToastMessage }}</span>
-      </div>
-    </transition>
-
-    <div class="border border-gray-300 mt-5 p-5 mx-0  rounded-lg">
-      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32 ">
+    <Toast ref="toast"/>
+    <div class="border border-gray-300 mt-5 p-5 mx-0 rounded-lg">
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Transfer Type: </label>
         <select
           name="type"
@@ -49,9 +14,7 @@
           <option value="block">Block</option>
           <option value="service">Service</option>
         </select>
-        <p v-if="selectTransferType" class="text-red-500 text-xs mt-2">
-          Please Select Transfer Type!
-        </p>
+       
       </div>
 
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
@@ -83,9 +46,7 @@
             </option>
           </template>
         </select>
-        <p v-if="selectTransferFrom" class="text-red-500 text-xs mt-2">
-          Please select a bank from where to be transfer!
-        </p>
+       
       </div>
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Transfer to: </label>
@@ -106,7 +67,6 @@
             </option>
           </template>
 
-          
           <template v-else-if="transferType === 'service'">
             <option
               v-for="(bank, index) in serviceBanks"
@@ -117,29 +77,18 @@
             </option>
           </template>
         </select>
-
-        <p v-if="selectTransferTo" class="text-red-500 text-xs mt-2">
-          Please select a bank to where to be transfer!
-        </p>
-        <p v-if="notEqualFromTo" class="text-red-500 text-xs mt-2">
-          Transfer to and transfer from can not be equal!
-        </p>
+       
       </div>
 
-      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32 ">
-        <label class="custom-label w-1/3 mt-3"> Amount: </label>
+      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
+        <label class="custom-label w-1/3 mt-3"> amount: </label>
         <input
           type="number"
           class="custom-input text-xs"
           v-model="amount"
-          placeholder="Amount"
+          placeholder="amount"
         />
-        <p v-if="enterAmount" class="text-red-500 text-xs mt-2">
-          Please Enter Amount!
-        </p>
-        <p v-if="amountNotZero" class="text-red-500 text-xs mt-2">
-          Amount can not be zero!
-        </p>
+        
       </div>
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Transfer Date: </label>
@@ -147,123 +96,68 @@
           type="date"
           class="custom-input text-xs"
           v-model="transferDate"
-          placeholder="Amount"
+          placeholder="amount"
         />
-        <p v-if="enterTransferDate" class="text-red-500 text-xs mt-2">
-          Please Enter Transfer Date!
-        </p>
+
+       
       </div>
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Reason: </label>
         <div class="flex flex-col w-full space-y-5">
           <input
-          type="text"
-          class="custom-input text-xs"
-          v-model="reason"
-          placeholder="Reason"
-        />
-          <button @click.prevent="addCreditTransfer()" class="custom-button w-full lg:w-1/4">
-      <i class="fa fa-arrow-right"></i>  Submit
-      </button>
+            type="text"
+            class="custom-input text-xs"
+            v-model="reason"
+            placeholder="Reason"
+          />
+
+
+
+          <p v-if="selectTransferType" class="text-red-500 text-xs mt-2">
+          Please Select Transfer Type!
+        </p>
+        <p v-if="selectTransferFrom" class="text-red-500 text-xs mt-2">
+          Please select a bank from where to be transfer!
+        </p>
+        <p v-if="selectTransferTo" class="text-red-500 text-xs mt-2">
+          Please select a bank to where to be transfer!
+        </p>
+        <p v-if="notEqualFromTo" class="text-red-500 text-xs mt-2">
+          Transfer to and transfer from can not be equal!
+        </p>
+        <p v-if="enterAmount" class="text-red-500 text-xs mt-2">
+          Please Enter amount!
+        </p>
+        <p v-if="amountNotZero" class="text-red-500 text-xs mt-2">
+          amount can not be zero!
+        </p>
+        <p v-if="enterTransferDate" class="text-red-500 text-xs mt-2">
+          Please Enter Transfer Date!
+        </p>
+        <p v-if="showError" class="text-red-500 text-xs mt-2">
+          {{ errorMessage }}
+        </p>
+          <button
+            @click.prevent="addCreditTransfer()"
+            class="custom-button w-full lg:w-1/4"
+          >
+            <i class="fa fa-arrow-right"></i> Submit
+          </button>
         </div>
-       
       </div>
-
-      
-    </div>
-
-    <div v-if="showSuccess">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg-lg p-6 border border-cyan-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-green-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">Success!</h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  <!-- Your Comany Profile Created successfully -->
-                  {{ successMessage }}
-                </p>
-                <button
-                  @click="
-                    showSuccess = !showSuccess;
-                    routeToDisplay();
-                  "
-                  class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
-                  OK
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 md:min-w-full bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
-
-    <div v-if="showError">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-red-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-red-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">Error!</h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  {{ errorMessage }}
-                </p>
-                <button
-                  @click="showError = false"
-                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  OK
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 bg-red-500" />
-          </div>
-        </div>
-      </transition>
     </div>
   </div>
 </template>
 
 <script>
+
+
+import Toast from '../../../Common/Toast.vue';
+
 export default {
+  components:{
+      Toast,
+  },
   name: "creditTransfer",
   data() {
     return {
@@ -276,7 +170,7 @@ export default {
       toBankType: "",
       transferType: "",
       reason: "",
-      Amount: 0,
+      amount: 0,
       transferDate: "",
 
       showError: false,
@@ -303,26 +197,7 @@ export default {
   },
 
   methods: {
-    showSuccessToastMessage(message) {
-      //  alert(message);
-      console.log("message", message);
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
+   
     addCreditTransfer() {
       console.log(
         "data",
@@ -340,46 +215,42 @@ export default {
       this.notEqualFromTo = false;
       this.amountNotZero = false;
       this.enterTransferDate = false;
+      this.showError = false;
 
-      if (this.transferType == "") {
-        this.showErrorToastMessage(
-          "Transfer Type(Either service or Block)is required"
-        );
+      if (this.transferType == "" || this.transferType==null) {
+       //this.$refs.toast.showErrorToastMessage("Transfer Type(Either service or Block)is required");
         this.selectTransferType = true;
         return;
       }
-      if (this.fromBankType == "") {
-        this.showErrorToastMessage("Transfer-From is required");
+      if (this.fromBankType == "" || this.fromBankType==null) {
+       // this.showErrorToastMessage("Transfer-From is required");
         this.selectTransferFrom = true;
         return;
       }
-      if (this.toBankType == "") {
-        this.showErrorToastMessage("Transfer-To  is required");
+      if(this.amount =='' || this.amount==null)
+      if (this.toBankType == "" || this.toBankType==null) {
+        //this.$refs.toast.showErrorToastMessage("Transfer-To  is required");
         this.selectTransferTo = true;
         return;
       }
 
       if (this.fromBankType == this.toBankType) {
         //alert("Hiii")
-        this.showErrorToastMessage("You can't transfer from the same bank");
+        //this.showErrorToastMessage("You can't transfer from the same bank");
         this.notEqualFromTo = true;
         return;
       }
 
-      if (this.amount === "") {
-        this.showErrorToastMessage("Amount is required");
+      if (this.amount === "" || this.amount==null ||this.ammount===0) {
+        //this.showErrorToastMessage("amount is required");
         this.enterAmount = true;
         return;
       }
 
-      if (this.amount == 0) {
-        this.showErrorToastMessage("Amount can not be zero");
-        this.amountNotZero = true;
-        return;
-      }
+
 
       if (this.transferDate == "") {
-        this.showErrorToastMessage("Transfer Date is required");
+        //this.showErrorToastMessage("Transfer Date is required");
         this.enterTransferDate = true;
         return;
       }
@@ -401,14 +272,15 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (response.data.status === 1) {
-            this.showSuccessToastMessage(response.data.message);
+            this.$refs.toast.showSuccessToastMessage(response.data.message);
           }
         })
         .catch((error) => {
-          this.showErrorToastMessage("Something went wrong");
-          // this.errorMessage = error.response.data.message;
-          // this.showError = true;
+
           console.log("error", error);
+ 
+           this.showError = true;
+           this.errorMessage = error.response.data.message;
         });
     },
   },

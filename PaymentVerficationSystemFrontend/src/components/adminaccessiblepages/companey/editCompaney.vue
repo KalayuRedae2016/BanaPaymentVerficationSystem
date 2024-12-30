@@ -101,7 +101,7 @@
                       placeholder="Address"
                     />
                   </div>
-                  <Button class="custom-button w-32 mb-4 ml-5" @click.prevent="seeChange()">  <i class="fa fa-save"></i> Save</Button>
+                  <Button class="custom-button w-32 ml-5" @click.prevent="seeChange()">  <i class="fa fa-save"></i> Save</Button>
                 </div>
               </div>
             </div>
@@ -216,7 +216,9 @@
                       </svg>
                     </button>
                   </div>
-               
+
+               <p class="text-red-500 text-xs m-10" v-if="showError">{{ errorMessage }}  </p>
+
                   <div class="flex flex-row">
                     <button
                       @click.prevent="addBlockBankAccount()"
@@ -237,24 +239,14 @@
                         />
                       </svg>
                     </button>
+
+
                     <button
                       @click.prevent="seeChange()"
-                      class="ml-10 mt-3 mb-5 flex items-center justify-center bg-blue-500 text-white rounded-full w-10 h-10 hover:bg-green-600"
+                      class="ml-10 mt-3 mb-5 custom-button"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 3v18h14V3H5zm7 13V7m0 0H7m5 0h5"
-                        />
-                      </svg>
+            
+                      <i class="fa fa-save mr-2"></i>Save
                     </button>
                   </div>
                 </div>
@@ -392,22 +384,10 @@
                     </button>
                     <button
                       @click.prevent="seeChange()"
-                      class="ml-10 mt-3 mb-5 flex items-center justify-center bg-blue-500 text-white rounded-full w-10 h-10 hover:bg-green-600"
+                      class="ml-10 mt-3 mb-5 custom-button"
                     >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M5 3v18h14V3H5zm7 13V7m0 0H7m5 0h5"
-                        />
-                      </svg>
+            
+                      <i class="fa fa-save mr-2"></i>Save
                     </button>
                   </div>
                 </div>
@@ -848,6 +828,8 @@ export default {
       otherBlockSelected: false,
       otherServiceSelected: false,
 
+      showError:false,
+
       warningMessage: "",
       errorMessage: "",
       editSuccess: false,
@@ -1149,7 +1131,7 @@ export default {
     },
 
     addServiceBankAccount() {
-      this.addServiceAccount = true;
+      //this.addServiceAccount = true;
       console.log("i am here");
 
       this.addedServiceBankAccounts.push({
@@ -1267,6 +1249,7 @@ export default {
     },
 
     seeChange() {
+      //alert("See Change")
       this.addedBlockBankAccounts = this.addedBlockBankAccounts.filter(
         (account) => account.bankAccountNumber !== "" && account.bankType !== ""
       );
@@ -1283,8 +1266,9 @@ export default {
       this.addedServiceBankAccounts.forEach((account) => {
         this.serviceBankAccounts.push(account); //final service
       });
-      this.addedServiceBankAccounts = [];
 
+
+      this.addedServiceBankAccounts = [];
       console.log("blocks", this.blockBankAccounts);
       console.log("services", this.serviceBankAccounts);
 
@@ -1297,6 +1281,7 @@ export default {
         blockBankAccounts: this.blockBankAccounts,
         serviceBankAccounts: this.serviceBankAccounts,
       };
+
       console.log("companey Profile", companyEditedData);
       this.$apiClient
         .patch(
@@ -1310,7 +1295,9 @@ export default {
           }
         })
         .catch((error) => {
-          console.log("Error updating close", error);
+           this.showError=true;
+           this.errorMessage= error.response.data.message;
+
           this.$toast.showErrorToastMessage("Something went wrong");
         });
     },

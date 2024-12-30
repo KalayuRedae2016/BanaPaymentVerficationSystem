@@ -51,7 +51,7 @@ const mutations = {
     state.role = role;
     localStorage.setItem('role', role);
   },
-  setRole(state, email) {
+  setEmail(state, email) {
     console.log("role in mutation", email);
     state.email = email;
     localStorage.setItem('email', email);
