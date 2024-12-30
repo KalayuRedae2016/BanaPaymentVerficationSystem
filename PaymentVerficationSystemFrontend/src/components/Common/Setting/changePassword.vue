@@ -56,10 +56,10 @@
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-800 "
 >
         <label class="text-gray-700 font-medium custom-label">Change Password</label>
-          <i
+          <!-- <i
             :class="passwordVisible ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
             class="text-gray-500"
-          ></i>
+          ></i> -->
         </div>
         <form
          
