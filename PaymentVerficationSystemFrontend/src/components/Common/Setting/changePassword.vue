@@ -9,18 +9,18 @@
     <div class="mx-5">
       <div class="mt-4 py-4 ml-0  border border-gray-300 rounded-lg">
         <div
-          @click="toggleSection('email')"
-          class="flex justify-between items-center cursor-pointer p-4"
-          :class="emailVisible ? 'border-b border-gray-300 text-blue-800' : 'border-gray-300 text-gray-500'"
+        
+          class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-80"
+       
         >
           <label class="text-gray-700 font-medium custom-label">Change Email</label>
-          <i
+          <!-- <i
             :class="emailVisible ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
             class="text-gray-500"
-          ></i>
+          ></i> -->
         </div>
         <form
-          v-if="emailVisible"
+        
           class="flex flex-col  rounded-lg p-5 mt-2"
         >
           <div class="flex flex-col lg:flex-row mb-4" v-if="role === 'Admin'">
@@ -53,9 +53,8 @@
       <div class="mt-4 py-4 ml-0 border border-gray-300 rounded-lg">
         <div
           @click="toggleSection('password')"
-          class="flex justify-between items-center cursor-pointer p-4  "
-          :class="passwordVisible ? 'border-b border-gray-300 text-blue-800' : 'border-gray-300 text-gray-500'"
-        >
+          class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-800 "
+>
         <label class="text-gray-700 font-medium custom-label">Change Password</label>
           <i
             :class="passwordVisible ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
@@ -63,7 +62,7 @@
           ></i>
         </div>
         <form
-          v-if="passwordVisible"
+         
           class="flex flex-col  rounded-lg p-5 mt-2"
         >
           <div class="mb-4">
