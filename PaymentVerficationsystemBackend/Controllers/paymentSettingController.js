@@ -137,11 +137,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
       });
     }
     // Find the payment setting marked as latest
-    const latestPaymentSetting = await PaymentSetting.findOne({ latest: true });
-     // Format the starting and ending dates
-  const formattedStartDate = latestPaymentSetting.startingDate ? formatDate(latestPaymentSetting.startingDate) : null;
-  const formattedEndDate = latestPaymentSetting.endingDate ? formatDate(latestPaymentSetting.endingDate) : null;
-    
+  const latestPaymentSetting = await PaymentSetting.findOne({ latest: true });
     if (!latestPaymentSetting) {
         return res.status(200).json({
             status: 1,
@@ -149,6 +145,14 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
             paymentSetting: null
         });
     }
+    
+  const formattedStartDate = latestPaymentSetting.startingDate ? formatDate(latestPaymentSetting.startingDate) : null;
+  const formattedEndDate = latestPaymentSetting.endingDate ? formatDate(latestPaymentSetting.endingDate) : null;
+  let activate=false
+  const today=new Date()
+  if(today>paymentSetting.endingDate){
+    activate=true
+  }
 
     console.log(latestPaymentSetting)
     res.status(200).json({
@@ -159,7 +163,8 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
           startingDate:formatDateGC(paymentSetting.startingDate),
           endingDate:formatDateGC(paymentSetting.endingDate),
           formattedStartDate,
-          formattedEndDate
+          formattedEndDate,
+          activate
         }
     });
 });
