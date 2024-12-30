@@ -1044,8 +1044,8 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   paymentTypes.forEach((type) => {
     if (formattedPayment[type]) {
       if (formattedPayment[type].paidAt) {
-        formattedPayment[type].paidAt = formatDate(formattedPayment[type].paidAt); // Format paidAt date
         formattedPayment[type].paidAtGC = formatDateGC(formattedPayment[type].paidAt); // Format paidAt date
+        formattedPayment[type].paidAt = formatDate(formattedPayment[type].paidAt); // Format paidAt date
       }
       if (formattedPayment[type].createdAt) {
         formattedPayment[type].createdAt = formatDate(formattedPayment[type].createdAt); // Format createdAt date
