@@ -4,11 +4,12 @@ function formatDateGC(dateString){
   if (!dateString) return null;
   const d = new Date(dateString);
   const year = d.getFullYear();
-  const month = String(d.getMonth()).padStart(2, '0'); // Add leading zero
+  const month = String(d.getMonth()+1).padStart(2, '0'); // Add leading zero
   const day = String(d.getDate()).padStart(2, '0'); // Add leading zero
   return `${year}-${month}-${day}`; // Format as YYYY-MM-DD
 
 }
+// formatDate(dateString1)
 // // Format date fields to 'YYYY-MM-DD'
 // const formatDate = (date) => date.toISOString().split('T')[0];
 
