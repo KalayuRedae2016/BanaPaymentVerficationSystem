@@ -665,7 +665,7 @@
                       type="date"
                       id="startingDate"
                       class="custom-input"
-                      v-model="paymentSetting.formattedStartDate"
+                      v-model="paymentSetting.startingDate"
                     />
                   </div>
                   <div class="mb-4">
@@ -677,7 +677,7 @@
                       type="date"
                       id="edingDate"
                       class="custom-input"
-                      v-model="paymentSetting.formattedEndDate"
+                      v-model="paymentSetting.endingDate"
                     />
                   </div>
                   <div class="mb-4">
@@ -838,90 +838,7 @@
       </transition>
     </div>
 
-    <div v-if="showSuccess">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center mb-4 ml-32">
-                  <svg
-                    class="w-8 h-8 text-green-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
-                  </svg>
-                  <h2 class="text-md text-green-800">{{ $t("success") }}!</h2>
-                </div>
-                <p class="text-blue-800 text-md ml-8">
-                  {{ successMessage }}
-                </p>
-                <button
-                  @click="showSuccess = false"
-                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 py-2 px-4rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 md:min-w-full bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
-    <div v-if="showError">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-red-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-red-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">
-                    {{ $t("error") }}!
-                  </h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  {{ errorMessage }}
-                </p>
-                <button
-                  @click="showError = false"
-                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 py-2 px-4rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
+
   </div>
 </template>
 
@@ -1009,11 +926,18 @@ export default {
             const endingDate = new Date(
               response.data.paymentSetting.endingDate
             );
-            const today = new Date();
+           // const today = new Date();
 
-            console.log("today: " + today);
+            const today = {
+  year: new Date().getFullYear(),
+  month: new Date().getMonth() + 1, // Months are 0-indexed, so add 1
+  day: new Date().getDate(),
+};
+console.log("today",today);
 
-            today.setHours(0, 0, 0, 0);
+          //  today.toISOString();
+
+           
             endingDate.setHours(0, 0, 0, 0);
             if (today > endingDate) {
               console.log("today is greater than ending date");
@@ -1210,7 +1134,11 @@ export default {
         activeMonth: this.paymentSetting.activeMonth,
         activeYear: this.paymentSetting.activeYear,
         regFeeRate: this.paymentSetting.regFeeRate,
+        startingDate: this.paymentSetting.startingDate,
+        endingDate: this.paymentSetting.endingDate,
       };
+
+      
 
       this.paymentSetting = {};
       console.log(regularData);
@@ -1282,13 +1210,13 @@ export default {
 
         return;
       }
-      if (this.paymentSetting.formattedStartDate == "") {
+      if (this.paymentSetting.startingDate == "") {
         this.startingDateIsRequired = true;
 
         return;
       }
 
-      const date = new Date(this.paymentSetting.formattedStartDate); //used for the ff if condtions;
+      const date = new Date(this.paymentSetting.startingDate); //used for the ff if condtions;
 
       if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
         this.start_date_less_than_activeMonth = true;
@@ -1296,15 +1224,15 @@ export default {
         return;
       }
 
-      if (this.paymentSetting.formattedEndDate == "") {
+      if (this.paymentSetting.endingDate == "") {
         this.endingDateIsRequired = true;
 
         return;
       }
 
-      if (this.paymentSetting.formattedEndDate) {
+      if (this.paymentSetting.endingDate) {
         //alert("there is ending date")
-        const date = new Date(this.paymentSetting.formattedEndDate);
+        const date = new Date(this.paymentSetting.endingDate);
         if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
           this.end_date_less_than_activeMonth = true;
 
@@ -1315,8 +1243,8 @@ export default {
       }
 
       if (
-        new Date(this.paymentSetting.formattedStartDate) >
-        new Date(this.paymentSetting.formattedEndDate)
+        new Date(this.paymentSetting.startingDate) >
+        new Date(this.paymentSetting.endingDate)
       ) {
         this.startDateLessEndDate = true;
 
@@ -1367,17 +1295,18 @@ export default {
         regFeeRate: this.paymentSetting.regFeeRate,
         activeMonth: this.paymentSetting.activeMonth,
         activeYear: this.paymentSetting.activeYear,
-        startingDate: this.paymentSetting.formattedStartDate,
-        endingDate: this.paymentSetting.formattedEndDate,
+        startingDate: this.paymentSetting.startingDate,
+        endingDate: this.paymentSetting.endingDate,
         penalityLate5Days: this.paymentSetting.penalityLate5Days,
         penalityLate10Days: this.paymentSetting.penalityLate10Days,
         penalityLateAbove10Days: this.paymentSetting.penalityLateAbove10Days,
         id: this.paymentSetting._id,
       };
 
+
       console.log("to be edit data", regularData);
 
-      //const id=this.paymentSetting._id;
+
       this.$apiClient
         .put(`/api/v1/paymentSetting/${this.paymentSetting._id}`, regularData)
         .then((response) => {
@@ -1410,7 +1339,12 @@ export default {
         });
     },
 
+
+
     activatePaymentSetting() {
+
+
+
       this.regularIsRequired = false;
       this.serviceIsRequired = false;
       this.activeYearIsRequired = false;
@@ -1425,6 +1359,8 @@ export default {
       this.fiveDayLessTenDay = false;
       this.tenDayLessAboveTenDay = false;
       this.settingAlreadyExists = false;
+
+
       if (this.paymentSetting.regularAmount == "") {
         this.regularIsRequired = true;
 
@@ -1445,13 +1381,13 @@ export default {
 
         return;
       }
-      if (this.paymentSetting.formattedStartDate == "") {
+      if (this.paymentSetting.startingDate == "") {
         this.startingDateIsRequired = true;
 
         return;
       }
 
-      const date = new Date(this.paymentSetting.formattedStartDate); //used for the ff if condtions;
+      const date = new Date(this.paymentSetting.startingDate); //used for the ff if condtions;
 
       if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
         this.start_date_less_than_activeMonth = true;
@@ -1459,15 +1395,15 @@ export default {
         return;
       }
 
-      if (this.paymentSetting.formattedEndDate == "") {
+      if (this.paymentSetting.endingDate == "") {
         this.endingDateIsRequired = true;
 
         return;
       }
 
-      if (this.paymentSetting.formattedEndDate) {
+      if (this.paymentSetting.endingDate) {
         //alert("there is ending date")
-        const date = new Date(this.paymentSetting.formattedEndDate);
+        const date = new Date(this.paymentSetting.endingDate);
         if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
           this.end_date_less_than_activeMonth = true;
 
@@ -1478,8 +1414,8 @@ export default {
       }
 
       if (
-        new Date(this.paymentSetting.formattedStartDate) >
-        new Date(this.paymentSetting.formattedEndDate)
+        new Date(this.paymentSetting.startingDate) >
+        new Date(this.paymentSetting.endingDate)
       ) {
         this.startDateLessEndDate = true;
 
@@ -1524,6 +1460,10 @@ export default {
 
       console.log("paymentId inc lose", this.paymentId);
 
+  
+
+
+
       const regularData = {
         regularAmount: this.paymentSetting.regularAmount,
         subsidyAmount: this.paymentSetting.subsidyAmount,
@@ -1532,41 +1472,12 @@ export default {
         regFeeRate: this.paymentSetting.regFeeRate,
         activeMonth: this.paymentSetting.activeMonth,
         activeYear: this.paymentSetting.activeYear,
-        startingDate: this.paymentSetting.formattedStartDate,
-        endingDate: this.paymentSetting.formattedEndDate,
+        startingDate: this.paymentSetting.startingDate,
+        endingDate: this.paymentSetting.endingDate,
         penalityLate5Days: this.paymentSetting.penalityLate5Days,
         penalityLate10Days: this.paymentSetting.penalityLate10Days,
         penalityLateAbove10Days: this.paymentSetting.penalityLateAbove10Days,
       };
-
-      console.log("regular in the activating is", regularData);
-      if (this.paymentSetting.formattedEndDate) {
-        const date = new Date(this.paymentSetting.formattedStartDate);
-        if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
-          this.edit_activate_start_date_less_than_activeMonth = true;
-          this.showPaymentEditingActivating = true;
-          console.log("it enters to return start ");
-
-          return;
-        } else {
-          this.edit_activate_start_date_less_than_activeMonth = false;
-        }
-      }
-
-      if (this.paymentSetting.formattedEndDate) {
-        const date = new Date(this.paymentSetting.formattedEndDate);
-        if (date.getMonth() + 1 < this.paymentSetting.activeMonth) {
-          console.log("it enters to return end ");
-          this.edit_activate_end_date_less_than_activeMonth = true;
-
-          return;
-        } else {
-          this.edit_activate_end_date_less_than_activeMonth = false;
-        }
-      }
-
-      console.log("it will go the server");
-
       this.$apiClient
         .post("/api/v1/paymentSetting", regularData)
         .then((response) => {

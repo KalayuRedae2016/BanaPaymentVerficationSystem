@@ -86,12 +86,12 @@
                         {{ payment.activeMonthInString }}</span
                       >
                       <span
-                        class="text-xs ml-5 text-yellow-500 bg-blue-500 rounded-lg  pb-1"
+                        class="text-xs ml-5 text-yellow-500 bg-blue-500 rounded-lg  px-3 pb-1"
                         v-if="payment.status === 'pending'"
                         >{{ payment.status }}</span
                       >
                       <span
-                        class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg  pb-1"
+                        class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg  px-3 pb-1"
                         v-else-if="payment.status === 'overdue'"
                         >{{ payment.status }}</span
                       >
@@ -1731,6 +1731,10 @@ export default {
         })
         .then((response) => {
           console.log("Response from service confirming", response.data);
+         
+         
+            this.$refs.toast.showSuccessToastMessage(response.data.message);
+            this.$reloadPage();
           // if(response.data.payment.isPaid){
           //   this.$router.push({
           //     path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
@@ -1743,6 +1747,8 @@ export default {
 
           // }
           //   this.fetchUnPaid();
+
+
         })
         .catch((error) => {
           console.log("Error confirming", error);
@@ -2495,7 +2501,6 @@ export default {
         }
       });
     },
-
     openModal() {
       this.showPaymentDetailModal = true;
     },
