@@ -140,8 +140,8 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
   const formattedStartDate = latestPaymentSetting.startingDate ? formatDate(latestPaymentSetting.startingDate) : null;
   const formattedEndDate = latestPaymentSetting.endingDate ? formatDate(latestPaymentSetting.endingDate) : null;
   let activate=false
-  const today=new Date()
-  if(today>latestPaymentSetting.endingDate){
+  const today=new Date(formatDateGC(new Date()))
+  if(today>new Date(formatDateGC(latestPaymentSetting.endingDate))){
     activate=true
   }
 
