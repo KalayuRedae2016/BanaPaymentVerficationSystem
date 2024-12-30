@@ -203,6 +203,10 @@
           </div>
         </div>
 
+      
+      </div>
+
+      <div class="ml-4 mr-8 mt-5">
         <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
           {{ $t("firstNameRequired") }}
         </p>
@@ -233,9 +237,6 @@
         <p v-if="showErrorMessage" class="text-red-500 text-sm mt-1 ml-10">
           {{ errorMessage }}
         </p>
-      </div>
-
-      <div class="ml-4 mr-8">
         <div class="w-1/2">
           <button
             @click="register()"

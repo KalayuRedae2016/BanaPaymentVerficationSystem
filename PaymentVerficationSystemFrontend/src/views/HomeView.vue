@@ -331,7 +331,8 @@ export default {
           .post("/api/v1/users/login", userData)
           .then((response) => {
             // Handle successful login response
-            const { role, token, userId, userCode } = response.data;
+            const { role, token, userId, userCode} = response.data;
+            const email='kalayuredae2016@gmail.com';
             if (response.data.status === 1) {
               // Dispatch actions based on role
               if (role.includes("Admin")) {
@@ -340,12 +341,14 @@ export default {
                 this.$store.dispatch("commitRole", { role });
                  console.log("role is given from the server",role);
                 this.$store.dispatch("commitUserCode", { userCode });
+                this.$store.dispatch("commitEmail", { email });
                 this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" } });
               } else if (role.includes("User")) {
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
                 this.$store.dispatch("commitUserCode", { userCode });
+                this.$store.dispatch("commitEmail", { email });
                 this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true" } });
               } else {
                 this.showError = true;

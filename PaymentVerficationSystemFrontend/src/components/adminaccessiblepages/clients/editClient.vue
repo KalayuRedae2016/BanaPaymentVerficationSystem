@@ -1,43 +1,13 @@
 <template>
   <div class="pb-20 shadow-lg">
+    <Toast ref="toast"/>
+
+    <LoadingSpinner :visible="isLoading"/>
+
     <div class="border-b border-blue-500">
       <p class="text-blue-500 font-bold px-4 pb-4 pt-3">Edit Client Profile</p>
     </div>
-    <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ succesToastMessage }}</span>
-    </div>
-  </transition> 
-
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
-    </div>
-  </transition> 
+ 
     
 <div v-if="formEmptyEditProfile" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
   <strong class="font-bold">Success!</strong>
@@ -51,7 +21,7 @@
 </div>
 <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
         <div
-          class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
+          class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0  "
         >
           <div class="m-4 w-full h-full lg:w-1/4 h-64 bg-gray-500">
             <img
@@ -134,7 +104,7 @@
 
             <button
               @click="showEditModal = true"
-              class="border border-gray-200 mt-5 mb-5 p-2 rounded-lg hover:bg-blue-50 ml-2 text-blue-500"
+              class="custom-button my-5 ml-3"
             >
               <i class="fas fa-edit mr-2"></i>Edit
             </button>
@@ -429,13 +399,16 @@
     <script>
 
 import { mapGetters } from "vuex";
+import Toast from '../../Common/Toast.vue'
+import LoadingSpinner from '../../Common/LoadingSpinner.vue'
 export default {
   components: {
-    
+    Toast,
+    LoadingSpinner
   },
   data() {
     return {
-
+      isLoading:false,
       showSuccessToast:false,
       showErrorToast:false,
       succesToastMessage:"",
@@ -475,7 +448,7 @@ export default {
     },
   },
   mounted() {
-
+   this.isLoading=true;
 
     this.clientId = this.$route.params.clientId;
 
@@ -487,27 +460,13 @@ export default {
         console.log("Response client profile", response);
         this.clientProfile = response.data.clientProfile;
         this.imageData = "data:image/jpeg;base64," + response.data.imageData;
+        this.isLoading=false;
       })
       .catch((error) => {
         console.error("Error fetching client datakk:", error);
       });
   },
   methods: {
-    showSuccessToastMessage(message) {
-      this.succesToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000); 
-    },
-
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000); 
-    },
 
 
     handleImageInput() {
@@ -521,6 +480,11 @@ export default {
     },
     editDetail() {
       //alert("mmm");
+      // this.$refs.loadingSpinner.
+      this.isLoading = true; 
+      
+      
+      // Show the spinner
       this.showEditModal = false;
       const formData = new FormData();
       if (this.imageFile && this.imageFile !== null && this.imageFile !== "") {
@@ -540,19 +504,18 @@ export default {
           console.log("response from the update: " ,response);
           if (response.data.status === 1) {
             this.clientProfile =response.data.updatedUser;
-           
+            this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
+            this.isLoading=false;
             this.$reloadPage();
-
            // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
            // this.imageData = "data:image/jpeg;base64," + this.imageFile;
            // this.showSuccess = true;
-           // this.successMessage = response.data.message;
-            
+       
           }
         })
         .catch((error) => {
           console.log(error);
-          this.showErrorToastMessage("Somthing went wrong!!");
+          this.$refs.toast.showErrorToastMessage("Somthing went wrong!!");
         });
     },
   },

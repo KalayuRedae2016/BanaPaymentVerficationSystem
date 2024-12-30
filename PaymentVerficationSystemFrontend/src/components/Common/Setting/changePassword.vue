@@ -126,6 +126,7 @@ export default {
   },
   data() {
     return {
+      
       role:"",
       showOldPassword: false,
       showNewPassword: false,
@@ -148,6 +149,7 @@ export default {
     };
   },
 
+
   computed: {
     ...mapGetters(["getToken", "getUserId", "getRole"]),
     userId() {
@@ -161,6 +163,10 @@ export default {
     },
   },
   created(){
+    this.newEmail=localStorage.getItem("email");
+
+     console.log("email",this.newEmail);
+
     this.role=localStorage.getItem("role")
   },
 
@@ -216,6 +222,9 @@ export default {
           console.log("response", response);
           if (response.data.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.data.message);
+
+            this.$reloadPage();
+
           } else {
             //this.$refs.toast.showErrorToastMessage("Something went wrong");
           }
