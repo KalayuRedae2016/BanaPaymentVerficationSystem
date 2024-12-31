@@ -13,6 +13,7 @@
             {{ $t("Payment Management") }}
           </h1>
 
+      
           <hr class="mt-0 md:min-w-full border border-blue-300" />
 
           <ul class="mt-3 flex flex-col list-none space-y-1">
