@@ -507,10 +507,11 @@ export default {
         }
        // console.log("finally");
       });
+
     await this.fetchNotifications();
 
     //this.showToast();
-   // setInterval(this.fetchNotifications, 5000);
+   //setInterval(this.fetchNotifications, 5000);
   },
   methods: {
    
@@ -548,6 +549,7 @@ export default {
         role: this.role,
       };
 
+      
       this.$apiPut("/api/v1/payments/markPaymentAsSeen", notification._id, payload)
         .then((response) => {
           console.log("response for payment update", response);
@@ -581,13 +583,12 @@ export default {
     },
 
     firstPaymentLength() {
-      this.$apiClient
-        .get("api/v1/payments")
-        .then((response) => {
-          this.previosPaymentsLength = response.data.length;
-        })
-        .catch((error) => {
+        this.$apiGet('/api/v1/payments').then((response) => {
+            this.previosPaymentsLength=response.length;
+        }).catch((error) => {
           console.log("error in the catch", error);
+        }).finally(() =>{
+          console.log("finally completed");
         });
     },
 
@@ -606,15 +607,7 @@ export default {
         this.largerScreen = false;
       }
     },
-    formatDate(date) {
-      const options = {
-        hour: "2-digit",
-        minute: "2-digit",
-        month: "short",
-        day: "numeric",
-      };
-      return new Date(date).toLocaleDateString(undefined, options);
-    },
+
 
     getFullImagePath(image) {
       return `../../../${image}`;

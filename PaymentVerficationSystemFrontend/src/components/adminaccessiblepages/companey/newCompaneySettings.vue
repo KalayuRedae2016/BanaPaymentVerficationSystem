@@ -300,11 +300,6 @@ export default {
   },
   mounted() {
   },
-  created() {
-    this.apiClient = axios.create({
-      baseURL: "http://localhost:8081", // Set your base URL here
-    });
-  },
 
   methods: {
     routeToDisplay() {
@@ -361,23 +356,43 @@ export default {
 
       console.log("companey profile data", companeyProfileData);
       //  console.log("This close created=",this.closepaymentCreated);
-      this.$apiClient
-        .post("/api/v1/organization", companeyProfileData)
-        .then((response) => {
-          console.log("response", response);
-          if (Number(response.data.status) === 1) {
-            this.$router.push("/admindashboard/empty-companey");
-          } else {
-            this.showErrorToastMessage("Something went wrong");
-          }
+      // this.$apiClient
+      //   .post("/api/v1/organization", companeyProfileData)
+      //   .then((response) => {
+      //     console.log("response", response);
+
+      //     if (Number(response.data.status) === 1) {
+      //       this.$router.push("/admindashboard/empty-companey");
+      //     } else {
+      //       this.showErrorToastMessage("Something went wrong");
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     if(error.response.data){
+      //       this.showError=true;
+      //       this.errorMessage = error.response.data.message;
+      //     }
+      //     console.log(error);
+      //   });
+
+        this.$apiPost('/api/v1/organization',companeyProfileData).then((response) => {
+                 
+              console.log("response from creating ", response);
+                 if(response.status==1){
+                    this.$router.push("/admindashboard/empty-companey");
+                  } else {
+                    this.showErrorToastMessage("Something went wrong");
+              }
+                 
+        }).catch((error) => {
+             console.log("error", error);
+             if(error.response.data){
+                this.showError=true;
+                this.errorMessage = error.response.data.message;
+             }
+        }).finally(() => {
+
         })
-        .catch((error) => {
-          if(error.response.data){
-            this.showError=true;
-            this.errorMessage = error.response.data.message;
-          }
-          console.log(error);
-        });
     },
 
     addBlockBankAccount() {
