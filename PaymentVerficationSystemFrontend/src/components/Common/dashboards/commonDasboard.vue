@@ -133,7 +133,7 @@
       <transition name="fade" mode="out-in">
         <div
           v-show="sidebarVisible"
-          class="flex flex-col fixed inset-0 z-50 items-start bg-black bg-opacity-85"
+          class="flex flex-col fixed inset-0 z-50 items-start bg-blue-500 bg-opacity-85"
         >
           <!-- Close Icon -->
           <i
