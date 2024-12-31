@@ -994,7 +994,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
       };
 
     }
-  console.log("status",status)
+  // console.log("status",status)
     // Add the status and penalty updates to the bulk operations
     bulkUpdates.push({
       updateOne: {
