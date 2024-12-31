@@ -1,52 +1,69 @@
+const https = require("https");
+const http = require("http");
+const fs = require("fs");
+const dotenv = require("dotenv");
 const app = require("./index");
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const createDefaultAdminUser = require('./utils/setupDefaultUser'); // Import the function
+const connectDB = require("./config/db");
+const createDefaultAdminUser = require("./utils/setupDefaultUser"); // Import the function
 
-dotenv.config();
+// Load environment variables based on the NODE_ENV
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
+dotenv.config({ path: envFile });
 connectDB();
 
-// Create an async function to initialize the server
-async function initializeServer() {
+const initializeServer = async () => {
   try {
     // Ensure the default admin user is created before starting the server
     await createDefaultAdminUser();
-    console.log('Default admin user created successfully');
+    console.log("Default admin user created successfully");
 
-    // Start the server after ensuring the default user is created
     const PORT = process.env.PORT || 8081;
-    const server = app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
-    });
+    const SSL = process.env.SSL
+
+    if (SSL==="true") {
+      // Load SSL credentials from the environment variables
+      const SSL_KEY_PATH = process.env.SSL_KEY_PATH || "/etc/letsencrypt/live/banapvs.com/privkey.pem";
+      const SSL_CERT_PATH = process.env.SSL_CERT_PATH || "/etc/letsencrypt/live/banapvs.com/fullchain.pem";
+
+      // Ensure the paths are valid and the files exist
+      const key = fs.readFileSync(SSL_KEY_PATH, "utf8");
+      const cert = fs.readFileSync(SSL_CERT_PATH, "utf8");
+
+      // Start HTTPS server
+      https.createServer({ key, cert }, app).listen(PORT, () => {
+        console.log(`HTTPS Server is running on https://localhost:${PORT}`);
+      });
+    } else {
+      // Start HTTP server
+      http.createServer(app).listen(PORT, () => {
+        console.log(`HTTP Server is running on http://localhost:${PORT}`);
+      });
+    }
 
     // Handle unhandled promise rejections
-    process.on('unhandledRejection', (err) => {
+    process.on("unhandledRejection", (err) => {
       console.log(`Error: ${err.message}`);
-      console.log('Shutting down the server due to Unhandled Promise Rejection');
-      server.close(() => {
-        process.exit(1);
-      });
+      console.log("Shutting down the server due to Unhandled Promise Rejection");
+      process.exit(1);
     });
 
     // Handle uncaught exceptions
-    process.on('uncaughtException', (err) => {
+    process.on("uncaughtException", (err) => {
       console.log(`Error: ${err.message}`);
-      console.log('Shutting down the server due to Uncaught Exception');
-      server.close(() => {
-        process.exit(1);
-      });
+      console.log("Shutting down the server due to Uncaught Exception");
+      process.exit(1);
     });
   } catch (err) {
-    console.error('Error initializing the server:', err);
+    console.error("Error initializing the server:", err);
     process.exit(1);
   }
-}
+};
 
 // Start the initialization process
 initializeServer();
 
-app.get('/', (req, res) => {
-  res.send('Welcome to the Payment Verification System API');
+app.get("/", (req, res) => {
+  res.send("Welcome to the Payment Verification System API");
 });
 
 
