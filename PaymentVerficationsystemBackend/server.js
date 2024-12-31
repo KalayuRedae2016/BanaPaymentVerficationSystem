@@ -36,12 +36,12 @@ const initializeServer = async () => {
       });
     } else {
       // Start HTTP server
-      http.createServer(app).listen(PORT, () => {
+      http.createServer(app).listen(PORT, "127.0.0.1", () => {
         console.log(`HTTP Server is running on http://localhost:${PORT}`);
-      }).on("error", (err) => {
+    }).on("error", (err) => {
         console.log("Error starting HTTP server:", err);
-      });
-      
+    });
+    
     }
 
     // Handle unhandled promise rejections
