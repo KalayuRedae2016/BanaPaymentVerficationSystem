@@ -1,10 +1,10 @@
 <template>
   <div class="root div">
     <div class="px-3 md:px-4 py-3">
-      <h1 class="text-blue-500 font-bold text-xl">{{ $t("Payment Management") }}</h1>
+      <h1 class="text-blue-500 font-bold text-md">{{ $t("Payment Management") }}</h1>
     </div>
 
-    <div class="border-t border-indigo-800 mt-1 py-4">
+    <div class="border-t border-blue-500 mt-1 py-4">
       <div class="m-2 mb-10">
         <div class="flex flex-wrap">
           <button

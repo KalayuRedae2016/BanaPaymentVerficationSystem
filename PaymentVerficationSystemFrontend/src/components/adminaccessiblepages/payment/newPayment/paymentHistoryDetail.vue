@@ -683,7 +683,7 @@
                   >
                 </p>
               </div>
-              <!-- Right Column: Print Button -->
+    
               <div class="ml-auto">
                 <button
                   @click="printDiv()"
@@ -1512,10 +1512,25 @@ export default {
         })
         .then((response) => {
           //alert('k')
-          this.$reloadPage();
+          if (response.data.unpaid == true) {
+              this.$router.push({
+                  path: "/api/v1/payments1",
+                  query: {
+                      userCode: this.payment.userCode,
+                      fullName: this.payment.fullName,
+                      activeTab:1,
+                      bankStatement:true,
+                  }
+              });
+          }
+
+
           console.log("Response from service confirming", response.data);
           console.log("message",response.data.message);
           this.$refs.toast.showSuccessToastMessage(response.data.message);
+          this.$reloadPage();
+          
+
         })
         .catch((error) => {
           console.log("Error confirming", error);

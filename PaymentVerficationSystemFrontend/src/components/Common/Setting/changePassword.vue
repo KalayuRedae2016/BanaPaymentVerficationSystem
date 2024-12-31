@@ -2,12 +2,12 @@
   <div>
     <Toast ref="toast" />
     <div class="p-3 border-b border-blue-300">
-      <h4 class="text-blue-500 mt-1">{{ $t("Change Setting") }}</h4>
+      <h4 class="text-blue-500 mt-1">{{ $t("Profile Setting") }}</h4>
     </div>
-    <div class="w-full   mt-10 space-y-4 mb-10">
+    <div class="w-full   mt-10  mb-10">
     <!-- Change Email Section -->
     <div class="mx-5">
-      <div class="mt-4 py-4 ml-0  border border-gray-300 rounded-lg">
+      <div class="mt-4 py-4 ml-0  border-t border-gray-100 rounded-lg shadow-md">
         <div
         
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-80"
@@ -21,7 +21,7 @@
         </div>
         <form
         
-          class="flex flex-col  rounded-lg p-5 mt-2"
+          class="flex flex-col  rounded-lg p-5 mt-2 mr-4 lg:mr-32"
         >
           <div class="flex flex-col lg:flex-row mb-4" v-if="role === 'Admin'">
             <label for="newEmail" class="custom-label w-full lg:w-1/3 mt-3">
@@ -50,7 +50,7 @@
 
     <!-- Change Password Section -->
     <div class="mx-5">
-      <div class="mt-4 py-4 ml-0 border border-gray-300 rounded-lg">
+      <div class="mt-4 py-4 ml-0 border-t border-gray-100 rounded-lg shadow-md">
         <div
           @click="toggleSection('password')"
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-800 "
@@ -63,7 +63,7 @@
         </div>
         <form
          
-          class="flex flex-col  rounded-lg p-5 mt-2"
+          class="flex flex-col  rounded-lg p-5 mt-2 mr-4 lg:mr-32"
         >
           <div class="mb-4">
             <div class="flex flex-col lg:flex-row">
@@ -97,7 +97,8 @@
               </div>
             </div>
           </div>
-          <div class="mb-4">
+
+          <div class="mb-4 lg:-mr-3">
             <div class="flex flex-col lg:flex-row">
               <label
                 for="confirmNewPassword"

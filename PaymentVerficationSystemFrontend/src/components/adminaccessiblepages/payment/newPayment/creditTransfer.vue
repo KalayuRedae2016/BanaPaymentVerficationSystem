@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toast ref="toast"/>
-    <div class="border border-gray-300 mt-5 p-5 mx-0 rounded-lg">
+    <div class="border border-gray-300 mt-5 p-5 mx-0 rounded-lg shadow-md">
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Transfer Type: </label>
         <select
