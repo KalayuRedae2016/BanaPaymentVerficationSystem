@@ -1,6 +1,6 @@
 <template>
   <nav
-    class="bg-gray-700 shadow-lg md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl flex flex-wrap items-center justify-between relative md:w-64 z-10 px-6 shadow-md"
+    class="bg-white shadow-lg md:left-0 md:block md:fixed md:top-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden shadow-xl flex flex-wrap items-center justify-between relative md:w-64 z-10 px-6 shadow-md"
     style="margin-top: 67px"
   >
     <div class="-ml-5 -mr-5 ">
@@ -8,8 +8,8 @@
         v-if="sidebarVisible"
         class="md:flex md:flex-col md:items-stretch md:opacity-100 md:relative sm:-mt-4 md:mt-0 md:shadow-none shadow absolute top-0 left-0 right-0 z-40 overflow-y-auto overflow-x-hidden h-auto items-center flex-1 rounded"
       >
-        <div class="flex flex-col space-y-4 bg-gray-700">
-          <h1 class=" text-md mt-3 text-white font-extrabold">
+        <div class="flex flex-col space-y-4 bg-white">
+          <h1 class=" text-md mt-3 text-blue-500 font-extrabold">
             {{ $t("Payment Management") }}
           </h1>
 
@@ -21,16 +21,16 @@
             <li
               v-if="role=== 'Admin'"
               @click="setActive('dashboard')"
-              class="items-center bg- hover:bg-gray-100  transition "
+              class="items-center bg-white hover:bg-gray-100 transition "
               :class="
-                activeItem === 'dashboard' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'dashboard' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
-                class="ml-4 flex items-center text-white py-3 font-bold hover:text-blue-500 "
+                class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-tachometer-alt mr-3 text-green-500"></i>
+                <i class="fas fa-tachometer-alt mr-3 text-teal-600"></i>
                 <span>{{ $t("dashboard") }} </span>
               </a>
             </li>
@@ -39,18 +39,18 @@
             <li
               v-if="role === 'Admin'"
               @click="setActive('companyProfile')"
-              class="items-center bg-gray-700 hover:bg-gray-100 transition"
+              class="items-center bg-white hover:bg-gray-100 transition"
               :class="
                 activeItem === 'companyProfile'
-                  ? 'border-r-4 border-blue-500'
+                  ? 'border-r-4 border-indigo-600'
                   : ''
               "
             >
               <a
-                class="ml-4 flex items-center text-white py-3 font-bold hover:text-blue-500 "
+                class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-building mr-3 text-green-500"></i>
+                <i class="fas fa-building mr-3 text-teal-600"></i>
                 <span>{{ $t("companyProfile") }}</span>
               </a>
             </li>
@@ -59,16 +59,16 @@
             <li
               v-if="role === 'Admin'"
               @click="setActive('clients')"
-              class="items-center bg-gray-700 hover:bg-gray-100 transition"
+              class="items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'clients' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'clients' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
-                class="ml-4 flex items-center text-white py-3 font-extrabold hover:text-blue-500"
+                class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-users mr-3 text-green-500"></i>
+                <i class="fas fa-users mr-3 text-teal-600"></i>
                 <span>{{ $t("clientProfile") }}</span>
               </a>
             </li>
@@ -76,16 +76,16 @@
             <li
               v-if="role === 'Admin'"
               @click="setActive('payment')"
-              class=" items-center  hover:bg-gray-100 transition"
+              class=" items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'payment' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'payment' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
-                class="ml-4 flex items-center text-white py-3 font-extrabold hover:text-blue-500"
+                class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-credit-card mr-3 text-green-500"></i>
+                <i class="fas fa-credit-card mr-3 text-teal-600"></i>
                 <span>{{ $t("Payment") }}</span>
               </a>
             </li>
@@ -93,16 +93,16 @@
             <li
               v-if="role === 'Admin'"
               @click="setActive('idCard')"
-              class=" items-center bg-gray-700 hover:bg-gray-100 transition"
+              class=" items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'idCard' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'idCard' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
-                class="ml-4 flex items-center text-white py-3 font-extrabold hover:text-blue-500"
+                class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-id-card mr-3 text-green-500"></i>
+                <i class="fas fa-id-card mr-3 text-teal-600"></i>
                 <span>{{ $t("idCard") }}</span>
               </a>
             </li>
@@ -111,16 +111,16 @@
             <li
               v-if="role === 'Admin'"
               @click="setActive('message')"
-              class="items-center bg-gray-700 hover:bg-gray-100 transition"
+              class="items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'message' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'message' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
-                class="ml-4 flex items-center text-white py-3 font-extrabold hover:text-blue-500"
+                class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-envelope mr-3 text-green-500"></i>
+                <i class="fas fa-envelope mr-3 text-teal-600"></i>
                 <span>{{ $t("sendMessage") }}</span>
               </a>
             </li>
@@ -132,14 +132,14 @@
               @click="setActive('userDashboard')"
               class="items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'userDashboard' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'userDashboard' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
                 class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-tachometer-alt mr-3 text-green-500"></i>
+                <i class="fas fa-tachometer-alt mr-3 text-teal-600"></i>
                 <span>{{ $t("dashboard") }} </span>
               </a>
             </li>
@@ -151,7 +151,7 @@
               class="items-center bg-white hover:bg-gray-100 transition"
               :class="
                 activeItem === 'userProfile'
-                  ? 'border-r-4 border-blue-500'
+                  ? 'border-r-4 border-indigo-600'
                   : ''
               "
             >
@@ -159,7 +159,7 @@
                 class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-building mr-3 text-green-500"></i>
+                <i class="fas fa-building mr-3 text-teal-600"></i>
                 <span>{{ $t("Profile") }}</span>
               </a>
             </li>
@@ -170,14 +170,14 @@
               @click="setActive('deadlines')"
               class="items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'deadlines' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'deadlines' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
                 class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-users mr-3 text-green-500"></i>
+                <i class="fas fa-users mr-3 text-teal-600"></i>
                 <span>{{ $t("deadlines") }}</span>
               </a>
             </li>
@@ -187,14 +187,14 @@
               @click="setActive('userIdCard')"
               class="border-t border-gray-300 items-center bg-white hover:bg-gray-100 transition"
               :class="
-                activeItem === 'userIdCard' ? 'border-r-4 border-blue-500' : ''
+                activeItem === 'userIdCard' ? 'border-r-4 border-indigo-600' : ''
               "
             >
               <a
                 class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-id-card mr-3 text-green-500"></i>
+                <i class="fas fa-id-card mr-3 text-teal-600"></i>
                 <span>{{ $t("idCard") }}</span>
               </a>
             </li>
