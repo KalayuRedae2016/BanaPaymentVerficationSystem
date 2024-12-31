@@ -1458,7 +1458,6 @@ export default {
     },
 
     saveChanges() {
-
       const payment={
         paymentType: this.paymentType,
         paidAt: this.paidAt,
@@ -1466,8 +1465,9 @@ export default {
         bankType: this.bankType,
         TTNumber: this.TTNumber,
         isPaid: this.isPaid,
-       
-      }
+    }
+
+
       if (this.paymentType === "regular") {
    
         this.payload = {
@@ -1512,10 +1512,13 @@ export default {
           },
         })
         .then((response) => {
+          console.log("response after editing", response);
           //alert('k')
-          if (response.data.unpaid == true) {
+          
+          if (response.data.items.isPaid == false) {
+            //alert("hi");
               this.$router.push({
-                  path: "/api/v1/payments1",
+                  path: "/admindashboard/payments1",
                   query: {
                       userCode: this.payment.userCode,
                       fullName: this.payment.fullName,
@@ -1529,7 +1532,7 @@ export default {
           console.log("Response from service confirming", response.data);
           console.log("message",response.data.message);
           this.$refs.toast.showSuccessToastMessage(response.data.message);
-          this.$reloadPage();
+          //this.$reloadPage();
           
 
         })
