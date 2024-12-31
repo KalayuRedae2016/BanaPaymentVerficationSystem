@@ -5,7 +5,9 @@ const catchAsync = require('./catchAsync');
 
 const createDefaultAdminUser = catchAsync(async () => {
     const existingAdmin = await User.findOne({ role: 'Admin' });
-    if (!existingAdmin) {
+    if(existingAdmin){
+      return
+    }
     const hashedPassword = await bcrypt.hash('admin1234', 12);
       const defaultAdmin = await User.create({
         userCode: 'BM0001',
@@ -16,19 +18,11 @@ const createDefaultAdminUser = catchAsync(async () => {
         phoneNumber:"0909090909",
         email: 'kalayuredae2016@gmail.com',
       });
-
-      console.log('Default Admin User Created:', defaultAdmin.userCode);
-
-      // You can send an email to the admin about the default credentials, if needed
+      // console.log('Default Admin User Created:', defaultAdmin.userCode);
       const subject = 'Welcome to the system';
       const message = `A default admin user has been created for you.\nUserCode: admin\nPassword: admin1234\nPlease change your password after your first login.`;
       await sendEmail({ email: defaultAdmin.email, subject, message });
-
       return defaultAdmin;
-    } else {
-      console.log('Admin user already exists.');
-      return null;
-    }
 });
 
 module.exports = createDefaultAdminUser;

@@ -26,10 +26,6 @@ router.use(paymentController.updateStatusAndPenality);
 // Route to create unconfirmed payments (initiated but not yet confirmed)
 router.route('/create/bills').post(paymentController.createUnconfirmedPayments);
 
-// =====Routes for managing payments via integrated 3rd party BankAPI========
-router.route('/search/bills') .get(authenticateApiKey,paymentController.searchBills);//search payments
-router.route('/query_more_bill/:paymentTypeIds').get(authenticateApiKey,paymentController.getMoreBills);//getMoreBills
-router.route('/c2b-payment-validation-request').post(authenticateApiKey,paymentController.confirmBills);//confirm payment
 
 // ========== Routes for managing payments via the system ==========
 router.route('/search').get(paymentController.searchPayments);//search Bank Statement payment
@@ -60,5 +56,11 @@ router.route('/orgBalance').get(paymentController.calculateOrganizationBalances)
 // ========== Routes for Data Import and Export ==========
 router.post('/importPayments', paymentController.uploadPaymentFile, paymentController.importPayments); // Import payments
 router.get('/exportPayments', paymentController.exportPayments); // Export payments
+
+// =====Routes for managing payments via integrated 3rd party BankAPI========
+router.route('/search/bills') .get(authenticateApiKey,paymentController.searchBills);//search payments
+router.route('/query_more_bill/:paymentTypeIds').get(authenticateApiKey,paymentController.getMoreBills);//getMoreBills
+router.route('/c2b-payment-validation-request').post(authenticateApiKey,paymentController.confirmBills);//confirm payment
+
 
 module.exports = router;
