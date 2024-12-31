@@ -188,7 +188,7 @@ userSchema.methods.generateRandomPassword = async function (length = 6) {
   const passwordArray = Array.from({ length }, () => alphabet[Math.floor(Math.random() * alphabet.length)]);
   return passwordArray.join('');
 }
-userSchema.index({ firstName: 'text' }, { userCode: 'text' }, { firstName: 'text' }, { lastName: 'text' }, { phoneNumber: 'text' });
+userSchema.index({ firstName: 'text' }, { userCode: 'text' }, { firstName: 'text' }, { lastName: 'text' }, { phoneNumber: 'text' },{ userCode: 'text' });
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

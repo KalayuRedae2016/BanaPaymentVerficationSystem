@@ -13,13 +13,14 @@ connectDB();
 
 const initializeServer = async () => {
   try {
+    console.log("Initializing server...");
     // Ensure the default admin user is created before starting the server
     await createDefaultAdminUser();
     console.log("Default admin user created successfully");
 
     const PORT = process.env.PORT || 8081;
     const SSL = process.env.SSL
-
+    console.log("SSL:",SSL)
     if (SSL==="true") {
       // Load SSL credentials from the environment variables
       const SSL_KEY_PATH = process.env.SSL_KEY_PATH || "/etc/letsencrypt/live/banapvs.com/privkey.pem";
@@ -37,7 +38,10 @@ const initializeServer = async () => {
       // Start HTTP server
       http.createServer(app).listen(PORT, () => {
         console.log(`HTTP Server is running on http://localhost:${PORT}`);
+      }).on("error", (err) => {
+        console.log("Error starting HTTP server:", err);
       });
+      
     }
 
     // Handle unhandled promise rejections

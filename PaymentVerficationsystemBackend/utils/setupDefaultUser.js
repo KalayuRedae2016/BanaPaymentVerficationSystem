@@ -6,7 +6,7 @@ const catchAsync = require('./catchAsync');
 const createDefaultAdminUser = catchAsync(async () => {
     const existingAdmin = await User.findOne({ role: 'Admin' });
     if(existingAdmin){
-      return
+      return null
     }
     const hashedPassword = await bcrypt.hash('admin1234', 12);
       const defaultAdmin = await User.create({
