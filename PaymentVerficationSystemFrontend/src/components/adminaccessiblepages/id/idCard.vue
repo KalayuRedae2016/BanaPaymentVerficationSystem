@@ -42,7 +42,7 @@
 
     <div
       v-if="showIdCard"
-      class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300 rounded-xl shadow-lg space-y-6 lg:space-y-0 lg:space-x-8"
+      class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300  shadow-lg space-y-6 lg:space-y-0 lg:space-x-8"
     >
       <!-- Left Section: Image and Button (Mobile and Desktop) -->
       <div
@@ -89,7 +89,7 @@
       </div>
     </div>
 
-    <div v-if="showIdCard" class="flex flex-col" id="printable-area">
+    <div v-if="showIdCard" class="flex flex-col mx-10 mt-5" id="printable-area" >
       <div
         class="header h-20 w-full bg-blue-500 flex items-center justify-between"
       >
@@ -107,140 +107,131 @@
       </div>
 
       <div class="flex flex-row">
-        <div
-          class="bg-white border-t-2 border-l-2 border-b-2 border-dashed border-blue-500 flex flex-col w-1/2"
-        >
-          <div class="mb-5 flex flex-col justify-center">
-            <div class="mx-auto mt-5">
-              <img :src="imageData" alt="" class="h-32 w-32 rounded-full" />
-            </div>
+  <div class="flex flex-col bg-blue-100 0 w-1/2">
+    <!-- Image Section -->
+    <div class="mx-auto mt-5">
+      <img :src="imageData" alt="User Image" class="h-32 w-32 rounded-full" />
+    </div>
 
-            <div class="mx-auto">
-              <div class="bg-blue-100 rounded-lg p-1">User information</div>
-              <p class="text-blue-500 text-xs">ምሉእ ሽም/Full Name:</p>
-              <div class="mx-auto flex flex-col">
-                <span class="ml-2 text-yellow-800 text-xs"
-                  >{{ selectedUser.fullName }}
-                </span>
-                <span class="ml-2 text-yellow-800 text-xs"
-                  >{{ selectedUser.fullName }}
-                </span>
-              </div>
-              <p class="text-blue-500 text-xs">
-                ኣድራሻ/Address:<span class="ml-2 text-yellow-800 text-xs">{{
-                  selectedUser.address
-                }}</span>
-              </p>
-              <p class="text-blue-500 font-bold text-xs">
-                ጾታ/Gender:<span
-                  class="ml-2 text-yellow-800 font-bold text-xs"
-                  >{{ selectedUser.gender }}</span
-                >
-              </p>
-            </div>
-          </div>
-          <div class="mx-auto" id="qrCodeImageContainer"></div>
+    <!-- Horizontal Line Above -->
+    <div class="border-t-2 border-gray-300 mt-4 mb-4"></div>
+
+    <!-- User Information Section -->
+    <div class="bg-blue-100 p-4 mt-5">
+      <div class="w-full">
+        <div class="mx-auto flex items-start mt-2">
+          <p class="text-blue-500 text-xs w-1/3">ምሉእ ሽም/Full Name:</p>
+          <span class="ml-2 text-yellow-800 text-xs break-words">{{ selectedUser.fullName }}</span>
         </div>
-
-        <div class="w-1/2 bg-white border-2 border-dashed border-blue-500">
-          <div class="m-5">
-            <h2 class="mb-5">መተሓሳሰቢ | Disclaimer</h2>
-
-            <div
-              class="flex flex-col w-full bg-gray-50 rounded-lg border border-blue-500 flex items-center justify-center p-4"
-            >
-              <p class="text-xs">
-                <i class="far fa-circle text-gray-600 mr-2 text-green-500"> </i
-                >This card is only for the person seen in the photo
-              </p>
-              <p class="text-xs">
-                <i class="far fa-circle text-gray-600 mr-2 text-green-500"> </i
-                >This card is only for the person seen in the photo
-              </p>
-              <p class="text-xs">
-                <i class="far fa-circle text-gray-600 mr-2 text-green-500"> </i
-                >This card is only for the person seen in the photo
-              </p>
-            </div>
-          </div>
+        <div class="mx-auto flex items-start mt-2">
+          <p class="text-blue-500 text-xs w-1/3">ኣድራሻ/Address:</p>
+          <span class="ml-2 text-yellow-800 text-xs break-words">{{ selectedUser.address }}</span>
+        </div>
+        <div class="mx-auto flex items-start mt-2">
+          <p class="text-blue-500 font-bold text-xs w-1/3">ጾታ/Gender:</p>
+          <span class="ml-2 text-yellow-800 font-bold text-xs break-words">{{ selectedUser.gender }}</span>
         </div>
       </div>
+    </div>
+
+    <!-- Horizontal Line Below -->
+    <div class="border-b-2 border-gray-300 mt-4 mb-4"></div>
+
+    <!-- Barcode Section -->
+    <div class="mx-auto mt-5 mb-5" id="qrCodeImageContainer">
+      <!-- QR Code will appear here -->
+    </div>
+  </div>
+
+  <!-- Disclaimer Section -->
+  <div class="w-1/2 bg-blue-100  border-l border-white">
+    <div class="m-5">
+      <h2 class="mb-5 text-center font-semibold">መተሓሳሰቢ | Disclaimer</h2>
+      <div class="flex flex-col rounded-lg">
+        <p class="text-xs">
+          <i class="far fa-circle text-gray-600 mr-2 text-green-500"></i>
+          This card is only for the person seen in the photo
+        </p>
+        <p class="text-xs">
+          <i class="far fa-circle text-gray-600 mr-2 text-green-500"></i>
+          This card is used for making payments to Bana
+        </p>
+        <p class="text-xs">
+          <i class="far fa-circle text-gray-600 mr-2 text-green-500"></i>
+          This card cannot be used for any other purposes
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
       <div class="my-3">
-        <div class="h-10 bg-blue-800 rounded-lg">
-          <p class="text-yellow-500 ml-10 font-bold italic">
+        <div class="h-10 bg-blue-500 rounded-lg">
+          <p class="text-yellow-500 ml-10 font-bold italic pt-2">
             Cut in the dotted border and get your id card.
           </p>
         </div>
       </div>
 
-      <div class="">
-        <div
-          class="w-full bg-white border-2 border-dashed border-blue-500 flex flex-row rounded-lg"
-        >
-          <div
-            class="front border-r-2 border-dashed border-blue-500 w-1/2 flex flex-col"
-          >
-            <div
-              class="rounded-lg mx-5 mt-3 mb-2 header h-8 flex items-center justify-between"
-            >
-              <div class="flex items-center">
-                <img
-                  src="../../../assets/img/circularlogo.jpg"
-                  alt=""
-                  class="h-8 w-8"
-                />
-                <div class="flex flex-col">
-                  <p class="ml-5 text-gray-500 font-extrabold text-sm">
-                    ባና ሞል ዲጂታል ኣይዲ ካርድ
-                  </p>
-                  <p class="ml-5 text-gray-500 font-extrabold text-sm">
-                    Banna Mall Digital ID Card
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-row mx-auto">
-              <div>
-                <img :src="imageData" alt="" class="mb-3" />
-              </div>
-              <div class="p-4 space-y-2">
-                <p class="text-xs">
-                  ተጠቃሚ ኮድ/Usercode:{{ selectedUser.userCode }}
-                </p>
-                <p class="text-xs">ሙሉእ ሽም/Full Name:</p>
-                <p class="text-xs ml-3">{{ selectedUser.fullName }}</p>
-                <p class="text-xs">ጾታ / Sex :{{ selectedUser.gender }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="w-full">
-            <div class="flex flex-row p-4">
-              <div class="w-1/2 text-xs">
-                <p class="text-xs">ስልኪ ቁጽሪ/Phone Number</p>
-                <p class="ml-5 text-xs">
-                  {{ selectedUser.phoneNumber }}
-                </p>
-                <p class="text-xs">ኢመይል /Email</p>
-                <p class="ml-5 text-xs">
-                  {{ selectedUser.email }}
-                </p>
-                <p class="text-xs">ኣድራሻ /Address</p>
-                <p class="ml-5 text-xs">
-                  {{ selectedUser.address }}
-                </p>
-              </div>
-              <div class="w-1/2" id="qrCodeImageContainer1"></div>
-            </div>
-
-            <p class="mx-5 mb-2 text-indigo-900 text-xxs">
-              <i class="fas fa-exclamation-circle"></i> If you find this
-              droped,please give to the intended company or to your closer
-              police station. Thanks!!!
-            </p>
-          </div>
+     <div class="w-full bg-blue-100 border-2 border-dashed border-blue-500 flex ">
+  <!-- Front Section -->
+  <div class="front w-1/2 bg-white border-r-2 border-dashed border-blue-500 p-4 flex flex-col rounded-l-lg">
+    <!-- Header Section -->
+    <div class="header flex items-center justify-between mb-4">
+      <div class="flex items-center">
+        <img src="../../../assets/img/circularlogo.jpg" alt="Logo" class="h-8 w-8 rounded-full" />
+        <div class="ml-5">
+          <p class="text-gray-500 font-extrabold text-sm">ባና ሞል ዲጂታል ኣይዲ ካርድ</p>
+          <p class="text-gray-500 font-extrabold text-sm">Banna Mall Digital ID Card</p>
         </div>
       </div>
+    </div>
+
+    <!-- Image and User Information Section -->
+    <div class="flex flex-row items-center space-x-4">
+      <div class="flex-shrink-0">
+        <img :src="imageData" alt="User Image" class="h-24 w-24 rounded-full object-cover mb-3" />
+      </div>
+      <div class="flex flex-col space-y-1">
+        <p class="text-xs font-semibold text-gray-700">ተጠቃሚ ኮድ/Usercode: {{ selectedUser.userCode }}</p>
+        <p class="text-xs font-semibold text-gray-700">ሙሉእ ሽም/Full Name:</p>
+        <p class="text-xs ml-3 text-gray-800">{{ selectedUser.fullName }}</p>
+        <p class="text-xs font-semibold text-gray-700">ጾታ / Sex : {{ selectedUser.gender }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Back Section -->
+  <div class="back w-1/2 bg-white p-4 flex flex-col rounded-r-lg">
+    <!-- User Contact Information -->
+    <div class="flex flex-row space-x-4 mb-4">
+      <div class="w-1/2 text-xs space-y-2">
+        <p class="text-xs font-semibold text-gray-700">ስልኪ ቁጽሪ/Phone Number:</p>
+        <p class="ml-5 text-gray-800">{{ selectedUser.phoneNumber }}</p>
+        <p class="text-xs font-semibold text-gray-700">ኢመይል /Email:</p>
+        <p class="ml-5 text-gray-800">{{ selectedUser.email }}</p>
+        <p class="text-xs font-semibold text-gray-700">ኣድራሻ /Address:</p>
+        <p class="ml-5 text-gray-800">{{ selectedUser.address }}</p>
+      </div>
+      <!-- QR Code Section -->
+      <div class="w-1/2 flex justify-center items-center" id="qrCodeImageContainer1">
+        <!-- QR Code will appear here -->
+      </div>
+    </div>
+
+    <!-- Disclaimer Text -->
+    <p class="mx-5 text-indigo-900 text-xxs">
+      <i class="fas fa-exclamation-circle"></i> If you find this, please return it to the intended company or your nearest police station. Thanks!
+    </p>
+  </div>
+</div>
+
+
+
     </div>
   </div>
 </template>
@@ -359,7 +350,7 @@ export default {
         });
         document.getElementById(
           "qrCodeImageContainer"
-        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
+        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" style='height:200px;'/>`;
         document.getElementById(
           "qrCodeImageContainer1"
         ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" style='height:100px;'/>`;
