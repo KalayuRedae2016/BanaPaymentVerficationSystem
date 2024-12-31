@@ -1567,27 +1567,6 @@ export default {
       }
       return "Invalid month";
     },
-
-
-    // fetchPenality(paymentType, paidAt) {
-    //   this.$apiClient
-    //     .get("api/v1/payments/penality", {
-    //       params: {
-    //         activeYear: this.selectedPayment.activeYear,
-    //         activeMonth: this.selectedPayment.activeMonth,
-    //         paymentType: paymentType,
-    //         paymentDate: paidAt,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       this.payment.paymentTpe.penality = response.data.message;
-    //       this.daysLate=response.data.message
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
-
     showEditModalDetail(billCode, payment, paymentType) {
       console.log("payment type: ", paymentType);
       this.bankType = payment.bankType;
@@ -1866,8 +1845,15 @@ export default {
         })
         .then((response) => {
           // console.log("this reponse after confirmation", response.data);
+          console.log("response after regular confirmation latest", response);
+
           this.$refs.toast.showSuccessToastMessage("Regular Payment updated");
+
+
           if (response.data.items.isPaid) {
+
+           //  alert("it will go to the detail");
+           
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
               query: {
@@ -1894,8 +1880,10 @@ export default {
           },
         })
         .then((response) => {
+          console.log("response after subsidyconfirmation latest", response);
           this.$refs.toast.showSuccessToastMessage("Subsidy Payment updated");
           if (response.data.items.isPaid) {
+            //alert("it will go to the detail");
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
               query: {
@@ -1923,8 +1911,10 @@ export default {
           },
         })
         .then((response) => {
+          console.log("response after urgent confirmation latemmst", response);
           this.$refs.toast.showSuccessToastMessage("Urgent Payment updated");
           if (response.data.items.isPaid) {
+            //alert("it will go to the detail");
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
               query: {
@@ -1952,8 +1942,10 @@ export default {
           },
         })
         .then((response) => {
+          console.log("response after serviceconfirmation latest", response);
           this.$refs.toast.showSuccessToastMessage("Service Payment updated");
           if (response.data.items.isPaid) {
+           /// alert("it will go to the detail");
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
               query: {
@@ -1981,10 +1973,12 @@ export default {
           },
         })
         .then((response) => {
+          console.log("response after penality confirmation latest", response);
           this.$refs.toast.showSuccessToastMessage(
             "Penality Paid Successfully"
           );
           if (response.data.items.isPaid) {
+           // alert("it will go to the detail");
             this.$router.push({
               path: `/admindashboard/payment-history-detail/${response.data.items.userCode}`,
               query: {
