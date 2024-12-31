@@ -828,7 +828,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
     payment.status = 'pending';
     payment.confirmedDate = null;
     payment.latest = false//which one is the latest then
-
+    
     /// Identify the nearest relevant bill to mark as latest
     const nearestRelevantBill = await Payment.findOne({
       userCode: payment.userCode, isPaid: true, _id: { $ne: payment._id }, // Exclude the current bill
@@ -975,6 +975,15 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
     if (paymentDate >= new Date(startingDate) && paymentDate <= new Date(endingDate)) {
       status = 'pending';
+      updateData = {
+        'regular.penality': 0,
+        'regular.daysLate': 0,
+        'urgent.penality': 0,
+        'urgent.daysLate': 0,
+        'subsidy.penality': 0,
+        'subsidy.daysLate': 0,
+        'penality.amount': 0,
+      };
     } else if (paymentDate > new Date(endingDate)) {
       status = 'overdue';
       // Calculate penalties for each payment type
