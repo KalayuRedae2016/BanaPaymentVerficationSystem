@@ -1030,9 +1030,10 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
     status: 'confirmed'
   };
   const paymentsWithYear = await Payment.findOne(paymentQueryWithYear);
+  console.log(paymentsWithYear)
 
   if (!paymentsWithYear) {
-    return next(new AppError(`${paymentsWithYear.fullName} has No Paid payment for Year ${activeYear}-Month ${activeMonth}`, 400));
+    return next(new AppError(`user with userCode:${userCode} has No Paid payment for Year ${activeYear}-Month ${activeMonth}`, 400));
   }
 
   // Convert Mongoose document to plain JavaScript object
@@ -1044,8 +1045,9 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   paymentTypes.forEach((type) => {
     if (formattedPayment[type]) {
       if (formattedPayment[type].paidAt) {
-        formattedPayment[type].paidAtGC = formatDateGC(formattedPayment[type].paidAt); // Format paidAt date
-        formattedPayment[type].paidAt = formatDate(formattedPayment[type].paidAt); // Format paidAt date
+        formattedPayment[type].paidAtGC = formatDateGC(formattedPayment[type].paidAt); 
+        formattedPayment[type].paidAt = formatDate(formattedPayment[type].paidAt);
+        
       }
       if (formattedPayment[type].createdAt) {
         formattedPayment[type].createdAt = formatDate(formattedPayment[type].createdAt); // Format createdAt date
@@ -1055,7 +1057,6 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
       }
     }
   });
-
   // Format general payment-level dates
   if (formattedPayment.createdAt) {
     formattedPayment.createdAt = formatDate(formattedPayment.createdAt); // Format createdAt
