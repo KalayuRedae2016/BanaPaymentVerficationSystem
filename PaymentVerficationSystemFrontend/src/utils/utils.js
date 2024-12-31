@@ -245,4 +245,36 @@ export function validateField(formName, fieldName, value, formSchema) {
     return { valid: true, message: '' };
   }
   
+
+  export function gregorianToEthiopian(today) {
+    // Constants
+    const ETHIOPIAN_EPOCH_OFFSET = 8; // Ethiopian year lags Gregorian by 7-8 years
+    const GREGORIAN_NEW_YEAR = new Date(today.getFullYear(), 8, 11); // September 11
   
+    // Calculate Ethiopian year
+    let ethiopianYear = today.getFullYear() - ETHIOPIAN_EPOCH_OFFSET;
+  
+    // Check if the date is before the Ethiopian New Year
+    if (today < GREGORIAN_NEW_YEAR) {
+      ethiopianYear -= 1;
+    }
+  
+    // Calculate days since Ethiopian New Year
+    const ethiopianNewYear = new Date(ethiopianYear + ETHIOPIAN_EPOCH_OFFSET, 8, 11);
+    const daysSinceNewYear = Math.floor((today - ethiopianNewYear) / (1000 * 60 * 60 * 24));
+  
+    // Determine Ethiopian month and day
+    let ethiopianMonth = Math.floor(daysSinceNewYear / 30) + 1;
+    let ethiopianDay = (daysSinceNewYear % 30) + 1;
+  
+    // Handle Pagumē (13th month)
+    if (ethiopianMonth > 13) {
+      ethiopianMonth = 13;
+      ethiopianDay = daysSinceNewYear - 360 + 1;
+    }
+  
+    // Return formatted string
+    return `${ethiopianYear}-${ethiopianMonth.toString().padStart(2, "0")}-${ethiopianDay
+      .toString()
+      .padStart(2, "0")}`;
+  }

@@ -39,13 +39,13 @@
           </svg>
         </button>
       </div>
-      <form @submit.prevent="login" v-if="loginVisible">
+      <form v-if="loginVisible">
         <div
           v-for="(field, key) in formSchema.login.fields"
           :key="key"
           class="mb-4"
         >
-          <label :for="key" class="custom-label">
+          <label :for="field.for" class="custom-label">
             {{ field.label }}
             <span class="text-red-500" v-if="field.rules.required">*</span>
           </label>
@@ -74,7 +74,8 @@
               </a>
             </p>
           </div>
-        <button class="custom-button w-full mt-5">
+
+        <button  @click.prevent="login" class="custom-button w-full mt-5">
           {{ $t("signIn") }}
         </button>
       </form>

@@ -240,9 +240,9 @@
         <div class="w-1/2">
           <button
             @click="register()"
-            class="mt-5 w-32 bg-indigo-600 text-white font-semibold py-2 rounded mb-8 hover:bg-indigo-600"
+            class="mt-3 w-32 custom-button mb-5"
           >
-            {{ $t("submit") }}
+          <i class="fa fa-arrow-right"></i> {{ $t("submit") }}
           </button>
         </div>
       </div>

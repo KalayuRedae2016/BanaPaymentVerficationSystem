@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast ref="toast"/>
     <div class="container hidden" id="printable-area">
       <div
         class="receipt"
@@ -682,7 +683,7 @@
                   >
                 </p>
               </div>
-              <!-- Right Column: Print Button -->
+    
               <div class="ml-auto">
                 <button
                   @click="printDiv()"
@@ -1084,9 +1085,9 @@
                       <p v-if="payment.penality.amount > 0">
                         {{ payment.penality.isPaid }}
                       </p>
-                      <p v-else>Not Needed</p>
+                      <p v-else class="text-xxs">Nothing to pay</p>
                     </td>
-                    <td
+                    <td v-if="payment.penality.amount > 0"
                       @click="
                         showEditModalDetail(
                           payment.billCode,
@@ -1100,6 +1101,7 @@
                         <i class="fas fa-edit "></i> Edit
                       </button>
                     </td>
+                    <td v-else class="text-xxs">No action needed</td>
                   </tr>
                 </tbody>
               </table>
@@ -1152,7 +1154,7 @@
                     type="date"
                     class="custom-input"
                     placeholder="Payment Date"
-                    v-model="paidAt"
+                    v-model="paidAtGC"
                   />
                 </div>
                 <div class="mb-4">
@@ -1240,7 +1242,11 @@
 
 <script>
 import QRCode from "qrcode";
+import Toast from "../../../Common/Toast.vue"
 export default {
+  components:{
+    Toast,
+  },
   data() {
     return {
       //for editing error and success
@@ -1252,6 +1258,7 @@ export default {
       selectedPayment: "",
 
       paidAt: null,
+      paidAtGC: null,
       TTNumber: "",
       bankType: "",
       paymentType: "",
@@ -1445,6 +1452,7 @@ export default {
       this.paymentType = paymentType;
       this.billCode = billCode;
       this.isPaid = payment.isPaid;
+      this.paidAtGC = payment.paidAtGC;
 
       this.showEditModal = true;
     },
@@ -1454,6 +1462,7 @@ export default {
       const payment={
         paymentType: this.paymentType,
         paidAt: this.paidAt,
+        paidAtGC: this.paidAtGC,
         bankType: this.bankType,
         TTNumber: this.TTNumber,
         isPaid: this.isPaid,
@@ -1502,8 +1511,26 @@ export default {
           },
         })
         .then((response) => {
+          //alert('k')
+          if (response.data.unpaid == true) {
+              this.$router.push({
+                  path: "/api/v1/payments1",
+                  query: {
+                      userCode: this.payment.userCode,
+                      fullName: this.payment.fullName,
+                      activeTab:1,
+                      bankStatement:true,
+                  }
+              });
+          }
+
+
           console.log("Response from service confirming", response.data);
-          // this.fetchUnPaid();
+          console.log("message",response.data.message);
+          this.$refs.toast.showSuccessToastMessage(response.data.message);
+          this.$reloadPage();
+          
+
         })
         .catch((error) => {
           console.log("Error confirming", error);

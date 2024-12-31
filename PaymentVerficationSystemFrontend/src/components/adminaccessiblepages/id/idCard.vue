@@ -1,5 +1,7 @@
 <template>
   <div class="mb-10 px-2 py-2">
+    <LoadingSpinner :visible="isLoading"/>
+
     <div class="border-b border-indigo-800 mb-5">
       <div class="flex flex-row mb-5">
         <h1 class="font-extrabold text-blue-500">{{ $t("idCard") }}</h1>
@@ -7,9 +9,6 @@
     </div>
     <div class="py-6 -mt-1">
       
-
-
-
   <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
   <!-- Search Input -->
   <div class="flex-1 mr-4">
@@ -244,9 +243,15 @@
   <script>
 import QRCode from "qrcode";
 import html2pdf from "html2pdf.js";
+import LoadingSpinner from '../../Common/LoadingSpinner.vue'
 export default {
+  components: {
+   
+    LoadingSpinner
+  },
   data() {
     return {
+      isLoading:false,
       showList:true,
       imageData: "",
       selectedUser: "",
@@ -270,13 +275,14 @@ export default {
       }
     };
   },
+  
   watch: {
     keyword() {
       // alert("Watch");
       this.searchUsers(this.keyword);
     },
   },
-  
+
  mounted() {
      this.$apiClient
       .get("/api/v1/users/", {
@@ -300,6 +306,8 @@ export default {
 
   methods: {
     toggleUserSelection(user) {
+      this.isLoading=true
+
       this.showList=false;
       this.showIdCard = true;
       this.filteredUsers = [];
@@ -308,9 +316,10 @@ export default {
         .get(`/api/v1/users/${user._id}`)
         .then((response) => {
           console.log("Response client profile", response);
-
+          this.isLoading=false;
           this.clientProfile = response.data.clientProfile;
           this.imageData = "data:image/jpeg;base64," + response.data.imageData;
+
         })
         .catch((error) => {
           console.error("Error fetching client datakk:", error);
