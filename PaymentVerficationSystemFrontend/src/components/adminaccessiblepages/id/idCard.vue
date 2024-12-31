@@ -1,6 +1,6 @@
 <template>
   <div class="mb-10 px-2 py-2">
-    <LoadingSpinner :visible="isLoading"/>
+    <LoadingSpinner :visible="isLoading" />
 
     <div class="border-b border-indigo-800 mb-5">
       <div class="flex flex-row mb-5">
@@ -8,84 +8,88 @@
       </div>
     </div>
     <div class="py-6 -mt-1">
-      
-  <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200">
-  <!-- Search Input -->
-  <div class="flex-1 mr-4">
-    <input
-      v-model="keyword"
-      type="text"
-      :placeholder="$t('searchByNameEmailUsername')"
-      class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
-    />
-  </div>
+      <div
+        class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
+      >
+        <div class="flex-1 mr-4">
+          <input
+            v-model="keyword"
+            type="text"
+            :placeholder="$t('searchByNameEmailUsername')"
+            class="custom-input w-full h-12 px-4 text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-600"
+          />
+        </div>
+      </div>
 
-</div>
-
-      <div v-if="showList" class="border-t border-blue-900 border-dotted bg-white h-64 overflow-y-auto ">
+      <div
+        v-if="showList"
+        class="border-t border-blue-900 border-dotted bg-white h-64 overflow-y-auto"
+      >
         <div
           class="p-4 border-b border-blue-900 border-dotted cursor-pointer text-gray-500 text-sm"
           v-for="(user, userIndex) in filteredUsers"
           :key="userIndex"
-         
           @click="toggleUserSelection(user)"
         >
-          <div class="flex flex-row font-bold ">
+          <div class="flex flex-row font-bold">
             <p class="text-blue-800 w-1/4">{{ user.userCode }}</p>
             <p class="text-gray-600 w-2/3">{{ user.fullName }}</p>
             <p class="text-gray-600 w-2/3">{{ user.email }}</p>
           </div>
         </div>
       </div>
-
-
     </div>
 
-    <div v-if="showIdCard" class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300 rounded-xl shadow-lg  space-y-6 lg:space-y-0 lg:space-x-8">
-    
-    <!-- Left Section: Image and Button (Mobile and Desktop) -->
-    <div class="flex flex-col items-center space-y-4 w-full lg:w-1/4 lg:items-start rounded-lg">
-      <img :src="imageData" alt="User Profile" class="h-full w-48  object-cover " />
-      
-  
-    </div>
-
-    <!-- Right Section: User Info -->
-    <div class="w-full lg:w-1/2 text-center lg:text-left">
-      <div class=" text-sm text-gray-500 ml-8">
-        <div class="bg-white p-2 rounded-md shadow-sm ">
-              <div class="flex items-center space-x-3 border-b border-gray-300 border-t border-gray-300 py-2">
-                <i class="fas fa-id-badge text-green-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >{{ $t("User Code") }}:{{ selectedUser.userCode }}</span
-                >
-              </div>
-            </div>
-
-            <div class="bg-white p-2 rounded-md shadow-sm">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-user text-yellow-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >Full Name : {{ selectedUser.fullName }}</span
-                >
-              </div>
-            </div>
-        <button
-        class="border border-gray-300 mt-4 flex items-center px-6 py-3 text-black text-base font-medium rounded-full transform transition duration-300 ease-in-out hover:bg-blue-100 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 hover:text-gray-700"
-        @click="downloadReceiptAsPDF"
+    <div
+      v-if="showIdCard"
+      class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300 rounded-xl shadow-lg space-y-6 lg:space-y-0 lg:space-x-8"
+    >
+      <!-- Left Section: Image and Button (Mobile and Desktop) -->
+      <div
+        class="flex flex-col items-center space-y-4 w-full lg:w-1/4 lg:items-start rounded-lg"
       >
-        <i class="fas fa-download mr-3"></i>Id Card
-      </button>
+        <img
+          :src="imageData"
+          alt="User Profile"
+          class="h-full w-48 object-cover"
+        />
+      </div>
+
+      <!-- Right Section: User Info -->
+      <div class="w-full lg:w-1/2 text-center lg:text-left">
+        <div class="text-sm text-gray-500 ml-8">
+          <div class="bg-white p-2 rounded-md shadow-sm">
+            <div
+              class="flex items-center space-x-3 border-b border-gray-300 border-t border-gray-300 py-2"
+            >
+              <i class="fas fa-id-badge text-green-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >{{ $t("User Code") }}:{{ selectedUser.userCode }}</span
+              >
+            </div>
+          </div>
+
+          <div class="bg-white p-2 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-user text-yellow-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >Full Name : {{ selectedUser.fullName }}</span
+              >
+            </div>
+          </div>
+          <button
+            class="border border-gray-300 mt-4 flex items-center px-6 py-3 text-black text-base font-medium rounded-full transform transition duration-300 ease-in-out hover:bg-blue-100 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 hover:text-gray-700"
+            @click="downloadReceiptAsPDF"
+          >
+            <i class="fas fa-download mr-3"></i>Id Card
+          </button>
+        </div>
       </div>
     </div>
-   
-  </div>
 
-
-
-  <div v-if="showIdCard" class="flex flex-col " id="printable-area">
+    <div v-if="showIdCard" class="flex flex-col" id="printable-area">
       <div
         class="header h-20 w-full bg-blue-500 flex items-center justify-between"
       >
@@ -106,16 +110,22 @@
         <div
           class="bg-white border-t-2 border-l-2 border-b-2 border-dashed border-blue-500 flex flex-col w-1/2"
         >
-          <div class="mb-5 flex flex-row justify-center">
-            <div class="mt-10 ml-5">
-              <img :src="imageData" alt="" class="h-32 w-32" />
+          <div class="mb-5 flex flex-col justify-center">
+            <div class="mx-auto mt-5">
+              <img :src="imageData" alt="" class="h-32 w-32 rounded-full" />
             </div>
-            <div class="mx-5 mt-8 text-xs">
-              <p class="text-blue-500 text-xs">
-                ምሉእ ሽም/Full Name:<span class="ml-2 text-yellow-800 text-xs"
+
+            <div class="mx-auto">
+              <div class="bg-blue-100 rounded-lg p-1">User information</div>
+              <p class="text-blue-500 text-xs">ምሉእ ሽም/Full Name:</p>
+              <div class="mx-auto flex flex-col">
+                <span class="ml-2 text-yellow-800 text-xs"
                   >{{ selectedUser.fullName }}
                 </span>
-              </p>
+                <span class="ml-2 text-yellow-800 text-xs"
+                  >{{ selectedUser.fullName }}
+                </span>
+              </div>
               <p class="text-blue-500 text-xs">
                 ኣድራሻ/Address:<span class="ml-2 text-yellow-800 text-xs">{{
                   selectedUser.address
@@ -129,7 +139,7 @@
               </p>
             </div>
           </div>
-          <div class="flex ml-5 mb-5 h-64" id="qrCodeImageContainer"></div>
+          <div class="mx-auto" id="qrCodeImageContainer"></div>
         </div>
 
         <div class="w-1/2 bg-white border-2 border-dashed border-blue-500">
@@ -190,14 +200,9 @@
                 </div>
               </div>
             </div>
-            <div class="flex flex-row mx-5">
+            <div class="flex flex-row mx-auto">
               <div>
-                <img
-                  :src="imageData"
-                  alt=""
-                  style="hieght: 120px; width: 120px"
-                  class="mb-3"
-                />
+                <img :src="imageData" alt="" class="mb-3" />
               </div>
               <div class="p-4 space-y-2">
                 <p class="text-xs">
@@ -228,7 +233,6 @@
               <div class="w-1/2" id="qrCodeImageContainer1"></div>
             </div>
 
-
             <p class="mx-5 mb-2 text-indigo-900 text-xxs">
               <i class="fas fa-exclamation-circle"></i> If you find this
               droped,please give to the intended company or to your closer
@@ -237,7 +241,6 @@
           </div>
         </div>
       </div>
-    
     </div>
   </div>
 </template>
@@ -245,16 +248,15 @@
   <script>
 import QRCode from "qrcode";
 import html2pdf from "html2pdf.js";
-import LoadingSpinner from '../../Common/LoadingSpinner.vue'
+import LoadingSpinner from "../../Common/LoadingSpinner.vue";
 export default {
   components: {
-   
-    LoadingSpinner
+    LoadingSpinner,
   },
   data() {
     return {
-      isLoading:false,
-      showList:true,
+      isLoading: false,
+      showList: true,
       imageData: "",
       selectedUser: "",
       showIdCard: false,
@@ -272,12 +274,10 @@ export default {
       Tel: "0967740501",
       Address: "Mekelle Kedemay Weyane",
       City: "Mekelle",
-      filteredUsers:{
-
-      }
+      filteredUsers: {},
     };
   },
-  
+
   watch: {
     keyword() {
       // alert("Watch");
@@ -285,8 +285,8 @@ export default {
     },
   },
 
- mounted() {
-     this.$apiClient
+  mounted() {
+    this.$apiClient
       .get("/api/v1/users/", {
         params: {
           isActive: true,
@@ -308,9 +308,9 @@ export default {
 
   methods: {
     toggleUserSelection(user) {
-      this.isLoading=true
+      this.isLoading = true;
 
-      this.showList=false;
+      this.showList = false;
       this.showIdCard = true;
       this.filteredUsers = [];
       this.selectedUser = user;
@@ -318,10 +318,9 @@ export default {
         .get(`/api/v1/users/${user._id}`)
         .then((response) => {
           console.log("Response client profile", response);
-          this.isLoading=false;
+          this.isLoading = false;
           this.clientProfile = response.data.clientProfile;
           this.imageData = "data:image/jpeg;base64," + response.data.imageData;
-
         })
         .catch((error) => {
           console.error("Error fetching client datakk:", error);
@@ -332,7 +331,7 @@ export default {
     },
 
     searchUsers(keyword) {
-      this.showList=true;
+      this.showList = true;
       this.showIdCard = false;
       this.filteredUsers = this.users.filter((user) => {
         return (
@@ -363,7 +362,7 @@ export default {
         ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
         document.getElementById(
           "qrCodeImageContainer1"
-        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
+        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" style='height:100px;'/>`;
       } catch (error) {
         console.error("Error generating QR code:", error);
       }
@@ -373,7 +372,7 @@ export default {
       //  await this.generateQRCodeImage();
       // Clone the printable area
       const element = document.getElementById("printable-area").cloneNode(true);
-      element.classList.remove('hidden');
+      element.classList.remove("hidden");
       // Create a temporary div to hold the content and Tailwind styles
       const wrapperDiv = document.createElement("div");
       wrapperDiv.appendChild(element);
