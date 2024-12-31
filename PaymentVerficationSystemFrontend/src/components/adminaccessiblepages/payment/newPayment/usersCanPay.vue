@@ -1405,6 +1405,7 @@ export default {
   data() {
     return {
       gcEthio:this.$gcEthio(new Date()),
+      daysLate:0,
       paidAt: null,
       paidAtGC:null,
       TTNumber: "",
@@ -1566,23 +1567,26 @@ export default {
       }
       return "Invalid month";
     },
-    fetchPenality(paymentType, paidAt) {
-      this.$apiClient
-        .get("api/v1/payments/penality", {
-          params: {
-            activeYear: this.selectedPayment.activeYear,
-            activeMonth: this.selectedPayment.activeMonth,
-            paymentType: paymentType,
-            paymentDate: paidAt,
-          },
-        })
-        .then((response) => {
-          this.payment.paymentTpe.penality = response.data.message;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+
+
+    // fetchPenality(paymentType, paidAt) {
+    //   this.$apiClient
+    //     .get("api/v1/payments/penality", {
+    //       params: {
+    //         activeYear: this.selectedPayment.activeYear,
+    //         activeMonth: this.selectedPayment.activeMonth,
+    //         paymentType: paymentType,
+    //         paymentDate: paidAt,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       this.payment.paymentTpe.penality = response.data.message;
+    //       this.daysLate=response.data.message
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
 
     showEditModalDetail(billCode, payment, paymentType) {
       console.log("payment type: ", paymentType);
@@ -1605,6 +1609,7 @@ export default {
         TTNumber: this.TTNumber,
         isPaid: this.isPaid,
         paidAtGC: this.paidAtGC,
+        daysLate:this.daysLate,
       };
       if (this.paymentType === "regular") {
         this.payload = {
@@ -2343,6 +2348,7 @@ export default {
           this.payments.forEach((payment) => {
             if (payment._id === selectedPayment._id) {
               payment.regular.penality = response.data.penality;
+              this.daysLate= response.data.daysLate;
               console.log("payment regular penality", payment.regular.penality);
               // payment.regular.daysLate = 10;
             }
@@ -2372,6 +2378,7 @@ export default {
             if (payment._id === selectedPayment._id) {
               payment.subsidy.penality = response.data.penality;
               payment.subsidy.daysLate = response.data.daysLate;
+              this.daysLate= response.data.daysLate;
             }
           });
         })
@@ -2396,6 +2403,7 @@ export default {
             if (payment._id === selectedPayment._id) {
               payment.urgent.penality = response.data.penality;
               payment.urgent.daysLate = response.data.daysLate;
+              this.daysLate= response.data.daysLate;
             }
           });
         })

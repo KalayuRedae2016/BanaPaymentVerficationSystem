@@ -1466,6 +1466,7 @@ export default {
         bankType: this.bankType,
         TTNumber: this.TTNumber,
         isPaid: this.isPaid,
+       
       }
       if (this.paymentType === "regular") {
    
