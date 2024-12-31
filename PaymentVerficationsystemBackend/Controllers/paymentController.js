@@ -749,7 +749,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
       TTNumber: isPaid ? updates.TTNumber ?? existing.TTNumber : null,
-      penality: updates.penality ?? existing.penality,
+      penality: isPaid ?updates.penality ?? existing.penality:0,
       isPaid,
       paidAt,
       paidAtGC,
