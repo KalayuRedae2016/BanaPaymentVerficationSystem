@@ -616,6 +616,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   if (regular) unpaidBill.regular = updatePaymentField(unpaidBill.regular, regular);
   if (subsidy) unpaidBill.subsidy = updatePaymentField(unpaidBill.subsidy, subsidy);
   if (service) unpaidBill.service = updatePaymentField(unpaidBill.service, service);
+
+  unpaidBill = calculateTotalPaidAndPenalityAmount(unpaidBill);// Use the utility function to calculate TotalPaidAmount & Penality
   if (penality && penality.amount > 0) {
     const requiredPayments = ['urgent', 'regular', 'subsidy', 'service']
     const unpaidTypes = requiredPayments.filter(type => unpaidBill[type]?.amount && !unpaidBill[type]?.isPaid)
@@ -633,7 +635,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
 
   }
 
-  unpaidBill = calculateTotalPaidAndPenalityAmount(unpaidBill);// Use the utility function to calculate TotalPaidAmount & Penality
+  
   // Filter out payment types that have a non-zero amount
   const paymentsToCheck = [
     unpaidBill.urgent,
@@ -923,9 +925,6 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   // Special condition for service payment type (penalty is always 0)
   if (paymentType === 'service') {
     penality = 0;
-  }
-  if(penality===0){
-    daysLate=0
   }
   // Return penalty details
   res.status(200).json({
