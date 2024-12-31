@@ -33,10 +33,12 @@ app.set('views', path.join(__dirname, 'views'));
 
 // #1 Global Middlwares
 // Implement CORS
+//Postman usually sets null as the origin unless specified otherwise. 
+// This may cause your server to reject requests if null is not included in the origin list.
 let corsOptions;
 if (process.env.NODE_ENV === 'production') {
   corsOptions = {
-    origin: ['http://49.13.235.6','http://banapvs.com','https://banapvs.com','https://49.13.235.6'], // Allowed origin for production
+    origin: ['http://49.13.235.6','http://banapvs.com','https://banapvs.com','https://49.13.235.6',null], // Allowed origin for production
     credentials: true, // Enable credentials like cookies
     methods: ['GET', 'POST', 'PUT', 'PATCH','DELETE','OPTIONS'], // Add allowed methods
   };
