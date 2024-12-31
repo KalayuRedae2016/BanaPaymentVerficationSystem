@@ -334,6 +334,10 @@ export default {
             // Handle successful login response
             const { role, token, userId, userCode,email} = response.data;
             if (response.data.status === 1) {
+              
+              this.formSchema.login.fields.username.value="";
+              this.formSchema.login.fields.password.value="";
+
               // Dispatch actions based on role
               if (role.includes("Admin")) {
                 this.$store.dispatch("login", { token });
