@@ -11,7 +11,7 @@ exports.importFromExcel = catchAsync(async (filePath, Model, transformFn) => {
   const workbook = xlsx.readFile(filePath);
   const worksheet = workbook.Sheets[workbook.SheetNames[0]];
   const jsonData = xlsx.utils.sheet_to_json(worksheet);
-  console.log(jsonData)
+  // console.log(jsonData)
   if (!Array.isArray(jsonData) || jsonData.length === 0) {
     throw new AppError("Excel file is empty or data is not in the correct format.", 400);
   }
@@ -27,7 +27,7 @@ exports.importFromExcel = catchAsync(async (filePath, Model, transformFn) => {
       continue; // Ensure processing continues for subsequent rows
     }
   }
-  console.log(importedData)
+  // console.log(importedData)
   return importedData; // Always return an array
 });
 
@@ -59,7 +59,7 @@ exports.exportToExcel = async (data, sheetName, fileName, res) => {
         console.error('Failed to download file:', err);
         res.status(500).send('Failed to download file');
       } else {
-        console.log('File downloaded successfully');
+        // console.log('File downloaded successfully');
         fs.unlinkSync(filePath); // Optionally delete the file after download
       }
     });

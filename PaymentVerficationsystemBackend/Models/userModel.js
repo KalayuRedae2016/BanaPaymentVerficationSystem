@@ -168,12 +168,12 @@ userSchema.methods.generateUserCode = async function (prefixCode, length) {
     .sort({ userCode: -1 })
     .select('userCode')
     .lean();
-  console.log(highestAssignedUser)
+  // console.log(highestAssignedUser)
   if (highestAssignedUser) {
     const highestNumber = parseInt(highestAssignedUser.userCode.slice(prefixCode.length));
     nextNumber = highestNumber + 1;
   }
-  console.log(nextNumber)
+  // console.log(nextNumber)
   const paddedNumber = String(nextNumber).padStart(length, '0');
   const userCode = `${prefixCode}${paddedNumber}`;
 

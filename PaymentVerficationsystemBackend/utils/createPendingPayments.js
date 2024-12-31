@@ -40,15 +40,15 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
 
   if (existingPayment) {
     if (existingPayment.isPaid === true) {
-      console.log('payment for the specifed month and years is Paid for user:', user.userCode);
+      // console.log('payment for the specifed month and years is Paid for user:', user.userCode);
     }
     else {
-      console.log('Unconfirmed payment already exists for user:', user.userCode);
+      // console.log('Unconfirmed payment already exists for user:', user.userCode);
     }
     return; // Skip this user if an unconfirmed payment exists
   }
   if (user.role === 'Admin') {  // Use comparison `===` instead of assignment `=`
-    console.log(`User ${user.userCode} is an Admin, skipping...`);
+    // console.log(`User ${user.userCode} is an Admin, skipping...`);
     return; // Skip Admin users and move to the next user
   }
 
@@ -93,7 +93,7 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
     isPaid: false,
     status: 'pending',
   });
-  console.log("unconfirmed Payment created for user:", user.userCode)
+  // console.log("unconfirmed Payment created for user:", user.userCode)
   // Save the payment record to the database
   await payment.save();
 };

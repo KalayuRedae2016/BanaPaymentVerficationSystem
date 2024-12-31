@@ -183,7 +183,7 @@ function calculateBalances(payments, org) {
     }
   }
 
-  console.log(org.paymentTransfers)
+  // console.log(org.paymentTransfers)
 
   // Calculate totalBalanceBankType based on all statuses
   Object.values(categorizedPayments).forEach((statusObj) => {
@@ -214,8 +214,8 @@ function calculateBalances(payments, org) {
   // Ensure valid calculations for ServiceBankAccount and TotalOrgBalance
   organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
 
-  console.log("Organization:", organization);
-  console.log("Total Balance Per Bank Type:", totalBalanceBankType);
+  // console.log("Organization:", organization);
+  // console.log("Total Balance Per Bank Type:", totalBalanceBankType);
 
   return {
     Organization: organization,

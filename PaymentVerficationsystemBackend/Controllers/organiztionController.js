@@ -47,7 +47,7 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     blockBankAccounts,
   });
 
-console.log("all size",allBankTypes.size)
+// console.log("all size",allBankTypes.size)
  if(allBankTypes.size!=0){
    // Generate API keys for unique bank types
    for (const bankType of allBankTypes) {

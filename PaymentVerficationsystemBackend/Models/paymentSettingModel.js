@@ -87,7 +87,7 @@ paymentSettingSchema.pre('validate', function (next) {
 });
 
 paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
-  console.log("Pre-findOneAndUpdate Hook");
+  // console.log("Pre-findOneAndUpdate Hook");
 
   const updatedFields = this._update;
   const paymentSetting = this._conditions;
@@ -99,7 +99,7 @@ paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
       { $set: { latest: false } }
     );
   }
-  console.log("Updated Fields:", updatedFields);
+  // console.log("Updated Fields:", updatedFields);
 
   // Apply changes to associated payments
   const updatedPaymentFields = {};

@@ -341,7 +341,7 @@ exports.confirmBills = async (req, res) => {
       }
       // Check if the payment type is already paid
       if (unpaidBill[subdocumentField].isPaid) {
-        console.log(`${subdocumentField} payment is already paid for billCode: ${billCode}`);
+        // console.log(`${subdocumentField} payment is already paid for billCode: ${billCode}`);
         // continue; // Skip this payment type if it's already paid
         return res.status(500).json({
           error: true,
@@ -621,7 +621,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   if (penality && penality.amount > 0) {
     const requiredPayments = ['urgent', 'regular', 'subsidy', 'service']
     const unpaidTypes = requiredPayments.filter(type => unpaidBill[type]?.amount && !unpaidBill[type]?.isPaid)
-    console.log(unpaidTypes.length)
+    // console.log(unpaidTypes.length)
     if (unpaidTypes.length > 0) {
       return next(new AppError(`Cannot pay penality. The following payment types must be fully paid first: ${unpaidTypes.join(', ')}`, 400))
     }
@@ -648,7 +648,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   // Check if all relevant payment types (with non-zero amounts) are paid
   const allPaid = paymentsToCheck.every(payment => payment.isPaid);
   //console.log(paymentsToCheck)
-  console.log(allPaid)
+  // console.log(allPaid)
 
   if (allPaid) {
     // Generate QR code content
@@ -849,7 +849,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
   const formattedCreatedAt = payment.createdAt ? formatDate(payment.createdAt) : null;
   const formattedUpdatedAt = payment.updatedAt ? formatDate(payment.updatedAt) : null;
   const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate) : null;
-  console.log(payment)
+  // console.log(payment)
   res.status(200).json({
     message: 'Payment updated successfully',
     items: {
@@ -940,7 +940,7 @@ exports.getPenality = catchAsync(async (req, res, next) => {
 });
 exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
   const paymentDate = req.query.paymentDate ? new Date(req.query.paymentDate) : new Date(); // Use provided or current date
-  console.log("mdd triggered")
+  // console.log("mdd triggered")
   const payments = await Payment.find({ isPaid: false }); // Fetch only unpaid payments
   if (payments.length === 0) {
     return next(); // No unpaid payments, move to next middleware
@@ -1235,7 +1235,7 @@ exports.getLatestPayment = catchAsync(async (req, res, next) => {
   const formattedUpdatedAt = latestPayment.updatedAt ? formatDate(latestPayment.updatedAt) : null;
   const formattedConfirmedAt = latestPayment.confirmedDate ? formatDate(latestPayment.confirmedDate) : null;
 
-  console.log("latestPayment", latestPayment)
+  // console.log("latestPayment", latestPayment)
   res.status(200).json({
     status: 'success',
     message: `Latest Payment for ${user.fullName} has fetched successfully ->userCode:${userCode}`,
@@ -1458,8 +1458,8 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
 
   // Get the bank type balances for the organization
   // const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
-  console.log(organizationBalance)
-  console.log(orgBalancesBasedBankType)
+  // console.log(organizationBalance)
+  // console.log(orgBalancesBasedBankType)
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${organization.companyName}`,
@@ -1498,7 +1498,7 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
   const bankBalances = calculateBalances(payments, organization);
   const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
   const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
-  console.log(bankTypes[fromBankType]?.[balanceType])
+  // console.log(bankTypes[fromBankType]?.[balanceType])
 
   const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
 
@@ -1524,7 +1524,7 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
 
   // Save the updated organization document
   await organization.save();
-  console.log(`Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,)
+  // console.log(`Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,)
   res.status(200).json({
     status: 1,
     message: `Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,

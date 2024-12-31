@@ -39,10 +39,10 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  console.log("singup requestbody pro: " , req.body.profileImage);
+  //console.log("singup requestbody pro: " , req.body.profileImage);
   try {
     const organization = await Organization.findOne()
-    console.log("org",organization)
+    //console.log("org",organization)
     if (!organization) {
       return next(new AppError("Create Organization profile before Creating User", 400));
     }
@@ -119,7 +119,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  console.log("ss",req.body)
+  //console.log("ss",req.body)
   const { userCode, password } = req.body
   if (!userCode || !password) {
     return res.status(200).json({
@@ -278,10 +278,10 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     const message = `Forgot your password? Submit a request with your new password to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
     const email = user.email;
     const subject = 'Your password reset token (valid for 10 minutes)'
-    console.log(email)
-    console.log(message)
-    console.log(subject)
-    console.log(resetURL)
+    // console.log(email)
+    // console.log(message)
+    // console.log(subject)
+    // console.log(resetURL)
     //console.log(email,subject,message)
     await sendEmail({ email, subject, message });
     res.status(200).json({
@@ -360,13 +360,13 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
 
     await sendEmail({ email, subject, message });
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     return next(new AppError('There was an error sending the email. Try again later!', 500));
   }
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  console.log(req.body)
+  // console.log(req.body)
   const { currentPassword, newPassword,userId } = req.body;
 
   // Fetch the user from the database with the existing password

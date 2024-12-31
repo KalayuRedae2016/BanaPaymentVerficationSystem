@@ -20,7 +20,7 @@ const initializeServer = async () => {
 
     const PORT = process.env.PORT || 8081;
     const SSL = process.env.SSL
-    console.log("SSL:",SSL)
+    // console.log("SSL:",SSL)
     if (SSL==="true") {
       // Load SSL credentials from the environment variables
       const SSL_KEY_PATH = process.env.SSL_KEY_PATH || "/etc/letsencrypt/live/banapvs.com/privkey.pem";

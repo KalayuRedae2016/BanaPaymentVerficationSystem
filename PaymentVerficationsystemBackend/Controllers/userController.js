@@ -120,7 +120,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
 exports.updateUser = catchAsync(async (req, res) => {
   try {
     const userId = req.params.id;
-    console.log(userId)
+    // console.log(userId)
     // Retrieve the existing user
     const existingUser = await User.findById(userId);
     if (!existingUser) {
@@ -217,7 +217,7 @@ exports.deleteUsers = catchAsync(async (req, res, next) => {
   });
 });
 exports.activateDeactiveUser = catchAsync(async (req, res) => {
-  console.log(req.body)
+  // console.log(req.body)
   const { userId, isActive, reason } = req.body;
   // Validate if userId and isActive are provided
   if (!userId || typeof isActive === 'undefined') {
@@ -283,7 +283,7 @@ exports.importUsers = catchAsync(async (req, res, next) => {
   const filePath = req.file.path;
 
   const transformUserData = async (data) => {
-    console.log("Processing Row Data:", data); // Log input data for debugging
+    // console.log("Processing Row Data:", data); // Log input data for debugging
   
     const organization = await Organization.findOne();
     if (!organization) throw new AppError('Organization not found', 404);
@@ -303,7 +303,7 @@ exports.importUsers = catchAsync(async (req, res, next) => {
     const password = await user.generateRandomPassword(); // Assuming generateRandomPassword is a method in User model
     user.password = await bcrypt.hash(password, 12); // Hash the password for security
 
-    console.log("Transformed User Data:", user); // Log the transformed user data for debugging
+    // console.log("Transformed User Data:", user); // Log the transformed user data for debugging
     return user;
   };
 
@@ -333,7 +333,7 @@ exports.importUsers = catchAsync(async (req, res, next) => {
   console.log("After calling importFromExcel:", importedUsers);
 
   importedUsers = Array.isArray(importedUsers) ? importedUsers : [];
-  console.log("Final Imported Users after validation:", importedUsers);
+  // console.log("Final Imported Users after validation:", importedUsers);
 
   if (importedUsers.length === 0) {
     return next(new AppError('No valid users were imported from the file.', 400));
@@ -364,8 +364,8 @@ exports.exportUsers = catchAsync(async (req, res) => {
 });
 
 exports.sendEmailMessages = catchAsync(async (req, res, next) => {
-  console.log(req.body)
-  console.log("email")
+  // console.log(req.body)
+  // console.log("email")
   const { emailList, subject, message } = req.body;
 
   if (!subject || !message) {
@@ -401,7 +401,7 @@ exports.sendEmailMessages = catchAsync(async (req, res, next) => {
 
   try {
     await Promise.all(emailPromises);
-    console.log(`Messages successfully sent to all users.`);
+    // console.log(`Messages successfully sent to all users.`);
     res.status(200).json({
       status: 1,
       message: 'Messages sent to the specified email list or all users.',
