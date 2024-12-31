@@ -2321,7 +2321,6 @@ export default {
       this.showConfirmModal = true;
     },
     fetchRegularPenality(selectedPayment) {
-      ////alert("fetch penality called");
 
       console.log(
         "active year ,month,paid at for regular selected",
@@ -2345,10 +2344,11 @@ export default {
             "response from regular penality latest from kaliye",
             response.data
           );
+          this.daysLate= response.data.daysLate;
           this.payments.forEach((payment) => {
             if (payment._id === selectedPayment._id) {
               payment.regular.penality = response.data.penality;
-              this.daysLate= response.data.daysLate;
+            
               console.log("payment regular penality", payment.regular.penality);
               // payment.regular.daysLate = 10;
             }
@@ -2374,6 +2374,7 @@ export default {
         })
         .then((response) => {
           console.log("response subsidy penality", response.data);
+          this.daysLate= response.data.daysLate;
           this.payments.forEach((payment) => {
             if (payment._id === selectedPayment._id) {
               payment.subsidy.penality = response.data.penality;
@@ -2399,6 +2400,7 @@ export default {
         })
         .then((response) => {
           console.log("response urgent penality", response.data);
+          this.daysLate= response.data.daysLate;
           this.payments.forEach((payment) => {
             if (payment._id === selectedPayment._id) {
               payment.urgent.penality = response.data.penality;
