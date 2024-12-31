@@ -85,7 +85,7 @@
 
 
 
-  <div v-if="showIdCard" class="flex flex-col hidden" id="printable-area">
+  <div v-if="showIdCard" class="flex flex-col " id="printable-area">
       <div
         class="header h-20 w-full bg-blue-500 flex items-center justify-between"
       >
@@ -209,7 +209,7 @@
               </div>
             </div>
           </div>
-          <div class="back w-1/2">
+          <div class="w-full">
             <div class="flex flex-row p-4">
               <div class="w-1/2 text-xs">
                 <p class="text-xs">ስልኪ ቁጽሪ/Phone Number</p>
@@ -225,9 +225,11 @@
                   {{ selectedUser.address }}
                 </p>
               </div>
-              <div class="w-1/2 h-32 w-32" id="qrCodeImageContainer1"></div>
+              <div class="w-1/2" id="qrCodeImageContainer1"></div>
             </div>
-            <p class="mx-5 mb-2 text-indigo-900 text-xs">
+
+
+            <p class="mx-5 mb-2 text-indigo-900 text-xxs">
               <i class="fas fa-exclamation-circle"></i> If you find this
               droped,please give to the intended company or to your closer
               police station. Thanks!!!

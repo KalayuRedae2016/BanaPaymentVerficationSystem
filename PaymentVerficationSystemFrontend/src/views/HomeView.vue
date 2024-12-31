@@ -332,8 +332,7 @@ export default {
           .post("/api/v1/users/login", userData)
           .then((response) => {
             // Handle successful login response
-            const { role, token, userId, userCode} = response.data;
-            const email='kalayuredae2016@gmail.com';
+            const { role, token, userId, userCode,email} = response.data;
             if (response.data.status === 1) {
               // Dispatch actions based on role
               if (role.includes("Admin")) {
