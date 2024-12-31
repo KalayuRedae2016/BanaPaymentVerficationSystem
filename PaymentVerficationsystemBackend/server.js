@@ -20,7 +20,7 @@ const initializeServer = async () => {
 
     const PORT = process.env.PORT || 8081;
     const SSL = process.env.SSL
-    console.log("SSL:",SSL)
+    // console.log("SSL:",SSL)
     if (SSL==="true") {
       // Load SSL credentials from the environment variables
       const SSL_KEY_PATH = process.env.SSL_KEY_PATH || "/etc/letsencrypt/live/banapvs.com/privkey.pem";
@@ -36,12 +36,12 @@ const initializeServer = async () => {
       });
     } else {
       // Start HTTP server
-      http.createServer(app).listen(PORT, () => {
+      http.createServer(app).listen(PORT, "127.0.0.1", () => {
         console.log(`HTTP Server is running on http://localhost:${PORT}`);
-      }).on("error", (err) => {
+    }).on("error", (err) => {
         console.log("Error starting HTTP server:", err);
-      });
-      
+    });
+    
     }
 
     // Handle unhandled promise rejections

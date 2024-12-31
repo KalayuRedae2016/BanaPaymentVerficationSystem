@@ -29,7 +29,7 @@ module.exports = (req, res, next) => {
     }
     else{
       //console.log("verified Token:",token)
-      console.log("verified SecretKey:",secretKey)
+      // console.log("verified SecretKey:",secretKey)
       //console.log("verified bankName:",decoded.bankName)
     }
     next();

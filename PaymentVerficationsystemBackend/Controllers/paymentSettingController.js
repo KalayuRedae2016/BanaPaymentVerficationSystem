@@ -110,7 +110,7 @@ exports.getPaymentSetting = catchAsync(async (req, res, next) => {
   const formattedStartDate = paymentSettings.startingDate ? formatDate(paymentSettings.startingDate) : null;
   const formattedEndDate = paymentSettings.endingDate ? formatDate(paymentSettings.endingDate) : null;
 
-  console.log(paymentSettings)
+  // console.log(paymentSettings)
   res.status(200).json({
     status: 1,
     message: paymentSettings.activeYear && paymentSettings.activeMonth
@@ -145,7 +145,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
     activate=true
   }
 
-    console.log(latestPaymentSetting)
+    // console.log(latestPaymentSetting)
     res.status(200).json({
         status: 1,
         message: "Latest setting fetched successfullyyyyy.",
@@ -177,7 +177,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res,next) => {
     updatedData.startingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 1)); // First day of the month
     updatedData.endingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 30));  // 30th day of the month
     }
-  console.log("updatedData",updatedData)
+  // console.log("updatedData",updatedData)
     const paymentSetting = await PaymentSetting.findOneAndUpdate(
       { _id: settingId,latest:true}, 
       updatedData, // Update data from the request body
@@ -191,7 +191,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res,next) => {
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
-  console.log("Updated Payment Setting:", paymentSetting); // Log updated setting
+  // console.log("Updated Payment Setting:", paymentSetting); // Log updated setting
     res.status(200).json({
       status:1,
       message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
