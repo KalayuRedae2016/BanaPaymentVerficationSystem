@@ -623,13 +623,13 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     if (unpaidTypes.length > 0) {
       return next(new AppError(`Cannot pay penality. The following payment types must be fully paid first: ${unpaidTypes.join(', ')}`, 400))
     }
-    unpaidBill.penality.amount = penality.amount,
-      unpaidBill.penality.bankType = penality.bankType,
-      unpaidBill.penality.TTNumber = penality.TTNumber,
-      unpaidBill.penality.penality = 0
-    unpaidBill.penality.isPaid = penality.isPaid,
-      unpaidBill.penality.paidAt = penality.paidAt || Date.now() || null
-    unpaidBill.penality.daysLate = penality.daysLate || null
+  unpaidBill.penality.amount = penality.amount,
+  unpaidBill.penality.bankType = penality.bankType,
+  unpaidBill.penality.TTNumber = penality.TTNumber,
+  unpaidBill.penality.penality = 0
+  unpaidBill.penality.isPaid = penality.isPaid,
+  unpaidBill.penality.paidAt = penality.paidAt || Date.now() || null
+  unpaidBill.penality.daysLate = penality.daysLate || null
 
   }
 
@@ -693,7 +693,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
     unpaidBill.confirmedID = userId,
-      unpaidBill.confirmationMethod = "Admin-confirmed"
+    unpaidBill.confirmationMethod = "Admin-confirmed"
 
   }
 
@@ -828,7 +828,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
     payment.status = 'pending';
     payment.confirmedDate = null;
     payment.latest = false//which one is the latest then
-
+    
     /// Identify the nearest relevant bill to mark as latest
     const nearestRelevantBill = await Payment.findOne({
       userCode: payment.userCode, isPaid: true, _id: { $ne: payment._id }, // Exclude the current bill
@@ -888,18 +888,6 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   const dueDate = new Date(endingDate);
   const currentDate = new Date();
   const paymentDateObj = paymentDate ? new Date(paymentDate) : currentDate;
-
-  // // Validate payment date
-  // if (paymentDateObj < new Date(startingDate) || paymentDateObj > currentDate) {
-  //   return next(
-  //     new AppError(
-  //       `Payment date must be greater than ${new Date(startingDate).toLocaleDateString()} and less than or equal to ${currentDate.toLocaleDateString()}.`,
-  //       400
-  //     )
-  //   );
-  // }
-
-  // Calculate days late
   let daysLate = Math.ceil((paymentDateObj - dueDate) / (1000 * 3600 * 24));
   daysLate = daysLate > 0 ? daysLate : 0;
 
@@ -935,6 +923,9 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   // Special condition for service payment type (penalty is always 0)
   if (paymentType === 'service') {
     penality = 0;
+  }
+  if(penality===0){
+    daysLate=0
   }
   // Return penalty details
   res.status(200).json({
@@ -975,6 +966,15 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
     if (paymentDate >= new Date(startingDate) && paymentDate <= new Date(endingDate)) {
       status = 'pending';
+      updateData = {
+        'regular.penality': 0,
+        'regular.daysLate': 0,
+        'urgent.penality': 0,
+        'urgent.daysLate': 0,
+        'subsidy.penality': 0,
+        'subsidy.daysLate': 0,
+        'penality.amount': 0,
+      };
     } else if (paymentDate > new Date(endingDate)) {
       status = 'overdue';
       // Calculate penalties for each payment type
