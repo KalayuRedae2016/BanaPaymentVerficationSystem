@@ -261,6 +261,7 @@ exports.requiredRole = (requiredrole) => {
     next();
   };
 };
+
 exports.forgetPassword = catchAsync(async (req, res, next) => {
   //console.log(req.body.email)
   const user = await User.findOne({ email: req.body.email });
