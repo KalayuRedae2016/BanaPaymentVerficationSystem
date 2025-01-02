@@ -30,7 +30,7 @@ router.route('/create/bills').post(paymentController.createUnconfirmedPayments);
 // ========== Routes for managing payments via the system ==========
 router.route('/search').get(paymentController.searchPayments);//search Bank Statement payment
 router.route('/confirm').patch(paymentController.confirmPayments);//confirm Bank Statement payment
-router.route('/update') .patch(paymentController.updatePayments);//update Bank Statement payment
+router.route('/update') .patch(paymentController.editPayments);//update Bank Statement payment
 
 /// ========== Routes for Payments Management for all from Bank and from System ==========
 router.route('/getAllPayments').get(paymentController.getAllPayments); // Fetch all payments
