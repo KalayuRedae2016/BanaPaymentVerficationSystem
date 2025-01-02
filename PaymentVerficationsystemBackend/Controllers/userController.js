@@ -217,8 +217,8 @@ exports.deleteUsers = catchAsync(async (req, res, next) => {
   });
 });
 exports.activateDeactiveUser = catchAsync(async (req, res) => {
-  // console.log(req.body)
-  const { userId, isActive, reason } = req.body;
+  const { userId} = req.params;
+  const {isActive, reason } = req.body;
   // Validate if userId and isActive are provided
   if (!userId || typeof isActive === 'undefined') {
     return res.status(400).json({
