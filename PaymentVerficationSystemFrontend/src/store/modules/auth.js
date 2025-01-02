@@ -1,3 +1,5 @@
+import {apiGet} from '../../utils/utils';
+
 const state = {
   userId: localStorage.getItem('userId') || null,
   token: localStorage.getItem('token') || null,
@@ -81,27 +83,21 @@ const mutations = {
 };
 
 const actions = {
-
   async fetchBanks({ commit }) {
-    try {
-
-      this.$apiClient
-      .get("/api/v1/organization")
+      try { 
+      await apiGet("/api/v1/organization")
       .then((response) => {
           console.log("response from the store", response);
-          const serviceBanks =response.data.organization.serviceBankAccounts;
-          const blockBanks =response.data.organization.blockBankAccounts;
+          const serviceBanks =response.organization.serviceBankAccounts;
+          const blockBanks =response.organization.blockBankAccounts;
           commit('setServiceBanks',serviceBanks,);
           commit('setBlockBanks',blockBanks);
-       })
-      .catch((error) => {
+       })}catch(error)
+        {
        console.log(error);
-      });
+      }finally{
 
-    
-    } catch (error) {
-      console.error('Error fetching banks:', error);
-    }
+      };
   },
   login({ commit }, { token }) {
     console.log("token in commit ",token);

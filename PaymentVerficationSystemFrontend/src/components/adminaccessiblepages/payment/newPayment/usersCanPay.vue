@@ -1459,6 +1459,7 @@ export default {
     },
   },
   mounted() {
+  
     if (this.$route.query.activeTab == 1) {
       this.activeTab = 0;
       if (this.$route.query.bankStatement) {
