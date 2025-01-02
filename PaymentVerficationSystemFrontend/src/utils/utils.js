@@ -29,12 +29,13 @@ function handleApiError(error) {
             message = `Informational response: ${status}. Please wait...`;
         } else if (status >= 300 && status < 400) {
             message = `Redirection: ${status}. The resource has moved.`;
-        } 
-
+        }         
         else if ((status === 401 && error.response.data.tokenMissingExpired===1) ||(status == 403 && error.response.data.tokenMissingExpired===1)) {
           this.$store.dispatch("logout");
           this.$router.push("/login");
         }
+
+
         else if (status >= 400 && status < 500) {
             const errorMessages = {
                 400: "Bad Request. Please check your input.",

@@ -58,7 +58,7 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
   let registrationFee = 0;
 
   if (!user.hasMadepayment) { 
-    registrationFee = regFeeRate / 100 * baseAmount;
+    registrationFee = (regFeeRate / 100 * baseAmount).toFixed(2);
       //console.log("Before saving user:", user.hasMadepayment);
       user.hasMadepayment = true;
       await user.save(); // Save the user with the updated `hasMadePayment` status

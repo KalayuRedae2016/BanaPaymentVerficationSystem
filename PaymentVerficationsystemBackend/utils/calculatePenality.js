@@ -1,9 +1,11 @@
 const calculatePenalty = (paymentSetting,paymentType, amount,paymentDate) => {
-    if (!paymentType || paymentType.isPaid) {
-      return { penality: 0, daysLate: 0 };
-    }
-
-    const {endingDate,penalityLate5Days = 0,penalityLate10Days = 0,penalityLateAbove10Days = 0} = paymentSetting;
+  if (!paymentType || paymentType.isPaid) {
+    return {
+        penality: paymentType?.penality || 0, // Use existing penalty or default to 0
+        daysLate: paymentType?.daysLate || 0 // Use existing daysLate or default to 0
+    };
+}
+  const {endingDate,penalityLate5Days = 0,penalityLate10Days = 0,penalityLateAbove10Days = 0} = paymentSetting;
   
     const dueDate = new Date(endingDate);
     const daysLate = Math.max(0, Math.floor((paymentDate - dueDate) / (1000 * 3600 * 24))); // Days late calculation
