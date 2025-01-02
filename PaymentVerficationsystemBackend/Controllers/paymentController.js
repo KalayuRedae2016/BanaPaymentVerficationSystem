@@ -519,7 +519,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     };
   });
 
-  // console.log("Payment Details:", paymentDetails);
+  //console.log("Payment Details:", paymentDetails);
 
   // Handle cases where paymentDetails array might be empty
   if (!paymentDetails.length) {
@@ -815,11 +815,11 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   // Calculate penalty based on days late
   let penality = 0;
   if (daysLate > 0 && daysLate <= 5) {
-    penality = (amount * penalityLate5Days).toFixed(2);
+    penality = Number((amount * penalityLate5Days).toFixed(2));
   } else if (daysLate > 5 && daysLate <= 10) {
-    penality = (amount * penalityLate10Days).toFixed(2);
+    penality = Number((amount * penalityLate10Days).toFixed(2));
   } else if (daysLate > 10) {
-    penality = (amount * penalityLateAbove10Days).toFixed(2);
+    penality =Number((amount * penalityLateAbove10Days).toFixed(2));
   }
 
   // Special condition for service payment type (penalty is always 0)
