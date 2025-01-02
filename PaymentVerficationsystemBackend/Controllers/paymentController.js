@@ -680,7 +680,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
-    const paidAt = isPaid ? (updates.paidAt ? updates.paidAt : existing.paidAt) : null;
+    const paidAt = isPaid ? (updates.paidAt ? new Date(updates.paidAt) : new Date(existing.paidAt)) : null;
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
