@@ -65,7 +65,7 @@
               >
             </p>
           </div>
-          <!-- // displayin the payments each in a table for one user please -->
+          <!-- // displayin the payments each in a preConfirmPayment for one user please -->
           <div class="border-t border-blue-900 mt-5 text-xs">
             <div
               class="p-4 border-b border-blue-900 cursor-pointer"
@@ -177,7 +177,7 @@
                             <input
                               type="date"
                               class="custom-input h-8 px-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
-                              @change="fetchPenality(payment, 'regular')"
+                              @change="payment.status !== 'pending' ? fetchPenality(payment, 'regular') : null"
                               :value="payment.regular.paidAt"
                               @input="
                                 payment.regular.paidAt = $event.target.value
@@ -319,7 +319,7 @@
                             <input
                               type="date"
                               class="custom-input h-8 px-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
-                              @change="fetchPenality(payment, 'subsidy')"
+                              @change="payment.status !== 'pending' ? fetchPenality(payment, 'subsidy') : null"
                               :value="payment.subsidy.paidAt"
                               @input="
                                 payment.subsidy.paidAt = $event.target.value
@@ -458,11 +458,12 @@
                           <p v-if="payment.urgent.isPaid">
                             {{ payment.urgent.paidAt }}
                           </p>
+
                           <input
                             v-if="!payment.urgent.isPaid"
                             type="date"
                             class="custom-input h-7 mb-2"
-                            @change="fetchPenality(payment, 'urgent')"
+                           @change="payment.status !== 'pending' ? fetchPenality(payment, 'urgent') : null"
                             :value="payment.urgent.paidAt"
                             @input="payment.urgent.paidAt = $event.target.value"
                           />
@@ -1706,7 +1707,14 @@ export default {
 
 
       if(paymentType=='penality'){
-        if(!this.payments[paymentIndex][paymentType].isPaid ||!this.payments[paymentIndex].subsidy.isPaid ||!this.payments[paymentIndex].urgent.isPaid){
+        // alert("hoo")
+
+        // console.log("check it ",this.payments[paymentIndex][paymentType].isPaid);
+
+        // console.log("check aslo",this.payments[paymentIndex].regular.isPaid);
+
+
+        if(!this.payments[paymentIndex].regular.isPaid||!this.payments[paymentIndex].subsidy.isPaid ||!this.payments[paymentIndex].urgent.isPaid){
         this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = true;
         return true;
       }
