@@ -42,7 +42,7 @@
 
     <div
       v-if="showIdCard"
-      class="flex flex-col lg:flex-row items-center p-8 bg-white border border-blue-500 shadow-lg space-y-6 lg:space-y-0 lg:space-x-8"
+      class="flex flex-col lg:flex-row items-center p-8 bg-white border-t border-gray-300 rounded-lg shadow-lg space-y-6 lg:space-y-0 lg:space-x-8"
     >
       <!-- Left Section: Image and Button (Mobile and Desktop) -->
       <div
@@ -88,7 +88,7 @@
 
     <div
       v-if="showIdCard"
-      class="flex flex-col mx-10 mt-5 borderborder-blue-500 "
+      class="flex flex-col mx-10 mt-5 borderborder-blue-500 hidden"
       id="printable-area"
     >
       <div

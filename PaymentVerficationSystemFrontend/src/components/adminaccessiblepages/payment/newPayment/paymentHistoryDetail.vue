@@ -1424,23 +1424,6 @@ export default {
       }
       return "Invalid month";
     },
-    // fetchPenality(paymentType, paidAt) {
-    //   this.$apiClient
-    //     .get("api/v1/payments/penality", {
-    //       params: {
-    //         activeYear: this.selectedPayment.activeYear,
-    //         activeMonth: this.selectedPayment.activeMonth,
-    //         paymentType: paymentType,
-    //         paymentDate: paidAt,
-    //       },
-    //     })
-    //     .then((response) => {
-    //       this.payment.paymentTpe.penality = response.data.message;
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // },
 
     showEditModalDetail(
       billCode,
@@ -1460,81 +1443,55 @@ export default {
     },
 
 
-   async  saveChanges() {
-      const payment={
-        paymentType: this.paymentType,
-        paidAt: this.paidAt,
-        paidAtGC: this.paidAtGC,
-        bankType: this.bankType,
-        TTNumber: this.TTNumber,
-        isPaid: this.isPaid,
+    async saveChanges() {
+  // Construct the common payment object
+  const payment = {
+    paymentType: this.paymentType,
+    paidAt: this.paidAt,
+    paidAtGC: this.paidAtGC,
+    bankType: this.bankType,
+    TTNumber: this.TTNumber,
+    isPaid: this.isPaid,
+  };
+
+  // Add userId from localStorage to the payload
+  const userId = localStorage.getItem("userId");
+
+  // Dynamically build the payload based on paymentType
+  this.payload = {
+    billCode: this.billCode,
+    userId, // Include userId in the payload
+    [this.paymentType]: payment,
+  };
+
+  console.log("Payload:", this.payload);
+
+  try {
+    const response = await this.$apiPatch("/api/v1/payments/update", "", this.payload);
+
+    console.log("Response after editing:", response);
+
+    // Handle response logic
+    if (response.items.isPaid === false) {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          userCode: this.payment.userCode,
+          fullName: this.payment.fullName,
+          activeTab: 1,
+          bankStatement: true,
+        },
+      });
     }
+    this.$refs.toast.showSuccessToastMessage(response.message);
+    this.$reloadPage();
+  } catch (error) {
+    console.log("Error confirming:", error.status, error.message);
+  } finally {
+    this.showEditModal = false;
+  }
+}
 
-
-      if (this.paymentType === "regular") {
-   
-        this.payload = {
-          billCode: this.billCode,
-          regular: payment,
-        };
-      }
-      if (this.paymentType === "subsidy") {
-        this.payload = {
-          billCode: this.billCode,
-          subsidy:payment,
-        };
-      }
-      if (this.paymentType === "urgent") {
-        this.payload = {
-          billCode: this.billCode,
-          urgent: payment,
-        };
-      }
-      if (this.paymentType === "service") {
-        this.payload = {
-          billCode: this.billCode,
-          service:payment,
-        };
-      }
-
-
-      if (this.paymentType === "penality") {
-        this.payload = {
-          billCode: this.billCode,
-          penality: payment,
-        };
-      }
-
-      
-      console.log("ppppPayload", this.payload);
-
-      try {
-         await this.$apiPatch("/api/v1/payments/update",'', this.payload).then((response) => {
-          console.log("response after editing", response);
-          //alert('k')
-          
-          if (response.items.isPaid == false) {
-            //alert("hi");
-              this.$router.push({
-                  path: "/admindashboard/payments1",
-                  query: {
-                      userCode: this.payment.userCode,
-                      fullName: this.payment.fullName,
-                      activeTab:1,
-                      bankStatement:true,
-                  }
-              });
-          }
-          this.$refs.toast.showSuccessToastMessage(response.message);
-           this.$reloadPage();
-        })}
-       catch(error) {
-          console.log("Error confirming", error.status, error.message);
-        }finally{
-
-        };
-      this.showEditModal = false;
-    },
 
     async generateQRCodeImage() {
       const qrData = `Bana ${this.paymentTerm} Report,UserCode: ${this.payment.userCode}, Full Name: ${this.payment.fullName},Year:${this.payment.activeYear},Month:${this.payment.activeMonth},BillCode:${this.payment.billCode},Email:${this.Email},Website:${this.websiteUrl}`;
