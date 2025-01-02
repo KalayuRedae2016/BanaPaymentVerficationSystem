@@ -464,7 +464,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
   // Fetch payments
   const payments = await Payment.find(paymentQuery)
     .populate({ path: 'user', select: 'fullName' })
-    .sort({ activeMonth: 1 });
+    .sort({ activeMonth: 1 ,activeYear:1});
 
   if (!payments.length) {
     return res.status(200).json({
@@ -659,7 +659,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     }
   });
 });
-exports.updatePayments = catchAsync(async (req, res, next) => {
+exports.editPayments = catchAsync(async (req, res, next) => {
   const { billCode, urgent, regular, subsidy, service, penality } = req.body;
   if (!billCode) {
     return next(new AppError(`billCode is required to update Confirmed Payment`))
@@ -677,7 +677,11 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
+    console.log("updateisPaid:",updates.isPaid)
+    console.log("existingispaid:",existing.isPaid)
     const paidAt = isPaid ? formatDate(existing.paidAt) || formatDate(Date.now()) : null;
+    console.log("updatepaidAt:",updates.paidAt)
+    console.log("existingPaidAt:",existing.paidAt)
     const paidAtGC= isPaid ? formatDateGC(existing.paidAt) || formatDateGC(Date.now()) : null;
     return {
       amount: updates.amount ?? existing.amount,
