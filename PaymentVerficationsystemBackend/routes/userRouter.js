@@ -39,7 +39,7 @@ router.route('/:id')
   .patch(authoController.uploadUserImage,userController.updateUser)
   .delete(userController.deleteUser);
 
-router.route('/active-deactive').put(userController.activateDeactiveUser);
+router.route('/active-deactive/:userId').put(userController.activateDeactiveUser);
 router.route('/sendEmails').post(userController.sendEmailMessages)
 
 router.post('/importUsers',userController.uploadUserFile,userController.importUsers);
