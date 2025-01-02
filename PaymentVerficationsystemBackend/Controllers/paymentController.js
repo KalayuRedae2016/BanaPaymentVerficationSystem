@@ -391,15 +391,6 @@ exports.confirmBills = async (req, res) => {
       const allPaid = paymentsToCheck.every(payment => payment.isPaid);
 
       if (allPaid) {
-        // Generate QR code content
-        const qrContent = JSON.stringify({
-          billCode: unpaidBill.billCode,
-          userCode: unpaidBill.userCode,
-          fullName: unpaidBill.fullName,
-          totalAmount: unpaidBill.totalExpectedAmount,
-          confirmedDate: new Date().toISOString(),
-        });
-
         // Ensure no other payments are marked as latest
         const latestPayments = await Payment.find({ latest: true });
         if (latestPayments) {
@@ -409,37 +400,14 @@ exports.confirmBills = async (req, res) => {
           }
         }
 
-        // Generate QR code as data URL
-        const qrCodeDataUrl = await QRCode.toDataURL(qrContent);
-
-        // Convert data URL to a buffer
-        const base64Data = qrCodeDataUrl.replace(/^data:image\/png;base64,/, '');
-        const buffer = Buffer.from(base64Data, 'base64');
-
-        // Directory to save QR code images
-        const qrCodesDir = path.join(__dirname, 'qr_codes');
-        if (!fs.existsSync(qrCodesDir)) {
-          fs.mkdirSync(qrCodesDir);
-        }
-
-        // Define the file name and path
-        const fileName = `qr_${billCode}.png`;
-        const filePath = path.join(qrCodesDir, fileName);
-
-        // Save the buffer to a file
-        fs.writeFileSync(filePath, buffer);
-
-        // Return the URL where the QR code is accessible
-        const qrCodeUrl = `/qr_codes/${fileName}`;
 
         // Update the unpaid bill with the QR code URL and other details
-        unpaidBill.barCode = qrCodeUrl;
         unpaidBill.isPaid = true;
         unpaidBill.status = 'confirmed';
         unpaidBill.confirmedDate = new Date();
         unpaidBill.latest = true;
         unpaidBill.confirmedID = req.apiKeyData.id,
-          unpaidBill.confirmationMethod = "Bank-confirmed"
+        unpaidBill.confirmationMethod = "Bank-confirmed"
       }
 
       // Save the updated bill
@@ -635,7 +603,6 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
 
   }
 
-  
   // Filter out payment types that have a non-zero amount
   const paymentsToCheck = [
     unpaidBill.urgent,
@@ -651,15 +618,6 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   // console.log(allPaid)
 
   if (allPaid) {
-    // Generate QR code content
-    const qrContent = JSON.stringify({
-      billCode: unpaidBill.billCode,
-      userCode: unpaidBill.userCode,
-      fullName: unpaidBill.fullName,
-      totalAmount: unpaidBill.totalExpectedAmount,
-      confirmedDate: new Date().toISOString(),
-
-    });
     const latestPayments = await Payment.find({ latest: true });
     if (latestPayments) {
       for (const payment of latestPayments) {
@@ -667,36 +625,12 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
         await payment.save();
       }
     }
-    // Generate QR code as data URL
-    const qrCodeDataUrl = await QRCode.toDataURL(qrContent);
-    const base64Data = qrCodeDataUrl.replace(/^data:image\/png;base64,/, '');// Convert data URL to a buffer
-    const buffer = Buffer.from(base64Data, 'base64');
-
-    // Directory to save QR code images
-    const qrCodesDir = path.join(__dirname, 'qr_codes');
-    if (!fs.existsSync(qrCodesDir)) {
-      fs.mkdirSync(qrCodesDir);
-    }
-
-    // Define the file name and path
-    const fileName = `qr_${billCode}.png`;
-    const filePath = path.join(qrCodesDir, fileName);
-
-    // Save the buffer to a file
-    fs.writeFileSync(filePath, buffer);
-
-    // Return the URL where the QR code is accessible
-    const qrCodeUrl = `/qr_codes/${fileName}`;
-
-    // Update the unpaid bill with the QR code URL
-    unpaidBill.barCode = qrCodeUrl;
     unpaidBill.isPaid = true;
     unpaidBill.status = 'confirmed';
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
     unpaidBill.confirmedID = userId,
     unpaidBill.confirmationMethod = "Admin-confirmed"
-
   }
 
   // Save the updated bill
@@ -778,15 +712,7 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
   const allPaid = paymentsToCheck.every(payment => payment.isPaid);
 
   if (allPaid) {
-    // Generate QR code content
-    const qrContent = JSON.stringify({
-      billCode: payment.billCode,
-      userCode: payment.userCode,
-      fullName: payment.fullName,
-      totalAmount: payment.totalExpectedAmount,
-      confirmedDate: formatDate(new Date().toISOString()),
-    })
-
+    
     //   const latestPayments=await Payment.find({latest:true});
     //   if(latestPayments){
     //   for (const payment of latestPayments) {
@@ -795,37 +721,11 @@ exports.updatePayments = catchAsync(async (req, res, next) => {
     //   }
 
     // }
-    // Generate QR code as data URL
-    const qrCodeDataUrl = await QRCode.toDataURL(qrContent);
-
-    // Convert data URL to a buffer
-    const base64Data = qrCodeDataUrl.replace(/^data:image\/png;base64,/, '');
-    const buffer = Buffer.from(base64Data, 'base64');
-
-    // Directory to save QR code images
-    const qrCodesDir = path.join(__dirname, 'qr_codes');
-    if (!fs.existsSync(qrCodesDir)) {
-      fs.mkdirSync(qrCodesDir);
-    }
-
-    // Define the file name and path
-    const fileName = `qr_${billCode}.png`;
-    const filePath = path.join(qrCodesDir, fileName);
-
-    // Save the buffer to a file
-    fs.writeFileSync(filePath, buffer);
-
-    // Return the URL where the QR code is accessible
-    const qrCodeUrl = `/qr_codes/${fileName}`;
-
-    // Update the unpaid bill with the QR code URL
-    payment.barCode = qrCodeUrl;
-    payment.isPaid = true;
+      payment.isPaid = true;
     payment.status = 'confirmed';
     payment.confirmedDate = new Date();
   } else {
     // Update the unpaid bill with the QR code URL
-    payment.barCode = null;
     payment.isPaid = false;
     payment.status = 'pending';
     payment.confirmedDate = null;

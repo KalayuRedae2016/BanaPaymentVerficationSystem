@@ -30,7 +30,6 @@ const paymentSchema = new mongoose.Schema(
     confirmedDate: {type: Date,default: null},
     confirmationMethod:{type:String,enum: ['Manually-imported_old Data',`Bank-confirmed`,`Admin-confirmed`],default:null},
     confirmedID:{type: mongoose.Schema.Types.ObjectId,default:null },
-    barCode: {type: String,default: null},
     status: {type: String,enum: ['pending', 'confirmed', 'overdue',"unknown"],default: 'pending',index: true},
     isPaid: {type: Boolean,default: false,index: true}, // Frequently filtered},
     latest: {type: Boolean,default: false},

@@ -88,7 +88,6 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
     totalExpectedAmount,
   
     daysLate: 0,
-    barCode: null,
     confirmedDate: null,
     isPaid: false,
     status: 'pending',
