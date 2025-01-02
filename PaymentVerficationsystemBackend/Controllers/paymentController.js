@@ -544,9 +544,9 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.confirmPayments = catchAsync(async (req, res, next) => {
-  const { billCode, userId, urgent, regular, subsidy, service, penality, paidAt} = req.body;
+  const { billCode, userId, urgent, regular, subsidy, service, penality} = req.body;
   if (!billCode || !userId) {
-    return next(new AppError(`billCode or UserId is required`))
+    return next(new AppError(`billCode and UserId is required to confirm payments`))
   }
   if (!urgent && !regular && !subsidy && !service && !penality) {
     return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",))
@@ -660,8 +660,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
 });
 exports.editPayments = catchAsync(async (req, res, next) => {
   const { userId,billCode, urgent, regular, subsidy, service, penality} = req.body;
-  if (!billCode) {
-    return next(new AppError(`billCode is required to edit Confirmed Payment`))
+  if (!billCode || !userId) {
+    return next(new AppError(`billCode and userId is required to edit Confirmed Payment`))
   }
   if (!urgent && !regular && !subsidy && !service && !penality) {
     return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",404))
