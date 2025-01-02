@@ -464,7 +464,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
   // Fetch payments
   const payments = await Payment.find(paymentQuery)
     .populate({ path: 'user', select: 'fullName' })
-    .sort({ activeMonth: 1 ,activeYear:1});
+    .sort({ activeYear:1,activeMonth: 1});
 
   if (!payments.length) {
     return res.status(200).json({
