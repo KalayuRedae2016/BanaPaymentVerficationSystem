@@ -672,8 +672,8 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError("User is not found"), 400)
   } 
-  // Find the uPaid bill by billCode
-  let payment = await Payment.findOne({ billCode });
+  // Find the uPaid bill by billCode and ispaid:false
+  let payment = await Payment.findOne({ isPaid: false, billCode });
   if (!payment) {
     return next(new AppError("No paid Bill found",404))
   }
