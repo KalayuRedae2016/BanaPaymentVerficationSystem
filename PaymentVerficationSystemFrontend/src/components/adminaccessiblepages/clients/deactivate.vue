@@ -256,16 +256,7 @@ export default {
       detailModal: false,
       searchedClients: [],
       clientId: "",
-      clients: [
-        {
-          _id: "1",
-          fullName: "Tadesse Gebremicheal berhe",
-          firstName: "tadesse",
-          middleName: "gebremicheal",
-          lastName: "berehe",
-          userCode: "BM 0023",
-        },
-      ],
+      clients: [],
 
       showMoreChanged: false,
       filteredCleints: [],
@@ -318,8 +309,8 @@ export default {
 
     async activate(userId) {
       this.showActivationModal = false;
+ 
       const payload = {
-        userId: userId,
         reason: this.deactivationReason,
         isActive: true,
       };
@@ -327,7 +318,7 @@ export default {
       this.showDeactivateModal = false;
 
       try{
-        await this.$apiPut("/api/v1/users/active-deactive",'', payload)
+        await this.$apiPut("/api/v1/users/active-deactive",userId, payload)
         .then((response) => {
           console.log("users", response);
           if (response.status === 1) {
@@ -336,7 +327,7 @@ export default {
           }
         })
        }catch(error) {
-          console.log(error);
+          console.log("error",error.status,error.message);
           this.$refs.toast.showErrorToastMessage("Something went wrong");
         }finally {
 
