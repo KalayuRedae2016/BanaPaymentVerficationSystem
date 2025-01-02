@@ -194,7 +194,7 @@ export default {
     this.fetchPaymentSetting();
   },
   methods: {
-    fetchPaymentSetting() {
+    async fetchPaymentSetting() {
  this.noSettingOpened=true;
       if (this.year == "") {
         this.selectYear = true;
@@ -204,15 +204,20 @@ export default {
         return;
       }
 
-      this.$apiClient
-        .get(
-          `api/v1/paymentSetting/?activeYear=${this.year}&activeMonth=${this.month}`
+
+      const params={
+        activeYear:this.year,
+        activeMonth:this.month,
+
+      }
+    try{  await  this.$apiGet(
+          'api/v1/paymentSetting/',params
         )
         .then((response) => {
-          if (response.data.status === 1) {
-            console.log("response from history ", response.data);
-            this.paymentSetting = response.data.paymentSetting;
-            if (response.data.paymentSetting) {
+          if (response.status === 1) {
+            console.log("response from history ", response);
+            this.paymentSetting = response.paymentSetting;
+            if (response.paymentSetting) {
               this.noSettingOpened = false;
             } else {
               this.noSettingOpened = true;
@@ -220,8 +225,12 @@ export default {
           } else {
             console.log("payment setting  not found");
           }
-        })
-        .catch((error) => {});
+        })}
+        catch(error) {
+          console.log("error: ", error.status,error.message);
+        }finally{
+
+        };
     },
   },
 };

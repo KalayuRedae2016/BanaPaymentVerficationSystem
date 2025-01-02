@@ -170,7 +170,6 @@
                 </tbody>
               </table>
             </div>
-
             <div
               class="flex justify-between items-center mt-2 bg-white py-2 pl-1 rounded-lg border border-gray-200"
             >
@@ -532,6 +531,7 @@ export default {
   },
 
   async mounted() {
+
     try {
       await this.$apiGet("/api/v1/users", { params: { isActive: true } }).then(
         (response) => {
@@ -547,50 +547,35 @@ export default {
   },
 
   methods: {
-    showSuccessToastMessage(message) {
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-
-    resetPassword(user) {
+   
+    async resetPassword(user) {
       console.log("userId is", user._id);
       this.showResetModal = false;
       const payload = {
         id: user._id,
         email: user.email,
       };
-      this.$apiClient
-        .patch("/api/v1/users/resetPasswordByAdmin", payload)
+      try{
+      await this.$apiPatch("/api/v1/users/resetPasswordByAdmin",'', payload)
         .then((response) => {
-          console.log("users", response.data.message);
-          if (response.data.status === 1) {
+          console.log("users", response);
+          if (response.status === 1) {
             this.showResetedPasswordModal = true;
-            this.resetedPassword = response.data.resetedPassword;
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+            this.resetedPassword = response.resetedPassword;
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.displayedItems();
           }
         })
-        .catch((error) => {
-          this.errorMessage = error.response.data.message;
+      }catch(error){
+          this.errorMessage = error.message;
           this.showError = true;
-        });
+          conmsole.log("error during reseting",error.status,error.message)
+        }finally{
+
+        };
     },
 
-    deactivate(userId) {
+    async deactivate(userId) {
       const payload = {
         userId: userId,
         reason: this.deactivationReason,
@@ -599,34 +584,23 @@ export default {
 
       console.log("payload", payload);
       this.showDeactivateModal = false;
-      this.$apiClient
-        .put("/api/v1/users/active-deactive", payload)
+      try{
+        await this.$apiPut("/api/v1/users/active-deactive",'', payload)
         .then((response) => {
-          console.log("users", response.data.message);
-          if (response.data.status === 1) {
-            // this.fetchUsers();
-            // this.$refs.toast.showSuccessToastMessage(response.data.message);
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          console.log("users", response);
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
-            // this.successMessage = response.data.message
-            // this.showSuccess=true;
-            //this.displayedItems();
           } else {
             this.showErrorToastMessage("Something went wrong!!");
           }
         })
-        .catch((error) => {
-          console.log(error);
-          this.showErrorToastMessage("Something went wrong!!");
-        });
+       }catch(error) {
+          console.log("error during activating",error.status,error.message);
+          this.$refs.toast.showErrorToastMessage("Something went wrong!!");
+        }finally{
 
-      // const isNotById=true;
-      //   this.$apiPut("/api/v1/users/active-deactive", userId,payload,isNotById).then((response) => {
-      //     this.$reloadPage();
-      //      this.$refs.toast.showSuccessToastMessage(response.data.message);
-      //   }).catch((error) => {
-      //   console.log(error);
-      //   })
+        }
     },
     showDeactivatedUsers() {
       this.$router.push(`/admindashboard/deactivate`);

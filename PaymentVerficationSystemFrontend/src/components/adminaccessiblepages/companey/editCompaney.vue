@@ -1,5 +1,6 @@
 <template>
   <div>
+    <LoadingSpinner :visible="isLoading"/>
     <div class="container flex-col bg-white">
       <div class="flex flex-row">
         <h2 class="text-md font-bold text-blue-500 mt-3 ml-4">
@@ -805,13 +806,12 @@
 
 <script>
 import Toast from '../../Common/Toast.vue'
-
+import LoadingSpinner from '../../Common/LoadingSpinner.vue';
 export default {
-
   components:{
      Toast,
+     LoadingSpinner
   },
-
   name: "paymentsView",
   data() {
     return {
@@ -881,23 +881,23 @@ export default {
   },
 
   mounted() {
-    this.$apiClient
-      .get("/api/v1/organization")
+    this.isLoading = true;
+    this.$apiGet("/api/v1/organization")
       .then((response) => {
         console.log("Update response", response);
-
-        this.companyProfileId = response.data.organization._id;
-        this.companyName = response.data.organization.companyName;
-        this.companyPhoneNumber = response.data.organization.companyPhoneNumber;
-        this.companyEmail = response.data.organization.companyEmail;
-        this.companyAddress = response.data.organization.companyAddress;
-        this.companyPrefixCode = response.data.organization.companyPrefixCode;
-        this.blockBankAccounts = response.data.organization.blockBankAccounts;
+        this.isLoading = false;
+        this.companyProfileId = response.organization._id;
+        this.companyName = response.organization.companyName;
+        this.companyPhoneNumber = response.organization.companyPhoneNumber;
+        this.companyEmail = response.organization.companyEmail;
+        this.companyAddress = response.organization.companyAddress;
+        this.companyPrefixCode = response.organization.companyPrefixCode;
+        this.blockBankAccounts = response.organization.blockBankAccounts;
         this.serviceBankAccounts =
-          response.data.organization.serviceBankAccounts;
+          response.organization.serviceBankAccounts;
 
-        console.log("company Name", response.data.organization.companyName);
-        this.companyProfile = response.data;
+        console.log("company Name", response.organization.companyName);
+        this.companyProfile = response;
         console.log("block accounts", this.blockBankAccounts);
         console.log("service accounts", this.serviceBankAccounts);
       })
@@ -922,7 +922,6 @@ export default {
         this.account.bankType = account;
       }
     },
-
     trackNewServiceBankType(account) {
       console.log("account is", account);
       if (account == "other") {
@@ -937,8 +936,7 @@ export default {
         this.account.bankType = account;
       }
     },
-
-    saveNewBlockBank() {
+    async saveNewBlockBank() {
       this.otherBlockSelected = false;
       console.log(
         "newbanktype and accoutn ",
@@ -960,29 +958,26 @@ export default {
         serviceBankAccounts: this.serviceBankAccounts,
       };
 
-      this.$apiClient
-        .patch(
-          `/api/v1/organization/${this.companyProfileId}`,
+      try { await this.$apiPatch(
+          '/api/v1/organization/',this.companyProfileId,
           companyEditedData
         )
         .then((response) => {
-
           console.log("response", response);
-          if (Number(response.data.status) === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (Number(response.status) === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
           }
         })
-        .catch((error) => {
+      }catch(error) {
           this.$refs.toast.showErrorToastMessage("Something went wrong");
-          console.log("Error in the catch", error.response.data.message);
-        });
+          console.log("Error in the catch", error.status,error.message);
+        }finally {
+          console.log("Finished finally org fetch")
+        };
     },
-
-    saveNewServiceBank() {
-      // alert("hi")
+    async saveNewServiceBank() {
       this.otherServiceSelected = false;
-
       this.serviceBankAccounts.push({
         bankAccountNumber: this.newServiceBankAccountNumber,
         bankType: this.newServiceBankType,
@@ -998,22 +993,24 @@ export default {
         serviceBankAccounts: this.serviceBankAccounts,
       };
       console.log("service account: ", this.serviceBankAccounts);
-      this.$apiClient
-        .patch(
-          `/api/v1/organization/${this.companyProfileId}`,
+    try { await this.$apiPatch(
+          '/api/v1/organization',this.companyProfileId,
           companyEditedData
         )
         .then((response) => {
           console.log("response", response);
-          if (Number(response.data.status) === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (Number(response.status) === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
           }
         })
-        .catch((error) => {
-          this.$toast.showErrorToastMessage("Something went wrong");
-          console.log("Error in the catch", error.response.data.message);
-        });
+       }catch(error) {
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
+          console.log("Error in the catch", error.status,error.message);
+
+        }finally{
+          console.log("finally save new service account")
+        }
     },
 
     addBlockBankAccount() {
@@ -1028,6 +1025,8 @@ export default {
       console.log("added bank accounts", this.addedBlockBankAccounts);
     },
 
+    
+
     editBlockAccountModal(account) {
       /// alert("called");
       // Open the modal and pass the account details
@@ -1036,7 +1035,7 @@ export default {
       this.showEditBlockModal = true;
     },
 
-    saveEditedBlockAccount() {
+    async saveEditedBlockAccount() {
       // Find the index of the edited account in the array
       const index = this.blockBankAccounts.findIndex(
         (account) => account._id === this.editedBlockAccount._id
@@ -1057,30 +1056,35 @@ export default {
         serviceBankAccounts: this.serviceBankAccounts,
       };
 
-      this.$apiClient
-        .patch(
-          `/api/v1/organization/${this.companyProfileId}`,
+      try {
+        await this.$apiPatch(
+          '/api/v1/organization',this.companyProfileId,
           companyEditedData
         )
         .then((response) => {
           console.log("response", response);
-          if (Number(response.data.status) === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (Number(response.status) === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
           }
         })
-        .catch((error) => {
+      } catch(error) {
           this.$refs.toast.showErrorToastMessage("Something went wrong");
-          console.log("Error in the catch", error.response.data.message);
-        });
+          console.log("Error in the catch", error.status,error.message);
+        } finally {
+          console.log("finally editing bank account block")
+      }
     },
+
+
 
     confirmDeleteBlockAccount(account) {
       this.blockAccountToDelete = account;
       this.showConfirmationBlockModal = true;
     },
 
-    deleteBlockAccount() {
+   async  deleteBlockAccount() {
+  
       //alert("Are you sure you want to delete")
       const index = this.blockBankAccounts.findIndex(
         (a) => a._id === this.blockAccountToDelete._id
@@ -1101,23 +1105,25 @@ export default {
         serviceBankAccounts: this.serviceBankAccounts,
       };
 
-      this.$apiClient
-        .patch(
-          `/api/v1/organization/${this.companyProfileId}`,
+      try { await this.$apiPatch(
+          '/api/v1/organization',this.companyProfileId,
           companyEditedData
         )
         .then((response) => {
-          console.log("response", response);
-          if (Number(response.data.status) === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          console.log("response delete bank block account", response);
+          if (Number(response.status) === 1) {
+           // this.$refs.toast.showSuccessToastMessage(response.message);
+            this.$refs.toast.showSuccessToastMessage("Account Deleted Successfully");
             this.$reloadPage();
-            //alert(this.successMessage);
           }
         })
-        .catch((error) => {
-          this.$refs.toast.showSuccessToastMessage("Something went wrong");
-          console.log("Error in the catch", error.response.data.message);
-        });
+       }
+       catch(error) {
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
+          console.log("Error in the catch", error.status,error.message);
+        }finally {
+          console.log("Finally delete blck")
+        };
     },
 
     cancelDeleteBlockAccount() {
@@ -1131,7 +1137,7 @@ export default {
     },
 
     addServiceBankAccount() {
-      //this.addServiceAccount = true;
+      this.addServiceAccount = true;
       console.log("i am here");
 
       this.addedServiceBankAccounts.push({
@@ -1143,12 +1149,11 @@ export default {
     },
 
     editServiceAccountModal(account) {
-      /// alert("called");
-      // Open the modal and pass the account details
+  
       this.editedServiceAccount = { ...account }; // Create a copy to prevent direct mutation
       this.showEditServiceModal = true;
     },
-    saveEditedServiceAccount() {
+   async saveEditedServiceAccount() {
       // Find the index of the edited account in the array
       const index = this.serviceBankAccounts.findIndex(
         (account) => account._id === this.editedServiceAccount._id
@@ -1170,22 +1175,23 @@ export default {
         serviceBankAccounts: this.serviceBankAccounts,
       };
 
-      this.$apiClient
-        .patch(
-          `/api/v1/organization/${this.companyProfileId}`,
+      try{ await this.$apiPatch(
+          '/api/v1/organization',this.companyProfileId,
           companyEditedData
         )
         .then((response) => {
           console.log("response", response);
-          if (Number(response.data.status) === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (Number(response.status) === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
           }
         })
-        .catch((error) => {
+       }catch(error) {
           this.$refs.toast.showErrorToastMessage("Something went wrong");
-          console.log("Error in the catch", error.response.data.message);
-        });
+          console.log("Error in the catch", error.status,error.message);
+        }finally {
+          console.log("finally save edited account ")
+        };
     },
 
     confirmDeleteServiceAccount(account) {
@@ -1198,7 +1204,7 @@ export default {
       );
     },
 
-    deleteServiceAccount() {
+   async  deleteServiceAccount() {
       console.log("indeleteaccountlso", this.serviceAccountToDelete._id);
       console.log("service accounts", this.serviceBankAccounts);
 
@@ -1212,6 +1218,7 @@ export default {
       this.serviceAccountToDelete = null;
       this.showConfirmationServiceModal = false;
 
+
       const companyEditedData = {
         companyName: this.companyName,
         companyPhoneNumber: this.companyPhoneNumber,
@@ -1222,22 +1229,23 @@ export default {
         serviceBankAccounts: this.serviceBankAccounts,
       };
 
-      this.$apiClient
-        .patch(
-          `/api/v1/organization/${this.companyProfileId}`,
+      try { await this.$apiPatch(
+          '/api/v1/organization',this.companyProfileId,
           companyEditedData
         )
         .then((response) => {
           console.log("response", response);
-          if (Number(response.data.status) === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (Number(response.status) === 1) {
+            this.$refs.toast.showSuccessToastMessage("Service Account deleted successfully");
             this.$reloadPage();
           }
         })
-        .catch((error) => {
+      }catch(error) {
           this.$refs.toast.showErrorToastMessage("Something went wrong");
-          console.log("Error in the catch", error.response.error.message);
-        });
+          console.log("Error in the catch", error.status,error.message);
+        }finally{
+
+      };
     },
 
     cancelDeleteServiceAccount() {
@@ -1248,7 +1256,7 @@ export default {
       this.addedServiceBankAccounts.splice(index, 1);
     },
 
-    seeChange() {
+   async  seeChange() {
       //alert("See Change")
       this.addedBlockBankAccounts = this.addedBlockBankAccounts.filter(
         (account) => account.bankAccountNumber !== "" && account.bankType !== ""
@@ -1283,23 +1291,24 @@ export default {
       };
 
       console.log("companey Profile", companyEditedData);
-      this.$apiClient
-        .patch(
-          `/api/v1/organization/${this.companyProfileId}`,
+      try { await this.$apiPatch(
+          '/api/v1/organization',this.companyProfileId,
           companyEditedData
         )
         .then((response) => {
-          if (Number(response.data.status) === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (Number(response.status) === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
           }
         })
-        .catch((error) => {
+      }catch(error) {
            this.showError=true;
-           this.errorMessage= error.response.data.message;
+           this.errorMessage= error.message;
+           console.log("error during save org",error.status,error.message);
+           this.$refs.toast.showErrorToastMessage("Something went wrong");
+        }finally{
 
-          this.$toast.showErrorToastMessage("Something went wrong");
-        });
+      };
     },
     //block bank account
 

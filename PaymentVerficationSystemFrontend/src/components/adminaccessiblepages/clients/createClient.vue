@@ -518,19 +518,24 @@ export default {
       console.log("This.exel", this.exelFile);
       const formData = new FormData();
       formData.append("file", this.exelFile);
-      if (this.exelFile !== null) {
-        this.$apiClient
-          .post("/api/v1/users/importUsers", formData)
+      
+    
+      
+  if (this.exelFile !== null) {
+
+     try{
+        this.$apiPost("/api/v1/users/importUsers", formData)
           .then((response) => {
-            console.log("import response", response);
-            if (response.data.success === 1) {
-              this.showSuccessToastMessage(response.data.message);
+            if (response.$apiPostsuccess === 1) {
+              this.$refs.toast.showSuccessToastMessage(response.message);
             }
-          })
-          .catch((error) => {
-            console.log("import error", error);
-            this.showErrorToastMessage("Something went wrong");
           });
+        } catch(error){
+            console.log("import error", error.status,error.message);
+            this.showErrorToastMessage("Something went wrong");
+        }finally{
+
+        }
       }
     },
 
@@ -581,7 +586,7 @@ export default {
       return years;
     },
 
-    register() {
+   async  register() {
       this.showErrorMessage = false;
       this.firstNameIsRequired = false;
       this.middleNameIsRequired = false;
@@ -660,21 +665,23 @@ export default {
       formData.append("fullName", this.fullName);
       console.log("image", this.imageFile);
       console.log("formData", formData);
-      this.$apiClient
-        .post("/api/v1/users/signup", formData)
-        .then((response) => {
-          if (response.data.status === 1) {
-            this.$refs.toast.showSuccessToastMessage(
-              "This is a success message!"
+      try {
+
+        await this.$apiPost("/api/v1/users/signup", formData).then((response) => {
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message
             );
             this.$reloadPage();
           }
-        })
-        .catch((error) => {
-          console.log("error",error);
-          this.showErrorMessage=true;
-          this.errorMessage=error.response.data.message;
         });
+       } catch (error){
+          console.log("error",error.status,error.message);
+          this.showErrorMessage=true;
+          this.errorMessage=error.message;
+        }finally{
+
+        }
+        ;
     },
   },
 };

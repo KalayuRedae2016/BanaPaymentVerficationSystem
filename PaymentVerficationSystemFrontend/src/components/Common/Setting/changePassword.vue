@@ -9,7 +9,6 @@
     <div class="mx-5">
       <div class="mt-4 py-4 ml-0  border-t border-gray-100 rounded-lg shadow-md">
         <div
-        
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-80"
        
         >
@@ -146,7 +145,7 @@
                   {{ errorMessage }}
                 </p>
                 <button
-                  @click.prevent="changeSetting()"
+                  @click.prevent="changePassword()"
                    class="custom-button w-full lg:w-32 mt-5 text-xs"
                 >
                 <i class="fa fa-edit mr-2"></i>  Update
@@ -209,53 +208,44 @@ export default {
       return this.getRole;
     },
   },
+
+  
   created(){
     this.newEmail=localStorage.getItem("email");
-
      console.log("email",this.newEmail);
-
     this.role=localStorage.getItem("role")
   },
 
   methods: {
-    // toggleEmailSection() {
-    //   this.showEmailForm = !this.showEmailForm;
-    // },
-    // togglePasswordSection() {
-    //   this.showPasswordForm = !this.showPasswordForm;
-    // },
-    toggleSection(section) {
-      if (section === "email") this.emailVisible = !this.emailVisible;
-      if (section === "password") this.passwordVisible = !this.passwordVisible;
-    },
-
-    changeEmail() {
+   async  changeEmail() {
       const formData = new FormData();
       if(this.newEmail=='' || this.newEmail==null){
         this.newEmailIsRequired=true;
         return;
       } 
-
       formData.append("email", this.newEmail);
-      this.$apiClient
-        .patch(`/api/v1/users/${this.userId}`, formData)
+      try { await this.$apiPatch('/api/v1/users',this.userId, formData)
         .then((response) => {
           console.log("response from the update: " ,response);
-          if (response.data.status === 1) {
-            const email=response.data.updatedUser.email;
-            this.newEmail=response.data.updatedUser.email;
+          if (response.status === 1) {
+            const email=response.updatedUser.email;
+            this.newEmail=response.updatedUser.email;
             this.$store.dispatch("commitEmail", {  email});
-            this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
           }
-        })
-        .catch((error) => {
-          console.log(error);
+        })}
+        catch(error) {
+          console.log("error email chnage",error.status,error.message);
           this.$refs.toast.showErrorToastMessage("Somthing went wrong!!");
-        });
+          this.showError=true;
+          this.errorMessage=error.message;
+        }finally{
+          console.log("email change finally");
+        };
     },
 
-    changeSetting() {
+   async changePassword() {
       this.oldPasswordIsRequired = false;
       this.newPasswordIsRequired = false;
       this.confirmNewPasssordIsRequired = false;
@@ -292,27 +282,21 @@ export default {
         newPassword: this.newPassword,
         userId: this.userId,
       };
-
-      this.$apiClient
-        .patch("api/v1/users/updatePassword", payload)
+   
+      try { await this.$apiPatch("api/v1/users/updatePassword",'', payload)
         .then((response) => {
-          console.log("response", response);
-          if (response.data.status === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
-          } else {
-            //this.$refs.toast.showErrorToastMessage("Something went wrong");
-          }
+          } 
         })
-        .catch((error) => {
-          console.log(error.data);
-          if(error.response.data.message){
-            this.errorMessage=error.response.data.message;
+      }catch(error)  {
+            console.log("error", error.status,error.message);
+            this.errorMessage=error.message;
             this.showError=true;
-          }
-
-          //this.showErrorToastMessage("Incorrect current password");
-        });
+        }finally{
+          console.log("change password finally")
+        };
     },
   },
 };

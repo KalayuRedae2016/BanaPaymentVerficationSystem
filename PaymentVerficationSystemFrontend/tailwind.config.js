@@ -7,6 +7,26 @@ export default {
   ],
   theme: {
     extend: {
+
+      // animation: {
+      //   'looping-border': 'looping-border 4s linear infinite',
+      // },
+      // keyframes: {
+      //   'looping-border': {
+      //     '0%': { 'background-position': '0% 0%' },
+      //     '100%': { 'background-position': '400% 400%' },
+      //   },
+      // },
+
+      animation: {
+        'border-loop': 'border-loop 4s linear infinite',
+      },
+      keyframes: {
+        'border-loop': {
+          '0%': { 'background-position': '0% 0%' },
+          '100%': { 'background-position': '200% 200%' },
+        },
+      },
       boxShadow: {
         'custom-blue': '0 4px 6px -1px rgba(59, 130, 246, 0.5)', // Example with custom color
         'custom-red': '0 4px 6px -1px rgba(220, 38, 38, 0.5)',

@@ -66,6 +66,38 @@
         <span class="block sm:inline">{{ warningToastMessage }}</span>
       </div>
     </transition>
+
+
+
+    <div v-if="showLoginToast">
+    <!-- Optional overlay for modal effect -->
+    <div
+      class="fixed inset-0 bg-black bg-opacity-50 z-10"
+      @click="closeToast"
+    ></div>
+
+    <transition
+      enter-active-class="transform transition duration-300 ease-out"
+      enter-from-class="translate-y-full opacity-0"
+      enter-to-class="translate-y-0 opacity-100"
+      leave-active-class="transform transition duration-300 ease-in"
+      leave-from-class="translate-y-0 opacity-100"
+      leave-to-class="translate-y-full opacity-0"
+    >
+      <div
+        class="z-20 fixed inset-0 flex items-center justify-center"
+        role="alert"
+      >
+        <div
+          class="bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg text-center max-w-md"
+        >
+          <strong class="font-bold">Success!</strong>
+          <p class="mt-2">{{ loginToastMessage }}</p>
+          
+        </div>
+      </div>
+    </transition>
+  </div>
   </div>
 </template>
 
@@ -79,6 +111,7 @@ export default {
       showSuccessToast: false,
       showErrorToast: false,
       showWarningToast: false,
+      showLoginToast: false,
     };
   },
   methods: {
@@ -101,6 +134,13 @@ export default {
       this.showWarningToast = true;
       setTimeout(() => {
         this.showWarningToast = false;
+      }, 3000);
+    },
+    showLoginToastMessage(message) {
+      this.loginToastMessage = message;
+      this.showLoginToast = true;
+      setTimeout(() => {
+        this.showLoginToast = false;
       }, 3000);
     },
   },

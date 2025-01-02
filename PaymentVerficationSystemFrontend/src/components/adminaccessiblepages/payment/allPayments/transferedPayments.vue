@@ -193,18 +193,19 @@ export default {
   },
   methods: {
     async fetchOrganization() {
-      this.$apiClient
-        .get("/api/v1/organization/")
+      try { await this.$apiGet("/api/v1/organization/")
         .then((response) => {
-          console.log("organization", response.data.organization);
-          if (response.data.status == 1) {
-            this.paymentTransfers = response.data.organization.paymentTransfers;
+          console.log("organization", response.organization);
+          if (response.status == 1) {
+            this.paymentTransfers = response.organization.paymentTransfers;
             this.searchedTransferedPayments = this.paymentTransfers;
           }
         })
-        .catch((error) => {
+       }catch(error){
           console.log("error", error);
-        });
+      }finally{
+
+     }
     },
 
     async changeSearched(paymentType) {

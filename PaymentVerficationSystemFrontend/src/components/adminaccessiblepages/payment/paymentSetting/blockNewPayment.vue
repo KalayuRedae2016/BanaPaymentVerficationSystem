@@ -912,25 +912,23 @@ export default {
       }
     },
   },
-  mounted() {
+  async mounted() {
     this.paymentActivated = true;
-    this.$apiClient
-      .get("/api/v1/paymentSetting/latest")
+    try {await this.$apiGet("/api/v1/paymentSetting/latest")
       .then((response) => {
         console.log("response latest setting", response);
-      
-        if (response.data.status === 1) {
+        if (response.status === 1) {
           this.paymentSettingCreated = 1;
-          if (response.data.paymentSetting) {
+          if (response.paymentSetting) {
         
-            this.paymentSetting = response.data.paymentSetting;
+            this.paymentSetting = response.paymentSetting;
             //alert("hh")
              if(this.paymentSetting.activate==true){
               this.paymentActivate = true;
              }else{
               this.paymentActivate = false;
              }
-      
+    
           } else {
             this.paymentSettingCreated = 2;
           }
@@ -938,17 +936,18 @@ export default {
           this.paymentSettingCreated = 2;
         }
       })
-      .catch((error) => {
+       }catch(error){
         console.error(
           "An error occurred while fetching payment settings:",
-          error
+          error.status,error.message
         );
         this.paymentSettingCreated = 0; // Indicate an error state
-      });
+      }finally {
+    }
   },
 
   methods: {
-    createRegularPayment() {
+    async createRegularPayment() {
       console.log(
         this.paymentSetting.subsidyAmount,
         this.paymentSetting.regularAmount,
@@ -1118,39 +1117,24 @@ export default {
       this.paymentSetting = {};
       console.log(regularData);
       console.log("payment Dataaa", regularData);
-      this.$apiClient
-        .post("/api/v1/paymentSetting/", regularData)
+      try { await this.$apiPost("/api/v1/paymentSetting/", regularData)
         .then((response) => {
           console.log("response", response);
-          if (response.data.status === 1) {
-            //this.paymentSetting=response.data.paymentSetting;
-
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
-
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.paymentSettingCreated = 1;
-
             this.$reloadPage();
-          } else {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
+          } 
+        })}
+        catch(error) {
+          console.log("error", error.status,error.message);
+            this.$refs.toast.showErrorToastMessage(error.message);
+        }finally{
 
-          if (error.response) {
-            this.$refs.toast.showErrorToastMessage(
-              "Something went wrong with response"
-            );
-          }
-          if (error.request) {
-            this.$refs.toast.showErrorToastMessage(error.response.message);
-          } else {
-            this.$refs.toast.showErrorToastMessage("Something went wrong");
-          }
-        });
+        };
     },
 
-    editPaymentSetting() {
+    async editPaymentSetting() {
       this.regularIsRequired = false;
       this.serviceIsRequired = false;
       this.activeYearIsRequired = false;
@@ -1280,39 +1264,27 @@ export default {
 
       console.log("to be edit data", regularData);
 
-      this.$apiClient
-        .put(`/api/v1/paymentSetting/${this.paymentSetting._id}`, regularData)
-        .then((response) => {
+     try { 
+      await this.$apiPut('/api/v1/paymentSetting',this.paymentSetting._id, regularData).then((response) => {
           console.log("response is now=", response);
-          if (response.data.status === 1) {
-            console.log("response.data.message", response.data.message);
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (response.status === 1) {
+            console.log("response.data.message", response.message);
+            this.$refs.toast.showSuccessToastMessage(response.message);
 
             this.showPaymentEditingActivating =
               !this.showPaymentEditingActivating;
             this.$reloadPage();
           }
         })
-        .catch((error) => {
-          if (error.response) {
-            if (error.response.data.message) {
-              console.log("error", error);
-              //this.showErrorToastMessage(error.response.data.message);
-            } else {
-              console.log("error", error);
-              //this.$refs.toast.showErrorToastMessage("Something went wrong,in response");
-            }
-          } else if (error.request) {
-            console.log("error", error);
-            //this.$refs.toast.showErrorToastMessage("Something went wrong For the Request ");
-          } else {
-            console.log("error", error);
-            // this.$refs.toast.showErrorToastMessage("Something went wrong");
-          }
-        });
+      }catch (error){
+      console.log("error", error.status,error.message);
+      this.$refs.toast.showErrorToastMessage(error.message);
+      }finally {
+
+      };
     },
 
-    activatePaymentSetting() {
+    async activatePaymentSetting() {
       this.regularIsRequired = false;
       this.serviceIsRequired = false;
       this.activeYearIsRequired = false;
@@ -1441,35 +1413,24 @@ export default {
         penalityLate10Days: this.paymentSetting.penalityLate10Days,
         penalityLateAbove10Days: this.paymentSetting.penalityLateAbove10Days,
       };
-      this.$apiClient
-        .post("/api/v1/paymentSetting", regularData)
+      try {
+        await 
+        this.$apiPost("/api/v1/paymentSetting", regularData)
         .then((response) => {
           console.log("Update response", response.data);
-          if (response.data.status === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.paymentActivate = false;
             this.paymentSettingCreated = 1;
             this.showPaymentEditingActivating = false;
             this.$reloadPage();
           }
         })
-        .catch((error) => {
-          if (error.response) {
-            if (error.response.data.message) {
-              this.settingAlreadyExists = true;
-              //this.$refs.toast.showErrorToastMessage(error.response.data.message);
-            } else {
-              console.log("occured error", error);
-              //this.$refs.toast.showErrorToastMessage("Something went wrong,in response");
-            }
-          } else if (error.request) {
-            // this.$refs.toast.showErrorToastMessage("Something went wrong For the Request ");
-            console.log("occured error", error);
-          } else {
-            //this.$refs.toast.showErrorToastMessage("Something went wrong");
-            console.log("occured error", error);
-          }
-        });
+      }catch(error) {
+        console.log("error during activate",error.status,error.message);
+      }finally {
+
+      }
     },
   },
 };

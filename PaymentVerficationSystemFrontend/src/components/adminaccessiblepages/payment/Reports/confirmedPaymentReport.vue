@@ -178,7 +178,6 @@
       <div>
         <div class="flex flex-row">
           <p
-           
             class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
           >
             <span
@@ -289,135 +288,197 @@
                   .confirmed.bankTypes"
                 :key="index"
               >
-              <td class="border border-gray-300 px-4 py-2">
-                  {{ index}}
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ index }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.regularBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.regularBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.regularBalance || 0)
-                        )
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.regularBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.regularBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.regularBalance || 0)
                       : 0
                   }}
                 </td>
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.subsidyBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.subsidyBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.subsidyBalance || 0)
-                        )
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.subsidyBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.subsidyBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.subsidyBalance || 0)
                       : 0
                   }}
                 </td>
 
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.urgentBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.urgentBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.urgentBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                
-
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0)
-                        )
-                      : 0
-                  }}
-
-
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.penalityBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.penalityBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.penalityBalance || 0)
-                        )
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.urgentBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.urgentBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.urgentBalance || 0)
                       : 0
                   }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.serviceBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.serviceBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.serviceBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
-                
-
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0)
-                        )
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.totalBlockBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.totalBlockBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.totalBlockBalance || 0)
                       : 0
                   }}
                 </td>
                 <td class="border border-gray-300 px-4 py-2">
                   {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0) 
-                        )
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.penalityBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.penalityBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.penalityBalance || 0)
+                      : 0
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.serviceBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.serviceBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.serviceBalance || 0)
                       : 0
                   }}
                 </td>
 
- 
-              
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.totalServiceBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.totalServiceBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.totalServiceBalance || 0)
+                      : 0
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.pending.bankTypes[index]
+                        ?.bankType &&
+                    reports.items.categorizedPayments.confirmed.bankTypes[index]
+                      ?.bankType ===
+                      reports.items.categorizedPayments.overdue.bankTypes[index]
+                        ?.bankType
+                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.totalServiceBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.totalServiceBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.totalServiceBalance || 0) +
+                        (reports.items.categorizedPayments.confirmed.bankTypes[
+                          index
+                        ]?.totalBlockBalance || 0) +
+                        (reports.items.categorizedPayments.pending.bankTypes[
+                          index
+                        ]?.totalBlockBalance || 0) +
+                        (reports.items.categorizedPayments.overdue.bankTypes[
+                          index
+                        ]?.totalBlockBalance || 0)
+                      : 0
+                  }}
+                </td>
               </tr>
 
               <tr class="font-bold bg-gray-100" rowspan="4">
@@ -546,8 +607,9 @@
           color: blue;
           font-size: 10px;
         "
-      > 
-        Date(Day-Month-Year): {{ this.year  }} <p v-if="month">-{{this.month}}</p>
+      >
+        Date(Day-Month-Year): {{ this.year }}
+        <p v-if="month">-{{ this.month }}</p>
         <!-- <span
                 >{{ new endDate.getDate() }}-{{
                   changeMonthIntoString(receiptDate.getMonth() + 1)
@@ -562,7 +624,7 @@
           font-size: 10px;
         "
       >
-        <div>Reported Date:{{new Date().toLocaleDateString()}}</div>
+        <div>Reported Date:{{ new Date().toLocaleDateString() }}</div>
       </div>
 
       <h2
@@ -594,198 +656,245 @@
             <th>Total Service</th>
           </tr>
         </thead>
-        <tbody style="background-color: white; font-size: 12px" v-if="confirmedLength>0 || pendingLength>0 ||overdueLength>0">
+        <tbody
+          style="background-color: white; font-size: 12px"
+          v-if="confirmedLength > 0 || pendingLength > 0 || overdueLength > 0"
+        >
           <tr
-                v-for="(bank, index) in reports.items.categorizedPayments
-                  .confirmed.bankTypes"
-                :key="index"
-              >
-              <td class="border border-gray-300 px-4 py-2">
-                  {{ index}}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.regularBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.regularBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.regularBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
+            v-for="(bank, index) in reports.items.categorizedPayments.confirmed
+              .bankTypes"
+            :key="index"
+          >
+            <td class="border border-gray-300 px-4 py-2">
+              {{ index }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.regularBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.regularBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.regularBalance || 0)
+                  : 0
+              }}
+            </td>
 
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.subsidyBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.subsidyBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.subsidyBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.subsidyBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.subsidyBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.subsidyBalance || 0)
+                  : 0
+              }}
+            </td>
 
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.urgentBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.urgentBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.urgentBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.urgentBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.urgentBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.urgentBalance || 0)
+                  : 0
+              }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.totalBlockBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.totalBlockBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.totalBlockBalance || 0)
+                  : 0
+              }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.penalityBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.penalityBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.penalityBalance || 0)
+                  : 0
+              }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.serviceBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.serviceBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.serviceBalance || 0)
+                  : 0
+              }}
+            </td>
 
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0)
-                        )
-                      : 0
-                  }}
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.totalServiceBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.totalServiceBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.totalServiceBalance || 0)
+                  : 0
+              }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.pending.bankTypes[index]
+                    ?.bankType &&
+                reports.items.categorizedPayments.confirmed.bankTypes[index]
+                  ?.bankType ===
+                  reports.items.categorizedPayments.overdue.bankTypes[index]
+                    ?.bankType
+                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.totalServiceBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.totalServiceBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.totalServiceBalance || 0) +
+                    (reports.items.categorizedPayments.confirmed.bankTypes[
+                      index
+                    ]?.totalBlockBalance || 0) +
+                    (reports.items.categorizedPayments.pending.bankTypes[index]
+                      ?.totalBlockBalance || 0) +
+                    (reports.items.categorizedPayments.overdue.bankTypes[index]
+                      ?.totalBlockBalance || 0)
+                  : 0
+              }}
+            </td>
+          </tr>
+          <tr class="font-bold bg-gray-100" rowspan="4">
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ $t("total") }}
+            </td>
 
-
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.penalityBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.penalityBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.penalityBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.serviceBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.serviceBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.serviceBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
-                
-
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0)
-                        )
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    (reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]?.bankType)
-                      ? (
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalServiceBalance || 0) +
-                          (reports.items.categorizedPayments.confirmed.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.pending.bankTypes[index]?.totalBlockBalance || 0) +
-                          (reports.items.categorizedPayments.overdue.bankTypes[index]?.totalBlockBalance || 0) 
-                        )
-                      : 0
-                  }}
-                </td>
-
-           
-    
-              </tr>
-              <tr class="font-bold bg-gray-100" rowspan="4">
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ $t("total") }}
-                </td>
-
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalRegularBalance }}
-                </td>
-                <!-- Total Regular -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalSubsidyBalance }}
-                </td>
-                <!-- Total Subsidy -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalUrgentBalance }}
-                </td>
-                <!-- Total Urgent -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalBlockBankAccount }}
-                </td>
-                <!-- Total Urgent -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalPenalityBalance }}
-                </td>
-                <!-- Total Block -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalServiceBalance }}
-                </td>
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalServiceBankAccount }}
-                </td>
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.Organization.totalBlockBankAccount +
-                    reports.items.Organization.totalServiceBankAccount
-                  }}
-                </td>
-              </tr>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ reports.items.Organization.totalRegularBalance }}
+            </td>
+            <!-- Total Regular -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ reports.items.Organization.totalSubsidyBalance }}
+            </td>
+            <!-- Total Subsidy -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ reports.items.Organization.totalUrgentBalance }}
+            </td>
+            <!-- Total Urgent -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ reports.items.Organization.totalBlockBankAccount }}
+            </td>
+            <!-- Total Urgent -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ reports.items.Organization.totalPenalityBalance }}
+            </td>
+            <!-- Total Block -->
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ reports.items.Organization.totalServiceBalance }}
+            </td>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{ reports.items.Organization.totalServiceBankAccount }}
+            </td>
+            <td
+              class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+            >
+              {{
+                reports.items.Organization.totalBlockBankAccount +
+                reports.items.Organization.totalServiceBankAccount
+              }}
+            </td>
+          </tr>
         </tbody>
       </table>
 
@@ -793,8 +902,6 @@
         <h2
           class="section-title"
           style="
-
-          
             font-size: 12px;
             color: #622e2e;
             font-weight: bold;
@@ -842,9 +949,11 @@
             margin-left: 20px;
           "
         >
-          Total Overdue(Monthly Deadline Passed and Still Unpaid):{{ reports.items.categorizedPayments.overdue.uniqueUsers }}
+          Total Overdue(Monthly Deadline Passed and Still Unpaid):{{
+            reports.items.categorizedPayments.overdue.uniqueUsers
+          }}
         </h2>
-       
+
         <!-- <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
           Total Pending In This Month: 25
       </h2>
@@ -913,8 +1022,6 @@
           QR Code
         </div>
       </div>
-
-
 
       <!-- <div style="margin-top:100px;display: flex; align-items: center; justify-content: center; width: 100%;; height: 100px;">
  
@@ -988,869 +1095,1206 @@ export default {
       return years;
     },
   },
-  mounted() {
-    this.year = 2024;
-    this.reportType = "annually";
-    // this.semiAnaualSelected=true;
-    //  this.annaualSelected=true;
-    this.fetchPayments();
-
-    this.$apiClient
-      .get("api/v1/payments/orgBalance")
-      .then((response) => {
+  async mounted() {
+    this.setReportParameters("annually", new Date().getFullYear()); // Set report type and year
+    await this.fetchPayments(); // Fetch payments
+    try {
+        const response = await this.$apiGet("api/v1/payments/orgBalance");
         console.log("response org balance", response);
-        this.totalBalance = response.data.items;
-        this.totalOrgBalance = response.data.items.organizationBalance;
-      })
-      .catch((error) => {
+        this.totalBalance = response.items;
+        this.totalOrgBalance = response.items.organizationBalance;
+    } catch (error) {
         console.error(
-          " error fetching org data data:",
-          error.response.data.error
+            "Error fetching org data:",
+            error.status,
+            error.message
         );
-      });
+    }
+},
+  methods: {
+  navigateToPayments(status) {
+    this.$router.push({
+      path: "/admindashboard/payments1",
+      query: {
+        activeTab: 2,
+        status: status,
+      },
+    });
   },
 
-  methods: {
-    methods: {
-  calculateSum(array) {
-    if (!Array.isArray(array)) {
-      console.error('Invalid input: Expected an array');
-      return 0;
+  exportPaymentsToExcel(category, status) {
+    console.log("payments");
+    const data = this.reports.items.categorizedPayments[category].payments.map(item => ({
+      "Full Name": item.fullName,
+      "User Code": item.userCode,
+      Billcode: item.billCode,
+      Year: item.activeYear,
+      Month: item.activeMonth,
+      Regular: item.regular.amount,
+      Subsidy: item.subsidy.amount,
+      Urgent: item.urgent.amount,
+      "Total Block": item.regular.amount + item.subsidy.amount + item.urgent.amount,
+      "Reg Fee": item.registrationFee,
+      "Monthly Service": item.service.amount,
+      Penality: item.penality.amount,
+      "Total Service": item.service.amount + item.penality.amount + item.registrationFee,
+      Status: status,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+    XLSX.writeFile(workbook, "items.xlsx");
+  },
+
+
+
+  seeAllPaid() {
+    this.navigateToPayments("confirmed");
+  },
+
+  seeAllOverdue() {
+    this.navigateToPayments("overdue");
+  },
+
+
+
+  exportConfirmedToExcel() {
+    this.exportPaymentsToExcel("confirmed", "Paid");
+  },
+
+  exportPendingToExcel() {
+    this.exportPaymentsToExcel("pending", "Unpaid");
+  },
+
+  exportOverdueToExcel() {
+    this.exportPaymentsToExcel("overdue", "Overdue/Unpaid");
+  },
+
+
+  
+
+  changeReportType() {
+    const reportTypes = ["annually", "semiAnnually", "monthly", "weekly", "daily"];
+    this.selectReportType = false;
+
+    reportTypes.forEach(type => {
+      this[`${type}Selected`] = this.reportType === type;
+    });
+    
+    console.log("Selected report type:", this.reportType);
+  },
+
+  async fetchPayments() {
+    const reportTypeActions = {
+      annually: this.fetchYearlyPayments,
+      semiAnnually: this.fetchSemiYearlyPayments,
+      monthly: this.fetchMonthlyPayments,
+      weekly: this.fetchWeeklyPayments,
+      daily: this.fetchDailyPayments,
+    };
+    const action = reportTypeActions[this.reportType];
+    if (action) {
+      await action.call(this);
     }
+  },
 
-    return array.reduce((sum, value) => {
-      if (typeof value === 'number') {
-        return sum + value;
-      } else {
-        console.warn(`Skipping non-numeric value: ${value}`);
-        return sum;
-      }
-    }, 0);
-  }
- }
-,
-    seeAllPaid() {
-      this.$router.push({
-        path: "/admindashboard/payments1",
-        query: {
-          activeTab: 2,
-          status: "confirmed",
-        },
+  async fetchData(params) {
+    try {
+      const response = await this.$apiGet('/api/v1/payments/reports', params);
+      console.log("Response:", response);
+      this.reports = response;
+      this.updateReportLengths(response);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      this.resetReportLengths();
+    }
+  },
+
+  updateReportLengths(response) {
+    this.reportLength = response.items.categorizedPayments.confirmed.uniqueUsers;
+    this.confirmedLength = response.items.categorizedPayments.confirmed.uniqueUsers;
+    this.pendingLength = response.items.categorizedPayments.pending.uniqueUsers;
+    this.overdueLength = response.items.categorizedPayments.overdue.uniqueUsers;
+  },
+
+  resetReportLengths() {
+    this.reportLength = 0;
+    this.confirmedLength = 0;
+    this.pendingLength = 0;
+    this.overdueLength = 0;
+  },
+
+  async fetchYearlyPayments() {
+    const params = { timeRange: this.reportType, year: this.year };
+    if (this.reportType) await this.fetchData(params);
+  },
+
+  async fetchSemiYearlyPayments() {
+    const params = { timeRange: this.reportType, year: this.year, semiYear: this.semiYear };
+    if (this.year && this.semiYear) await this.fetchData(params);
+  },
+
+  async fetchMonthlyPayments() {
+    const params = { timeRange: this.reportType, year: this.year, month: this.month };
+    if (this.year && this.month) await this.fetchData(params);
+  },
+
+  async fetchWeeklyPayments() {
+    const params = { timeRange: this.reportType, year: this.year, month: this.month, week: this.week };
+    if (this.year && this.month && this.week) await this.fetchData(params);
+  },
+
+  async fetchDailyPayments() {
+    const params = { timeRange: this.reportType, year: this.year, month: this.month, day: this.day };
+    if (this.year && this.month && this.day) await this.fetchData(params);
+  },
+
+  setReportParameters(reportType, year, month = "", week = "", day = "") {
+    this.reportType = reportType;
+    this.year = year;
+    this.month = month;
+    this.week = week;
+    this.day = day;
+
+    // Reset other selections
+    this.semiAnaualSelected = false;
+    this.monthlySelected = false;
+    this.weeklySelected = false;
+    this.dailySelected = false;
+
+    // Call fetchPayments to update the data
+    this.fetchPayments();
+  },
+
+  thisYear() {
+    const currentYear = new Date().getFullYear();
+    this.setReportParameters("annually", currentYear);
+  },
+
+  thisMonth() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed
+    this.setReportParameters("monthly", currentYear, currentMonth);
+    this.monthlySelected = true;
+  },
+
+  thisWeek() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const currentWeek = this.getWeekNumber(new Date());
+
+    this.setReportParameters("weekly", currentYear, currentMonth, currentWeek);
+    this.weeklySelected = true;
+  },
+
+  thisDay() {
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+    const currentDay = new Date().getDate();
+
+    this.setReportParameters("daily", currentYear, currentMonth, "", currentDay);
+    this.dailySelected = true;
+  },
+
+  getWeekNumber(date) {
+    const currentDate = new Date(date);
+    const startDate = new Date(currentDate.getFullYear(), 0, 1);
+    const dayOfYear = Math.floor(
+      (currentDate - startDate) / (24 * 60 * 60 * 1000)
+    );
+    const weekDay = (currentDate.getDay() + 6) % 7;
+    return Math.ceil((dayOfYear + 7 - weekDay) / 7);
+  },
+
+  goToGruopPayment() {
+    const paymentType = this.paymentType;
+    const reportType = this.reportType;
+
+    const year = this.year;
+    const semiYear = this.semiYear;
+    const month = this.month;
+    const week = this.week;
+    const day = this.day;
+
+    this.$router.push({
+      name: "group-payments",
+      query: {
+        paymentType,
+        reportType,
+        year,
+        semiYear,
+        month,
+        week,
+        day,
+      },
+    });
+  },
+
+  getCurrentHalf() {
+    const month = new Date().getMonth();
+    return month < 6 ? "1st" : "2nd";
+  },
+
+  async generateQRCodeImage() {
+    const qrData = `User ID: ${this.userId}, User Name: ${this.userName}`;
+
+    try {
+      const qrCodeImage = await QRCode.toDataURL(qrData, {
+        errorCorrectionLevel: "H",
       });
-    },
-    seeAllOverdue() {
-      this.$router.push({
-        path: "/admindashboard/payments1",
-        query: {
-          activeTab: 2,
-          status: "overdue",
-        },
-      });
-    },
-    exportConfirmedToExcel() {
-      // Prepare the data for the Excel file
-      console.log("payments");
-      const data =
-        this.reports.items.categorizedPayments.confirmed.payments.map(
-          (item) => ({
-            "Full Name": item.fullName,
-            "User Code": item.userCode,
-            Billcode: item.billCode,
-            Year: item.activeYear,
-            Month: item.activeMonth,
-            Regular: item.regular.amount,
-            Subsidy: item.subsidy.amount,
-            Urgent: item.urgent.amount,
-            "Total Block":
-              item.regular.amount + item.subsidy.amount + item.urgent.amount,
-            "Reg Fee": item.registrationFee,
-            "Monthly Service": item.service.amount,
-            Penality: item.penality.amount,
-            "Total Service":
-              item.service.amount + item.penality.amount + item.registrationFee,
-            Status: "Paid",
-          })
-        );
-      // Create a worksheet
-      const worksheet = XLSX.utils.json_to_sheet(data);
 
-      // Create a workbook
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+      document.getElementById("qrCodeImageContainer").innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
+    } catch (error) {
+      console.error("Error generating QR code:", error);
+    }
+  },
 
-      // Write the workbook to a file and trigger download
-      XLSX.writeFile(workbook, "items.xlsx");
-    },
-    exportPendingToExcel() {
-      // Prepare the data for the Excel file
-      console.log("payments");
-      const data = this.reports.items.categorizedPayments.pending.payments.map(
-        (item) => ({
-          "Full Name": item.fullName,
-          "User Code": item.userCode,
-          Billcode: item.billCode,
-          Year: item.activeYear,
-          Month: item.activeMonth,
-          Regular: item.regular.amount,
-          Subsidy: item.subsidy.amount,
-          Urgent: item.urgent.amount,
-          "Total Block":
-            item.regular.amount + item.subsidy.amount + item.urgent.amount,
-          "Reg Fee": item.registrationFee,
-          "Monthly Service": item.service.amount,
-          Penality: item.penality.amount,
-          "Total Service":
-            item.service.amount + item.penality.amount + item.registrationFee,
-          Status: "Unpaid",
-        })
-      );
-      // Create a worksheet
-      const worksheet = XLSX.utils.json_to_sheet(data);
+  async printDiv() {
+    await this.generateQRCodeImage();
 
-      // Create a workbook
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+    const printContent = document.getElementById("printable-area").innerHTML;
+    const linkElement = document.createElement("link");
+    linkElement.href = "/src/assets/css/tailwind.css";
+    linkElement.rel = "stylesheet";
 
-      // Write the workbook to a file and trigger download
-      XLSX.writeFile(workbook, "items.xlsx");
-    },
-    exportOverdueToExcel() {
-      // Prepare the data for the Excel file
-      console.log("payments");
-      const data = this.reports.items.categorizedPayments.overdue.payments.map(
-        (item) => ({
-          "Full Name": item.fullName,
-          "User Code": item.userCode,
-          Billcode: item.billCode,
-          Year: item.activeYear,
-          Month: item.activeMonth,
-          Regular: item.regular.amount,
-          Subsidy: item.subsidy.amount,
-          Urgent: item.urgent.amount,
-          "Total Block":
-            item.regular.amount + item.subsidy.amount + item.urgent.amount,
-          "Reg Fee": item.registrationFee,
-          "Monthly Service": item.service.amount,
-          Penality: item.penality.amount,
-          "Total Service":
-            item.service.amount + item.penality.amount + item.registrationFee,
-          Status: "Overdue/Unpaid",
-        })
-      );
-      // Create a worksheet
-      const worksheet = XLSX.utils.json_to_sheet(data);
+    const printWindow = window.open("", "", `height=${window.innerHeight},width=${window.innerWidth}`);
+    printWindow.document.open();
 
-      // Create a workbook
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
-
-      // Write the workbook to a file and trigger download
-      XLSX.writeFile(workbook, "items.xlsx");
-    },
-    changeReportType() {
-      this.selectReportType = false;
-      if (this.reportType == "annually") {
-        console.log("year", this.year);
-        this.annaualSelected = true;
-        this.semiAnaualSelected = false;
-        this.monthlySelected = false;
-        this.weeklySelected = false;
-        this.dailySelected = false;
-      }
-
-      if (this.reportType == "semiAnnually") {
-        console.log("year,semi", this.year, this.semiYear);
-        this.annaualSelected = true;
-        this.semiAnaualSelected = true;
-        this.monthlySelected = false;
-        this.weeklySelected = false;
-        this.dailySelected = false;
-        // if (this.semiYear =="") {
-        //   this.semiAnaualSelected=true;
-        //   this.selectSemiAnnual = true;
-        //   return;
-        // }
-        // this.fetchPayments();
-      }
-
-      if (this.reportType == "monthly") {
-        console.log("year,month", this.year, this.month);
-        this.annaualSelected = true;
-        this.semiAnaualSelected = false;
-        this.monthlySelected = true;
-        this.weeklySelected = false;
-        this.dailySelected = false;
-
-        // if (this.month === null) {
-        //   this.selectMonth = true;
-        //   return;
-        // }
-        // if (this.day === null) {
-        //   this.selectDay = true;
-        //   return;
-        // }
-        // this.fetchPayments();
-      }
-
-      if (this.reportType == "weekly") {
-        console.log("year,month,week", this.year, this.month, this.week);
-        this.annaualSelected = true;
-        this.monthlySelected = true;
-        this.weeklySelected = true;
-        this.semiAnaualSelected = false;
-        this.dailySelected = false;
-        // console.log("year,month,week", this.year, this.month, this.week);
-        // console.log("datetaype", this.reportType);
-
-        // if (this.month === null) {
-        //   this.selectMonth = true;
-        //   return;
-        // }
-        // if (this.week === null) {
-        //   this.selectDay = true;
-        //   return;
-        // }
-        // this.fetchPayments();
-      }
-
-      if (this.reportType == "daily") {
-        console.log("year,month,day", this.year, this.month, this.day);
-        this.annaualSelected = true;
-        this.monthlySelected = true;
-        this.dailySelected = true;
-        this.semiAnaualSelected = false;
-        this.weeklySelected = false;
-        // console.log("datetaype", this.reportType);
-        // if (this.month === null) {
-        //   this.selectMonth = true;
-        //   return;
-        // }
-        // if (this.day === null) {
-        //   this.selectDay = true;
-        //   return;
-        // }
-        // this.fetchPayments();
-      }
-    },
-
-    fetchPayments() {
-      if (this.reportType == "annually") {
-        //alert("annually")
-        this.fetchYearlyPayments();
-      }
-
-      if (this.reportType == "semiAnnually") {
-        this.fetchSemiYearlyPayments();
-      }
-
-      if (this.reportType == "monthly") {
-        if (this.year == "") {
-          this.selectYear = true;
-          return;
-        }
-        this.fetchMonthlyPayments();
-      }
-      if (this.reportType == "weekly") {
-        if (this.year == "") {
-          this.selectYear = true;
-          return;
-        }
-        if (this.month == "") {
-          this.selectMonth = true;
-          this.selectYear = false;
-          return;
-        } else {
-          this.selectMonth = false;
-        }
-        this.fetchWeeklyPayments();
-      }
-      if (this.reportType == "daily") {
-        if (this.year == "") {
-          this.selectYear = true;
-          return;
-        }
-        if (this.month == "") {
-          this.selectMonth = true;
-          this.selectYear = false;
-          return;
-        } else {
-          this.selectMonth = false;
-        }
-        this.fetchDailyPayments();
-      }
-    },
-
-    fetchYearlyPayments() {
-      // //alert("last yearly method")
-      this.selectSemiYear = false;
-      this.selectYear = false;
-      this.selectMonth = false;
-      (this.selectWeek = false), (this.selectDay = false);
-      this.selectReportType = false;
-      if (this.reportType == "") {
-        this.selectReportType = true;
-        return;
-      }
-      if (this.year == "") {
-        this.selectYear = true;
-        return;
-      }
-
-      if (this.reportType == "semiAnnually") {
-        this.fetchSemiYearlyPayments();
-        return;
-      }
-
-      if (this.reportType == "monthly") {
-        this.fetchMonthlyPayments();
-        return;
-      }
-      if (this.reportType == "weekly") {
-        this.fetchWeeklyPayments();
-        return;
-      }
-      if (this.reportType == "daily") {
-        this.fetchDailyPayments;
-        return;
-      }
-
-      //  //alert(this.year);
-
-      this.$apiClient
-        .get(
-          `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}`
-        )
-        .then((response) => {
-          console.log("report type for year is for year", this.year, response);
-
-          ////alert("response");
-          console.log("yearly report is =", response.data);
-          this.reports = response.data;
-
-          this.reportLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.confirmedLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.pendingLength =
-            response.data.items.categorizedPayments.pending.uniqueUsers;
-          this.overdueLength =
-            response.data.items.categorizedPayments.overdue.uniqueUsers;
-        })
-        .catch((error) => {
-          this.reports = [];
-          ////alert("an error");
-          this.reportLength = 0;
-          this.confirmedLength = 0;
-          this.pendingCount = 0;
-          this.overdueLength = 0;
-          console.error("Error fetching yearly data in yearly:", error);
-        });
-
-      ////alert("you have finished");
-    },
-    fetchSemiYearlyPayments() {
-      this.selectSemiYear = false;
-      this.selectYear = false;
-      this.selectMonth = false;
-      (this.selectWeek = false), (this.selectDay = false);
-      this.selectReportType = false;
-
-      if (this.year == "") {
-        this.selectYear = true;
-        return;
-      }
-
-      if (this.semiYear == "") {
-        this.selectSemiYear = true;
-        return;
-      }
-
-      this.$apiClient
-        .get(
-          `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}$semiYear=${this.semiYear}`
-        )
-        .then((response) => {
-          console.log(
-            "report type for semiyearly is for for year,semiyear",
-            this.year,
-            this.semiYear,
-            response
-          );
-
-          this.reports = response.data;
-          this.reportLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.confirmedLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.pendingLength =
-            response.data.items.categorizedPayments.pending.uniqueUsers;
-          this.overdueLength =
-            response.data.items.categorizedPayments.overdue.uniqueUsers;
-        })
-        .catch((error) => {
-          this.reportLength = 0;
-          this.confirmedLength = 0;
-          this.pendingCount = 0;
-          this.overdueLength = 0;
-          console.error(
-            "Error fetching client data for semi year in year,semiyeae:",
-            this.year,
-            this.semiYear,
-            error
-          );
-        });
-    },
-    fetchMonthlyPayments() {
-      this.selectSemiYear = false;
-      this.selectYear = false;
-      this.selectMonth = false;
-      (this.selectWeek = false), (this.selectDay = false);
-      this.selectReportType = false;
-
-      if (this.year == "") {
-        this.selectYear = true;
-        return;
-      }
-
-      if (this.month == "") {
-        this.selectMonth = true;
-        return;
-      }
-      if (this.reportType == "weekly") {
-        this.fetchWeeklyPayments();
-        return;
-      }
-      if (this.reportType == "daily") {
-        this.fetchDailyPayments();
-        return;
-      }
-      this.$apiClient
-        .get(
-          `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}&month=${this.month}`
-        )
-        .then((response) => {
-          console.log(
-            "report type for monthly is for year,month",
-            this.year,
-            this.month,
-            response
-          );
-
-          this.reports = response.data;
-          this.reportLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.confirmedLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.pendingLength =
-            response.data.items.categorizedPayments.pending.uniqueUsers;
-          this.overdueLength =
-            response.data.items.categorizedPayments.overdue.uniqueUsers;
-        })
-        .catch((error) => {
-          this.reportLength = 0;
-          this.confirmedLength = 0;
-          this.pendingCount = 0;
-          this.overdueLength = 0;
-          console.error(
-            "Error fetching client data monthly year,month",
-            this.year,
-            this.month,
-            error
-          );
-        });
-    },
-    fetchWeeklyPayments() {
-      this.selectYear = false;
-      this.selectMonth = false;
-      this.selectSemiYear = false;
-      this.selectWeek = false;
-      this.selectDay = false;
-      this.selectReportType = false;
-      if (this.year == "") {
-        this.selectYear = true;
-        return;
-      }
-      if (this.month == "") {
-        this.selectMonth = true;
-        return;
-      }
-      if (this.week == "") {
-        this.selectWeek = true;
-        return;
-      }
-      this.$apiClient
-        .get(
-          `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}&month=${this.month}&week=${this.week}`
-        )
-        .then((response) => {
-          console.log(
-            "report type for weekly is for year,month,week",
-            this.year,
-            this.month,
-            this.week,
-            response
-          );
-
-          this.reports = response.data;
-          this.reportLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.confirmedLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.pendingLength =
-            response.data.items.categorizedPayments.pending.uniqueUsers;
-          this.overdueLength =
-            response.data.items.categorizedPayments.overdue.uniqueUsers;
-        })
-        .catch((error) => {
-          this.reportLength = 0;
-          this.confirmedLength = 0;
-          this.pendingCount = 0;
-          this.overdueLength = 0;
-          console.error(
-            "Error fetching client data weekly is for year,month,week:",
-            this.year,
-            this.month,
-            this.week,
-            error
-          );
-        });
-    },
-    fetchDailyPayments() {
-      this.selectYear = false;
-      this.selectMonth = false;
-      this.selectYear = false;
-      this.selectWeek = false;
-      this.selectDay = false;
-      this.selectReportType = false;
-      if (this.year == "") {
-        this.selectYear = true;
-        return;
-      }
-      if (this.month == "") {
-        this.selectMonth = true;
-        return;
-      }
-      if (this.day == "") {
-        this.selectDay = true;
-        return;
-      }
-      this.$apiClient
-        .get(
-          `/api/v1/payments/reports?timeRange=${this.reportType}&year=${this.year}&month=${this.month}&day=${this.day}`
-        )
-        .then((response) => {
-          console.log(
-            "report type for daily is for year,month,day",
-            this.year,
-            this.month,
-            this.day,
-            response
-          );
-          this.reports = response.data;
-          this.reportLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.confirmedLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-          this.pendingLength =
-            response.data.items.categorizedPayments.pending.uniqueUsers;
-          this.overdueLength =
-            response.data.items.categorizedPayments.overdue.uniqueUsers;
-        })
-        .catch((error) => {
-          this.reportLength = 0;
-          this.confirmedLength = 0;
-          this.pendingCount = 0;
-          this.overdueLength = 0;
-          console.error(
-            "Error fetching client data for a daaily anmd for year,month,day:",
-            this.year,
-            this.month,
-            this.day,
-            error
-          );
-        });
-    },
-
-    thisYear() {
-      ////alert("this year")
-     this.reportType="annually"
-     this.month='';
-     this.week='';
-     this.day='';
-
-      this.semiAnaualSelected = false;
-      this.monthlySelected = false;
-      this.weeklySelected = false;
-      this.dailySelected = false;
-
-      console.log("this year is called");
-
-      const timeRange = "annually";
-      this.year = new Date().getFullYear();
-      this.$apiClient
-        .get(
-          `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.year}`
-        )
-        .then((response) => {
-          console.log(
-            "report type for monthly is this year",
-            this.year,
-            response
-          );
-          this.reports = response.data;
-          this.reportLength =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
-        })
-        .catch((error) => {
-          this.reportLength = 0;
-          console.error(
-            "Error fetching yearly reports for this year:",
-            this.year,
-            error
-          );
-        });
-    },
-    thisSemi() {
-      this.annaualSelected = true;
-      this.semiAnaualSelected = true;
-      this.monthlySelected = false;
-      this.weeklySelected = false;
-      this.dailySelected = false;
-      this.reportType = "semiAnnually";
-      this.year = new Date().getFullYear();
-      this.semiYear = this.getCurrentHalf();
-      this.fetchSemiYearlyPayments();
-    },
-
-    thisMonth() {
-      this.annaualSelected = true;
-      this.semiAnaualSelected = false;
-      this.monthlySelected = true;
-      this.weeklySelected = false;
-      this.dailySelected = false;
-      this.year = new Date().getFullYear();
-      this.month = new Date().getMonth() + 1;
-      this.reportType = "monthly";
-      this.fetchPayments();
-    },
-    thisWeek() {
-      this.annaualSelected = true;
-      this.monthlySelected = true;
-      this.weeklySelected = true;
-
-      this.semiAnaualSelected = false;
-      this.dailySelected = false;
-
-      this.year = new Date().getFullYear();
-      this.reportType = "weekly";
-      const today = new Date();
-      this.week = this.getWeekNumber(today);
-      this.month = new Date().getMonth() + 1;
-      this.fetchPayments();
-    },
-    thisDay() {
-      this.annaualSelected = true;
-      this.monthlySelected = true;
-      this.dailySelected = true;
-
-      this.weeklySelected = false;
-      this.semiAnaualSelected = false;
-
-      this.day = new Date().getDate();
-      this.year = new Date().getFullYear();
-      this.month = new Date().getMonth() + 1;
-      this.reportType = "daily";
-      this.fetchPayments();
-    },
-
-    getWeekNumber(date) {
-      const currentDate = new Date(date);
-      const startDate = new Date(currentDate.getFullYear(), 0, 1);
-      const dayOfYear = Math.floor(
-        (currentDate - startDate) / (24 * 60 * 60 * 1000)
-      );
-      // ISO week date weeks start on Monday, so correct the day number
-      const weekDay = (currentDate.getDay() + 6) % 7;
-      // Calculate week number
-      return Math.ceil((dayOfYear + 7 - weekDay) / 7);
-    },
-    goToGruopPayment() {
-      const paymentType = this.paymentType;
-      const reportType = this.reportType;
-
-      const year = this.year;
-      const semiYear = this.semiYear;
-      const month = this.month;
-      const week = this.Week;
-      const day = this.day;
-
-      if (this.reportType == "annually") {
-        this.$router.push({
-          name: "confirmed",
-          query: { paymentType, reportType, year },
-          // props: { paymentType, year },
-        });
-      }
-
-      if (this.reportType == "semiAnnually") {
-        this.$router.push({
-          name: "group-payments",
-          query: { paymentType, reportType, year, semiYear },
-          // props: { paymentType, year },
-        });
-      }
-
-      if (this.reportType == "monthly") {
-        this.$router.push({
-          name: "group-payments",
-          query: { paymentType, reportType, year, month },
-          // props: { paymentType, year },
-        });
-      }
-      if (this.reportType == "weekly") {
-        this.$router.push({
-          name: "group-payments",
-          query: { paymentType, reportType, year, month, week },
-        });
-      }
-      if (this.reportType == "daily") {
-        this.$router.push({
-          name: "group-payments",
-          query: { paymentType, reportType, year, month, day },
-        });
-      }
-    },
-    getCurrentHalf() {
-      const month = new Date().getMonth();
-      return month < 6 ? "1st" : "2nd";
-    },
-
-    async generateQRCodeImage() {
-      const qrData = `User ID: ${this.userId}, User Name: ${this.userName}`;
-
-      try {
-        // Generate QR code as a data URL (image) without rendering it to a canvas
-        const qrCodeImage = await QRCode.toDataURL(qrData, {
-          errorCorrectionLevel: "H",
-        });
-
-        // You can now use qrCodeImage in an <img> tag directly
-        document.getElementById(
-          "qrCodeImageContainer"
-        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
-      } catch (error) {
-        console.error("Error generating QR code:", error);
-      }
-    },
-
-    async printDiv() {
-      //alert("print div")
-      // First, generate the QR code image
-      await this.generateQRCodeImage();
-
-      // Now proceed with the printing
-      const printContent = document.getElementById("printable-area").innerHTML;
-
-      // Create a link element to read the Tailwind CSS file
-      const linkElement = document.createElement("link");
-      linkElement.href = "/src/assets/css/tailwind.css"; // Adjust the path as necessary
-      linkElement.rel = "stylesheet";
-
-      // Create a new window for printing
-      const printWindow = window.open(
-        "",
-        "",
-        `height=${window.innerHeight},width=${window.innerWidth}`
-      );
-      printWindow.document.open();
-
-      // Write the content to the new window
-      printWindow.document.write(`
+    printWindow.document.write(`
       <html>
         <head>
           <title>Payment Report</title>
-          ${linkElement.outerHTML} <!-- Include the Tailwind CSS link -->
-
+          ${linkElement.outerHTML}
           <style>
-         
-             body {
-               border: 1px dotted #622e2e; 
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f4f4f9;
-    }
-    .report-table {
-      margin-top: 40px;
-      background-color: #ffffff;
-      border: 1px solid #cccccc;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .report-table h2 {
-      text-align: center;
-      font-size: 24px;
-      color: #4b0082;
-      margin-bottom: 10px;
-    }
-    .report-table p {
-      text-align: center;
-      font-size: 14px;
-      color: #666666;
-      margin-bottom: 20px;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-    th, td {
-      border: 1px solid #cccccc;
-      padding: 8px 12px;
-      text-align: left;
-    }
-    th {
-      background-color: #f9f9f9;
-      color: #333333;
-      font-weight: bold;
-    }
-    .highlight {
-      background-color: #f0f0f0;
-      font-weight: bold;
-    }
-    .footer-info {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-    }
-    .footer-info div {
-      font-size: 14px;
-    }
-    .qr-code-container {
-      text-align: center;
-      margin-top: 20px;
-    }
+            body { border: 1px dotted #622e2e; font-family: Arial, sans-serif; padding: 20px; background-color: #f4f4f9; }
+            .report-table { margin-top: 40px; background-color: #ffffff; border: 1px solid #cccccc; border-radius: 8px; padding: 20px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+            .report-table h2 { text-align: center; font-size: 24px; color: #4b0082; margin-bottom: 10px; }
+            .report-table p { text-align: center; font-size: 14px; color: #666666; margin-bottom: 20px; }
+            table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+            th, td { border: 1px solid #cccccc; padding: 8px 12px; text-align: left; }
+            th { background-color: #f9f9f9; color: #333333; font-weight: bold; }
+            .highlight { background-color: #f0f0f0; font-weight: bold; }
+            .footer-info { display: flex; justify-content: space-between; margin-top: 20px; }
+            .footer-info div { font-size: 14px; }
+            .qr-code-container { text-align: center; margin-top: 20px; }
           </style>
         </head>
         <body>
-          <div id="printable-area">
-            ${printContent}
-          </div>
+          <div id="printable-area">${printContent}</div>
         </body>
       </html>
     `);
-      printWindow.document.close();
+    printWindow.document.close();
 
-      // Ensure that the print dialog opens and window closes after printing
-      printWindow.onload = function () {
-        printWindow.focus();
-        printWindow.print();
-      };
-      printWindow.onafterprint = function () {
-        printWindow.close();
-      };
-    },
+    printWindow.onload = function () {
+      printWindow.focus();
+      printWindow.print();
+    };
+    printWindow.onafterprint = function () {
+      printWindow.close();
+    };
   },
+}
+//   methods: {
+
+//   async fetchData(params) {
+//     try {
+//       const response = await this.$apiGet('/api/v1/payments/reports', params);
+//       console.log("Response:", response);
+//       this.reports = response;
+//       this.updateReportLengths(response);
+//     } catch (error) {
+//       console.error("Error fetching data:", error);
+//       this.resetReportLengths();
+//     }
+//   },
+
+//   updateReportLengths(response) {
+//     this.reportLength = response.items.categorizedPayments.confirmed.uniqueUsers;
+//     this.confirmedLength = response.items.categorizedPayments.confirmed.uniqueUsers;
+//     this.pendingLength = response.items.categorizedPayments.pending.uniqueUsers;
+//     this.overdueLength = response.items.categorizedPayments.overdue.uniqueUsers;
+//   },
+
+//   resetReportLengths() {
+//     this.reportLength = 0;
+//     this.confirmedLength = 0;
+//     this.pendingLength = 0;
+//     this.overdueLength = 0;
+//   },
+
+
+//   changeReportType() {
+//     const reportTypes = ["annually", "semiAnnually", "monthly", "weekly", "daily"];
+//     this.selectReportType = false;
+
+//     reportTypes.forEach(type => {
+//       this[`${type}Selected`] = this.reportType === type;
+//     });
+    
+//     console.log("Selected report type:", this.reportType);
+//   },
+
+//   exportPaymentsToExcel(category, status) {
+//     console.log("payments");
+//     const data = this.reports.items.categorizedPayments[category].payments.map(item => ({
+//       "Full Name": item.fullName,
+//       "User Code": item.userCode,
+//       Billcode: item.billCode,
+//       Year: item.activeYear,
+//       Month: item.activeMonth,
+//       Regular: item.regular.amount,
+//       Subsidy: item.subsidy.amount,
+//       Urgent: item.urgent.amount,
+//       "Total Block": item.regular.amount + item.subsidy.amount + item.urgent.amount,
+//       "Reg Fee": item.registrationFee,
+//       "Monthly Service": item.service.amount,
+//       Penality: item.penality.amount,
+//       "Total Service": item.service.amount + item.penality.amount + item.registrationFee,
+//       Status: status,
+//     }));
+
+//     const worksheet = XLSX.utils.json_to_sheet(data);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+//     XLSX.writeFile(workbook, "items.xlsx");
+//   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//     seeAllPaid() {
+//       this.$router.push({
+//         path: "/admindashboard/payments1",
+//         query: {
+//           activeTab: 2,
+//           status: "confirmed",
+//         },
+//       });
+//     },
+//     seeAllOverdue() {
+//       this.$router.push({
+//         path: "/admindashboard/payments1",
+//         query: {
+//           activeTab: 2,
+//           status: "overdue",
+//         },
+//       });
+//     },
+
+
+//     exportConfirmedToExcel() {
+//       // Prepare the data for the Excel file
+//       console.log("payments");
+//       const data =
+//         this.reports.items.categorizedPayments.confirmed.payments.map(
+//           (item) => ({
+//             "Full Name": item.fullName,
+//             "User Code": item.userCode,
+//             Billcode: item.billCode,
+//             Year: item.activeYear,
+//             Month: item.activeMonth,
+//             Regular: item.regular.amount,
+//             Subsidy: item.subsidy.amount,
+//             Urgent: item.urgent.amount,
+//             "Total Block":
+//               item.regular.amount + item.subsidy.amount + item.urgent.amount,
+//             "Reg Fee": item.registrationFee,
+//             "Monthly Service": item.service.amount,
+//             Penality: item.penality.amount,
+//             "Total Service":
+//               item.service.amount + item.penality.amount + item.registrationFee,
+//             Status: "Paid",
+//           })
+//         );
+//       // Create a worksheet
+//       const worksheet = XLSX.utils.json_to_sheet(data);
+
+//       // Create a workbook
+//       const workbook = XLSX.utils.book_new();
+//       XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+
+//       // Write the workbook to a file and trigger download
+//       XLSX.writeFile(workbook, "items.xlsx");
+//     },
+//     exportPendingToExcel() {
+//       // Prepare the data for the Excel file
+//       console.log("payments");
+//       const data = this.reports.items.categorizedPayments.pending.payments.map(
+//         (item) => ({
+//           "Full Name": item.fullName,
+//           "User Code": item.userCode,
+//           Billcode: item.billCode,
+//           Year: item.activeYear,
+//           Month: item.activeMonth,
+//           Regular: item.regular.amount,
+//           Subsidy: item.subsidy.amount,
+//           Urgent: item.urgent.amount,
+//           "Total Block":
+//             item.regular.amount + item.subsidy.amount + item.urgent.amount,
+//           "Reg Fee": item.registrationFee,
+//           "Monthly Service": item.service.amount,
+//           Penality: item.penality.amount,
+//           "Total Service":
+//             item.service.amount + item.penality.amount + item.registrationFee,
+//           Status: "Unpaid",
+//         })
+//       );
+//       // Create a worksheet
+//       const worksheet = XLSX.utils.json_to_sheet(data);
+
+//       // Create a workbook
+//       const workbook = XLSX.utils.book_new();
+//       XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+
+//       // Write the workbook to a file and trigger download
+//       XLSX.writeFile(workbook, "items.xlsx");
+//     },
+//     exportOverdueToExcel() {
+//       // Prepare the data for the Excel file
+//       console.log("payments");
+//       const data = this.reports.items.categorizedPayments.overdue.payments.map(
+//         (item) => ({
+//           "Full Name": item.fullName,
+//           "User Code": item.userCode,
+//           Billcode: item.billCode,
+//           Year: item.activeYear,
+//           Month: item.activeMonth,
+//           Regular: item.regular.amount,
+//           Subsidy: item.subsidy.amount,
+//           Urgent: item.urgent.amount,
+//           "Total Block":
+//             item.regular.amount + item.subsidy.amount + item.urgent.amount,
+//           "Reg Fee": item.registrationFee,
+//           "Monthly Service": item.service.amount,
+//           Penality: item.penality.amount,
+//           "Total Service":
+//             item.service.amount + item.penality.amount + item.registrationFee,
+//           Status: "Overdue/Unpaid",
+//         })
+//       );
+//       // Create a worksheet
+//       const worksheet = XLSX.utils.json_to_sheet(data);
+
+//       // Create a workbook
+//       const workbook = XLSX.utils.book_new();
+//       XLSX.utils.book_append_sheet(workbook, worksheet, "Items");
+
+//       // Write the workbook to a file and trigger download
+//       XLSX.writeFile(workbook, "items.xlsx");
+//     },
+
+
+//     changeReportType() {
+//       this.selectReportType = false;
+//       if (this.reportType == "annually") {
+//         console.log("year", this.year);
+//         this.annaualSelected = true;
+//         this.semiAnaualSelected = false;
+//         this.monthlySelected = false;
+//         this.weeklySelected = false;
+//         this.dailySelected = false;
+//       }
+
+//       if (this.reportType == "semiAnnually") {
+//         console.log("year,semi", this.year, this.semiYear);
+//         this.annaualSelected = true;
+//         this.semiAnaualSelected = true;
+//         this.monthlySelected = false;
+//         this.weeklySelected = false;
+//         this.dailySelected = false;
+//       }
+//       if (this.reportType == "monthly") {
+//         console.log("year,month", this.year, this.month);
+//         this.annaualSelected = true;
+//         this.semiAnaualSelected = false;
+//         this.monthlySelected = true;
+//         this.weeklySelected = false;
+//         this.dailySelected = false;
+//       }
+//       if (this.reportType == "weekly") {
+//         console.log("year,month,week", this.year, this.month, this.week);
+//         this.annaualSelected = true;
+//         this.monthlySelected = true;
+//         this.weeklySelected = true;
+//         this.semiAnaualSelected = false;
+//         this.dailySelected = false;
+//       }
+
+//       if (this.reportType == "daily") {
+//         console.log("year,month,day", this.year, this.month, this.day);
+//         this.annaualSelected = true;
+//         this.monthlySelected = true;
+//         this.dailySelected = true;
+//         this.semiAnaualSelected = false;
+//         this.weeklySelected = false;
+//       }
+//     },
+
+//     async fetchPayments() {
+//       if (this.reportType == "annually") {
+//         //alert("annually")
+//         await this.fetchYearlyPayments();
+//       }
+
+//       if (this.reportType == "semiAnnually") {
+//         await this.fetchSemiYearlyPayments();
+//       }
+
+//       if (this.reportType == "monthly") {
+//         if (this.year == "") {
+//           this.selectYear = true;
+//           return;
+//         }
+//         await this.fetchMonthlyPayments();
+//       }
+//       if (this.reportType == "weekly") {
+//         if (this.year == "") {
+//           this.selectYear = true;
+//           return;
+//         }
+//         if (this.month == "") {
+//           this.selectMonth = true;
+//           this.selectYear = false;
+//           return;
+//         } else {
+//           this.selectMonth = false;
+//         }
+//         await this.fetchWeeklyPayments();
+//       }
+//       if (this.reportType == "daily") {
+//         if (this.year == "") {
+//           this.selectYear = true;
+//           return;
+//         }
+//         if (this.month == "") {
+//           this.selectMonth = true;
+//           this.selectYear = false;
+//           return;
+//         } else {
+//           this.selectMonth = false;
+//         }
+//         await this.fetchDailyPayments();
+//       }
+//     },
+
+//     async fetchYearlyPayments() {
+//       // //alert("last yearly method")
+//       this.selectSemiYear = false;
+//       this.selectYear = false;
+//       this.selectMonth = false;
+//       (this.selectWeek = false), (this.selectDay = false);
+//       this.selectReportType = false;
+//       if (this.reportType == "") {
+//         this.selectReportType = true;
+//         return;
+//       }
+//       if (this.year == "") {
+//         this.selectYear = true;
+//         return;
+//       }
+
+//       if (this.reportType == "semiAnnually") {
+//         this.fetchSemiYearlyPayments();
+//         return;
+//       }
+
+//       if (this.reportType == "monthly") {
+//         this.fetchMonthlyPayments();
+//         return;
+//       }
+//       if (this.reportType == "weekly") {
+//         this.fetchWeeklyPayments();
+//         return;
+//       }
+//       if (this.reportType == "daily") {
+//         this.fetchDailyPayments;
+//         return;
+//       }
+
+//       //  //alert(this.year);
+//  const params ={
+//   timeRange:this.reportType,
+//   year:this.year,
+//  }
+//       try {await this.$apiGet(
+//           '/api/v1/payments/reports',params)
+//         .then((response) => {
+//           console.log("report type for year is for year", this.year, response);
+//           console.log("yearly report is =", response);
+//           this.reports = response;
+//           this.reportLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.confirmedLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.pendingLength =
+//             response.items.categorizedPayments.pending.uniqueUsers;
+//           this.overdueLength =
+//             response.items.categorizedPayments.overdue.uniqueUsers;
+//         })
+//       }catch(error){
+//           this.reports = [];
+//           ////alert("an error");
+//           this.reportLength = 0;
+//           this.confirmedLength = 0;
+//           this.pendingCount = 0;
+//           this.overdueLength = 0;
+//           console.error("Error fetching yearly data in yearly:", error.status,error.message);
+//         }finally{
+
+//         };
+
+//       ////alert("you have finished");
+//     },
+//     async fetchSemiYearlyPayments() {
+//       this.selectSemiYear = false;
+//       this.selectYear = false;
+//       this.selectMonth = false;
+//       (this.selectWeek = false), (this.selectDay = false);
+//       this.selectReportType = false;
+
+//       if (this.year == "") {
+//         this.selectYear = true;
+//         return;
+//       }
+
+//       if (this.semiYear == "") {
+//         this.selectSemiYear = true;
+//         return;
+//       }
+
+//       const params={
+//         timeRange:this.reportType,
+//         year:this.year,
+//         semiYear:this.semiYear,
+//       }
+//       try {await this.$apiGet(
+//           '/api/v1/payments/reports',params
+//         )
+//         .then((response) => {
+//           console.log(
+//             "report type for semiyearly is for for year,semiyear",
+//             this.year,
+//             this.semiYear,
+//             response
+//           );
+
+//           this.reports = response;
+//           this.reportLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.confirmedLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.pendingLength =
+//             response.items.categorizedPayments.pending.uniqueUsers;
+//           this.overdueLength =
+//             response.items.categorizedPayments.overdue.uniqueUsers;
+//         })
+//        }catch(error) {
+//           this.reportLength = 0;
+//           this.confirmedLength = 0;
+//           this.pendingCount = 0;
+//           this.overdueLength = 0;
+//           console.error(
+//             "Error fetching client data for semi year in year,semiyeae:",
+//             this.year,
+//             this.semiYear,
+//             error.status,error.message
+//           );
+//         }finally{
+
+//         };
+//     },
+//    async  fetchMonthlyPayments() {
+//       this.selectSemiYear = false;
+//       this.selectYear = false;
+//       this.selectMonth = false;
+//       (this.selectWeek = false), (this.selectDay = false);
+//       this.selectReportType = false;
+
+//       if (this.year == "") {
+//         this.selectYear = true;
+//         return;
+//       }
+
+//       if (this.month == "") {
+//         this.selectMonth = true;
+//         return;
+//       }
+//       if (this.reportType == "weekly") {
+//         this.fetchWeeklyPayments();
+//         return;
+//       }
+//       if (this.reportType == "daily") {
+//         this.fetchDailyPayments();
+//         return;
+//       }
+
+//       const params={
+//         timeRange: this.reportType,
+//         year:this.year,
+//         month:this.month,
+//       } 
+//       try {
+//          await this.$apiGet(
+//           '/api/v1/payments/reports',params).then((response) => {
+//           console.log(
+//             "report type for monthly is for year,month",
+//             this.year,
+//             this.month,
+//             response
+//           );
+
+//           this.reports = response;
+//           this.reportLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.confirmedLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.pendingLength =
+//             response.items.categorizedPayments.pending.uniqueUsers;
+//           this.overdueLength =
+//             response.items.categorizedPayments.overdue.uniqueUsers;
+//         })
+//       }catch(error){
+//           this.reportLength = 0;
+//           this.confirmedLength = 0;
+//           this.pendingCount = 0;
+//           this.overdueLength = 0;
+//           console.error(
+//             "Error fetching client data monthly year,month",
+//             this.year,
+//             this.month,
+//             error.status,error.message
+//           );
+//         }finally{
+//         };
+//     },
+
+//     async fetchWeeklyPayments() {
+//       this.selectYear = false;
+//       this.selectMonth = false;
+//       this.selectSemiYear = false;
+//       this.selectWeek = false;
+//       this.selectDay = false;
+//       this.selectReportType = false;
+//       if (this.year == "") {
+//         this.selectYear = true;
+//         return;
+//       }
+//       if (this.month == "") {
+//         this.selectMonth = true;
+//         return;
+//       }
+//       if (this.week == "") {
+//         this.selectWeek = true;
+//         return;
+//       }
+//       const params={
+//         timeRange:this.reportType,
+//         year:this.year,
+//         month:this.month,
+//         week:this.week
+//       }
+//       try {
+        
+//         await this.$apiGet(
+//           '/api/v1/payments/reports',params
+//         )
+//         .then((response) => {
+//           console.log(
+//             "report type for weekly is for year,month,week",
+//             this.year,
+//             this.month,
+//             this.week,
+//             response
+//           );
+
+//           this.reports = response;
+//           this.reportLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.confirmedLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.pendingLength =
+//             response.items.categorizedPayments.pending.uniqueUsers;
+//           this.overdueLength =
+//             response.items.categorizedPayments.overdue.uniqueUsers;
+//         })
+//       }catch(error) {
+//           this.reportLength = 0;
+//           this.confirmedLength = 0;
+//           this.pendingCount = 0;
+//           this.overdueLength = 0;
+//           console.log(
+//             "Error fetching client data weekly is for year,month,week:",
+//             this.year,
+//             this.month,
+//             this.week,
+//             error.status,error.message
+//           );
+//         }finally {
+
+//       };
+//     },
+//     async fetchDailyPayments() {
+//       this.selectYear = false;
+//       this.selectMonth = false;
+//       this.selectYear = false;
+//       this.selectWeek = false;
+//       this.selectDay = false;
+//       this.selectReportType = false;
+//       if (this.year == "") {
+//         this.selectYear = true;
+//         return;
+//       }
+//       if (this.month == "") {
+//         this.selectMonth = true;
+//         return;
+//       }
+//       if (this.day == "") {
+//         this.selectDay = true;
+//         return;
+//       }
+//       const params={
+//         timeRange: this.reportType,
+//         year: this.year,
+//         month: this.month,
+//         day: this.day
+//       }
+//        try { await this.$apiClient
+//         .get(
+//           '/api/v1/payments/reports',params
+//         )
+//         .then((response) => {
+//           console.log(
+//             "report type for daily is for year,month,day",
+//             this.year,
+//             this.month,
+//             this.day,
+//             response
+//           );
+//           this.reports = response;
+//           this.reportLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.confirmedLength =
+//             response.items.categorizedPayments.confirmed.uniqueUsers;
+//           this.pendingLength =
+//             response.items.categorizedPayments.pending.uniqueUsers;
+//           this.overdueLength =
+//             response.items.categorizedPayments.overdue.uniqueUsers;
+//         })
+//        }catch(error) {
+//           this.reportLength = 0;
+//           this.confirmedLength = 0;
+//           this.pendingCount = 0;
+//           this.overdueLength = 0;
+//           console.error(
+//             "Error fetching client data for a daaily anmd for year,month,day:",
+//             this.year,
+//             this.month,
+//             this.day,
+//             error.status,error.message
+//           );
+//         }finally {
+
+//         };
+//     },
+
+//     thisYear() {
+//       ////alert("this year")
+//       this.reportType = "annually";
+//       this.month = "";
+//       this.week = "";
+//       this.day = "";
+
+//       this.semiAnaualSelected = false;
+//       this.monthlySelected = false;
+//       this.weeklySelected = false;
+//       this.dailySelected = false;
+
+//       console.log("this year is called");
+
+//       const timeRange = "annually";
+//       this.year = new Date().getFullYear();
+//       this.$apiClient
+//         .get(
+//           `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.year}`
+//         )
+//         .then((response) => {
+//           console.log(
+//             "report type for monthly is this year",
+//             this.year,
+//             response
+//           );
+//           this.reports = response.data;
+//           this.reportLength =
+//             response.data.items.categorizedPayments.confirmed.uniqueUsers;
+//         })
+//         .catch((error) => {
+//           this.reportLength = 0;
+//           console.error(
+//             "Error fetching yearly reports for this year:",
+//             this.year,
+//             error
+//           );
+//         });
+//     },
+//     thisSemi() {
+//       this.annaualSelected = true;
+//       this.semiAnaualSelected = true;
+//       this.monthlySelected = false;
+//       this.weeklySelected = false;
+//       this.dailySelected = false;
+//       this.reportType = "semiAnnually";
+//       this.year = new Date().getFullYear();
+//       this.semiYear = this.getCurrentHalf();
+//       this.fetchSemiYearlyPayments();
+//     },
+
+//     thisMonth() {
+//       this.annaualSelected = true;
+//       this.semiAnaualSelected = false;
+//       this.monthlySelected = true;
+//       this.weeklySelected = false;
+//       this.dailySelected = false;
+//       this.year = new Date().getFullYear();
+//       this.month = new Date().getMonth() + 1;
+//       this.reportType = "monthly";
+//       this.fetchPayments();
+//     },
+//     thisWeek() {
+//       this.annaualSelected = true;
+//       this.monthlySelected = true;
+//       this.weeklySelected = true;
+
+//       this.semiAnaualSelected = false;
+//       this.dailySelected = false;
+
+//       this.year = new Date().getFullYear();
+//       this.reportType = "weekly";
+//       const today = new Date();
+//       this.week = this.getWeekNumber(today);
+//       this.month = new Date().getMonth() + 1;
+//       this.fetchPayments();
+//     },
+//     thisDay() {
+//       this.annaualSelected = true;
+//       this.monthlySelected = true;
+//       this.dailySelected = true;
+
+//       this.weeklySelected = false;
+//       this.semiAnaualSelected = false;
+
+//       this.day = new Date().getDate();
+//       this.year = new Date().getFullYear();
+//       this.month = new Date().getMonth() + 1;
+//       this.reportType = "daily";
+//       this.fetchPayments();
+//     },
+
+//     getWeekNumber(date) {
+//       const currentDate = new Date(date);
+//       const startDate = new Date(currentDate.getFullYear(), 0, 1);
+//       const dayOfYear = Math.floor(
+//         (currentDate - startDate) / (24 * 60 * 60 * 1000)
+//       );
+//       // ISO week date weeks start on Monday, so correct the day number
+//       const weekDay = (currentDate.getDay() + 6) % 7;
+//       // Calculate week number
+//       return Math.ceil((dayOfYear + 7 - weekDay) / 7);
+//     },
+//     goToGruopPayment() {
+//       const paymentType = this.paymentType;
+//       const reportType = this.reportType;
+
+//       const year = this.year;
+//       const semiYear = this.semiYear;
+//       const month = this.month;
+//       const week = this.Week;
+//       const day = this.day;
+
+//       if (this.reportType == "annually") {
+//         this.$router.push({
+//           name: "confirmed",
+//           query: { paymentType, reportType, year },
+//           // props: { paymentType, year },
+//         });
+//       }
+
+//       if (this.reportType == "semiAnnually") {
+//         this.$router.push({
+//           name: "group-payments",
+//           query: { paymentType, reportType, year, semiYear },
+//           // props: { paymentType, year },
+//         });
+//       }
+
+//       if (this.reportType == "monthly") {
+//         this.$router.push({
+//           name: "group-payments",
+//           query: { paymentType, reportType, year, month },
+//           // props: { paymentType, year },
+//         });
+//       }
+//       if (this.reportType == "weekly") {
+//         this.$router.push({
+//           name: "group-payments",
+//           query: { paymentType, reportType, year, month, week },
+//         });
+//       }
+//       if (this.reportType == "daily") {
+//         this.$router.push({
+//           name: "group-payments",
+//           query: { paymentType, reportType, year, month, day },
+//         });
+//       }
+//     },
+//     getCurrentHalf() {
+//       const month = new Date().getMonth();
+//       return month < 6 ? "1st" : "2nd";
+//     },
+
+//     async generateQRCodeImage() {
+//       const qrData = `User ID: ${this.userId}, User Name: ${this.userName}`;
+
+//       try {
+//         // Generate QR code as a data URL (image) without rendering it to a canvas
+//         const qrCodeImage = await QRCode.toDataURL(qrData, {
+//           errorCorrectionLevel: "H",
+//         });
+
+//         // You can now use qrCodeImage in an <img> tag directly
+//         document.getElementById(
+//           "qrCodeImageContainer"
+//         ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
+//       } catch (error) {
+//         console.error("Error generating QR code:", error);
+//       }
+//     },
+
+//     async printDiv() {
+//       //alert("print div")
+//       // First, generate the QR code image
+//       await this.generateQRCodeImage();
+
+//       // Now proceed with the printing
+//       const printContent = document.getElementById("printable-area").innerHTML;
+
+//       // Create a link element to read the Tailwind CSS file
+//       const linkElement = document.createElement("link");
+//       linkElement.href = "/src/assets/css/tailwind.css"; // Adjust the path as necessary
+//       linkElement.rel = "stylesheet";
+
+//       // Create a new window for printing
+//       const printWindow = window.open(
+//         "",
+//         "",
+//         `height=${window.innerHeight},width=${window.innerWidth}`
+//       );
+//       printWindow.document.open();
+
+//       // Write the content to the new window
+//       printWindow.document.write(`
+//       <html>
+//         <head>
+//           <title>Payment Report</title>
+//           ${linkElement.outerHTML} <!-- Include the Tailwind CSS link -->
+
+//           <style>
+         
+//              body {
+//                border: 1px dotted #622e2e; 
+//       font-family: Arial, sans-serif;
+//       padding: 20px;
+//       background-color: #f4f4f9;
+//     }
+//     .report-table {
+//       margin-top: 40px;
+//       background-color: #ffffff;
+//       border: 1px solid #cccccc;
+//       border-radius: 8px;
+//       padding: 20px;
+//       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+//     }
+//     .report-table h2 {
+//       text-align: center;
+//       font-size: 24px;
+//       color: #4b0082;
+//       margin-bottom: 10px;
+//     }
+//     .report-table p {
+//       text-align: center;
+//       font-size: 14px;
+//       color: #666666;
+//       margin-bottom: 20px;
+//     }
+//     table {
+//       width: 100%;
+//       border-collapse: collapse;
+//       margin-bottom: 20px;
+//     }
+//     th, td {
+//       border: 1px solid #cccccc;
+//       padding: 8px 12px;
+//       text-align: left;
+//     }
+//     th {
+//       background-color: #f9f9f9;
+//       color: #333333;
+//       font-weight: bold;
+//     }
+//     .highlight {
+//       background-color: #f0f0f0;
+//       font-weight: bold;
+//     }
+//     .footer-info {
+//       display: flex;
+//       justify-content: space-between;
+//       margin-top: 20px;
+//     }
+//     .footer-info div {
+//       font-size: 14px;
+//     }
+//     .qr-code-container {
+//       text-align: center;
+//       margin-top: 20px;
+//     }
+//           </style>
+//         </head>
+//         <body>
+//           <div id="printable-area">
+//             ${printContent}
+//           </div>
+//         </body>
+//       </html>
+//     `);
+//       printWindow.document.close();
+
+//       // Ensure that the print dialog opens and window closes after printing
+//       printWindow.onload = function () {
+//         printWindow.focus();
+//         printWindow.print();
+//       };
+//       printWindow.onafterprint = function () {
+//         printWindow.close();
+//       };
+//     },
+//   },
 };
 </script>
 <style>

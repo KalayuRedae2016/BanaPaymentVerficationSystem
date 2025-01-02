@@ -42,7 +42,7 @@
 
     <div
       v-if="showIdCard"
-      class="flex flex-col lg:flex-row items-center p-8 bg-white border border-gray-300 shadow-lg space-y-6 lg:space-y-0 lg:space-x-8"
+      class="flex flex-col lg:flex-row items-center p-8 bg-white border border-blue-500 shadow-lg space-y-6 lg:space-y-0 lg:space-x-8"
     >
       <!-- Left Section: Image and Button (Mobile and Desktop) -->
       <div
@@ -88,11 +88,11 @@
 
     <div
       v-if="showIdCard"
-      class="flex flex-col mx-10 mt-5 border border-white hidden"
+      class="flex flex-col mx-10 mt-5 borderborder-blue-500 "
       id="printable-area"
     >
       <div
-        class="header h-20 w-full bg-blue-100 flex items-center justify-between border-b border-white"
+        class="header h-20 w-full bg-gray-100 flex items-center justify-between border-b border-blue-500"
       >
         <div class="flex items-center">
           <img
@@ -110,7 +110,7 @@
       </div>
 
       <div class="flex flex-row">
-        <div class="flex flex-col bg-blue-100 0 w-1/2">
+        <div class="flex flex-col bg-gray-100 0 w-1/2">
           <!-- Image Section -->
           <div class="mx-auto mt-16">
             <img
@@ -121,10 +121,10 @@
           </div>
 
           <!-- Horizontal Line Above -->
-          <div class="mx-auto border-t border-white mt-4 mb-4"></div>
+          <div class="mx-auto border-t border-blue-500 mt-4 mb-4"></div>
 
           <!-- User Information Section -->
-          <div class="pl-16 bg-blue-100 p-4 mt-5 font-extrabold">
+          <div class="pl-16 bg-gray-100 p-4 mt-5 font-extrabold">
             <div class="w-full">
               <div class="flex items-start mt-2">
                 <p class="text-blue-500 text-xs w-1/3">ምሉእ ሽም/Full Name:</p>
@@ -148,7 +148,7 @@
           </div>
 
           <!-- Horizontal Line Below -->
-          <div class="border-b border-white mt-4 mb-4"></div>
+          <div class="border-b border-blue-500 mt-4 mb-4"></div>
 
           <!-- Barcode Section -->
           <div class="mx-auto mt-5 mb-5" id="qrCodeImageContainer">
@@ -157,22 +157,22 @@
         </div>
 
         <!-- Disclaimer Section -->
-        <div class="w-1/2 bg-blue-100 border-l border-white">
+        <div class="w-1/2 bg-gray-100 border-lborder-blue-500">
           <div class="m-5">
             <h2 class="mb-5 text-center font-semibold">መተሓሳሰቢ | Disclaimer</h2>
             <div class="flex flex-col rounded-lg space-y-4">
               <div
-                class="text-xs font-extrabold border border-white text-blue-500 rounded p-5"
+                class="text-xs font-extrabold borderborder-blue-500 text-blue-500 rounded p-5"
               >
                 This card is only for the person seen in the photo
               </div>
               <div
-                class="text-xs font-extrabold border border-white text-blue-500 rounded p-5"
+                class="text-xs font-extrabold borderborder-blue-500 text-blue-500 rounded p-5"
               >
                 This card is used for making payments to Bana
               </div>
               <div
-                class="text-xs font-extrabold border border-white text-blue-500 rounded p-5"
+                class="text-xs font-extrabold borderborder-blue-500 text-blue-500 rounded p-5"
               >
                 This card cannot be used for any other purposes
               </div>
@@ -183,17 +183,17 @@
 
       
       <div class="my-3">
-        <div class="h-10 bg-blue-100 border border-dashed border-blue-500">
+        <div class="h-10 bg-gray-100 border border-dashed border-blue-500">
           <p class="text-blue-500 ml-10 pb-3">
             Cut in the dotted border and get your id card in pysical format.
           </p>
         </div>
       </div>
 
-      <div class="w-full bg-blue-100 border border-dashed border-blue-500 flex">
+      <div class="w-full bg-gray-100 border border-dashed border-blue-500 flex">
         <!-- Front Section -->
         <div
-          class="front w-1/2 bg-blue-100 border-r border-dashed border-blue-500 p-4 flex flex-col rounded-l-lg"
+          class="front w-1/2 bg-gray-100 border-r border-dashed border-blue-500 p-4 flex flex-col rounded-l-lg"
         >
           <!-- Header Section -->
           <div class="header flex items-center justify-between mb-4">
@@ -221,7 +221,7 @@
               <img
                 :src="imageData"
                 alt="User Image"
-                class="h-32 w-32 rounded-md object-cover"
+                class="h-32 w-32  object-cover"
               />
             </div>
 
@@ -257,7 +257,7 @@
         </div>
 
         <!-- Back Section -->
-        <div class="back w-1/2 p-4 flex flex-col rounded-r-lg bg-blue-100">
+        <div class="back w-1/2 p-4 flex flex-col rounded-r-lg bg-gray-100">
           <!-- User Contact Information -->
           <div class="flex flex-row space-x-4">
             <div class="w-1/2 text-xs space-y-1">
@@ -289,7 +289,7 @@
 
           <!-- Disclaimer Text -->
           <p
-            class="text-violet-500 font-bold text-xxs bg-blue-100 p-2 rounded-lg"
+            class="text-violet-500 font-bold text-xxs bg-gray-100 p-2 rounded-lg"
           >
             <i class="fas fa-exclamation-circle"></i> If you find this dropped,
             please return it to the intended company or your nearest police
@@ -333,54 +333,50 @@ export default {
       filteredUsers: {},
     };
   },
-
+  
   watch: {
     keyword() {
-      // alert("Watch");
       this.searchUsers(this.keyword);
     },
   },
 
-  mounted() {
-    this.$apiClient
-      .get("/api/v1/users/", {
-        params: {
-          isActive: true,
-        },
-      })
-      .then((response) => {
+ async mounted() {
+    try { this.$apiGet("/api/v1/users/", { params: {  isActive: true,}}) .then((response) => {
         console.log("response data", response.data);
         if (response.data !== null) {
           //alert(this.users)
-          this.users = response.data.users;
+          this.users = response.users;
           this.filteredUsers = this.users;
         }
       })
-      .catch((error) => {
-        console.error("Error fetching users:", error);
-      });
+    } catch(error) {
+        console.log("Error fetching users:", error.status,error.message);
+    }finally{
+      
+  }
     console.log("These are the users please", this.users);
   },
 
   methods: {
-    toggleUserSelection(user) {
+   async  toggleUserSelection(user) {
       this.isLoading = true;
-
       this.showList = false;
       this.showIdCard = true;
       this.filteredUsers = [];
       this.selectedUser = user;
-      this.$apiClient
-        .get(`/api/v1/users/${user._id}`)
-        .then((response) => {
+
+      try { 
+        await this.$apiGetById('/api/v1/users',user._id).then((response) => {
           console.log("Response client profile", response);
           this.isLoading = false;
-          this.clientProfile = response.data.clientProfile;
-          this.imageData = "data:image/jpeg;base64," + response.data.imageData;
+          this.clientProfile = response.clientProfile;
+          this.imageData = "data:image/jpeg;base64," + response.imageData;
         })
-        .catch((error) => {
-          console.error("Error fetching client datakk:", error);
-        });
+       } catch(error) {
+          console.error("Error fetching client datakk:", error.status,error.message);
+        }finally {
+
+        }
 
       this.generateQRCodeImage(user);
       console.log("user=", user);
