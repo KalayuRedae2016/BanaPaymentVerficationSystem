@@ -1,44 +1,10 @@
 <template>
   <div>
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showSuccessToast"
-        class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Success!</strong>
-        <span class="block sm:inline">{{ successToastMessage }}</span>
-      </div>
-    </transition>
-
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-x-full opacity-0"
-      enter-to-class="translate-x-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-x-0 opacity-100"
-      leave-to-class="translate-x-full opacity-0"
-    >
-      <div
-        v-if="showErrorToast"
-        class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-        role="alert"
-      >
-        <strong class="font-bold">Error!</strong>
-        <span class="block sm:inline">{{ errorToastMessage }}</span>
-      </div>
-    </transition>
-    <div
-      v-if="organizationCreated === 0"
+    <!-- <div
+      v-if="organizationCreated ===0"
       class="loader mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
-    ></div>
+    ></div> -->
+    <LoadingSpinner :visible="isLoading"/>
     <div v-if="organizationCreated === 1" class="p-4">
       <h1 class="text-blue-500 font-bold">Company Details</h1>
     </div>
@@ -231,10 +197,13 @@
 <script>
 import newCompanyProfile from "./newCompaneySettings.vue";
 import { mapGetters } from "vuex";
+import LoadingSpinner from '../../Common/LoadingSpinner.vue';
+
 export default {
 
   components: {
     newCompanyProfile,
+    LoadingSpinner,
   },
 
   name: "paymentsView",
@@ -247,6 +216,8 @@ export default {
       showSuccessToast: false,
 
       loading: true,
+      isLoading:false,
+
       companyProfile: {
         companyName: "",
         companyPhoneNumber: "",
@@ -286,46 +257,46 @@ export default {
         });
       }, 2000);
     }
-    this.$apiClient
-      .get("/api/v1/organization")
-      .then((response) => {
-        console.log("Org response ", response);
-        if (response.data.status === 1) {
-          if (response.data.organization.length == 0) {
+    // this.$apiClient
+    //   .get("/api/v1/organization")
+    //   .then((response) => {
+    //     console.log("Org response ", response);
+    //     if (response.data.status === 1) {
+    //       if (response.data.organization.length == 0) {
+    //         this.organizationCreated = 2;
+    //         return;
+    //       }
+    //       this.companyProfile = response.data.organization;
+    //       this.organizationCreated = 1;
+    //       console.log("cretaed");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error", error);
+    //     this.organizationCreated = 0;
+    //   });
+
+    this.isLoading = true;
+      this.$apiGet('/api/v1/organization').then((response) => {
+        if (response.status === 1) {
+          this.isLoading = false;
+          if (response.organization.length == 0) {
             this.organizationCreated = 2;
             return;
           }
-          this.companyProfile = response.data.organization;
+          this.companyProfile = response.organization;
           this.organizationCreated = 1;
           console.log("cretaed");
         }
-      })
-      .catch((error) => {
+      }).catch((error) => {
         console.log("Error", error);
         this.organizationCreated = 0;
-      });
+      }).finally(() =>{
+
+      })
   },
   methods: {
-    showSuccessToastMessage(message) {
-      //  alert(message);
-      console.log("message", message);
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
+   
     localee() {
       console.log("locale", this.getLocale);
     },
