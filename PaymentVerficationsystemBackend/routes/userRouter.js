@@ -13,7 +13,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-router.post('/signup', authoController.uploadUserImage,authoController.signup);// Route to upload user images
+
 router.post('/login',authoController.login);
 router.get('/logout',authoController.logout);
 
@@ -21,8 +21,9 @@ router.post('/forgetPassword', authoController.forgetPassword);
 router.patch('/resetPassword',authoController.resetPassword);
 
 // Protect all routes after this middleware
-//router.use(authoController.authenticationJwt);
+router.use(authoController.authenticationJwt);
 
+router.post('/signup', authoController.uploadUserImage,authoController.signup);
 router.patch('/updatePassword',authoController.updatePassword);
 router.patch('/updateMe',authoController.uploadUserImage,userController.updateMe);
   

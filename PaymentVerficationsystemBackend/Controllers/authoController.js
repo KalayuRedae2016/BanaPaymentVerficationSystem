@@ -198,21 +198,19 @@ exports.logout = catchAsync(async(req, res,next) => {
   res.status(200).json({ status: 'success' });
 });
 
-exports.authenticationJwt = catchAsync(async (req, _, next) => {
+exports.authenticationJwt = catchAsync(async (req, res, next) => {
   let token;
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer')
-  ) {
+  if (req.headers.authorization &&req.headers.authorization.startsWith('Bearer') ) {
     token = req.headers.authorization.split(' ')[1];
   }
+  console.log(req.headers)
   if (!token) {
-    return next(new AppError('You are not Unauthorized user', 403));
+    return next(new AppError('Token is missed! Unauthorized user', 403,1));
   }
 
-  jwt.verify(token, myKey, (err, decoded) => {
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return next(new AppError('Session expired', 401));
+      return next(new AppError('Token Session expired', 401,1));
     }
 
     req.user = decoded;
