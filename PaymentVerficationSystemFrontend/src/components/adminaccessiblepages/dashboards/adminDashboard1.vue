@@ -526,7 +526,7 @@ export default {
           if (response.status === 1) {
             this.activeMonth = response.paymentSetting.activeMonth;
             this.activeYear = response.paymentSetting.activeYear;
-            this.monthlyPayment();
+             this.monthlyPayment();
           }
         })}catch(error){
      
@@ -539,43 +539,45 @@ export default {
         };
     },
     //monthly payment
-    monthlyPayment() {
+  async   monthlyPayment() {
        const params={
         timeRange: "monthly",
         year: this.activeYear,
         month: this.activeMonth,
        }
-      this.$apiGet('/api/v1/payments/reports',params)
+     try{ await this.$apiGet('/api/v1/payments/reports',params)
         .then((response) => {
           console.log("active month ", this.activeMonth);
-          console.log("monthly report in the dashboard", response);
-          this.monthlyReport = response.data.items;
+          console.log("monthly report based on the latest setting", response);
+          this.monthlyReport = response.items;
           this.monthlyPaid =
-            response.data.items.categorizedPayments.confirmed.uniqueUsers;
+            response.items.categorizedPayments.confirmed.uniqueUsers;
           console.log("confirmed", this.monthlyPaid);
 
           this.monthlyPending =
-            response.data.items.categorizedPayments.pending.uniqueUsers;
+            response.items.categorizedPayments.pending.uniqueUsers;
           console.log("pending", this.monthlyPending);
 
   this.monthlyCapital = 
-    (response.data.items.categorizedPayments.confirmed?.totalBlockBankAccountPaid || 0) +
-    (response.data.items.categorizedPayments.confirmed?.totalServiceBankAccountPaid || 0) +
-    (response.data.items.categorizedPayments.pending?.totalBlockBankAccountPaid || 0) +
-    (response.data.items.categorizedPayments.pending?.totalServiceBankAccountPaid || 0) +
-    (response.data.items.categorizedPayments.overdue?.totalBlockBankAccountPaid || 0) +
-    (response.data.items.categorizedPayments.overdue?.totalServiceBankAccountPaid || 0);
+    (response.items.categorizedPayments.confirmed?.totalBlockBankAccountPaid || 0) +
+    (response.items.categorizedPayments.confirmed?.totalServiceBankAccountPaid || 0) +
+    (response.items.categorizedPayments.pending?.totalBlockBankAccountPaid || 0) +
+    (response.items.categorizedPayments.pending?.totalServiceBankAccountPaid || 0) +
+    (response.items.categorizedPayments.overdue?.totalBlockBankAccountPaid || 0) +
+    (response.items.categorizedPayments.overdue?.totalServiceBankAccountPaid || 0);
 
 
         })
-        .catch((error) => {
+       }catch(error) {
           console.log(
             "active month and year in catch",
             this.activeMonth,
             this.activeYear
           );
-          console.log("Error fetching reports:", error.response.data.error);
-        });
+          console.log("Error fetching reports:", error.status,error.message);
+        }finally{
+
+        };
     },
 
     viewPaidUnPaid() {

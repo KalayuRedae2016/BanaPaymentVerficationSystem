@@ -10,7 +10,7 @@ export default {
       serviceBanks: [],
       blockBanks: [],
       inactivityTimeout: null, // Timeout for inactivity
-      inactivityDuration: 1* 60 * 1000, // 30 minutes
+      inactivityDuration: 30* 60 * 1000, // 30 minutes
     };
   },
   created() {

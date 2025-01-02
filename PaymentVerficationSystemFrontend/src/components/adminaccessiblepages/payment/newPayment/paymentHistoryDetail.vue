@@ -647,7 +647,7 @@
         <p class="text-blue-500 font-bold px-4">View and Get Receipt</p>
         <div class="border-t border-blue-900 ml-5 mt-5 px-3">
           <div class="mt-4 flex flex-col space-y-5">
-            <div class="flex flex-row w-full bg-blue-100">
+            <div class="flex flex-row w-full bg-blue-50">
               <!-- Left Column: User Information -->
               <div class="text-gray-800 font-semibold py-4 text-md">
                 <p>
@@ -655,7 +655,7 @@
                     class="fas fa-chevron-right mr-3 text-pink-500 ml-1 text-xs"
                   ></i>
 
-                  <span class="text-blue-900 text-xs">
+                  <span class="text-gray-500 text-xs">
                     User Code:
                     <span class="ml-3">{{ payment.userCode }}</span></span
                   >
@@ -665,7 +665,7 @@
                     class="fas fa-chevron-right mr-3 text-pink-500 ml-1 text-xs"
                   ></i>
 
-                  <span class="text-indigo-800 text-xs">
+                  <span class="text-gray-500 text-xs">
                     Full Name:
                     <span class="ml-3">{{ payment.fullName }}</span></span
                   >
@@ -673,7 +673,7 @@
                 <p>
                   <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1"></i>
 
-                  <span class="text-indigo-800 text-xs">
+                  <span class="text-gray-500 text-xs">
                     Report For:
                     <span class="ml-3">
                       {{ payment.activeYear }}-{{
@@ -695,7 +695,7 @@
             </div>
 
             <div class="overflow-x-auto">
-              <table class="w-full bg-white">
+              <table class="w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
                   <tr class="bg-gray-200">
                     <th
@@ -711,7 +711,7 @@
                     <th
                       class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
-                      Payment Date
+                      Payment Date(Paid At)
                     </th>
                     <th
                       class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
@@ -729,23 +729,23 @@
                     >
                       TT Number
                     </th>
-                    <th
+                    <!-- <th
                       class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Paid
-                    </th>
-                    <th
+                    </th> -->
+                    <!-- <th
                       class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Action
-                    </th>
+                    </th> -->
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                <tr class="mt-5 border-b border-t border-gray-300 font-bold">
+                    <td class="text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-blue-100 text-blue-800 px-2 rounded-lg font-bold"
+                        class="text-blue-800 px-2  font-bold"
                       >
                         Regular
                       </p>
@@ -768,11 +768,11 @@
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.regular.TTNumber }}
                     </td>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                    <!-- <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.regular.isPaid }}
-                    </td>
+                    </td> -->
 
-                    <td
+                    <!-- <td
                       @click="
                         showEditModalDetail(
                           payment.billCode,
@@ -785,12 +785,13 @@
                       <button class="custom-button">
                         <i class="fas fa-edit "></i> Edit
                       </button>
-                    </td>
+                    </td> -->
                   </tr>
-                  <tr v-if="payment.subsidy.amount > 0">
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+
+                  <tr v-if="payment.subsidy.amount > 0" class="border-b border-gray-300 font-bold">
+                    <td class=" text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-cyan-100 text-cyan-800 px-2 rounded-lg font-bold"
+                        class=" text-cyan-800 px-2 rounded-lg font-bold"
                       >
                         Subsidy
                       </p>
@@ -823,14 +824,14 @@
                       </p>
                       <p v-else>-------------</p>
                     </td>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                    <!-- <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.subsidy.amount > 0">
                         {{ payment.subsidy.isPaid }}
                       </p>
                       <p v-else>Not needed</p>
-                    </td>
+                    </td> -->
 
-                    <td
+                    <!-- <td
                       v-if="payment.subsidy.amount > 0"
                       class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
@@ -846,7 +847,7 @@
                       >
                         <i class="fas fa-edit "></i> Edit
                       </button>
-                    </td>
+                    </td> -->
 
                     <td
                       v-if="payment.subsidy.amount == 0"
@@ -856,10 +857,10 @@
                     </td>
                   </tr>
 
-                  <tr v-if="payment.urgent.amount > 0">
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                  <tr v-if="payment.urgent.amount > 0" class="border-b border-gray-300 font-bold">
+                    <td class="text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-pink-100 text-blue-800 px-2 rounded-lg font-bold"
+                        class="text-blue-800 px-2 rounded-lg font-bold"
                       >
                         Urgent
                       </p>
@@ -887,13 +888,13 @@
                       </p>
                       <p v-else>-------------</p>
                     </td>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                    <!-- <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.urgent.amount > 0">
                         {{ payment.urgent.isPaid }}
                       </p>
                       <p v-else>Not needed</p>
-                    </td>
-                    <td
+                    </td> -->
+                    <!-- <td
                       v-if="payment.urgent.amount > 0"
                       class="px-3 text-xs text-gray-700 whitespace-nowrap"
                     >
@@ -909,7 +910,7 @@
                       >
                         <i class="fas fa-edit"></i>Edit
                       </button>
-                    </td>
+                    </td> -->
 
                     <td
                       v-if="payment.urgent.amount == 0"
@@ -918,10 +919,10 @@
                       Action Not Needed;
                     </td>
                   </tr>
-                  <tr>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                  <tr class="border-b border-gray-300 font-bold">
+                    <td class=" text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-yellow-100 text-blue-800 px-2 rounded-lg font-bold"
+                        class=" text-blue-800 px-2 rounded-lg font-bold"
                       >
                         Service
                       </p>
@@ -946,10 +947,10 @@
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.TTNumber }}
                     </td>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                    <!-- <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.isPaid }}
-                    </td>
-                    <td
+                    </td> -->
+                    <!-- <td
                       @click="
                         showEditModalDetail(
                           payment.billCode,
@@ -963,13 +964,13 @@
                         <i class="fas fa-edit"></i>Edit
                       </button>
 
-                    </td>
+                    </td> -->
                   </tr>
                 </tbody>
               </table>
             </div>
             <div class="overflow-x-auto">
-              <table class="">
+              <table class="border border-gray-300">
                 <thead>
                   <tr class="bg-gray-200">
                     <th
@@ -1012,37 +1013,37 @@
                     >
                       TT Number
                     </th>
-                    <th
+                    <!-- <th
                       class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Paid
-                    </th>
-                    <th
+                    </th> -->
+                    <!-- <th
                       class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
                     >
                       Action
-                    </th>
+                    </th> -->
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                  <tr class="font-bold">
+                    <td class="py-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-red-300 text-blue-800 px-2 rounded-lg font-bold"
+                        class="text-gray-500  px-2 rounded-lg font-bold"
                       >
                         Penality
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
+                        class=" text-gray-500 px-2 rounded-lg font-bold"
                       >
                         {{ payment.regular.penality }}
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
+                        class="text-gray-500  px-2 rounded-lg font-bold"
                       >
                         {{ payment.subsidy.penality }}
                       </p>
@@ -1050,14 +1051,14 @@
 
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
+                        class=" text-gray-500  px-2 rounded-lg font-bold"
                       >
                         {{ payment.urgent.penality }}
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p
-                        class="bg-red-100 text-blue-800 px-2 rounded-lg font-bold"
+                        class=" text-gray-500 px-2 rounded-lg font-bold"
                       >
                         {{ payment.penality.amount }}
                       </p>
@@ -1081,13 +1082,13 @@
                       </p>
                       <p v-else>----</p>
                     </td>
-                    <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                    <!-- <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.penality.amount > 0">
                         {{ payment.penality.isPaid }}
                       </p>
                       <p v-else class="text-xxs">Nothing to pay</p>
-                    </td>
-                    <td v-if="payment.penality.amount > 0"
+                    </td> -->
+                    <!-- <td v-if="payment.penality.amount > 0"
                       @click="
                         showEditModalDetail(
                           payment.billCode,
@@ -1101,7 +1102,7 @@
                         <i class="fas fa-edit "></i> Edit
                       </button>
                     </td>
-                    <td v-else class="text-xxs">No action needed</td>
+                    <td v-else class="text-xxs">No action needed</td> -->
                   </tr>
                 </tbody>
               </table>
@@ -1300,8 +1301,8 @@ export default {
           paidAt: "",
           bankType: "",
           TTNumber: "",
-          isPaid: true,
-          daysLate: 3,
+          isPaid: '',
+          daysLate: '',
         },
         subsidy: {
           amount: "",
@@ -1309,8 +1310,8 @@ export default {
           paidAt: "",
           bankType: "",
           TTNumber: "",
-          isPaid: true,
-          daysLate: 3,
+          isPaid: '',
+          daysLate: '',
         },
         urgent: {
           amount: "",
@@ -1318,7 +1319,7 @@ export default {
           paidAt: "",
           bankType: "",
           TTNumber: "",
-          isPaid: true,
+          isPaid: '',
           daysLate: "",
         },
         service: {
@@ -1327,7 +1328,7 @@ export default {
           paidAt: "",
           bankType: "",
           TTNumber: "",
-          isPaid: true,
+          isPaid: '',
           daysLate: "",
         },
         penality: {
@@ -1336,9 +1337,10 @@ export default {
           paidAt: "",
           bankType: "",
           TTNumber: "",
-          isPaid: true,
+          isPaid: '',
           daysLate: "",
         },
+      
       },
     };
   },
