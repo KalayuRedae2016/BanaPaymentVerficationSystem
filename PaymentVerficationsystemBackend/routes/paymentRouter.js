@@ -20,12 +20,10 @@ router.use(function (req, res, next) {
 router.use(authoController.authenticationJwt);
 
 //router.use(authoController.requiredRole('admin'));
-
 router.use(paymentController.updateStatusAndPenality);
 
 // Route to create unconfirmed payments (initiated but not yet confirmed)
 router.route('/create/bills').post(paymentController.createUnconfirmedPayments);
-
 
 // ========== Routes for managing payments via the system ==========
 router.route('/search').get(paymentController.searchPayments);//search Bank Statement payment
@@ -61,6 +59,5 @@ router.get('/exportPayments', paymentController.exportPayments); // Export payme
 router.route('/search/bills') .get(authenticateApiKey,paymentController.searchBills);//search payments
 router.route('/query_more_bill/:paymentTypeIds').get(authenticateApiKey,paymentController.getMoreBills);//getMoreBills
 router.route('/c2b-payment-validation-request').post(authenticateApiKey,paymentController.confirmBills);//confirm payment
-
 
 module.exports = router;
