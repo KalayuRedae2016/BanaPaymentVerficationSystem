@@ -5,7 +5,7 @@
       <!-- search and searched users -->
       <div class="">
         <div
-          class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
+          class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200"
         >
           <!-- Search Input -->
           <div class="flex-1 mr-4">
@@ -1549,6 +1549,7 @@ export default {
         daysLate: this.daysLate,
       };
       this.payload = {
+        user:this.userId,
         billCode: this.billCode,
         [this.paymentType]: payment,
       };

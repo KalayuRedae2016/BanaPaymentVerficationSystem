@@ -353,9 +353,22 @@ export default {
       const fileInput = this.$refs.fileInput;
       console.log("fileInput", fileInput);
       if (fileInput && fileInput.files.length > 0) {
+      //  alert("ll")
         const file = fileInput.files[0];
         this.imageFile = file;
         // Rest of your code to handle the file
+
+        console.log("Selected file:", file);
+      console.log("File type:", file.type); // This should be 'image/jpeg', 'image/png', etc.
+      console.log("File size:", file.size); // Check size to ensure it's within acceptable limits
+      console.log("File name:", file.name); // Check the name of the file
+
+      // Optional: Check if the file is an image based on MIME type
+      if (!file.type.startsWith('image/')) {
+        console.log("Not a valid image file.");
+      } else {
+        console.log("Image is valid.");
+      }
       }
     },
     async editDetail() {
