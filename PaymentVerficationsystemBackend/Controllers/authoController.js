@@ -124,7 +124,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!userCode || !password) {
     return res.status(200).json({
       status: 0,
-      message: 'Please provide userCode or password',
+      message: 'Please provide valid userCode or password',
     });
   }
   const Upper_userCode = userCode.toUpperCase();
