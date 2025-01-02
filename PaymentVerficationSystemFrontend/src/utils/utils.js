@@ -39,7 +39,7 @@ function handleApiError(error) {
           //alert("hiii")
           console.log("enters in to the 401 and 403 with option")
           this.$store.dispatch("logout");
-          this.$router.push("/login");
+          this.$router.push("/");
           return;
         }
 
