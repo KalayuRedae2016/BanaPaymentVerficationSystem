@@ -39,7 +39,7 @@
           </svg>
         </button>
       </div>
-      <form v-if="loginVisible">
+      <form v-if="loginVisible" >
         <div
           v-for="(field, key) in formSchema.login.fields"
           :key="key"

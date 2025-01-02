@@ -33,6 +33,7 @@ function handleApiError(error) {
         else if ((status === 401 && error.response.data.tokenMissingExpired===1) ||(status == 403 && error.response.data.tokenMissingExpired===1)) {
           this.$store.dispatch("logout");
           this.$router.push("/login");
+          return;
         }
 
 
