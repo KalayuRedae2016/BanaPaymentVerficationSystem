@@ -1,9 +1,9 @@
 const PaymentSetting = require('../Models/paymentSettingModel');
-const mongoose = require('mongoose');
+const Payment = require('../Models/paymentModel');
+const User=require("../Models/userModel")
+
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-
-const User=require("../Models/userModel")
 const createPendingPayments=require("../utils/createPendingPayments")
 const {formatDate,formatDateGC}=require("../utils/formatDate")
 
@@ -22,7 +22,6 @@ const normalizePenalties = (data) => {
   return result;
 };
 
-// Create a new payment setting
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
   const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
 
@@ -160,38 +159,27 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
     });
 });
 
-// Update a payment setting by ID
 exports.updatePaymentSettingBYId = catchAsync(async (req, res,next) => {
-  console.log("body is for setting is ",req.body)
-  //console.log(req.params.id);
     const settingId= req.params.id;
-    //const updatedData=req.body
     let updatedData=req.body
+
     if(!settingId){
       return next(new AppError('Setting ID is required', 404));
     }
-    // Normalize penalties if provided in the update
     updatedData = normalizePenalties(updatedData);
 
     if(updatedData.activeMonth && updatedData.activeYear){
     updatedData.startingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 1)); // First day of the month
     updatedData.endingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 30));  // 30th day of the month
     }
-  // console.log("updatedData",updatedData)
-    const paymentSetting = await PaymentSetting.findOneAndUpdate(
-      { _id: settingId,latest:true}, 
-      updatedData, // Update data from the request body
-      { new: true, runValidators: true } // Options to return the updated document and to run validators
-    );
+
+    const paymentSetting = await PaymentSetting.findOneAndUpdate({ _id: settingId,latest:true}, updatedData,{ new: true, runValidators: true });
     if (!paymentSetting) {
       return next(new AppError('Payment setting is not found', 404))
     }
-
-    // Format the starting and ending dates
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
-  // console.log("Updated Payment Setting:", paymentSetting); // Log updated setting
     res.status(200).json({
       status:1,
       message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,

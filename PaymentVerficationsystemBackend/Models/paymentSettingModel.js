@@ -87,28 +87,23 @@ paymentSettingSchema.pre('validate', function (next) {
 });
 
 paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
-  // console.log("Pre-findOneAndUpdate Hook");
-
   const updatedFields = this._update;
   const paymentSetting = this._conditions;
-
-  // If this setting is marked as latest, ensure all previous PaymentSettings are marked as not latest
   if (updatedFields.latest === true) {
     await mongoose.model('PaymentSetting').updateMany(
       { _id: { $ne: paymentSetting._id }, latest: true },
       { $set: { latest: false } }
     );
   }
-  // console.log("Updated Fields:", updatedFields);
-
+  
   // Apply changes to associated payments
   const updatedPaymentFields = {};
-
   if (updatedFields.activeYear) updatedPaymentFields['activeYear'] = updatedFields.activeYear;
   if (updatedFields.activeMonth) updatedPaymentFields['activeMonth'] = updatedFields.activeMonth;
   if (updatedFields.regularAmount) updatedPaymentFields['regular.amount'] = updatedFields.regularAmount;
   if (updatedFields.urgentAmount) updatedPaymentFields['urgent.amount'] = updatedFields.urgentAmount;
   if (updatedFields.subsidyAmount) updatedPaymentFields['subsidy.amount'] = updatedFields.subsidyAmount;
+  if (updatedFields.serviceAmount) updatedPaymentFields['service.amount'] = updatedFields.serviceAmount;
 
   if (Object.keys(updatedPaymentFields).length > 0) {
     const Payment = mongoose.model('Payment');
