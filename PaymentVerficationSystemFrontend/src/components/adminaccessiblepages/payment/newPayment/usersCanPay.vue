@@ -1549,7 +1549,7 @@ export default {
         daysLate: this.daysLate,
       };
       this.payload = {
-        user:this.userId,
+        userId:this.userId,
         billCode: this.billCode,
         [this.paymentType]: payment,
       };
@@ -1562,6 +1562,7 @@ export default {
     },
 
     async updatePayment() {
+      console("payload in  the update is ",this.payload);
       try {
         await this.$apiPatch("/api/v1/payments/update", "", this.payload).then(
           (response) => {
