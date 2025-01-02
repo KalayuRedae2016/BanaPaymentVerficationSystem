@@ -1549,6 +1549,7 @@ export default {
         daysLate: this.daysLate,
       };
       this.payload = {
+        user:this.userId,
         billCode: this.billCode,
         [this.paymentType]: payment,
       };
