@@ -476,12 +476,17 @@ export default {
 //   this.$store.dispatch("commitReloading", false);
 //   this.$refs.smoozer.startSmoothReload();
 // }, 2000);
-
+    
+if(localStorage.getItem(token)===null){
+  this.$router.push({ path: "/" });
+}else{
+  alert(localStorage.getItem(token))
+}
 
     window.addEventListener("resize", this.checkScreenSize);
     this.checkScreenSize();
 
-   await  this.$apiGetById("/api/v1/users", this.userId)
+await  this.$apiGetById("/api/v1/users", this.userId)
       .then((response) => {
         console.log("response in the edit client mounted: ", response);
         this.profileData = "data:image/jpeg;base64," + response.imageData;

@@ -1,4 +1,8 @@
-import axios from "axios"; // Import apiClient and baseUrl from globals
+import axios from "axios"; 
+import router from '../router'; // Import the router directly
+import store from '../store';
+router.push('/');
+// Import apiClient and baseUrl from globals
 // import { formSchema } from "./formSchema";
 export function reloadPage() {
     setTimeout(() => {
@@ -21,18 +25,25 @@ export function getApiClient() {
 }
 
 function handleApiError(error) {
+
+
     let status = 0;
     let message = "An unexpected error occurred.";
     if (error.response) {
+      status = error.response.status;
+      console.log("Error details:", status, error, error.response.data?.error?.option);
+
         status = error.response.status;
         if (status >= 100 && status < 200) {
             message = `Informational response: ${status}. Please wait...`;
         } else if (status >= 300 && status < 400) {
             message = `Redirection: ${status}. The resource has moved.`;
         }         
-        else if ((status === 401 && error.response.data.tokenMissingExpired===1) ||(status == 403 && error.response.data.tokenMissingExpired===1)) {
-          this.$store.dispatch("logout");
-          this.$router.push("/login");
+        else if (status === 401 && error.response.data?.error?.option === 1) {
+         // alert("hiii")
+          console.log("enters in to the 401 and 403 with option")
+            store.dispatch("logout");
+            router.push("/");
           return;
         }
 
@@ -80,7 +91,7 @@ function handleApiError(error) {
 }
 
 function getDefaultHeaders(customHeaders = {}) {
-    const token = localStorage.getItem("token"); // Access the token from Vuex or localStorage
+    const token =localStorage.getItem("token"); // Access the token from Vuex or localStorage
     return {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
