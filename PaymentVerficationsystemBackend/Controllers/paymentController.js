@@ -27,7 +27,6 @@ const paymentFileUpload = createMulterMiddleware(
 );
 // Middleware for handling single file upload
 exports.uploadPaymentFile = paymentFileUpload.single('file');
-// Function to create unconfirmed payments
 
 exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
   const { activeYear, activeMonth } = req.body;
@@ -432,6 +431,7 @@ exports.confirmBills = async (req, res) => {
     });
   }
 };
+
 exports.searchPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid, activeYear, activeMonth } = req.query;
 
@@ -756,6 +756,8 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   });
 
 });
+
+
 exports.getPenality = catchAsync(async (req, res, next) => {
   const { paymentType, activeYear, activeMonth, paymentDate } = req.query;
 
@@ -1049,6 +1051,7 @@ exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
     payment
   });
 });
+
 exports.getAllPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid } = req.query;
   if (!keyword) {
@@ -1197,6 +1200,7 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
     }
   })
 });
+
 exports.importPayments = catchAsync(async (req, res, next) => {
   if (!req.file) {
     return next(new AppError('No file uploaded', 400));
@@ -1227,6 +1231,7 @@ exports.exportPayments = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({});
   await exportToExcel(payments, 'Payments', 'paymentData.xlsx', res);
 });
+
 exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   const { userCode, activeYear } = req.query;
   if (!userCode) {
