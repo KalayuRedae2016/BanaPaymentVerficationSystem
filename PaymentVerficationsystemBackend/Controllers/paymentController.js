@@ -544,7 +544,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.confirmPayments = catchAsync(async (req, res, next) => {
-  const { billCode, userId, urgent, regular, subsidy, service, penality, paymentDate } = req.body;
+  const { billCode, userId, urgent, regular, subsidy, service, penality, paidAt} = req.body;
   if (!billCode || !userId) {
     return next(new AppError(`billCode or UserId is required`))
   }
@@ -561,7 +561,6 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   if (!unpaidBill) {
     return next(new AppError(`No unpaid bill found for billCode->${billCode}`, 400))
   }
-
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
@@ -660,29 +659,28 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.editPayments = catchAsync(async (req, res, next) => {
-  const { billCode, urgent, regular, subsidy, service, penality } = req.body;
+  const { userId,billCode, urgent, regular, subsidy, service, penality} = req.body;
   if (!billCode) {
-    return next(new AppError(`billCode is required to update Confirmed Payment`))
+    return next(new AppError(`billCode is required to edit Confirmed Payment`))
   }
   if (!urgent && !regular && !subsidy && !service && !penality) {
-    return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",))
+    return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",404))
 
   }
 
+  const user = await User.findById(userId)
+  if (!user) {
+    return next(new AppError("User is not found"), 400)
+  } 
   // Find the uPaid bill by billCode
   let payment = await Payment.findOne({ billCode });
   if (!payment) {
-    return res.status(404).json({ error: 'No Paid bill found' });
+    return next(new AppError("No paid Bill found",404))
   }
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
-    console.log("updateisPaid:",updates.isPaid)
-    console.log("existingispaid:",existing.isPaid)
-    const paidAt = isPaid ? formatDate(existing.paidAt) || formatDate(Date.now()) : null;
-    console.log("updatepaidAt:",updates.paidAt)
-    console.log("existingPaidAt:",existing.paidAt)
-    const paidAtGC= isPaid ? formatDateGC(existing.paidAt) || formatDateGC(Date.now()) : null;
+    const paidAt = isPaid ? (updates.paidAt ? new Date(updates.paidAt) : new Date(existing.paidAt)) : null;
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
@@ -690,7 +688,6 @@ exports.editPayments = catchAsync(async (req, res, next) => {
       penality: isPaid ?updates.penality ?? existing.penality:0,
       isPaid,
       paidAt,
-      paidAtGC,
       daysLate: updates.daysLate ?? existing.daysLate,
     };
   };
@@ -716,26 +713,20 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   const allPaid = paymentsToCheck.every(payment => payment.isPaid);
 
   if (allPaid) {
-    
-    //   const latestPayments=await Payment.find({latest:true});
-    //   if(latestPayments){
-    //   for (const payment of latestPayments) {
-    //     payment.latest=false
-    //     await payment.save();
-    //   }
-
-    // }
-      payment.isPaid = true;
+    payment.isPaid = true;
     payment.status = 'confirmed';
     payment.confirmedDate = new Date();
+    payment.confirmedID = userId,
+    payment.confirmationMethod = "Admin-confirmed"
+    //should be exist separate field to hold payemnt editer id
   } else {
-    // Update the unpaid bill with the QR code URL
     payment.isPaid = false;
     payment.status = 'pending';
     payment.confirmedDate = null;
-    payment.latest = false//which one is the latest then
-    
-    /// Identify the nearest relevant bill to mark as latest
+    payment.latest = false
+    payment.confirmationMethod=null
+    payment.confirmedID=null
+
     const nearestRelevantBill = await Payment.findOne({
       userCode: payment.userCode, isPaid: true, _id: { $ne: payment._id }, // Exclude the current bill
     }).sort({ paidAt: -1, createdAt: -1 }).exec();// Sort by paidAt or createdAt, descending
@@ -747,13 +738,12 @@ exports.editPayments = catchAsync(async (req, res, next) => {
     }
     // console.log(nearestRelevantBill)
   }
-  // Save the updated bill
   await payment.save();
 
   const formattedCreatedAt = payment.createdAt ? formatDate(payment.createdAt) : null;
   const formattedUpdatedAt = payment.updatedAt ? formatDate(payment.updatedAt) : null;
   const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate) : null;
-  // console.log(payment)
+  console.log(payment)
   res.status(200).json({
     message: 'Payment updated successfully',
     items: {
