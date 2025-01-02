@@ -17,7 +17,7 @@ router.use(function (req, res, next) {
 });
 
 // Protect all routes after this middleware
-//router.use(authoController.authenticationJwt);
+router.use(authoController.authenticationJwt);
 
 //router.use(authoController.requiredRole('admin'));
 

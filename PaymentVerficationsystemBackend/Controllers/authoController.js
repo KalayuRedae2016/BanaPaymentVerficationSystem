@@ -205,18 +205,19 @@ exports.authenticationJwt = catchAsync(async (req, res, next) => {
   }
   console.log(req.headers)
   if (!token) {
-    return next(new AppError('Token is missed! Unauthorized user', 403,1));
+    return next(new AppError('Token is missed! Unauthorized user,Please log in again', 401,1));
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return next(new AppError('Token Session expired', 401,1));
+      return next(new AppError('Token Session expired or invalid,Please log in again', 401,1));
     }
 
     req.user = decoded;
     next();
   });
 });
+
 // Only for rendered pages, no errors!
 // exports.isLoggedIn = async (req, res, next) => {
 //   if (req.cookies.jwt) {
