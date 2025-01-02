@@ -281,25 +281,28 @@ export default {
     },
   },
 
-  mounted() {
-    this.$apiClient
-      .get("/api/v1/users", {
-        params: {
-          isActive: false,
-        },
-      })
+  async mounted() {
+
+    try {
+      const params={
+        isActive: false,
+      }
+      await this.$apiGet("/api/v1/users", 
+        params)
       .then((response) => {
-        if (response.data.status === 1) {
+        if (response.status === 1) {
           console.log("success fetching users");
-          this.clients = response.data.users;
+          this.clients = response.users;
           this.searchedClients = this.clients;
 
           console.log("this clients from db", this.clients);
         }
       })
-      .catch((error) => {
-        console.log("eror fetching users", error);
-      });
+    }catch(error){
+        console.log("eror fetching users", error.status,error.message);
+      }finally{
+
+      };
   },
 
   methods: {
@@ -318,7 +321,7 @@ export default {
       this.showDeactivateModal = false;
 
       try{
-        await this.$apiPut("/api/v1/users/active-deactive",userId, payload)
+        await this.$apiPut("/api/v1/users/active-deactive",userId,payload)
         .then((response) => {
           console.log("users", response);
           if (response.status === 1) {

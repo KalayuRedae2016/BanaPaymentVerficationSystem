@@ -577,15 +577,15 @@ export default {
 
     async deactivate(userId) {
       const payload = {
-        userId: userId,
         reason: this.deactivationReason,
         isActive: false,
       };
 
       console.log("payload", payload);
       this.showDeactivateModal = false;
+      
       try{
-        await this.$apiPut("/api/v1/users/active-deactive",'', payload)
+        await this.$apiPut("/api/v1/users/active-deactive",userId, payload)
         .then((response) => {
           console.log("users", response);
           if (response.status === 1) {
