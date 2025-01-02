@@ -170,30 +170,30 @@ export default {
     this.month = this.$route.query.month;
     this.day = this.$route.query.day;
   },
-  mounted() {
+  async mounted() {
     this.displayedItems(); //for the table
-    this.$apiClient
-      .get("/api/v1/paymentSetting/latest")
+    try { await this.$apiGet("/api/v1/paymentSetting/latest")
       .then((response) => {
-        if (response.data.status === 1) {
-          this.activeMonth = response.data.paymentSetting.activeMonth;
-          this.activeYear = response.data.paymentSetting.activeYear;
+        if (response.status === 1) {
+          this.activeMonth = response.paymentSetting.activeMonth;
+          this.activeYear = response.paymentSetting.activeYear;
           console.log("activeMonth", this.activeMonth, this.activeYear);
         }
-      })
-      .catch((error) => {
+      })}
+       catch(error){
         console.error(
           "An error occurred while fetching payment sfettings:",
           error
         );
-      });
-    const mountedOrNot = 1;
+    }finally{
+
+    };
+    const mountedOrNot=1;
     this.fetchPayments(mountedOrNot);
   },
 
   methods: {
     paymentHistory(userCode,fullName,activeYear, activeMonth, status) {
-
       console.log("userCodeFullName in paid unpaid: " ,fullName);
 
       if (status == "confirmed") {
@@ -233,27 +233,28 @@ export default {
         );
       }
     },
-    fetchPayments(mountedOrNot) {
-      const keyword = "latestPayments";
-      this.$apiClient
-        .get("/api/v1/payments/getAllPayments", {
-          params: {
-            keyword: keyword,
-          },
-        })
+    async fetchPayments(mountedOrNot) {
+ 
+      const params={
+        keyword:"latestPayments"
+      }
+     try { await this.$apiGet("/api/v1/payments/getAllPayments", params)
         .then((response) => {
           console.log("response latest fetch", response);
           if (mountedOrNot == 1) {
-            this.payments = response.data.payments;
+            this.payments = response.payments;
             this.searchedpayments = this.payments;
           } else {
-            this.payments = response.data.payments;
+            this.payments = response.payments;
           }
         })
-        .catch((error) => {
-          console.error("Error fetching payment data:", error);
-        });
+      }catch(error){
+          console.error("Error fetching payment data:", error.status,error.message);
+        }finally{
+      };
     },
+
+
 
     navigateProfile(paymentId) {
       console.log("paymentid", paymentId);
@@ -299,7 +300,7 @@ export default {
           "this searched ain the searche are ",
           this.searchedpayments
         );
-        const mountedOrNot = 0;
+    const mountedOrNot=0;
         this.fetchPayments(mountedOrNot);
         return this.searchedpayments;
       }

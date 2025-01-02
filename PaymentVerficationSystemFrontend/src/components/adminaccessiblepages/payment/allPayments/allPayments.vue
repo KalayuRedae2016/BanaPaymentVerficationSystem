@@ -3,17 +3,13 @@
     <div class="pb-5 flex flex-col -mt-2">
       <div class="-ml-3 rounded-lg p-1 lg:p-3 text-xs">
         <div
-          class="border-t border-gray-200 flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg shadow-md space-y-3 lg:space-y-0"
-        >
+          class="border-t border-gray-200 flex flex-col lg:flex-row items-center justify-between mb-6 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg shadow-md space-y-3 lg:space-y-0">
           <!-- Search Input -->
 
           <!-- Payment Status Select -->
 
-          <select
-            v-model="paymentStatus"
-            @change="changeSearched(paymentStatus)"
-            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          >
+          <select v-model="paymentStatus" @change="changeSearched(paymentStatus)"
+            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
             <option value="" selected disabled>Select Status</option>
             <option value="all">All</option>
             <option value="paid" class="text-green-500">Paid/Confirmed</option>
@@ -22,11 +18,8 @@
           </select>
 
           <!-- Year Select -->
-          <select
-            v-model="selectedYear"
-            @change="changeSearched(paymentStatus)"
-            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          >
+          <select v-model="selectedYear" @change="changeSearched(paymentStatus)"
+            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
             <option value="" disabled>Select Year</option>
             <option value="all">All</option>
             <option v-for="year in $years" :key="year" :value="year">
@@ -35,106 +28,86 @@
           </select>
 
           <!-- Month Select (conditional rendering) -->
-          <select
-            v-if="selectMonth"
-            v-model="selectedMonth"
-            @change="changeSearched(paymentStatus)"
-            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0 lg:px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          >
+          <select v-if="selectMonth" v-model="selectedMonth" @change="changeSearched(paymentStatus)"
+            class="w-full lg:w-1/4 border border-gray-300 rounded-lg h-10 px-0 lg:px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
             <option value="" disabled>Select Month</option>
             <option value="all">All</option>
-            <option
-              v-for="month in $months"
-              :key="month.value"
-              :value="month.value"
-            >
+            <option v-for="month in $months" :key="month.value" :value="month.value">
               {{ month.name }}
             </option>
           </select>
           <div class="flex-1 w-full">
-            <input
-              v-model="searchQuery"
-              type="text"
-              placeholder="Search by Name, Email, Username"
-              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
-            />
+            <input v-model="searchQuery" type="text" placeholder="Search by Name, Email, Username"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" />
           </div>
         </div>
 
         <div class="overflow-x-auto overflow-y-auto h-96">
-  <!-- Table -->
-  <table class="table-auto min-w-full border-collapse border-b border-gray-300">
-    <!-- Table Head -->
-    <thead class="bg-blue-50 text-white sticky top-0 z-10">
-      <tr class="text-blue-500 text-xs">
-        <th class="w-24 p-4 font-bold tracking-wide text-left">UserCode</th>
-        <th class="w-36 p-4 font-bold tracking-wide text-left">Full Name</th>
-        <th class="w-36 p-4 font-bold tracking-wide text-left">Year</th>
-        <th class="w-36 p-4 font-bold tracking-wide text-left">Month</th>
-        <th class="w-24 p-4 font-bold tracking-wide text-left">Paid/Unpaid</th>
-        <th class="w-24 p-4 font-bold tracking-wide text-left">Action</th>
-      </tr>
-    </thead>
-    <!-- Scrollable Table Body -->
-    <tbody class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto">
-      <tr
-      @click="paymentHistory(
-              searchPayment.userCode,
-              searchPayment.fullName,
-              searchPayment.activeYear,
-              searchPayment.activeMonth,
-              
-              searchPayment.status
-            )"
-        v-for="searchPayment in searchedpayments"
-        :key="searchPayment._id"
-        class="cursor-pointer bg-white hover:shadow-lg hover:bg-blue-100 rounded-lg p-4"
-      >
-        <td class="p-4 text-xs text-gray-700">
-          <span class="font-bold text-indigo-600">{{ searchPayment.userCode }}</span>
-        </td>
-        <td class="p-4 text-xs text-gray-700 font-bold">
-          {{ searchPayment.fullName }}
-        </td>
-        <td class="p-4 text-xs text-gray-700 font-bold">
-          {{ searchPayment.activeYear }}
-        </td>
-        <td class="p-4 text-xs text-gray-700 font-bold">
-          {{ searchPayment.activeMonth }}
-        </td>
-        <td class="p-4 text-xs" >
-          <span
-            :class="{
-              'bg-green-100 text-green-600 font-bold px-2 py-1 rounded': searchPayment.isPaid,
-              'bg-yellow-100 text-yellow-600 font-bold px-2 py-1 rounded': (!searchPayment.isPaid && searchPayment.status==='pending'),
-              'bg-red-100 text-red-600 font-bold px-2 py-1 rounded': (!searchPayment.isPaid && searchPayment.status==='overdue')
-            }"
-          >
-            <span v-if="searchPayment.isPaid">Paid</span>
-            <span v-else-if="!searchPayment.isPaid && searchPayment.status==='pending'">pending</span>
-            <span v-else-if="!searchPayment.isPaid && searchPayment.status==='overdue'">Overdue</span>
-          </span>
-        </td>
-        <td class="p-4">
-          <button
-            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded shadow-lg"
-            @click="paymentHistory(
-              searchPayment.userCode,
-              searchPayment.fullName,
-              searchPayment.activeYear,
-              searchPayment.activeMonth,
-              searchPayment.status
-            )"
-          >
-            <i class="fas fa-info-circle"></i> Detail
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+          <!-- Table -->
+          <table class="table-auto min-w-full border-collapse border-b border-gray-300">
+            <!-- Table Head -->
+            <thead class="bg-blue-50 text-white sticky top-0 z-10">
+              <tr class="text-blue-500 text-xs">
+                <th class="w-24 p-4 font-bold tracking-wide text-left">UserCode</th>
+                <th class="w-36 p-4 font-bold tracking-wide text-left">Full Name</th>
+                <th class="w-36 p-4 font-bold tracking-wide text-left">Year</th>
+                <th class="w-36 p-4 font-bold tracking-wide text-left">Month</th>
+                <th class="w-24 p-4 font-bold tracking-wide text-left">Paid/Unpaid</th>
+                <th class="w-24 p-4 font-bold tracking-wide text-left">Action</th>
+              </tr>
+            </thead>
+            <!-- Scrollable Table Body -->
+            <tbody class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto">
+              <tr @click="paymentHistory(
+                searchPayment.userCode,
+                searchPayment.fullName,
+                searchPayment.activeYear,
+                searchPayment.activeMonth,
 
-  
+                searchPayment.status
+              )" v-for="searchPayment in searchedpayments" :key="searchPayment._id"
+                class="cursor-pointer bg-white hover:shadow-lg hover:bg-blue-100 rounded-lg p-4">
+                <td class="p-4 text-xs text-gray-700">
+                  <span class="font-bold text-indigo-600">{{ searchPayment.userCode }}</span>
+                </td>
+                <td class="p-4 text-xs text-gray-700 font-bold">
+                  {{ searchPayment.fullName }}
+                </td>
+                <td class="p-4 text-xs text-gray-700 font-bold">
+                  {{ searchPayment.activeYear }}
+                </td>
+                <td class="p-4 text-xs text-gray-700 font-bold">
+                  {{ searchPayment.activeMonth }}
+                </td>
+                <td class="p-4 text-xs">
+                  <span :class="{
+                    'bg-green-100 text-green-600 font-bold px-2 py-1 rounded': searchPayment.isPaid,
+                    'bg-yellow-100 text-yellow-600 font-bold px-2 py-1 rounded': (!searchPayment.isPaid && searchPayment.status === 'pending'),
+                    'bg-red-100 text-red-600 font-bold px-2 py-1 rounded': (!searchPayment.isPaid && searchPayment.status === 'overdue')
+                  }">
+                    <span v-if="searchPayment.isPaid">Paid</span>
+                    <span v-else-if="!searchPayment.isPaid && searchPayment.status === 'pending'">pending</span>
+                    <span v-else-if="!searchPayment.isPaid && searchPayment.status === 'overdue'">Overdue</span>
+                  </span>
+                </td>
+                <td class="p-4">
+                  <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded shadow-lg"
+                    @click="paymentHistory(
+                      searchPayment.userCode,
+                      searchPayment.fullName,
+                      searchPayment.activeYear,
+                      searchPayment.activeMonth,
+                      searchPayment.status
+                    )">
+                    <i class="fas fa-info-circle"></i> Detail
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+
       </div>
     </div>
   </div>
@@ -201,34 +174,33 @@ export default {
   },
 
   async mounted() {
-  this.displayedItems(); // Initialize table data
+    this.displayedItems(); // Initialize table data
 
-  try {
-    const response = await this.$apiClient.get("/api/v1/paymentSetting/latest");
-    if (response.data.status === 1) {
-      this.activeMonth = response.data.paymentSetting.activeMonth;
-      this.activeYear = response.data.paymentSetting.activeYear;
-      console.log("activeMonth", this.activeMonth, this.activeYear);
+    try {
+      await this.$apiGet("/api/v1/paymentSetting/latest").then(response => {
+        if (response.status === 1) {
+          this.activeMonth = response.paymentSetting.activeMonth;
+          this.activeYear = response.paymentSetting.activeYear;
+          console.log("activeMonth", this.activeMonth, this.activeYear);
+        }
+      });
+    } catch (error) {
+      console.error("An error occurred while fetching payment settings:", error.status, error.message);
+    } finally {
+
     }
-  } catch (error) {
-    console.error(
-      "An error occurred while fetching payment settings:",
-      error
-    );
-  }
 
-  // First, fetch payments
-  await this.fetchPayments();
+    await this.fetchPayments();
 
-  // Then evaluate conditions based on the query status
-  if (this.$route.query.status === "confirmed") {
-    this.paymentStatus = "paid";
-    this.changeSearched(this.paymentStatus);
-  } else if (this.$route.query.status === "overdue") {
-    this.paymentStatus = "overdue";
-    this.changeSearched(this.paymentStatus);
-  }
-},
+    // Then evaluate conditions based on the query status
+    if (this.$route.query.status === "confirmed") {
+      this.paymentStatus = "paid";
+      this.changeSearched(this.paymentStatus);
+    } else if (this.$route.query.status === "overdue") {
+      this.paymentStatus = "overdue";
+      this.changeSearched(this.paymentStatus);
+    }
+  },
 
   methods: {
     exportToExcel() {
@@ -270,7 +242,7 @@ export default {
       }
     },
 
-    paymentHistory(userCode,fullName, activeYear, activeMonth, status) {
+    paymentHistory(userCode, fullName, activeYear, activeMonth, status) {
       //alert("hii");
       if (status == "confirmed") {
         this.$router.push({
@@ -283,36 +255,35 @@ export default {
       } else {
         this.$router.push({
           path: "/admindashboard/payments1",
-          query:{
-            activeTab:1,
-            userCode:userCode,
-            userSelected:true,
-            fullName:fullName
+          query: {
+            activeTab: 1,
+            userCode: userCode,
+            userSelected: true,
+            fullName: fullName
           }
         });
       }
     },
 
     async fetchPayments() {
-      const keyword = "allPayments";
-     await  this.$apiClient
-        .get("/api/v1/payments/getAllPayments", 
-          {
-            params:{
-              keyword: keyword,
-            }
-          }
-        )
-        .then((response) => {
+      const params = {
+        keyword: "allPayments",
+      }
+
+      try {
+        await this.$apiGet("/api/v1/payments/getAllPayments", params).then((response) => {
           console.log("response in the all payment nnnnnnn ", response);
-          this.payments = response.data.payments;
+          this.payments = response.payments;
           this.searchedpayments = this.payments;
-          console.log("in fetch");
         })
-        .catch((error) => {
-          console.error("Error fetching payment data:", error);
-        });
+      } catch (error) {
+        console.error("Error fetching payment data:", error);
+      } finally {
+
+      };
     },
+
+
     async changeSearched(paymentStatus) {
       //alert("hiiii")
       if (paymentStatus == "all" || paymentStatus == "") {
@@ -344,7 +315,7 @@ export default {
         //console.log("this ser payments in other year", this.searchedpayments)
         return;
       } else if (paymentStatus == "paid") {
-       // alert("paid")
+        // alert("paid")
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(
             (payment) => payment.isPaid == true && payment.status == "confirmed"
@@ -395,8 +366,8 @@ export default {
           }
         }
       } else {
-       // alert("overdue")
-        console.log("payments",this.payments);
+        // alert("overdue")
+        console.log("payments", this.payments);
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(
             (payment) => payment.isPaid == false && payment.status == "overdue"

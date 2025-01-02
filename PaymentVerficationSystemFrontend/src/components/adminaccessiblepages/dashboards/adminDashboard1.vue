@@ -6,37 +6,7 @@
         <span class=""></span>
       </h2>
 
-   <div v-if="showToast">
-    <!-- Optional overlay for modal effect -->
-    <div
-      class="fixed inset-0 bg-black bg-opacity-50 z-10"
-      @click="closeToast"
-    ></div>
-
-    <transition
-      enter-active-class="transform transition duration-300 ease-out"
-      enter-from-class="translate-y-full opacity-0"
-      enter-to-class="translate-y-0 opacity-100"
-      leave-active-class="transform transition duration-300 ease-in"
-      leave-from-class="translate-y-0 opacity-100"
-      leave-to-class="translate-y-full opacity-0"
-    >
-      <div
-        class="z-20 fixed inset-0 flex items-center justify-center"
-        role="alert"
-      >
-        <div
-          class="bg-blue-500 text-white px-6 py-4 rounded-lg shadow-lg text-center max-w-md"
-        >
-          <strong class="font-bold">Success!</strong>
-          <p class="mt-2">{{ toastMessage }}</p>
-          
-        </div>
-      </div>
-    </transition>
-  </div>
-
-
+     <Toast ref="toast" />
 
       <div class="">
         <div class="mx-4 text-xs">
@@ -402,11 +372,13 @@
 </template>
 <script>
 
-import Chart from "../payment/Reports/charts/charts.vue";
+// import Chart from "../payment/Reports/charts/charts.vue";
 import { mapGetters } from "vuex";
+import Toast from '../../Common/Toast.vue'
 export default {
   components: {
-    Chart,
+    // Chart,
+    Toast,
   },
   name: "CapitalReport",
   data() {
@@ -475,54 +447,46 @@ export default {
       const activeItem="dashboard";
       this.$store.dispatch("commitActiveItem", { activeItem });
 
-    this.showSuccessToast("Successfully Login in to your dashboard");
+    this.$refs.toast.showLoginToastMessage("Successfully Login in to your dashboard");
       setTimeout(() => {
         this.$router.push('/admindashboard');
       }, 2000);
     }
 
 
-    //finding users
-    await this.$apiClient
-      .get("/api/v1/users")
-      .then((response) => {
-        console.log("response clients", response);
-        this.clientProfile = response.data;
-        this.totalClients = response.data.result;
-        console.log("clientlength", this.clientLength);
-      })
-      .catch((error) => {
-        console.error("Error fetching client data:", error.response.data.error);
+
+      await this.$apiGet('/api/v1/users').then((response) => {
+        this.totalClients = response.result;
+      }).catch((error) => { 
+        console.log("error status and message",error.status,error.message)
+      }).finally(() =>{
+         console.log("finally finished");
       });
 
 
-
     //overdue payments
-    const allTimeRange = "allTime";
-    await this.$apiClient
-      .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
-      .then((response) => {
+
+    const params={
+      timeRange: "allTime",
+    }
+
+    await this.$apiGet('/api/v1/payments/reports',params).then((response) => {
         console.log("allThe Time now nnn", response);
-        this.totalOvedue =
-          response.data.items.categorizedPayments.overdue.uniqueUsers;
+        this.totalOvedue = response.items.categorizedPayments.overdue.uniqueUsers;
       })
       .catch((error) => {
-        console.log("Error fetching total overdue", error.response.data.error);
+        console.log("Error fetching total overdue and error status and message", error.status,error.message);
       });
 
 //finding org balance
 
-    await this.$apiClient
-      .get("api/v1/payments/orgBalance")
-      .then((response) => {
+    await this.$apiGet("api/v1/payments/orgBalance").then((response) => {
         console.log("response org balance", response);
-        this.totalBalance = response.data.items;
-        this.totalOrgBalance = response.data.items.organizationBalance;
-      })
-      .catch((error) => {
+        this.totalBalance = response.items;
+        this.totalOrgBalance = response.items.organizationBalance; }).catch((error) => {
         console.error(
           " error fetching org data data:",
-          error.response.data.error
+       error.status,error.message
         );
       });
 
@@ -543,7 +507,6 @@ export default {
       }, 1000); 
       
       
-      
       // Toast will disappear after 3 seconds
     },
     paidUnPaidOverdue() {
@@ -556,31 +519,31 @@ export default {
     },
     //latest payment month and active year
     latestPaymentSetting() {
-      this.$apiClient
-        .get("/api/v1/paymentSetting/latest")
+      this.$apiGet("/api/v1/paymentSetting/latest")
         .then((response) => {
           console.log("latest month response:", response);
 
-          if (response.data.status === 1) {
-            this.activeMonth = response.data.paymentSetting.activeMonth;
-            this.activeYear = response.data.paymentSetting.activeYear;
+          if (response.status === 1) {
+            this.activeMonth = response.paymentSetting.activeMonth;
+            this.activeYear = response.paymentSetting.activeYear;
             this.monthlyPayment();
           }
         })
         .catch((error) => {
           console.error(
             "An error occurred while fetching Payment settings:",
-            error
+            error.status,error.message
           );
         });
     },
     //monthly payment
     monthlyPayment() {
-      const timeRange = "monthly";
-      this.$apiClient
-        .get(
-          `/api/v1/payments/reports?timeRange=${timeRange}&year=${this.activeYear}&month=${this.activeMonth}`
-        )
+       const params={
+        timeRange: "monthly",
+        year: this.activeYear,
+        month: this.activeMonth,
+       }
+      this.$apiGet('/api/v1/payments/reports',params)
         .then((response) => {
           console.log("active month ", this.activeMonth);
           console.log("monthly report in the dashboard", response);

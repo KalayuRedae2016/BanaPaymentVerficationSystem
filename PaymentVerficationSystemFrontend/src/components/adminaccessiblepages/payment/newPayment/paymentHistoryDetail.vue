@@ -1343,7 +1343,7 @@ export default {
     };
   },
 
-  created() {
+  async created() {
     console.log("In the payment history page");
     this.userCode = this.$route.params.userCode || "Default UserCode";
     this.year = this.$route.query.year || "Default Year";
@@ -1351,41 +1351,43 @@ export default {
 
     console.log("usercode,year,month", this.userCode, this.year, this.month);
 
-    this.$apiClient
-      .get("/api/v1/organization")
+    try{ await this.$apiGet("/api/v1/organization")
       .then((response) => {
         console.log("Org response", response);
-        if (response.data.status === 1) {
+        if (response.status === 1) {
           console.log(
             "Organization email",
-            response.data.organization.companyEmail
+            response.organization.companyEmail
           );
-          this.email = response.data.organization.companyEmail;
-          this.tel = response.data.organization.companyPhoneNumber;
-          this.address = response.data.organization.companyAddress;
+          this.email = response.organization.companyEmail;
+          this.tel = response.organization.companyPhoneNumber;
+          this.address = response.organization.companyAddress;
         }
       })
-      .catch((error) => {
-        console.log("Error", error.message);
+     }catch(error) {
+        console.log("Error", error.status,error.message);
         this.organizationCreated = 0;
-      });
+      }finally{
 
-    this.$apiClient
-      .get("/api/v1/payments/paymentbyMonth", {
-        params: {
+      };
+  try {
+    const params={
           userCode: this.userCode,
           activeYear: this.year,
           activeMonth: this.month,
-        },
-      })
+        }
+
+    await this.$apiGet("/api/v1/payments/paymentbyMonth",params)
       .then((response) => {
         console.log("response pp", response);
-        this.payment = response.data.payment;
+        this.payment = response.payment;
         console.log("this payment is billcode ", this.payment.billCode);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+    }catch(error){
+        console.log("error fetchyng payment bymonth",error.status,error.message);
+      }finally{
+
+    };
   },
   computed: {
     serviceBanks() {
@@ -1422,23 +1424,23 @@ export default {
       }
       return "Invalid month";
     },
-    fetchPenality(paymentType, paidAt) {
-      this.$apiClient
-        .get("api/v1/payments/penality", {
-          params: {
-            activeYear: this.selectedPayment.activeYear,
-            activeMonth: this.selectedPayment.activeMonth,
-            paymentType: paymentType,
-            paymentDate: paidAt,
-          },
-        })
-        .then((response) => {
-          this.payment.paymentTpe.penality = response.data.message;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    // fetchPenality(paymentType, paidAt) {
+    //   this.$apiClient
+    //     .get("api/v1/payments/penality", {
+    //       params: {
+    //         activeYear: this.selectedPayment.activeYear,
+    //         activeMonth: this.selectedPayment.activeMonth,
+    //         paymentType: paymentType,
+    //         paymentDate: paidAt,
+    //       },
+    //     })
+    //     .then((response) => {
+    //       this.payment.paymentTpe.penality = response.data.message;
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // },
 
     showEditModalDetail(
       billCode,
@@ -1457,7 +1459,8 @@ export default {
       this.showEditModal = true;
     },
 
-    saveChanges() {
+
+   async  saveChanges() {
       const payment={
         paymentType: this.paymentType,
         paidAt: this.paidAt,
@@ -1505,17 +1508,12 @@ export default {
       
       console.log("ppppPayload", this.payload);
 
-      this.$apiClient
-        .patch("/api/v1/payments/update", this.payload, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
+      try {
+         await this.$apiPatch("/api/v1/payments/update",'', this.payload).then((response) => {
           console.log("response after editing", response);
           //alert('k')
           
-          if (response.data.items.isPaid == false) {
+          if (response.items.isPaid == false) {
             //alert("hi");
               this.$router.push({
                   path: "/admindashboard/payments1",
@@ -1527,19 +1525,14 @@ export default {
                   }
               });
           }
+          this.$refs.toast.showSuccessToastMessage(response.message);
+           this.$reloadPage();
+        })}
+       catch(error) {
+          console.log("Error confirming", error.status, error.message);
+        }finally{
 
-
-          console.log("Response from service confirming", response.data);
-          console.log("message",response.data.message);
-          this.$refs.toast.showSuccessToastMessage(response.data.message);
-          //this.$reloadPage();
-          
-
-        })
-        .catch((error) => {
-          console.log("Error confirming", error);
-        });
-
+        };
       this.showEditModal = false;
     },
 

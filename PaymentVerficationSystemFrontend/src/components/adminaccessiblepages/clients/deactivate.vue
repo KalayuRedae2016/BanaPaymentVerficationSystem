@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast ref="toast"/>
     <div class="container mx-auto p-4 flex flex-col">
      
 
@@ -10,40 +11,7 @@
         </button>
       </div>
 
-      <transition
-        enter-active-class="transform transition duration-300 ease-out"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
-        leave-active-class="transform transition duration-300 ease-in"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
-      >
-        <div
-          v-if="showSuccessToast"
-          class="z-20 fixed right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-          role="alert"
-        >
-          <strong class="font-bold">Success!</strong>
-          <span class="block sm:inline">{{ successToastMessage }}</span>
-        </div>
-      </transition>
-      <transition
-        enter-active-class="transform transition duration-300 ease-out"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
-        leave-active-class="transform transition duration-300 ease-in"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
-      >
-        <div
-          v-if="showErrorToast"
-          class="z-20 fixed right-5 bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-          role="alert"
-        >
-          <strong class="font-bold">Error!</strong>
-          <span class="block sm:inline">{{ errorToastMessage }}</span>
-        </div>
-      </transition>
+  
       <div class="border-t border-blue-500 mt-3">
         <div
           class="mb-96 border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
@@ -262,10 +230,11 @@
   </div>
 </template>
 <script>
+import Toast from '../../Common/Toast.vue'
 export default {
   name: "ClientsView",
   components: {
-    //clientsForm,
+    Toast,
   },
   data() {
     return {
@@ -346,26 +315,8 @@ export default {
     reloadPage() {
     window.location.reload();
     },
-    showSuccessToastMessage(message) {
-      this.successToastMessage = message;
-      this.showSuccessToast = true;
-      setTimeout(() => {
-        this.showSuccessToast = false;
-      }, 1000);
 
-      // Toast will disappear after 3 seconds
-    },
-    showErrorToastMessage(message) {
-      this.errorToastMessage = message;
-      this.showErrorToast = true;
-      setTimeout(() => {
-        this.showErrorToast = false;
-      }, 1000);
-
-      // Toast will disappear after 3 seconds
-    },
-    activate(userId) {
-      
+    async activate(userId) {
       this.showActivationModal = false;
       const payload = {
         userId: userId,
@@ -375,21 +326,21 @@ export default {
       console.log("payload", payload);
       this.showDeactivateModal = false;
 
-      this.$apiClient
-        .put("/api/v1/users/active-deactive", payload)
+      try{
+        await this.$apiPut("/api/v1/users/active-deactive",'', payload)
         .then((response) => {
           console.log("users", response);
-          if (response.data.status === 1) {
-            this.showSuccessToastMessage(response.data.message);
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.reloadPage();
           }
         })
-        .catch((error) => {
+       }catch(error) {
           console.log(error);
-          // this.errorMessage = error.response.data.message
-          // this.showError=true;
-          this.showErrorToastMessage("Something went wrong");
-        });
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
+        }finally {
+
+        };
     },
     showActiveUsers() {
       this.$router.push(`/admindashboard/clients`);

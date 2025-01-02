@@ -90,12 +90,12 @@
                         {{ payment.activeMonthInString }}</span
                       >
                       <span
-                        class="text-xs ml-5 text-yellow-500 bg-blue-500 rounded-lg  px-3 pb-1"
+                        class="text-xs ml-5 text-yellow-500 bg-blue-500 rounded-lg px-3 pb-1"
                         v-if="payment.status === 'pending'"
                         >{{ payment.status }}</span
                       >
                       <span
-                        class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg  px-3 pb-1"
+                        class="text-xs ml-5 text-red-500 bg-blue-500 rounded-lg px-3 pb-1"
                         v-else-if="payment.status === 'overdue'"
                         >{{ payment.status }}</span
                       >
@@ -153,10 +153,10 @@
                     </thead>
                     <tbody>
                       <!-- // this tr is for the regular data -->
-                      <tr class="border-b border-t border-gray-300 pb-2 ">
+                      <tr class="border-b border-t border-gray-300 pb-2">
                         <!-- Payment Type -->
                         <td
-                          class=" text-xs text-gray-700 whitespace-nowrap w-12"
+                          class="text-xs text-gray-700 whitespace-nowrap w-12"
                         >
                           <span
                             class="bg-blue-100 px-2 py-1 text-indigo-800 font-bold rounded-lg"
@@ -177,7 +177,7 @@
                             <input
                               type="date"
                               class="custom-input h-8 px-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
-                              @change="fetchRegularPenality(payment)"
+                              @change="fetchPenality(payment, 'regular')"
                               :value="payment.regular.paidAt"
                               @input="
                                 payment.regular.paidAt = $event.target.value
@@ -263,7 +263,8 @@
                         >
                           <button
                             @click="
-                              confirmUnconfirmRegular(
+                              confirmPayment(
+                                'regular',
                                 payment.regular,
                                 payment.billCode,
                                 payment.activeYear,
@@ -325,7 +326,7 @@
                             <input
                               type="date"
                               class="custom-input h-8 px-2 rounded border border-gray-300 focus:outline-none focus:ring focus:ring-blue-200"
-                              @change="fetchSubsidyPenality(payment)"
+                              @change="fetchPenality(payment, 'subsidy')"
                               :value="payment.subsidy.paidAt"
                               @input="
                                 payment.subsidy.paidAt = $event.target.value
@@ -413,7 +414,8 @@
                         >
                           <button
                             @click="
-                              confirmUnconfirmSubsidy(
+                              confirmPayment(
+                                'subsidy',
                                 payment.subsidy,
                                 payment.billCode,
                                 payment.activeYear,
@@ -452,9 +454,7 @@
                         class="border-b border-t border-gray-300 pb-2"
                       >
                         <!-- Urgent Label -->
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p
                             class="bg-pink-100 px-2 text-indigo-800 font-extrabold rounded-lg"
                           >
@@ -463,16 +463,12 @@
                         </td>
 
                         <!-- Payment Amount -->
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p>{{ payment.urgent.amount }}</p>
                         </td>
 
                         <!-- Payment Date -->
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p v-if="payment.urgent.isPaid">
                             {{ payment.urgent.paidAt }}
                           </p>
@@ -480,7 +476,7 @@
                             v-if="!payment.urgent.isPaid"
                             type="date"
                             class="custom-input h-7 mb-2"
-                            @change="fetchUrgentPenality(payment)"
+                            @change="fetchPenality(payment, 'urgent')"
                             :value="payment.urgent.paidAt"
                             @input="payment.urgent.paidAt = $event.target.value"
                           />
@@ -496,9 +492,7 @@
                         </td>
 
                         <!-- Bank Type -->
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p v-if="payment.urgent.isPaid">
                             {{ payment.urgent.bankType }}
                           </p>
@@ -507,7 +501,7 @@
                               payment.urgent.amount > 0 &&
                               !payment.urgent.isPaid
                             "
-                            class="custom-select w-64 text-xs  py-2.5 leading-tight"
+                            class="custom-select w-64 text-xs py-2.5 leading-tight"
                             v-model="payment.urgent.bankType"
                           >
                             <option value="" disabled selected>
@@ -533,9 +527,7 @@
                         </td>
 
                         <!-- TTNumber -->
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p v-if="payment.urgent.isPaid">
                             {{ payment.urgent.TTNumber }}
                           </p>
@@ -560,9 +552,7 @@
                         </td>
 
                         <!-- Payment Status -->
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
                             v-if="payment.urgent.isPaid"
                             class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
@@ -580,11 +570,12 @@
                         <!-- Confirm / Edit Actions -->
                         <td
                           v-if="!payment.urgent.isPaid"
-                          class=" text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             @click="
-                              confirmUnconfirmUrgent(
+                              confirmPayment(
+                                'urgent',
                                 payment.urgent,
                                 payment.billCode,
                                 payment.activeYear,
@@ -599,7 +590,7 @@
                         </td>
                         <td
                           v-if="payment.urgent.isPaid"
-                          class=" text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             @click="
@@ -618,18 +609,14 @@
 
                       <!-- for the service data -->
                       <tr class="border-b border-t border-gray-300">
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p
                             class="bg-yellow-100 px-2 text-indigo-800 font-extrabold rounded-lg"
                           >
                             Ser(+ RF)
                           </p>
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.amount }}
                           </p>
@@ -644,9 +631,7 @@
                             "
                           />
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.paidAt }}
                           </p>
@@ -666,15 +651,13 @@
                             Payment Date is required
                           </p>
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.bankType }}
                           </p>
                           <select
                             v-if="!payment.service.isPaid"
-                            class="custom-select w-64 text-xs  py-2.5 leading-tight"
+                            class="custom-select w-64 text-xs py-2.5 leading-tight"
                             v-model="payment.service.bankType"
                           >
                             <option value="" disabled selected>
@@ -696,9 +679,7 @@
                           </p>
                         </td>
 
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p v-if="payment.service.isPaid">
                             {{ payment.service.TTNumber }}
                           </p>
@@ -715,9 +696,7 @@
                             TTNumber is required
                           </p>
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
                             v-if="payment.service.isPaid"
                             class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
@@ -733,11 +712,12 @@
                         </td>
                         <td
                           v-if="!payment.service.isPaid"
-                          class=" text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             @click="
-                              confirmUnconfirmService(
+                              confirmPayment(
+                                'service',
                                 payment.service,
                                 payment.billCode,
                                 payment.activeYear,
@@ -753,7 +733,7 @@
 
                         <td
                           v-if="payment.service.isPaid"
-                          class=" text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             @click="
@@ -778,52 +758,52 @@
                     <thead>
                       <tr class="bg-gray-200">
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Metric
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           RegP
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           SubR
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           UrgP
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           TP
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Payment Date
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Bank Type
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           TTNumber
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Paid
                         </th>
                         <th
-                          class="w-24  text-sm font-extrabold tracking-wide text-left text-indigo-800"
+                          class="w-24 text-sm font-extrabold tracking-wide text-left text-indigo-800"
                         >
                           Action
                         </th>
@@ -831,33 +811,23 @@
                     </thead>
                     <tbody>
                       <tr class="border-b border-t border-gray-300">
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <p
                             class="bg-red-200 px-2 text-indigo-800 font-extrabold rounded-lg"
                           >
                             Penality
                           </p>
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           {{ payment.regular.penality }}
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           {{ payment.subsidy.penality }}
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           {{ payment.urgent.penality }}
                         </td>
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           {{
                             payment.regular.penality +
                             payment.subsidy.penality +
@@ -865,9 +835,7 @@
                           }}
                         </td>
 
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <input
                             v-if="
                               payment.regular.penality +
@@ -911,9 +879,7 @@
                           </p>
                         </td>
 
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <select
                             v-if="
                               payment.regular.penality +
@@ -921,7 +887,7 @@
                                 payment.urgent.penality >
                               0
                             "
-                            class="custom-select w-64 text-xs  py-2.5 leading-tight"
+                            class="custom-select w-64 text-xs py-2.5 leading-tight"
                             v-model="payment.penality.bankType"
                             @input="
                               payment.penality.bankType = $event.target.value
@@ -948,9 +914,7 @@
                           </p>
                         </td>
 
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <input
                             v-if="
                               payment.regular.penality +
@@ -975,9 +939,7 @@
                           </p>
                         </td>
 
-                        <td
-                          class=" text-xs text-gray-700 whitespace-nowrap"
-                        >
+                        <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
                             v-if="payment.penality.isPaid"
                             class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
@@ -994,7 +956,7 @@
 
                         <td
                           v-if="!payment.penality.isPaid"
-                          class=" text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <button
                             v-if="
@@ -1004,7 +966,8 @@
                               0
                             "
                             @click="
-                              confirmUnconfirmPenality(
+                              confirmPaymentPenality(
+                                'penality',
                                 payment.activeYear,
                                 payment.activeMonth,
                                 payment.penality,
@@ -1029,7 +992,7 @@
 
                         <td
                           v-if="payment.penality.isPaid"
-                          class=" text-xs text-gray-700 whitespace-nowrap relative"
+                          class="text-xs text-gray-700 whitespace-nowrap relative"
                         >
                           <p
                             class="bg-pink-100 text-indigo-800 p-1 font-extrabold"
@@ -1081,7 +1044,7 @@
           </div>
         </div>
         <!-- // for confirming we need ti show the detail to ensure he/she is confirmeing verified data -->
-        <div v-if="showPaymentDetailModal">
+        <!-- <div v-if="showPaymentDetailModal">
           <transition name="fade" mode="out-in">
             <div
               class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50 rounded-lg"
@@ -1109,8 +1072,7 @@
               </div>
             </div>
           </transition>
-        </div>
-
+        </div> -->
       </div>
       <!-- // this is also for the confirming modal for the system administrator -->
       <div v-if="showConfirmModal">
@@ -1153,7 +1115,7 @@
                       </p>
                       <p>
                         <i class="fas fa-calendar-alt text-gray-500 mr-2"></i>
-                        Regular Payment Date: {{ regularPayment.paidAt}}
+                        Regular Payment Date: {{ regularPayment.paidAt }}
                       </p>
                     </div>
 
@@ -1247,7 +1209,7 @@
 
                 <div class="flex space-x-4 mt-6 ml-5">
                   <button
-                    @click="yesConfirmed()"
+                    @click="confirm()"
                     class="bg-blue-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 flex items-center"
                   >
                     <i class="fas fa-check mr-2"></i> Yes
@@ -1393,8 +1355,463 @@
     </div>
   </div>
 </template>
-
 <script>
+import Toast from "../../../Common/Toast.vue";
+import { mapGetters } from "vuex";
+
+export default {
+  components: {
+    Toast,
+  },
+  data() {
+    return {
+      gcEthio: this.$gcEthio(new Date()),
+      daysLate: 0,
+      paidAt: null,
+      paidAtGC: null,
+      TTNumber: "",
+      bankType: "",
+      paymentType: "",
+      penality: "",
+      isPaid: true,
+      billCode: "",
+      showEditModal: false,
+
+      successToastMessage: "",
+      errorToastMessage: "",
+      showErrorToast: false,
+      showSuccessToast: false,
+
+      showUserList: true,
+      paymentStatus: "newPayment",
+      noSelectionCount: 0,
+      previosSelected: -1,
+      paymentVerified: true,
+      showConfirmModal: false,
+      keyword: "",
+      filteredUsers: [],
+      users: [],
+      payments: [],
+
+      // New bank statement
+      bankStatement: false,
+      blockConfirmedIndex: null,
+      blockUnconfirmIndex: false,
+
+      subsidyConfirmedIndex: null,
+      subsidyUnconfirmIndex: false,
+
+      urgentConfirmedIndex: null,
+      urgentUnconfirmedIndex: false,
+
+      serviceConfirmedIndex: null,
+      serviceUnconfirmIndex: null,
+
+      penalityConfirmedIndex: null,
+      penalityUnconfirmIndex: false,
+
+      userCode: "",
+      fullName: "",
+      activeYear: "",
+      activeMonth: "",
+      includePending: true,
+      paymentConfirm: false,
+      paymentUnconfirm: false,
+
+      // Payment objects
+      regularPayment: {},
+      subsidyPayment: {},
+      urgentPayment: {},
+      servicePayment: {},
+      penalityPayment: {},
+
+      payBeforeThisMonth: false,
+      nothingToPay: false,
+      placeholderText: "-----------",
+      getReceipt: false,
+      keyword: "",
+      payload: {
+        paymentType: "",
+        billcode: "",
+        activeYear: "",
+        activeMonth: "",
+      },
+    };
+  },
+  watch: {
+    keyword() {
+      this.searchUsers(this.keyword);
+    },
+  },
+  created() {
+    this.$store.dispatch("fetchBanks");
+  },
+  computed: {
+    ...mapGetters(["getToken", "getUserId", "getLocale", "getRole"]),
+    userId() {
+      return this.getUserId;
+    },
+    serviceBanks() {
+      return this.$store.getters.serviceBanks;
+    },
+    blockBanks() {
+      return this.$store.getters.blockBanks;
+    },
+  },
+  mounted() {
+    if (this.$route.query.activeTab == 1) {
+      this.activeTab = 0;
+      if (this.$route.query.bankStatement) {
+        this.bankStatement = true;
+        this.navigateToPayment(
+          this.$route.query.userCode,
+          this.$route.query.fullName
+        );
+      }
+    }
+    console.log("service banks are", this.serviceBanks);
+    console.log("block banks are", this.blockBanks);
+
+    this.fetchUsers();
+  },
+  methods: {
+    toggleIsPaid(event) {
+      this.isPaid = !event.target.checked;
+    },
+    changeMonthIntoString(month) {
+      const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+      ];
+      return month >= 1 && month <= 12 ? months[month - 1] : "Invalid month";
+    },
+    showEditModalDetail(billCode, payment, paymentType) {
+      Object.assign(this, {
+        bankType: payment.bankType,
+        TTNumber: payment.TTNumber,
+        paidAt: payment.paidAt,
+        paymentType,
+        billCode,
+        isPaid: payment.isPaid,
+        paidAtGC: payment.paidAtGC,
+        showEditModal: true,
+      });
+    },
+
+    async confirm() {
+      // console.log("yesConfirmed");
+      // console.log("this payload", this.payload);
+      this.showConfirmModal = false;
+      // Map of payment types to messages and confirmation logic
+      const paymentActions = {
+        regular: "Regular Payment updated",
+        subsidy: "Subsidy Payment updated",
+        urgent: "Urgent Payment updated",
+        service: "Service Payment updated",
+        penality: "Penalty Payment updated",
+      };
+
+      // Check if the payment type is valid
+      if (paymentActions[this.paymentType]) {
+        // Set the specific payment type as paid
+        this.payload[this.paymentType].isPaid = true;
+
+        // Send the payload to the database
+        try {
+          await this.$apiPatch(
+            "/api/v1/payments/confirm",
+            "",
+            this.payload
+          ).then((response) => {
+            console.log(
+              `Response after ${this.paymentType} confirmation:`,
+              response
+            );
+
+            // Show success toast
+            this.$refs.toast.showSuccessToastMessage(
+              paymentActions[this.paymentType]
+            );
+
+            if (response.items.isPaid) {
+              // Redirect to payment history detail page
+              this.$router.push({
+                path: `/admindashboard/payment-history-detail/${response.items.userCode}`,
+                query: {
+                  year: this.activeYear,
+                  month: this.activeMonth,
+                },
+              });
+            } else {
+              this.fetchUnPaid();
+            }
+          });
+        } catch (error) {
+          console.error(
+            `Error confirming ${this.paymentType}`,
+            error.status,
+            error.message
+          );
+          this.$refs.toast.showErrorToastMessage("Something went wrong");
+        } finally {
+        }
+      } else {
+        console.error("Invalid payment type:", this.paymentType);
+        this.$refs.toast.showErrorToastMessage("Invalid payment type");
+      }
+    },
+    saveChanges() {
+      const payment = {
+        paymentType: this.paymentType,
+        paidAt: this.paidAtGC,
+        bankType: this.bankType,
+        TTNumber: this.TTNumber,
+        isPaid: this.isPaid,
+        paidAtGC: this.paidAtGC,
+        daysLate: this.daysLate,
+      };
+      this.payload = {
+        billCode: this.billCode,
+        [this.paymentType]: payment,
+      };
+
+      this.updatePayment();
+      this.showEditModal = false;
+    },
+
+    async updatePayment() {
+      try {
+        await this.$apiPatch("/api/v1/payments/update", "", this.payload).then(
+          (response) => {
+            this.$refs.toast.showSuccessToastMessage(response.message);
+            this.$reloadPage();
+          }
+        );
+      } catch (error) {
+        console.error("Error confirming", error.status, error.message);
+      } finally {
+      }
+    },
+    navigateToPayment(userCode, fullName) {
+      this.fullName = fullName;
+      this.$router.push({
+        path: `/admindashboard/payments1/`,
+        query: {
+          bankStatement: true,
+          activeTab: 1,
+          userCode,
+          fullName,
+        },
+      });
+      this.bankStatement = true;
+      this.showUserList = false;
+      this.userCode = userCode;
+      this.fetchUnPaid();
+    },
+    searchUsers(keyword) {
+      this.showUserList = true;
+      this.bankStatement = false;
+      this.filteredUsers = this.users.filter(
+        (user) =>
+          user.fullName.toLowerCase().includes(keyword.toLowerCase()) ||
+          user.userCode.toLowerCase().includes(keyword.toLowerCase())
+      );
+    },
+    async fetchUsers() {
+      try {
+        await this.$apiGet("/api/v1/users/", {
+          params: { isActive: true },
+        }).then((response) => {
+          this.users = response.users || [];
+          this.filteredUsers = this.users;
+          console.log("Fetched users:", this.users);
+        });
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+      }
+    },
+    async fetchUnPaid() {
+      const params = {
+        keyword: this.userCode,
+      };
+      try {
+        await this.$apiGet("/api/v1/payments/search", params).then(
+          (response) => {
+           
+            this.nothingToPay = response.status === 1 && response.items.length === 0;
+            this.payments = this.includePending?response.items:response.items.filter((payment) => payment.status === "overdue");
+              console.log("unpaid payments are ",this.payments)
+            this.payments.forEach((payment) => {
+              payment.activeMonthInString = this.changeMonthIntoString(
+                payment.activeMonth
+              );
+              ["regular", "subsidy", "urgent", "service", "penality"].forEach(
+                (type) => {
+                  payment[type].bankType = payment[type].bankType || "";
+                }
+              );
+            });
+            
+          }
+        );
+      } catch (error) {
+        console.error(
+          "Error fetching unpaid payments:",
+          error.status,
+          error.message
+        );
+      } finally {
+      }
+    },
+
+    confirmPayment(
+      paymentType,
+      payment,
+      billcode,
+      activeYear,
+      activeMonth,
+      paymentIndex
+    ) {
+      console.log("to be Confirm paymentType:", paymentType);
+      console.log("to be Confirm payment:", payment);
+      console.log("to be Confirm billcode:", billcode),
+        console.log("to be Confirm aYear:", activeYear),
+        console.log("to be Confirm aMonth:", activeMonth),
+        console.log("to be Confirm paymentIndex:", paymentIndex);
+
+      this.paymentType = paymentType;
+      this.activeYear = activeYear;
+      this.activeMonth = activeMonth;
+      const validation = this.validatePayment(payment, paymentIndex,paymentType);
+      if (validation) return;
+
+      const payload = {
+        userId: this.userId,
+        billCode: billcode,
+        [paymentType]: payment,
+      };
+
+      if (
+        ["regular", "subsidy", "urgent", "service", "penality"].includes(
+          paymentType
+        )
+      ) {
+        this[`${paymentType}Payment`] = payment;
+      }
+
+      this.payload = payload;
+      this.showConfirmModal = true;
+    },
+    validatePayment(payment, paymentIndex,paymentType) {
+      const { paidAt, bankType, TTNumber } = payment;
+      console.log("payment and index", payment, paymentIndex);
+      if (paymentIndex > 0) {
+        this.payments[paymentIndex].permitSelect = true;
+        return false;
+      }
+
+     // Define the dynamic key outside of the ifs
+const key = `verify${paymentType.charAt(0).toUpperCase() + paymentType.slice(1)}`; 
+    console.log("key",key);
+
+ ['PaymentDate', 'BankType', 'TTNumber'].forEach(field => {
+  this.payments[paymentIndex][`${key}${field}`] = false;
+});
+
+// Check if `paidAt` is  empty or null
+if (!paidAt || paidAt.trim() === "") {
+ // alert("paidAt is empty or null");
+  this.payments[paymentIndex][`${key}PaymentDate`] = true; // Use the dynamic key
+  return true;
+} else {
+  //alert("paidAt is valid");
+}
+
+// Check if `bankType` is empty or null
+if (!bankType || bankType.trim() === "") {
+  //alert("bankType is empty or null");
+  this.payments[paymentIndex][`${key}BankType`] = true; // Use the dynamic key
+  return true;
+}
+
+// Check if `TTNumber` is empty or null
+if (!TTNumber || TTNumber.trim() === "") {
+ // alert("TTNumber is empty or null");
+  this.payments[paymentIndex][`${key}TTNumber`] = true; // Use the dynamic key
+  return true;
+}
+      return false;
+    },
+
+    callGetReceipt() {
+      this.getReceipt = true;
+    },
+    userLevelReport() {
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 2,
+          reportLevel: "userLevelReport",
+        },
+      });
+    },
+    async fetchPenality(selectedPayment, type) {
+      console.log("selected payment", type);
+      const params = {
+        activeYear: selectedPayment.activeYear,
+        activeMonth: selectedPayment.activeMonth,
+        paymentType: type,
+        paymentDate: selectedPayment[type].paidAt,
+      };
+
+      console.log("params:", params);
+
+      try {
+        await this.$apiGet("api/v1/payments/penality", params).then(
+          (response) => {
+            const { penality, daysLate } = response;
+            this.daysLate = daysLate;
+            this.payments.forEach((payment) => {
+              if (payment._id === selectedPayment._id) {
+                payment[type].penality = penality;
+                payment[type].daysLate = daysLate;
+              }
+            });
+          }
+        );
+      } catch (error) {
+        console.error("Error fetching penalty:", error);
+      } finally {
+      }
+    },
+    changePaymentSelection(paymentId) {
+      this.payments.forEach((payment) => {
+        payment.paymentSelected = payment.id === paymentId;
+      });
+    },
+    openModal() {
+      this.showPaymentDetailModal = true;
+    },
+    closeModal() {
+      this.showPaymentDetailModal = false;
+    },
+  },
+};
+</script>
+
+
+<!-- <script>
 import Toast from "../../../Common/Toast.vue";
 import { mapGetters } from "vuex";
 
@@ -1870,6 +2287,9 @@ export default {
           this.$refs.toast.showErrorToastMessage("Something went wrong");
         });
     },
+
+
+
     sendSubsidyToDb() {
       this.payload.subsidy.isPaid = true;
       console.log("this payload", this.payload);
@@ -2430,7 +2850,7 @@ export default {
     },
   },
 };
-</script>
+</script> -->
 
 <style>
 /* Add any custom styles here */

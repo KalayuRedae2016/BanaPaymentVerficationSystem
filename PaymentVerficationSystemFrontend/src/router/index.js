@@ -3,7 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import reset from "../views/reset.vue";
 import accessDenied from "../views/accessDenied.vue";
-
+import portofilo from "../views/portofilo.vue";
 
 import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
 import changeCommonPassword from '../components/Common/Setting/changePassword.vue'
@@ -29,12 +29,12 @@ import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEd
 
 import overdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/overdue.vue";
 import paidUnpaid from "../components/adminaccessiblepages/payment/Reports//paymentStatus/paidUnpaid.vue"
-import transferHistory from "../components/adminaccessiblepages/payment/Reports/transferHistory.vue"
+// import transferHistory from "../components/adminaccessiblepages/payment/Reports/transferHistory.vue"
 
 
 import idCardAdmin from "../components/adminaccessiblepages/id/idCard.vue";
 import sendEmail from "../components/adminaccessiblepages/messages/sendEmail.vue";
-import bankStatement from "../components/adminaccessiblepages/payment/newPayment/bankStatement.vue";
+//import bankStatement from "../components/adminaccessiblepages/payment/newPayment/bankStatement.vue";
 import paymentHistoryDetail from "../components/adminaccessiblepages/payment/newPayment/paymentHistoryDetail.vue";
 import usersForBankStatement from "../components/adminaccessiblepages/payment/newPayment/usersCanPay.vue";
 
@@ -61,6 +61,11 @@ const routes = [
   {
     path: "/resetPassword/:token",
     component: reset,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: "/portofilo",
+    component: portofilo,
     meta: { requiresGuest: true },
   },
   // {
@@ -97,13 +102,13 @@ const routes = [
       { path: "edit-client/:clientId", name: "edit-client", component: editClient },
       { path: "empty-edit-profile/:clientId", name: "empty-edit-profile", component: emptyEditProfile },
      
-      { path: "bank-statement/:userCode", component: bankStatement },
+      // { path: "bank-statement/:userCode", component: bankStatement },
       { path: "user-for-bank-statement", component:  usersForBankStatement  },
       
   
       { path: "overdue", name: "overdue", component: overdue, props: true },
       { path: "paid-unpaid", name: "paid-unpaid", component: paidUnpaid, props: true },
-      { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
+      // { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
    
       
       { path: "empty/:clientId", component: empty },

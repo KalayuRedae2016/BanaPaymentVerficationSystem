@@ -220,22 +220,23 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     this.searchedusers = this.users;
-    this.$apiClient
-      .get("/api/v1/users", {
+      try { await this.$apiGet("/api/v1/users", {
         params: {
           isActive: true,
         },
       })
       .then((response) => {
         console.log("response active users are", response);
-        this.users = response.data.users;
+        this.users = response.users;
         this.searchedusers = this.users;
       })
-      .catch((error) => {
+    }catch(error) {
         console.log("error", error);
-      });
+    }finally {
+
+    };
   },
 
   methods: {
@@ -265,7 +266,7 @@ export default {
         console.log("Deselected all emails ", this.emails);
       }
     },
-    sendMessage() {
+    async sendMessage() {
 
       this.showError=false;
       this.subjectIsRequired=false;
@@ -295,23 +296,25 @@ export default {
       };
 
       console.log(emailList);
-      this.$apiClient
-        .post("/api/v1/users/sendEmails", emailList)
+
+      try { 
+        await this.$apiPost("/api/v1/users/sendEmails", emailList)
         .then((response) => {
-          console.log("users", response.data.message);
-          if (response.data.status === 1) {
+          console.log("users", response.message);
+          if (response.status === 1) {
             this.searchedusers = this.users; //response.data.message;
             this.displayedItems();
-            this.$refs.toast.showSuccessToastMessage("Email sent successfully");
-
+            this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
             
           }
         })
-        .catch((error) => {
+       }catch(error)  {
           console.error("Error fetching users:", error);
           this.showErrorToastMessage("Something went wrong");
-        });
+        }finally{
+
+        };
       this.emails = [];
     },
     updateSelectedUsers() {
@@ -328,27 +331,6 @@ export default {
       console.log("perpage is", this.perPage);
       this.searchedusers = this.users;
       this.displayedItems();
-    },
-    fetchUsers() {
-      this.$apiClient
-        .get("/api/v1/users/", {
-          params: {
-            isActive: true,
-          },
-        })
-        .then((response) => {
-          console.log("users", response.data.message);
-          if (response.data.status === 1) {
-            this.searchedusers = response.data.message;
-            this.users = response.data.message;
-            this.messageSentSuccessfully = true;
-            //console.log("this.userssearch", this.searchedusers);
-            //this.displayedItems();
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching users:", error);
-        });
     },
 
     showFamilyModal() {

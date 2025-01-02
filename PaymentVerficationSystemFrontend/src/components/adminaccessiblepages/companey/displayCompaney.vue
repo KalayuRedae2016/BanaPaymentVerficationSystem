@@ -246,7 +246,9 @@ export default {
       return this.getLocale;
     },
   },
-  mounted() {
+
+
+ async  mounted() {
     if (this.$route.query.fromEmpty === "true") {
       this.showSuccessToastMessage(
         "Your Company Profile Creeated Successfully"
@@ -257,27 +259,12 @@ export default {
         });
       }, 2000);
     }
-    // this.$apiClient
-    //   .get("/api/v1/organization")
-    //   .then((response) => {
-    //     console.log("Org response ", response);
-    //     if (response.data.status === 1) {
-    //       if (response.data.organization.length == 0) {
-    //         this.organizationCreated = 2;
-    //         return;
-    //       }
-    //       this.companyProfile = response.data.organization;
-    //       this.organizationCreated = 1;
-    //       console.log("cretaed");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.log("Error", error);
-    //     this.organizationCreated = 0;
-    //   });
 
-    this.isLoading = true;
-      this.$apiGet('/api/v1/organization').then((response) => {
+
+   this.isLoading = true;
+
+   try {
+        await this.$apiGet('/api/v1/organization').then((response) => {
         if (response.status === 1) {
           this.isLoading = false;
           if (response.organization.length == 0) {
@@ -288,12 +275,13 @@ export default {
           this.organizationCreated = 1;
           console.log("cretaed");
         }
-      }).catch((error) => {
+      })
+     } catch(error) {
         console.log("Error", error);
         this.organizationCreated = 0;
-      }).finally(() =>{
+      }finally{
 
-      })
+      }
   },
   methods: {
    

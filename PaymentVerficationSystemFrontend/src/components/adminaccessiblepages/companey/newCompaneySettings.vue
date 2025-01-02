@@ -20,7 +20,7 @@
           <div class="flex flex-col w-full md:w-1/2">
             <div class="mb-4">
               <label class="custom-label" for="username">
-                {{ $t("compName") }} 
+                {{ $t("compName") }}
               </label>
               <input
                 class="custom-input"
@@ -29,7 +29,6 @@
                 :placeholder="$t('compName')"
                 v-model="companyName"
               />
-      
             </div>
 
             <div class="mb-4">
@@ -44,8 +43,6 @@
                 :placeholder="$t('compPhoneNumber')"
                 v-model="companyPhoneNumber"
               />
-
-      
             </div>
 
             <div class="mb-4">
@@ -59,7 +56,6 @@
                 :placeholder="$t('compEmail')"
                 v-model="companyEmail"
               />
-      
             </div>
           </div>
           <div class="flex flex-col w-full md:w-1/2">
@@ -74,7 +70,6 @@
                 :placeholder="$t('compAddress')"
                 v-model="companyAddress"
               />
-    
             </div>
             <div class="mb-4">
               <label class="custom-label" for="prifex-code">
@@ -88,14 +83,13 @@
                 :placeholder="$t('compPrefixCode')"
                 v-model="companyPrefixCode"
               />
-
             </div>
           </div>
         </div>
 
         <div class="rounded-lg mx-3 px-3 py-3 mt-5">
           <label class="custom-label">
-            {{ $t("blockAccounts") }} 
+            {{ $t("blockAccounts") }}
             <span class="text-red-500 ml-1">*</span>
           </label>
           <div class="border border-gray-300 rounded-lg">
@@ -232,26 +226,35 @@
             </button>
           </div>
         </div>
-             <div class="mx-8 my-5">
-              <p  v-if="companyPrefixCodeIsRequired" class="text-red-500 text-xs">Prefix Code is required</p>
-              <p  v-if="companyEmailIsRequired" class="text-red-500 text-xs">Email is required</p>
-              <p  v-if="companyAddressIsRequired" class="text-red-500 text-xs">Address is required</p>
-              <p  v-if="companyPhoneNumberIsRequired" class="text-red-500 text-xs">Phone Number is required</p>
-              <p  v-if="companyNameIsRequired" class="text-red-500 text-xs">Compnay Name is required</p>
-              <p  v-if="showError" class="text-red-500 text-xs">{{ errorMessage}}</p>
-            
-            </div>
+        <div class="mx-8 my-5">
+          <p v-if="companyPrefixCodeIsRequired" class="text-red-500 text-xs">
+            Prefix Code is required
+          </p>
+          <p v-if="companyEmailIsRequired" class="text-red-500 text-xs">
+            Email is required
+          </p>
+          <p v-if="companyAddressIsRequired" class="text-red-500 text-xs">
+            Address is required
+          </p>
+          <p v-if="companyPhoneNumberIsRequired" class="text-red-500 text-xs">
+            Phone Number is required
+          </p>
+          <p v-if="companyNameIsRequired" class="text-red-500 text-xs">
+            Compnay Name is required
+          </p>
+          <p v-if="showError" class="text-red-500 text-xs">
+            {{ errorMessage }}
+          </p>
+        </div>
         <button type="submit" class="custom-button ml-6 mr-3">
           <i class="fa fa-arrow-right"></i> {{ $t("submit") }}
         </button>
       </form>
     </div>
-
   </div>
 </template>
 
 <script>
-import axios from "axios";
 import Toast from "../../Common/Toast.vue";
 export default {
   name: "paymentsView",
@@ -290,17 +293,12 @@ export default {
       companyEmail: "",
       companyPrefixCode: "",
       blockBankAccounts: [],
-      serviceBankAccounts: [
-       
-      ],
+      serviceBankAccounts: [],
       companyAddress: "",
       paymentType: "block",
       days: Array.from({ length: 31 }, (_, i) => i + 1),
     };
   },
-  mounted() {
-  },
-
   methods: {
     routeToDisplay() {
       this.createdSuccessfully = false;
@@ -314,35 +312,31 @@ export default {
       this.companyAddressIsRequired = false;
       this.companyPrefixCodeIsRequired = false;
 
-      if (this.companyName ==="" || this.companyName === null) {
-        
+      if (this.companyName === "" || this.companyName === null) {
         //alert("hii");
 
-        this.companyNameIsRequired=true;
+        this.companyNameIsRequired = true;
         return;
       }
-      if (this.companyPhoneNumber ==="" || this.companyPhoneNumber === null) {
-        this.companyPhoneNumberIsRequired=true;
-        return;
-      }
-      
-      if (this.companyEmail ==="" || this.companyEmail === null) {
-        this.companyEmailIsRequired=true;
+      if (this.companyPhoneNumber === "" || this.companyPhoneNumber === null) {
+        this.companyPhoneNumberIsRequired = true;
         return;
       }
 
+      if (this.companyEmail === "" || this.companyEmail === null) {
+        this.companyEmailIsRequired = true;
+        return;
+      }
 
-
-      if ((this.companyAddress ==="" || this.companyAddress === null)) {
-          this.companyAddressIsRequired=true;
-          return;
+      if (this.companyAddress === "" || this.companyAddress === null) {
+        this.companyAddressIsRequired = true;
+        return;
       }
 
       if (this.companyPrefixCode == "" || this.companyPrefixCode === null) {
-        this.companyPrefixCodeIsRequired=true;
+        this.companyPrefixCodeIsRequired = true;
         return;
       }
-
 
       const companeyProfileData = {
         companyName: this.companyName,
@@ -355,44 +349,22 @@ export default {
       };
 
       console.log("companey profile data", companeyProfileData);
-      //  console.log("This close created=",this.closepaymentCreated);
-      // this.$apiClient
-      //   .post("/api/v1/organization", companeyProfileData)
-      //   .then((response) => {
-      //     console.log("response", response);
-
-      //     if (Number(response.data.status) === 1) {
-      //       this.$router.push("/admindashboard/empty-companey");
-      //     } else {
-      //       this.showErrorToastMessage("Something went wrong");
-      //     }
-      //   })
-      //   .catch((error) => {
-      //     if(error.response.data){
-      //       this.showError=true;
-      //       this.errorMessage = error.response.data.message;
-      //     }
-      //     console.log(error);
-      //   });
-
-        this.$apiPost('/api/v1/organization',companeyProfileData).then((response) => {
-                 
-              console.log("response from creating ", response);
-                 if(response.status==1){
-                    this.$router.push("/admindashboard/empty-companey");
-                  } else {
-                    this.showErrorToastMessage("Something went wrong");
-              }
-                 
-        }).catch((error) => {
-             console.log("error", error);
-             if(error.response.data){
-                this.showError=true;
-                this.errorMessage = error.response.data.message;
-             }
-        }).finally(() => {
-
+      
+      try {
+        this.$apiPost("/api/v1/organization", companeyProfileData)
+        .then((response) => {
+          console.log("response from creating ", response);
+          if (response.status == 1) {
+            this.$router.push("/admindashboard/empty-companey");
+          }
         })
+      } catch(error) {
+          console.log("error during insert", error.status, error.message);
+          this.showError = true;
+          this.errorMessage = error.message;
+        }finally{
+
+      };
     },
 
     addBlockBankAccount() {

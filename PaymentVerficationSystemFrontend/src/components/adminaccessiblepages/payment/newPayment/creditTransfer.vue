@@ -197,8 +197,7 @@ export default {
   },
 
   methods: {
-   
-    addCreditTransfer() {
+    async addCreditTransfer() {
       console.log(
         "data",
         this.transferType,
@@ -267,21 +266,20 @@ export default {
 
       //
 
-      this.$apiClient
-        .post("api/v1/payments/transferFunds", payload)
+      try {await this.$apiPost("api/v1/payments/transferFunds", payload)
         .then((response) => {
           console.log("response", response);
-          if (response.data.status === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.data.message);
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
           }
         })
-        .catch((error) => {
-
-          console.log("error", error);
- 
+      }catch(error) {
+          console.log("error", error.status, error.message);
            this.showError = true;
-           this.errorMessage = error.response.data.message;
-        });
+           this.errorMessage = error.message;
+        }finally{
+
+      }
     },
   },
 };

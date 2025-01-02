@@ -145,22 +145,27 @@ export default {
     this.month = this.$route.query.month;
     this.day = this.$route.query.day;
   },
-  mounted() {
+  async mounted() {
     this.displayedItems();
     console.log("payments", this.payments);
-    const allTimeRange = "allTime";
-    this.$apiClient
-      .get(`/api/v1/payments/reports?timeRange=${allTimeRange}`)
+
+     const params={
+      timeRange:"allTime"
+     }
+
+    try { await this.$apiGet('/api/v1/payments/reports',params)
       .then((response) => {
         console.log("allThe Time", response);
         this.payments =
-          response.data.items.categorizedPayments.overdue.payments;
+          response.items.categorizedPayments.overdue.payments;
         this.searchedPayments = this.payments;
         console.log("thispayments: " ,this.searchedPayments);
       })
-      .catch((error) => {
-        console.log("Error fetching total overdue", error.response.data.error);
-      });
+    }catch(error){
+        console.log("Error fetching total overdue", error.status,error.message);
+      }finally{
+
+      }
   },
 
   methods: {
