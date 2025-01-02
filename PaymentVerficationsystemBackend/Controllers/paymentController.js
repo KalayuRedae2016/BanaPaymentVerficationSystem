@@ -700,6 +700,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   if (penality) payment.penality = updatePaymentField(payment.penality, penality);
 
   payment = calculateTotalPaidAndPenalityAmount(payment)
+  await payment.save();
   // Filter out payment types that have a non-zero amount
   const paymentsToCheck = [
     payment.urgent,
