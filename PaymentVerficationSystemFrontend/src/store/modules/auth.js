@@ -1,5 +1,4 @@
 import {apiGet} from '../../utils/utils';
-
 const state = {
   userId: localStorage.getItem('userId') || null,
   token: localStorage.getItem('token') || null,

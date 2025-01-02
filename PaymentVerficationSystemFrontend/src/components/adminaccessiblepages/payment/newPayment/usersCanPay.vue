@@ -263,14 +263,7 @@
                         >
                           <button
                             @click="
-                              confirmPayment(
-                                'regular',
-                                payment.regular,
-                                payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
-                              )
+                             preConfirmPayment('regular', payment, paymentIndex)
                             "
                             class="w-32 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 flex items-center justify-center shadow-sm"
                           >
@@ -414,14 +407,7 @@
                         >
                           <button
                             @click="
-                              confirmPayment(
-                                'subsidy',
-                                payment.subsidy,
-                                payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
-                              )
+                             preConfirmPayment('subsidy', payment, paymentIndex)
                             "
                             class="w-32 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 flex items-center justify-center shadow-sm"
                           >
@@ -574,14 +560,7 @@
                         >
                           <button
                             @click="
-                              confirmPayment(
-                                'urgent',
-                                payment.urgent,
-                                payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
-                              )
+                             preConfirmPayment('urgent', payment, paymentIndex)
                             "
                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
@@ -716,14 +695,7 @@
                         >
                           <button
                             @click="
-                              confirmPayment(
-                                'service',
-                                payment.service,
-                                payment.billCode,
-                                payment.activeYear,
-                                payment.activeMonth,
-                                paymentIndex
-                              )
+                             preConfirmPayment('service', payment, paymentIndex)
                             "
                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
@@ -753,7 +725,7 @@
                   </table>
                 </div>
                 <!-- // this is a table for the penality total for each payment incluiding the regular,subsidy,urgent only -->
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto" v-if="payment.status!='pending'">
                   <table class="w-full bg-white">
                     <thead>
                       <tr class="bg-gray-200">
@@ -966,17 +938,7 @@
                               0
                             "
                             @click="
-                              confirmPaymentPenality(
-                                'penality',
-                                payment.activeYear,
-                                payment.activeMonth,
-                                payment.penality,
-                                payment.billCode,
-                                payment.regular.penality,
-                                payment.subsidy.penality,
-                                payment.urgent.penality,
-                                paymentIndex
-                              )
+                             preConfirmPayment('penality', payment, paymentIndex)
                             "
                             class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
@@ -1459,7 +1421,6 @@ export default {
     },
   },
   mounted() {
-  
     if (this.$route.query.activeTab == 1) {
       this.activeTab = 0;
       if (this.$route.query.bankStatement) {
@@ -1476,6 +1437,7 @@ export default {
     this.fetchUsers();
   },
   methods: {
+    confirmPaymentPenality() {},
     toggleIsPaid(event) {
       this.isPaid = !event.target.checked;
     },
@@ -1521,6 +1483,10 @@ export default {
         service: "Service Payment updated",
         penality: "Penalty Payment updated",
       };
+
+
+
+      console.log("data to be confirmed are ",this.payload);
 
       // Check if the payment type is valid
       if (paymentActions[this.paymentType]) {
@@ -1586,6 +1552,9 @@ export default {
         [this.paymentType]: payment,
       };
 
+
+      console.log("payload during save change is ",this.payload);
+
       this.updatePayment();
       this.showEditModal = false;
     },
@@ -1649,10 +1618,14 @@ export default {
       try {
         await this.$apiGet("/api/v1/payments/search", params).then(
           (response) => {
-           
-            this.nothingToPay = response.status === 1 && response.items.length === 0;
-            this.payments = this.includePending?response.items:response.items.filter((payment) => payment.status === "overdue");
-              console.log("unpaid payments are ",this.payments)
+            this.nothingToPay =
+              response.status === 1 && response.items.length === 0;
+            this.payments = this.includePending
+              ? response.items
+              : response.items.filter(
+                  (payment) => payment.status === "overdue"
+                );
+            console.log("unpaid payments are ", this.payments);
             this.payments.forEach((payment) => {
               payment.activeMonthInString = this.changeMonthIntoString(
                 payment.activeMonth
@@ -1663,7 +1636,6 @@ export default {
                 }
               );
             });
-            
           }
         );
       } catch (error) {
@@ -1676,85 +1648,93 @@ export default {
       }
     },
 
-    confirmPayment(
-      paymentType,
-      payment,
-      billcode,
-      activeYear,
-      activeMonth,
-      paymentIndex
-    ) {
+
+   preConfirmPayment(paymentType, payment, paymentIndex) {
       console.log("to be Confirm paymentType:", paymentType);
       console.log("to be Confirm payment:", payment);
-      console.log("to be Confirm billcode:", billcode),
-        console.log("to be Confirm aYear:", activeYear),
-        console.log("to be Confirm aMonth:", activeMonth),
+      console.log("to be Confirm billcode:", payment.billcode),
+        console.log("to be Confirm aYear:", payment.activeYear),
+        console.log("to be Confirm aMonth:", payment.activeMonth),
         console.log("to be Confirm paymentIndex:", paymentIndex);
-
+    console.log("payment is",payment.billCode);
       this.paymentType = paymentType;
-      this.activeYear = activeYear;
-      this.activeMonth = activeMonth;
-      const validation = this.validatePayment(payment, paymentIndex,paymentType);
+      this.activeYear = payment.activeYear;
+      this.activeMonth = payment.activeMonth;
+      this.billCode = payment.billCode
+      ;
+       
+      const validation = this.validatePayment(
+        payment[paymentType],
+        paymentIndex,
+        paymentType
+      );
       if (validation) return;
 
       const payload = {
         userId: this.userId,
-        billCode: billcode,
-        [paymentType]: payment,
+        billCode: this.billCode,
+        [paymentType]: JSON.parse(JSON.stringify(payment[paymentType])),
       };
-
+         console.log("payload is",payload);
       if (
         ["regular", "subsidy", "urgent", "service", "penality"].includes(
           paymentType
         )
       ) {
-        this[`${paymentType}Payment`] = payment;
+        this[`${paymentType}Payment`] = payment[paymentType];
       }
 
       this.payload = payload;
       this.showConfirmModal = true;
     },
-    validatePayment(payment, paymentIndex,paymentType) {
+    validatePayment(payment, paymentIndex, paymentType) {
       const { paidAt, bankType, TTNumber } = payment;
       console.log("payment and index", payment, paymentIndex);
       if (paymentIndex > 0) {
         this.payments[paymentIndex].permitSelect = true;
-        return false;
+        return true;
+      }
+      // Define the dynamic key outside of the ifs
+      const key = `verify${
+        paymentType.charAt(0).toUpperCase() + paymentType.slice(1)
+      }`;
+      console.log("key", key);
+
+      ["PaymentDate", "BankType", "TTNumber"].forEach((field) => {
+        this.payments[paymentIndex][`${key}${field}`] = false;
+      });
+
+
+      if(paymentType=='penality'){
+        if(!this.payments[paymentIndex][paymentType].isPaid ||!this.payments[paymentIndex].subsidy.isPaid ||!this.payments[paymentIndex].urgent.isPaid){
+        this.payments[paymentIndex].confirmRegularSubsisyUrgentFirst = true;
+        return true;
+      }
+     }
+      // Check if `paidAt` is  empty or null
+      if (!paidAt || paidAt.trim() === "") {
+        // alert("paidAt is empty or null");
+        this.payments[paymentIndex][`${key}PaymentDate`] = true; // Use the dynamic key
+        return true;
+      } else {
+        //alert("paidAt is valid");
       }
 
-     // Define the dynamic key outside of the ifs
-const key = `verify${paymentType.charAt(0).toUpperCase() + paymentType.slice(1)}`; 
-    console.log("key",key);
+      // Check if `bankType` is empty or null
+      if (!bankType || bankType.trim() === "") {
+        //alert("bankType is empty or null");
+        this.payments[paymentIndex][`${key}BankType`] = true; // Use the dynamic key
+        return true;
+      }
 
- ['PaymentDate', 'BankType', 'TTNumber'].forEach(field => {
-  this.payments[paymentIndex][`${key}${field}`] = false;
-});
-
-// Check if `paidAt` is  empty or null
-if (!paidAt || paidAt.trim() === "") {
- // alert("paidAt is empty or null");
-  this.payments[paymentIndex][`${key}PaymentDate`] = true; // Use the dynamic key
-  return true;
-} else {
-  //alert("paidAt is valid");
-}
-
-// Check if `bankType` is empty or null
-if (!bankType || bankType.trim() === "") {
-  //alert("bankType is empty or null");
-  this.payments[paymentIndex][`${key}BankType`] = true; // Use the dynamic key
-  return true;
-}
-
-// Check if `TTNumber` is empty or null
-if (!TTNumber || TTNumber.trim() === "") {
- // alert("TTNumber is empty or null");
-  this.payments[paymentIndex][`${key}TTNumber`] = true; // Use the dynamic key
-  return true;
-}
+      // Check if `TTNumber` is empty or null
+      if (!TTNumber || TTNumber.trim() === "") {
+        // alert("TTNumber is empty or null");
+        this.payments[paymentIndex][`${key}TTNumber`] = true; // Use the dynamic key
+        return true;
+      }
       return false;
     },
-
     callGetReceipt() {
       this.getReceipt = true;
     },
