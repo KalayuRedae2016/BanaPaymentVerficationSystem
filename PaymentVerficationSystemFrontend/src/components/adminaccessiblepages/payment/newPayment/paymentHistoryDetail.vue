@@ -1490,7 +1490,7 @@ export default {
   } finally {
     this.showEditModal = false;
   }
-}
+},
 
 
     async generateQRCodeImage() {
@@ -1498,7 +1498,7 @@ export default {
       try {
         // Generate QR code as a data URL (image) without rendering it to a canvas
         const qrCodeImage = await QRCode.toDataURL(qrData, {
-          errorCorrectionLevel: "H",
+          errorCorrectionLevel: "H"
         });
 
         // You can now use qrCodeImage in an <img> tag directly
