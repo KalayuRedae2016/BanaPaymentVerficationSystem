@@ -175,6 +175,8 @@ export default {
 
       year: new Date().getFullYear(),
       month: new Date().getMonth() + 1,
+      
+
       paymentSetting: {
         regularAmount: "",
         subsidyAmount: "",
@@ -190,8 +192,29 @@ export default {
     };
   },
 
-  mounted() {
+  async mounted() {
+    console.log("defualt year andmonth are ",this.year,this.month);
+      try { await this.$apiGet("/api/v1/paymentSetting/latest")
+        .then((response) => {
+          console.log("latest month response:", response);
+
+          if (response.status === 1) {
+            this.month = response.paymentSetting.activeMonth;
+            this.year = response.paymentSetting.activeYear;
+            this.monthlyPayment();
+          }
+        })}catch(error){
+     
+          console.error(
+            "An error occurred while fetching Payment settings:",
+            error.status,error.message
+          );
+        }finally{
+
+        };
+    
     this.fetchPaymentSetting();
+
   },
   methods: {
     async fetchPaymentSetting() {
@@ -210,7 +233,8 @@ export default {
         activeMonth:this.month,
 
       }
-    try{  await  this.$apiGet(
+    try {  
+      await  this.$apiGet(
           'api/v1/paymentSetting/',params
         )
         .then((response) => {
