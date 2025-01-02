@@ -518,8 +518,8 @@ export default {
       });
     },
     //latest payment month and active year
-    latestPaymentSetting() {
-      this.$apiGet("/api/v1/paymentSetting/latest")
+    async latestPaymentSetting() {
+      try { await this.$apiGet("/api/v1/paymentSetting/latest")
         .then((response) => {
           console.log("latest month response:", response);
 
@@ -528,13 +528,15 @@ export default {
             this.activeYear = response.paymentSetting.activeYear;
             this.monthlyPayment();
           }
-        })
-        .catch((error) => {
+        })}catch(error){
+     
           console.error(
             "An error occurred while fetching Payment settings:",
             error.status,error.message
           );
-        });
+        }finally{
+
+        };
     },
     //monthly payment
     monthlyPayment() {

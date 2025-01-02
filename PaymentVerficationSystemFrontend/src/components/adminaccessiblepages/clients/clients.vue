@@ -531,9 +531,11 @@ export default {
   },
 
   async mounted() {
-
+   const params= {
+    isActive: true 
+   }
     try {
-      await this.$apiGet("/api/v1/users", { params: { isActive: true } }).then(
+      await this.$apiGet("/api/v1/users",params).then(
         (response) => {
           this.clients = response.users;
           this.searchedClients = this.clients;
@@ -577,15 +579,15 @@ export default {
 
     async deactivate(userId) {
       const payload = {
-        userId: userId,
         reason: this.deactivationReason,
         isActive: false,
       };
 
       console.log("payload", payload);
       this.showDeactivateModal = false;
+
       try{
-        await this.$apiPut("/api/v1/users/active-deactive",'', payload)
+        await this.$apiPut("/api/v1/users/active-deactive",userId, payload)
         .then((response) => {
           console.log("users", response);
           if (response.status === 1) {

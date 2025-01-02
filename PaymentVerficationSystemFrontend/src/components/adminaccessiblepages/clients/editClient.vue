@@ -327,24 +327,26 @@ export default {
       return this.getName;
     },
   },
-  mounted() {
+  async mounted() {
     this.isLoading = true;
 
     this.clientId = this.$route.params.clientId;
 
     console.log("client Id", this.clientId);
 
-    this.$apiClient
-      .get(`/api/v1/users/${this.clientId}`)
+    try {
+      await this.$apiGetById('/api/v1/users',this.clientId)
       .then((response) => {
         console.log("Response client profile", response);
-        this.clientProfile = response.data.clientProfile;
-        this.imageData = "data:image/jpeg;base64," + response.data.imageData;
+        this.clientProfile = response.clientProfile;
+        this.imageData = "data:image/jpeg;base64," + response.imageData;
         this.isLoading = false;
-      })
-      .catch((error) => {
+      })} catch(error)
+     {
         console.error("Error fetching client datakk:", error);
-      });
+      }finally{
+
+      };
   },
   methods: {
     handleImageInput() {
