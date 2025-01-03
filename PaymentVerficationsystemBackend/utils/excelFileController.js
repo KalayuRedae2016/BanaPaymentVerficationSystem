@@ -112,7 +112,6 @@ exports.uploadMultipleFiles = (req, res) => {
 
 // Utility function to configure multer for file uploads
 exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) => {
-  // Ensure the destination folder exists
   if (!fs.existsSync(destinationFolder)) {
     fs.mkdirSync(destinationFolder, { recursive: true });
   }
@@ -136,6 +135,8 @@ exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) 
   });
 
   const fileFilter = (req, file, cb) => {
+    console.log('File upload middleware hit');
+    console.log('File type:', file.mimetype);
     // Accept only specified file types
     if (fileTypes.includes(file.mimetype)) {
       cb(null, true);

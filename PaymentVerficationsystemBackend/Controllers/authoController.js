@@ -16,13 +16,7 @@ const signInToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
-const userImageUpload = createMulterMiddleware(// Configure multer for user image uploads
-  'uploads/users/', // Destination folder
-  'User', // Prefix for filenames
-  ['image/jpeg', 'image/png', 'image/gif'], // Allowed file types
-);
-
-// Middleware for handling single file upload
+const userImageUpload = createMulterMiddleware('uploads/users/','User',['image/jpeg', 'image/png', 'image/gif'])
 exports.uploadUserImage = userImageUpload.single('profileImage');
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
@@ -39,8 +33,8 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  console.log("singup requestbody pro: " , req.body);
-  console.log("req.file",req.file)
+  console.log('Request body:', req.body);
+  console.log('Uploaded file:', req.file);
   try {
     const organization = await Organization.findOne()
     //console.log("org",organization)
