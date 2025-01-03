@@ -16,8 +16,18 @@ const signInToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
-const userImageUpload = createMulterMiddleware('uploads/users/','User',['image/jpeg', 'image/png', 'image/gif'])
-exports.uploadUserImage = userImageUpload.single('profileImage');
+let userImageUpload; // Declare the variable to hold the multer middleware
+
+// The uploadUserImage function initializes the multer middleware lazily
+exports.uploadUserImage = (req, res, next) => {
+  console.log("Uploaded file:", req.file); 
+  if (!userImageUpload) {
+    console.log('Initializing multer middleware'); // Log when initializing
+  userImageUpload = createMulterMiddleware('uploads/users/','User', ['image/jpeg', 'image/png', 'image/gif']);
+  }
+  // Execute the middleware only when needed
+  userImageUpload.single('profileImage')(req, res, next);
+};
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
