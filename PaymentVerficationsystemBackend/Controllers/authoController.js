@@ -39,7 +39,8 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  //console.log("singup requestbody pro: " , req.body.profileImage);
+  console.log("singup requestbody pro: " , req.body);
+  console.log("req.file",req.file)
   try {
     const organization = await Organization.findOne()
     //console.log("org",organization)
@@ -119,7 +120,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  //console.log("ss",req.body)
+  console.log("ss",req.body)
   const { userCode, password } = req.body
   if (!userCode || !password) {
     return res.status(200).json({
@@ -203,7 +204,7 @@ exports.authenticationJwt = catchAsync(async (req, res, next) => {
   if (req.headers.authorization &&req.headers.authorization.startsWith('Bearer') ) {
     token = req.headers.authorization.split(' ')[1];
   }
-  console.log(req.headers)
+  // console.log(req.headers)
   if (!token) {
     return next(new AppError('Token is missed! Unauthorized user,Please log in again', 401,1));
   }

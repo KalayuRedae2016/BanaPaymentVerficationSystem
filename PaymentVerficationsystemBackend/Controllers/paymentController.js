@@ -757,7 +757,6 @@ exports.editPayments = catchAsync(async (req, res, next) => {
 
 });
 
-
 exports.getPenality = catchAsync(async (req, res, next) => {
   const { paymentType, activeYear, activeMonth, paymentDate } = req.query;
 
@@ -848,7 +847,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
     const paymentSetting = await PaymentSetting.findById(settingId);
     if (!paymentSetting) {
-      console.error(`Payment setting not found for payment ID: ${paymentId}`);
+      // console.error(`Payment setting not found for payment ID: ${paymentId}`);
       bulkUpdates.push({
         updateOne: { filter: { _id: paymentId }, update: { status: 'unknown' } },
       });

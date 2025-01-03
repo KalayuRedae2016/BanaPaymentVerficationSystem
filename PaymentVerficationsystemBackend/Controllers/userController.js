@@ -155,7 +155,6 @@ exports.updateUser = catchAsync(async (req, res) => {
 
     if (req.file) {
       updateData.profileImage = req.file.filename; // Set new profile image filename to update
-
       let oldImagePath;
       if (existingUser.profileImage && existingUser.profileImage.trim() !== '' && existingUser.profileImage !== 'default.png') {
         const profileImage = existingUser.profileImage.trim();

@@ -16,17 +16,14 @@ const initializeServer = async () => {
     console.log("Initializing server...");
     // Ensure the default admin user is created before starting the server
     await createDefaultAdminUser();
-    console.log("Default admin user created successfully");
+    // console.log("Default admin user created successfully");
 
     const PORT = process.env.PORT || 8081;
     const SSL = process.env.SSL
-    // console.log("SSL:",SSL)
     if (SSL==="true") {
-      // Load SSL credentials from the environment variables
       const SSL_KEY_PATH = process.env.SSL_KEY_PATH || "/etc/letsencrypt/live/banapvs.com/privkey.pem";
       const SSL_CERT_PATH = process.env.SSL_CERT_PATH || "/etc/letsencrypt/live/banapvs.com/fullchain.pem";
 
-      // Ensure the paths are valid and the files exist
       const key = fs.readFileSync(SSL_KEY_PATH, "utf8");
       const cert = fs.readFileSync(SSL_CERT_PATH, "utf8");
 

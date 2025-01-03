@@ -70,7 +70,6 @@ exports.exportToExcel = async (data, sheetName, fileName, res) => {
   }
 };
 
-
 exports.uploadFile = async (req, res) => {
   try {
     const { originalname, buffer } = req.file;
