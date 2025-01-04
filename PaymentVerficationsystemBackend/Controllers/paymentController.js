@@ -1456,7 +1456,7 @@ exports.reports = catchAsync(async (req, res, next) => {
     case 'semiAnnually':
       if (!specifiedYear) return res.status(400).json({ error: 'Year is required for semiannual time range' });
       if (!semiYear || (semiYear!=="1st"&!semiYear!=="2nd"))
-        return res.status(400).json({ error: 'Valid  semiYear month is required for semiannual time range(1st or 2nd)' });
+        return res.status(400).json({ error: 'Valid semiYear is required for semiannual time range(1st or 2nd)' });
       if(semiYear==="1st"){
         startDate = new Date(specifiedYear, 1, 1);
         endDate = new Date(specifiedYear, 6, 0);
@@ -1464,7 +1464,7 @@ exports.reports = catchAsync(async (req, res, next) => {
         startDate = new Date(specifiedYear, 7, 1);
         endDate = new Date(specifiedYear, 12, 0);
       }
-      
+
       break;
     case 'monthly':
       if (!specifiedYear || !month)
