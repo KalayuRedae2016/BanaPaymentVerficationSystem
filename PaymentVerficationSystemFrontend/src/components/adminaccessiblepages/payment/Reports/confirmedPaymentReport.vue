@@ -937,6 +937,8 @@ export default {
     }
     
     console.log("Selected report type:", this.reportType);
+
+    this.fetchPayments();
   },
 
   async fetchPayments() {
@@ -984,7 +986,7 @@ export default {
    //alert("ooo")
     try {
       const response = await this.$apiGet('/api/v1/payments/reports', params);
-      console.log("Response for report:yyy", response);
+      console.log("Response for report:yysssy", response);
       this.reports = response || {
       items: {
         totalBalanceBankType: [],
