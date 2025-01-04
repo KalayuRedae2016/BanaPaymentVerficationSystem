@@ -1458,12 +1458,12 @@ exports.reports = catchAsync(async (req, res, next) => {
       if (!semiYear || (semiYear!=="1st"&semiYear!=="2nd"))
         return res.status(400).json({ error: 'Valid semiYear is required for semiannual time range(1st or 2nd)' });
       if(semiYear==="1st"){
-        startDate = new Date(specifiedYear, 1, 1);
-        endDate = new Date(specifiedYear, 6, 0);
+        startDate = new Date(specifiedYear, 9, 1);
+        endDate = new Date(specifiedYear, 2, 0);
         console.log("1st date",startDate,endDate)
       }else{
-        startDate = new Date(specifiedYear, 6, 1);
-        endDate = new Date(specifiedYear, 12, 0);
+        startDate = new Date(specifiedYear, 2, 1);
+        endDate = new Date(specifiedYear, 8, 0);
         console.log("2nd date",startDate,endDate)
       }
       break;
