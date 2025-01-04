@@ -1058,8 +1058,9 @@ export default {
       break;
     case "semiAnnually":
       this.year = currentYear;
-      this.semiYear = currentSemiYear; // Assuming getCurrentHalf() is defined
+      // Assuming getCurrentHalf() is defined
       const currentSemiYear = this.getCurrentHalf(); // Assuming getCurrentHalf() is defined
+      this.semiYear = currentSemiYear; 
       params = { timeRange: "semiAnnually", year: currentYear, semiYear: currentSemiYear };
       selectedFlags.annuallySelected = true;
       selectedFlags.semiAnnuallySelected = true;
