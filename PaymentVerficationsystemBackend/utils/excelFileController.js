@@ -70,7 +70,6 @@ exports.exportToExcel = async (data, sheetName, fileName, res) => {
   }
 };
 
-
 exports.uploadFile = async (req, res) => {
   try {
     const { originalname, buffer } = req.file;
@@ -113,7 +112,7 @@ exports.uploadMultipleFiles = (req, res) => {
 
 // Utility function to configure multer for file uploads
 exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) => {
-  // Ensure the destination folder exists
+  console.log("Thissss")
   if (!fs.existsSync(destinationFolder)) {
     fs.mkdirSync(destinationFolder, { recursive: true });
   }
@@ -123,6 +122,7 @@ exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) 
       cb(null, destinationFolder);
     },
     filename: (req, file, cb) => {
+      console.log("file",file)
       // Generate a unique filename for the uploaded file
       const now = new Date();
       const year = now.getFullYear(); // Full year (e.g., 2024)
@@ -134,9 +134,13 @@ exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) 
       const fileExt = path.extname(file.originalname);
       cb(null, `${filenamePrefix}-${name}-${uniqueSuffix}${fileExt}`);
     },
-  });
+  })
+  
+  console.log("second here")
 
   const fileFilter = (req, file, cb) => {
+    console.log('File upload middleware hit');
+    console.log('File type:', file.mimetype);
     // Accept only specified file types
     if (fileTypes.includes(file.mimetype)) {
       cb(null, true);
@@ -147,6 +151,7 @@ exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) 
 
   return multer({ storage, fileFilter });
 };
+
 
 exports.deleteFile = (filePath) => {
   if (filePath) {

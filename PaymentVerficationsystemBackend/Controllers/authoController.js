@@ -16,14 +16,18 @@ const signInToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
-const userImageUpload = createMulterMiddleware(// Configure multer for user image uploads
-  'uploads/users/', // Destination folder
-  'User', // Prefix for filenames
-  ['image/jpeg', 'image/png', 'image/gif'], // Allowed file types
-);
+let userImageUpload; // Declare the variable to hold the multer middleware
 
-// Middleware for handling single file upload
-exports.uploadUserImage = userImageUpload.single('profileImage');
+// The uploadUserImage function initializes the multer middleware lazily
+exports.uploadUserImage = (req, res, next) => {
+  console.log("Uploaded file:", req.file); 
+  if (!userImageUpload) {
+    console.log('Initializing multer middleware'); // Log when initializing
+  userImageUpload = createMulterMiddleware('uploads/users/','User', ['image/jpeg', 'image/png', 'image/gif']);
+  }
+  // Execute the middleware only when needed
+  userImageUpload.single('profileImage')(req, res, next);
+};
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
@@ -39,7 +43,8 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  //console.log("singup requestbody pro: " , req.body.profileImage);
+  console.log('Request body:', req.body);
+  console.log('Uploaded file:', req.file);
   try {
     const organization = await Organization.findOne()
     //console.log("org",organization)
@@ -119,7 +124,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-  //console.log("ss",req.body)
+  console.log("ss",req.body)
   const { userCode, password } = req.body
   if (!userCode || !password) {
     return res.status(200).json({
@@ -203,7 +208,7 @@ exports.authenticationJwt = catchAsync(async (req, res, next) => {
   if (req.headers.authorization &&req.headers.authorization.startsWith('Bearer') ) {
     token = req.headers.authorization.split(' ')[1];
   }
-  console.log(req.headers)
+  // console.log(req.headers)
   if (!token) {
     return next(new AppError('Token is missed! Unauthorized user,Please log in again', 401,1));
   }

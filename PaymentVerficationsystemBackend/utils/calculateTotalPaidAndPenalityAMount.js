@@ -26,7 +26,9 @@ const calculateTotalPaidAndPenalityAmount = (payment) => {
         if (payment[type]) { // Ensure the type exists
             // console.log(`${type} Penalty: ${payment[type]?.penality || 0}`);
             if (payment[type]?.isPaid) {
-                payment.penality.amount += payment[type].penality || 0;
+                payment.penality.amount += (payment[type].penality || 0);
+                payment.penality.amount = Number(payment.penality.amount.toFixed(2));
+
             }
         }
     });

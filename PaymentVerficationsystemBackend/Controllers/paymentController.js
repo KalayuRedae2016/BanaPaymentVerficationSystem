@@ -27,7 +27,6 @@ const paymentFileUpload = createMulterMiddleware(
 );
 // Middleware for handling single file upload
 exports.uploadPaymentFile = paymentFileUpload.single('file');
-// Function to create unconfirmed payments
 
 exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
   const { activeYear, activeMonth } = req.body;
@@ -432,6 +431,7 @@ exports.confirmBills = async (req, res) => {
     });
   }
 };
+
 exports.searchPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid, activeYear, activeMonth } = req.query;
 
@@ -672,8 +672,8 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   if (!user) {
     return next(new AppError("User is not found"), 400)
   } 
-  // Find the uPaid bill by billCode
-  let payment = await Payment.findOne({ billCode });
+  // Find the uPaid bill by billCode and ispaid:false
+  let payment = await Payment.findOne({ isPaid: false, billCode });
   if (!payment) {
     return next(new AppError("No paid Bill found",404))
   }
@@ -756,6 +756,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   });
 
 });
+
 exports.getPenality = catchAsync(async (req, res, next) => {
   const { paymentType, activeYear, activeMonth, paymentDate } = req.query;
 
@@ -846,7 +847,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
 
     const paymentSetting = await PaymentSetting.findById(settingId);
     if (!paymentSetting) {
-      console.error(`Payment setting not found for payment ID: ${paymentId}`);
+      // console.error(`Payment setting not found for payment ID: ${paymentId}`);
       bulkUpdates.push({
         updateOne: { filter: { _id: paymentId }, update: { status: 'unknown' } },
       });
@@ -1049,6 +1050,7 @@ exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
     payment
   });
 });
+
 exports.getAllPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid } = req.query;
   if (!keyword) {
@@ -1197,6 +1199,7 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
     }
   })
 });
+
 exports.importPayments = catchAsync(async (req, res, next) => {
   if (!req.file) {
     return next(new AppError('No file uploaded', 400));
@@ -1227,6 +1230,7 @@ exports.exportPayments = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({});
   await exportToExcel(payments, 'Payments', 'paymentData.xlsx', res);
 });
+
 exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   const { userCode, activeYear } = req.query;
   if (!userCode) {
