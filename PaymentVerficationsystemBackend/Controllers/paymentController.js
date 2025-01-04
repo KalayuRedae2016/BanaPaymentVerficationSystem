@@ -1430,7 +1430,7 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
   });
 });
 exports.reports = catchAsync(async (req, res, next) => {
-  const { paymentType, userCode, fullName, isPaid, status, bankType, year, month, timeRange } = req.query;
+  const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month, timeRange } = req.query;
   const paymentQuery = {};
   if (!timeRange) {
     return next(new AppError("Time Range is required"), 400)
@@ -1455,10 +1455,16 @@ exports.reports = catchAsync(async (req, res, next) => {
       break;
     case 'semiAnnually':
       if (!specifiedYear) return res.status(400).json({ error: 'Year is required for semiannual time range' });
-      if (!month || month < 1 || month > 12)
-        return res.status(400).json({ error: 'Valid month is required for semiannual time range' });
-      startDate = new Date(specifiedYear, month - 1, 1);
-      endDate = new Date(specifiedYear, month + 5, 0);
+      if (!semiYear || (semiYear!=="1st"&!semiYear!=="2nd"))
+        return res.status(400).json({ error: 'Valid  semiYear month is required for semiannual time range(1st or 2nd)' });
+      if(semiYear==="1st"){
+        startDate = new Date(specifiedYear, 1, 1);
+        endDate = new Date(specifiedYear, 6, 0);
+      }else{
+        startDate = new Date(specifiedYear, 7, 1);
+        endDate = new Date(specifiedYear, 12, 0);
+      }
+      
       break;
     case 'monthly':
       if (!specifiedYear || !month)
