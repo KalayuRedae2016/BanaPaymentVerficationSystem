@@ -1430,7 +1430,7 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
   });
 });
 exports.reports = catchAsync(async (req, res, next) => {
-  const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month, timeRange } = req.query;
+  const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month,day, timeRange } = req.query;
   const paymentQuery = {};
   if (!timeRange) {
     return next(new AppError("Time Range is required"), 400)
@@ -1479,8 +1479,11 @@ exports.reports = catchAsync(async (req, res, next) => {
       endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), startOfWeek + 7);
       break;
     case 'daily':
-      startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
-      endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+      if (!specifiedYear || !month||!day)
+        return res.status(400).json({ error: 'Year or  month or day is are required for daily time range' });
+      startDate = new Date(specifiedYear, month-1, day, 0, 0, 0);
+      endDate = new Date(specifiedYear, month-1, day, 23, 59, 59);
+      console.log("Daily date",startDate,endDate)
       break;
     case 'allTime':
       startDate = new Date(1970, 0, 1);  // Unix epoch start date (or any other earlier date)
