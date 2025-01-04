@@ -937,7 +937,7 @@
                       <p v-if="!payment.service.dayslate">
                         {{ payment.service.daysLate }}
                       </p>
-                      <p else>0</p>
+                      
                     </td>
 
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">

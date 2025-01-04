@@ -1,91 +1,124 @@
 <template>
   <div class="p-4 m-2 bg-white shadow-lg">
-    <Toast ref="toast"/>
+    <Toast ref="toast" />
     <div class="flex justify-between items-center mb-4">
-      <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-4 p-4 bg-white rounded-lg">
         <label class="flex items-center space-x-2">
-          <span class="text-sm text-blue-500 font-bold">Show</span>
-          <select v-model="itemsPerPage" class="border border-gray-500 rounded-lg h-6">
-            <option v-for="option in itemsPerPageOptions" :key="option" :value="option">
+          <span class="text-sm text-blue-600 font-semibold tracking-wide"
+            >Show</span
+          >
+          <select
+          @change="changeCurrentPage()"
+            v-model="itemsPerPage"
+            class="border border-gray-300 rounded-md h-6 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300 hover:border-blue-400"
+          >
+            <option
+              v-for="option in itemsPerPageOptions"
+              :key="option"
+              :value="option"
+              class="text-gray-700"
+            >
               {{ option }}
             </option>
           </select>
         </label>
       </div>
+
       <div class="flex items-center space-x-2">
         <label for="search" class="text-sm text-gray-600">Search:</label>
         <input
           id="search"
           type="text"
           v-model="searchQuery"
-          class="border border-gray-600 rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300"
+          class="border border-gray-600 rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300 w-1/2 lg:w-full"
         />
       </div>
+
     </div>
-
-    <table class="table-auto w-full border-collapse border-b-2 border-gray-300">
-      <thead class="border-b-2 border-gray-300 border-r border-t border-l border-gray-300">
-        <tr>
-          <th
-            v-for="header in headers"
-            :key="header.key"
-            @click.prevent="sortBy(header.key)"
-            class="cursor-pointer border-b border-blue-300 text-left py-2 px-3 text-blue-500"
-          >
-            {{ header.label }}
-            <span v-if="sortKey === header.key">
-              {{ sortDirection === 'asc' ? '▲' : '▼' }}
-            </span>
-            <span v-else class="text-gray-300">⬍</span>
-          </th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr
-          v-for="(user, index) in paginatedData"
-          :key="user._id"
-          class="font-bold border-r border-t border-l border-gray-300 bg-white text-gray-500 text-xs hover:bg-blue-100"
+    <div class="overflow-x-auto ">
+      <table
+        class="table-auto w-full border-collapse border-b-2 border-gray-300"
+      >
+        <thead
+          class="border-b-2 border-gray-300 border-r border-t border-l border-gray-300"
         >
-          <td class="border-b border-gray-300 py-2 px-3">{{ currentRangeStart + index }}</td>
-          <td class="border-b border-gray-300 py-2 px-3">{{ user.userCode }}</td>
-          <td class="border-b border-gray-300 py-2 px-3">{{ user.fullName }}</td>
-          <td class="border-b border-gray-300 py-2 px-3">{{ user.email }}</td>
-          <td class="border-b border-gray-300 py-2 px-3">{{ user.createdAt }}</td>
-          <td class="border-b border-gray-300 py-2 px-3">{{ user.updatedAt }}</td>
-          <td class="border-b border-gray-300 py-2 px-3">
-            <div class="flex items-center space-x-2">
-              <button
-                @click="navigateToInClient(user._id)"
-                class="bg-blue-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-blue-600"
-              >
-                <i class="fas fa-info-circle"></i>
-                <span>Detail</span>
-              </button>
-              <button
-                      @click="showResetModal=!showResetModal;selectedUserToBeResetPassword = user;"
-             
-                class="bg-yellow-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-yellow-600"
-              >
-                <i class="fas fa-sync-alt"></i>
-                <span>Reset</span>
-              </button>
-              <button
-              @click="showDeactivateModal=!showDeactivateModal;userIdToBeDeactivated = user._id;"
-                class="bg-red-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-red-600"
-              >
-                <i class="fas fa-ban"></i>
-                <span>Deactivate</span>
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          <tr>
+            <th
+              v-for="header in headers"
+              :key="header.key"
+              @click.prevent="sortBy(header.key)"
+              class="w-32 cursor-pointer border-b border-blue-300 text-left py-2 px-3 text-blue-500"
+            >
+              {{ header.label }}
+              <span v-if="sortKey === header.key">
+                {{ sortDirection === "asc" ? "▲" : "▼" }}
+              </span>
+              <span v-else class="text-gray-300">⬍</span>
+            </th>
+          </tr>
+        </thead>
 
+        <tbody>
+          <tr
+            v-for="(user, index) in paginatedData"
+            :key="user._id"
+            class="font-bold border-r border-t border-l border-gray-300 bg-white text-gray-500 text-xs hover:bg-blue-100"
+          >
+            <td class="cursor-pointer border-b border-gray-300 py-2 px-3" @click="navigateToInClient(user._id)">
+              {{ currentRangeStart + index }}
+            </td>
+            <td class=" cursor-pointer border-b border-gray-300 py-2 px-3" @click="navigateToInClient(user._id)">
+              {{ user.userCode }}
+            </td>
+            <td class="cursor-pointer border-b border-gray-300 py-2 px-3" @click="navigateToInClient(user._id)">
+              {{ user.fullName }}
+            </td>
+            <td class="cursor-pointer border-b border-gray-300 py-2 px-3" @click="navigateToInClient(user._id)">{{ user.email }}</td>
+            <td class="cursor-pointer border-b border-gray-300 py-2 px-3" @click="navigateToInClient(user._id)">
+              {{ user.createdAt }}
+            </td>
+            <td class="cursor-pointer border-b border-gray-300 py-2 px-3" @click="navigateToInClient(user._id)">
+              {{ user.updatedAt }}
+            </td>
+            <td class="border-b border-gray-300 py-2 px-3" >
+              <div class="flex items-center space-x-2">
+                <button
+                  @click="navigateToInClient(user._id)"
+                  class="bg-blue-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-blue-600"
+                >
+                  <i class="fas fa-info-circle"></i>
+                  <span>Detail</span>
+                </button>
+                <button
+                  @click="
+                    showResetModal = !showResetModal;
+                    selectedUserToBeResetPassword = user;
+                  "
+                  class="bg-yellow-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-yellow-600"
+                >
+                  <i class="fas fa-sync-alt"></i>
+                  <span>Reset</span>
+                </button>
+                <button
+                  @click="
+                    showDeactivateModal = !showDeactivateModal;
+                    userIdToBeDeactivated = user._id;
+                  "
+                  class="bg-red-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-red-600"
+                >
+                  <i class="fas fa-ban"></i>
+                  <span>Deactivate</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <div class="flex justify-between items-center mt-4">
       <div class="text-sm text-gray-600">
-        Showing {{ currentRangeStart }} to {{ currentRangeEnd }} of {{ filteredData.length }} entries ({{ totalPages }} pages)
+        Showing {{ currentRangeStart }} to {{ currentRangeEnd }} of
+        {{ filteredData.length }} entries ({{ totalPages }} pages)
       </div>
       <div class="flex items-center space-x-1 overflow-x-auto">
         <button
@@ -99,7 +132,12 @@
           v-for="page in visiblePages"
           :key="page"
           @click="goToPage(page)"
-          :class="[page === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-50 text-blue-500 hover:bg-gray-200', 'px-3 py-1 rounded text-sm']"
+          :class="[
+            page === currentPage
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-50 text-blue-500 hover:bg-gray-200',
+            'px-3 py-1 rounded text-sm',
+          ]"
         >
           {{ page }}
         </button>
@@ -260,16 +298,15 @@
     </div>
   </div>
 </template>
-
-<script>
-import Toast from '../components/Common/Toast.vue';
+  
+  <script>
+import Toast from "../../Common/Toast.vue";
 export default {
   components: { Toast },
   data() {
     return {
-
-      showResetedPasswordModal:false,
-      showResetModal:false,
+      showResetedPasswordModal: false,
+      showResetModal: false,
 
       selectedUserToBeResetPassword: "",
       userIdToBeDeactivated: "",
@@ -277,18 +314,18 @@ export default {
       showDeactivateModal: false,
 
       headers: [
-        { key: 'no', label: 'No' },
-        { key: 'userCode', label: 'User Code' },
-        { key: 'fullName', label: 'Full Name' },
-        { key: 'email', label: 'Email' },
-        { key: 'createdAt', label: 'Created At' },
-        { key: 'updatedAt', label: 'Updated At' },
-        { key: 'actions', label: 'Actions' },
+        { key: "no", label: "No" },
+        { key: "userCode", label: "User Code" },
+        { key: "fullName", label: "Full Name" },
+        { key: "email", label: "Email" },
+        { key: "createdAt", label: "Created At" },
+        { key: "updatedAt", label: "Updated At" },
+        { key: "actions", label: "Actions" },
       ],
       data: [],
-      searchQuery: '',
-      sortKey: '',
-      sortDirection: 'asc',
+      searchQuery: "",
+      sortKey: "",
+      sortDirection: "asc",
       currentPage: 1,
       itemsPerPage: 5,
       itemsPerPageOptions: [5, 10, 20, 50],
@@ -297,12 +334,11 @@ export default {
   computed: {
     filteredData() {
       if (!this.searchQuery) {
-        
         return this.data;
       }
 
-      if(this.currentPage!=1){
-        this.currentPage =1;
+      if (this.currentPage != 1) {
+        this.currentPage = 1;
       }
       return this.data.filter((item) =>
         Object.values(item).some((value) =>
@@ -317,7 +353,7 @@ export default {
       return [...this.filteredData].sort((a, b) => {
         const compareA = a[this.sortKey];
         const compareB = b[this.sortKey];
-        return this.sortDirection === 'asc'
+        return this.sortDirection === "asc"
           ? compareA > compareB
             ? 1
             : -1
@@ -337,7 +373,10 @@ export default {
       return (this.currentPage - 1) * this.itemsPerPage + 1;
     },
     currentRangeEnd() {
-      return Math.min(this.currentPage * this.itemsPerPage, this.filteredData.length);
+      return Math.min(
+        this.currentPage * this.itemsPerPage,
+        this.filteredData.length
+      );
     },
     visiblePages() {
       const range = [];
@@ -351,20 +390,25 @@ export default {
     await this.fetchData();
   },
   methods: {
+    changeCurrentPage(){
+       this.currentPage=1;
+    },
     async fetchData() {
       try {
-        const response = await this.$apiGet('/api/v1/users', { isActive: true });
+        const response = await this.$apiGet("/api/v1/users", {
+          isActive: true,
+        });
         this.data = response.users || [];
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     },
     sortBy(key) {
       if (this.sortKey === key) {
-        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        this.sortDirection = this.sortDirection === "asc" ? "desc" : "asc";
       } else {
         this.sortKey = key;
-        this.sortDirection = 'asc';
+        this.sortDirection = "asc";
       }
     },
     previousPage() {
@@ -380,7 +424,7 @@ export default {
     goToPage(page) {
       this.currentPage = page;
     },
- 
+
     async resetPassword(user) {
       console.log("userId is", user._id);
       this.showResetModal = false;
@@ -388,30 +432,32 @@ export default {
         id: user._id,
         email: user.email,
       };
-      try{
-      await this.$apiPatch("/api/v1/users/resetPasswordByAdmin",'', payload)
-        .then((response) => {
+      try {
+        await this.$apiPatch(
+          "/api/v1/users/resetPasswordByAdmin",
+          "",
+          payload
+        ).then((response) => {
           console.log("users", response);
           if (response.status === 1) {
-            alert("reseted")
+            //alert("reseted");
             this.showResetedPasswordModal = true;
 
             this.resetedPassword = response.resetedPassword;
             this.$refs.toast.showSuccessToastMessage(response.message);
             this.displayedItems();
           }
-        })
-      }catch(error){
-          this.errorMessage = error.message;
-          this.showError = true;
-          conmsole.log("error during reseting",error.status,error.message)
-        }finally{
-
-        };
+        });
+      } catch (error) {
+        this.errorMessage = error.message;
+        this.showError = true;
+        conmsole.log("error during reseting", error.status, error.message);
+      } finally {
+      }
     },
 
     async deactivate(userId) {
-      alert("deactivate")
+     // alert("deactivate");
 
       const payload = {
         reason: this.deactivationReason,
@@ -421,9 +467,12 @@ export default {
       console.log("payload", payload);
       this.showDeactivateModal = false;
 
-      try{
-        await this.$apiPut("/api/v1/users/active-deactive",userId, payload)
-        .then((response) => {
+      try {
+        await this.$apiPut(
+          "/api/v1/users/active-deactive",
+          userId,
+          payload
+        ).then((response) => {
           console.log("users", response);
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
@@ -431,13 +480,12 @@ export default {
           } else {
             this.showErrorToastMessage("Something went wrong!!");
           }
-        })
-       }catch(error) {
-          console.log("error during activating",error.status,error.message);
-          this.$refs.toast.showErrorToastMessage("Something went wrong!!");
-        }finally{
-
-        }
+        });
+      } catch (error) {
+        console.log("error during activating", error.status, error.message);
+        this.$refs.toast.showErrorToastMessage("Something went wrong!!");
+      } finally {
+      }
     },
 
     navigateToInClient(clientId) {
@@ -446,3 +494,4 @@ export default {
   },
 };
 </script>
+  

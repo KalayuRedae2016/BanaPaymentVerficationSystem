@@ -101,15 +101,15 @@
                       >
                     </p>
 
-                    <p class="mt-3 text-red-500" v-if="payment.permitSelect">
-                      Youcan't pay before you pay months before this month
+                  <p class="mt-5 text-red-500 text-lg " v-if="payment.permitSelect">
+                      You can't pay before you pay months before this month
                       please
                     </p>
                   </div>
                 </div>
 
                 <div class="overflow-x-auto">
-                  <table class="w-full bg-white">
+                  <table class="w-full bg-white border border-gray-500">
                     <thead>
                       <!-- // head of the tables -->
                       <tr class="bg-gray-200">
@@ -261,14 +261,16 @@
                           v-if="!payment.regular.isPaid"
                           class="text-xs text-gray-700 whitespace-nowrap"
                         >
+                          
                           <button
-                            @click="
+                         
+                          @click="
                              preConfirmPayment('regular', payment, paymentIndex)
                             "
-                            class="w-32 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 flex items-center justify-center shadow-sm"
-                          >
-                            <i class="fas fa-check-circle mr-2"></i> Confirm
-                          </button>
+                       class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
+                     >
+                       <i class="fas fa-check-circle mr-2"></i> Confirm
+                     </button>
                         </td>
 
                         <!-- Edit Button -->
@@ -276,17 +278,18 @@
                           v-if="payment.regular.isPaid"
                           class="text-xs text-gray-700 whitespace-nowrap"
                         >
+                        
                           <button
-                            @click="
+                          @click="
                               showEditModalDetail(
                                 payment.billCode,
                                 payment.regular,
                                 'regular'
                               )
                             "
-                            class="w-32 custom-button"
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
-                            <i class="fas fa-edit mr-2"></i> Edit
+                            <i class="fas fa-edit mr-2"></i>Edit
                           </button>
                         </td>
                       </tr>
@@ -384,17 +387,18 @@
                           </template>
                         </td>
 
-                        <!-- Payment Status -->
+                       
+
                         <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
-                            v-if="payment.subsidy.isPaid"
+                           v-if="payment.subsidy.isPaid"
                             class="bg-green-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Paid
                           </span>
                           <span
                             v-else
-                            class="bg-red-500 text-white py-1 px-4 rounded-lg shadow-sm"
+                            class="bg-yellow-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Unpaid
                           </span>
@@ -405,11 +409,15 @@
                           v-if="!payment.subsidy.isPaid"
                           class="text-xs text-gray-700 whitespace-nowrap"
                         >
+                     
+
                           <button
-                            @click="
+                         
+                              @click="
                              preConfirmPayment('subsidy', payment, paymentIndex)
+                            
                             "
-                            class="w-32 bg-blue-500 text-white py-1 px-4 rounded hover:bg-blue-600 flex items-center justify-center shadow-sm"
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
                             <i class="fas fa-check-circle mr-2"></i> Confirm
                           </button>
@@ -420,17 +428,19 @@
                           v-if="payment.subsidy.isPaid"
                           class="text-xs text-gray-700 whitespace-nowrap"
                         >
+                        
+
                           <button
-                            @click="
+                          @click="
                               showEditModalDetail(
                                 payment.billCode,
                                 payment.subsidy,
                                 'subsidy'
                               )
                             "
-                            class="w-32 custom-button"
+                            class="w-32 custom-button bg-blue-500 text-white flex items-center p-2 rounded hover:bg-blue-600"
                           >
-                            <i class="fas fa-edit mr-2"></i> Edit
+                            <i class="fas fa-edit mr-2"></i>Edit
                           </button>
                         </td>
                       </tr>
@@ -538,21 +548,21 @@
                           </p>
                         </td>
 
-                        <!-- Payment Status -->
                         <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
-                            v-if="payment.urgent.isPaid"
-                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                             v-if="payment.urgent.isPaid"
+                            class="bg-green-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Paid
                           </span>
                           <span
-                            v-else-if="!payment.urgent.isPaid"
-                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                            v-else
+                            class="bg-yellow-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Unpaid
                           </span>
                         </td>
+                        
 
                         <!-- Confirm / Edit Actions -->
                         <td
@@ -676,20 +686,24 @@
                             TTNumber is required
                           </p>
                         </td>
+
+
+
                         <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
-                            v-if="payment.service.isPaid"
-                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                             v-if="payment.service.isPaid"
+                            class="bg-green-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Paid
                           </span>
                           <span
-                            v-else-if="!payment.service.isPaid"
-                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                            v-else
+                            class="bg-yellow-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Unpaid
                           </span>
                         </td>
+                        
                         <td
                           v-if="!payment.service.isPaid"
                           class="text-xs text-gray-700 whitespace-nowrap relative"
@@ -914,19 +928,18 @@
 
                         <td class="text-xs text-gray-700 whitespace-nowrap">
                           <span
-                            v-if="payment.penality.isPaid"
-                            class="bg-green-400 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                             v-if="payment.penality.isPaid"
+                            class="bg-green-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Paid
                           </span>
                           <span
-                            v-else-if="!payment.penality.isPaid"
-                            class="bg-red-300 text-white py-2 px-5 rounded-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                            v-else
+                            class="bg-yellow-500 text-white py-1 px-4 rounded-lg shadow-sm"
                           >
                             Unpaid
                           </span>
                         </td>
-
                         <td
                           v-if="!payment.penality.isPaid"
                           class="text-xs text-gray-700 whitespace-nowrap relative"
