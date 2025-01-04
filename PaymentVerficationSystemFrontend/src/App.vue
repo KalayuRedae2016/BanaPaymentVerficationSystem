@@ -70,3 +70,43 @@ handleInactivity() {
 
 };
 </script>
+
+<style>
+/* Global styles for jTable */
+.jtable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.jtable th,
+.jtable td {
+  padding: 0.75rem;
+  text-align: left;
+  border: 1px solid #e2e8f0;
+}
+
+.jtable th {
+  background-color: #f7fafc;
+  font-weight: bold;
+}
+
+.jtable tbody tr:hover {
+  background-color: #f1f5f9;
+}
+
+.jtable tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.jtable .pagination-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.jtable .pagination-btn:hover {
+  background-color: #e2e8f0;
+}
+</style>

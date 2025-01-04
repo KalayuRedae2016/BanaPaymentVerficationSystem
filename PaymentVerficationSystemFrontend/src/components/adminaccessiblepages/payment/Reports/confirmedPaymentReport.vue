@@ -1,581 +1,6 @@
 <template>
   <div class="border border border-gray-400 mt-5">
-    <div class="flex flex-col p-4 text-xs">
-      <div class="flex flex-row border-b pb-5 border-blue-500">
-        <label class="custom-label"> Report Type: </label>
-        <select
-          v-model="reportType"
-          @change="changeReportType()"
-          class="custom-select h-10"
-        >
-          <option value="" disabled>Select Report Type</option>
-          <option
-            v-for="reportType in $reportTypes"
-            :key="reportType"
-            :value="reportType.value"
-          >
-            {{ reportType.name }}
-          </option>
-        </select>
-      </div>
-      <div class="flex flex-col">
-        <div
-          class="mt-5 w-full flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0"
-        >
-          <div>
-            <select
-              v-model="year"
-              @change="fetchPayments()"
-              class="custom-select"
-            >
-              <option value="" disabled>Select Year</option>
-              <!-- Dynamically generate options using the global $years variable -->
-              <option
-                v-for="yearOption in $years"
-                :key="yearOption"
-                :value="yearOption"
-              >
-                {{ yearOption }}
-              </option>
-            </select>
-          </div>
-
-          <div>
-            <select
-              v-model="semiYear"
-              v-if="semiAnaualSelected"
-              @change="fetchPayments()"
-              class="custom-select"
-            >
-              <option value="" disabled>Selecct Semi Annual</option>
-              <option value="1st">1st-half</option>
-              <option value="2nd">2nd-half</option>
-            </select>
-          </div>
-
-          <div>
-            <select
-              v-model="month"
-              v-if="monthlySelected"
-              @change="fetchPayments()"
-              class="custom-select"
-            >
-              <option value="" disabled>Select Month</option>
-              <!-- Dynamically generate options using the global $months variable -->
-              <option
-                v-for="monthOption in $months"
-                :key="monthOption.value"
-                :value="monthOption.value"
-              >
-                {{ monthOption.name }}
-              </option>
-            </select>
-          </div>
-
-          <div>
-            <select
-              v-model="week"
-              v-if="weeklySelected"
-              @change="fetchPayments()"
-              class="custom-select"
-            >
-              <option value="" disabled selected>Select Week</option>
-              <option value="week1">week-1</option>
-              <option value="week2">week-2</option>
-              <option value="week3">week-3</option>
-              <option value="week4">week4</option>
-            </select>
-          </div>
-          <div>
-            <select
-              v-model="day"
-              @change="fetchPayments()"
-              v-if="dailySelected"
-              class="custom-select"
-            >
-              <option value="" disabled selected>Select Day</option>
-              <!-- Dynamically generate options using the global $days variable -->
-              <option
-                v-for="dayOption in $days"
-                :key="dayOption"
-                :value="dayOption"
-              >
-                {{ dayOption }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="mt-5 ml-10">
-          <p v-if="selectReportType" class="text-red-500">
-            Please Select Report Type
-          </p>
-          <p v-if="selectYear" class="text-red-500">Please Select Year</p>
-          <p v-if="selectSemiYear" class="text-red-500">
-            Please Select Semi year
-          </p>
-          <p v-if="selectMonth" class="text-red-500">Please Select Month</p>
-          <p v-if="selectWeek" class="text-red-500">Please Select Week</p>
-          <p v-if="selectDay" class="text-red-500">Please Select Day</p>
-        </div>
-        <div class="flex flex-row mt-5 space-x-3 w-2/3">
-          <div class="flex flex-col space-y-3">
-            <button
-              @click="thisYear()"
-              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
-            >
-              <i
-                class="fas fa-calendar-alt text-sm lowercase mr-2 text-blue-500 text-blue-500"
-              ></i>
-              <span>This Year</span>
-            </button>
-            <button
-              @click="thisSemi()"
-              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
-            >
-              <i
-                class="fas fa-calendar-minus text-sm lowercase mr-2 text-blue-500"
-              ></i>
-              <span>This Semi</span>
-            </button>
-          </div>
-          <div class="flex flex-col space-y-3">
-            <button
-              @click="thisMonth()"
-              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
-            >
-              <i
-                class="fas fa-calendar-week text-sm lowercase mr-2 text-blue-500"
-              ></i>
-              <span>This Mon</span>
-            </button>
-
-            <button
-              @click="thisWeek()"
-              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
-            >
-              <i
-                class="fas fa-calendar-check text-sm lowercase mr-2 text-blue-500"
-              ></i>
-              <span>This Week</span>
-            </button>
-          </div>
-          <div class="flex flex-col space-y-3">
-            <button
-              @click="thisDay()"
-              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
-            >
-              <i
-                class="fas fa-calendar-day text-sm lowercase mr-2 text-blue-500"
-              ></i>
-              <span>This Day</span>
-            </button>
-          </div>
-        </div>
-      </div>
-      <!-- //select true or falses -->
-
-      <div>
-        <div class="flex flex-row">
-          <p
-            class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
-          >
-            <span
-              >All Paid Capital Report(
-              <span class="text-blue-500">Fully/Partially Paid</span>)
-              <span class="text-blue-500">{{ value }}</span></span
-            >
-            <!-- <button @click="seeAllPaid()" class="cursor-pointer bg-blue-100 px-4 py-1 rounded-lg text-green-800" >See Detail</button > -->
-            <!-- <button
-              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
-              @click="exportConfirmedToExcel()"
-            >
-              <i class="fas fa-download"></i>
-              <span class="text-xs">Excel</span>
-            </button> -->
-
-            <button
-              @click="printDiv()"
-              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-5 text-sm rounded flex items-center space-x-1"
-            >
-              <i class="fas fa-print"></i>
-            </button>
-          </p>
-        </div>
-        <div class="overflow-x-auto rounded-lg">
-          <table class="min-w-full divide-y divide-gray-300 text-xs">
-            <thead class="bg-gray-50">
-              <tr>
-                <th
-                  rowspan="3"
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("banks") }}
-                </th>
-                <th
-                  colspan="10"
-                  class="justify-center items-center text-blue-800 border border-gray-300 py-3"
-                >
-                  {{ $t("balance") }}
-                </th>
-              </tr>
-              <tr>
-                <th
-                  colspan="4"
-                  class="py-2 justify-center items-center text-blue-800 border border-gray-300"
-                >
-                  {{ $t("block") }}
-                </th>
-                <th
-                  colspan="3"
-                  class="py-2 justify-center items-center text-blue-800 border border-gray-300"
-                >
-                  {{ $t("service") }}
-                </th>
-                <th
-                  rowspan="2"
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("Total Balance") }}
-                </th>
-              </tr>
-              <tr>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("regular") }}
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("subsidy") }}
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("urgent") }}
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("totalBlock") }}
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("penality") }}
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("Monthly Service") }}
-                </th>
-                <th
-                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
-                >
-                  {{ $t("totalService") }}
-                </th>
-              </tr>
-            </thead>
-            <tbody
-              class="bg-white divide-y divide-gray-300"
-              v-if="
-                confirmedLength > 0 || pendingLength > 0 || overdueLength > 0
-              "
-            >
-              <tr
-                v-for="(bank, index) in reports.items.categorizedPayments
-                  .confirmed.bankTypes"
-                :key="index"
-              >
-                <td class="border border-gray-300 px-4 py-2">
-                  {{ index }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.regularBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.regularBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.regularBalance || 0)
-                      : 0
-                  }}
-                </td>
-
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.subsidyBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.subsidyBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.subsidyBalance || 0)
-                      : 0
-                  }}
-                </td>
-
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.urgentBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.urgentBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.urgentBalance || 0)
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.totalBlockBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.totalBlockBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.totalBlockBalance || 0)
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.penalityBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.penalityBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.penalityBalance || 0)
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.serviceBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.serviceBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.serviceBalance || 0)
-                      : 0
-                  }}
-                </td>
-
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.totalServiceBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.totalServiceBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.totalServiceBalance || 0)
-                      : 0
-                  }}
-                </td>
-                <td class="border border-gray-300 px-4 py-2">
-                  {{
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.pending.bankTypes[index]
-                        ?.bankType &&
-                    reports.items.categorizedPayments.confirmed.bankTypes[index]
-                      ?.bankType ===
-                      reports.items.categorizedPayments.overdue.bankTypes[index]
-                        ?.bankType
-                      ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.totalServiceBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.totalServiceBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.totalServiceBalance || 0) +
-                        (reports.items.categorizedPayments.confirmed.bankTypes[
-                          index
-                        ]?.totalBlockBalance || 0) +
-                        (reports.items.categorizedPayments.pending.bankTypes[
-                          index
-                        ]?.totalBlockBalance || 0) +
-                        (reports.items.categorizedPayments.overdue.bankTypes[
-                          index
-                        ]?.totalBlockBalance || 0)
-                      : 0
-                  }}
-                </td>
-              </tr>
-
-              <tr class="font-bold bg-gray-100" rowspan="4">
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ $t("total") }}
-                </td>
-
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalRegularBalance }}
-                </td>
-                <!-- Total Regular -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalSubsidyBalance }}
-                </td>
-                <!-- Total Subsidy -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalUrgentBalance }}
-                </td>
-                <!-- Total Urgent -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalBlockBankAccount }}
-                </td>
-                <!-- Total Urgent -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalPenalityBalance }}
-                </td>
-                <!-- Total Block -->
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalServiceBalance }}
-                </td>
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{ reports.items.Organization.totalServiceBankAccount }}
-                </td>
-                <td
-                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
-                >
-                  {{
-                    reports.items.Organization.totalBlockBankAccount +
-                    reports.items.Organization.totalServiceBankAccount
-                  }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div class="flex flex-row">
-          <p
-            v-if="reportLength > 0"
-            class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
-          >
-            <span
-              >All Overdue Payments:
-
-              <span v-if="overdueLength > 0" class="text-cyan-500">{{
-                reports.items.categorizedPayments.overdue.uniqueUsers
-              }}</span>
-              <span v-else class="text-cyan-500">0</span>
-            </span>
-            <a
-              @click="seeAllOverdue"
-              class="cursor-pointer bg-blue-100 px-4 py-1 rounded-lg text-green-800"
-              >See Detail</a
-            >
-
-            <button
-              v-if="overdueLength > 0"
-              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
-              @click="exportOverdueToExcel()"
-            >
-              <i class="fas fa-download"></i>
-              <span class="text-xs">Excel</span>
-            </button>
-          </p>
-        </div>
-        <p v-if="reportLength == 0">No report with the select time line</p>
-      </div>
-      <div></div>
-    </div>
-
-    <div class="report-table hidden" id="printable-area">
+    <div class="report-table hidden" id="printable-area" v-if="kkk">
       <!-- <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:5px; display: flex; align-items: center;">
     <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
    <h1 style="margin: 0;">Bana Mall Report </h1>
@@ -670,172 +95,45 @@
             </td>
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.regularBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.regularBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.regularBalance || 0)
-                  : 0
+             
               }}
             </td>
 
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.subsidyBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.subsidyBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.subsidyBalance || 0)
-                  : 0
+                
               }}
             </td>
 
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.urgentBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.urgentBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.urgentBalance || 0)
-                  : 0
+               
               }}
             </td>
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.totalBlockBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.totalBlockBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.totalBlockBalance || 0)
-                  : 0
+               
               }}
             </td>
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.penalityBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.penalityBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.penalityBalance || 0)
-                  : 0
+               
               }}
             </td>
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.serviceBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.serviceBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.serviceBalance || 0)
-                  : 0
+                
               }}
             </td>
 
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.totalServiceBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.totalServiceBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.totalServiceBalance || 0)
-                  : 0
+                
               }}
             </td>
             <td class="border border-gray-300 px-4 py-2">
               {{
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.pending.bankTypes[index]
-                    ?.bankType &&
-                reports.items.categorizedPayments.confirmed.bankTypes[index]
-                  ?.bankType ===
-                  reports.items.categorizedPayments.overdue.bankTypes[index]
-                    ?.bankType
-                  ? (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.totalServiceBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.totalServiceBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.totalServiceBalance || 0) +
-                    (reports.items.categorizedPayments.confirmed.bankTypes[
-                      index
-                    ]?.totalBlockBalance || 0) +
-                    (reports.items.categorizedPayments.pending.bankTypes[index]
-                      ?.totalBlockBalance || 0) +
-                    (reports.items.categorizedPayments.overdue.bankTypes[index]
-                      ?.totalBlockBalance || 0)
-                  : 0
+               
               }}
             </td>
           </tr>
@@ -1034,7 +332,424 @@
        
     </div>
 </div> -->
+</div>
+
+
+
+    <div class="flex flex-col p-4 text-xs">
+      <div class="flex flex-row border-b pb-5 border-blue-500">
+        <label class="custom-label"> Report Type: </label>
+        <select
+          v-model="reportType"
+          @change="changeReportType()"
+          class="custom-select h-10"
+        >
+          <option value="" disabled>Select Report Type</option>
+          <option
+            v-for="reportType in $reportTypes"
+            :key="reportType"
+            :value="reportType.value"
+          >
+            {{ reportType.name }}
+          </option>
+        </select>
+      </div>
+      <div class="flex flex-col">
+        <div
+          class="mt-5 w-full flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0"
+        >
+          <div>
+            <select
+              v-model="year"
+              @change="fetchPayments()"
+              class="custom-select"
+            >
+              <option value="" disabled>Select Year</option>
+              <!-- Dynamically generate options using the global $years variable -->
+              <option
+                v-for="yearOption in $years"
+                :key="yearOption"
+                :value="yearOption"
+              >
+                {{ yearOption }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <select
+              v-model="semiYear"
+              v-if="semiAnnuallySelected"
+              @change="fetchPayments()"
+              class="custom-select"
+            >
+              <option value="" disabled>Select Semi Annual</option>
+              <option value="1st">1st-half</option>
+              <option value="2nd">2nd-half</option>
+            </select>
+          </div>
+
+          <div>
+            <select
+              v-model="month"
+              v-if="monthlySelected"
+              @change="fetchPayments()"
+              class="custom-select"
+            >
+              <option value="" disabled>Select Month</option>
+              <!-- Dynamically generate options using the global $months variable -->
+              <option
+                v-for="monthOption in $months"
+                :key="monthOption.value"
+                :value="monthOption.value"
+              >
+                {{ monthOption.name }}
+              </option>
+            </select>
+          </div>
+
+          <div>
+            <select
+              v-model="week"
+              v-if="weeklySelected"
+              @change="fetchPayments()"
+              class="custom-select"
+            >
+              <option value="" disabled selected>Select Week</option>
+              <option value="week1">week-1</option>
+              <option value="week2">week-2</option>
+              <option value="week3">week-3</option>
+              <option value="week4">week4</option>
+            </select>
+          </div>
+          <div>
+            <select
+              v-model="day"
+              @change="fetchPayments()"
+              v-if="dailySelected"
+              class="custom-select"
+            >
+              <option value="" disabled selected>Select Day</option>
+              <!-- Dynamically generate options using the global $days variable -->
+              <option
+                v-for="dayOption in $days"
+                :key="dayOption"
+                :value="dayOption"
+              >
+                {{ dayOption }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="mt-5 ml-10">
+          <p v-if="selectReportType" class="text-red-500">
+            Please Select Report Type
+          </p>
+          <p v-if="selectYear" class="text-red-500">Please Select Year</p>
+          <p v-if="selectSemiYear" class="text-red-500">
+            Please Select Semi year
+          </p>
+          <p v-if="selectMonth" class="text-red-500">Please Select Month</p>
+          <p v-if="selectWeek" class="text-red-500">Please Select Week</p>
+          <p v-if="selectDay" class="text-red-500">Please Select Day</p>
+        </div>
+
+        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 ">
+        <div class="flex flex-row space-x-2">
+            <button
+              @click="setReportParamsForCurrentPeriod('annually')"
+              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
+            >
+              <i
+                class="fas fa-calendar-alt text-sm lowercase mr-2 text-blue-500 text-blue-500"
+              ></i>
+              <span>This Year</span>
+            </button>
+
+            <button
+              @click="setReportParamsForCurrentPeriod('semiAnnually')"
+              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
+            >
+              <i
+                class="fas fa-calendar-minus text-sm lowercase mr-2 text-blue-500"
+              ></i>
+              <span>This Semi</span>
+            </button>
+      
+     
+            <button
+              @click="setReportParamsForCurrentPeriod('monthly')"
+              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
+            >
+              <i
+                class="fas fa-calendar-week text-sm lowercase mr-2 text-blue-500"
+              ></i>
+              <span>This Mon</span>
+            </button>
+          </div>
+         <div class="flex flex-row space-x-2">
+            <button
+              @click="setReportParamsForCurrentPeriod('weekly')"
+              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
+            >
+              <i
+                class="fas fa-calendar-check text-sm lowercase mr-2 text-blue-500"
+              ></i>
+              <span>This Week</span>
+            </button>
+      
+   
+            <button
+              @click="setReportParamsForCurrentPeriod('daily')"
+              class="h-12 lg:h-8 flex items-center bg-blue-100 text-black rounded-md px-4 py-2 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-opacity-50"
+            >
+              <i
+                class="fas fa-calendar-day text-sm lowercase mr-2 text-blue-500"
+              ></i>
+              <span>This Day</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div >
+
+        <div class="flex flex-row" v-if="reportLength >0">
+          <p
+            class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
+          >
+            <span
+              >All Paid Capital Report(
+              <span class="text-blue-500">Fully/Partially Paid</span>)
+              <span class="text-blue-500">{{ value }}</span></span
+            >
+            <button
+              @click="printDiv()"
+              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-5 text-sm rounded flex items-center space-x-1"
+            >
+              <i class="fas fa-print"></i>
+            </button>
+          </p>
+        </div>
+
+        <div class="overflow-x-auto rounded-lg"  v-if=" reportLength > 0 ">
+          <table class="min-w-full divide-y divide-gray-300 text-xs">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  rowspan="3"
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("banks") }}
+                </th>
+                <th
+                  colspan="10"
+                  class="justify-center items-center text-blue-800 border border-gray-300 py-3"
+                >
+                  {{ $t("balance") }}
+                </th>
+              </tr>
+              <tr>
+                <th
+                  colspan="4"
+                  class="py-2 justify-center items-center text-blue-800 border border-gray-300"
+                >
+                  {{ $t("block") }}
+                </th>
+                <th
+                  colspan="3"
+                  class="py-2 justify-center items-center text-blue-800 border border-gray-300"
+                >
+                  {{ $t("service") }}
+                </th>
+                <th
+                  rowspan="2"
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("Total Balance") }}
+                </th>
+              </tr>
+              <tr>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("regular") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("subsidy") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("urgent") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("totalBlock") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("penality") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("Monthly Service") }}
+                </th>
+                <th
+                  class="px-4 py-2 text-blue-800 text-left border border-gray-300"
+                >
+                  {{ $t("totalService") }}
+                </th>
+              </tr>
+            </thead>
+            <tbody
+              class="bg-white divide-y divide-gray-300"
+            >
+              <tr 
+                v-for="(bank, index) in reports.items.totalBalanceBankType"
+                :key="index"
+              >
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ index }} 
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ bank.regularBalance }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{   bank.subsidyBalance }} 
+             
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                   bank.urgentBalance
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  
+                  {{ bank.totalBlockBalance }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                   bank.penalityBalance
+
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                   bank.serviceBalance
+                  }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{bank.totalServiceBalance}}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{bank.totalServiceBalance + bank.totalBlockBalance }}
+                </td>
+              </tr>
+
+              <tr class="font-bold bg-gray-100" rowspan="4">
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ $t("total") }}
+                </td>
+
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalRegularBalance }}
+                </td>
+                <!-- Total Regular -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalSubsidyBalance }}
+                </td>
+                <!-- Total Subsidy -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalUrgentBalance }}
+                </td>
+                <!-- Total Urgent -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalBlockBankAccount }}
+                </td>
+                <!-- Total Urgent -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalPenalityBalance }}
+                </td>
+                <!-- Total Block -->
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalServiceBalance }}
+                </td>
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{ reports.items.Organization.totalServiceBankAccount }}
+                </td>
+                <td
+                  class="px-4 py-2 text-left border border-gray-300 text-blue-800"
+                >
+                  {{
+                    reports.items.Organization.totalBlockBankAccount +
+                    reports.items.Organization.totalServiceBankAccount
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex flex-row">
+          <p
+            v-if="reportLength > 0"
+            class="mx-5 my-5 text-gray-800 font-bold flex items-center space-x-4"
+          >
+            <span
+              >All Overdue Payments:
+
+              <span v-if="overdueLength > 0" class="text-cyan-500">{{
+                reports.items.categorizedPayments.overdue.uniqueUsers
+              }}</span>
+              <span v-else class="text-cyan-500">0</span>
+            </span>
+            <a
+              @click="seeAllOverdue"
+              class="cursor-pointer bg-blue-100 px-4 py-1 rounded-lg text-green-800"
+              >See Detail</a
+            >
+
+            <button
+              v-if="overdueLength > 0"
+              class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-2 text-sm rounded flex items-center space-x-1"
+              @click="exportOverdueToExcel()"
+            >
+              <i class="fas fa-download"></i>
+              <span class="text-xs">Excel</span>
+            </button>
+          </p>
+          <p v-else class="text-md p-3 text-pink-900">No report for the selected time !!</p>
+        </div>
+      </div>
+     
     </div>
+
+
   </div>
 </template>
 <script>
@@ -1047,7 +762,9 @@ export default {
       categories: ["confirmed", "pending", "overdue"],
       totalBalance: [],
       totalOrgBalance: {},
+
       reportLength: 0,
+
       pendingLength: 0,
       confirmedLength: 0,
       overdueLength: 0,
@@ -1057,10 +774,10 @@ export default {
       userName: "Tadesse Gebremicheal Berhe",
       canvasId: "qrcodeCanvas",
 
-      year: "", //new Date().getFullYear()(),
+      year: new Date().getFullYear(),
       semiYear: "", // this.getCurrentHalf(),
-      month: "", //new Date().getMonth()(),
-      week: "",
+      month: "", //new Date().getMonth() 
+      week:'',
       day: "",
       reportType: "",
       selectYear: false,
@@ -1071,19 +788,19 @@ export default {
       selectReportType: false,
       annaualSelected: false,
       semiAnaualSelected: false,
+      semiAnnuallySelected:false,
       monthlySelected: false,
       weeklySelected: false,
       dailySelected: false,
       reports: {
-        status: "success",
-        message: "Reports generated for annually",
-        startDate: "2023-12-31",
-        endDate: "2024-12-30",
-        totalAllPayments: 41,
-        reports: [],
+      items: {
+        totalBalanceBankType: [],
       },
+    },
+
     };
   },
+  
   computed: {
     selectableYears() {
       const currentYear = new Date().getFullYear()();
@@ -1094,10 +811,17 @@ export default {
       }
       return years;
     },
+  //   reportLength() {
+  //   return this.reports.length;
+  // }
   },
-  async mounted() {
-    this.setReportParameters("annually", new Date().getFullYear()); // Set report type and year
-    await this.fetchPayments(); // Fetch payments
+  async created() {
+
+    this.year=new Date().getFullYear();
+    this.reportType="annually";
+    await this.fetchPayments(); 
+  
+
     try {
         const response = await this.$apiGet("api/v1/payments/orgBalance");
         console.log("response org balance", response);
@@ -1110,6 +834,7 @@ export default {
             error.message
         );
     }
+
 },
   methods: {
   navigateToPayments(status) {
@@ -1147,75 +872,155 @@ export default {
     XLSX.writeFile(workbook, "items.xlsx");
   },
 
-
-
   seeAllPaid() {
     this.navigateToPayments("confirmed");
   },
-
   seeAllOverdue() {
     this.navigateToPayments("overdue");
   },
-
-
-
   exportConfirmedToExcel() {
     this.exportPaymentsToExcel("confirmed", "Paid");
   },
-
   exportPendingToExcel() {
     this.exportPaymentsToExcel("pending", "Unpaid");
   },
-
   exportOverdueToExcel() {
     this.exportPaymentsToExcel("overdue", "Overdue/Unpaid");
   },
-
-
   
 
   changeReportType() {
+    //alert("j")
     const reportTypes = ["annually", "semiAnnually", "monthly", "weekly", "daily"];
     this.selectReportType = false;
 
     reportTypes.forEach(type => {
+      console.log(type);
       this[`${type}Selected`] = this.reportType === type;
     });
+
+    if (this.reportType ==="annually"){
+     this.annuallySelected=true;
+     this.year=new Date().getFullYear();
+     this.fetchPayments();
+
+    }
+    if(this.reportType === "semiAnnually"){
+     //alert("semi")
+     this.year=new Date().getFullYear();
+      this.semiAnnuallySelected=true;
+    }
+    if(this.reportType === "monthly"){
+     // alert("monthly")
+     this.year=new Date().getFullYear();
+     this.month=new Date().getMonth()+1;
+      this.monthlySelected=true;
+      this.semiAnnuallySelected=false;
+      
+    }
+    if(this.reportType === "weekly"){
+      this.year=new Date().getFullYear();
+      this.month=new Date().getMonth()+1;
+      this.week=this.getWeekNumber(new Date());
+
+      //alert("weekly")
+      this.semiAnnuallySelected=false;
+      this.monthlySelected=true;
+    }
+    if(this.reportType === "daily"){
+      
+      this.year=new Date().getFullYear();
+      this.month=new Date().getMonth()+1;
+      this.day=new Date().getDate();
+      this.semiAnnuallySelected=false;
+      this.monthlySelected=true;
+    }
     
     console.log("Selected report type:", this.reportType);
   },
 
   async fetchPayments() {
-    const reportTypeActions = {
-      annually: this.fetchYearlyPayments,
-      semiAnnually: this.fetchSemiYearlyPayments,
-      monthly: this.fetchMonthlyPayments,
-      weekly: this.fetchWeeklyPayments,
-      daily: this.fetchDailyPayments,
-    };
-    const action = reportTypeActions[this.reportType];
-    if (action) {
-      await action.call(this);
-    }
-  },
+  const params = { timeRange: this.reportType, year: this.year };
+  // Set the selected flags based on the hierarchical nature of this.reportType
+  this.annuallySelected = true; // Always true
+  this.semiAnnuallySelected = this.reportType === "semiAnnually";
+  this.monthlySelected = ["monthly", "weekly", "daily"].includes(this.reportType);
+  this.weeklySelected = this.reportType === "weekly";
+  this.dailySelected = this.reportType === "daily";
+
+  // Add additional parameters dynamically based on the report type
+  if (this.reportType === "semiAnnually" && this.semiYear) {
+    params.semiYear = this.semiYear;
+  }
+  if (["monthly", "weekly", "daily"].includes(this.reportType) && this.month) {
+    params.month = this.month;
+  }
+  if (this.reportType === "weekly" && this.week) {
+    params.week = this.week;
+  }
+  if (this.reportType === "daily" && this.day) {
+    params.day = this.day;
+  }
+
+  // Validation logic
+  const isValid =
+    this.year &&
+    (this.reportType === "annually" ||
+      (this.reportType === "semiAnnually" && this.semiYear) ||
+      (this.reportType === "monthly" && this.month) ||
+      (this.reportType === "weekly" && this.month && this.week) ||
+      (this.reportType === "daily" && this.month && this.day));
+
+  // Fetch data if valid
+  if (isValid) {
+    //alert("valid")
+    await this.fetchData(params);
+  }else{
+    //alert("notvalid")
+  }
+},
 
   async fetchData(params) {
+   //alert("ooo")
     try {
       const response = await this.$apiGet('/api/v1/payments/reports', params);
-      console.log("Response:", response);
-      this.reports = response;
-      this.updateReportLengths(response);
+      console.log("Response for report:yyy", response);
+      this.reports = response || {
+      items: {
+        totalBalanceBankType: [],
+      },
+    };
+      this.reportLength=1
+      console.log("report is ",this.reports);
+      // this.updateReportLengths(response);
     } catch (error) {
-      console.error("Error fetching data:", error);
-      this.resetReportLengths();
+      //alert("error")
+      this.reportLength=0;
+      this.reports = {
+      items: {
+        totalBalanceBankType: [],  // Empty data when there is an error
+      },
+    };
+  
+    console.log("reports in error: ",this.reports);
+
+       console.log("this.reportLength",this.reportLength);
+
+       console.error("Error fetching datakkk:", error.status,error.message);
+
+      //this.resetReportLengths();
+    }finally{
+
     }
   },
 
   updateReportLengths(response) {
+
     this.reportLength = response.items.categorizedPayments.confirmed.uniqueUsers;
     this.confirmedLength = response.items.categorizedPayments.confirmed.uniqueUsers;
     this.pendingLength = response.items.categorizedPayments.pending.uniqueUsers;
     this.overdueLength = response.items.categorizedPayments.overdue.uniqueUsers;
+
   },
 
   resetReportLengths() {
@@ -1225,76 +1030,80 @@ export default {
     this.overdueLength = 0;
   },
 
-  async fetchYearlyPayments() {
-    const params = { timeRange: this.reportType, year: this.year };
-    if (this.reportType) await this.fetchData(params);
-  },
+  setReportParamsForCurrentPeriod(reportType) {
 
-  async fetchSemiYearlyPayments() {
-    const params = { timeRange: this.reportType, year: this.year, semiYear: this.semiYear };
-    if (this.year && this.semiYear) await this.fetchData(params);
-  },
+   this.year='';this.semiYear='';this.month='';this.week='';this.day='';
 
-  async fetchMonthlyPayments() {
-    const params = { timeRange: this.reportType, year: this.year, month: this.month };
-    if (this.year && this.month) await this.fetchData(params);
-  },
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed
+  const currentDay = new Date().getDate();
+  const currentWeek = this.getWeekNumber(new Date()); // Assuming this.getWeekNumber() is defined
 
-  async fetchWeeklyPayments() {
-    const params = { timeRange: this.reportType, year: this.year, month: this.month, week: this.week };
-    if (this.year && this.month && this.week) await this.fetchData(params);
-  },
+  let params = { timeRange: reportType, year: currentYear };
+  let selectedFlags = {
+    annuallySelected: false,
+    semiAnnuallySelected: false,
+    monthlySelected: false,
+    weeklySelected: false,
+    dailySelected: false,
+  };
 
-  async fetchDailyPayments() {
-    const params = { timeRange: this.reportType, year: this.year, month: this.month, day: this.day };
-    if (this.year && this.month && this.day) await this.fetchData(params);
-  },
+  // Handle reportType and set the corresponding parameters and flags
+  switch (reportType) {
+  
+    case "annually":
+      this.year = currentYear;
+      params = { timeRange: "annually", year: currentYear };
+      selectedFlags.annuallySelected = true;
+      break;
+    case "semiAnnually":
+      this.year = currentYear;
+      this.semiYear = currentSemiYear; // Assuming getCurrentHalf() is defined
+      const currentSemiYear = this.getCurrentHalf(); // Assuming getCurrentHalf() is defined
+      params = { timeRange: "semiAnnually", year: currentYear, semiYear: currentSemiYear };
+      selectedFlags.annuallySelected = true;
+      selectedFlags.semiAnnuallySelected = true;
+      break;
+    case "monthly":
+      this.year = currentYear;
+      this.month = currentMonth; // Months are 1-indexed
+      params = { timeRange: "monthly", year: currentYear, month: currentMonth };
+      selectedFlags.annuallySelected = true;
+      selectedFlags.monthlySelected = true;
+      break;
+    case "weekly":
+      this.year = currentYear;
+      this.month = currentMonth; 
+      this.week = currentWeek; 
 
-  setReportParameters(reportType, year, month = "", week = "", day = "") {
-    this.reportType = reportType;
-    this.year = year;
-    this.month = month;
-    this.week = week;
-    this.day = day;
+      params = { timeRange: "weekly", year: currentYear, month: currentMonth, week: currentWeek };
+      selectedFlags.annuallySelected = true;
+      selectedFlags.monthlySelected = true;
+      selectedFlags.weeklySelected = true;
+      break;
+    case "daily":
+      this.year = currentYear;
+      this.month = currentMonth; 
+      this.day = currentDay;
 
-    // Reset other selections
-    this.semiAnaualSelected = false;
-    this.monthlySelected = false;
-    this.weeklySelected = false;
-    this.dailySelected = false;
+      params = { timeRange: "daily", year: currentYear, month: currentMonth, day: currentDay };
+      selectedFlags.annuallySelected = true;
+      selectedFlags.monthlySelected = true;
+      selectedFlags.dailySelected = true;
+      break;
+    default:
+      return; // If reportType doesn't match any case, return early
+  }
 
-    // Call fetchPayments to update the data
-    this.fetchPayments();
-  },
+  // Set the selected flags based on the current reportType
+  this.annuallySelected = selectedFlags.annuallySelected;
+  this.semiAnnuallySelected = selectedFlags.semiAnnuallySelected;
+  this.monthlySelected = selectedFlags.monthlySelected;
+  this.weeklySelected = selectedFlags.weeklySelected;
+  this.dailySelected = selectedFlags.dailySelected;
 
-  thisYear() {
-    const currentYear = new Date().getFullYear();
-    this.setReportParameters("annually", currentYear);
-  },
-
-  thisMonth() {
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1; // Months are 0-indexed
-    this.setReportParameters("monthly", currentYear, currentMonth);
-    this.monthlySelected = true;
-  },
-
-  thisWeek() {
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1;
-    const currentWeek = this.getWeekNumber(new Date());
-
-    this.setReportParameters("weekly", currentYear, currentMonth, currentWeek);
-    this.weeklySelected = true;
-  },
-
-  thisDay() {
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1;
-    const currentDay = new Date().getDate();
-
-    this.setReportParameters("daily", currentYear, currentMonth, "", currentDay);
-    this.dailySelected = true;
+  // Call fetchData with the constructed params
+  this.fetchData(params);
   },
 
   getWeekNumber(date) {
@@ -1304,7 +1113,7 @@ export default {
       (currentDate - startDate) / (24 * 60 * 60 * 1000)
     );
     const weekDay = (currentDate.getDay() + 6) % 7;
-    return Math.ceil((dayOfYear + 7 - weekDay) / 7);
+    return "week"+ Math.ceil((dayOfYear + 7 - weekDay) / 7);
   },
 
   goToGruopPayment() {
@@ -1332,6 +1141,7 @@ export default {
   },
 
   getCurrentHalf() {
+
     const month = new Date().getMonth();
     return month < 6 ? "1st" : "2nd";
   },

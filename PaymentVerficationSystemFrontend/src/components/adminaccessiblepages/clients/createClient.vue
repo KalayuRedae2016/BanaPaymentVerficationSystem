@@ -541,11 +541,22 @@ export default {
 
 
     handleImageInput() {
+      alert("fileinput");
       const fileInput = this.$refs.fileInput;
       console.log("fileInput", fileInput);
       if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
         this.imageFile = file;
+      }
+      console.log("Selected file:", this.imageFile );
+      console.log("File type:", this.imageFile.type); // This should be 'image/jpeg', 'image/png', etc.
+      console.log("File size:", this.imageFile.size); // Check size to ensure it's within acceptable limits
+      console.log("File name:", this.imageFile.name); // Check the name of the file
+     
+      if (!this.imageFile.type.startsWith('image/')) {
+        console.log("Not a valid image file.");
+      } else {
+        console.log("Image is valid.");
       }
     },
 
@@ -652,6 +663,9 @@ export default {
         fullPhoneNumber
       );
 
+     console.log("file image  that will be passed",this.imageFile);
+
+
       const formData = new FormData();
       formData.append("firstName", this.firstName);
       formData.append("middleName", this.middleName);
@@ -665,13 +679,20 @@ export default {
       formData.append("fullName", this.fullName);
       console.log("image", this.imageFile);
       console.log("formData", formData);
+
+
+
+        console.log("image file ",this.imageFile);
+
+
+
       try {
 
         await this.$apiPost("/api/v1/users/signup", formData).then((response) => {
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message
             );
-            this.$reloadPage();
+           // this.$reloadPage();
           }
         });
        } catch (error){

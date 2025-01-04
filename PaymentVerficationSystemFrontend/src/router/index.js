@@ -4,7 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import reset from "../views/reset.vue";
 import accessDenied from "../views/accessDenied.vue";
 import portofilo from "../views/portofilo.vue";
-
+import jTableCaller from '../components/Common/jatableCaller.vue';
 import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
 import changeCommonPassword from '../components/Common/Setting/changePassword.vue'
 // Admin components
@@ -24,6 +24,7 @@ import clients from "../components/adminaccessiblepages/clients/clients.vue";
 import deactivate from "../components/adminaccessiblepages/clients/deactivate.vue";
 import createClient from "../components/adminaccessiblepages/clients/createClient.vue";
 import editClient from "../components/adminaccessiblepages/clients/editClient.vue";
+import editClient1 from "../components/adminaccessiblepages/clients/createcccc.vue";
 import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEditProfile.vue";
 
 
@@ -36,6 +37,7 @@ import idCardAdmin from "../components/adminaccessiblepages/id/idCard.vue";
 import sendEmail from "../components/adminaccessiblepages/messages/sendEmail.vue";
 //import bankStatement from "../components/adminaccessiblepages/payment/newPayment/bankStatement.vue";
 import paymentHistoryDetail from "../components/adminaccessiblepages/payment/newPayment/paymentHistoryDetail.vue";
+
 import usersForBankStatement from "../components/adminaccessiblepages/payment/newPayment/usersCanPay.vue";
 
 import commonModal from "../components/adminaccessiblepages/commonFiles/modal.vue";
@@ -66,6 +68,18 @@ const routes = [
   {
     path: "/portofilo",
     component: portofilo,
+    meta: { requiresGuest: true },
+  },
+
+ 
+  {
+    path: "/create",
+    component:  editClient1,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: "/jtable",
+    component:  jTableCaller,
     meta: { requiresGuest: true },
   },
   // {
