@@ -455,7 +455,7 @@
           <p v-if="selectDay" class="text-red-500">Please Select Day</p>
         </div>
 
-        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 ">
+        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 space-x-0 lg:space-x-2">
         <div class="flex flex-row space-x-2">
             <button
               @click="setReportParamsForCurrentPeriod('annually')"
