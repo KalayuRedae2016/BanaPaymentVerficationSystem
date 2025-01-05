@@ -1460,11 +1460,11 @@ exports.reports = catchAsync(async (req, res, next) => {
       if(semiYear==="1st"){
         startDate = new Date(specifiedYear, 0, 1);
         endDate = new Date(specifiedYear, 6, 0);
-        console.log("1st date",startDate,endDate)
+        // console.log("1st date",startDate,endDate)
       }else{
         startDate = new Date(specifiedYear, 6, 1);
         endDate = new Date(specifiedYear, 12, 0);
-        console.log("2nd date",startDate,endDate)
+        // console.log("2nd date",startDate,endDate)
       }
       break;
     case 'monthly':
@@ -1483,7 +1483,7 @@ exports.reports = catchAsync(async (req, res, next) => {
         return res.status(400).json({ error: 'Year or  month or day is are required for daily time range' });
       startDate = new Date(specifiedYear, month-1, day, 0, 0, 0);
       endDate = new Date(specifiedYear, month-1, day, 23, 59, 59);
-      console.log("Daily date",startDate,endDate)
+      // console.log("Daily date",startDate,endDate)
       break;
     case 'allTime':
       startDate = new Date(1970, 0, 1);  // Unix epoch start date (or any other earlier date)
