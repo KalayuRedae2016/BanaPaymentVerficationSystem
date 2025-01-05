@@ -392,8 +392,12 @@ export default {
       formData.append("phoneNumber", this.clientProfile.phoneNumber);
       formData.append("gender", this.clientProfile.gender);
 
+
+      const customHeaders = {
+    "Content-Type": "multipart/form-data",
+   };
       try {
-        await this.$apiPatch('/api/v1/users', this.clientProfile._id, formData)
+        await this.$apiPatch('/api/v1/users', this.clientProfile._id, formData,customHeaders)
           .then((response) => {
             console.log("response from the update: ", response);
             if (response.status === 1) {

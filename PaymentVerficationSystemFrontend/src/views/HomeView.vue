@@ -18,7 +18,7 @@
         class="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
         role="alert"
       >
-        <strong class="font-bold">Error!</strong>
+       
         <span class="block sm:inline">{{ errorMessage }}</span>
         <button
           type="button"
@@ -78,6 +78,7 @@
         <button  @click.prevent="login" class="custom-button w-full mt-5">
           {{ $t("signIn") }}
         </button>
+
       </form>
 
    

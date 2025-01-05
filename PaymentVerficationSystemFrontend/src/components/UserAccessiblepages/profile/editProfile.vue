@@ -498,17 +498,17 @@ export default {
 
     console.log("client Id", this.clientId);
 
-    this.$apiClient
-      .get(`/api/v1/users/${this.clientId}`)
+    this.$apiGetById('/api/v1/users',this.clientId)
       .then((response) => {
         console.log("Response client profile", response);
 
-        this.clientProfile = response.data.clientProfile;
-        this.imageData = "data:image/jpeg;base64," + response.data.imageData;
+        this.clientProfile = response.clientProfile;
+        this.imageData = "data:image/jpeg;base64," + response.imageData;
       })
       .catch((error) => {
         console.error("Error fetching client datakk:", error);
       });
+
   },
   methods: {
     showSuccessToastMessage(message) {
@@ -552,8 +552,11 @@ export default {
       formData.append("email", this.clientProfile.email);
       formData.append("phoneNumber", this.clientProfile.phoneNumber);
       formData.append("gender", this.clientProfile.gender);
+      const customHeaders = {
+    "Content-Type": "multipart/form-data",
+};
       this.$apiClient
-        .patch(`/api/v1/users/${this.clientProfile._id}`, formData)
+        .patch(`/api/v1/users/${this.clientProfile._id}`, formData,customHeaders)
         .then((response) => {
           console.log("response from the update: " ,response);
           if (response.data.status === 1) {

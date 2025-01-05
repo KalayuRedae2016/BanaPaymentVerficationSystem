@@ -6,7 +6,7 @@
       
       class=" "
     >
-      <div class="text-gray-700 text-sm font-bold">
+      <div class="text-gray-700 text-sm font-bold ml-1">
         <p>User Code: {{ userCode }}</p>
         <p>Full Name: {{ fullName }}</p>
       </div>
@@ -344,17 +344,16 @@ export default {
   },
   mounted() {
 console.log("this usercode and userId are",this.userCode,this.userId);
-  this.$apiClient
-    .get(`/api/v1/users/${localStorage.getItem('userId')}`)
+  this.$apiGetById('/api/v1/users/',localStorage.getItem('userId'))
     .then((response) => {
       console.log("Response client profile based on the id", response);
-      this.userEmail = response.data.clientProfile.email;
-      this.userAddress = response.data.clientProfile.address;
-      this.userGender = response.data.clientProfile.gender;
-      this.fullName = response.data.clientProfile.fullName;
-      this.userPhoneNumber = response.data.clientProfile.phoneNumber;
-      this.userCode = response.data.clientProfile.userCode;
-      console.log("Usercode is=" ,response.data.clientProfile.userCode);
+      this.userEmail = response.clientProfile.email;
+      this.userAddress = response.clientProfile.address;
+      this.userGender = response.clientProfile.gender;
+      this.fullName = response.clientProfile.fullName;
+      this.userPhoneNumber = response.clientProfile.phoneNumber;
+      this.userCode = response.clientProfile.userCode;
+      console.log("Usercode is=" ,response.clientProfile.userCode);
     })
     .catch((error) => {
       console.error("Error fetching client data:", error);
@@ -386,15 +385,18 @@ console.log("this usercode and userId are",this.userCode,this.userId);
     },
     fetchNotPaid() {
       //this.userCode
-      this.$apiClient
-        .get(`/api/v1/payments/search?keyword=${localStorage.getItem('userCode')}`)
+      const params={
+        keyword: localStorage.getItem('userCode'),
+        paymentStatus: "Not Paid",
+      }
+      this.$apiGet('/api/v1/payments/search',params)
         .then((response) => {
           console.log("not paid are",response)
-          if (response.data.status === 1) {
-            this.fullName = response.data.fullName;
-            this.userCode = response.data.userCode;
-            this.payments = response.data.items;
-            console.log("response for the unapid ", response.data);
+          if (response.status === 1) {
+            this.fullName = response.fullName;
+            this.userCode = response.userCode;
+            this.payments = response.items;
+            console.log("response for the unapid ", response);
           } else {
             //this.nothingToPay = true;
             console.log("nothing tp pay");

@@ -184,19 +184,16 @@ export default {
   mounted() {
 
 
-   this.$apiClient
-    .get(`/api/v1/users/${localStorage.getItem('userId')}`)
+   this.$apiGetById('/api/v1/users',localStorage.getItem('userId'))
     .then((response) => {
-      console.log("Response client profile based on the id", response);
-
-      // Assigning response data to component properties
-      this.userEmail = response.data.clientProfile.email;
-      this.userAddress = response.data.clientProfile.address;
-      this.userGender = response.data.clientProfile.gender;
-      this.fullName = response.data.clientProfile.fullName;
-      this.userPhoneNumber = response.data.clientProfile.phoneNumber;
-      this.userCode = response.data.clientProfile.userCode;
-      this.imageData = "data:image/jpeg;base64," + response.data.imageData;
+      console.log("response",response)
+      this.userEmail = response.clientProfile.email;
+      this.userAddress = response.clientProfile.address;
+      this.userGender = response.clientProfile.gender;
+      this.fullName = response.clientProfile.fullName;
+      this.userPhoneNumber = response.clientProfile.phoneNumber;
+      this.userCode = response.clientProfile.userCode;
+      this.imageData = "data:image/jpeg;base64," + response.imageData;
 
     })
     .catch((error) => {

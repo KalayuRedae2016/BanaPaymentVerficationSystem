@@ -2,14 +2,22 @@
     <div>
     <Toast ref="toast" />
     <div class="container mx-auto p-4 flex flex-col">
-      <div class="flex flex-row w-full border-b border-blue-500 pb-3">
-        <p class="text-blue-500 text-md font-bold">{{ $t("Active Clients") }}</p>
-        <button class="text-blue-500 ml-auto font-bold" @click="showDeactivatedUsers()">
-          {{ $t("viewDeactivatedUsers") }}
-        </button>
-      </div>
-  
+  <div class="flex flex-row w-full border-b border-blue-500 pb-3">
+    <p class="text-blue-500 text-md font-bold">{{ $t("Active Clients") }}</p>
+   
+    <!-- Align buttons to the right with ml-auto and add margin between them -->
+    <div class="ml-auto flex space-x-2">
+   
+      <button @click.prevent="navigateToCreateClient()" class="custom-button ">
+        <i class="fa fa-add mr-2"></i>Add
+      </button>
+      <button class="custom-button" @click="showDeactivatedUsers()">
+        {{ $t("View Deactivated Users") }}
+      </button>
     </div>
+  </div>
+</div>
+
     <clientTable></clientTable>
   </div>
 </template>

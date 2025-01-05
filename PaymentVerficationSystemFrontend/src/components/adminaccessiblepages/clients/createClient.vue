@@ -11,6 +11,8 @@
           </h1>
         </div>
       </div>
+
+     
       <div class="flex flex-row space-x-6 mt-5 ml-5">
         <label
           for="file-upload"
@@ -246,6 +248,8 @@
           </button>
         </div>
       </div>
+ 
+
     </div>
 
     <div v-if="importExelFilePressed">
@@ -541,7 +545,7 @@ export default {
 
 
     handleImageInput() {
-      alert("fileinput");
+    //  alert("fileinput");
       const fileInput = this.$refs.fileInput;
       console.log("fileInput", fileInput);
       if (fileInput && fileInput.files.length > 0) {
@@ -598,6 +602,7 @@ export default {
     },
 
    async  register() {
+    //alert("hadgo")
       this.showErrorMessage = false;
       this.firstNameIsRequired = false;
       this.middleNameIsRequired = false;
@@ -665,7 +670,7 @@ export default {
 
      console.log("file image  that will be passed",this.imageFile);
 
-
+ 
       const formData = new FormData();
       formData.append("firstName", this.firstName);
       formData.append("middleName", this.middleName);
@@ -685,10 +690,12 @@ export default {
         console.log("image file ",this.imageFile);
 
 
-
+        const customHeaders = {
+    "Content-Type": "multipart/form-data",
+};
       try {
 
-        await this.$apiPost("/api/v1/users/signup", formData).then((response) => {
+        await this.$apiPost("/api/v1/users/signup", formData,customHeaders).then((response) => {
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message
             );

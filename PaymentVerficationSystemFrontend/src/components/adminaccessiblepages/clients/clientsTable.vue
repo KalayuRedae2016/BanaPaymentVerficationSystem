@@ -25,6 +25,7 @@
       </div>
 
       <div class="flex items-center space-x-2">
+      
         <label for="search" class="text-sm text-gray-600">Search:</label>
         <input
           id="search"
@@ -35,9 +36,10 @@
       </div>
 
     </div>
-    <div class="overflow-x-auto ">
+    
+    <div class="overflow-x-auto mx-5 overflow-y-auto">
       <table
-        class="table-auto w-full border-collapse border-b-2 border-gray-300"
+        class="table-auto border-collapse border-b-2 border-gray-300 overflow-x-auto overflow-y-auto"
       >
         <thead
           class="border-b-2 border-gray-300 border-r border-t border-l border-gray-300"
