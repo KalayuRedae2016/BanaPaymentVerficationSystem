@@ -180,6 +180,7 @@ exports.login = catchAsync(async (req, res, next) => {
       userId: user._id,
       userCode:user.userCode,
       email:user.email,
+      fullName:user.fullName,
       message: 'Please change your password',
       changePassword: true,  // Indicating that the frontend should redirect to the password change page
     });
