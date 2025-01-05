@@ -790,18 +790,17 @@ export default {
   watch: {},
 
   mounted() {
-    this.$apiClient
-      .get("/api/v1/organization")
+    this.$apiGet("/api/v1/organization")
       .then((response) => {
         console.log("Org response", response);
-        if (response.data.status === 1) {
+        if (response.status === 1) {
           console.log(
             "Organization email",
-            response.data.organization.companyEmail
+            response.organization.companyEmail
           );
-          this.email = response.data.organization.companyEmail;
-          this.tel = response.data.organization.companyPhoneNumber;
-          this.address = response.data.organization.companyAddress;
+          this.email = response.organization.companyEmail;
+          this.tel = response.organization.companyPhoneNumber;
+          this.address = response.organization.companyAddress;
         }
       })
       .catch((error) => {
@@ -812,17 +811,15 @@ export default {
     this.year = new Date().getFullYear();
 
 //find user info
-this.$apiClient
-      .get(`/api/v1/users/${this.userId}`)
+this.$apiGetById('/api/v1/users',this.userId)
       .then((response) => {
         console.log("Response client profile in unpaid", response);
-
-        this.userEmail= response.data.clientProfile.email;
-        this.userAddress= response.data.clientProfile.address;
-        this.userGender= response.data.clientProfile.gender;
-        this.fullName= response.data.clientProfile.fullName;
-        this.userPhoneNumber= response.data.clientProfile.phoneNumber;
-        this.userCode= response.data.clientProfile.userCode;
+        this.userEmail= response.clientProfile.email;
+        this.userAddress= response.clientProfile.address;
+        this.userGender= response.clientProfile.gender;
+        this.fullName= response.clientProfile.fullName;
+        this.userPhoneNumber= response.clientProfile.phoneNumber;
+        this.userCode= response.clientProfile.userCode;
       })
       .catch((error) => {
         console.error("Error fetching client datakk:", error);
@@ -958,13 +955,17 @@ this.$apiClient
 
     getData() {
       console.log("this.usercode is",this.userCode);
-      this.$apiClient
-        .get(
-          `/api/v1/payments/userBalance?&activeYear=${this.year} &userCode=${this.userCode}`
+      const params={
+        activeYear: this.year,
+        userCode: this.userCode,
+        
+      }
+      this.$apiGet(
+          '/api/v1/payments/userBalance',params
         )
         .then((response) => {
           console.log("response userbalance", response);
-          this.payments = response.data.payments;
+          this.payments = response.payments;
           console.log("payments of the given year", this.payments);
           this.selectedPaymentLength = 1;
         })

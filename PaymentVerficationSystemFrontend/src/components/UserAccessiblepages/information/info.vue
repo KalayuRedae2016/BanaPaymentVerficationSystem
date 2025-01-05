@@ -123,41 +123,27 @@
       return {
         paymentSetting: {
         paymentActivate: true,
-        regularAmount: '5000',
-        subsidyAmount: '1000',
-        urgentAmount: '40000',
-        serviceAmount: '200',
-        activeYear: '2024',
-        activeMonth: '1',
-        startingDate: "2024-05-01",
-        endingDate: "2024-05-30",
-        penalityLate5Days: '5',
-        penalityLate10Days: '7',
-        penalityLateAbove10Days: '10',
-        regFeeRate: "10",
+        regularAmount: '',
+        subsidyAmount: '',
+        urgentAmount: '',
+        serviceAmount: '',
+        activeYear: '',
+        activeMonth: '',
+        startingDate: "",
+        endingDate: "",
+        penalityLate5Days: '',
+        penalityLate10Days: '',
+        penalityLateAbove10Days: '',
+        regFeeRate: "",
       },
     }
     },
     mounted(){
-      this.$apiClient
-      .get("/api/v1/paymentSetting/latest")
+      this.$apiGet("/api/v1/paymentSetting/latest")
       .then((response) => {
-        console.log("response latest setting", response);
-        if (response.data.status === 1) {
-          if(response.data.paymentSetting){
-          console.log("");
-          this.paymentSettingCreated=1;
-          const endingDate = new Date(response.data.paymentSetting.endingDate);
-          const today = new Date();
-          today.setHours(0, 0, 0, 0);
-          endingDate.setHours(0, 0, 0, 0);
-          if (today > endingDate) {
-            this.paymentActivate = true;
-          }
-          this.paymentSetting = response.data.paymentSetting;
-          console.log("response setttinghh h ", response.data);
-        }else{
-          this.paymentSettingCreated=2;
+        if (response.status === 1) {
+          if(response.paymentSetting){
+          this.paymentSetting = response.paymentSetting;
         }
        }
       })
@@ -165,8 +151,7 @@
         console.error(
           "An error occurred while fetching payment settings:",
           error
-        );
-        this.paymentSettingCreated = 0; // Indicate an error state
+        )
       });
     },
     methods:{

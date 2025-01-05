@@ -455,7 +455,7 @@
           <p v-if="selectDay" class="text-red-500">Please Select Day</p>
         </div>
 
-        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 ">
+        <div class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 space-x-0 lg:space-x-2">
         <div class="flex flex-row space-x-2">
             <button
               @click="setReportParamsForCurrentPeriod('annually')"
@@ -937,6 +937,8 @@ export default {
     }
     
     console.log("Selected report type:", this.reportType);
+
+    this.fetchPayments();
   },
 
   async fetchPayments() {
@@ -984,7 +986,7 @@ export default {
    //alert("ooo")
     try {
       const response = await this.$apiGet('/api/v1/payments/reports', params);
-      console.log("Response for report:yyy", response);
+      console.log("Response for report:yysssy", response);
       this.reports = response || {
       items: {
         totalBalanceBankType: [],
@@ -1058,8 +1060,9 @@ export default {
       break;
     case "semiAnnually":
       this.year = currentYear;
-      this.semiYear = currentSemiYear; // Assuming getCurrentHalf() is defined
+      // Assuming getCurrentHalf() is defined
       const currentSemiYear = this.getCurrentHalf(); // Assuming getCurrentHalf() is defined
+      this.semiYear = currentSemiYear; 
       params = { timeRange: "semiAnnually", year: currentYear, semiYear: currentSemiYear };
       selectedFlags.annuallySelected = true;
       selectedFlags.semiAnnuallySelected = true;

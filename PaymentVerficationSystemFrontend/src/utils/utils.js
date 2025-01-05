@@ -91,13 +91,28 @@ function handleApiError(error) {
 }
 
 function getDefaultHeaders(customHeaders = {}) {
-    const token =localStorage.getItem("token"); // Access the token from Vuex or localStorage
-    return {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-        ...customHeaders, // Include any custom headers passed to the function
-    };
+  const token = localStorage.getItem("token"); // Access the token from localStorage
+
+  // Default headers
+  const defaultHeaders = {
+      Authorization: `Bearer ${token}`, // Use token from localStorage
+      "Content-Type": "application/json", // Default to JSON
+  };
+
+  // Merge headers
+  const headers = {
+      ...defaultHeaders,
+      ...customHeaders, // Custom headers take precedence
+  };
+
+  // Handle 'multipart/form-data' dynamically
+  if (customHeaders["Content-Type"] === "multipart/form-data") {
+      delete headers["Content-Type"]; // Let Axios set the boundary automatically
+  }
+
+  return headers;
 }
+
 
 // Function to make a GET request
 export async function apiGet(url, params = {}, customHeaders = {}) {
