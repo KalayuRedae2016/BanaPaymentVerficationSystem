@@ -401,14 +401,16 @@ export default {
           .then((response) => {
             console.log("response from the update: ", response);
             if (response.status === 1) {
+
               this.clientProfile = response.updatedUser;
+              this.imageData = "data:image/jpeg;base64," + response.imageData;
               this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
              // this.isLoading = false;
 
-              this.$router.replace({ path: `/admindashboard/edit-client/${this.clientProfile._id}`}).catch(() => {
-              console.log("Navigation to the same route was prevented.");
-            });
-              this.$reloadPage();
+            //   this.$router.replace({ path: `/admindashboard/edit-client/${this.clientProfile._id}`}).catch(() => {
+            //   console.log("Navigation to the same route was prevented.");
+            // });
+            //   this.$reloadPage();
               // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
               // this.imageData = "data:image/jpeg;base64," + this.imageFile;
               // this.showSuccess = true;
