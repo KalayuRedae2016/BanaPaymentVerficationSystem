@@ -174,6 +174,18 @@ exports.updateUser = catchAsync(async (req, res) => {
     Object.assign(existingUser, updateData);// Apply updates to the existing user object
     const updatedUser = await existingUser.save();// Save the updated user document
 
+  // If the user has a profile image, attempt to read it
+  if (updatedUser.profileImage) {
+    const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', updatedUser.profileImage);
+
+    try {
+      imageData = fs.readFileSync(imageFilePath,'base64');
+    } catch (err) {
+      console.error(`Error reading image file: ${imageFilePath}`, err.message);
+      imageData = null;
+    }
+  }
+
     const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
     const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
 
@@ -185,7 +197,8 @@ exports.updateUser = catchAsync(async (req, res) => {
         formattedCreatedAt,
         formattedUpdatedAt
       },
-      profileImage: updatedUser.profileImage,
+      imageData
+      // profileImage: updatedUser.profileImage,
     });
   } catch (error) {
     deleteFile(req.file?.path);
