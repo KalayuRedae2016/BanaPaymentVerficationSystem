@@ -42,7 +42,7 @@
 
             <div class="flex flex-row mb-5 mt-5">
               <label class="custom-label text-xs w-1/4 mt-5" for="search">
-                {{ $t("sendTo") }}:<span class="text-red-500 ml-1">*</span>
+                {{ $t("sendTo") }}:<span class="text-red-500 ml-1"></span>
               </label>
               <input
                 v-model="searchQuery"

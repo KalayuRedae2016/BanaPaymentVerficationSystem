@@ -83,8 +83,8 @@
         </tbody>
       </table>
     </div>
-    <div v-if="showPaymentNotFound" class="text-blue-500 my-5 mx-5 font-bold">
-      <span class="text-blue-800 font-extrabold">{{ fullName }}({{ userCode }})</span> has no paid payment in the selected
+    <div v-if="showPaymentNotFound" class="text-blue-500 my-5 mx-5 ">
+      <span class="text-pink-800 ">{{ fullName }}({{ userCode }})</span> has no paid payment in the selected
       year.
     </div>
 

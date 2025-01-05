@@ -23,9 +23,13 @@
     </div>
     <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
       <div class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0  ">
-        <div class="m-4 w-full h-full lg:w-1/4 h-64 bg-gray-500">
-          <img :src="imageData" alt="User Profile Image" class="h-64 w-full lg:w-64 lg:w-96" />
-        </div>
+        <div class="m-4 w-full h-full lg:w-1/4 h-64 ">
+            <img
+              :src="imageData"
+              alt="User Profile Image"
+              class="h-64  w-64 lg:w-96"
+            />
+          </div>
 
         <div class="mt-3 mx-auto lg:w-2/3">
           <div class="bg-white p-2 rounded-md shadow-sm mt-3">

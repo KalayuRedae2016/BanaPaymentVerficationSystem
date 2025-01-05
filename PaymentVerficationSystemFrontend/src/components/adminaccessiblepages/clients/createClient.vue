@@ -193,7 +193,7 @@
           <div class="w-full">
             <label class="custom-label">
               {{ $t("chooseProfileImage") }}
-              <span class="text-red-500 ml-1">*</span>
+              <span class="text-red-500 ml-1"></span>
             </label>
             <input
               class="custom-input mt-5 text-xs"

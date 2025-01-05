@@ -6,7 +6,7 @@
     </div>
     <div class="w-full   mt-10  mb-10">
     <!-- Change Email Section -->
-    <div class="mx-5">
+    <div class="mx-5" v-if="role==='Admin'">
       <div class="mt-4 py-4 ml-0  border-t border-gray-100 rounded-lg shadow-md">
         <div
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-80"

@@ -178,7 +178,8 @@
                 class="ml-4 flex items-center text-blue-500 py-3 font-bold"
                 href="#"
               >
-                <i class="fas fa-users mr-3 text-teal-600"></i>
+                
+                <i class="fas fa-clock mr-3 text-teal-600"></i>
                 <span>{{ $t("deadlines") }}</span>
               </a>
             </li>
@@ -186,7 +187,7 @@
             <li
               v-if="role === 'User'"
               @click="setActive('userIdCard')"
-              class="border-t border-gray-300 items-center bg-white hover:bg-gray-100 transition"
+              class=" items-center bg-white hover:bg-gray-100 transition"
               :class="
                 activeItem === 'userIdCard' ? 'border-r-4 border-indigo-600' : ''
               "

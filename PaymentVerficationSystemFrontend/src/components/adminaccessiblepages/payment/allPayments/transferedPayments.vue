@@ -105,12 +105,12 @@
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   <p
                     v-if="searchedTransferedPayment.transferType === 'block'"
-                    class="bg-blue-100 px-2 rounded-lg"
+                    class=" px-2 rounded-lg"
                   >
-                    {{ searchedTransferedPayment.transferType }}
+                  {{ searchedTransferedPayment.transferType.toUpperCase() }}
                   </p>
                   <p v-else class="bg-yellow-100 px-2 rounded-lg">
-                    {{ searchedTransferedPayment.transferType }}
+                    {{ searchedTransferedPayment.transferType.toUpperCase() }}
                   </p>
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">

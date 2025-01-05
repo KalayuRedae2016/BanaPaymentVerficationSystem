@@ -2,13 +2,13 @@
   <div class="p-4 m-2 bg-white shadow-lg">
     <Toast ref="toast" />
     <div class="flex justify-between items-center mb-4">
-      <div class="flex items-center space-x-4 p-4 bg-white rounded-lg">
+      <div class="flex items-center space-x-4 py-4 bg-white rounded-lg">
         <label class="flex items-center space-x-2">
           <span class="text-sm text-blue-600 font-semibold tracking-wide"
             >Show</span
           >
           <select
-          @change="changeCurrentPage()"
+            @change="changeCurrentPage()"
             v-model="itemsPerPage"
             class="border border-gray-300 rounded-md h-6 px-3 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition duration-300 hover:border-blue-400"
           >
@@ -23,9 +23,7 @@
           </select>
         </label>
       </div>
-
       <div class="flex items-center space-x-2">
-      
         <label for="search" class="custom-label">Search:</label>
         <input
           id="search"
@@ -34,87 +32,101 @@
           class="border border-blue-600 rounded px-2 py-1 text-sm shadow-sm focus:ring focus:ring-blue-300 w-1/2 lg:w-full hover:border-2 border-blue-500"
         />
       </div>
-
     </div>
-    
-    <div class="overflow-x-auto mx-5 overflow-y-auto">
-  <table class="table-auto border-b-2 border-gray-300 overflow-x-auto overflow-y-auto">
-    <thead class="border-b-2 border-gray-300 border-r border-t border-l border-gray-300">
-      <tr>
-        <th
-          v-for="header in headers"
-          :key="header.key"
-          @click.prevent="sortBy(header.key)"
-          class="w-32 cursor-pointer border-b border-blue-300 text-left py-2 px-3 text-blue-500"
-        >
-          {{ header.label }}
-          <span v-if="sortKey === header.key">
-            {{ sortDirection === "asc" ? "▲" : "▼" }}
-          </span>
-          <span v-else class="text-gray-300">⬍</span>
-        </th>
-      </tr>
-    </thead>
 
-    <tbody>
-      <tr
-        v-for="(user, index) in paginatedData"
-        :key="user._id"
-        class="font-bold border-r border-t border-l border-gray-300 bg-white text-gray-500 text-xs hover:bg-blue-100"
-      >
-        <td class="cursor-pointer border-b border-gray-300 py-2 px-3 whitespace-nowrap" @click="navigateToInClient(user._id)">
-          {{ currentRangeStart + index }}
-        </td>
-        <td class="cursor-pointer border-b border-gray-300 py-2 px-3 whitespace-nowrap" @click="navigateToInClient(user._id)">
-          {{ user.userCode }}
-        </td>
-        <td class="cursor-pointer border-b border-gray-300 py-2 px-3 whitespace-nowrap" @click="navigateToInClient(user._id)">
-          {{ user.fullName }}
-        </td>
-        <td class="cursor-pointer border-b border-gray-300 py-2 px-3 whitespace-nowrap" @click="navigateToInClient(user._id)">
-          {{ user.email }}
-        </td>
-        <td class="cursor-pointer border-b border-gray-300 py-2 px-3 whitespace-nowrap" @click="navigateToInClient(user._id)">
-          {{ user.createdAt }}
-        </td>
-        <td class="cursor-pointer border-b border-gray-300 py-2 px-3 whitespace-nowrap" @click="navigateToInClient(user._id)">
-          {{ user.updatedAt }}
-        </td>
-        <td class="border-b border-gray-300 py-2 px-3">
-          <div class="flex items-center space-x-2">
-            <button
+    <div class="overflow-x-auto overflow-y-auto">
+      <table class="table-auto border-b-2 border-gray-300 overflow-y-auto">
+        <thead
+          class="border-b-2 border-gray-300 border-r border-t border-l border-gray-300"
+        >
+          <tr>
+            <th
+              v-for="header in headers"
+              :key="header.key"
+              @click.prevent="sortBy(header.key)"
+              class="cursor-pointer border-b border-blue-300 text-left py-2 px-3 text-blue-500"
+            >
+              <div class="flex items-center">
+                <span>{{ header.label }}</span>
+                <span v-if="sortKey === header.key" class="ml-2">
+                  {{ sortDirection === "asc" ? "▲" : "▼" }}
+                </span>
+                <span v-else class="ml-2 text-gray-300">⬍</span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="user in paginatedData"
+            :key="user._id"
+            class="font-bold border-r border-t border-l border-gray-300 bg-white text-gray-500 text-xs hover:bg-blue-100"
+          >
+            <td
+              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap text-blue-500 font-extrabold"
               @click="navigateToInClient(user._id)"
-              class="bg-blue-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-blue-600"
             >
-              <i class="fas fa-info-circle"></i>
-              <span>Detail</span>
-            </button>
-            <button
-              @click="
-                showResetModal = !showResetModal;
-                selectedUserToBeResetPassword = user;
-              "
-              class="bg-yellow-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-yellow-600"
+              {{ user.userCode }}
+            </td>
+            <td
+              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
+              @click="navigateToInClient(user._id)"
             >
-              <i class="fas fa-sync-alt"></i>
-              <span>Reset</span>
-            </button>
-            <button
-              @click="
-                showDeactivateModal = !showDeactivateModal;
-                userIdToBeDeactivated = user._id;
-              "
-              class="bg-red-500 text-white px-2 py-1 rounded flex items-center space-x-1 hover:bg-red-600"
+              {{ user.fullName }}
+            </td>
+            <td
+              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
+              @click="navigateToInClient(user._id)"
             >
-              <i class="fas fa-ban"></i>
-              <span>Deactivate</span>
-            </button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+              {{ user.email }}
+            </td>
+            <td
+              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
+              @click="navigateToInClient(user._id)"
+            >
+              {{ user.formattedCreatedAt }}
+            </td>
+            <td
+              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
+              @click="navigateToInClient(user._id)"
+            >
+              {{ user.formattedUpdatedAt }}
+            </td>
+            <td class="border-b border-gray-300 py-2 px-3">
+              <div class="flex items-center space-x-2">
+                <button
+                  @click="navigateToInClient(user._id)"
+                  class="bg-blue-500 text-white px-2 rounded flex items-center space-x-1 hover:bg-blue-600"
+                >
+                  <i class="fas fa-info-circle"></i>
+                  <span>Detail</span>
+                </button>
+                <button
+                  @click="
+                    showResetModal = !showResetModal;
+                    selectedUserToBeResetPassword = user;
+                  "
+                  class="bg-yellow-500 text-white px-2 rounded flex items-center space-x-1 hover:bg-yellow-600"
+                >
+                  <i class="fas fa-sync-alt"></i>
+                  <span>Reset</span>
+                </button>
+                <button
+                  @click="
+                    showDeactivateModal = !showDeactivateModal;
+                    userIdToBeDeactivated = user._id;
+                  "
+                  class="bg-red-500 text-white px-2 rounded flex items-center space-x-1 hover:bg-red-600"
+                >
+                  <i class="fas fa-ban"></i>
+                  <span>Deactivate</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="flex justify-between items-center mt-4">
       <div class="text-sm text-gray-600">
@@ -315,7 +327,6 @@ export default {
       showDeactivateModal: false,
 
       headers: [
-        { key: "no", label: "No" },
         { key: "userCode", label: "Code" },
         { key: "fullName", label: "Full Name" },
         { key: "email", label: "Email" },
@@ -328,8 +339,8 @@ export default {
       sortKey: "",
       sortDirection: "asc",
       currentPage: 1,
-      itemsPerPage: 3,
-      itemsPerPageOptions: [3,5, 10, 20, 50],
+      itemsPerPage: 10,
+      itemsPerPageOptions: [3, 5, 10, 20, 50],
     };
   },
   computed: {
@@ -391,14 +402,15 @@ export default {
     await this.fetchData();
   },
   methods: {
-    changeCurrentPage(){
-       this.currentPage=1;
+    changeCurrentPage() {
+      this.currentPage = 1;
     },
     async fetchData() {
       try {
         const response = await this.$apiGet("/api/v1/users", {
           isActive: true,
         });
+        console.log("users are ", response);
         this.data = response.users || [];
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -458,7 +470,7 @@ export default {
     },
 
     async deactivate(userId) {
-     // alert("deactivate");
+      // alert("deactivate");
 
       const payload = {
         reason: this.deactivationReason,

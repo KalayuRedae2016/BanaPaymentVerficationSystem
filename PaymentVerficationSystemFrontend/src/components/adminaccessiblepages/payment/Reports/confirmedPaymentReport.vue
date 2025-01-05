@@ -1,6 +1,6 @@
 <template>
   <div class="border border border-gray-400 mt-5">
-    <div class="report-table hidden" id="printable-area" v-if="kkk">
+    <div class="report-table hidden" id="printable-area" >
       <!-- <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:5px; display: flex; align-items: center;">
     <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
    <h1 style="margin: 0;">Bana Mall Report </h1>
@@ -56,7 +56,7 @@
         class="section-title"
         style="color: #622e2e; font-weight: bold; margin-bottom: 15px"
       >
-        Total Balance(Paid In The Gven Time Interval)
+        Total Balance
       </h2>
       <table>
         <thead style="font-size: 12px">
@@ -81,62 +81,53 @@
             <th>Total Service</th>
           </tr>
         </thead>
-        <tbody
+        <tbody v-if="reportLength>0"
           style="background-color: white; font-size: 12px"
-          v-if="confirmedLength > 0 || pendingLength > 0 || overdueLength > 0"
         >
-          <tr
-            v-for="(bank, index) in reports.items.categorizedPayments.confirmed
-              .bankTypes"
-            :key="index"
-          >
-            <td class="border border-gray-300 px-4 py-2">
-              {{ index }}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {{
+        <tr 
+                v-for="(bank, index) in reports.items.totalBalanceBankType"
+                :key="index"
+              >
+                 <td class="border border-gray-300 px-4 py-2">
+                  {{ index }} 
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{ bank.regularBalance }}
+                </td>
+
+                <td class="border border-gray-300 px-4 py-2">
+                  {{   bank.subsidyBalance }} 
              
-              }}
-            </td>
+                </td>
 
-            <td class="border border-gray-300 px-4 py-2">
-              {{
-                
-              }}
-            </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                   bank.urgentBalance
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  
+                  {{ bank.totalBlockBalance }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                   bank.penalityBalance
 
-            <td class="border border-gray-300 px-4 py-2">
-              {{
-               
-              }}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {{
-               
-              }}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {{
-               
-              }}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {{
-                
-              }}
-            </td>
+                  }}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{
+                   bank.serviceBalance
+                  }}
+                </td>
 
-            <td class="border border-gray-300 px-4 py-2">
-              {{
-                
-              }}
-            </td>
-            <td class="border border-gray-300 px-4 py-2">
-              {{
-               
-              }}
-            </td>
-          </tr>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{bank.totalServiceBalance}}
+                </td>
+                <td class="border border-gray-300 px-4 py-2">
+                  {{bank.totalServiceBalance + bank.totalBlockBalance }}
+                </td>
+              </tr>
           <tr class="font-bold bg-gray-100" rowspan="4">
             <td
               class="px-4 py-2 text-left border border-gray-300 text-blue-800"
@@ -247,9 +238,9 @@
             margin-left: 20px;
           "
         >
-          Total Overdue(Monthly Deadline Passed and Still Unpaid):{{
+          <!-- Total Overdue(Monthly Deadline Passed and Still Unpaid):{{
             reports.items.categorizedPayments.overdue.uniqueUsers
-          }}
+          }} -->
         </h2>
 
         <!-- <h2 class="section-title" style="font-size:12px;color: #622e2e; font-weight: bold;margin-bottom:15px;margin-left:20px;">
@@ -891,13 +882,13 @@ export default {
 
   changeReportType() {
     //alert("j")
-    const reportTypes = ["annually", "semiAnnually", "monthly", "weekly", "daily"];
+   // const reportTypes = ["annually", "semiAnnually", "monthly", "weekly", "daily"];
     this.selectReportType = false;
 
-    reportTypes.forEach(type => {
-      console.log(type);
-      this[`${type}Selected`] = this.reportType === type;
-    });
+    // reportTypes.forEach(type => {
+    //   console.log(type);
+    //   this[`${type}Selected`] = this.reportType === type;
+    // });
 
     if (this.reportType ==="annually"){
      this.annuallySelected=true;
@@ -921,7 +912,7 @@ export default {
     if(this.reportType === "weekly"){
       this.year=new Date().getFullYear();
       this.month=new Date().getMonth()+1;
-      this.week=this.getWeekNumber(new Date());
+      // this.week=this.getWeekNumber(new Date());
 
       //alert("weekly")
       this.semiAnnuallySelected=false;
@@ -947,7 +938,7 @@ export default {
   this.annuallySelected = true; // Always true
   this.semiAnnuallySelected = this.reportType === "semiAnnually";
   this.monthlySelected = ["monthly", "weekly", "daily"].includes(this.reportType);
-  this.weeklySelected = this.reportType === "weekly";
+  // this.weeklySelected = this.reportType === "weekly";
   this.dailySelected = this.reportType === "daily";
 
   // Add additional parameters dynamically based on the report type
@@ -956,9 +947,6 @@ export default {
   }
   if (["monthly", "weekly", "daily"].includes(this.reportType) && this.month) {
     params.month = this.month;
-  }
-  if (this.reportType === "weekly" && this.week) {
-    params.week = this.week;
   }
   if (this.reportType === "daily" && this.day) {
     params.day = this.day;
@@ -986,7 +974,7 @@ export default {
    //alert("ooo")
     try {
       const response = await this.$apiGet('/api/v1/payments/reports', params);
-      console.log("Response for report:yysssy", response);
+      console.log("Response for report:checkweek", response);
       this.reports = response || {
       items: {
         totalBalanceBankType: [],
@@ -1079,10 +1067,9 @@ export default {
       this.month = currentMonth; 
       this.week = currentWeek; 
 
-      params = { timeRange: "weekly", year: currentYear, month: currentMonth, week: currentWeek };
+      params = { timeRange: "weekly", year: currentYear, month: currentMonth};
       selectedFlags.annuallySelected = true;
       selectedFlags.monthlySelected = true;
-      selectedFlags.weeklySelected = true;
       break;
     case "daily":
       this.year = currentYear;
