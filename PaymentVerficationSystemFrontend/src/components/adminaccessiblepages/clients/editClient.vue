@@ -374,7 +374,7 @@ export default {
     async editDetail() {
       //alert("mmm");
       // this.$refs.loadingSpinner.
-      this.isLoading = true;
+      //this.isLoading = true;
 
 
       // Show the spinner
@@ -403,7 +403,11 @@ export default {
             if (response.status === 1) {
               this.clientProfile = response.updatedUser;
               this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
-              this.isLoading = false;
+             // this.isLoading = false;
+
+              this.$router.replace({ path: `/admindashboard/edit-client/${this.clientProfile._id}`}).catch(() => {
+              console.log("Navigation to the same route was prevented.");
+            });
               this.$reloadPage();
               // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
               // this.imageData = "data:image/jpeg;base64," + this.imageFile;

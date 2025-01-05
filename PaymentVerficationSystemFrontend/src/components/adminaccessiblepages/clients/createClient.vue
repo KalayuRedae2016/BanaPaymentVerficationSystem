@@ -699,7 +699,7 @@ export default {
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message
             );
-           // this.$reloadPage();
+           this.$reloadPage();
           }
         });
        } catch (error){

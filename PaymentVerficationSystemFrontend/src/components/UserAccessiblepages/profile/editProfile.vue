@@ -434,8 +434,9 @@ export default {
     
   },
   data() {
-    return {
 
+    return {
+      componentKey: 0,
       showSuccessToast:false,
       showErrorToast:false,
       succesToastMessage:"",
@@ -562,6 +563,8 @@ export default {
           if (response.data.status === 1) {
             this.clientProfile =response.data.updatedUser;
            
+         
+
             this.$reloadPage();
 
            // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
