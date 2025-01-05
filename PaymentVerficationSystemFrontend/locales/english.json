@@ -1,7 +1,5 @@
 {
 
-
-
 "metric":"Metric",
 "paidCleints":"Paid Cleints",
 "unPaidClients":"Unpaid Clients",
@@ -9,7 +7,6 @@
 "totalPaidPenality":"Total Paid Penality",
 "detail":"Detail",
 "yearMonth":"Year Month",
-
 
 "view":"View",
 "allPaiments":"All Paiments",
@@ -160,7 +157,7 @@
  "phoneNumberRequired": "Phone Number is required *",
  "phoneNumberExample": "+251 (Ethiopia)",
  "phoneNumber": "Phone Number",
- "chooseProfileImage": "Choose Profile Image *",
+ "chooseProfileImage": "Choose Profile Image",
  "profileImageRequired": "Profile Image is required ",
   "noFileChosen": "No file choosed",
   "editClientProfile": "Edit Client Profile",

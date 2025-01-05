@@ -1,43 +1,10 @@
 <template>
   <div class="pb-20 shadow-lg">
+    <Toast ref="toast"/>
     <div class="border-b border-blue-500">
-      <p class="text-blue-800 font-bold px-4 pb-4 pt-3">Edit Client Profile</p>
+      <p class="text-blue-500 font-bold px-4 pb-4 pt-3">Edit Client Profile</p>
     </div>
-    <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showSuccessToast"
-      class="z-20 fixed right-5  bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Success!</strong>
-      <span class="block sm:inline">{{ succesToastMessage }}</span>
-    </div>
-  </transition> 
 
-      <transition
-    enter-active-class="transform transition duration-300 ease-out"
-    enter-from-class="translate-x-full opacity-0"
-    enter-to-class="translate-x-0 opacity-100"
-    leave-active-class="transform transition duration-300 ease-in"
-    leave-from-class="translate-x-0 opacity-100"
-    leave-to-class="translate-x-full opacity-0"
-  >
-    <div
-      v-if="showErrorToast"
-      class="z-20 fixed right-5  bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg"
-      role="alert"
-    >
-      <strong class="font-bold">Error!</strong>
-      <span class="block sm:inline">{{ errorToastMessage }}</span>
-    </div>
-  </transition> 
     
 <div v-if="formEmptyEditProfile" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
   <strong class="font-bold">Success!</strong>
@@ -53,11 +20,11 @@
         <div
           class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
         >
-          <div class="m-4 w-full h-full lg:w-1/4 h-64 bg-gray-500">
+          <div class="m-4 w-full h-full lg:w-1/4 h-64 ">
             <img
               :src="imageData"
               alt="User Profile Image"
-              class="h-64 w-full lg:w-64 lg:w-96"
+              class="h-64  w-64 lg:w-96"
             />
           </div>
 
@@ -134,7 +101,7 @@
 
             <button
               @click="showEditModal = true"
-              class="border border-gray-200 mt-5 mb-5 p-2 rounded-lg hover:bg-blue-50 ml-2 text-blue-500"
+              class="custom-button mb-10 ml-3 mt-5"
             >
               <i class="fas fa-edit mr-2"></i>Edit
             </button>
@@ -429,9 +396,10 @@
     <script>
 
 import { mapGetters } from "vuex";
+import Toast from '../../Common/Toast.vue'
 export default {
   components: {
-    
+    Toast,
   },
   data() {
 
@@ -556,22 +524,13 @@ export default {
       const customHeaders = {
     "Content-Type": "multipart/form-data",
 };
-      this.$apiClient
-        .patch(`/api/v1/users/${this.clientProfile._id}`, formData,customHeaders)
+      this.$apiPatch('/api/v1/users',this.clientProfile._id, formData,customHeaders)
         .then((response) => {
           console.log("response from the update: " ,response);
-          if (response.data.status === 1) {
-            this.clientProfile =response.data.updatedUser;
-           
-         
-
-            this.$reloadPage();
-
-           // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
-           // this.imageData = "data:image/jpeg;base64," + this.imageFile;
-           // this.showSuccess = true;
-           // this.successMessage = response.data.message;
-            
+          if (response.status === 1) {
+              this.clientProfile = response.updatedUser;
+              this.imageData = "data:image/jpeg;base64," + response.imageData;
+              this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
           }
         })
         .catch((error) => {

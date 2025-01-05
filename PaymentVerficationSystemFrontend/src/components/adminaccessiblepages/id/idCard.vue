@@ -48,11 +48,7 @@
       <div
         class="flex flex-col items-center space-y-4 w-full lg:w-1/4 lg:items-start rounded-lg"
       >
-        <img
-          :src="imageData"
-          alt="User Profile"
-          class="mt-5 h-full w-48 object-cover"
-        />
+        <img :src="imageData" alt="User Profile" class="mt-5 h-48 w-48" />
       </div>
 
       <!-- Right Section: User Info -->
@@ -92,7 +88,7 @@
       id="printable-area"
     >
       <div
-        class="header h-20 w-full bg-gray-100 flex items-center justify-between border-b border-blue-500"
+        class="header h-20 w-full bg-gray-100 flex items-center justify-between border-t border-l border-r border-blue-500"
       >
         <div class="flex items-center">
           <img
@@ -109,9 +105,10 @@
         </div>
       </div>
 
-      <div class="flex flex-row">
-        <div class="flex flex-col bg-gray-100 0 w-1/2">
-          <!-- Image Section -->
+      <div class="flex flex-row h-full items-stretch border border-blue-500">
+        <!-- Left Column (Profile Image and User Information) -->
+        <div class="flex flex-col w-1/2">
+          <!-- Profile Image Section -->
           <div class="mx-auto mt-16">
             <img
               :src="imageData"
@@ -124,12 +121,37 @@
           <div class="mx-auto border-t border-blue-500 mt-4 mb-4"></div>
 
           <!-- User Information Section -->
-          <div class="pl-16 bg-gray-100 p-4 mt-5 font-extrabold">
+          <div class="pl-16 p-4  font-extrabold flex-grow">
             <div class="w-full">
               <div class="flex items-start mt-2">
                 <p class="text-blue-500 text-xs w-1/3">ምሉእ ሽም/Full Name:</p>
                 <span class="ml-2 text-yellow-800 text-xs break-words">{{
                   selectedUser.fullName
+                }}</span>
+              </div>
+              <div class="flex items-start mt-2">
+                <p class="text-blue-500 text-xs w-1/3">ኮድ/User Code:</p>
+                <span class="ml-2 text-yellow-800 text-xs break-words">{{
+                  selectedUser.userCode
+                }}</span>
+              </div>
+           
+              <div class="mx-auto flex items-start mt-2">
+                <p class="text-blue-500 text-xs w-1/3">ጾታ/Gender:</p>
+                <span class="ml-2 text-yellow-800 text-xs break-words">{{
+                  selectedUser.gender
+                }}</span>
+              </div>
+              <div class="mx-auto flex items-start mt-2">
+                <p class="text-blue-500 text-xs w-1/3">ሜይል/Email:</p>
+                <span class="ml-2 text-yellow-800 text-xs break-words">{{
+                  selectedUser.email
+                }}</span>
+              </div>
+              <div class="mx-auto flex items-start mt-2">
+                <p class="text-blue-500 text-xs w-1/3">ስልኪ/Phone Number:</p>
+                <span class="ml-2 text-yellow-800 text-xs break-words">{{
+                  selectedUser.phoneNumber 
                 }}</span>
               </div>
               <div class="mx-auto flex items-start mt-2">
@@ -138,53 +160,44 @@
                   selectedUser.address
                 }}</span>
               </div>
-              <div class="mx-auto flex items-start mt-2">
-                <p class="text-blue-500 text-xs w-1/3">ጾታ/Gender:</p>
-                <span class="ml-2 text-yellow-800 text-xs break-words">{{
-                  selectedUser.gender
-                }}</span>
-              </div>
             </div>
-          </div>
-
-          <!-- Horizontal Line Below -->
-          <div class="border-b border-blue-500 mt-4 mb-4"></div>
-
-          <!-- Barcode Section -->
-          <div class="mx-auto mt-5 mb-5" id="qrCodeImageContainer">
-            <!-- QR Code will appear here -->
           </div>
         </div>
 
-        <!-- Disclaimer Section -->
-        <div class="w-1/2 bg-gray-100 border-lborder-blue-500">
-          <div class="m-5">
+        <!-- Right Column (Disclaimer and Barcode) -->
+        <div class="w-1/2 border-l border-blue-500 flex flex-col">
+          <div class="m-5 flex-grow">
+            <!-- Disclaimer Section -->
             <h2 class="mb-5 text-center font-semibold">መተሓሳሰቢ | Disclaimer</h2>
             <div class="flex flex-col rounded-lg space-y-4">
               <div
-                class="text-xs font-extrabold borderborder-blue-500 text-blue-500 rounded p-5"
+                class="text-xs font-extrabold border border-blue-500 text-blue-500 rounded p-5"
               >
                 This card is only for the person seen in the photo
               </div>
               <div
-                class="text-xs font-extrabold borderborder-blue-500 text-blue-500 rounded p-5"
+                class="text-xs font-extrabold border border-blue-500 text-blue-500 rounded p-5"
               >
                 This card is used for making payments to Bana
               </div>
               <div
-                class="text-xs font-extrabold borderborder-blue-500 text-blue-500 rounded p-5"
+                class="text-xs font-extrabold border border-blue-500 text-blue-500 rounded p-5"
               >
                 This card cannot be used for any other purposes
               </div>
             </div>
           </div>
+
+          <!-- Barcode Section Below the Disclaimer -->
+          <div class="mx-auto mt-5 mb-5" id="qrCodeImageContainer">
+            <!-- QR Code will appear here -->
+          </div>
         </div>
       </div>
 
-      
       <div class="my-3">
         <div class="h-10 bg-gray-100 border border-dashed border-blue-500">
-          <p class="text-blue-500 ml-10 pb-3">
+          <p class="text-blue-500 ml-10 pb-5 pt-1">
             Cut in the dotted border and get your id card in pysical format.
           </p>
         </div>
@@ -193,7 +206,7 @@
       <div class="w-full bg-gray-100 border border-dashed border-blue-500 flex">
         <!-- Front Section -->
         <div
-          class="front w-1/2 bg-gray-100 border-r border-dashed border-blue-500 p-4 flex flex-col rounded-l-lg"
+          class="front w-1/2 border-r border-dashed border-blue-500 p-4 flex flex-col rounded-l-lg"
         >
           <!-- Header Section -->
           <div class="header flex items-center justify-between mb-4">
@@ -218,37 +231,40 @@
           <div class="flex items-center space-x-4">
             <!-- Image Section -->
             <div class="flex-shrink-0 h-full">
-              <img
-                :src="imageData"
-                alt="User Image"
-                class="h-32 w-32  object-cover"
-              />
+              <img :src="imageData" alt="User Image" class="h-32 w-32" />
             </div>
 
-            <div
-              class="flex flex-col items-center justify-center space-y-2 h-full"
-            >
-              <div>
+            <div class="flex flex-col space-y-1 h-full">
+              <!-- User Code -->
+              <div class="flex flex-col">
+                <!-- Field Name -->
                 <p class="text-xxs font-semibold text-gray-700">
                   ተጠቃሚ ኮድ | Usercode
                 </p>
-                <p class="text-xxs text-gray-800 mt-1 ml-10 font-extrabold">
+                <!-- Value -->
+                <p class="text-xxs text-gray-800 font-extrabold mt-1 ml-2">
                   {{ selectedUser.userCode }}
                 </p>
               </div>
+
               <!-- Full Name -->
-              <div>
+              <div class="flex flex-col">
+                <!-- Field Name -->
                 <p class="text-xxs font-semibold text-gray-700">
                   ሙሉእ ሽም | Full Name
                 </p>
-                <p class="text-xxs text-gray-800 mt-1 ml-10 font-extrabold">
+                <!-- Value -->
+                <p class="text-xxs text-gray-800 font-extrabold mt-1 ml-2">
                   {{ selectedUser.fullName }}
                 </p>
               </div>
+
               <!-- Gender -->
-              <div>
+              <div class="flex flex-col">
+                <!-- Field Name -->
                 <p class="text-xxs font-semibold text-gray-700">ጾታ | Sex</p>
-                <p class="text-xxs text-gray-800 ml-10 font-extrabold">
+                <!-- Value -->
+                <p class="text-xxs text-gray-800 font-extrabold mt-1 ml-2">
                   {{ selectedUser.gender }}
                 </p>
               </div>
@@ -280,7 +296,7 @@
             </div>
             <!-- QR Code Section -->
             <div
-              class="w-1/2 flex justify-center items-center"
+              class="w-1/2 flex justify-center items-center rounded-full"
               id="qrCodeImageContainer1"
             >
               <!-- QR Code will appear here -->
@@ -333,50 +349,55 @@ export default {
       filteredUsers: {},
     };
   },
-  
+
   watch: {
     keyword() {
       this.searchUsers(this.keyword);
     },
   },
 
- async mounted() {
-    try { this.$apiGet("/api/v1/users/", { params: {  isActive: true,}}) .then((response) => {
-        console.log("response data", response.data);
-        if (response.data !== null) {
-          //alert(this.users)
-          this.users = response.users;
-          this.filteredUsers = this.users;
+  async mounted() {
+    try {
+      this.$apiGet("/api/v1/users/", { params: { isActive: true } }).then(
+        (response) => {
+          console.log("response data", response.data);
+          if (response.data !== null) {
+            //alert(this.users)
+            this.users = response.users;
+            this.filteredUsers = this.users;
+          }
         }
-      })
-    } catch(error) {
-        console.log("Error fetching users:", error.status,error.message);
-    }finally{
-      
-  }
+      );
+    } catch (error) {
+      console.log("Error fetching users:", error.status, error.message);
+    } finally {
+    }
     console.log("These are the users please", this.users);
   },
 
   methods: {
-   async  toggleUserSelection(user) {
+    async toggleUserSelection(user) {
       this.isLoading = true;
       this.showList = false;
       this.showIdCard = true;
       this.filteredUsers = [];
       this.selectedUser = user;
 
-      try { 
-        await this.$apiGetById('/api/v1/users',user._id).then((response) => {
+      try {
+        await this.$apiGetById("/api/v1/users", user._id).then((response) => {
           console.log("Response client profile", response);
           this.isLoading = false;
           this.clientProfile = response.clientProfile;
           this.imageData = "data:image/jpeg;base64," + response.imageData;
-        })
-       } catch(error) {
-          console.error("Error fetching client datakk:", error.status,error.message);
-        }finally {
-
-        }
+        });
+      } catch (error) {
+        console.error(
+          "Error fetching client datakk:",
+          error.status,
+          error.message
+        );
+      } finally {
+      }
 
       this.generateQRCodeImage(user);
       console.log("user=", user);

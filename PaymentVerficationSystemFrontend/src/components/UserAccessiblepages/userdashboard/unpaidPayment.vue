@@ -8,7 +8,7 @@
     >
       <div class="text-gray-700 text-sm font-bold ml-1">
         <p>User Code: {{ userCode }}</p>
-        <p>Full Name: {{ fullName }}</p>
+        <p>Full Name: {{fullName }}</p>
       </div>
 
       <div class="border-t-2 border-blue-500 border-dotted mt-5" v-if="payments.length >0">
@@ -150,122 +150,13 @@
           </div>
         </div>
       </div>
-      <div v-else class="mt-5 border border-gray-200 rounded-lg p-5 text-blue-500 shadow-lg">
+
+
+      <div v-else class="mt-5 border border-gray-200 rounded-lg p-5 text-blue-500 ">
         There is no opened unpaid Payment
       </div>
 
       <!-- this is the end of the forloop -->
-    </div>
-
-    <div
-      v-if="nothingToPay"
-      class="py-6 px-6 -mt-1 border-t border-blue-500 w-full mb-64"
-    >
-      <div
-        class="relative p-6 bg-blue-100 border border-green-300 rounded-lg shadow-md flex justify-between items-center"
-      >
-        <span class="text-green-800 font-semibold text-lg w-2/3 text-sm">
-          <span class="text-blue-800 text-sm">{{ fullName }} </span> has
-          successfully completed all payments. No payments are currently overdue
-          or in progress. Any open payments will be processed in the next month.
-          <span class="text-blue-800">!!!</span>
-        </span>
-        <a
-          href="/admindashboard/payment-history"
-          class="text-sm w-1/4 text-blue-600 hover:text-blue-800 font-medium text-lg ml-4"
-        >
-          See Payment History
-        </a>
-        <div
-          class="absolute top-0 right-0 -mt-3 -mr-3 w-6 h-6 bg-green-500 rounded-full"
-        ></div>
-      </div>
-    </div>
-
-    <div v-if="showPaymentDetailModal">
-      <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
-            <div class="flex flex-row">
-              <div>Do You want to confirm The following Details</div>
-              <div class="ml-64">
-                <svg
-                  @click="closeModal()"
-                  class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </div>
-            </div>
-
-            <hr class="my-4 md:min-w-full bg-red-500" />
-
-            <div class="overflow-y-auto" style="height: 300px">
-              <form class="px-5 py-5">
-                <div class="regular p-4">
-                  <p class="text-blue-500">Regular Payment</p>
-                  <div class="ml-3">
-                    <p class="text-gray-400">regular Amount :5000</p>
-                    <p class="text-gray-400">regular Paid Penality :30</p>
-                    <p class="text-gray-400">bank Type:LIB</p>
-                    <p class="text-gray-400">TTNumber:LIB096ty</p>
-                  </div>
-                </div>
-                <div class="subsidy border-dotted border-t border-blue-800 p-4">
-                  <p class="text-blue-500">Subsidy Payment</p>
-                  <div class="ml-3">
-                    <p class="text-gray-400">subsidy Amount :5000</p>
-                    <p class="text-gray-400">subsidy Paid Penality :30</p>
-                    <p class="text-gray-400">bank Type:LIB</p>
-                    <p class="text-gray-400">TTNumber:LIB096ty</p>
-                  </div>
-                </div>
-                <div class="urgent border-dotted border-t border-blue-800 p-4">
-                  <p class="text-blue-500">Urgent Payment</p>
-                  <div class="ml-3">
-                    <p class="text-gray-400">urgent Amount :5000</p>
-                    <p class="text-gray-400">urgent Paid Penality :30</p>
-                    <p class="text-gray-400">bank Type:LIB</p>
-                    <p class="text-gray-400">TTNumber:LIB096ty</p>
-                  </div>
-                </div>
-                <div
-                  class="service border-dotted border-t border-b border-blue-800 p-4"
-                >
-                  <p class="text-blue-500">Service Payment</p>
-                  <div class="ml-3">
-                    <p class="text-gray-400">service Amount :5000</p>
-                    <p class="text-gray-400">service Paid Penality :30</p>
-                    <p class="text-gray-400">bank Type:LIB</p>
-                    <p class="text-gray-400">TTNumber:LIB096ty</p>
-                  </div>
-                </div>
-              </form>
-            </div>
-
-            <hr class="my-4 md:min-w-full bg-red-500" />
-            <button
-              type="submit"
-              @click="sendToDataBase()"
-              class="ml-8 bg-indigo-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              <i class="fas fa-save">
-                <span class="text-md ml-3"> Yes </span>
-              </i>
-            </button>
-          </div>
-        </div>
-      </transition>
     </div>
   </div>
 </template>

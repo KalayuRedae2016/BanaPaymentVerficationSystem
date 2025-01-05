@@ -2,7 +2,7 @@
   <div class="p-4 m-2 bg-white shadow-lg">
     <Toast ref="toast" />
     <div class="flex justify-between items-center mb-4">
-      <div class="flex items-center space-x-4 p-4 bg-white rounded-lg">
+      <div class="flex items-center space-x-4 py-4 bg-white rounded-lg">
         <label class="flex items-center space-x-2">
           <span class="text-sm text-blue-600 font-semibold tracking-wide"
             >Show</span
