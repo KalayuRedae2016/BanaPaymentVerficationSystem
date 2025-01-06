@@ -121,7 +121,7 @@ app.use('/api/v1/payments', paymentRouter);
 
 app.use('/api/ups', paymentRouter); // third Party Bank API
 
-app.use('/api/v1/reset', paymentRouter); //reset all
+app.use('/api/v1/reset', paymentRouter); //reset all files
 
 // Catch-all route handler for undefined routes
 app.all('*', (req, res, next) => {
