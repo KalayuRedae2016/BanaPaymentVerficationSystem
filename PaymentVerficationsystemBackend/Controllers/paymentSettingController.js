@@ -7,77 +7,82 @@ const catchAsync = require('../utils/catchAsync');
 const createPendingPayments=require("../utils/createPendingPayments")
 const {formatDate,formatDateGC}=require("../utils/formatDate")
 
-
-const normalizePenalties = (data) => {
-  const result = { ...data };
-  if (result.penalityLate5Days !== undefined) {
-      result.penalityLate5Days = result.penalityLate5Days > 1 ? result.penalityLate5Days / 100 : result.penalityLate5Days;
-  }
-  if (result.penalityLate10Days !== undefined) {
-      result.penalityLate10Days = result.penalityLate10Days > 1 ? result.penalityLate10Days / 100 : result.penalityLate10Days;
-  }
-  if (result.penalityLateAbove10Days !== undefined) {
-      result.penalityLateAbove10Days = result.penalityLateAbove10Days > 1 ? result.penalityLateAbove10Days / 100 : result.penalityLateAbove10Days;
-  }
-  return result;
-};
-
-exports.createPaymentSetting = catchAsync(async (req, res,next) => {
-  const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
+exports.createPaymentSetting = catchAsync(async (req, res, next) => {
+  const { 
+    activeYear, 
+    activeMonth, 
+    regularAmount, 
+    urgentAmount, 
+    serviceAmount, 
+    subsidyAmount, 
+    regFeeRate, 
+    penalityLate5Days, 
+    penalityLate10Days, 
+    penalityLateAbove10Days 
+  } = req.body;
 
   // Validate required fields
-  if (!activeYear || !activeMonth || !regularAmount ||!serviceAmount || !regFeeRate) {
+  if (!activeYear || !activeMonth || !regularAmount || !serviceAmount || !regFeeRate) {
     return next(new AppError('Please provide Required Fields', 400));
   }
 
   // Normalize penalty fields
-  const normalizedData = normalizePenalties(req.body);
-  
+  const normalizeValue = (value) => (value > 1 ? value / 100 : value);
+
+  const normalizedData = {
+    ...req.body,
+    penalityLate5Days: penalityLate5Days !== undefined ? normalizeValue(penalityLate5Days) : undefined,
+    penalityLate10Days: penalityLate10Days !== undefined ? normalizeValue(penalityLate10Days) : undefined,
+    penalityLateAbove10Days: penalityLateAbove10Days !== undefined ? normalizeValue(penalityLateAbove10Days) : undefined,
+  };
+
   // Set default startingDate and endingDate if not provided
   let { startingDate, endingDate } = req.body;
 
   if (!startingDate || !endingDate) {
-    startingDate = new Date(Date.UTC(activeYear, activeMonth-1, 1)); // First day of the month
-    endingDate = new Date(Date.UTC(activeYear, activeMonth-1, 30));  // 30th day of the month
+    startingDate = new Date(Date.UTC(activeYear, activeMonth - 1, 1)); // First day of the month
+    endingDate = new Date(Date.UTC(activeYear, activeMonth, 0)); // Last day of the month
   } else {
     startingDate = new Date(startingDate);
     endingDate = new Date(endingDate);
   }
+
   if (endingDate <= startingDate) {
     return next(new AppError(`Ending Date (${endingDate}) should be greater than Starting Date (${startingDate})!`, 400));
   }
-    //const PaymentSetting = mongoose.connection.model('PaymentSetting');
-    // Check if there's an existing PaymentSetting for the activeYear and Month
-    const existingSetting = await PaymentSetting.findOne({activeYear:activeYear,activeMonth:activeMonth});
-    if (existingSetting) {
-      return next(new AppError(`Payment Setting already exists for Month-${activeMonth}-Year-${activeYear}`, 400));
-    }
-    
-     // Bulk update: Deactivate all previous "latest" settings
+
+  // Check for existing PaymentSetting for the active year and month
+  const existingSetting = await PaymentSetting.findOne({ activeYear, activeMonth });
+  if (existingSetting) {
+    return next(new AppError(`Payment Setting already exists for Month-${activeMonth}-Year-${activeYear}`, 400));
+  }
+
+  // Deactivate all previous "latest" settings
   await PaymentSetting.updateMany({ latest: true }, { $set: { latest: false } });
 
-   const newSetting = new PaymentSetting({
+  // Create a new PaymentSetting
+  const newSetting = new PaymentSetting({
     ...normalizedData,
     startingDate,
     endingDate,
-    latest: true
-});
-    await newSetting.save();
+    latest: true,
+  });
 
-    const users = await User.find({isActive:true,role:"User"});
-    //console.log(users)
+  await newSetting.save();
 
-    // Create pending payments for all users
-    for (const user of users) {
-      await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
-    }
+  // Fetch all active users with the "User" role
+  const users = await User.find({ isActive: true, role: "User" });
 
-    res.status(200).json({
-      status:1,
-      message:`Payment Setting is created for Month-${req.body.activeMonth}-Year-${req.body.activeYear}`,
-      paymentSetting:newSetting
-    });
+  // Create pending payments for all users
+  for (const user of users) {
+    await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
+  }
 
+  res.status(200).json({
+    status: 1,
+    message: `Payment Setting is created for Month-${activeMonth}-Year-${activeYear}.`,
+    paymentSetting: newSetting,
+  });
 });
 
 exports.getPaymentSetting = catchAsync(async (req, res, next) => {
@@ -147,7 +152,7 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
     activate=true
   }
 
-    // console.log(latestPaymentSetting)
+    console.log(latestPaymentSetting)
     res.status(200).json({
         status: 1,
         message: "Latest setting fetched successfullyyyyy.",
