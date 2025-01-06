@@ -1503,8 +1503,8 @@ exports.reports = catchAsync(async (req, res, next) => {
   const organization = await Organization.findOne()
   const categorizedPayments = calculateBalances(payments, organization);
 
-  console.log("payments:",payments)
-  console.log("catPa",categorizedPayments)
+  // console.log("payments:",payments)
+  // console.log("catPa",categorizedPayments)
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${timeRange}`,
@@ -1517,7 +1517,6 @@ exports.reports = catchAsync(async (req, res, next) => {
 
 exports.resetAll = catchAsync(async (req, res, next) => {
   try {
-
     const deletedOrgs = await Organization.deleteMany({});
     const deletedUsers = await User.deleteMany({});
     const deletedSettings = await PaymentSetting.deleteMany({});
