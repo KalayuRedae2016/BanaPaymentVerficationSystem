@@ -14,7 +14,7 @@
           />
           <span class="text-lg font-semibold text-blue-500">Bana</span>
         </div>
-
+      
         <!-- Right Section -->
         <div class="flex items-center space-x-6">
           <p class="hidden">locale: {{ locale }}</p>
@@ -57,6 +57,15 @@
               v-show="dropdownVisible"
               class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-20"
             >
+            <li>
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-blue-500 hover:bg-gray-100"
+                  @click="help"
+                >
+                  {{ $t("Help") }}
+                </a>
+              </li>
               <li>
                 <a
                   href="#"
@@ -66,6 +75,7 @@
                   {{ $t("Account Setting") }}
                 </a>
               </li>
+             
               <li>
                 <a
                   href="#"
@@ -519,7 +529,12 @@ if(localStorage.getItem("token")===null){
    //setInterval(this.fetchNotifications, 5000);
   },
   methods: {
-   
+    toggleDarkMode() {
+      document.body.classList.toggle('dark');
+    },
+   help(){
+this.$router.push('/admindashboard/user-manual')
+   },
     closeDropDownSidebar() {
       this.sidebarVisible = false;
     },

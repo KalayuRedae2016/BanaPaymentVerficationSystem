@@ -7,6 +7,7 @@ import portofilo from "../views/portofilo.vue";
 import jTableCaller from '../components/Common/jatableCaller.vue';
 import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
 import resetTables from "../components/Common/resetTables.vue"
+import userManual from "../components/Common/userManual.vue"
 import changeCommonPassword from '../components/Common/Setting/changePassword.vue'
 // Admin components
 // import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
@@ -53,6 +54,7 @@ import userdashboardFirst from "../components/UserAccessiblepages/userdashboard/
 import profile from "../components/UserAccessiblepages/profile/editProfile.vue";
 import idCard from "../components/UserAccessiblepages/idCard/idCard.vue";
 import infoPayment from "../components/UserAccessiblepages/information/info.vue";
+import { faHeadphonesSimple } from "@fortawesome/free-solid-svg-icons";
 
 const routes = [
   {
@@ -128,7 +130,7 @@ const routes = [
       { path: "modal", component: commonModal },
       { path: "parent-modal", component: parentModal },
       { path: "send-email", component: sendEmail },
-
+      { path: "user-manual", component: userManual},
       { path: "id-card", name: "id-card", component: idCardAdmin },
       { path: "reset-table", name: "reset-table", component:  resetTables },
     ],
