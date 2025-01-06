@@ -137,7 +137,8 @@
           <div class="flex items-center space-x-3">
             <i class="fas fa-clock text-yellow-500"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerTenDaysPercentage') }}:</span>
-            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate10Days }}%</span>
+            <span class="text-lg text-gray-800"><span>{{ paymentSetting.penalityLate10Days.toFixed(0) }}</span>
+            %</span>
           </div>
         </div>
 

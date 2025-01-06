@@ -471,9 +471,8 @@
                     <span class="font-semibold text-sm"
                       >{{ $t("penaltyPerTenDaysPercentage") }}:</span
                     >
-                    <span class="text-lg text-gray-800">{{
-                      paymentSetting.penalityLate10Days
-                    }}%</span>
+                    <span class="text-lg text-gray-800"><span>{{ paymentSetting.penalityLate10Days.toFixed(0) }}</span>
+                    %</span>
                   </div>
                 </div>
 
