@@ -16,7 +16,7 @@ router.use(function (req, res, next) {
   next();
 });
 
-router.route('/resetAll').delete(paymentController.resetAll);//reset
+router.route('/resetAll').delete(paymentController.resetAll);//reset all files
 
 // Protect all routes after this middleware
 router.use(authoController.authenticationJwt);
