@@ -5,6 +5,7 @@ const User = require('../Models/userModel');
 const Payment = require('../Models/paymentModel');
 const Apikey = require('../Models/apiKeyModel');
 
+const createDefaultAdminUser = require("../utils/setupDefaultUser"); 
 const { calculateBalances } = require('../utils/calculateBalances')
 const { formatDate, formatDateGC } = require("../utils/formatDate")
 const { calculatePenalty } = require("../utils/calculatePenality")
@@ -1523,10 +1524,12 @@ exports.resetAll = catchAsync(async (req, res, next) => {
     const deletedSettings = await PaymentSetting.deleteMany({});
     const deletedPayments = await Payment.deleteMany({});
     const deletedApikeys = await Apikey.deleteMany({});
+
+    await createDefaultAdminUser();
   
     res.status(200).json({
       status: 'success',
-      message: `All Files Deleted and Reset`,
+      message: `All Files Deleted and Default Admin created`,
       data: {
         deletedOrgs: deletedOrgs.deletedCount,
         deletedUsers: deletedUsers.deletedCount,
