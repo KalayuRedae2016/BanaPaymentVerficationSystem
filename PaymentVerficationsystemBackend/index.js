@@ -22,7 +22,9 @@ const organizationRoutes = require('./routes/organizationRouter');
 const userRouter = require('./routes/userRouter');
 const paymentSettingRouter = require('./routes/paymentSettingRouter');
 const paymentRouter = require('./routes/paymentRouter');
+const resetRouter=require('./routes/resetRoute');
 //const smsRoutes=require('./routes/smsRoutes');
+
 
 const app = express(); //start Express app
 
@@ -118,6 +120,8 @@ app.use('/api/v1/paymentSetting', paymentSettingRouter);
 app.use('/api/v1/payments', paymentRouter);
 
 app.use('/api/ups', paymentRouter); // third Party Bank API
+
+app.use('/api/v1/reset', paymentRouter); //reset all
 
 // Catch-all route handler for undefined routes
 app.all('*', (req, res, next) => {
