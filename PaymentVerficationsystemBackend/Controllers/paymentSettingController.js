@@ -119,6 +119,9 @@ exports.getPaymentSetting = catchAsync(async (req, res, next) => {
       ...paymentSettings._doc,
       startingDate:formatDateGC(paymentSettings.startingDate),
       endingDate:formatDateGC(paymentSettings.endingDate),
+      penalityLate5Days:paymentSettings.penalityLate5Days*100,
+      penalityLate10Days:paymentSettings.penalityLate10Days*100,
+      penalityLateAbove10Days:paymentSettings.penalityLateAbove10Days*100,
       formattedStartDate,
       formattedEndDate
     }
@@ -152,6 +155,9 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
           ...latestPaymentSetting._doc,
           startingDate:formatDateGC(latestPaymentSetting.startingDate),
           endingDate:formatDateGC(latestPaymentSetting.endingDate),
+          penalityLate5Days:latestPaymentSetting.penalityLate5Days*100,
+          penalityLate10Days:latestPaymentSetting.penalityLate10Days*100,
+          penalityLateAbove10Days:latestPaymentSetting.penalityLateAbove10Days*100,
           formattedStartDate,
           formattedEndDate,
           activate
