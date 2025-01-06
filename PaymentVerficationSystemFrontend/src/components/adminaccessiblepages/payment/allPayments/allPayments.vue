@@ -366,7 +366,7 @@ export default {
           }
         }
       } else {
-        // alert("overdue")
+       
         console.log("payments", this.payments);
         if (this.selectedYear == "" || this.selectedYear == "all") {
           this.searchedpayments = this.payments.filter(

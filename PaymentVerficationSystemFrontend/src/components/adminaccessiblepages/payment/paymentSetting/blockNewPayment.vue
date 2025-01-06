@@ -161,7 +161,7 @@
 
                   <div class="mb-4">
                     <label class="custom-label" for="penalityLate5Days">
-                      {{ $t("penaltyPerFiveDaysPercentage") }}
+                      {{ $t("penaltyPerFiveDaysPercentage") }} %
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -174,7 +174,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="upTo10Days">
-                      {{ $t("penaltyPerTenDaysPercentage") }}
+                      {{ $t("penaltyPerTenDaysPercentage") }}%
 
                       <span class="text-red-500 ml-1">*</span>
                     </label>
@@ -188,7 +188,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label" for="above10DaysInMonth">
-                      {{ $t("penaltyPerAboveTenDaysPercentage") }}
+                      {{ $t("penaltyPerAboveTenDaysPercentage") }}%
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -486,7 +486,7 @@
                       >{{ $t("penaltyPerAboveTenDaysPercentage") }}:</span
                     >
                     <span class="text-lg text-gray-800"
-                      >{{ paymentSetting.penalityLateAbove10Days }}%</span
+                      >{{ paymentSetting.penalityLateAbove10Days }}</span
                     >
                   </div>
                 </div>
@@ -682,7 +682,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label">
-                      {{ $t("penalityFiveDaysPercentage") }}
+                      {{ $t("penalityFiveDaysPercentage") }}  %
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -694,7 +694,7 @@
                   </div>
                   <div class="mb-4">
                     <label class="custom-label">
-                      {{ $t("penaltyPerTenDaysPercentage") }}
+                      {{ $t("penaltyPerTenDaysPercentage") }}%
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -707,7 +707,7 @@
 
                   <div class="mb-4">
                     <label class="custom-label">
-                      {{ $t("penaltyPerAboveTenDaysPercentage") }}
+                      {{ $t("penaltyPerAboveTenDaysPercentage") }}%
                       <span class="text-red-500 ml-1">*</span>
                     </label>
                     <input
@@ -912,11 +912,12 @@ export default {
       }
     },
   },
+
   async mounted() {
     this.paymentActivated = true;
     try {await this.$apiGet("/api/v1/paymentSetting/latest")
       .then((response) => {
-        console.log("response latest setting", response);
+        console.log("response latest setting kkkkk", response);
         if (response.status === 1) {
           this.paymentSettingCreated = 1;
           if (response.paymentSetting) {
