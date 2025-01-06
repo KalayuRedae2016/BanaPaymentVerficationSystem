@@ -1516,6 +1516,8 @@ exports.reports = catchAsync(async (req, res, next) => {
 });
 
 exports.resetAll = catchAsync(async (req, res, next) => {
+  try {
+
     const deletedOrgs = await Organization.deleteMany({});
     const deletedUsers = await User.deleteMany({});
     const deletedSettings = await PaymentSetting.deleteMany({});
@@ -1533,5 +1535,7 @@ exports.resetAll = catchAsync(async (req, res, next) => {
         deletedApikeys: deletedApikeys.deletedCount
       }
     });
-
+  } catch (error) {
+    next(error); // Passing the error to the error handler
+  }
 });
