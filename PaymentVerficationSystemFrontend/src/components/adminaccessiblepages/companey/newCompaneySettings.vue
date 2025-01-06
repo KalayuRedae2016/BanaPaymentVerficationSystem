@@ -1,6 +1,10 @@
 <template>
   <div class="container flex-col">
-    <Toasst ref="toast" />
+
+
+    <Toast ref="toast" />
+
+
     <div class="px-4 py-2">
       <h2 class="text-md font-bold mt-2 text-indigo-800 font-bold">
         {{ $t("companyProfile") }}
@@ -255,7 +259,9 @@
 </template>
 
 <script>
+
 import Toast from "../../Common/Toast.vue";
+
 export default {
   name: "paymentsView",
   components: {
@@ -269,9 +275,13 @@ export default {
       showSuccessToast: false,
 
       showError: false,
+
       showWarning: false,
+
       warningMessage: "",
+
       errorMessage: "",
+
       successMessage: "",
       isInputFocused: false,
       isInputFocused1: false,
@@ -313,8 +323,7 @@ export default {
       this.companyPrefixCodeIsRequired = false;
 
       if (this.companyName === "" || this.companyName === null) {
-        //alert("hii");
-
+  
         this.companyNameIsRequired = true;
         return;
       }
@@ -353,9 +362,10 @@ export default {
       try {
         this.$apiPost("/api/v1/organization", companeyProfileData)
         .then((response) => {
-          console.log("response from creating ", response);
+          console.log("response from creatinghhh", response);
           if (response.status == 1) {
-            this.$router.push("/admindashboard/empty-companey");
+           this.$refs.toast.showSuccessToastMessage(response.message);
+           this.$router.push("/admindashboard/empty-companey");
           }
         })
       } catch(error) {

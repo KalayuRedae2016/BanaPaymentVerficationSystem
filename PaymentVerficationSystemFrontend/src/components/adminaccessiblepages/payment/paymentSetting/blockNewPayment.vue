@@ -50,7 +50,7 @@
                   <div class="w-full">
                     <label class="custom-label" for="amount">
                       {{ $t("urgent") }}
-                      <span class="text-red-500 ml-1">*</span>
+                    
                     </label>
                     <input
                       type="number"
@@ -64,7 +64,7 @@
                   <div class="">
                     <label class="custom-label" for="amount">
                       {{ $t("service") }}
-                      <span class="text-red-500 ml-1">*</span>
+              
                     </label>
                     <input
                       type="number"
@@ -578,7 +578,7 @@
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
                       {{ $t("urgentAmount") }}
-                      <span class="text-red-500 ml-1">*</span>
+                    
                     </label>
                     <input
                       type="number"
@@ -592,7 +592,7 @@
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
                       {{ $t("serviceAmount") }}
-                      <span class="text-red-500 ml-1">*</span>
+                     
                     </label>
                     <input
                       type="number"

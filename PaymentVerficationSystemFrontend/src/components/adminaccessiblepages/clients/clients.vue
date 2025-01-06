@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mb-48">
     <Toast ref="toast" />
     <div class="container mx-auto p-4 flex flex-col">
   <div class="flex flex-row w-full border-b border-blue-500 pb-1">

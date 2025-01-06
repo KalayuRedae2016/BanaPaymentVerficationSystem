@@ -1500,7 +1500,7 @@ export default {
 
 
 
-      console.log("data to be confirmed are ",this.payload);
+      console.log("data to be confirmed aremmm ",this.payload);
 
       // Check if the payment type is valid
       if (paymentActions[this.paymentType]) {

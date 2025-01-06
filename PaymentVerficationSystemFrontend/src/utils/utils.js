@@ -193,6 +193,20 @@ export async function apiPatch(url, id, data, customHeaders = {}) {
   
   // Export for reuse in other file
 }
+
+export async function apiDelete(url, id = null, customHeaders = {}) {
+  const apiClient = getApiClient(); // Get the API client instance
+  try {
+    const headers = getDefaultHeaders(customHeaders);
+    const finalUrl = id ? `${url}/${id}` : url; // Append ID if provided
+    const response = await apiClient.delete(finalUrl, { headers });
+    return response.data; // Return response data
+  } catch (error) {
+    const handledError = handleApiError(error); // Handle error
+    throw handledError; // Re-throw the error
+  }
+}
+
 export function isStrongPassword(password) {
     const minLength = 8; // Minimum length requirement
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
