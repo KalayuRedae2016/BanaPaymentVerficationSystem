@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch,isStrongPassword,validateField,gregorianToEthiopian} from "../utils/utils"; // Adjust the path to match your project structure
+import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch,apiDelete,isStrongPassword,validateField,gregorianToEthiopian} from "../utils/utils"; // Adjust the path to match your project structure
 export default {
   async install(app) {
     // Check environment and set base URL
@@ -65,6 +65,7 @@ export default {
       $apiPost:apiPost,
       $apiPut:apiPut,
       $apiPatch:apiPatch,
+      $apiDelete:apiDelete,
       $isStrongPassword:isStrongPassword,
       $validateField:validateField,
       $gcEthio:gregorianToEthiopian,      

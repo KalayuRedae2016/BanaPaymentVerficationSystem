@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Toast ref="toast"/>
     <!-- <div
       v-if="organizationCreated ===0"
       class="loader mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
@@ -198,12 +199,13 @@
 import newCompanyProfile from "./newCompaneySettings.vue";
 import { mapGetters } from "vuex";
 import LoadingSpinner from '../../Common/LoadingSpinner.vue';
-
+import Toast from '../../Common/Toast.vue'
 export default {
 
   components: {
     newCompanyProfile,
     LoadingSpinner,
+    Toast,
   },
 
   name: "paymentsView",
@@ -250,7 +252,7 @@ export default {
 
  async  mounted() {
     if (this.$route.query.fromEmpty === "true") {
-      this.showSuccessToastMessage(
+      this.$refs.toast.showSuccessToastMessage(
         "Your Company Profile Creeated Successfully"
       );
       setTimeout(() => {
