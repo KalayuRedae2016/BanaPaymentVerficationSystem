@@ -25,7 +25,7 @@
             // alert("in response");
 
             console.log("response",response);
-
+            console.log("response",response.message);
             this.$refs.toast.showSuccessToastMessage("Tables Reset Successfully");
 
              this.$store.dispatch("logout");
