@@ -21,11 +21,12 @@
        if (confirm("Are you sure you want to delete this user?")) {
         try { this.$apiDelete.delete('/api/v1/reset/resetAll','').then(response=>{
             console.log("response",response);
+            this.$refs.toast.showSuccessToastMessage("Tables Reset Successfully");
          })
         }catch(error){
 
          }finally{
-            
+
          }
         }
       },
