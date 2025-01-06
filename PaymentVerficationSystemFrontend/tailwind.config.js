@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: 'class', 
+
+  //darkMode: 'class', 
+  darkMode: 'media',
   content: [
     "./index.html",
     "./src/**/*.{vue,js,ts,jsx,tsx}",
@@ -32,6 +34,8 @@ export default {
         'custom-red': '0 4px 6px -1px rgba(220, 38, 38, 0.5)',
       },
       colors: {//text-color,....
+        darkBackground: '#1a202c', // Example of a dark background color
+        darkText: '#ffffff', // White text for dark mode
         primary: '#6366f1',
         secondary: '#4f46e5',
         tertiary: '#c7d2fe',
@@ -39,6 +43,8 @@ export default {
         default: '#fff',
         'custom-dark': '#1e1e1e',
         'custom-light': '#ffffff',
+        main: '#3490dc', // Your main color for light mode
+        'main-dark': '#1e3a8a', // Your main color for dark mode
       },
       fontFamily: {//font-sans
         sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
@@ -108,6 +114,7 @@ export default {
         '48': '12rem',
         '56': '14rem',
         '64': '16rem',
+        '80': '20rem',
       },
       screens: {//sm,md,lg,xl,2xl:
         'sm': '640px',

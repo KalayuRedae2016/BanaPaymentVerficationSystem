@@ -11,7 +11,7 @@
           v-if="paymentSettingCreated === 0"
           class="mx-auto w-1/2 mb-16 text-cyan-500 mt-16 md:ml-32"
         ></div>
-
+<!-- //if payment not created -->
         <div
           v-if="paymentSettingCreated === 2"
           class="w-full border border-gray-300 rounded-lg mt-5"
@@ -19,7 +19,7 @@
           <div class="m-4">
             <form action="">
               <div class="flex flex-col lg:flex-row lg:space-x-12">
-                <div class="flex flex-col w-full lg: w-1/2">
+                <div class="flex flex-col w-full lg: w-1/2 space-y-3">
                   <div class="">
                     <label class="custom-label" for="amount">
                       {{ $t("regularAmount") }}
@@ -290,14 +290,14 @@
               <button
                 @click.prevent="createRegularPayment()"
                 type="submit"
-                class="custom-button"
+                class="custom-button mt-5"
               >
                 <i class="fa fa-arrow-right"></i> {{ $t("submit") }}
               </button>
             </form>
           </div>
         </div>
-
+<!-- //if payment is created it will be displayed here please  -->
         <div v-if="paymentSettingCreated === 1" class="w-full m-4">
           <div v-if="paymentActivate">
             <p class="text-blue-500">
@@ -485,7 +485,7 @@
                       >{{ $t("penaltyPerAboveTenDaysPercentage") }}:</span
                     >
                     <span class="text-lg text-gray-800"
-                      >{{ paymentSetting.penalityLateAbove10Days }}</span
+                      >{{ paymentSetting.penalityLateAbove10Days }}%</span
                     >
                   </div>
                 </div>
@@ -508,12 +508,14 @@
       </div>
     </div>
 
+<!-- //during the activation and the editing -->
+
     <div v-if="showPaymentEditingActivating" class="">
       <transition name="fade" mode="out-in">
         <div
           class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-80 px-4"
         >
-          <div
+          <div style="height:500px;"
             class="bg-white rounded-lg border border-cyan-500 px-3 py-6 lg:p-6"
           >
             <div class="flex flex-row items-center">
@@ -545,9 +547,9 @@
 
             <hr class="my-4 md:min-w-full bg-red-500" />
 
-            <div class="w-full">
-              <form action.prevent="" class="w-96">
-                <div class="flex flex-col h-96 overflow-y-auto">
+            <div class="mx-2 ">
+              <form action.prevent="" class="">
+                <div class="flex flex-col w-96 h-80 overflow-y-auto">
                   <div class="mb-4">
                     <label class="custom-label" for="amount">
                       {{ $t("regularAmount") }}
@@ -636,6 +638,7 @@
                       <span class="custom-star ml-1">*</span>
                     </label>
                     <select
+                     @change="getMonthDates(paymentSetting.activeYear,paymentSetting.activeMonth)"
                       v-model="paymentSetting.activeMonth"
                       class="custom-select"
                     >
@@ -655,6 +658,7 @@
                       Active Month is required *
                     </p>
                   </div>
+
                   <div class="mb-4">
                     <label for="startingDate" class="custom-label"
                       >{{ $t("startingDay") }}
@@ -831,6 +835,7 @@
                   </button>
                 </div>
               </form>
+
             </div>
           </div>
         </div>
@@ -922,7 +927,8 @@ export default {
           if (response.paymentSetting) {
         
             this.paymentSetting = response.paymentSetting;
-            //alert("hh")
+         // this.paymentSetting.penalityLate10Days = Number(this.paymentSetting.penalityLate10Days).toFixed(0);
+
              if(this.paymentSetting.activate==true){
               this.paymentActivate = true;
              }else{
@@ -947,6 +953,19 @@ export default {
   },
 
   methods: {
+    getMonthDates(year, month) {
+  const formatDate = (date) => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zero for month
+    const dd = String(date.getDate()).padStart(2, '0');      // Add leading zero for day
+    return `${yyyy}-${mm}-${dd}`; // Return in YYYY-MM-DD format
+  };
+
+  this.paymentSetting.startingDate = formatDate(new Date(year, month - 1, 1)); // First day of the month
+  this.paymentSetting.endingDate = formatDate(new Date(year, month, 0));      // Last day of the month
+},
+
+
     async createRegularPayment() {
       console.log(
         this.paymentSetting.subsidyAmount,
