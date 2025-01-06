@@ -1493,7 +1493,8 @@ exports.reports = catchAsync(async (req, res, next) => {
       return res.status(400).json({ error: 'Invalid time range' });
   }
 
-  paymentQuery.createdAt = { $gte: startDate, $lt: endDate };
+  // paymentQuery.createdAt = { $gte: startDate, $lt: endDate };
+  paymentQuery.updatedAt = { $gte: startDate, $lte: endDate };
   const payments = await Payment.find(paymentQuery).populate('user', 'phoneNumber').lean()
   if (!payments.length) {
     return res.status(404).json({ error: 'No payments found for the given criteria' });
