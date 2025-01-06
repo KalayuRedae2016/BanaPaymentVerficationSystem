@@ -1,6 +1,6 @@
 <template>
   <div class="">
-    <Toast ref=""/>
+    <Toast ref="toast"/>
     <button
       @click="confirmDelete"
       class="m-32 px-4 py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
@@ -22,10 +22,14 @@
 
         try { this.$apiClient.delete('/api/v1/reset/resetAll').then(response=>{
 
-            alert("in response");
+            // alert("in response");
 
             console.log("response",response);
+            console.log("response",response.message);
             this.$refs.toast.showSuccessToastMessage("Tables Reset Successfully");
+
+             this.$store.dispatch("logout");
+             this.$router.push("/");
          })
         }catch(error){
 
