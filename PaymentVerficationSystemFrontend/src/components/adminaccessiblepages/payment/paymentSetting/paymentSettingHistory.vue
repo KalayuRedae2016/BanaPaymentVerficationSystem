@@ -85,7 +85,7 @@
         <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
           <div class="flex items-center space-x-3">
             <i class="fas fa-percent text-blue-500"></i>
-            <span class="font-semibold text-sm">{{ $t('registrationFee') }} %:</span>
+            <span class="font-semibold text-sm">{{ $t('registrationFee') }}:</span>
             <span class="text-lg text-gray-800">{{ paymentSetting.regFeeRate }} %</span>
           </div>
         </div>
@@ -129,7 +129,7 @@
           <div class="flex items-center space-x-3">
             <i class="fas fa-clock text-yellow-500"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerFiveDaysPercentage') }}:</span>
-            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate5Days }}</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate5Days }}%</span>
           </div>
         </div>
 
@@ -137,7 +137,7 @@
           <div class="flex items-center space-x-3">
             <i class="fas fa-clock text-yellow-500"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerTenDaysPercentage') }}:</span>
-            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate10Days }}</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate10Days }}%</span>
           </div>
         </div>
 
@@ -145,7 +145,7 @@
           <div class="flex items-center space-x-3">
             <i class="fas fa-clock text-red-500"></i>
             <span class="font-semibold text-sm">{{ $t('penaltyPerAboveTenDaysPercentage') }}:</span>
-            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLateAbove10Days }}</span>
+            <span class="text-lg text-gray-800">{{ paymentSetting.penalityLateAbove10Days }}%</span>
           </div>
         </div>
       </div>

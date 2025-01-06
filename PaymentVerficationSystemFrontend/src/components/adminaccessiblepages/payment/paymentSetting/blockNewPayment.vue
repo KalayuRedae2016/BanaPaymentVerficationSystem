@@ -382,7 +382,7 @@
                   <div class="flex items-center space-x-3">
                     <i class="fas fa-percent text-blue-500"></i>
                     <span class="font-semibold text-sm"
-                      >{{ $t("registrationFee") }} %:</span
+                      >{{ $t("registrationFee") }}:</span
                     >
                     <span class="text-lg text-gray-800"
                       >{{ paymentSetting.regFeeRate }} %</span
@@ -459,7 +459,7 @@
                     >
                     <span class="text-lg text-gray-800">{{
                       paymentSetting.penalityLate5Days
-                    }}</span>
+                    }}%</span>
                   </div>
                 </div>
 
@@ -473,7 +473,7 @@
                     >
                     <span class="text-lg text-gray-800">{{
                       paymentSetting.penalityLate10Days
-                    }}</span>
+                    }}%</span>
                   </div>
                 </div>
 
