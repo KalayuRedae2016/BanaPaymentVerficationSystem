@@ -20,7 +20,7 @@
       confirmDelete() {
        if (confirm("Are you sure you want to delete this user?")) {
 
-        try { this.$apiDelete.delete('/api/v1/reset/resetAll').then(response=>{
+        try { this.$apiClient.delete('/api/v1/reset/resetAll').then(response=>{
 
             alert("in response");
 
