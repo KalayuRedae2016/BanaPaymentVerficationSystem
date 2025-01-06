@@ -22,7 +22,6 @@ const organizationRoutes = require('./routes/organizationRouter');
 const userRouter = require('./routes/userRouter');
 const paymentSettingRouter = require('./routes/paymentSettingRouter');
 const paymentRouter = require('./routes/paymentRouter');
-const resetRouter=require('./routes/resetRoute');
 //const smsRoutes=require('./routes/smsRoutes');
 
 
