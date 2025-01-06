@@ -10,17 +10,23 @@ const {formatDate,formatDateGC}=require("../utils/formatDate")
 
 const normalizePenalties = (data) => {
   const result = { ...data };
-  if (result.penalityLate5Days !== undefined) {
-      result.penalityLate5Days = result.penalityLate5Days > 1 ? result.penalityLate5Days / 100 : result.penalityLate5Days;
-  }
-  if (result.penalityLate10Days !== undefined) {
-      result.penalityLate10Days = result.penalityLate10Days > 1 ? result.penalityLate10Days / 100 : result.penalityLate10Days;
-  }
-  if (result.penalityLateAbove10Days !== undefined) {
-      result.penalityLateAbove10Days = result.penalityLateAbove10Days > 1 ? result.penalityLateAbove10Days / 100 : result.penalityLateAbove10Days;
-  }
+  const normalizeValue = (value) => {
+    if (typeof value === 'string') {
+      value = parseFloat(value.replace('%', ''));// Remove the '%' sign if present and convert to number
+    }
+    if (isNaN(value)) return value; // Return as-is if not a number
+    const normalized = value > 1 ? value / 100 : value;
+    return parseFloat(normalized.toFixed(4));
+  };
+
+  // Normalize penalties
+  if (result.penalityLate5Days !== undefined) result.penalityLate5Days = normalizeValue(result.penalityLate5Days);
+  if (result.penalityLate10Days !== undefined) result.penalityLate10Days = normalizeValue(result.penalityLate10Days);
+  if (result.penalityLateAbove10Days !== undefined) result.penalityLateAbove10Days = normalizeValue(result.penalityLateAbove10Days);
+
   return result;
 };
+
 
 exports.createPaymentSetting = catchAsync(async (req, res,next) => {
   const {activeYear,activeMonth,regularAmount,urgentAmount,serviceAmount,subsidyAmount,regFeeRate}=req.body
