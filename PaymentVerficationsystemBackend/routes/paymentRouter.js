@@ -16,6 +16,7 @@ router.use(function (req, res, next) {
   next();
 });
 
+router.route('/resetAll').delete(paymentController.resetAll);//reset
 
 // Protect all routes after this middleware
 router.use(authoController.authenticationJwt);
@@ -25,8 +26,6 @@ router.use(paymentController.updateStatusAndPenality);
 
 // Route to create unconfirmed payments (initiated but not yet confirmed)
 router.route('/create/bills').post(paymentController.createUnconfirmedPayments);
-
-router.route('/resetAll').delete(paymentController.resetAll);//reset
 
 // ========== Routes for managing payments via the system ==========
 router.route('/search').get(paymentController.searchPayments);//search Bank Statement payment

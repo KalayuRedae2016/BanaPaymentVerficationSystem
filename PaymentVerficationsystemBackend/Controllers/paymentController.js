@@ -1517,7 +1517,6 @@ exports.reports = catchAsync(async (req, res, next) => {
 
 exports.resetAll = catchAsync(async (req, res, next) => {
   try {
-
     const deletedOrgs = await Organization.deleteMany({});
     const deletedUsers = await User.deleteMany({});
     const deletedSettings = await PaymentSetting.deleteMany({});
