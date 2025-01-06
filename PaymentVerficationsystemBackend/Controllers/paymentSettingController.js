@@ -8,75 +8,48 @@ const createPendingPayments=require("../utils/createPendingPayments")
 const {formatDate,formatDateGC}=require("../utils/formatDate")
 
 exports.createPaymentSetting = catchAsync(async (req, res, next) => {
-  const { 
-    activeYear, 
-    activeMonth, 
-    regularAmount, 
-    urgentAmount, 
-    serviceAmount, 
-    subsidyAmount, 
-    regFeeRate, 
-    penalityLate5Days, 
-    penalityLate10Days, 
-    penalityLateAbove10Days 
-  } = req.body;
+  const { activeYear, activeMonth, regularAmount, serviceAmount, regFeeRate, penalityLate5Days, penalityLate10Days, penalityLateAbove10Days, startingDate, endingDate } = req.body;
 
   // Validate required fields
   if (!activeYear || !activeMonth || !regularAmount || !serviceAmount || !regFeeRate) {
-    return next(new AppError('Please provide Required Fields', 400));
+    return next(new AppError('Missing Required Fields', 400));
   }
 
-  // Normalize penalty fields
+  // Normalize penalties
   const normalizeValue = (value) => (value > 1 ? value / 100 : value);
-
-  const normalizedData = {
-    ...req.body,
-    penalityLate5Days: penalityLate5Days !== undefined ? normalizeValue(penalityLate5Days) : undefined,
-    penalityLate10Days: penalityLate10Days !== undefined ? normalizeValue(penalityLate10Days) : undefined,
-    penalityLateAbove10Days: penalityLateAbove10Days !== undefined ? normalizeValue(penalityLateAbove10Days) : undefined,
+  const penalties = {
+    penalityLate5Days: normalizeValue(penalityLate5Days),
+    penalityLate10Days: normalizeValue(penalityLate10Days),
+    penalityLateAbove10Days: normalizeValue(penalityLateAbove10Days),
   };
 
-  // Set default startingDate and endingDate if not provided
-  let { startingDate, endingDate } = req.body;
+  // Set default dates
+  const start = startingDate ? new Date(startingDate) : new Date(Date.UTC(activeYear, activeMonth - 1, 1));
+  const end = endingDate ? new Date(endingDate) : new Date(Date.UTC(activeYear, activeMonth, 0));
 
-  if (!startingDate || !endingDate) {
-    startingDate = new Date(Date.UTC(activeYear, activeMonth - 1, 1)); // First day of the month
-    endingDate = new Date(Date.UTC(activeYear, activeMonth, 0)); // Last day of the month
-  } else {
-    startingDate = new Date(startingDate);
-    endingDate = new Date(endingDate);
+  if (end <= start) {
+    return next(new AppError(`Ending Date (${end}) should be greater than Starting Date (${start})!`, 400));
   }
 
-  if (endingDate <= startingDate) {
-    return next(new AppError(`Ending Date (${endingDate}) should be greater than Starting Date (${startingDate})!`, 400));
-  }
-
-  // Check for existing PaymentSetting for the active year and month
-  const existingSetting = await PaymentSetting.findOne({ activeYear, activeMonth });
-  if (existingSetting) {
+  // Prevent duplicate settings
+  if (await PaymentSetting.findOne({ activeYear, activeMonth })) {
     return next(new AppError(`Payment Setting already exists for Month-${activeMonth}-Year-${activeYear}`, 400));
   }
 
-  // Deactivate all previous "latest" settings
-  await PaymentSetting.updateMany({ latest: true }, { $set: { latest: false } });
-
-  // Create a new PaymentSetting
-  const newSetting = new PaymentSetting({
-    ...normalizedData,
-    startingDate,
-    endingDate,
+  // Deactivate previous settings and create new one
+  await PaymentSetting.updateMany({ latest: true }, { latest: false });
+  const newSetting = await PaymentSetting.create({
+    ...req.body,
+    ...penalties,
+    startingDate: start,
+    endingDate: end,
     latest: true,
   });
 
-  await newSetting.save();
-
-  // Fetch all active users with the "User" role
+  /// Create pending payments for all active users
   const users = await User.find({ isActive: true, role: "User" });
-
-  // Create pending payments for all users
-  for (const user of users) {
-    await createPendingPayments(user, newSetting.activeYear, newSetting.activeMonth);
-  }
+  const createPayments = users.map((user) => createPendingPayments(user, activeYear, activeMonth));
+  await Promise.allSettled(createPayments);
 
   res.status(200).json({
     status: 1,
@@ -87,122 +60,128 @@ exports.createPaymentSetting = catchAsync(async (req, res, next) => {
 
 exports.getPaymentSetting = catchAsync(async (req, res, next) => {
   const { activeYear, activeMonth } = req.query;
-  const settingQuery = {};
 
-  // If activeYear or activeMonth is provided, build the query
+  const settingQuery = {};
   if (activeYear) settingQuery.activeYear = activeYear;
   if (activeMonth) settingQuery.activeMonth = activeMonth;
 
-  // Fetch the payment setting based on the query, or get the latest one if no query is provided
-  let paymentSettings;
-  if (!activeYear && !activeMonth) {
-    paymentSettings = await PaymentSetting.findOne().sort({ createdAt: -1 }); // Get the most recent payment setting
-  } else {
-    paymentSettings = await PaymentSetting.findOne(settingQuery).sort({ createdAt: 1 });
-  }
+  const paymentSettings = await PaymentSetting.findOne(settingQuery)
+    .sort(settingQuery.activeYear || settingQuery.activeMonth ? { createdAt: 1 } : { createdAt: -1 });
 
-  // Handle case when no payment setting is found
   if (!paymentSettings) {
     return res.status(404).json({
       status: 0,
-      message: "No Payment setting found. Please create one first.",
-      paymentSetting: null
+      message: `No Payment setting found for ${activeYear || "any year"}-${activeMonth || "any month"}.`,
+      paymentSetting: null,
     });
   }
 
-  // Format the starting and ending dates
-  const formattedStartDate = paymentSettings.startingDate ? formatDate(paymentSettings.startingDate) : null;
-  const formattedEndDate = paymentSettings.endingDate ? formatDate(paymentSettings.endingDate) : null;
+  const { startingDate, endingDate, penalityLate5Days, penalityLate10Days, penalityLateAbove10Days, ...rest } = paymentSettings._doc;
 
-  // console.log(paymentSettings)
   res.status(200).json({
     status: 1,
-    message: paymentSettings.activeYear && paymentSettings.activeMonth
-      ? `Payment setting for ${paymentSettings.activeMonth}/${paymentSettings.activeYear} fetched successfully.`
+    message: activeYear && activeMonth
+      ? `Payment setting for ${activeMonth}/${activeYear} fetched successfully.`
       : "Latest payment setting fetched successfully.",
     paymentSetting: {
-      ...paymentSettings._doc,
-      startingDate:formatDateGC(paymentSettings.startingDate),
-      endingDate:formatDateGC(paymentSettings.endingDate),
-      penalityLate5Days:paymentSettings.penalityLate5Days*100,
-      penalityLate10Days:paymentSettings.penalityLate10Days*100,
-      penalityLateAbove10Days:paymentSettings.penalityLateAbove10Days*100,
-      formattedStartDate,
-      formattedEndDate
-    }
+      ...rest,
+      startingDate: formatDateGC(startingDate),
+      endingDate: formatDateGC(endingDate),
+      penalityLate5Days: Math.round(penalityLate5Days * 100),
+      penalityLate10Days: Math.round(penalityLate10Days * 100),
+      penalityLateAbove10Days: Math.round(penalityLateAbove10Days * 100),
+      formattedStartDate: startingDate ? formatDate(startingDate) : null,
+      formattedEndDate: endingDate ? formatDate(endingDate) : null,
+    },
   });
 });
 
 exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
-    // Find the payment setting marked as latest
   const latestPaymentSetting = await PaymentSetting.findOne({ latest: true });
-    if (!latestPaymentSetting) {
-        return res.status(200).json({
-            status: 1,
-            message: "No latest payment setting found.",
-            latestPaymentSetting: null
-        });
-    }
 
-  const formattedStartDate = latestPaymentSetting.startingDate ? formatDate(latestPaymentSetting.startingDate) : null;
-  const formattedEndDate = latestPaymentSetting.endingDate ? formatDate(latestPaymentSetting.endingDate) : null;
-  let activate=false
-  const today=new Date(formatDateGC(new Date()))
-  if(today>new Date(formatDateGC(latestPaymentSetting.endingDate))){
-    activate=true
+  if (!latestPaymentSetting) {
+    return res.status(200).json({
+      status: 1,
+      message: "No latest payment setting found.",
+      latestPaymentSetting: null,
+    });
   }
 
-    console.log(latestPaymentSetting)
-    res.status(200).json({
-        status: 1,
-        message: "Latest setting fetched successfullyyyyy.",
-        paymentSetting: {
-          ...latestPaymentSetting._doc,
-          startingDate:formatDateGC(latestPaymentSetting.startingDate),
-          endingDate:formatDateGC(latestPaymentSetting.endingDate),
-          penalityLate5Days:latestPaymentSetting.penalityLate5Days*100,
-          penalityLate10Days:latestPaymentSetting.penalityLate10Days*100,
-          penalityLateAbove10Days:latestPaymentSetting.penalityLateAbove10Days*100,
-          formattedStartDate,
-          formattedEndDate,
-          activate
-        }
-    });
+  const today = new Date(formatDateGC(new Date()));
+  const { startingDate, endingDate, penalityLate5Days, penalityLate10Days, penalityLateAbove10Days, ...rest } = latestPaymentSetting._doc;
+
+  const formattedStartDate = startingDate ? formatDate(startingDate) : null;
+  const formattedEndDate = endingDate ? formatDate(endingDate) : null;
+  const activate = today > new Date(formatDateGC(endingDate));
+
+  res.status(200).json({
+    status: 1,
+    message: "Latest payment setting fetched successfully.",
+    paymentSetting: {
+      ...rest,
+      startingDate: formatDateGC(startingDate),
+      endingDate: formatDateGC(endingDate),
+      penalityLate5Days: Math.round((penalityLate5Days || 0) * 100),
+      penalityLate10Days: Math.round((penalityLate10Days || 0) * 100),
+      penalityLateAbove10Days: Math.round((penalityLateAbove10Days || 0) * 100),
+      formattedStartDate,
+      formattedEndDate,
+      activate,
+    },
+  });
 });
 
-exports.updatePaymentSettingBYId = catchAsync(async (req, res,next) => {
-    const settingId= req.params.id;
-    let updatedData=req.body
+exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
+  const settingId = req.params.id;
+  
+  if (!settingId) {
+    return next(new AppError('Setting ID is required', 404));
+  }
 
-    if(!settingId){
-      return next(new AppError('Setting ID is required', 404));
-    }
-    updatedData = normalizePenalties(updatedData);
+  let updatedData = req.body;
+  
+  // Function to normalize values (from percentage to decimal)
+  const normalizeValue = (value) => (value > 1 ? value / 100 : value);
 
-    if(updatedData.activeMonth && updatedData.activeYear){
-    updatedData.startingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 1)); // First day of the month
-    updatedData.endingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth-1, 30));  // 30th day of the month
-    }
+  // Normalize penalties if provided
+  if (updatedData.penalityLate5Days) updatedData.penalityLate5Days = normalizeValue(updatedData.penalityLate5Days);
+  if (updatedData.penalityLate10Days) updatedData.penalityLate10Days = normalizeValue(updatedData.penalityLate10Days);
+  if (updatedData.penalityLateAbove10Days) updatedData.penalityLateAbove10Days = normalizeValue(updatedData.penalityLateAbove10Days);
 
-    const paymentSetting = await PaymentSetting.findOneAndUpdate({ _id: settingId,latest:true}, updatedData,{ new: true, runValidators: true });
-    if (!paymentSetting) {
-      return next(new AppError('Payment setting is not found', 404))
-    }
+  // Set starting and ending dates if activeYear and activeMonth are provided
+  if (updatedData.activeYear && updatedData.activeMonth) {
+    updatedData.startingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth - 1, 1));  // First day of the month
+    updatedData.endingDate = new Date(Date.UTC(updatedData.activeYear, updatedData.activeMonth, 0));  // Last day of the month
+  }
+
+  // Find and update the payment setting (must be marked as latest)
+  const paymentSetting = await PaymentSetting.findOneAndUpdate(
+    { _id: settingId, latest: true },
+    updatedData,
+    { new: true, runValidators: true }
+  );
+
+  // Handle case if the payment setting is not found
+  if (!paymentSetting) {
+    return next(new AppError('Payment setting not found or not marked as latest', 404));
+  }
+
+  // Format the start and end dates for the response
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
-    res.status(200).json({
-      status:1,
-      message:`Payment Setting is Updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
-      paymentSetting:{
-        ...paymentSetting._doc,
-        startingDate:formatDateGC(paymentSetting.startingDate),
-        endingDate:formatDateGC(paymentSetting.endingDate),
-        formattedStartDate,
-        formattedEndDate
-      }
-    });
-
+  // Send the response with the updated payment setting
+  res.status(200).json({
+    status: 1,
+    message: `Payment setting updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
+    paymentSetting: {
+      ...paymentSetting._doc,
+      startingDate: formatDateGC(paymentSetting.startingDate),
+      endingDate: formatDateGC(paymentSetting.endingDate),
+      formattedStartDate,
+      formattedEndDate
+    }
+  });
 });
 
 exports.deleteSetting = catchAsync(async (req, res, next) => {
