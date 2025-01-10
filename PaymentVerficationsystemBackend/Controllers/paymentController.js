@@ -1207,6 +1207,7 @@ exports.importPayments = catchAsync(async (req, res, next) => {
     return next(new AppError('No file uploaded', 400));
   }
   const filePath = req.file.path; // Path to the uploaded file
+  console.log(filePath)
   try {
     const result = await importFromExcel(filePath, Payment);
     console.log(result)
