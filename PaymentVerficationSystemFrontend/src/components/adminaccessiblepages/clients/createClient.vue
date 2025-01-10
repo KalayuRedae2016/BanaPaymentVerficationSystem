@@ -6,7 +6,7 @@
         class="flex items-center justify-between p-3 bg-white border-b border-blue-500"
       >
         <div class="flex items-center space-x-6">
-          <h1 class="text-xl text-indigo-800 font-bold">
+          <h1 class="text-xl text-blue-500 font-bold">
             {{ $t("registerClient") }}
           </h1>
         </div>
@@ -94,7 +94,7 @@
               class="custom-input text-xs"
               :placeholder="$t('tigrignaFullName')"
               style="padding-left: 16px"
-              v-model="fullName"
+              v-model="tigrignaFullName"
             />
           </div>
 
@@ -114,7 +114,10 @@
               <option value="Female">{{ $t("female") }}</option>
             </select>
           </div>
+        </div>
 
+        <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
+          
           <div class="w-full">
             <label class="custom-label"> {{ $t("age") }} <span>*</span></label>
             <input
@@ -127,9 +130,6 @@
               v-model="age"
             />
           </div>
-        </div>
-
-        <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
           <div class="w-full">
             <label class="custom-label" for="address">
               {{ $t("address") }}
@@ -181,7 +181,7 @@
               </select>
               <input
                 type="text"
-                class="rounded-sm custom-input h-12 mt-5 text-xs ml-2 w-3/4"
+                class="rounded-sm custom-input h-10  text-xs ml-2 w-3/4"
                 required
                 :placeholder="$t('phoneNumber')"
                 style="padding-left: 16px"
@@ -196,7 +196,7 @@
               <span class="text-red-500 ml-1"></span>
             </label>
             <input
-              class="custom-input mt-5 text-xs"
+              class="custom-input  text-xs"
               type="file"
               ref="fileInput"
               accept="image/*"
@@ -400,6 +400,7 @@ export default {
       firstName: "",
       middleName: "",
       lastName: "",
+      tigrignaFullName:"",
       email: "",
       address: "",
       phoneNumber: "",
@@ -681,7 +682,8 @@ export default {
       formData.append("email", this.email);
       formData.append("phoneNumber", fullPhoneNumber);
       formData.append("profileImage", this.imageFile);
-      formData.append("fullName", this.fullName);
+      //formData.append("fullName", this.fullName);
+      formData.append("tigrignaName",this.tigrignaFullName);
       console.log("image", this.imageFile);
       console.log("formData", formData);
 

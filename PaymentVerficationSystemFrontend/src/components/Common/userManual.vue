@@ -181,9 +181,7 @@
         </div>
       </div>
 
-      <div class="bg-white text-black dark:bg-gray-900 dark:text-white p-4">
-  This content changes based on dark mode.
-</div>
+
     </div>
   </template>
   

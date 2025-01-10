@@ -24,74 +24,118 @@
     <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
       <div class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0  ">
         <div class="m-4 w-full h-full lg:w-1/4 h-64 ">
-            <img
-              :src="imageData"
-              alt="User Profile Image"
-              class="h-64  w-64 lg:w-96"
-            />
-          </div>
+          <img :src="imageData" alt="User Profile Image" class="h-64  w-64 lg:w-96" />
+        </div>
 
-        <div class="mt-3 mx-auto lg:w-2/3">
-          <div class="bg-white p-2 rounded-md shadow-sm mt-3">
-            <div class="flex items-center space-x-3 border-b border-gray-300">
-              <i class="fas fa-id-badge text-green-500"></i>
+        <div class="mt-3 lg:w-2/3 mx-4 lg:mx-0 ">
+          <!-- Grid container -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <!-- First Column -->
+            <div class="space-y-4">
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-id-badge text-green-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("User Code") }}: {{ clientProfile.userCode }}</span>
+                </div>
+              </div>
 
-              <span class="text-sm text-gray-800">{{ $t("User Code") }}:{{ clientProfile.userCode }}</span>
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-user text-yellow-500"></i>
+                  <span class="text-sm text-gray-800">Full Name : {{ clientProfile.fullName }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-user text-yellow-500"></i>
+                  <span class="text-sm text-gray-800">Tig Full Name : {{ clientProfile.tigrignaName }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-venus-mars text-indigo-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("Gender") }}: {{ clientProfile.gender }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-calendar-alt text-green-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("Age") }}: {{ clientProfile.age }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-map-marker-alt text-blue-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("Address") }}: {{ clientProfile.address }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Second Column -->
+            <div class="space-y-4">
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-phone text-purple-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("phoneNumber") }}: {{ clientProfile.phoneNumber }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-envelope text-green-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("Email") }}: {{ clientProfile.email }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-map-marker-alt text-blue-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("Created at") }}: {{ clientProfile.formattedCreatedAt
+                    }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-map-marker-alt text-blue-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("Updated At") }}: {{ clientProfile.formattedUpdatedAt
+                    }}</span>
+                </div>
+              </div>
+
+              <div class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <svg class="w-6 h-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 16h-1v-4h1m0 4h-1m1-4V8h-1v4h1m0 4h-1V8h1m0-4h-1V4h1v4zM12 9V5h.01M4.93 4.93l.08-.08 6.99 6.99M8.34 8.34l6.99 6.99-.08.08M4.93 19.07l6.99-6.99M4.93 4.93l14.14 14.14">
+                    </path>
+                  </svg>
+                  <span class="text-sm text-black">{{ $t("Current Status") }}:</span>
+                  <span class="text-sm text-white px-2 py-0.5 mb-2 rounded-full"
+                    :class="clientProfile.isActive ? 'bg-blue-500' : 'bg-yellow-500'">
+                    {{ clientProfile.isActive ? $t('Active') : $t('Inactive') }}
+                  </span>
+                </div>
+              </div>
+
+              <div v-if="clientProfile.reason" class="bg-white p-2 rounded-md shadow-sm">
+                <div class="flex items-center space-x-3 border-b border-gray-300">
+                  <i class="fas fa-exclamation-circle text-red-500"></i>
+                  <span class="text-sm text-gray-800">{{ $t("Reason") }}: {{ clientProfile.reason }}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div class="bg-white p-2 rounded-md shadow-sm">
-            <div class="flex items-center space-x-3 border-b border-gray-300">
-              <i class="fas fa-user text-yellow-500"></i>
-
-              <span class="text-sm text-gray-800">Full Name : {{ clientProfile.fullName }}</span>
-            </div>
-          </div>
-
-          <div class="bg-white p-2 rounded-md shadow-sm mt-3">
-            <div class="flex items-center space-x-3 border-b border-gray-300">
-              <i class="fas fa-calendar-alt text-green-500"></i>
-
-              <span class="text-sm text-gray-800">{{ $t("Age") }}:{{ clientProfile.age }}</span>
-            </div>
-          </div>
-
-          <div class="bg-white p-2 rounded-md shadow-sm">
-            <div class="flex items-center space-x-3 border-b border-gray-300">
-              <i class="fas fa-venus-mars text-indigo-500"></i>
-
-              <span class="text-sm text-gray-800">{{ $t("Gender") }}:{{ clientProfile.gender }}</span>
-            </div>
-          </div>
-
-          <div class="bg-white p-2 rounded-md shadow-sm">
-            <div class="flex items-center space-x-3 border-b border-gray-300">
-              <i class="fas fa-map-marker-alt text-blue-500"></i>
-
-              <span class="text-sm text-gray-800">{{ $t("Address") }}:{{ clientProfile.address }}</span>
-            </div>
-          </div>
-
-          <div class="bg-white p-2 rounded-md shadow-sm">
-            <div class="flex items-center space-x-3 border-b border-gray-300">
-              <i class="fas fa-phone text-purple-500"></i>
-
-              <span class="text-sm text-gray-800">{{ $t("phoneNumber") }}:{{ clientProfile.phoneNumber }}</span>
-            </div>
-          </div>
-
-          <div class="bg-white p-2 rounded-md shadow-sm">
-            <div class="flex items-center space-x-3 border-b border-gray-300">
-              <i class="fas fa-envelope text-green-500"></i>
-
-              <span class="text-sm text-gray-800">{{ $t("Email") }}:{{ clientProfile.email }}</span>
-            </div>
-          </div>
-
-          <button @click="showEditModal = true" class="custom-button my-5 ml-3">
+          <button @click="showEditModal = true" class="custom-button my-5 w-full lg:w-auto">
             <i class="fas fa-edit mr-2"></i>Edit
           </button>
         </div>
+
       </div>
     </div>
 
@@ -165,7 +209,14 @@
                     <input type="text" id="closeAmount" class="custom-input" v-model="clientProfile.lastName"
                       :placeholder="$t('lastName')" />
                   </div>
-
+                  <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg">
+                      {{ $t("Tig Full Name") }}
+                      <span class="text-red-500 ml-1">*</span>
+                    </label>
+                    <input type="text" id="closeAmount" class="custom-input" v-model="clientProfile.tigrignaName"
+                      :placeholder="$t('lastName')" />
+                  </div>
                   <div class="w-full">
                     <label class="block text-sm font-medium text-gray-700 sm:text-base md:text-lg">
                       Gender
@@ -339,40 +390,40 @@ export default {
     console.log("client Id", this.clientId);
 
     try {
-      await this.$apiGetById('/api/v1/users',this.clientId)
-      .then((response) => {
-        console.log("Response client profile", response);
-        this.clientProfile = response.clientProfile;
-        this.imageData = "data:image/jpeg;base64," + response.imageData;
-        this.isLoading = false;
-      })} catch(error)
-     {
-        console.error("Error fetching client datakk:", error);
-      }finally{
+      await this.$apiGetById('/api/v1/users', this.clientId)
+        .then((response) => {
+          console.log("Response client profile", response);
+          this.clientProfile = response.clientProfile;
+          this.imageData = "data:image/jpeg;base64," + response.imageData;
+          this.isLoading = false;
+        })
+    } catch (error) {
+      console.error("Error fetching client datakk:", error);
+    } finally {
 
-      };
+    };
   },
   methods: {
     handleImageInput() {
       const fileInput = this.$refs.fileInput;
       console.log("fileInput", fileInput);
       if (fileInput && fileInput.files.length > 0) {
-      //  alert("ll")
+        //  alert("ll")
         const file = fileInput.files[0];
         this.imageFile = file;
         // Rest of your code to handle the file
 
         console.log("Selected file:", file);
-      console.log("File type:", file.type); // This should be 'image/jpeg', 'image/png', etc.
-      console.log("File size:", file.size); // Check size to ensure it's within acceptable limits
-      console.log("File name:", file.name); // Check the name of the file
+        console.log("File type:", file.type); // This should be 'image/jpeg', 'image/png', etc.
+        console.log("File size:", file.size); // Check size to ensure it's within acceptable limits
+        console.log("File name:", file.name); // Check the name of the file
 
-      // Optional: Check if the file is an image based on MIME type
-      if (!file.type.startsWith('image/')) {
-        console.log("Not a valid image file.");
-      } else {
-        console.log("Image is valid.");
-      }
+        // Optional: Check if the file is an image based on MIME type
+        if (!file.type.startsWith('image/')) {
+          console.log("Not a valid image file.");
+        } else {
+          console.log("Image is valid.");
+        }
       }
     },
     async editDetail() {
@@ -390,6 +441,7 @@ export default {
       formData.append("firstName", this.clientProfile.firstName);
       formData.append("middleName", this.clientProfile.middleName);
       formData.append("lastName", this.clientProfile.lastName);
+      formData.append("tigrignaName", this.clientProfile.tigrignaName);
       formData.append("age", this.clientProfile.age);
       formData.append("address", this.clientProfile.address);
       formData.append("email", this.clientProfile.email);
@@ -398,10 +450,10 @@ export default {
 
 
       const customHeaders = {
-    "Content-Type": "multipart/form-data",
-   };
+        "Content-Type": "multipart/form-data",
+      };
       try {
-        await this.$apiPatch('/api/v1/users', this.clientProfile._id, formData,customHeaders)
+        await this.$apiPatch('/api/v1/users', this.clientProfile._id, formData, customHeaders)
           .then((response) => {
             console.log("response from the update: ", response);
             if (response.status === 1) {
@@ -409,12 +461,12 @@ export default {
               this.clientProfile = response.updatedUser;
               this.imageData = "data:image/jpeg;base64," + response.imageData;
               this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
-             // this.isLoading = false;
+              // this.isLoading = false;
 
-            //   this.$router.replace({ path: `/admindashboard/edit-client/${this.clientProfile._id}`}).catch(() => {
-            //   console.log("Navigation to the same route was prevented.");
-            // });
-            //   this.$reloadPage();
+              //   this.$router.replace({ path: `/admindashboard/edit-client/${this.clientProfile._id}`}).catch(() => {
+              //   console.log("Navigation to the same route was prevented.");
+              // });
+              //   this.$reloadPage();
               // this.$router.push(`/userdashboard/empty-edit-user-profile/${this.clientProfile._id}`)
               // this.imageData = "data:image/jpeg;base64," + this.imageFile;
               // this.showSuccess = true;

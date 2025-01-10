@@ -370,27 +370,18 @@
                 <li>Copyright © {{ date }}</li>
                 <li>
                   <a
-                    href="#"
-                    class="text-blueGray-500 hover:text-blueGray-700 text-xs font-semibold py-1 px-o lg:px-3"
+                    href="https://grandtechsolutions.com"
+                    class="text-purple-700  text-xs font-extrabold py-1 px-o lg:px-3"
                   >
                     {{ $t("Grand Technology Solutions ") }}
                   </a>
                 </li>
                 <li>
                   <a
-                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3"
+                    href="https://bannamall.com/"
+                    class="text-blue-600 hover:text-blueGray-800 text-xs font-extrabold block py-1 px-0 lg:px-3"
                   >
-                    {{ $t("Bana Mall General Trading") }}
-                  </a>
-                </li>
-
-                <li>
-                  <a
-                    href="#"
-                    class="text-blueGray-600 hover:text-blueGray-800 text-xs font-semibold block py-1 px-0 lg:px-3"
-                  >
-                    {{ $t("aboutUs") }}
+                    {{ $t("Bana General Market Mall  ") }}
                   </a>
                 </li>
               </ul>

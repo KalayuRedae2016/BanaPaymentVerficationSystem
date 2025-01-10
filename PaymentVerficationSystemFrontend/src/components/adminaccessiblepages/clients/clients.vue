@@ -4,10 +4,7 @@
     <div class="container mx-auto p-4 flex flex-col">
   <div class="flex flex-row w-full border-b border-blue-500 pb-1">
     <p class="text-blue-500 text-md font-bold">{{ $t("Active Clients") }}</p>
-   
-    <!-- Align buttons to the right with ml-auto and add margin between them -->
     <div class="ml-auto flex space-x-2">
-   
       <button @click.prevent="navigateToCreateClient()" class="custom-button text-xs ">
         <i class="fa fa-add mr-2 "></i>Add
       </button>
@@ -18,10 +15,10 @@
   </div>
 </div>
 
-    <clientTable></clientTable>
-  </div>
-</template>
+<clientTable></clientTable>
+</div>
 
+</template>
 <script>
 import Toast from "../../Common/Toast.vue";
 import clientTable from './clientsTable.vue'
@@ -58,23 +55,6 @@ export default {
       detailModal: false,
       clientId: "",
       clients: [
-        // {
-        //   _id: "1",
-        //   fullName: "Tadesse Gebremicheal Berhe",
-        //   firstName: "Tadesse",
-        //   middleName: "Gebremicheal",
-        //   lastName: "Berhe",
-        //   userCode: "BM 0023",
-        // },
-        // {
-        //   _id: "2",
-        //   fullName: "Amanuel Kidane",
-        //   firstName: "Amanuel",
-        //   middleName: "Kidane",
-        //   lastName: "Kidane",
-        //   userCode: "AM 0045",
-        // },
-        // More client objects can be added here
       ],
       searchedClients: [],
       showMoreChanged: false,

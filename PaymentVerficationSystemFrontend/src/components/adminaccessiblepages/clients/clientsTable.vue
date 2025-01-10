@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 m-2 bg-white shadow-lg">
+  <div class="p-4 m-2 bg-white shadow-lg ">
     <Toast ref="toast" />
     <div class="flex justify-between items-center mb-4">
       <div class="flex items-center space-x-4 py-4 bg-white rounded-lg">
@@ -35,7 +35,7 @@
     </div>
 
     <div class="overflow-x-auto overflow-y-auto">
-      <table class="table-auto border-b-2 border-gray-300 overflow-y-auto">
+      <table class="table-auto border-b-2 border-gray-300 overflow-y-auto w-full">
         <thead
           class="border-b-2 border-gray-300 border-r border-t border-l border-gray-300"
         >
@@ -78,48 +78,44 @@
               class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
               @click="navigateToInClient(user._id)"
             >
+              {{ user.tigrignaName }}
+            </td>
+           
+
+            <td
+              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
+              @click="navigateToInClient(user._id)"
+            >
               {{ user.email }}
-            </td>
-            <td
-              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
-              @click="navigateToInClient(user._id)"
-            >
-              {{ user.formattedCreatedAt }}
-            </td>
-            <td
-              class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
-              @click="navigateToInClient(user._id)"
-            >
-              {{ user.formattedUpdatedAt }}
             </td>
             <td class="border-b border-gray-300 py-2 px-3">
               <div class="flex items-center space-x-2">
                 <button
                   @click="navigateToInClient(user._id)"
-                  class="bg-blue-500 text-white px-2 rounded flex items-center space-x-1 hover:bg-blue-600"
+                  class="bg-blue-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-blue-600"
                 >
                   <i class="fas fa-info-circle"></i>
-                  <span>Detail</span>
+                  <span></span>
                 </button>
                 <button
                   @click="
                     showResetModal = !showResetModal;
                     selectedUserToBeResetPassword = user;
                   "
-                  class="bg-yellow-500 text-white px-2 rounded flex items-center space-x-1 hover:bg-yellow-600"
+                  class="bg-yellow-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-yellow-600"
                 >
                   <i class="fas fa-sync-alt"></i>
-                  <span>Reset</span>
+                  <span></span>
                 </button>
                 <button
                   @click="
                     showDeactivateModal = !showDeactivateModal;
                     userIdToBeDeactivated = user._id;
                   "
-                  class="bg-red-500 text-white px-2 rounded flex items-center space-x-1 hover:bg-red-600"
+                  class="bg-red-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
                 >
                   <i class="fas fa-ban"></i>
-                  <span>Deactivate</span>
+                  <span></span>
                 </button>
               </div>
             </td>
@@ -243,12 +239,12 @@
     <div v-if="showDeactivateModal">
       <transition name="fade" mode="out-in">
         <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-40"
         >
           <div class="bg-white rounded-lg p-6 border border-orange-500">
             <div class="fixed inset-0 flex items-center justify-center z-50">
               <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
+                <div class="flex mb-4">
                   <!-- Warning Icon -->
                   <svg
                     class="w-8 h-8 text-orange-500 mr-2"
@@ -263,7 +259,7 @@
                       d="M13 16h-1v-4h1m0 4h-1m1-4V8h-1v4h1m0 4h-1V8h1m0-4h-1V4h1v4zM12 9V5h.01M4.93 4.93l.08-.08 6.99 6.99M8.34 8.34l6.99 6.99-.08.08M4.93 19.07l6.99-6.99M4.93 4.93l14.14 14.14"
                     ></path>
                   </svg>
-                  <h2 class="text-2xl font-bold text-gray-800">
+                  <h2 class="text-2xl font-extrabold text-blue-800">
                     Deactivate User
                   </h2>
                 </div>
@@ -272,23 +268,23 @@
                   <div class="mb-4">
                     <label
                       for="reason"
-                      class="block text-lg font-medium text-gray-700"
+                      class="custom-label text-lg"
                       >Reason for Deactivation</label
                     >
                     <input
                       type="text"
                       id="reason"
                       v-model="deactivationReason"
-                      class="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                      class="custom-input"
                       placeholder="Enter reason"
                       required
                     />
                   </div>
-                  <div class="flex justify-end space-x-4 mt-6">
+                  <div class="flex  space-x-4 mt-6">
                     <button
                       @click.prevent="deactivate(userIdToBeDeactivated)"
                       type="submit"
-                      class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-orange-500 flex items-center justify-center"
+                      class="custom-button"
                     >
                       <i class="fas fa-check-circle mr-2"></i>
                       {{ $t("Submit") }}
@@ -296,7 +292,7 @@
 
                     <button
                       @click.prevent="showDeactivateModal = false"
-                      class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-500"
+                      class="rounded-lg bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 focus:outline-none focus:ring-2 focus:ring-gray-500"
                     >
                       Cancel
                     </button>
@@ -329,11 +325,11 @@ export default {
       headers: [
         { key: "userCode", label: "Code" },
         { key: "fullName", label: "Full Name" },
+        { key: "tigrignaFullName", label: "TigFullName" },
         { key: "email", label: "Email" },
-        { key: "createdAt", label: "Created At" },
-        { key: "updatedAt", label: "Updated At" },
         { key: "actions", label: "Actions" },
       ],
+
       data: [],
       searchQuery: "",
       sortKey: "",
