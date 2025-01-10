@@ -8,13 +8,13 @@ const createDefaultAdminUser = catchAsync(async () => {
     if(existingAdmin){
       return null
     }
-    const hashedPassword = await bcrypt.hash('admin1234', 12);
+    const hashedPassword = await bcrypt.hash('super1234', 12);
       const defaultAdmin = await User.create({
         userCode: 'BM0001',
         password: hashedPassword, // Static password for the initial login
-        firstName:"Admin",
+        firstName:"SuperAdmin",
         lastName:"User",
-        role: 'Admin',
+        role: 'SuperAdmin',
         phoneNumber:"0909090909",
         email: 'kalayuredae2016@gmail.com',
       });
