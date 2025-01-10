@@ -67,7 +67,6 @@ const mutations = {
     localStorage.setItem('reloading', reloading);
   },
 
-
   logout(state) {
     state.userCode = null;
     state.name = null;

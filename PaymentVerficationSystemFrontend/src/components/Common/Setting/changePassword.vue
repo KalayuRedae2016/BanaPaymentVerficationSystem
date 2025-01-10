@@ -6,7 +6,7 @@
     </div>
     <div class="w-full   mt-10  mb-10">
     <!-- Change Email Section -->
-    <div class="mx-5" v-if="role==='Admin'">
+    <div class="mx-5" v-if="role==='Admin' || role==='SuperAdmin'">
       <div class="mt-4 py-4 ml-0  border-t border-gray-100 rounded-lg shadow-md">
         <div
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-80"
@@ -22,7 +22,7 @@
         
           class="flex flex-col  rounded-lg p-5 mt-2 mr-4 lg:mr-32"
         >
-          <div class="flex flex-col lg:flex-row mb-4" v-if="role === 'Admin'">
+          <div class="flex flex-col lg:flex-row mb-4" v-if="role === 'Admin' ||role==='SuperAdmin'">
             <label for="newEmail" class="custom-label w-full lg:w-1/3 mt-3">
             Email
             </label>
@@ -211,9 +211,11 @@ export default {
 
   
   created(){
+   // alert("Created");
     this.newEmail=localStorage.getItem("email");
      console.log("email",this.newEmail);
     this.role=localStorage.getItem("role")
+    console.log("roleinsetting",this.role);
   },
 
   methods: {

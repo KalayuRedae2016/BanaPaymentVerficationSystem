@@ -119,11 +119,6 @@
           </div>
         
         </div>
-
-
-        
-     
-
         <!-- <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
           <Chart class="-ml-5 mr-5 lg: ml-0 mr-0"></Chart>
           
@@ -442,18 +437,15 @@ export default {
   },
 
   async mounted() {
-
     if (this.$route.query.loginSuccess === 'true') {
       const activeItem="dashboard";
       this.$store.dispatch("commitActiveItem", { activeItem });
 
     this.$refs.toast.showLoginToastMessage("Successfully Login in to your dashboard");
       setTimeout(() => {
-        this.$router.push('/admindashboard');
+        this.$router.push('/superadmindashboard');
       }, 2000);
     }
-
-
 
       await this.$apiGet('/api/v1/users').then((response) => {
         this.totalClients = response.result;

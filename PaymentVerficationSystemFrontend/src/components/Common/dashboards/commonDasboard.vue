@@ -160,7 +160,7 @@
             >
               <!-- Admin Navigations -->
               <li
-                v-if="role === 'Admin'"
+                v-if="role === 'Admin'  ||role==='SuperAdmin'"
                 @click="setActive('dashboard')"
                 class="w-full items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -177,7 +177,7 @@
               </li>
 
               <li
-                v-if="role=== 'Admin'"
+                v-if="role=== 'Admin' ||role==='SuperAdmin'"
                 @click="setActive('companyProfile')"
                 class="items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -195,7 +195,7 @@
               </li>
 
               <li
-                v-if="role === 'Admin'"
+                v-if="role === 'Admin'  ||role==='SuperAdmin'"
                 @click="setActive('clients')"
                 class="items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -212,7 +212,7 @@
               </li>
 
               <li
-                v-if="role === 'Admin'"
+                v-if="role === 'Admin'  ||role==='SuperAdmin'"
                 @click="setActive('payment')"
                 class="items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -229,7 +229,7 @@
               </li>
 
               <li
-                v-if="role === 'Admin'"
+                v-if="role === 'Admin'  ||role==='SuperAdmin'"
                 @click="setActive('idCard')"
                 class="items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -246,7 +246,7 @@
               </li>
 
               <li
-                v-if="role === 'Admin'"
+                v-if="role === 'Admin'  ||role==='SuperAdmin'"
                 @click="setActive('message')"
                 class="items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -477,12 +477,14 @@ export default {
 //   this.$store.dispatch("commitReloading", false);
 //   this.$refs.smoozer.startSmoothReload();
 // }, 2000);
-    
-if(localStorage.getItem("token")===null){
-  this.$router.push({ path: "/" });
-}else{
+   
 
-}
+
+    if(localStorage.getItem("token")===null){
+      this.$router.push({ path: "/" });
+    }else{
+
+    }
 
     window.addEventListener("resize", this.checkScreenSize);
     this.checkScreenSize();
@@ -515,7 +517,6 @@ if(localStorage.getItem("token")===null){
       });
 
     await this.fetchNotifications();
-
     //this.showToast();
    //setInterval(this.fetchNotifications, 5000);
   },
@@ -572,7 +573,7 @@ this.$router.push('/admindashboard/user-manual')
           console.log("finally done");
        });
 
-      if (this.role === "Admin") {
+      if (this.role === "Admin" ||this.role==="SuperAdmin") {
         
         this.$router.push({
           path: `/admindashboard/payment-history-detail/${notification.userCode}`,
@@ -604,7 +605,7 @@ this.$router.push('/admindashboard/user-manual')
     },
 
     accountSetting() {
-      if (this.role == "Admin") {
+      if (this.role == "Admin" ||this.role==="SuperAdmin") {
         this.$router.push("/admindashboard/change-password");
       } else {
         this.$router.push("/userdashboard/change-password");

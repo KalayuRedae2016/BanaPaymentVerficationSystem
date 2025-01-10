@@ -20,7 +20,7 @@
             <!-- //admin navigations  -->
                                <!-- Dashboard -->
             <li
-              v-if="role=== 'Admin'"
+              v-if="role=== 'Admin' || role==='SuperAdmin'"
               @click="setActive('dashboard')"
               class="items-center bg-white hover:bg-gray-100 transition "
               :class="
@@ -38,7 +38,7 @@
 
             <!-- Company Profile -->
             <li
-              v-if="role === 'Admin'"
+              v-if="role === 'Admin' || role==='SuperAdmin'"
               @click="setActive('companyProfile')"
               class="items-center bg-white hover:bg-gray-100 transition"
               :class="
@@ -58,7 +58,7 @@
 
             <!-- Clients -->
             <li
-              v-if="role === 'Admin'"
+              v-if="role === 'Admin' ||role==='SuperAdmin'"
               @click="setActive('clients')"
               class="items-center bg-white hover:bg-gray-100 transition"
               :class="
@@ -75,7 +75,7 @@
             </li>
 
             <li
-              v-if="role === 'Admin'"
+              v-if="role === 'Admin' || role==='SuperAdmin'"
               @click="setActive('payment')"
               class=" items-center bg-white hover:bg-gray-100 transition"
               :class="
@@ -92,7 +92,7 @@
             </li>
             <!-- ID Card -->
             <li
-              v-if="role === 'Admin'"
+              v-if="role === 'Admin' || role==='SuperAdmin'"
               @click="setActive('idCard')"
               class=" items-center bg-white hover:bg-gray-100 transition"
               :class="
@@ -110,7 +110,7 @@
 
             <!-- Send Message -->
             <li
-              v-if="role === 'Admin'"
+              v-if="role === 'Admin' || role==='SuperAdmin'"
               @click="setActive('message')"
               class="items-center bg-white hover:bg-gray-100 transition"
               :class="
@@ -126,7 +126,6 @@
               </a>
             </li>
 
-            <!-- // user navigations -->
 
             <li
               v-if="role === 'User'"

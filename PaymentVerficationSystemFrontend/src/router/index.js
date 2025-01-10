@@ -96,7 +96,8 @@ const routes = [
   {
     path: "/admindashboard",
     component: commonDashboard,
-    meta: { requiresAuth: true, role: 'Admin' },
+    // meta: { requiresAuth: true, role: ['Admin', 'SuperAdmin'] },
+    meta: { requiresAuth: true},
     //meta: { requiresGuest: true },
     children: [
       // Admin routes
@@ -136,11 +137,48 @@ const routes = [
     ],
   },
 
-  {
-    path: "/superadmindashboard",
-    component: commonDashboard,
-    meta: { requiresAuth: true, role: 'Super' },
-  },
+  // {
+  //   path: "/superadmindashboard",
+  //   component: commonDashboard,
+  //   meta: { requiresAuth: true, role: 'SuperAdmin' },
+  //   children: [
+  //     // Admin routes
+  //     { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
+  //     { path: "", component: adminDashboard },
+  //     { path: "res-dash", component: adminDashboard },
+  //     { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },
+  //     { path: "display-companey", name: "display-companey", component: displayCompaney },
+  //     { path: "edit-companey", name: "edit-companey", component: editCompaney },
+  //     { path: "change-password", name: "change-password", component: changeCommonPassword  },
+  //     { path: "payments1", name: "payments1", component: payment1 },
+  //     { path: "regular-new-setting", name: "regular-new-setting", component: regular }, 
+  //     { path: "clients", component: clients },
+  //     { path: "deactivate", component: deactivate },
+  //     { path: "create-client", name: "create-client", component: createClient },
+  //     { path: "edit-client/:clientId", name: "edit-client", component: editClient },
+  //     { path: "empty-edit-profile/:clientId", name: "empty-edit-profile", component: emptyEditProfile },
+     
+  //     // { path: "bank-statement/:userCode", component: bankStatement },
+  //     { path: "user-for-bank-statement", component:  usersForBankStatement  },
+      
+  
+  //     { path: "overdue", name: "overdue", component: overdue, props: true },
+  //     { path: "paid-unpaid", name: "paid-unpaid", component: paidUnpaid, props: true },
+  //     // { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
+   
+      
+  //     { path: "empty/:clientId", component: empty },
+  //     { path: "empty-companey", component: emptyCompaney },
+  //     { path: "empty-client", component: emptyClient }, 
+  //     { path: "modal", component: commonModal },
+  //     { path: "parent-modal", component: parentModal },
+  //     { path: "send-email", component: sendEmail },
+  //     { path: "user-manual", component: userManual},
+  //     { path: "id-card", name: "id-card", component: idCardAdmin },
+  //     { path: "reset-table", name: "reset-table", component:  resetTables },
+  //   ],
+  // },
+  
   {
     path: "/userdashboard",
     component: commonDashboard,
@@ -163,37 +201,51 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem("token");
-        console.log("ntoken",isAuthenticated);
-  const userRole = localStorage.getItem("role");
-        console.log("rolekk",userRole);
-  // Check if the route requires authentication
-  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-         console.log(" requiresAuth", requiresAuth);
-  // Check if the route requires guest access (unauthenticated users)
-  const requiresGuest = to.matched.some((record) => record.meta.requiresGuest);
-         console.log(" requiresGuest", requiresGuest);
-  // Role required for the route
+  const isAuthenticated = localStorage.getItem("token"); // Token to check if authenticated
+  const userRole = localStorage.getItem("role"); // Role to check if the user has the correct role
+
+  console.log("ntokensuper", isAuthenticated);
+  console.log("rolekk", userRole);
+
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth); // If the route requires auth
+  console.log("requiresAuth", requiresAuth);
+  const requiresGuest = to.matched.some((record) => record.meta.requiresGuest); // If the route allows guests
+  console.log("requiresGuest", requiresGuest);
+
+  // Get the role required for the route
   const requiredRole = to.meta.role;
-         console.log(" requiredRole", requiredRole);
+  console.log("requiredRole", requiredRole);
+
   // If the route requires authentication
   if (requiresAuth) {
     console.log("require auth detected");
     if (!isAuthenticated) {
       // User is not authenticated, redirect to login or home page
-      next("/");
-    } else if(userRole!==requiredRole){
-     localStorage.removeItem("token");
-     localStorage.removeItem("userId");
-     localStorage.removeItem("role");
-     localStorage.removeItem("name");
-     next('/');
-    }else{
-      next(); // Default redirect, adjust as needed
+      next("/"); // Redirect to home or login page
+    } else if (requiredRole && userRole !== requiredRole) {
+      // User does not have the correct role, redirect to home page
+      localStorage.removeItem("token");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("role");
+      localStorage.removeItem("name");
+      next("/"); // Redirect to home or login page
+    } else {
+      // Authenticated and role matches, proceed to the route
+      next();
     }
   } else if (requiresGuest) {
     console.log("require guest detected");
-      next(); // Default redirect, adjust as needed
+    if (isAuthenticated) {
+      // If the route requires guest and user is authenticated, redirect to dashboard or home
+      next("/admindashboard"); // Change to a route you want for authenticated users
+    } else {
+      next(); // Proceed to the guest route
+    }
+  } else {
+    // If no specific auth or guest requirements, just proceed
+    next();
   }
 });
+
+
 export default router;

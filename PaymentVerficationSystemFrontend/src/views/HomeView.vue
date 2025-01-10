@@ -339,8 +339,8 @@ export default {
               this.formSchema.login.fields.password.value="";
 
               // Dispatch actions based on role
-              if (role==="Admin") {
-                alert("kk")
+              if (role==="Admin" ||role==="SuperAdmin") {
+                //alert("kk")
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
@@ -357,17 +357,17 @@ export default {
                 this.$store.dispatch("commitEmail", { email });
                 this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true" } });
               } 
-              else if(role==="SuperAdmin"){
-                alert("Super Admin")
-                this.$store.dispatch("login", { token });
-                this.$store.dispatch("commitId", { userId });
-                this.$store.dispatch("commitRole", { role });
-                 console.log("role is given from the server",role);
-                this.$store.dispatch("commitUserCode", { userCode });
-                this.$store.dispatch("commitEmail", { email });
-                console.log("responses for superadmin",token,userId,role,userCode,email);
-                this.$router.push({ path: "/superadmindashboard", query: { loginSuccess: "true" } });
-            }
+            //   else if(role==="SuperAdmin"){
+            //    // alert("Super Admin")
+            //     this.$store.dispatch("login", { token });
+            //     this.$store.dispatch("commitId", { userId });
+            //     this.$store.dispatch("commitRole", { role });
+            //     console.log("role is given from the server",role);
+            //     this.$store.dispatch("commitUserCode", { userCode });
+            //     this.$store.dispatch("commitEmail", { email });
+            //     console.log("responses for superadmin",token,userId,role,userCode,email);
+            //     this.$router.push({ path: "/superadmindashboard", query: { loginSuccess: "true" } });
+            // }
               
               else {
                 this.showError = true;
@@ -381,6 +381,7 @@ export default {
           .catch((error) => {
             this.showError = true;
             alert("error")
+            console.log("login errors",error)
             this.errorMessage = error.response?.data.message || "Something went wrong!";
           });
      

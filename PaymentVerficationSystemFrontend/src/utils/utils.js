@@ -39,11 +39,10 @@ function handleApiError(error) {
         else if (status === 401 && error.response.data?.error?.option === 1) {
          // alert("hiii")
           console.log("enters in to the 401 and 403 with option")
-            store.dispatch("logout");
-            router.push("/");
+           // store.dispatch("logout");
+            //router.push("/");
           return;
         }
-
 
         else if (status >= 400 && status < 500) {
             const errorMessages = {
