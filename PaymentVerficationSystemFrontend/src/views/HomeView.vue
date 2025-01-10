@@ -320,8 +320,7 @@ export default {
       }
     },
     login() {
-      
-
+  
       // If the form is valid, proceed with the login logic
      
         const userData = {
@@ -335,10 +334,13 @@ export default {
             // Handle successful login response
             const { role, token, userId, userCode,email} = response.data;
             if (response.data.status === 1) {
+             // alert("the response was fetched")
+              console.log("respomnse from login",response.data)
               this.formSchema.login.fields.password.value="";
 
               // Dispatch actions based on role
-              if (role.includes("Admin")) {
+              if (role==="Admin") {
+                alert("")
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
@@ -346,7 +348,8 @@ export default {
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
                 this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" } });
-              } else if (role.includes("User")) {
+              } else if (role==="User") {
+                
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
@@ -354,14 +357,18 @@ export default {
                 this.$store.dispatch("commitEmail", { email });
                 this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true" } });
               } 
-              else if(role.includes("SuperAdmin")){
+              else if(role==="SuperAdmin"){
+                alert("Super Admin")
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
                  console.log("role is given from the server",role);
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
+                console.log("responses for superadmin",token,userId,role,userCode,email);
                 this.$router.push({ path: "/superadmindashboard", query: { loginSuccess: "true" } });
+
+
             }
               
               else {
@@ -375,6 +382,7 @@ export default {
           })
           .catch((error) => {
             this.showError = true;
+            alert("error")
             this.errorMessage = error.response?.data.message || "Something went wrong!";
           });
      
