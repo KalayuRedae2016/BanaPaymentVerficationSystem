@@ -340,7 +340,7 @@ export default {
 
               // Dispatch actions based on role
               if (role==="Admin") {
-                alert("")
+                alert("kk")
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
@@ -367,8 +367,6 @@ export default {
                 this.$store.dispatch("commitEmail", { email });
                 console.log("responses for superadmin",token,userId,role,userCode,email);
                 this.$router.push({ path: "/superadmindashboard", query: { loginSuccess: "true" } });
-
-
             }
               
               else {
