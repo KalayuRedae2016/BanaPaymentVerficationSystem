@@ -1,6 +1,4 @@
 const { formatDate } = require("../utils/formatDate");
-// const payments = require("../utils/Paymentmanagmentsystem.payments.json");
-// const org = require("../Models/organizationModel");
 
 function calculateBalances(payments, org) {
   const organization = {
@@ -86,8 +84,6 @@ function calculateBalances(payments, org) {
     statusObj.totalBlockBankAccountPaid += amounts.totalRegularAmountPaid + amounts.totalUrgentAmountPaid + amounts.totalSubsidyAmountPaid;
     statusObj.totalBlockBankAccountNotPaid += amounts.totalRegularAmountNotPaid + amounts.totalUrgentAmountNotPaid + amounts.totalSubsidyAmountNotPaid;
 
-    // statusObj.totalServiceBankAccountPaid += amounts.totalServiceAmountPaid + amounts.totalPenalityAmountPaid + amounts.totalRegFeeAmountPaid;
-    // statusObj.totalServiceBankAccountNotPaid += amounts.totalServiceAmountNotPaid + amounts.totalPenalityAmountNotPaid + amounts.totalRegFeeAmountNotPaid;
     statusObj.totalServiceBankAccountPaid += amounts.totalServiceAmountPaid + amounts.totalPenalityAmountPaid;
     statusObj.totalServiceBankAccountNotPaid += amounts.totalServiceAmountNotPaid + amounts.totalPenalityAmountNotPaid;
 
@@ -183,8 +179,6 @@ function calculateBalances(payments, org) {
     }
   }
 
-  // console.log(org.paymentTransfers)
-
   // Calculate totalBalanceBankType based on all statuses
   Object.values(categorizedPayments).forEach((statusObj) => {
     Object.entries(statusObj.bankTypes).forEach(([bankType, bankDetails]) => {
@@ -195,27 +189,56 @@ function calculateBalances(payments, org) {
           subsidyBalance: 0,
           serviceBalance: 0,
           penalityBalance: 0,
+
+          blockIncoming:0,
+          blockOutcoming:0,
+          serviceIncoming:0,
+          serviceOutcoming:0,
+
           totalBlockBalance:0,
           totalServiceBalance:0,
         };
       }
-
+     
       // Summing up balances across all statuses
       totalBalanceBankType[bankType].regularBalance += bankDetails.regularBalance || 0;
       totalBalanceBankType[bankType].urgentBalance += bankDetails.urgentBalance || 0;
       totalBalanceBankType[bankType].subsidyBalance += bankDetails.subsidyBalance || 0;
       totalBalanceBankType[bankType].serviceBalance += bankDetails.serviceBalance || 0;
       totalBalanceBankType[bankType].penalityBalance += bankDetails.penalityBalance || 0;
-      totalBalanceBankType[bankType].totalBlockBalance += bankDetails.regularBalance+bankDetails.urgentBalance+ bankDetails.subsidyBalance;
-      totalBalanceBankType[bankType].totalServiceBalance+= bankDetails.serviceBalance+bankDetails.penalityBalance;
-    });
+        });
   });
 
-  // Ensure valid calculations for ServiceBankAccount and TotalOrgBalance
-  organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
+  // Process organization paymentTransfers
+  if (org.paymentTransfers && Array.isArray(org.paymentTransfers)) {
+    org.paymentTransfers.forEach((transfer) => {
+      const { transferType, fromBankType, toBankType, amount } = transfer;
+      if (transferType === "block") {
+        totalBalanceBankType[fromBankType].blockOutcoming += amount;
+        totalBalanceBankType[toBankType].blockIncoming += amount;
+      }
+      if (transferType === "service") {
+        totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+        totalBalanceBankType[toBankType].serviceIncoming += amount;
+      }
+    });
+  }
 
-  // console.log("Organization:", organization);
-  // console.log("Total Balance Per Bank Type:", totalBalanceBankType);
+  Object.keys(totalBalanceBankType).forEach((bank) => {
+    totalBalanceBankType[bank].totalBlockBalance +=
+      totalBalanceBankType[bank].regularBalance +
+      totalBalanceBankType[bank].subsidyBalance +
+      totalBalanceBankType[bank].urgentBalance+
+      totalBalanceBankType[bank].blockIncoming-
+      totalBalanceBankType[bank].blockOutcoming
+
+    totalBalanceBankType[bank].totalServiceBalance +=
+      totalBalanceBankType[bank].serviceBalance +
+      totalBalanceBankType[bank].penalityBalance+
+      totalBalanceBankType[bank].serviceIncoming-
+      totalBalanceBankType[bank].serviceOutcoming
+  });
+organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
 
   return {
     Organization: organization,

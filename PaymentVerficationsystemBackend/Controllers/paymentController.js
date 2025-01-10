@@ -1344,7 +1344,6 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   });
 });
 exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
-  // console.log("reqeust for calculated org balances")
   const payments = await Payment.find({});
   if (!payments.length) {
     return res.status(404).json({ error: 'No payments found!' });
@@ -1357,10 +1356,6 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
   const organizationBalance = bankBalances.Organization
   const orgBalancesBasedBankType = bankBalances.totalBalanceBankType
 
-  // Get the bank type balances for the organization
-  // const orgBalancesBasedBankType = bankBalances.categorizedPayments.confirmed.bankTypes;
-  // console.log(organizationBalance)
-  // console.log(orgBalancesBasedBankType)
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${organization.companyName}`,
@@ -1432,12 +1427,11 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
   });
 });
 exports.reports = catchAsync(async (req, res, next) => {
-  const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month,day, timeRange } = req.query;
+  const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month,day,startingDate,endingDate,timeRange } = req.query;
   const paymentQuery = {};
   if (!timeRange) {
     return next(new AppError("Time Range is required"), 400)
   }
-
   if (paymentType) paymentQuery.paymentType = new RegExp(paymentType, 'i');
   if (userCode) paymentQuery.userCode = new RegExp(userCode, 'i');
   if (fullName) paymentQuery.fullName = new RegExp(fullName, 'i');
@@ -1487,6 +1481,25 @@ exports.reports = catchAsync(async (req, res, next) => {
       endDate = new Date(specifiedYear, month-1, day, 23, 59, 59);
       // console.log("Daily date",startDate,endDate)
       break;
+    case "other":
+      if(!startingDate ||!endingDate){
+        return next(new AppError("StartingDate and endingDate are required", 400));
+      }
+     
+      if (isNaN(new Date(startingDate).getTime()) || isNaN(new Date(endingDate).getTime())) {
+        return res.status(400).json({ error: 'Invalid date format. Please use a valid date format.' });
+      }
+      
+      startDate = new Date(startingDate);
+      endDate = new Date(endingDate);
+
+      if(startDate>endDate){
+        return next(new AppError(`${formatDateGC(endingDate)} should be greater than ${formatDateGC(startingDate)}`))
+      }
+
+      console.log("d",startingDate)
+      console.log("h",startDate)
+
     case 'allTime':
       startDate = new Date(1970, 0, 1);  // Unix epoch start date (or any other earlier date)
       endDate = new Date();  // Current date
