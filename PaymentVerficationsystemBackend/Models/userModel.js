@@ -60,7 +60,7 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['User', 'Admin'],
+      enum: ['User', 'Admin',"SuperAdmin"],
       default: 'User',
     },
     age: Number,//calculated form date of birth
