@@ -172,7 +172,7 @@ exports.login = catchAsync(async (req, res, next) => {
   
   const token = signInToken(user._id);
   //If user is an admin and the password is still the default, ask for a password change
-  if (user.role === 'Admin' && password === 'admin1234') {
+  if (user.role === 'Admin' ||user.role==="SuperAdmin" && password === 'admin1234') {
     return res.status(200).json({
       status: 1,
       token:token,
