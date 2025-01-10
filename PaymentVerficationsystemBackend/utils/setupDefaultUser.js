@@ -4,7 +4,7 @@ const { sendEmail } = require('./email');
 const catchAsync = require('./catchAsync');
 
 const createDefaultAdminUser = catchAsync(async () => {
-    const existingAdmin = await User.findOne({ role: 'Admin' });
+    const existingAdmin = await User.findOne({ role: 'SuperAdmin' });
     if(existingAdmin){
       return null
     }
