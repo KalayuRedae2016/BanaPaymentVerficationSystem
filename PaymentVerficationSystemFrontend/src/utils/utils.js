@@ -25,14 +25,11 @@ export function getApiClient() {
 }
 
 function handleApiError(error) {
-
-
     let status = 0;
     let message = "An unexpected error occurred.";
     if (error.response) {
       status = error.response.status;
-      console.log("Error details:", status, error, error.response.data?.error?.option);
-
+      console.log("Error details in the global function error handler:", status, error, error.response.data?.error?.option);
         status = error.response.status;
         if (status >= 100 && status < 200) {
             message = `Informational response: ${status}. Please wait...`;

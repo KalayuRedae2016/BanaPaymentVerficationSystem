@@ -88,6 +88,8 @@
                       placeholder="Percentage"
                     />
                   </div>
+
+
                   <div class="mb-4">
                     <label class="custom-label" for="activeMonth">
                       {{ $t("activeYear") }}
@@ -105,7 +107,12 @@
                     </select>
                   </div>
 
-                  <div class="mb-4">
+             
+                </div>
+
+                <div class="w-full lg: w-1/2">
+
+                  <div class="mb-3">
                     <label class="custom-label" for="activeMonth">
                       {{ $t("activeMonth") }}
                       <span class="custom-star ml-1">*</span>
@@ -128,10 +135,7 @@
                       </option>
                     </select>
                   </div>
-                </div>
-
-                <div class="w-full lg: w-1/2">
-                  <div class="mb-4">
+                  <div class="mb-3">
                     <label class="custom-label" for="startingDate">
                       {{ $t("startingDay") }}
                       <span class="text-red-500 ml-1">*</span>
@@ -145,7 +149,9 @@
                     />
                   </div>
 
-                  <div class="mb-4">
+
+
+                  <div class="mb-3">
                     <label class="custom-label" for="endingDate">
                       {{ $t("endingDate") }}
                       <span class="text-red-500 ml-1">*</span>
@@ -159,7 +165,9 @@
                     />
                   </div>
 
-                  <div class="mb-4">
+
+
+                  <div class="mb-3">
                     <label class="custom-label" for="penalityLate5Days">
                       {{ $t("penaltyPerFiveDaysPercentage") }} %
                       <span class="text-red-500 ml-1">*</span>
@@ -172,7 +180,9 @@
                       :placeholder="$t('penaltyPerFiveDaysPercentage')"
                     />
                   </div>
-                  <div class="mb-4">
+
+
+                  <div class="mb-3">
                     <label class="custom-label" for="upTo10Days">
                       {{ $t("penaltyPerTenDaysPercentage") }}%
 
@@ -186,7 +196,7 @@
                       :placeholder="$t('penaltyPerTenDaysPercentage')"
                     />
                   </div>
-                  <div class="mb-4">
+                  <div class="mb-3">
                     <label class="custom-label" for="above10DaysInMonth">
                       {{ $t("penaltyPerAboveTenDaysPercentage") }}%
                       <span class="text-red-500 ml-1">*</span>
@@ -376,6 +386,8 @@
                   </div>
                 </div>
 
+
+
                 <div
                   class="bg-white border-b border-dotted py-2 px-4rounded-md shadow-sm border-b border-gray-500"
                 >
@@ -389,6 +401,8 @@
                     >
                   </div>
                 </div>
+
+
 
                 <div
                   class="bg-white border-b border-dotted py-2 px-4rounded-md shadow-sm border-b border-gray-500"
@@ -735,12 +749,22 @@
                   >
                     Service amount is required *
                   </p>
+
+
                   <p
                     v-if="activeYearIsRequired"
                     class="text-red-500 text-xs mt-2 mb-5"
                   >
                     Active Year is required *
                   </p>
+
+                   <p
+                    v-if="regFeeIsRequired"
+                    class="text-red-500 text-xs mt-2 mb-5"
+                  >
+                    Reg Fee is required *
+                  </p>
+
                   <p
                     v-if="startingDateIsRequired"
                     class="text-red-500 text-xs mt-2 mb-5"
@@ -766,36 +790,40 @@
                   >
                     Ending Date is required *
                   </p>
-                  <p
-                    v-if="endingDateIsRequired"
-                    class="text-red-500 text-xs mt-2 mb-5"
-                  >
-                    Ending Date is required *
-                  </p>
+                 
+
                   <p
                     v-if="end_date_less_than_activeMonth"
                     class="text-red-500 text-xs mt-2 mb-5"
                   >
                     Ending date should in the interval of the selected month
                   </p>
+
+
                   <p
                     v-if="penality5DayIsRequired"
                     class="text-red-500 text-xs mt-2 mb-5"
                   >
                     Penality for late 5 days is required *
                   </p>
+
+
                   <p
                     v-if="fiveDayLessTenDay"
                     class="text-red-500 text-xs mt-2 mb-5"
                   >
                     Penality 5 days Can not be Greater than charge 10 day
                   </p>
+
+
                   <p
                     v-if="penality10DayIsRequired"
                     class="text-red-500 text-xs mt-2 mb-5"
                   >
                     Penality for late 10 days is required *
                   </p>
+
+
                   <p
                     v-if="tenDayLessAboveTenDay"
                     class="text-red-500 text-xs mt-2 mb-5"
@@ -810,6 +838,8 @@
                   >
                     Penality for above 10 days is required *
                   </p>
+
+
                   <p
                     v-if="settingAlreadyExists"
                     class="text-red-500 text-xs mt-2 mb-5 mb-5"
@@ -817,6 +847,8 @@
                     Payment Setting is already exist for the selected month and
                     can not be activated
                   </p>
+
+
                   <button
                     v-if="!paymentActivate"
                     @click.prevent="editPaymentSetting()"
@@ -833,6 +865,7 @@
                   >
                     <i class="fa fa-check mr-2"></i>{{ $t("Confirm") }}
                   </button>
+
                 </div>
               </form>
 
@@ -880,6 +913,9 @@ export default {
       penality5DayIsRequired: false,
       penality10DayIsRequired: false,
       penalityAbove10DayIsRequired: false,
+
+      regFeeIsRequired:false,
+
 
       paymentActivate: false,
       paymentSetting: {
@@ -971,7 +1007,7 @@ export default {
         this.paymentSetting.subsidyAmount,
         this.paymentSetting.regularAmount,
         this.paymentSetting.serviceAmount,
-        this.regFeeRate,
+        this.paymentSetting.regFeeRate,
         this.paymentSetting.urgentAmount,
         this.paymentSetting.activeMonth,
         this.paymentSetting.activeYear,
@@ -995,6 +1031,7 @@ export default {
       this.startDateLessEndDate = false;
       this.fiveDayLessTenDay = false;
       this.tenDayLessAboveTenDay = false;
+      this.regFeeIsRequired=false;
 
       if (this.paymentSetting.regularAmount === "") {
         this.regularIsRequired = true;
@@ -1014,6 +1051,7 @@ export default {
         }
 
         return;
+
       }
 
       if (this.paymentSetting.serviceAmount == "") {
@@ -1021,16 +1059,30 @@ export default {
         this.showErrorToastMessage("Service amount is required");
         return;
       }
+      
+      if (this.paymentSetting.regFeeRate == "") {
+        //alert("please enter a valid reg fee")
+
+        this.regFeeIsRequired = true;
+        this.showErrorToastMessage("Reg Fee is required");
+        return;
+
+      }
+
+
       if (this.paymentSetting.activeYear == "") {
         this.activeYearIsRequired = true;
         this.showErrorToastMessage("Active Year is required");
         return;
       }
+
+
       if (this.paymentSetting.activeMonth == "") {
         this.activeMonthIsRequired = true;
         this.showErrorToastMessage("Active Month is required");
         return;
       }
+
       if (this.paymentSetting.startingDate == "") {
         this.startingDateIsRequired = true;
         this.showErrorToastMessage("Starting Date is required");
@@ -1140,9 +1192,13 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (response.status === 1) {
+            this.paymentSetting = response.paymentSetting;
             this.$refs.toast.showSuccessToastMessage(response.message);
-            this.paymentSettingCreated = 1;
-            this.$reloadPage();
+            setTimeout(() => {
+              this.paymentSettingCreated = 1;
+            }, 2000);
+           
+           // this.$reloadPage();
           } 
         })}
         catch(error) {

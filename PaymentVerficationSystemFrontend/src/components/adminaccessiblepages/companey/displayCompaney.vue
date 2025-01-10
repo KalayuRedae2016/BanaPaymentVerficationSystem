@@ -190,7 +190,12 @@
 
       <new-company-profile
         v-if="organizationCreated === 2"
+        :companyProfile="companyProfile" 
+       :organizationCreated="organizationCreated" 
+       @update-organization="handleUpdate"
       ></new-company-profile>
+
+
     </div>
   </div>
 </template>
@@ -286,7 +291,11 @@ export default {
       }
   },
   methods: {
-   
+    handleUpdate(data) {
+      this.companyProfile = data.companyProfile;
+      this.organizationCreated = data.organizationCreated;
+      this.$refs.toast.showSuccessToastMessage(data.toastMessage);
+    },
     localee() {
       console.log("locale", this.getLocale);
     },
