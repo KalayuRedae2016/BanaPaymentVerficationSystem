@@ -114,10 +114,6 @@
               <option value="Female">{{ $t("female") }}</option>
             </select>
           </div>
-        </div>
-
-        <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
-          
           <div class="w-full">
             <label class="custom-label"> {{ $t("age") }} <span>*</span></label>
             <input
@@ -130,6 +126,11 @@
               v-model="age"
             />
           </div>
+        </div>
+
+        <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
+          
+      
           <div class="w-full">
             <label class="custom-label" for="address">
               {{ $t("address") }}
@@ -202,6 +203,17 @@
               accept="image/*"
               @change="handleImageInput"
             />
+          </div>
+          <div class="w-full" v-if="role==='SuperAdmin'">
+            <label class="custom-label"> {{ $t("Role") }} <span>*</span></label>
+            <select
+                v-model="userRole"
+                class="custom-select "
+              >
+                <option value="">Select Role</option>
+                <option value="User">User</option>
+                <option value="Admin">Admin</option>
+              </select>
           </div>
         </div>
 
@@ -392,6 +404,10 @@ export default {
   },
   data() {
     return {
+      role:"",
+
+      userRole:"User",
+
       errorMessage:"",
       showErrorMessage: false,
       duplicateEmailError: false,
@@ -512,6 +528,8 @@ export default {
     // this.$apiClient = axios.create({
     //   baseURL: "http://localhost:8081/", // Set your base URL here
     // });
+    this.role=localStorage.getItem("role");
+
   },
   methods: {
     viewClients() {
@@ -671,7 +689,6 @@ export default {
 
      console.log("file image  that will be passed",this.imageFile);
 
- 
       const formData = new FormData();
       formData.append("firstName", this.firstName);
       formData.append("middleName", this.middleName);
@@ -682,6 +699,7 @@ export default {
       formData.append("email", this.email);
       formData.append("phoneNumber", fullPhoneNumber);
       formData.append("profileImage", this.imageFile);
+      formData.append("role", this.userRole);
       //formData.append("fullName", this.fullName);
       formData.append("tigrignaName",this.tigrignaFullName);
       console.log("image", this.imageFile);
@@ -705,9 +723,16 @@ export default {
           }
         });
        } catch (error){
-          console.log("error",error.status,error.message);
+          console.log("error from server",error.status,error.message);
           this.showErrorMessage=true;
           this.errorMessage=error.message;
+
+          if(error.status===404){
+          console.log("it is 404")
+          this.errorMessage="";
+         this.$refs.toast.showWarningToastMessage("Please Create a payment Setting")
+         this.$reloadPage();
+          }
         }finally{
 
         }

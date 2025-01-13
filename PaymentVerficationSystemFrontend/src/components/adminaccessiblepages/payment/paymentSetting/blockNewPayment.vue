@@ -122,6 +122,7 @@
                       class="custom-select"
                       required
                       style="padding-left: 16px"
+                      @change="getMonthDates(paymentSetting.activeYear, paymentSetting.activeMonth)"
                       v-model="paymentSetting.activeMonth"
                       :placeholder="$t('activeMonth')"
                     >
@@ -148,9 +149,6 @@
                       placeholder="Starting Date"
                     />
                   </div>
-
-
-
                   <div class="mb-3">
                     <label class="custom-label" for="endingDate">
                       {{ $t("endingDate") }}
@@ -444,7 +442,7 @@
                       >{{ $t("startingDay") }}:</span
                     >
                     <span class="text-lg text-gray-800">{{
-                      paymentSetting.formattedStartDate
+                      paymentSetting.startingDate
                     }}</span>
                   </div>
                 </div>
@@ -458,7 +456,7 @@
                       >{{ $t("endingDay") }}:</span
                     >
                     <span class="text-lg text-gray-800">{{
-                      paymentSetting.formattedEndDate
+                      paymentSetting.endingDate
                     }}</span>
                   </div>
                 </div>

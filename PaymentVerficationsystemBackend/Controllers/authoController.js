@@ -12,22 +12,19 @@ const catchAsync = require('../utils/catchAsync');
 const { sendEmail } = require('../utils/email');
 const { deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
 
+
 const signInToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
-let userImageUpload; // Declare the variable to hold the multer middleware
+const userImageUpload = createMulterMiddleware(// Configure multer for user image uploads
+  'uploads/users/', // Destination folder
+  'User', // Prefix for filenames
+  ['image/jpeg', 'image/png', 'image/gif'], // Allowed file types
+);
 
-// The uploadUserImage function initializes the multer middleware lazily
-exports.uploadUserImage = (req, res, next) => {
-  console.log("Uploaded file:", req.file); 
-  if (!userImageUpload) {
-    console.log('Initializing multer middleware'); // Log when initializing
-  userImageUpload = createMulterMiddleware('uploads/users/','User', ['image/jpeg', 'image/png', 'image/gif']);
-  }
-  // Execute the middleware only when needed
-  userImageUpload.single('profileImage')(req, res, next);
-};
+// Middleware for handling single file upload
+exports.uploadUserImage = userImageUpload.single('profileImage');
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
@@ -43,11 +40,10 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  console.log('Request body:', req.body);
-  console.log('Uploaded file:', req.file);
+  console.log("singup requestbody pro: " , req.body.profileImage);
   try {
     const organization = await Organization.findOne()
-    //console.log("org",organization)
+    console.log("org",organization)
     if (!organization) {
       return next(new AppError("Create Organization profile before Creating User", 400));
     }
@@ -123,17 +119,87 @@ exports.signup = catchAsync(async (req, res, next) => {
   }
 });
 
+//tried t enter but some error by tadios
+
+exports.insertMultipleUsers = catchAsync(async (req, res, next) => {
+  console.log("Signup request body:", req.body.users);
+  
+  try {
+    const organization = await Organization.findOne();
+    console.log("Organization:", organization);
+
+    if (!organization) {
+      return next(new AppError("Create Organization profile before creating users", 400));
+    }
+
+    const prefixCode = organization.companyPrefixCode;
+    const length = 4;
+
+    const users = req.body.users; // Expecting an array of users in the request body
+
+    if (!Array.isArray(users) || users.length === 0) {
+      return next(new AppError("Invalid or empty users array", 400));
+    }
+
+  
+    for (const userData of users) {
+      const existingUser = await User.findOne({ email: userData.email });
+
+      if (existingUser) {
+        console.log(`Email already exists: ${userData.email}`);
+        continue; // Skip creating this user
+      }
+
+      const user = new User({
+        ...userData,
+        isActive: true,
+        hasMadePayment: false, // New user hasn't made a payment yet
+      });
+
+      const userCode = await user.generateUserCode(prefixCode, length);
+      user.userCode = userCode;
+
+      const password = userData.password || (await user.generateRandomPassword());
+      user.password = await bcrypt.hash(password, 12);
+
+      await user.save();
+
+      // Find the payment setting marked as latest
+      const latestSetting = await PaymentSetting.findOne({ latest: true });
+      if (!latestSetting) {
+        return next(new AppError("No active payment setting found.", 404));
+      }
+      
+      if (user.role === "User") {
+        await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
+      }
+    
+    }
+
+    res.status(200).json({
+      status: 1,
+      message: "Users registered successfully with pending payments created",
+    });
+  } catch (error) {
+    console.error("Signup process error:", error);
+    return res.status(500).json({ message: "Error saving users: " + error.message });
+  }
+});
+//end of tadios
+
+
+
+
 exports.login = catchAsync(async (req, res, next) => {
-  console.log("ss",req.body)
   const { userCode, password } = req.body
+  // Input validation
   if (!userCode || !password) {
     return res.status(200).json({
       status: 0,
-      message: 'Please provide valid userCode or password',
+      message: 'Please provide userCode or password',
     });
   }
-  const Upper_userCode = userCode.toUpperCase();
-  const user = await User.findOne({ userCode:Upper_userCode }).select('+password');
+  const user = await User.findOne({ userCode }).select('+password');
   if (!user) {
     return res.status(200).json({
       status: 0,
@@ -152,7 +218,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!correct) {
     //If password doesn't match, increment failedLoginAttempts
     user.failedLoginAttempts += 1;
-    if (user.failedLoginAttempts >= 20) {
+    if (user.failedLoginAttempts >= 5) {
       user.lockUntil = new Date(Date.now() + 60 * 60 * 1000); // Lock the account for 1 hour
     }
 
@@ -163,37 +229,22 @@ exports.login = catchAsync(async (req, res, next) => {
 
     await sendEmail({ email, message, subject })
     await user.save()
-    return res.status(401).json({ message: 'Invalid UserCode or password' });
+    return res.status(401).json({ message: 'Invalid email or password' });
   }
 
   user.failedLoginAttempts = 0;
   user.lockUntil = null;
   await user.save();
-  
   const token = signInToken(user._id);
-  //If user is an admin and the password is still the default, ask for a password change
-  if (user.role === 'Admin' ||user.role==="SuperAdmin" && password === 'admin1234') {
-    return res.status(200).json({
-      status: 1,
-      token:token,
-      role: user.role,
-      userId: user._id,
-      userCode:user.userCode,
-      email:user.email,
-      fullName:user.fullName,
-      message: 'Login Succeffully But Please change your password',
-      changePassword: true,  // Indicating that the frontend should redirect to the password change page
-    });
-  }
-   res.status(200).json({
+
+  res.status(200).json({
     status: 1,
     token: token,
     role: user.role,
     userId: user._id,
     userCode:user.userCode,
-    email:user.email,
     fullName:user.fullName,
-    Message: 'Login Succeffully',
+    Message: 'Login Succeffullly',
   });
 });
 
@@ -205,19 +256,21 @@ exports.logout = catchAsync(async(req, res,next) => {
   res.status(200).json({ status: 'success' });
 });
 
-exports.authenticationJwt = catchAsync(async (req, res, next) => {
+exports.authenticationJwt = catchAsync(async (req, _, next) => {
   let token;
-  if (req.headers.authorization &&req.headers.authorization.startsWith('Bearer') ) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
     token = req.headers.authorization.split(' ')[1];
   }
-  // console.log(req.headers)
   if (!token) {
-    return next(new AppError('Token is missed! Unauthorized user,Please log in again', 401,1));
+    return next(new AppError('You are not Unauthorized user', 403));
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return next(new AppError('Token Session expired or invalid,Please log in again', 401,1));
+      return next(new AppError('Session expired', 401));
     }
 
     req.user = decoded;
@@ -267,7 +320,6 @@ exports.requiredRole = (requiredrole) => {
     next();
   };
 };
-
 exports.forgetPassword = catchAsync(async (req, res, next) => {
   //console.log(req.body.email)
   const user = await User.findOne({ email: req.body.email });
@@ -285,10 +337,10 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     const message = `Forgot your password? Submit a request with your new password to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
     const email = user.email;
     const subject = 'Your password reset token (valid for 10 minutes)'
-    // console.log(email)
-    // console.log(message)
-    // console.log(subject)
-    // console.log(resetURL)
+    console.log(email)
+    console.log(message)
+    console.log(subject)
+    console.log(resetURL)
     //console.log(email,subject,message)
     await sendEmail({ email, subject, message });
     res.status(200).json({
@@ -367,13 +419,13 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
 
     await sendEmail({ email, subject, message });
   } catch (error) {
-    // console.log(error)
+    console.log(error)
     return next(new AppError('There was an error sending the email. Try again later!', 500));
   }
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  // console.log(req.body)
+  console.log(req.body)
   const { currentPassword, newPassword,userId } = req.body;
 
   // Fetch the user from the database with the existing password

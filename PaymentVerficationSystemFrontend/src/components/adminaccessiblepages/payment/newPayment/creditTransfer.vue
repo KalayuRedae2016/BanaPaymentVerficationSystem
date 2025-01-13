@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toast ref="toast"/>
-    <div class="border border-gray-300 mt-5 p-5 mx-0 rounded-lg shadow-md">
+    <div v-if="role==='SuperAdmin'" class="border border-gray-300 mt-5 p-5 mx-0 rounded-lg shadow-md">
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Transfer Type: </label>
         <select
@@ -101,6 +101,8 @@
 
        
       </div>
+
+      
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Reason: </label>
         <div class="flex flex-col w-full space-y-5">
@@ -146,6 +148,9 @@
         </div>
       </div>
     </div>
+    <div v-else class="mx-5">
+      <p class="text-pink-800">You have no permision to make transfer payments !!! </p>
+    </div>
   </div>
 </template>
 
@@ -161,6 +166,8 @@ export default {
   name: "creditTransfer",
   data() {
     return {
+
+      role:"",
       successToastMessage: "",
       errorToastMessage: "",
       showErrorToast: false,
@@ -186,7 +193,9 @@ export default {
       notEqualFromTo: false,
     };
   },
-
+ created(){
+ this.role=localStorage.getItem("role");
+ },
   computed: {
     serviceBanks() {
       return this.$store.getters.serviceBanks;

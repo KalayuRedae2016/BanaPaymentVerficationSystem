@@ -1,7 +1,7 @@
 <template>
     <div class="mb-16">
        <h1 class="py-3 px-6 text-xl text-blue-500 font-bold">Deadlines(Current Settings)</h1>
-      <div class="grid grid-cols-1 gap-4 border-t border-indigo-800">
+      <div class="grid grid-cols-1 gap-4 border-t border-blue-500">
         <div class="bg-white rounded-lg p-6">
           <div >
             <div >

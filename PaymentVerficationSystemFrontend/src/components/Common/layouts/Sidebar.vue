@@ -179,7 +179,7 @@
               >
                 
                 <i class="fas fa-clock mr-3 text-teal-600"></i>
-                <span>{{ $t("deadlines") }}</span>
+                <span>{{ $t("Payments Info") }}</span>
               </a>
             </li>
 

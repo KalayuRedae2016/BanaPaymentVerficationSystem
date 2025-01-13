@@ -112,9 +112,19 @@
                     showDeactivateModal = !showDeactivateModal;
                     userIdToBeDeactivated = user._id;
                   "
-                  class="bg-red-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
+                  class="bg-pink-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
                 >
                   <i class="fas fa-ban"></i>
+                  <span></span>
+                </button>
+                <button v-if="role==='SuperAdmin'"
+                  @click="
+                    showDelateModal = !showDelateModal;
+                    userToBeDeleted = user
+                  "
+                  class="bg-red-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
+                >
+                  <i class="fas fa-trash"></i>
                   <span></span>
                 </button>
               </div>
@@ -305,6 +315,56 @@
         </div>
       </transition>
     </div>
+    <div v-if="showDelateModal">
+   <transition name="fade" mode="out-in">
+    <div
+      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="deleteModalTitle"
+    >
+      <!-- Modal Content -->
+      <div class="bg-white rounded-lg shadow-lg w-96">
+        <!-- Modal Header -->
+        <div
+          class="bg-blue-500 text-white flex items-center justify-between rounded-t-lg px-4 py-3"
+        >
+          <h2 id="deleteModalTitle" class="text-lg font-semibold">
+            Confirm Deletion
+          </h2>
+          <button
+            @click="showDelateModal = false"
+            class="text-white hover:text-gray-200 focus:outline-none"
+            aria-label="Close Modal"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-4 text-gray-700">
+          <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex space-x-3 p-4">
+          <button
+            @click="confirmUserDelete(userToBeDeleted)" 
+            class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          >
+            <i class="fas fa-check mr-2"></i> Yes, Delete
+          </button>
+          <button
+            @click="showDelateModal = false"
+            class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+          >
+            <i class="fas fa-times mr-2"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </transition>
+    </div>
   </div>
 </template>
   
@@ -314,14 +374,15 @@ export default {
   components: { Toast },
   data() {
     return {
+      role:"",
       showResetedPasswordModal: false,
       showResetModal: false,
-
+      showDelateModal:false,
       selectedUserToBeResetPassword: "",
       userIdToBeDeactivated: "",
       showResetedPasswordModal: false,
       showDeactivateModal: false,
-
+      userToBeDeleted:"",
       headers: [
         { key: "userCode", label: "Code" },
         { key: "fullName", label: "Full Name" },
@@ -394,10 +455,32 @@ export default {
       return range;
     },
   },
+  created(){
+    this.role=localStorage.getItem("role");  },
   async mounted() {
     await this.fetchData();
   },
   methods: {
+   
+confirmUserDelete(userToBeDeleted) {
+
+
+
+console.log("user to be dekleted",userToBeDeleted);
+
+ this.$apiDelete('/api/v1/users',userToBeDeleted._id)
+   .then(response => {
+     console.log("Response:", response);
+     this.showDelateModal = false;
+     this.$refs.toast.showSuccessToastMessage(response.message);
+     setTimeout(() => {
+       this.$reloadPage();
+     }, 2000);
+   })
+   .catch(error => {
+     console.log("Error:", error);
+   });
+},
     changeCurrentPage() {
       this.currentPage = 1;
     },

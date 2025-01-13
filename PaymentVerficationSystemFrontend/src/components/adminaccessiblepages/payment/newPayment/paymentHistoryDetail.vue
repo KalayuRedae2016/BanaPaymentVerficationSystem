@@ -1,22 +1,16 @@
 <template>
   <div>
-    <Toast ref="toast"/>
+    <Toast ref="toast" />
     <div class="container hidden" id="printable-area">
-      <div
-        class="receipt"
-        style="
+      <div class="receipt" style="
           margin-right: 10px;
           margin-top: 10px;
           margin-bottom: 10px;
           margin-left: 10px;
-        "
-      >
+        ">
         <div style="width: 90%; max-width: 100%; min-width: 100%">
-          <img
-            src="../../../../assets/img/banaReceipt1.jpg"
-            alt=""
-            style="max-width: 100%; height: auto; display: block"
-          />
+          <img src="../../../../assets/img/banaReceipt1.jpg" alt=""
+            style="max-width: 100%; height: auto; display: block" />
         </div>
 
         <div class="receipt-header" style="background-color: white">
@@ -26,11 +20,9 @@
             </div>
             <div class="text">
               Date(Day-Month-Year):
-              <span
-                >{{ receiptDate.getDate() }}-{{
-                  changeMonthIntoString(receiptDate.getMonth() + 1)
-                }}-{{ receiptDate.getFullYear() }}</span
-              >
+              <span>{{ receiptDate.getDate() }}-{{
+                changeMonthIntoString(receiptDate.getMonth() + 1)
+              }}-{{ receiptDate.getFullYear() }}</span>
             </div>
           </div>
         </div>
@@ -73,20 +65,16 @@
           Payment Information
         </h2>
         <table class="table">
-          <tr
-            style="
+          <tr style="
               border-bottom: 1px solid #d1d5db;
               border-top: 1px solid #d1d5db;
-            "
-          >
-            <td
-              style="
+            ">
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               FullName
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -94,14 +82,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               UserCode
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -110,14 +96,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Payment Term
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -125,14 +109,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               RegFee
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -140,14 +122,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Regular Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -156,14 +136,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Subsidy Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -171,14 +149,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Urgent Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -186,14 +162,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Service Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -202,14 +176,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Penality
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -218,14 +190,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Total Block
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -237,14 +207,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Total Service
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -253,83 +221,85 @@
           </tr>
         </table>
 
-        <div
-          class="signature-section"
-          style="color: #622e2e; font-weight: bold"
-        >
+        <div class="signature-section" style="color: #622e2e; font-weight: bold">
           <div class="signature-row">
             <div class="signature-block">
               <span>Prepared by: ___________________________</span>
-              <span style="margin-left: 11px"
-                >Signature: ___________________________</span
-              >
+              <span style="margin-left: 11px">Signature: ___________________________</span>
             </div>
             <div class="signature-block">
               <span>Received by: _________________________</span>
-              <span style="margin-left: 13px"
-                >Signature: _________________________</span
-              >
+              <span style="margin-left: 13px">Signature: _________________________</span>
             </div>
           </div>
 
-          <div
-            class="approval-section"
-            style="color: #622e2e; font-weight: bold"
-          >
+          <div class="approval-section" style="color: #622e2e; font-weight: bold">
             <div class="approval-block">
               <span>Approval Bank Deposit: ____________________________</span>
-              <span style="margin-left: 58px"
-                >Signature: ____________________________</span
-              >
+              <span style="margin-left: 58px">Signature: ____________________________</span>
             </div>
           </div>
           <div style="position: relative; width: 100%; height: 150px">
-            <div
-              class="w-32 h-32"
-              id="qrCodeImageContainer"
-              style="
+            <div class="w-32 h-32" id="qrCodeImageContainer" style="
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
                 top: 40px;
                 background-color: lightgray;
-              "
-            >
+              ">
               QR Code
             </div>
           </div>
         </div>
 
-        <div
-          style="
+        <div style="
             display: flex;
             justify-content: center;
-            margin-top: 25px;
-            margin-bottom: 15px;
+            margin-top: 10px;
             color: #622e2e;
             font-weight: bold;
-          "
-        >
+          ">
           <div class="footer">
-            &copy; {{ new Date().getFullYear() }} Bana Mole. All rights
+            &copy; {{ new Date().getFullYear() }} Bana General Market Mall. All rights
             reserved.
           </div>
         </div>
+
+
+
+        <div style="
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.7rem; /* Extremely small text */
+            color: #6b21a8; /* Purple color for the text */
+          ">
+          <div style="font-weight: 800;">
+           <span class="" style="color: black;">Powered By</span> Grand Technology Solutions
+          </div>
+          <div style="
+            font-size: 0.7rem; /* Smaller text for email and phone */
+            margin-top: 4px;
+          ">
+            Email: <a href="mailto:info@grandtechnolgysolutions.com"
+              style="color: black; text-decoration: none;">info@grandtechnolgysolutions.com</a> |
+            Phone: <a href="tel:+251987014339" style="color: black; text-decoration: none;">+251987014339</a>
+          </div>
+        </div>
       </div>
-      <div
-        class="vertical-line"
-        style="
+
+
+      <div class="vertical-line" style="
           width: 2px;
           border-left: 2px dotted #d1d5db;
           height: 100%;
           margin-right: 10px;
-        "
-      ></div>
+        "></div>
 
-      <div
-        class="receipt"
-        style="margin-right: 10px; margin-top: 10px; margin-bottom: 10px"
-      >
+      <div class="receipt" style="margin-right: 10px; margin-top: 10px; margin-bottom: 10px">
         <!-- 
   <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
   <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
@@ -337,11 +307,8 @@
 </div> -->
 
         <div style="width: 90%; max-width: 100%; min-width: 100%">
-          <img
-            src="../../../../assets/img/banaReceipt1.jpg"
-            alt=""
-            style="max-width: 100%; height: auto; display: block"
-          />
+          <img src="../../../../assets/img/banaReceipt1.jpg" alt=""
+            style="max-width: 100%; height: auto; display: block" />
         </div>
 
         <div class="receipt-header" style="background-color: white">
@@ -351,11 +318,9 @@
             </div>
             <div class="text">
               Date(Day-Month-Year):
-              <span
-                >{{ receiptDate.getDate() }}-{{
-                  changeMonthIntoString(receiptDate.getMonth() + 1)
-                }}-{{ receiptDate.getFullYear() }}</span
-              >
+              <span>{{ receiptDate.getDate() }}-{{
+                changeMonthIntoString(receiptDate.getMonth() + 1)
+              }}-{{ receiptDate.getFullYear() }}</span>
             </div>
           </div>
         </div>
@@ -398,20 +363,16 @@
           Payment Information
         </h2>
         <table class="table">
-          <tr
-            style="
+          <tr style="
               border-bottom: 1px solid #d1d5db;
               border-top: 1px solid #d1d5db;
-            "
-          >
-            <td
-              style="
+            ">
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               FullName
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -419,14 +380,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               UserCode
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -435,14 +394,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Payment Term
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -450,14 +407,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               RegFee
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -465,14 +420,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Regular Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -481,14 +434,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Subsidy Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -496,14 +447,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Urgent Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -511,14 +460,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Service Amount
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -527,14 +474,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Penality
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -543,14 +488,12 @@
           </tr>
 
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Total Block
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -562,14 +505,12 @@
             </td>
           </tr>
           <tr style="border-bottom: 1px solid #d1d5db">
-            <td
-              style="
+            <td style="
                 color: #333;
                 font-weight: bold;
                 padding-left: 20px;
                 text-align: left;
-              "
-            >
+              ">
               Total Service
             </td>
             <td style="padding-right: 20px; text-align: right">
@@ -577,73 +518,78 @@
             </td>
           </tr>
         </table>
-        <div
-          class="signature-section"
-          style="color: #622e2e; font-weight: bold"
-        >
+        <div class="signature-section" style="color: #622e2e; font-weight: bold">
           <div class="signature-row">
             <div class="signature-block">
               <span>Prepared by: ___________________________</span>
-              <span style="margin-left: 11px"
-                >Signature: ___________________________</span
-              >
+              <span style="margin-left: 11px">Signature: ___________________________</span>
             </div>
             <div class="signature-block">
               <span>Received by: _________________________</span>
-              <span style="margin-left: 13px"
-                >Signature: _________________________</span
-              >
+              <span style="margin-left: 13px">Signature: _________________________</span>
             </div>
           </div>
 
-          <div
-            class="approval-section"
-            style="color: #622e2e; font-weight: bold"
-          >
+          <div class="approval-section" style="color: #622e2e; font-weight: bold">
             <div class="approval-block">
               <span>Approval Bank Deposit: ____________________________</span>
-              <span style="margin-left: 58px"
-                >Signature: ____________________________</span
-              >
+              <span style="margin-left: 58px">Signature: ____________________________</span>
             </div>
           </div>
           <div style="position: relative; width: 100%; height: 150px">
-            <div
-              class="w-32 h-32"
-              id="qrCodeImageContainer1"
-              style="
+            <div class="w-32 h-32" id="qrCodeImageContainer1" style="
                 position: absolute;
                 left: 50%;
                 transform: translateX(-50%);
                 top: 40px;
                 background-color: lightgray;
-              "
-            >
+              ">
               QR Code
             </div>
           </div>
         </div>
 
-        <div
-          style="
+        <div style="
             display: flex;
             justify-content: center;
-            margin-top: 25px;
-            margin-bottom: 15px;
+            margin-top: 10px;
             color: #622e2e;
             font-weight: bold;
-          "
-        >
+          ">
           <div class="footer">
-            &copy; {{ new Date().getFullYear() }} Bana Mole. All rights
+            &copy; {{ new Date().getFullYear() }} Bana General Market Mall. All rights
             reserved.
+          </div>
+        </div>
+
+
+          <div style="
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.7rem; /* Extremely small text */
+            color: #6b21a8; /* Purple color for the text */
+          ">
+          <div style="font-weight: 800;">
+           <span class="" style="color: black;">Powered By</span> Grand Technology Solutions
+          </div>
+          <div style="
+            font-size: 0.7rem; /* Smaller text for email and phone */
+            margin-top: 4px;
+          ">
+            Email: <a href="mailto:info@grandtechnolgysolutions.com"
+              style="color: black; text-decoration: none;">info@grandtechnolgysolutions.com</a> |
+            Phone: <a href="tel:+251987014339" style="color: black; text-decoration: none;">+251987014339</a>
           </div>
         </div>
       </div>
     </div>
 
     <div class="">
-      <div class="py-3 -mt-1 border-t border-blue-500">
+      <div class="py-3 -mt-1 ">
         <p class="text-blue-500 font-bold px-4">View and Get Receipt</p>
         <div class="border-t border-blue-900 ml-5 mt-5 px-3">
           <div class="mt-4 flex flex-col space-y-5">
@@ -651,24 +597,18 @@
               <!-- Left Column: User Information -->
               <div class="text-gray-800 font-semibold py-4 text-md">
                 <p>
-                  <i
-                    class="fas fa-chevron-right mr-3 text-pink-500 ml-1 text-xs"
-                  ></i>
+                  <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1 text-xs"></i>
 
                   <span class="text-gray-500 text-xs">
                     User Code:
-                    <span class="ml-3">{{ payment.userCode }}</span></span
-                  >
+                    <span class="ml-3">{{ payment.userCode }}</span></span>
                 </p>
                 <p>
-                  <i
-                    class="fas fa-chevron-right mr-3 text-pink-500 ml-1 text-xs"
-                  ></i>
+                  <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1 text-xs"></i>
 
                   <span class="text-gray-500 text-xs">
                     Full Name:
-                    <span class="ml-3">{{ payment.fullName }}</span></span
-                  >
+                    <span class="ml-3">{{ payment.fullName }}</span></span>
                 </p>
                 <p>
                   <i class="fas fa-chevron-right mr-3 text-pink-500 ml-1"></i>
@@ -678,17 +618,13 @@
                     <span class="ml-3">
                       {{ payment.activeYear }}-{{
                         changeMonthIntoString(receiptDate.getMonth() + 1)
-                      }}</span
-                    ></span
-                  >
+                      }}</span></span>
                 </p>
               </div>
-    
+
               <div class="ml-auto">
-                <button
-                  @click="printDiv()"
-                  class="custom-button mt-8 text-xs mr-16 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-                >
+                <button @click="printDiv()"
+                  class="custom-button mt-8 text-xs mr-16 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
                   <i class="fas fa-print text-xs"></i> Print
                 </button>
               </div>
@@ -698,35 +634,23 @@
               <table class="w-full bg-white border border-gray-300 rounded-lg">
                 <thead>
                   <tr class="bg-gray-200">
-                    <th
-                      class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Metric
                     </th>
-                    <th
-                      class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Amount
                     </th>
-                    <th
-                      class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Payment Date(Paid At)
                     </th>
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Days Late
                     </th>
 
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Bank Type
                     </th>
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       TT Number
                     </th>
                     <!-- <th
@@ -734,19 +658,16 @@
                     >
                       Paid
                     </th> -->
-                    <!-- <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th v-if="role === 'SuperAdmin'"
+                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Action
-                    </th> -->
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                <tr class="mt-5 border-b border-t border-gray-300 font-bold">
+                  <tr class="mt-5 border-b border-t border-gray-300 font-bold">
                     <td class="text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class="text-blue-800 px-2  font-bold"
-                      >
+                      <p class="text-blue-800 px-2  font-bold">
                         Regular
                       </p>
                     </td>
@@ -754,7 +675,7 @@
                       <p>{{ payment.regular.amount }}</p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                      <p>{{ payment.regular.paidAt }}</p>
+                      <p>{{ payment.regular.paidAtGC }}</p>
                     </td>
 
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
@@ -772,27 +693,22 @@
                       {{ payment.regular.isPaid }}
                     </td> -->
 
-                    <!-- <td
-                      @click="
-                        showEditModalDetail(
-                          payment.billCode,
-                          payment.regular,
-                          'regular',
-                        )
-                      "
-                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                    >
+                    <td v-if="role === 'SuperAdmin'" @click="
+                      showEditModalDetail(
+                        payment.billCode,
+                        payment.regular,
+                        'regular',
+                      )
+                      " class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <button class="custom-button">
                         <i class="fas fa-edit "></i> Edit
                       </button>
-                    </td> -->
+                    </td>
                   </tr>
 
                   <tr v-if="payment.subsidy.amount > 0" class="border-b border-gray-300 font-bold">
                     <td class=" text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class=" text-cyan-800 px-2 rounded-lg font-bold"
-                      >
+                      <p class=" text-cyan-800 px-2 rounded-lg font-bold">
                         Subsidy
                       </p>
                     </td>
@@ -801,7 +717,7 @@
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.subsidy.amount > 0">
-                        {{ payment.subsidy.paidAt }}
+                        {{ payment.subsidy.paidAtGC }}
                       </p>
                       <p v-else>----------------</p>
                     </td>
@@ -831,37 +747,27 @@
                       <p v-else>Not needed</p>
                     </td> -->
 
-                    <!-- <td
-                      v-if="payment.subsidy.amount > 0"
-                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                    >
-                      <button
-                        @click="
-                          showEditModalDetail(
-                            payment.billCode,
-                            payment.subsidy,
-                            'subsidy',
-                          )
-                        "
-                        class="custom-button"
-                      >
+                    <td v-if="payment.subsidy.amount > 0 && role === 'SuperAdmin'"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                      <button @click="
+                        showEditModalDetail(
+                          payment.billCode,
+                          payment.subsidy,
+                          'subsidy',
+                        )
+                        " class="custom-button">
                         <i class="fas fa-edit "></i> Edit
                       </button>
-                    </td> -->
+                    </td>
 
-                    <td
-                      v-if="payment.subsidy.amount == 0"
-                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                    >
+                    <td v-if="payment.subsidy.amount == 0" class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       Action Not Needed;
                     </td>
                   </tr>
 
                   <tr v-if="payment.urgent.amount > 0" class="border-b border-gray-300 font-bold">
                     <td class="text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class="text-blue-800 px-2 rounded-lg font-bold"
-                      >
+                      <p class="text-blue-800 px-2 rounded-lg font-bold">
                         Urgent
                       </p>
                     </td>
@@ -869,7 +775,7 @@
                       {{ payment.urgent.amount }}
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                      {{ payment.urgent.paidAt }}
+                      {{ payment.urgent.paidAtGC }}
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.urgent.daysLate }}
@@ -894,36 +800,26 @@
                       </p>
                       <p v-else>Not needed</p>
                     </td> -->
-                    <!-- <td
-                      v-if="payment.urgent.amount > 0"
-                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                    >
-                      <button
-                        @click="
-                          showEditModalDetail(
-                            payment.billCode,
-                            payment.urgent,
-                            'urgent',
-                          )
-                        "
-                        class="custom-button"
-                      >
+                    <td v-if="payment.urgent.amount > 0 && role === 'SuperAdmin'"
+                      class="px-3 text-xs text-gray-700 whitespace-nowrap">
+                      <button @click="
+                        showEditModalDetail(
+                          payment.billCode,
+                          payment.urgent,
+                          'urgent',
+                        )
+                        " class="custom-button">
                         <i class="fas fa-edit"></i>Edit
                       </button>
-                    </td> -->
+                    </td>
 
-                    <td
-                      v-if="payment.urgent.amount == 0"
-                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                    >
+                    <td v-if="payment.urgent.amount == 0" class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       Action Not Needed;
                     </td>
                   </tr>
                   <tr class="border-b border-gray-300 font-bold">
                     <td class=" text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class=" text-blue-800 px-2 rounded-lg font-bold"
-                      >
+                      <p class=" text-blue-800 px-2 rounded-lg font-bold">
                         Service
                       </p>
                     </td>
@@ -931,13 +827,13 @@
                       {{ payment.service.amount }}
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                      {{ payment.service.paidAt }}
+                      {{ payment.service.paidAtGC }}
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="!payment.service.dayslate">
                         {{ payment.service.daysLate }}
                       </p>
-                      
+
                     </td>
 
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
@@ -950,21 +846,18 @@
                     <!-- <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       {{ payment.service.isPaid }}
                     </td> -->
-                    <!-- <td
-                      @click="
-                        showEditModalDetail(
-                          payment.billCode,
-                          payment.service,
-                          'service',
-                        )
-                      "
-                      class="px-3 text-xs text-gray-700 whitespace-nowrap"
-                    >
+                    <td v-if="role === 'SuperAdmin'" @click="
+                      showEditModalDetail(
+                        payment.billCode,
+                        payment.service,
+                        'service',
+                      )
+                      " class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <button class="custom-button">
                         <i class="fas fa-edit"></i>Edit
                       </button>
 
-                    </td> -->
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -973,44 +866,28 @@
               <table class="border border-gray-300">
                 <thead>
                   <tr class="bg-gray-200">
-                    <th
-                      class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Metric
                     </th>
-                    <th
-                      class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Regular Penality
                     </th>
-                    <th
-                      class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-24 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Subsidy Penality
                     </th>
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Urgent Penality
                     </th>
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Total Penality
                     </th>
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Paid At
                     </th>
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       Bank Type
                     </th>
-                    <th
-                      class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800"
-                    >
+                    <th class="w-32 px-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">
                       TT Number
                     </th>
                     <!-- <th
@@ -1028,44 +905,34 @@
                 <tbody>
                   <tr class="font-bold">
                     <td class="py-3 text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class="text-gray-500  px-2 rounded-lg font-bold"
-                      >
+                      <p class="text-gray-500  px-2 rounded-lg font-bold">
                         Penality
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class=" text-gray-500 px-2 rounded-lg font-bold"
-                      >
+                      <p class=" text-gray-500 px-2 rounded-lg font-bold">
                         {{ payment.regular.penality }}
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class="text-gray-500  px-2 rounded-lg font-bold"
-                      >
+                      <p class="text-gray-500  px-2 rounded-lg font-bold">
                         {{ payment.subsidy.penality }}
                       </p>
                     </td>
 
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class=" text-gray-500  px-2 rounded-lg font-bold"
-                      >
+                      <p class=" text-gray-500  px-2 rounded-lg font-bold">
                         {{ payment.urgent.penality }}
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
-                      <p
-                        class=" text-gray-500 px-2 rounded-lg font-bold"
-                      >
+                      <p class=" text-gray-500 px-2 rounded-lg font-bold">
                         {{ payment.penality.amount }}
                       </p>
                     </td>
                     <td class="px-3 text-xs text-gray-700 whitespace-nowrap">
                       <p v-if="payment.penality.amount > 0">
-                        {{ payment.penality.paidAt }}
+                        {{ payment.penality.paidAtGC }}
                       </p>
                       <p v-else>----</p>
                     </td>
@@ -1107,6 +974,9 @@
                 </tbody>
               </table>
             </div>
+
+            <!-- <button @click="showDeleteModal=true" class="w-1/4 custom-button bg-pink-500 text-white hover:bg-red-600">Delete Payment</button> -->
+
           </div>
         </div>
       </div>
@@ -1114,26 +984,15 @@
 
     <div v-if="showEditModal">
       <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
+        <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="flex flex-row">
               <div>{{ $t("editBlockAccount") }}</div>
               <div class="ml-32 lg:ml-64">
-                <svg
-                  @click="showEditModal = !showEditModal"
+                <svg @click="showEditModal = !showEditModal"
                   class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </div>
             </div>
@@ -1143,96 +1002,96 @@
             <div class="">
               <form class="px-5 py-5">
                 <div class="mb-4">
-                  <label
-                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
-                  >
+                  <label class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs">
                     Payment Date
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <input
-                    @change="fetchPenality(paymentType, paidt)"
-                    type="date"
-                    class="custom-input"
-                    placeholder="Payment Date"
-                    v-model="paidAtGC"
-                  />
+                  <input @change="fetchPenality(paymentType, paidt)" type="date" class="custom-input"
+                    placeholder="Payment Date" v-model="paidAtGC" />
                 </div>
                 <div class="mb-4">
-                  <label
-                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
-                  >
+                  <label class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs">
                     Bank Type
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <select  v-if="paymentType!='service'" v-model="bankType" class="custom-select">
+                  <select v-if="paymentType != 'service'" v-model="bankType" class="custom-select">
                     <option value="">Select Bank Type</option>
-                    <option 
-                     
-                      v-for="(bank, index) in blockBanks"
-                      :key="'block-' + index"
-                      :value="bank.bankType"
-                    >
+                    <option v-for="(bank, index) in blockBanks" :key="'block-' + index" :value="bank.bankType">
                       {{ bank.bankType }}
                     </option>
                   </select>
                   <select v-else v-model="bankType" class="custom-select">
                     <option value="">Select Bank Type</option>
-                    <option 
-                     
-                      v-for="(bank, index) in serviceBanks"
-                      :key="'block-' + index"
-                      :value="bank.bankType"
-                    >
+                    <option v-for="(bank, index) in serviceBanks" :key="'block-' + index" :value="bank.bankType">
                       {{ bank.bankType }}
                     </option>
                   </select>
                 </div>
 
                 <div class="mb-4">
-                  <label
-                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
-                  >
+                  <label class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs">
                     TTNNumber
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <input
-                    type="TTNumber"
-                    class="custom-input"
-                    placeholder="TTNumber"
-                    v-model="TTNumber"
-                  />
+                  <input type="TTNumber" class="custom-input" placeholder="TTNumber" v-model="TTNumber" />
                 </div>
 
                 <div class="mb-4 flex flex-row space-x-3">
-                  <input
-                    type="checkbox"
-                    :checked="!isPaid"
-                    @change="toggleIsPaid"
-                  />
-                  <label
-                    class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs"
-                  >
+                  <input type="checkbox" :checked="!isPaid" @change="toggleIsPaid" />
+                  <label class="block text-xs font-medium text-gray-700 sm:text-base md:text-xs">
                     Make unpaid
-                  
+
                   </label>
                 </div>
 
-                <button
-                  @click.prevent="saveChanges()"
-                  type="submit"
-                  class="custom-button"
-                >
-                  <i class="fas fa-save"
-                    ><span class="text-md ml-3"></span></i
-                  >
+                <button @click.prevent="saveChanges()" type="submit" class="custom-button">
+                  <i class="fas fa-save"><span class="text-md ml-3"></span></i>
                   Save Changes
                 </button>
               </form>
             </div>
             <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
+    </div>
+
+    <div v-if="showDeleteModal">
+      <transition name="fade" mode="out-in">
+        <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-60" role="dialog"
+          aria-modal="true" aria-labelledby="deleteModalTitle">
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg shadow-lg w-96">
+            <!-- Modal Header -->
+            <div class="bg-blue-500 text-white flex items-center justify-between rounded-t-lg px-4 py-3">
+              <h2 id="deleteModalTitle" class="text-lg font-semibold">
+                Confirm Deletion
+              </h2>
+              <button @click="showDeleteModal = false" class="text-white hover:text-gray-200 focus:outline-none"
+                aria-label="Close Modal">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-4 text-gray-700">
+              <p>Are you sure you want to delete this user? This action cannot be undone.</p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex space-x-3 p-4">
+              <button @click="confirmPaymentDelete()"
+                class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                <i class="fas fa-check mr-2"></i> Yes, Delete
+              </button>
+              <button @click="showDeleteModal = false"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500">
+                <i class="fas fa-times mr-2"></i> Cancel
+              </button>
+            </div>
           </div>
         </div>
       </transition>
@@ -1245,13 +1104,15 @@
 import QRCode from "qrcode";
 import Toast from "../../../Common/Toast.vue"
 export default {
-  components:{
+  components: {
     Toast,
   },
   data() {
     return {
       //for editing error and success
-      isPaid:true,
+      showDeleteModal: false,
+      role: '',
+      isPaid: true,
       showSuccess: false,
       showError: false,
       errorMessage: "",
@@ -1264,7 +1125,7 @@ export default {
       bankType: "",
       paymentType: "",
       penality: "",
-      isPaid:true,
+      isPaid: true,
       billCode: "",
 
       showEditModal: false,
@@ -1274,7 +1135,7 @@ export default {
       userCode: "",
       activeYear: "",
       activeMonth: "",
-   
+
 
       // we will try from db then. but now from static
       paymentTerm: "monthly",
@@ -1340,7 +1201,7 @@ export default {
           isPaid: '',
           daysLate: "",
         },
-      
+
       },
     };
   },
@@ -1350,44 +1211,46 @@ export default {
     this.userCode = this.$route.params.userCode || "Default UserCode";
     this.year = this.$route.query.year || "Default Year";
     this.month = this.$route.query.month || "Default Month";
+    this.role = localStorage.getItem("role");
 
     console.log("usercode,year,month", this.userCode, this.year, this.month);
 
-    try{ await this.$apiGet("/api/v1/organization")
-      .then((response) => {
-        console.log("Org response", response);
-        if (response.status === 1) {
-          console.log(
-            "Organization email",
-            response.organization.companyEmail
-          );
-          this.email = response.organization.companyEmail;
-          this.tel = response.organization.companyPhoneNumber;
-          this.address = response.organization.companyAddress;
-        }
-      })
-     }catch(error) {
-        console.log("Error", error.status,error.message);
-        this.organizationCreated = 0;
-      }finally{
+    try {
+      await this.$apiGet("/api/v1/organization")
+        .then((response) => {
+          console.log("Org response", response);
+          if (response.status === 1) {
+            console.log(
+              "Organization email",
+              response.organization.companyEmail
+            );
+            this.email = response.organization.companyEmail;
+            this.tel = response.organization.companyPhoneNumber;
+            this.address = response.organization.companyAddress;
+          }
+        })
+    } catch (error) {
+      console.log("Error", error.status, error.message);
+      this.organizationCreated = 0;
+    } finally {
 
-      };
-  try {
-    const params={
-          userCode: this.userCode,
-          activeYear: this.year,
-          activeMonth: this.month,
-        }
+    };
+    try {
+      const params = {
+        userCode: this.userCode,
+        activeYear: this.year,
+        activeMonth: this.month,
+      }
 
-    await this.$apiGet("/api/v1/payments/paymentbyMonth",params)
-      .then((response) => {
-        console.log("response pp", response);
-        this.payment = response.payment;
-        console.log("this payment is billcode ", this.payment.billCode);
-      })
-    }catch(error){
-        console.log("error fetchyng payment bymonth",error.status,error.message);
-      }finally{
+      await this.$apiGet("/api/v1/payments/paymentbyMonth", params)
+        .then((response) => {
+          console.log("response pp", response);
+          this.payment = response.payment;
+          console.log("this payment is billcode ", this.payment.billCode);
+        })
+    } catch (error) {
+      console.log("error fetchyng payment bymonth", error.status, error.message);
+    } finally {
 
     };
   },
@@ -1401,6 +1264,22 @@ export default {
   },
 
   methods: {
+
+    confirmPaymentDelete() {
+      this.$apiDelete('/api/v1/payments/deletePayment', this.payment._id)
+        .then(response => {
+          console.log("Response:", response);
+          this.showDelateModal = false;
+          this.$refs.toast.showSuccessToastMessage(response.message);
+          setTimeout(() => {
+            this.$reloadPage();
+          }, 2000);
+        })
+        .catch(error => {
+          console.log("Error:", error);
+        });
+    },
+
     toggleIsPaid(event) {
       this.isPaid = !event.target.checked;
     },
@@ -1435,64 +1314,65 @@ export default {
       console.log("payment type: ", paymentType);
       this.bankType = payment.bankType;
       this.TTNumber = payment.TTNumber;
-      this.paidAt = payment.paidAt;
+
+      this.paidAt = new Date(payment.paidAt);
+
       this.paymentType = paymentType;
       this.billCode = billCode;
       this.isPaid = payment.isPaid;
       this.paidAtGC = payment.paidAtGC;
-
       this.showEditModal = true;
     },
 
-
     async saveChanges() {
-  // Construct the common payment object
-  const payment = {
-    paymentType: this.paymentType,
-    paidAt: this.paidAt,
-    paidAtGC: this.paidAtGC,
-    bankType: this.bankType,
-    TTNumber: this.TTNumber,
-    isPaid: this.isPaid,
-  };
+      // Construct the common payment object
+      const payment = {
+        paymentType: this.paymentType,
+        paidAt: this.paidAt,
+        paidAtGC: this.paidAtGC,
+        bankType: this.bankType,
+        TTNumber: this.TTNumber,
+        isPaid: this.isPaid,
+      };
 
-  // Add userId from localStorage to the payload
-  const userId = localStorage.getItem("userId");
+      // Add userId from localStorage to the payload
+      const userId = localStorage.getItem("userId");
 
-  // Dynamically build the payload based on paymentType
-  this.payload = {
-    billCode: this.billCode,
-    userId, // Include userId in the payload
-    [this.paymentType]: payment,
-  };
+      // Dynamically build the payload based on paymentType
+      this.payload = {
+        billCode: this.billCode,
+        userId: userId,
+        [this.paymentType]: payment,
+      };
 
-  console.log("Payload:", this.payload);
+      console.log("Payload:", this.payload);
 
-  try {
-    const response = await this.$apiPatch("/api/v1/payments/update", "", this.payload);
+      try {
+        const response = await this.$apiPatch("/api/v1/payments/update", "", this.payload);
 
-    console.log("Response after editing:", response);
+        console.log("Response after editing:", response);
 
-    // Handle response logic
-    if (response.items.isPaid === false) {
-      this.$router.push({
-        path: "/admindashboard/payments1",
-        query: {
-          userCode: this.payment.userCode,
-          fullName: this.payment.fullName,
-          activeTab: 1,
-          bankStatement: true,
-        },
-      });
-    }
-    this.$refs.toast.showSuccessToastMessage(response.message);
-    this.$reloadPage();
-  } catch (error) {
-    console.log("Error confirming:", error.status, error.message);
-  } finally {
-    this.showEditModal = false;
-  }
-},
+        // Handle response logic
+        if (response.items.isPaid === false) {
+          this.$router.push({
+            path: "/admindashboard/payments1",
+            query: {
+              userCode: this.payment.userCode,
+              fullName: this.payment.fullName,
+              activeTab: 1,
+              bankStatement: true,
+              radioStatus: "newPayment",
+            },
+          });
+        }
+        this.$refs.toast.showSuccessToastMessage(response.message);
+        this.$reloadPage();
+      } catch (error) {
+        console.log("Error confirming:", error.status, error.message);
+      } finally {
+        this.showEditModal = false;
+      }
+    },
 
 
     async generateQRCodeImage() {

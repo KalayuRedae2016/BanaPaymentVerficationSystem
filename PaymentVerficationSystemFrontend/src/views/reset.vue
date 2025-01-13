@@ -74,7 +74,7 @@ export default {
   },
   mounted() {
     this.token = this.$route.params.token;
-   
+    console.log("token from param is " , this.token);
   },
   methods: {
     changePassword() {

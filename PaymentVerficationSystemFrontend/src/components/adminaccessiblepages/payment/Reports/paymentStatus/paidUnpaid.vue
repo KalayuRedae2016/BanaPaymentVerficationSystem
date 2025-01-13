@@ -205,15 +205,26 @@ export default {
           },
         });
       } else {
+        // this.$router.push({
+        //   path: "/admindashboard/payments1",
+        //   query:{
+        //     activeTab:1,
+        //     userCode:userCode,
+        //     userSelected:true,
+        //     fullName:fullName
+        //   }
+        // });
+
         this.$router.push({
-          path: "/admindashboard/payments1",
-          query:{
-            activeTab:1,
-            userCode:userCode,
-            userSelected:true,
-            fullName:fullName
-          }
-        });
+        path: "/admindashboard/payments1",
+        query: {
+          userCode: userCode,
+          fullName: fullName,
+          activeTab: 1,
+          bankStatement: true,
+          radioStatus:"newPayment",
+        },
+      });
       }
     },
     changeSearched(paymentStatus) {

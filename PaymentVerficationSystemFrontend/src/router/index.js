@@ -1,9 +1,13 @@
 import { createRouter, createWebHistory } from "vue-router";
 // Import your components
 import HomeView from "../views/HomeView.vue";
+
 import reset from "../views/reset.vue";
+
 import accessDenied from "../views/accessDenied.vue";
+
 import portofilo from "../views/portofilo.vue";
+
 import jTableCaller from '../components/Common/jatableCaller.vue';
 import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
 import resetTables from "../components/Common/resetTables.vue"
@@ -24,12 +28,12 @@ import payment1 from "../components/adminaccessiblepages/payment/payments1.vue";
 import regular from "../components/adminaccessiblepages/payment/paymentSetting/blockNewPayment.vue";
 import clients from "../components/adminaccessiblepages/clients/clients.vue";
 import deactivate from "../components/adminaccessiblepages/clients/deactivate.vue";
+
+import importUsers from "../components/adminaccessiblepages/clients/insertMultiple.vue";
+
 import createClient from "../components/adminaccessiblepages/clients/createClient.vue";
 import editClient from "../components/adminaccessiblepages/clients/editClient.vue";
-
 import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEditProfile.vue";
-
-
 import overdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/overdue.vue";
 import paidUnpaid from "../components/adminaccessiblepages/payment/Reports//paymentStatus/paidUnpaid.vue"
 // import transferHistory from "../components/adminaccessiblepages/payment/Reports/transferHistory.vue"
@@ -54,7 +58,6 @@ import userdashboardFirst from "../components/UserAccessiblepages/userdashboard/
 import profile from "../components/UserAccessiblepages/profile/editProfile.vue";
 import idCard from "../components/UserAccessiblepages/idCard/idCard.vue";
 import infoPayment from "../components/UserAccessiblepages/information/info.vue";
-import { faHeadphonesSimple } from "@fortawesome/free-solid-svg-icons";
 
 const routes = [
   {
@@ -113,6 +116,7 @@ const routes = [
       { path: "clients", component: clients },
       { path: "deactivate", component: deactivate },
       { path: "create-client", name: "create-client", component: createClient },
+      { path: "import-users", name: "import-users", component: importUsers },
       { path: "edit-client/:clientId", name: "edit-client", component: editClient },
       { path: "empty-edit-profile/:clientId", name: "empty-edit-profile", component: emptyEditProfile },
      
@@ -234,13 +238,13 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (requiresGuest) {
+    //alert("guset")
     console.log("require guest detected");
-    if (isAuthenticated) {
-      // If the route requires guest and user is authenticated, redirect to dashboard or home
-      next("/admindashboard"); // Change to a route you want for authenticated users
-    } else {
+
+
+      //alert("proccedd")
       next(); // Proceed to the guest route
-    }
+    
   } else {
     // If no specific auth or guest requirements, just proceed
     next();

@@ -186,8 +186,10 @@ exports.updateUser = catchAsync(async (req, res) => {
     }
   }
 
+
     const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
     const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
+
 
     res.status(200).json({
       status: 1,
@@ -208,7 +210,7 @@ exports.updateUser = catchAsync(async (req, res) => {
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
   //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
-  const deleteUser = await User.findByIdAndDelete(req.query.id)
+  const deleteUser = await User.findByIdAndDelete(req.params.id)
   if (!deleteUser) {
     return next(new AppError("user entry not found", 404))
   }
@@ -218,6 +220,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     message: `User Deleted`
   });
 });
+
 exports.deleteUsers = catchAsync(async (req, res, next) => {
   const deletedUsers= await User.deleteMany({});  // Deletes all documents
   if (deletedUsers.deletedCount === 0) {

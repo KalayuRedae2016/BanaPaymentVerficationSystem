@@ -18,6 +18,18 @@ const createDefaultAdminUser = catchAsync(async () => {
         phoneNumber:"0909090909",
         email: 'kalayuredae2016@gmail.com',
       });
+      
+      const hashedPassword1 = await bcrypt.hash('admin1234', 12);
+      await User.create({
+        userCode: 'BM0002',
+        password: hashedPassword1, // Static password for the initial login
+        firstName:"Defaul tAdmin",
+        lastName:"Default Admin",
+        role: 'Admin',
+        phoneNumber:"0909090909",
+        email: 'tadiosgb26@gmail.com',
+      });
+
       // console.log('Default Admin User Created:', defaultAdmin.userCode);
       const subject = 'Welcome to the system';
       const message = `A default admin user has been created for you.\nUserCode: admin\nPassword: admin1234\nPlease change your password after your first login.`;

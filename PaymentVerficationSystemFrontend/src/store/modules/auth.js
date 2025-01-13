@@ -82,7 +82,9 @@ const mutations = {
 
 const actions = {
   async fetchBanks({ commit }) {
+    if(localStorage.getItem('token')!=null){
       try { 
+   
       await apiGet("/api/v1/organization")
       .then((response) => {
           console.log("response from the store", response);
@@ -96,6 +98,8 @@ const actions = {
       }finally{
 
       };
+    }
+    
   },
   login({ commit }, { token }) {
     console.log("token in commit ",token);

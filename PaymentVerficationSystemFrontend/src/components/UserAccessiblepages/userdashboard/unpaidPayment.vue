@@ -1,16 +1,12 @@
 <template>
   <div class="p-4">
- 
-
     <div
-      
       class=" "
     >
       <div class="text-gray-700 text-sm font-bold ml-1">
-        <p>User Code: {{ userCode }}</p>
-        <p>Full Name: {{fullName }}</p>
+        <p class="text-blue-500 font-bold ml-2">User Code: {{ userCode }}</p>
+        <!-- <p>Full Name: {{fullName }}</p> -->
       </div>
-
       <div class="border-t-2 border-blue-500 border-dotted mt-5" v-if="payments.length >0">
         <div
           class="p-4 border-b-2 border-blue-500 border-dotted cursor-pointer"
@@ -150,13 +146,9 @@
           </div>
         </div>
       </div>
-
-
-      <div v-else class="mt-5 border border-gray-200 rounded-lg p-5 text-blue-500 ">
+      <div v-else class="mt-5 border border-gray-200 rounded-lg p-5 text-pink-800 ">
         There is no opened unpaid Payment
       </div>
-
-      <!-- this is the end of the forloop -->
     </div>
   </div>
 </template>

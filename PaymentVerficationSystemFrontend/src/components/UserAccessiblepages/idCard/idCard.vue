@@ -1,6 +1,6 @@
 <template>
   <div class="mb-10 px-10 py-2  mb-64">
-    <div class=" border-b border-indigo-800 mb-5">
+    <div class=" border-b border-blue-500 mb-5">
       <div class=" flex flex-row mb-5">
         <h1 class="font-extrabold text-blue-500">Id Card</h1>
       
@@ -12,16 +12,16 @@
   <div
     class="flex justify-between items-center w-full py-3 px-4 border border-gray-300 rounded-md shadow-sm cursor-pointer hover:bg-gray-100"
     @click="viewCardAsPDF()">
-    <span>View Card</span>
-    <i class="fas fa-eye text-gray-500"></i>
+    <span class="text-blue-500">View Card</span>
+    <i class="text-blue-500 fas fa-eye "></i>
   </div>
 
   <!-- Download -->
   <div
     class="flex justify-between items-center w-full py-3 px-4 border border-gray-300 rounded-md shadow-sm cursor-pointer hover:bg-gray-100"
     @click="downloadReceiptAsPDF()">
-    <span>Download</span>
-    <i class="fas fa-download text-gray-500"></i>
+    <span class="text-blue-500">Download</span>
+    <i class="text-blue-500 fas fa-download "></i>
   </div>
 </div>
 

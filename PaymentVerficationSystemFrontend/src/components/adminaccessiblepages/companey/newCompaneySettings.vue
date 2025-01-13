@@ -681,7 +681,7 @@ export default {
             }
           })
       } catch (error) {
-        console.log("error during insert", error.status, error.message);
+        console.log("error during insert org", error.status, error.message);
         this.showError = true;
         this.errorMessage = error.message;
       } finally {

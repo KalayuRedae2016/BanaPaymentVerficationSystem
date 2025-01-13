@@ -213,14 +213,45 @@ function calculateBalances(payments, org) {
   if (org.paymentTransfers && Array.isArray(org.paymentTransfers)) {
     org.paymentTransfers.forEach((transfer) => {
       const { transferType, fromBankType, toBankType, amount } = transfer;
-      if (transferType === "block") {
-        totalBalanceBankType[fromBankType].blockOutcoming += amount;
-        totalBalanceBankType[toBankType].blockIncoming += amount;
-      }
-      if (transferType === "service") {
-        totalBalanceBankType[fromBankType].serviceOutcoming += amount;
-        totalBalanceBankType[toBankType].serviceIncoming += amount;
-      }
+      // if (transferType === "block") {
+      //   totalBalanceBankType[fromBankType].blockOutcoming += amount;
+      //   totalBalanceBankType[toBankType].blockIncoming += amount;
+      // }
+      // if (transferType === "service") {
+      //   totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+      //   totalBalanceBankType[toBankType].serviceIncoming += amount;
+      // }
+
+
+
+
+// tadios
+if (!totalBalanceBankType[fromBankType]) {
+  totalBalanceBankType[fromBankType] = {};
+}
+if (!totalBalanceBankType[toBankType]) {
+  totalBalanceBankType[toBankType] = {};
+}
+
+
+if (transferType === "block") {
+  totalBalanceBankType[fromBankType].blockOutcoming = totalBalanceBankType[fromBankType].blockOutcoming || 0;
+  totalBalanceBankType[toBankType].blockIncoming = totalBalanceBankType[toBankType].blockIncoming || 0;
+
+  totalBalanceBankType[fromBankType].blockOutcoming += amount;
+  totalBalanceBankType[toBankType].blockIncoming += amount;
+}
+
+if (transferType === "service") {
+  totalBalanceBankType[fromBankType].serviceOutcoming = totalBalanceBankType[fromBankType].serviceOutcoming || 0;
+  totalBalanceBankType[toBankType].serviceIncoming = totalBalanceBankType[toBankType].serviceIncoming || 0;
+
+  totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+  totalBalanceBankType[toBankType].serviceIncoming += amount;
+}
+
+//end of tadios
+      
     });
   }
 

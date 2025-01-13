@@ -57,7 +57,7 @@
               v-show="dropdownVisible"
               class="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-300 rounded-lg shadow-lg z-20"
             >
-            <li>
+            <li  v-if="role==='SuperAdmin' || role==='Admin'">
                 <a
                   href="#"
                   class="block px-4 py-2 text-blue-500 hover:bg-gray-100"
@@ -105,7 +105,35 @@
           <div class="bg-blue-500 text-white font-semibold px-4 py-2">
             {{ $t("Notifications") }}
           </div>  
-          <div v-if="notificationLength ===0" class="mx-10 mt-5 text-blue-500 border border-gray-100 p-5">No notifications</div>
+          <ul>
+            <li
+            
+              class="border-b last:border-0"
+            >
+              <a
+                href="#"
+                class="flex items-start px-4 py-2 hover:bg-gray-100"
+                @click="navigateToPayment(notification)"
+              >
+                <img
+                  :src="'https://via.placeholder.com/128'"
+                  alt="Notification Image"
+                  class="w-10 h-10 rounded-full mr-3"
+                />
+                <div>
+                  <p class="text-sm font-bold text-blue-500">
+                    Paid for 2025 - ganuary
+                  </p>
+                  <p class="text-xs text-gray-500">
+                {{new Date()}}
+                  </p>
+                </div>
+              </a>
+            </li>
+
+            
+          </ul>
+          <div v-if="notificationLength ===9" class="mx-10 mt-5 text-blue-500 border border-gray-100 p-5">No notifications</div>
           <ul>
             <li
               v-for="(notification, index) in notifications"
@@ -357,38 +385,43 @@
         </main>
       </div>
 
-      <footer
-        class="block py-4 lg:ml-100 md:ml-[85px] md:mr-[15px] lg:mr-350 ml-0 mr-0 xl:mr-[350px] xl:ml-[85px]"
-      >
-        <div class="container mx-auto px-4">
-          <hr class="mb-4 border-b-1 border-blueGray-200" />
-          <div
-            class="flex flex-wrap items-center md:justify-between justify-center"
-          >
-            <div class="w-full">
-              <ul class="flex flex-col lg:flex-row">
-                <li>Copyright © {{ date }}</li>
-                <li>
-                  <a
-                    href="https://grandtechsolutions.com"
-                    class="text-purple-700  text-xs font-extrabold py-1 px-o lg:px-3"
-                  >
-                    {{ $t("Grand Technology Solutions ") }}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://bannamall.com/"
-                    class="text-blue-600 hover:text-blueGray-800 text-xs font-extrabold block py-1 px-0 lg:px-3"
-                  >
-                    {{ $t("Bana General Market Mall  ") }}
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <footer class="block py-6 bg-gray-100">
+  <div class="container mx-auto px-6">
+    <!-- Divider -->
+    <hr class="mb-6 border-gray-300" />
+
+    <!-- Footer Content -->
+    <div class="flex flex-col lg:flex-row justify-between items-center w-full">
+      <!-- Left Content -->
+      <div class="text-center lg:text-left mb-4 lg:mb-0 w-full lg:w-auto">
+        <a
+          href="https://bannamall.com/"
+          class="text-blue-600 hover:text-blue-800 text-lg font-bold block"
+        >
+          {{ $t("Bana General Market Mall") }}
+        </a>
+        <p class="text-gray-500 text-sm mt-2">
+          Copyright © {{ date }}
+        </p>
+      </div>
+
+      <!-- Right Content -->
+      <div class="flex flex-col lg:flex-row items-center justify-center lg:justify-end w-full lg:w-auto">
+        <p class="text-gray-500 text-sm font-semibold lg:mr-2">
+          Powered By
+        </p>
+        <a
+          href="https://grandtechsolutions.com"
+          class="text-purple-700 hover:text-purple-900 text-lg font-bold"
+        >
+          {{ $t("Grand Technology Solutions") }}
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
     </div>
   </div>
 </template>

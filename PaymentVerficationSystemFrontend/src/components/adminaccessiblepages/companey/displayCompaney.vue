@@ -273,6 +273,7 @@ export default {
    try {
         await this.$apiGet('/api/v1/organization').then((response) => {
         if (response.status === 1) {
+          console.log("from org response",response)
           this.isLoading = false;
           if (response.organization.length == 0) {
             this.organizationCreated = 2;
@@ -284,8 +285,9 @@ export default {
         }
       })
      } catch(error) {
-        console.log("Error", error);
-        this.organizationCreated = 0;
+        console.log("Error from the organization", error);
+        this.organizationCreated = 2;
+        this.isLoading = false;
       }finally{
 
       }
