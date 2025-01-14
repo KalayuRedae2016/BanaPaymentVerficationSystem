@@ -256,6 +256,46 @@
           </p>
         </div>
       </div>
+      <div>
+        
+        <div style="
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            color: #622e2e;
+            font-weight: bold;
+          ">
+          <div class="footer">
+            &copy; {{ new Date().getFullYear() }} Bana General Market Mall. All rights
+            reserved.
+          </div>
+        </div>
+
+
+          <div style="
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 0.7rem; /* Extremely small text */
+            color: #6b21a8; /* Purple color for the text */
+          ">
+          <div style="font-weight: 800;">
+           <span class="" style="color: black;">Powered By</span> Grand Technology Solutions
+          </div>
+          <div style="
+            font-size: 0.7rem; /* Smaller text for email and phone */
+            margin-top: 4px;
+            margin-bottom: 4px;
+          ">
+            Email: <a href="mailto:info@grandtechnolgysolutions.com"
+              style="color: black; text-decoration: none;">info@grandtechnolgysolutions.com</a> |
+            Phone: <a href="tel:+251987014339" style="color: black; text-decoration: none;">+251987014339</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -359,8 +399,8 @@ export default {
       const qrData = `"User Code":${this.userCode}, "Full Name": ${this.fullName}, "Phone Number":${this.userPhoneNumber}, "Email":${this.userEmail}, "Address":${this.userAddress}, "Gender":${this.userGender}, "Company":${'https://bannamall.com/'}`;
       try {
         const qrCodeImage = await QRCode.toDataURL(qrData, { errorCorrectionLevel: 'H' });
-        document.getElementById('qrCodeImageContainer').innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
-        document.getElementById('qrCodeImageContainer1').innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
+        document.getElementById('qrCodeImageContainer').innerHTML = `<img src="${qrCodeImage}" alt="QR Code" style="height:200px;"/>`;
+        document.getElementById('qrCodeImageContainer1').innerHTML = `<img src="${qrCodeImage}" alt="QR Code" style="width:100px;height:100px;"/> `;
 
       } catch (error) {
         console.error('Error generating QR code:', error);
