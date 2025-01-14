@@ -1399,8 +1399,11 @@ export default {
     },
 
     async generateQRCodeImage() {
-      const qrData = `User ID: ${this.userId}, User Name: ${this.userName}`;
-
+      const qrData = `
+       Company:${'Bana General Report'},
+       Report Type: ${this.reportType},
+       reported Date:${new Date().toDateString()}
+      `;
       try {
         const qrCodeImage = await QRCode.toDataURL(qrData, {
           errorCorrectionLevel: "H",
