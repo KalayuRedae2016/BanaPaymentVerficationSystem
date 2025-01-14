@@ -16,7 +16,7 @@ const createDefaultAdminUser = catchAsync(async () => {
         lastName:"User",
         role: 'SuperAdmin',
         phoneNumber:"09090909091",    
-        email: 'kalayuredae2016@gmail.com', 
+        email: 'tadiosgb26@gmail.com',  
       });
       
       const hashedPassword1 = await bcrypt.hash('admin1234', 12);
@@ -27,7 +27,8 @@ const createDefaultAdminUser = catchAsync(async () => {
         lastName:"Default Admin",
         role: 'Admin',
         phoneNumber:"09090909091",
-        email: 'tadiosgb261@gmail.com',  
+        email: 'kalayuredae2016@gmail.com', 
+      
       });
 
       // console.log('Default Admin User Created:', defaultAdmin.userCode);
