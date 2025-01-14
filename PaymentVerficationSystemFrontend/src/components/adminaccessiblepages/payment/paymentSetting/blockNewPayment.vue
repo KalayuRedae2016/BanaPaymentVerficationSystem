@@ -4,7 +4,7 @@
     <Toast ref="toast" />
 
     <!-- //end of transtion -->
-    <hr class="border border-gray-300" />
+  
     <div class="flex-col rounded-lg">
       <div class="flex flex-wrap">
         <div

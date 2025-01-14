@@ -1,5 +1,6 @@
 <template>
   <div>
+    <hr class="border border-gray-300" />
     <Toast ref="toast"/>
     <div v-if="role==='SuperAdmin'" class="border border-gray-300 mt-5 p-5 mx-0 rounded-lg shadow-md">
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">

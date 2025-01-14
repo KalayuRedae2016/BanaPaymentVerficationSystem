@@ -13,6 +13,12 @@
         </div>
       </div>
 
+      <div class="justify-center items-center mb-5 lg:pl-16"> 
+          <p class="text-blue-500 font-extrabold ">
+        Bana General Market Mall</p>
+      </div>
+    
+
       <div
         v-if="showError"
         class="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"

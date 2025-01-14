@@ -21,7 +21,7 @@
           </button>
         </div>
 
-        <div class="border-t border-blue-800  ">
+        <div class="border-t  border-blue-300  ">
           <div v-show="activeTab === 0" class="">
             <div class="">
               <!-- Payment Settings Options -->
@@ -65,7 +65,7 @@
                     </label>
                   </div>
                 </div>
-
+                <hr class="border border-gray-300 mt-5" />
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <block-payment
@@ -75,6 +75,8 @@
                     v-else-if="paymentSettingStatus === 'paymentSettingHistory'"
                   />
                 </div>
+
+
               </div>
             </div>
           </div>
@@ -124,7 +126,7 @@
                 </div>
 
 
-
+                <hr class="border border-gray-300 mt-5" />
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <all-payments
@@ -182,6 +184,8 @@
                     </label>
                   </div>
                 </div>
+
+                <hr class="border border-gray-300 mt-5" />
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <transfered-payments
@@ -242,6 +246,7 @@
                   </div>
                 </div>
 
+                <hr class="border border-gray-300 mt-5" />
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <all-payment-report

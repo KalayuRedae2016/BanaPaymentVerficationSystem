@@ -1,7 +1,6 @@
 <template>
  
   <div class=" rounded-lg py-2 ">
-    <hr class="border border-gray-300 ">
     <div class="flex flex-col mx-auto  ">
       <div class="flex flex-row  w-full lg:w-1/2  mt-5 px-4">
         <label for="month" class="custom-label mt-5 w-1/4"
