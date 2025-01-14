@@ -42,7 +42,7 @@
             email: `banauser${i + 1}@gmail.com`,
             phoneNumber: `+251911${100000 + i}`,
             role: "User",
-            tigrignaFullName: `ዳኔልዳኔል ${i + 1}`,
+            tigrignaName: `ዳኔልዳኔል ${i + 1}`,
           });
         }
         try {
