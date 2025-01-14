@@ -790,6 +790,7 @@ export default {
 
 
           this.isLoading = false;
+
           this.companyProfileId = response.organization._id;
           this.companyName = response.organization.companyName;
           this.companyPhoneNumber = response.organization.companyPhoneNumber;
@@ -797,8 +798,8 @@ export default {
           this.companyAddress = response.organization.companyAddress;
           this.companyPrefixCode = response.organization.companyPrefixCode;
           this.blockBankAccounts = response.organization.blockBankAccounts;
-          this.serviceBankAccounts =
-            response.organization.serviceBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+
 
           console.log("company Name", response.organization.companyName);
           this.companyProfile = response;
@@ -1042,6 +1043,8 @@ export default {
         this.account.bankType = account;
       }
     },
+
+
     async saveNewBlockBank() {
       this.otherBlockSelected = false;
       console.log(
@@ -1073,7 +1076,17 @@ export default {
             console.log("response", response);
             if (Number(response.status) === 1) {
               this.$refs.toast.showSuccessToastMessage(response.message);
-              this.$reloadPage();
+              //this.$reloadPage();
+          this.companyProfileId = response.organization._id;
+          this.companyName = response.organization.companyName;
+          this.companyPhoneNumber = response.organization.companyPhoneNumber;
+          this.companyEmail = response.organization.companyEmail;
+          this.companyAddress = response.organization.companyAddress;
+          this.companyPrefixCode = response.organization.companyPrefixCode;
+          this.blockBankAccounts = response.organization.blockBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+
+
             }
           })
       } catch (error) {
@@ -1120,6 +1133,7 @@ export default {
         console.log("finally save new service account")
       }
     },
+
     addBlockBankAccount() {
       this.addBlockAccount = true;
       console.log("i am here");
@@ -1167,8 +1181,18 @@ export default {
           .then((response) => {
             console.log("response", response);
             if (Number(response.status) === 1) {
-              this.$refs.toast.showSuccessToastMessage(response.message);
-              this.$reloadPage();
+           //this.$reloadPage();
+
+
+          this.companyProfileId = response.organization._id;
+          this.companyName = response.organization.companyName;
+          this.companyPhoneNumber = response.organization.companyPhoneNumber;
+          this.companyEmail = response.organization.companyEmail;
+          this.companyAddress = response.organization.companyAddress;
+          this.companyPrefixCode = response.organization.companyPrefixCode;
+          this.blockBankAccounts = response.organization.blockBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+          this.$refs.toast.showSuccessToastMessage(response.message);
             }
           })
       } catch (error) {
@@ -1293,7 +1317,17 @@ export default {
             console.log("response", response);
             if (Number(response.status) === 1) {
               this.$refs.toast.showSuccessToastMessage(response.message);
-              this.$reloadPage();
+              
+          this.companyProfileId = response.organization._id;
+          this.companyName = response.organization.companyName;
+          this.companyPhoneNumber = response.organization.companyPhoneNumber;
+          this.companyEmail = response.organization.companyEmail;
+          this.companyAddress = response.organization.companyAddress;
+          this.companyPrefixCode = response.organization.companyPrefixCode;
+          this.blockBankAccounts = response.organization.blockBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+
+              //this.$reloadPage();
             }
           })
       } catch (error) {

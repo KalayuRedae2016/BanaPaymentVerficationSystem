@@ -998,7 +998,39 @@ export default {
   this.paymentSetting.startingDate = formatDate(new Date(year, month - 1, 1)); // First day of the month
   this.paymentSetting.endingDate = formatDate(new Date(year, month, 0));      // Last day of the month
 },
+  async latestSetting(){
+    try {await this.$apiGet("/api/v1/paymentSetting/latest")
+      .then((response) => {
+        console.log("response latest setting kkkkk", response);
+        if (response.status === 1) {
+          this.paymentSettingCreated = 1;
+          if (response.paymentSetting) {
+        
+            this.paymentSetting = response.paymentSetting;
+         // this.paymentSetting.penalityLate10Days = Number(this.paymentSetting.penalityLate10Days).toFixed(0);
 
+             if(this.paymentSetting.activate==true){
+              this.paymentActivate = true;
+             }else{
+              this.paymentActivate = false;
+             }
+    
+          } else {
+            this.paymentSettingCreated = 2;
+          }
+        }else{
+          this.paymentSettingCreated = 2;
+        }
+      })
+       }catch(error){
+        console.error(
+          "An error occurred while fetching payment settings:",
+          error.status,error.message
+        );
+        this.paymentSettingCreated = 0; // Indicate an error state
+      }finally {
+    }
+  },
 
     async createRegularPayment() {
       console.log(
@@ -1190,12 +1222,13 @@ export default {
         .then((response) => {
           console.log("response", response);
           if (response.status === 1) {
-            this.paymentSetting = response.paymentSetting;
+            //this.paymentSetting = response.paymentSetting;
+          
             this.$refs.toast.showSuccessToastMessage(response.message);
             setTimeout(() => {
               this.paymentSettingCreated = 1;
             }, 2000);
-           
+            this.latestSetting();
            // this.$reloadPage();
           } 
         })}
@@ -1346,7 +1379,8 @@ export default {
 
             this.showPaymentEditingActivating =
               !this.showPaymentEditingActivating;
-            this.$reloadPage();
+            //this.$reloadPage();
+            this.latestSetting();
           }
         })
       }catch (error){
@@ -1496,7 +1530,8 @@ export default {
             this.paymentActivate = false;
             this.paymentSettingCreated = 1;
             this.showPaymentEditingActivating = false;
-            this.$reloadPage();
+            //this.$reloadPage();
+            this.latestSetting();
           }
         })
       }catch(error) {
