@@ -12,8 +12,9 @@ const catchAsync = require('../utils/catchAsync');
 const { sendEmail } = require('../utils/email');
 const { deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
 
-const signInToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+const signInToken = (user) => {
+  const payload = { id: user._id, role: user.role };
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
 let userImageUpload; // Declare the variable to hold the multer middleware
@@ -170,9 +171,10 @@ exports.login = catchAsync(async (req, res, next) => {
   user.lockUntil = null;
   await user.save();
   
-  const token = signInToken(user._id);
+  const token = signInToken(user);
+  console.log(token)
   //If user is an admin and the password is still the default, ask for a password change
-  if (user.role === 'Admin' ||user.role==="SuperAdmin" && password === 'admin1234') {
+  if (user.role === 'Admin'&& password === 'admin1234'||user.role==="SuperAdmin" && password === 'super1234') {
     return res.status(200).json({
       status: 1,
       token:token,
@@ -219,7 +221,6 @@ exports.authenticationJwt = catchAsync(async (req, res, next) => {
     if (err) {
       return next(new AppError('Token Session expired or invalid,Please log in again', 401,1));
     }
-
     req.user = decoded;
     next();
   });
@@ -259,10 +260,9 @@ exports.authenticationJwt = catchAsync(async (req, res, next) => {
 //see also for mulitile roles with argument ...requiredrole
 exports.requiredRole = (requiredrole) => {
   return async (req, res, next) => {
-    const UserId = req.user.id;
-    const user = await User.findById(UserId);
-    if (user.role !== requiredrole) {
-      return next(new AppError('Unautorized candidate', 404));
+   const userRole=req.user.role
+    if (userRole !== requiredrole) {
+      return next(new AppError('Access Denied', 404));
     }
     next();
   };
