@@ -1374,108 +1374,6 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
     }
   });
 });
-exports.transferFunds = catchAsync(async (req, res, next) => {
-  const { transferType, fromBankType, toBankType, amount, reason } = req.body;
-  if (!transferType || !fromBankType || !toBankType || !amount || !reason) {
-    return next(new AppError('Missing required fields for transfer', 400));
-  }
-  if (typeof amount !== 'number' || amount <= 0) {
-    return next(new AppError('Amount must be a positive number', 400));
-  }
-  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
-
-  if (isNaN(new Date(transferDate).getTime())) {
-    return next(new AppError('Invalid transfer date', 400));
-  }
-
-  const organization = await Organization.findOne();
-  if (!organization) {
-    return next(new AppError("Organization is not found", 400))
-  }
-
-  const transferCollection = "paymentTransfers"
-  const paymentQuery = { isPaid: true, status: 'confirmed' };
-  const payments = await Payment.find(paymentQuery);
-  if (!payments) {
-    return next(new AppError(`No confirmed Payments Found`, 400));
-
-  }
-  const bankBalances = calculateBalances(payments, organization);
-  const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
-  const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
-  // console.log(bankTypes[fromBankType]?.[balanceType])
-
-  const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
-
-  const fromBankExists = banks.some(account => account.bankType === fromBankType);
-  const toBankExists = banks.some(account => account.bankType === toBankType);
-  if (!fromBankExists) {
-    return next(new AppError(`Invalid bank type: ${fromBankType} does not exist`, 400));
-  }
-
-  if (!toBankExists) {
-    return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
-  }
-  if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
-    return next(new AppError('Insufficient funds', 400));
-  }
-  organization[transferCollection].push({
-    transferType,
-    fromBankType,
-    toBankType,
-    amount,
-    reason,
-  });
-
-  // Save the updated organization document
-  await organization.save();
-  // console.log(`Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,)
-  res.status(200).json({
-    status: 1,
-    message: `Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,
-  });
-});
-
-//tadios
-exports.deleteTransfer = catchAsync(async (req, res, next) => {
-  const { id: transferId } = req.params; // Extract ID from URL params
-  console.log("transferId:", transferId);
-
-  // Validate transfer ID
-  if (!transferId) {
-    return next(new AppError('Transfer ID is required for deletion', 400));
-  }
-
-  // Find organization
-  const organization = await Organization.findOne();
-  if (!organization) {
-    return next(new AppError('Organization not found', 400));
-  }
-
-  const transferCollection = 'paymentTransfers';
-
-  // Check if the transfer exists
-  const transferIndex = organization[transferCollection].findIndex(
-    transfer => transfer._id.toString() === transferId
-  );
-
-  if (transferIndex === -1) {
-    return next(new AppError(`Transfer with ID ${transferId} not found`, 404));
-  }
-
-  // Remove the transfer from the array
-  organization[transferCollection].splice(transferIndex, 1);
-
-  // Save the updated organization document
-  await organization.save();
-
-  res.status(200).json({
-    status: 1,
-    message: `Successfully deleted transfer with ID ${transferId}`,
-  });
-});
-
-//end tadios
 
 exports.reports = catchAsync(async (req, res, next) => {
   const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month,day,startingDate,endingDate,timeRange } = req.query;
@@ -1579,6 +1477,164 @@ exports.reports = catchAsync(async (req, res, next) => {
     items: categorizedPayments,
   });
 });
+
+exports.createTransferFunds = catchAsync(async (req, res, next) => {
+  const { transferType, fromBankType, toBankType, amount, reason } = req.body;
+  if (!transferType || !fromBankType || !toBankType || !amount || !reason) {
+    return next(new AppError('Missing required fields for transfer', 400));
+  }
+  if (typeof amount !== 'number' || amount <= 0) {
+    return next(new AppError('Amount must be a positive number', 400));
+  }
+  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
+
+  if (isNaN(new Date(transferDate).getTime())) {
+    return next(new AppError('Invalid transfer date', 400));
+  }
+
+  const organization = await Organization.findOne();
+  if (!organization) {
+    return next(new AppError("Organization is not found", 400))
+  }
+
+  const transferCollection = "paymentTransfers"
+  const paymentQuery = { isPaid: true, status: 'confirmed' };
+  const payments = await Payment.find(paymentQuery);
+  if (!payments) {
+    return next(new AppError(`No confirmed Payments Found`, 400));
+
+  }
+  const bankBalances = calculateBalances(payments, organization);
+  const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
+  const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
+  // console.log(bankTypes[fromBankType]?.[balanceType])
+
+  const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
+
+  const fromBankExists = banks.some(account => account.bankType === fromBankType);
+  const toBankExists = banks.some(account => account.bankType === toBankType);
+  if (!fromBankExists) {
+    return next(new AppError(`Invalid bank type: ${fromBankType} does not exist`, 400));
+  }
+
+  if (!toBankExists) {
+    return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
+  }
+  if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
+    return next(new AppError('Insufficient funds', 400));
+  }
+  organization[transferCollection].push({
+    transferType,
+    fromBankType,
+    toBankType,
+    amount,
+    reason,
+  });
+
+  // Save the updated organization document
+  await organization.save();
+  // console.log(`Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,)
+  res.status(200).json({
+    status: 1,
+    message: `Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,
+  });
+});
+
+exports.updateTransferFunds = catchAsync(async (req, res, next) => {
+  const transferId=req.params.id
+  const {transferType, fromBankType, toBankType, amount, reason } = req.body;
+
+  if (!transferId || !transferType || !fromBankType || !toBankType || !amount || !reason) {
+    return next(new AppError('Missing required fields for transfer update', 400));
+  }
+
+  if (typeof amount !== 'number' || amount <= 0) {
+    return next(new AppError('Amount must be a positive number', 400));
+  }
+
+  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
+  if (transferDate > new Date()) {
+    return next(new AppError('Transfer date cannot be in the future', 400));
+  }
+    if (isNaN(new Date(transferDate).getTime())) {
+      return next(new AppError('Invalid transfer date', 400));
+    }
+  console.log("tansferDate:",transferDate)
+  console.log(new Date(req.body.transferDate))
+  const organization = await Organization.findOne();
+  if (!organization) {
+    return next(new AppError("Organization not found", 400));
+  }
+
+  const transfer = organization.paymentTransfers.find(t => t._id.toString() === transferId);
+  if (!transfer) {
+    return next(new AppError('Transfer record not found', 400));
+  }
+  const paymentQuery = { isPaid: true, status: 'confirmed' };
+  const payments = await Payment.find(paymentQuery);
+  if (!payments) {
+    return next(new AppError('No confirmed Payments Found', 400));
+  }
+
+  const bankBalances = calculateBalances(payments, organization);
+  const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
+  const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
+
+  const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
+  const fromBankExists = banks.some(account => account.bankType === fromBankType);
+  const toBankExists = banks.some(account => account.bankType === toBankType);
+
+  if (!fromBankExists) {
+    return next(new AppError(`Invalid bank type: ${fromBankType} does not exist`, 400));
+  }
+
+  if (!toBankExists) {
+    return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
+  }
+
+  if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
+    return next(new AppError('Insufficient funds', 400));
+  }
+
+  transfer.transferType = transferType;
+  transfer.fromBankType = fromBankType;
+  transfer.toBankType = toBankType;
+  transfer.amount = amount;
+  transfer.reason = reason;
+  transfer.transferDate = transferDate;
+
+  await organization.save();
+  res.status(200).json({
+    status: 1,
+    message: `Successfully updated the transfer of ${amount} from ${fromBankType} to ${toBankType}`,
+  });
+});
+
+exports.deleteTransferFunds= catchAsync(async (req, res, next) => {
+  const transferId = req.params.id 
+  if (!transferId) {
+    return next(new AppError('Transfer ID is required for deletion', 400));
+  }
+
+  const organization = await Organization.findOne();
+  if (!organization) {
+    return next(new AppError('Organization not found', 400));
+  }
+
+  // Check if the transfer exists
+  const transferIndex = organization.paymentTransfers.findIndex(transfer => transfer._id.toString() === transferId);
+  if (transferIndex === -1) {
+    return next(new AppError(`Transfer with ID ${transferId} is not found`, 404));
+  }
+   organization.paymentTransfers.splice(transferIndex, 1); // Remove the transfer from the array
+  await organization.save();// Save the updated organization document
+
+  res.status(200).json({
+    status: 1,
+    message: `Successfully deleted paymentTransfer with ID ${transferId}`,
+  });
+});
+
 
 exports.resetAll = catchAsync(async (req, res, next) => {
   console.log("all")
