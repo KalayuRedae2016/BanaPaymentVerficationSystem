@@ -339,7 +339,7 @@ export default {
           .post("/api/v1/users/login", userData)
           .then((response) => {
             // Handle successful login response
-            const { role, token, userId, userCode,email,fullName} = response.data;
+            const { role, token, userId, userCode,email,fullName,changePassword} = response.data;
             if (response.data.status === 1) {
              // alert("the response was fetched")
               console.log("respomnse from login",response.data)
@@ -355,7 +355,7 @@ export default {
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
                 this.$store.dispatch("commitFullName", { fullName });
-                this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" } });
+                this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" ,changePassword:true} });
               } else if (role==="User") {
               
                 this.$store.dispatch("login", { token });
@@ -364,7 +364,7 @@ export default {
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
                 this.$store.dispatch("commitName", { fullName });
-                this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true" } });
+                this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true",changePassword:true } });
               } 
             //   else if(role==="SuperAdmin"){
             //    // alert("Super Admin")
