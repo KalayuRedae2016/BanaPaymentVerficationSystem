@@ -5,7 +5,7 @@ const User = require('../Models/userModel');
 const Payment = require('../Models/paymentModel');
 const Apikey = require('../Models/apiKeyModel');
 
-const createDefaultAdminUser = require("../utils/setupDefaultUser"); 
+const createDefaultAdminUser = require("../utils/userUtils"); 
 const { calculateBalances } = require('../utils/calculateBalances')
 const { formatDate, formatDateGC } = require("../utils/formatDate")
 const { calculatePenalty } = require("../utils/calculatePenality")
@@ -19,7 +19,6 @@ const { sendEmail } = require('../utils/email');
 const jwt = require('jsonwebtoken');
 
 const fs = require('fs');
-const QRCode = require('qrcode');
 const path = require('path');
 // Configure multer for payment file uploads
 const paymentFileUpload = createMulterMiddleware(
@@ -1487,7 +1486,9 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError('Amount must be a positive number', 400));
   }
   const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
-
+  if (transferDate > new Date()) {
+    return next(new AppError('Transfer date cannot be in the future', 400));
+  }
   if (isNaN(new Date(transferDate).getTime())) {
     return next(new AppError('Invalid transfer date', 400));
   }

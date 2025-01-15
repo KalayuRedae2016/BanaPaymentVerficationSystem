@@ -11,6 +11,7 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { sendEmail } = require('../utils/email');
 const { deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
+const {changePasswordFlag}=require('../utils/userUtils')
 
 
 const signInToken = (user) => {
@@ -55,6 +56,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     const user = new User({
       ...req.body,
       isActive: true,
+      changePassword:false,
       hasMadePayment: false, // New user hasn't made a payment yet
       profileImage: req.file ? req.file.filename : undefined,
     });
@@ -72,7 +74,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     const password = req.body.password || await user.generateRandomPassword()
     user.password = await bcrypt.hash(password, 12);
-
+   
     await user.save();
     // Call the payment creation function to create pending payments for the new user
 
@@ -234,22 +236,8 @@ exports.login = catchAsync(async (req, res, next) => {
   user.failedLoginAttempts = 0;
   user.lockUntil = null;
   await user.save();
-  
+
   const token = signInToken(user._id);
-  //If user is an admin and the password is still the default, ask for a password change
-  if (user.role === 'Admin'&& password === 'admin1234'||user.role==="SuperAdmin" && password === 'super1234') {
-    return res.status(200).json({
-      status: 1,
-      token:token,
-      role: user.role,
-      userId: user._id,
-      userCode:user.userCode,
-      email:user.email,
-      fullName:user.fullName,
-      message: 'Login Succeffully But Please change your password',
-      changePassword: true,  // Indicating that the frontend should redirect to the password change page
-    });
-  }
    res.status(200).json({
     status: 1,
     token: token,
@@ -258,7 +246,10 @@ exports.login = catchAsync(async (req, res, next) => {
     email:user.email,
     userCode:user.userCode,
     fullName:user.fullName,
-    Message: 'Login Succeffullly',
+    message: user.changePassword
+    ? 'Login successful, but you must change your password.'
+    : 'Login successful.',
+    changePassword: user.changePassword
   });
 });
 
@@ -291,7 +282,6 @@ exports.authenticationJwt = catchAsync(async (req, _, next) => {
   });
 });
 
-//see also for mulitile roles with argument ...requiredrole
 exports.requiredRole = (requiredrole) => {
   return async (req, res, next) => {
    const userRole=req.user.role
@@ -318,10 +308,6 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
     const message = `Forgot your password? Submit a request with your new password to: ${resetURL}.\nIf you didn't forget your password, please ignore this email!`;
     const email = user.email;
     const subject = 'Your password reset token (valid for 10 minutes)'
-    console.log(email)
-    console.log(message)
-    console.log(subject)
-    console.log(resetURL)
     //console.log(email,subject,message)
     await sendEmail({ email, subject, message });
     res.status(200).json({
@@ -351,8 +337,10 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.password = await bcrypt.hash(newPassword, 12);
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
+  user.changePassword=false
   await user.save();
   const token = signInToken(user._id);
+
   res.status(200).json({
     status: 1,
     userCode: user.userCode,
@@ -372,6 +360,7 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
   //console.log(user)
   password = await user.generateRandomPassword();
   user.password = await bcrypt.hash(password, 12);
+  user.changePassword=true
   await user.save();
   res.status(200).json({
     status: 1,
@@ -379,21 +368,38 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
     role: user.role,
     resetedPassword: password,
     message: "Password Reseted Succeffully",
+    changePassword:user.changePassword
 
   });
-  try {
-    const subject = 'Welcome to Our Platform, Bana Mole Marketing Group!';
-    const email = user.email;
-    const message = `Hi ${user.fullName},
-        Welcome to Our Platform! We're excited to have you on board.
-        Here are your account details:
-        - User Code: ${user.userCode}
-        - Email: ${user.email}
-        - NewPassword: ${newPassword}
-        -LoginLink:http://localhost:5173
 
-      Please visit our platform to explore and start using our services.
-      If you have any questions or need assistance, feel free to contact our support team.
+  // Check if the user has an email
+  if (!user.email) {
+    return res.status(200).json({
+      status: 1,
+      userId: user._id,
+      role: user.role,
+      resetedPassword: password,
+      message: 'Password reset successfully. The password will be provided by the admin. Please contact support.',
+    });
+  }
+  
+  try {
+    const subject = 'Your Password Has Been Reset';
+    const email = user.email;
+    const loginLink = process.env.NODE_ENV === "development" ? "http://localhost:5173" : "https://banapvs.com";
+    const message = `Hi ${user.fullName},
+   
+        Your password has been reset by an administrator. Here are your new login credentials:
+
+      - User Code: ${user.userCode}
+      - Email: ${user.email}
+      - Temporary Password: ${password}
+
+      Please log in and change your password immediately.
+
+      -LoginLink:${loginLink}
+
+      If you did not request this change, please contact our support team.
 
       Best regards,
       The Bana Marketing Group Team`;
@@ -406,11 +412,14 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
-  console.log(req.body)
-  const { currentPassword, newPassword,userId } = req.body;
-
-  // Fetch the user from the database with the existing password
-  //const user = await User.findById(req.user._id).select('+password');
+  const userId= req.params.userId
+  const { currentPassword, newPassword} = req.body;
+  
+  // Validate if currentPassword and newPassword are provided
+  if (!currentPassword || !newPassword) {
+    return res.status(400).json({ message: 'Please provide both current and new passwords' });
+  }
+  
   const user = await User.findById(userId).select('+password');
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
@@ -420,11 +429,15 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   if (!correct) {
     return res.status(401).json({ message: 'Incorrect current password' });
   }
-  // Hash the new password before saving it
-  const salt = await bcrypt.genSalt(10);
+
+  if (newPassword.length < 8) {
+    return res.status(400).json({ message: 'New password must be at least 8 characters long' });
+  }
+  
+  const salt = await bcrypt.genSalt(10);// Hash the new password before saving it
   const hashedNewPassword = await bcrypt.hash(newPassword, salt);
-  // Update the user's password
-  user.password = hashedNewPassword;
+  user.password = hashedNewPassword
+  user.changePassword=false
   await user.save();
   res.status(200).json({
     status: 1,

@@ -28,7 +28,7 @@ const userSchema = new Schema(
       type: String,
       default: null
     },
-    balance:{type:String,default:0,required:true,min:0},
+    // balance:{type:String,default:0,required:true,min:0},
     userCode: {
       //auto-increment
       type: String,
@@ -49,6 +49,10 @@ const userSchema = new Schema(
       minlength: [8, 'Password must be more than 8 characters'],
       select: false,
     },
+   changePassword:{
+    type: Boolean,
+    default: true
+  },
     isActive: {
       type: Boolean,
       default: true,
