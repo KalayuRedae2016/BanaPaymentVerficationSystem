@@ -54,7 +54,7 @@
           @click="toggleSection('password')"
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-800 "
 >
-        <label class="text-gray-700 font-medium custom-label">Change Password</label>
+        <label class="font-medium custom-label text-blue-500 text-lg ">Change Password</label>
           <!-- <i
             :class="passwordVisible ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
             class="text-gray-500"

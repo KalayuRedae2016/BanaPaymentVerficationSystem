@@ -342,7 +342,7 @@
                           <option value="" disabled>{{ $t("selectBankType") }}</option>
                           <option v-for="(bank, index) in availableServiceBanks" :key="index" :value="bank">{{ bank }}
                           </option>
-                          <option value="other">{{ $t("other") }}</option>
+                          <option value="other" class="mb-96">{{ $t("other") }}</option>
                         </select>
                         <input type="text" v-model="serviceBankAccountNumber" :placeholder="$t('bankAccountNumber')"
                           class="custom-input" />
@@ -419,24 +419,14 @@
                     <span class="custom-star ml-1">*</span>
                   </label>
 
-                  <select class="custom-select" required v-model="editedBlockAccount.bankType">
-                    <option :value="editedBlockAccount.bankType">
-                      {{ editedBlockAccount.bankType }}
-                    </option>
-                    <option value="" disabled>
-                      {{ $t("selectBankType") }}
-                    </option>
-                    <option value="CBE">{{ $t("CBE") }}</option>
-                    <option value="WEGAGEN">{{ $t("wegagen") }}</option>
-                    <option value="LIB">{{ $t("enat") }}</option>
-                    <option value="DASHEN">{{ $t("dashin") }}</option>
-                    <option value="OROMIA">{{ $t("oromia") }}</option>
-                    <option value="ABSINIA">{{ $t("absinia") }}</option>
-                  </select>
+                  <input type="text"
+                   v-model="editedBlockAccount.bankType" 
+                   class="custom-input"
+                   readonly/>
                 </div>
 
                 <div class="mb-4">
-                  <label class="custom-label">
+                  <label class="custom-label ">
                     {{ $t("bankAccount") }}
                     <span class="custom-star ml-1">*</span>
                   </label>
@@ -483,25 +473,11 @@
                     {{ $t("bankType") }}
                     <span class="custom-star ml-1">*</span>
                   </label>
-
-                  <select class="custom-select" required style="padding-left: 16px"
-                    v-model="editedServiceAccount.bankType">
-                    <option :value="editedServiceAccount.bankType">
-                      {{ editedServiceAccount.bankType }}
-                    </option>
-                    <option value="" disabled>
-                      {{ $t("selectBankType") }}
-                    </option>
-                    <option value="CBE">{{ $t("cbe") }}</option>
-                    <option value="WEGAGEN">{{ $t("wegagen") }}</option>
-                    <option value="LIB">{{ $t("enat") }}</option>
-                    <option value="DASHEN">{{ $t("dashin") }}</option>
-                    <option value="OROMIA">{{ $t("oromia") }}</option>
-                    <option value="ABSINIA">{{ $t("absinia") }}</option>
-                    <option value="other" class="text-indigo-800 font-bold">
-                      {{ $t("other") }}
-                    </option>
-                  </select>
+                  <input type="text"
+                    v-model="editedServiceAccount.bankType"
+                    readonly
+                    class="custom-input"
+                  >
                 </div>
 
                 <div class="mb-4">
@@ -804,7 +780,6 @@ export default {
       editedServiceAccount: {},
     };
   },
-
   mounted() {
     this.isLoading = true;
     this.$apiGet("/api/v1/organization")
@@ -815,6 +790,7 @@ export default {
 
 
           this.isLoading = false;
+
           this.companyProfileId = response.organization._id;
           this.companyName = response.organization.companyName;
           this.companyPhoneNumber = response.organization.companyPhoneNumber;
@@ -822,8 +798,8 @@ export default {
           this.companyAddress = response.organization.companyAddress;
           this.companyPrefixCode = response.organization.companyPrefixCode;
           this.blockBankAccounts = response.organization.blockBankAccounts;
-          this.serviceBankAccounts =
-            response.organization.serviceBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+
 
           console.log("company Name", response.organization.companyName);
           this.companyProfile = response;
@@ -976,8 +952,6 @@ export default {
       }
     },
 
-
-
     pushNewBlockAccount(blockBankType, blockBankAccountNumber) {
 
       this.newBlockBankTypeIsRequired = false;
@@ -1022,7 +996,6 @@ export default {
       }
     },
 
-
     checkOtherService(bankType) {
       if (bankType == "other") {
         this.serviceBankType = '',
@@ -1040,47 +1013,7 @@ export default {
         this.otherBlockSelected = true;
       }
     },
-    pushNewBlockAccount(blockBankType, blockBankAccountNumber) {
-
-      this.newBlockBankTypeIsRequired = false;
-      this.newBlockBankAccountNumberIsRequired = false;
-      this.newBlockBankExist = false;
-      this.errorMessage = "";
-
-
-      if (!blockBankType) {
-        this.newBlockBankTypeIsRequired = true;
-        this.errorMessage = "New Block Bank Type Is Required"
-        return;
-      }
-
-      if (!blockBankAccountNumber) {
-        this.newBlockBankAccountNumberIsRequired = true;
-        this.errorMessage = "New Bank Account Number Is Required";
-        return;
-      }
-
-      // Check if the bank type already exists
-      const isBankTypePresent = this.blockBankAccounts.some(
-        (account) => account.bankType.toLowerCase() === blockBankType.toLowerCase()
-      );
-
-
-      if (isBankTypePresent) {
-        // Set error message and flag if bank type exists
-        this.newBlockBankExist = true;
-        this.errorMessage = "Bank is already Exist";
-      } else {
-        // Add new bank type and reset error state
-        this.otherBlockSelected = false;
-        this.blockBankAccounts.push({
-          bankType: blockBankType,
-          bankAccountNumber: blockBankAccountNumber,
-        });
-        this.showError = false;
-        this.errorMessage = "";
-      }
-    },
+   
     trackNewBlockBankType(account) {
       //console.log("addedblock",account);
       if (account == "other") {
@@ -1110,6 +1043,8 @@ export default {
         this.account.bankType = account;
       }
     },
+
+
     async saveNewBlockBank() {
       this.otherBlockSelected = false;
       console.log(
@@ -1141,7 +1076,17 @@ export default {
             console.log("response", response);
             if (Number(response.status) === 1) {
               this.$refs.toast.showSuccessToastMessage(response.message);
-              this.$reloadPage();
+              //this.$reloadPage();
+          this.companyProfileId = response.organization._id;
+          this.companyName = response.organization.companyName;
+          this.companyPhoneNumber = response.organization.companyPhoneNumber;
+          this.companyEmail = response.organization.companyEmail;
+          this.companyAddress = response.organization.companyAddress;
+          this.companyPrefixCode = response.organization.companyPrefixCode;
+          this.blockBankAccounts = response.organization.blockBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+
+
             }
           })
       } catch (error) {
@@ -1188,6 +1133,7 @@ export default {
         console.log("finally save new service account")
       }
     },
+
     addBlockBankAccount() {
       this.addBlockAccount = true;
       console.log("i am here");
@@ -1199,7 +1145,6 @@ export default {
       console.log("old", this.blockBankAccounts);
       console.log("added bank accounts", this.addedBlockBankAccounts);
     },
-
     editBlockAccountModal(account) {
       /// alert("called");
       // Open the modal and pass the account details
@@ -1207,7 +1152,6 @@ export default {
       // Create a copy to prevent direct mutation
       this.showEditBlockModal = true;
     },
-
     async saveEditedBlockAccount() {
       // Find the index of the edited account in the array
       const index = this.blockBankAccounts.findIndex(
@@ -1237,8 +1181,18 @@ export default {
           .then((response) => {
             console.log("response", response);
             if (Number(response.status) === 1) {
-              this.$refs.toast.showSuccessToastMessage(response.message);
-              this.$reloadPage();
+           //this.$reloadPage();
+
+
+          this.companyProfileId = response.organization._id;
+          this.companyName = response.organization.companyName;
+          this.companyPhoneNumber = response.organization.companyPhoneNumber;
+          this.companyEmail = response.organization.companyEmail;
+          this.companyAddress = response.organization.companyAddress;
+          this.companyPrefixCode = response.organization.companyPrefixCode;
+          this.blockBankAccounts = response.organization.blockBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+          this.$refs.toast.showSuccessToastMessage(response.message);
             }
           })
       } catch (error) {
@@ -1248,12 +1202,10 @@ export default {
         console.log("finally editing bank account block")
       }
     },
-
     confirmDeleteBlockAccount(account) {
       this.blockAccountToDelete = account;
       this.showConfirmationBlockModal = true;
     },
-
     async deleteBlockAccount() {
 
       //alert("Are you sure you want to delete")
@@ -1309,7 +1261,6 @@ export default {
         console.log("Finally delete blck")
       };
     },
-
     cancelDeleteBlockAccount() {
       // alert("called");
       console.log("calsel delete called");
@@ -1319,7 +1270,6 @@ export default {
     removeBlockBankAccount(index) {
       this.addedBlockBankAccounts.splice(index, 1);
     },
-
     addServiceBankAccount() {
       this.addServiceAccount = true;
       console.log("i am here");
@@ -1331,7 +1281,6 @@ export default {
       console.log("old", this.serviceBankAccounts);
       console.log("added bank accounts", this.addedServiceBankAccounts);
     },
-
     editServiceAccountModal(account) {
 
       this.editedServiceAccount = { ...account }; // Create a copy to prevent direct mutation
@@ -1368,7 +1317,17 @@ export default {
             console.log("response", response);
             if (Number(response.status) === 1) {
               this.$refs.toast.showSuccessToastMessage(response.message);
-              this.$reloadPage();
+              
+          this.companyProfileId = response.organization._id;
+          this.companyName = response.organization.companyName;
+          this.companyPhoneNumber = response.organization.companyPhoneNumber;
+          this.companyEmail = response.organization.companyEmail;
+          this.companyAddress = response.organization.companyAddress;
+          this.companyPrefixCode = response.organization.companyPrefixCode;
+          this.blockBankAccounts = response.organization.blockBankAccounts;
+          this.serviceBankAccounts =response.organization.serviceBankAccounts;
+
+              //this.$reloadPage();
             }
           })
       } catch (error) {
@@ -1378,7 +1337,6 @@ export default {
         console.log("finally save edited account ")
       };
     },
-
     confirmDeleteServiceAccount(account) {
       console.log("in the service confirm of the account");
       this.serviceAccountToDelete = account;
@@ -1454,7 +1412,6 @@ export default {
       this.addedServiceBankAccounts.splice(index, 1);
     },
 
-
     async seeChange() {
       //alert("See Change")
       this.addedBlockBankAccounts = this.addedBlockBankAccounts.filter(
@@ -1499,7 +1456,7 @@ export default {
             if (Number(response.status) === 1) {
 
               console.log("response from see change",response)
-              this.$refs.toast.showSuccessToastMessage(response.message);
+          this.$refs.toast.showSuccessToastMessage(response.message);
           this.companyProfileId = response.organization._id;
           this.companyName = response.organization.companyName;
           this.companyPhoneNumber = response.organization.companyPhoneNumber;

@@ -48,6 +48,7 @@ export default {
       { value: "monthly", name: "Monthly" },
       { value: "weekly", name: "Weekly" },
       { value: "daily", name: "Daily" },
+      { value: "other", name: "Interval Period" },
     ];
 
     const days = Array.from({ length: 31 }, (v, i) => i + 1);

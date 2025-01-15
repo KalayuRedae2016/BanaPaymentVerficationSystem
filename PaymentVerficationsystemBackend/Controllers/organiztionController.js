@@ -72,6 +72,7 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
 });
 
 exports.getOrganization = catchAsync(async (req, res, next) => {
+  console.log("orgination get")
   // Fetch the organization from the database
   const organization = await Organization.findOne();
 

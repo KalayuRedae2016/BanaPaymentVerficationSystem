@@ -661,6 +661,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.editPayments = catchAsync(async (req, res, next) => {
+
+  console.log("req.body",req.body)
   const { userId,billCode, urgent, regular, subsidy, service, penality} = req.body;
   if (!billCode || !userId) {
     return next(new AppError(`billCode and userId is required to edit Confirmed Payment`))
@@ -675,7 +677,12 @@ exports.editPayments = catchAsync(async (req, res, next) => {
     return next(new AppError("User is not found"), 400)
   } 
   // Find the uPaid bill by billCode and ispaid:false
-  let payment = await Payment.findOne({ isPaid: false, billCode });
+ // let payment = await Payment.findOne({ isPaid: false, billCode });
+
+  //tadios
+  let payment = await Payment.findOne({ isPaid: { $in: [true, false] }, billCode });
+
+  //eind of tadios
   if (!payment) {
     return next(new AppError("No paid Bill found",404))
   }
@@ -683,6 +690,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
     const paidAt = isPaid ? (updates.paidAt ? new Date(updates.paidAt) : new Date(existing.paidAt)) : null;
+    
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
@@ -1427,6 +1435,48 @@ exports.transferFunds = catchAsync(async (req, res, next) => {
     message: `Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,
   });
 });
+
+//tadios
+exports.deleteTransfer = catchAsync(async (req, res, next) => {
+  const { id: transferId } = req.params; // Extract ID from URL params
+  console.log("transferId:", transferId);
+
+  // Validate transfer ID
+  if (!transferId) {
+    return next(new AppError('Transfer ID is required for deletion', 400));
+  }
+
+  // Find organization
+  const organization = await Organization.findOne();
+  if (!organization) {
+    return next(new AppError('Organization not found', 400));
+  }
+
+  const transferCollection = 'paymentTransfers';
+
+  // Check if the transfer exists
+  const transferIndex = organization[transferCollection].findIndex(
+    transfer => transfer._id.toString() === transferId
+  );
+
+  if (transferIndex === -1) {
+    return next(new AppError(`Transfer with ID ${transferId} not found`, 404));
+  }
+
+  // Remove the transfer from the array
+  organization[transferCollection].splice(transferIndex, 1);
+
+  // Save the updated organization document
+  await organization.save();
+
+  res.status(200).json({
+    status: 1,
+    message: `Successfully deleted transfer with ID ${transferId}`,
+  });
+});
+
+//end tadios
+
 exports.reports = catchAsync(async (req, res, next) => {
   const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month,day,startingDate,endingDate,timeRange } = req.query;
   const paymentQuery = {};

@@ -94,16 +94,14 @@
               <div class="bg-white p-2 rounded-md shadow-sm">
                 <div class="flex items-center space-x-3 border-b border-gray-300">
                   <i class="fas fa-map-marker-alt text-blue-500"></i>
-                  <span class="text-sm text-gray-800">{{ $t("Created at") }}: {{ clientProfile.formattedCreatedAt
-                    }}</span>
+                  <span class="text-sm text-gray-800">{{ $t("Created at") }}: {{ new Date(clientProfile.createdAt).toLocaleDateString('en-GB') }}</span>
                 </div>
               </div>
 
               <div class="bg-white p-2 rounded-md shadow-sm">
                 <div class="flex items-center space-x-3 border-b border-gray-300">
                   <i class="fas fa-map-marker-alt text-blue-500"></i>
-                  <span class="text-sm text-gray-800">{{ $t("Updated At") }}: {{ clientProfile.formattedUpdatedAt
-                    }}</span>
+                  <span class="text-sm text-gray-800">{{ $t("Updated At") }}: {{ new Date(clientProfile.updatedAt).toLocaleDateString('en-GB') }}</span>
                 </div>
               </div>
 

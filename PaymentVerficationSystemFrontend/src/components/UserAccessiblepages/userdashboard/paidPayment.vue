@@ -34,7 +34,7 @@
         class="space-y-2 mt-3 border-t border-gray-300"
         v-if="selectedPaymentLength >= 1"
       >
-        <ul class="bg-white rounded-md shadow-md divide-y divide-gray-200">
+        <ul class="border border-gray-300 bg-white rounded-md shadow-md divide-y divide-gray-200 py-2 mt-5">
           <li
             v-for="(payment, index) in payments"
             :key="index"
@@ -61,13 +61,16 @@
           </li>
         </ul>
       </div>
+      <div v-else class="text-pink-800  p-4 text-md">
+                  No payments found for the selected year. Please try again with a different year.
+      </div>
       <div id="pdf-container"></div>
  </div>
-    <div class="w-full flex flex-row hidden" id="printable-area">
+    <div class="w-full flex flex-row hidden" id="printable-area" style="border: brown;">
       <!-- First Receipt -->
       <div
         class="w-full p-2 receipt border-4"
-        style="border: 1px dotted #622e2e"
+        
       >
         <div class="text-blue-800 p-2 relative">
           <img
@@ -250,221 +253,44 @@
           </div>
         
             <div class="mx-auto w-64 h-64 mt-10" id="qrCodeImageContainer"></div>
-         
-          
-
-          <p class="text-center text-xs mt-2">The Best Mole Ever</p>
           <div
             style="
               display: flex;
               justify-content: center;
               color: #622e2e;
               font-weight: bold;
+              margin-top: 20px;
             "
           >
-            <div class="footer" style="margin-bottom: 172.5px">
-              &copy; {{ new Date().getFullYear() }} Bana Mole. All rights
+            <div class="footer" style="">
+              &copy; {{ new Date().getFullYear() }} Bana General Market Mall. All rights
               reserved.
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="container hidden" id="printableee-area">
-      <div class="receipt">
-        <!-- 
-  <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:3px; display: flex; align-items: center;">
-  <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
-  <h1 style="margin: 0;">Bana Mall Official Receipt</h1>
-</div> -->
 
-        <div style="width: 90%; max-width: 100%; min-width: 100%">
-          <img
-            src="../../../assets/img/banaReceipt1.jpg"
-            alt=""
-            style="max-width: 100%; height: auto; display: block"
-          />
-        </div>
-
-        <div class="receipt-header" style="background-color: white">
-          <div class="info">
-            <div class="text" style="margin-left: -10px">
-              Bill Code: <span>{{ payment.billCode }}</span>
-            </div>
-            <div class="text">
-              <!-- Date(Day-Month-Year):
-              <span
-                >{{ receiptDate.getDate() }}-{{
-                  changeMonthIntoString(receiptDate.getMonth() + 1)
-                }}-{{ receiptDate.getFullYear() }}</span
-              > -->
-            </div>
-          </div>
-        </div>
-
-        <h2 class="section-title" style="color: #622e2e; font-weight: bold">
-          Company Information
-        </h2>
-        <div class="grid">
-          <div class="box">
-            <table class="table" style="color: #622e2e; font-weight: bold">
-              <tr>
-                <td>Country:</td>
-                <td>{{ Country }}</td>
-              </tr>
-              <tr>
-                <td>City:</td>
-                <td>{{ City }}</td>
-              </tr>
-            </table>
-          </div>
-          <div class="box">
-            <table class="table" style="color: #622e2e; font-weight: bold">
-              <tr>
-                <td>Email:</td>
-                <td>{{ Email }}</td>
-              </tr>
-              <tr>
-                <td>Tel:</td>
-                <td>{{ Tel }}</td>
-              </tr>
-              <tr>
-                <td>address:</td>
-                <td>{{ Address }}</td>
-              </tr>
-            </table>
-          </div>
-        </div>
-
-        <h2 class="section-title" style="color: #622e2e; font-weight: bold">
-          Payment Information
-        </h2>
-        <img
-          src="../../../assets/img/sample.jpg"
-          alt="Sample Stamp"
-          class="absolute inset-0 w-64 h-64 mx-auto my-auto"
-        />
-
-        <table class="table">
-          <tr>
-            <td style="color: #333; font-weight: bold">FullName</td>
-            <td class="right">{{ payment.fullName }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">UserCode</td>
-            <td class="right">{{ payment.userCode }}</td>
-          </tr>
-
-          <tr>
-            <td style="color: #333; font-weight: bold">Payment Term</td>
-            <td class="right">{{ paymentTerm }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">RegFee</td>
-            <td class="right">{{ payment.registrationFee }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Regular Amount</td>
-            <td class="right">{{ payment.regular.amount }}</td>
-          </tr>
-
-          <tr>
-            <td style="color: #333; font-weight: bold">Subsidy Amount</td>
-            <td class="right">{{ payment.subsidy.amount }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Urgent Amount</td>
-            <td class="right">{{ payment.urgent.amount }}</td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Service Amount</td>
-            <td class="right">{{ payment.service.amount }}</td>
-          </tr>
-
-          <tr>
-            <td style="color: #333; font-weight: bold">Penality</td>
-            <td class="right">{{ payment.penality.amount }}</td>
-          </tr>
-
-          <tr>
-            <td style="color: #333; font-weight: bold">Total Block</td>
-            <td class="right">
-              {{
-                payment.regular.amount +
-                payment.subsidy.amount +
-                payment.urgent.amount
-              }}
-            </td>
-          </tr>
-          <tr>
-            <td style="color: #333; font-weight: bold">Total Service</td>
-            <td class="right">
-              {{ payment.penality.amount + payment.service.amount }}
-            </td>
-          </tr>
-        </table>
-
-        <div
-          class="signature-section"
-          style="color: #622e2e; font-weight: bold"
-        >
-          <div class="signature-row">
-            <div class="signature-block">
-              <span>Prepared by: ___________________________</span>
-              <span style="margin-left: 11px"
-                >Signature: ___________________________</span
-              >
-            </div>
-            <div class="signature-block">
-              <span>Received by: _________________________</span>
-              <span style="margin-left: 13px"
-                >Signature: _________________________</span
-              >
-            </div>
-          </div>
-
-          <div
-            class="approval-section"
-            style="color: #622e2e; font-weight: bold"
-          >
-            <div class="approval-block">
-              <span>Approval Bank Deposit: ____________________________</span>
-              <span style="margin-left: 58px"
-                >Signature: ____________________________</span
-              >
-            </div>
-          </div>
-          <div style="position: relative; width: 100%; height: 150px">
-            <div
-              class="w-32 h-32"
-              id="qrCodeImageContainer"
-              style="
-                position: absolute;
-                left: 50%;
-                transform: translateX(-50%);
-                top: 40px;
-                background-color: lightgray;
-              "
-            >
-              QR Code
-            </div>
-          </div>
-        </div>
-
-        <div
-          style="
+          <div style="
+            margin-top: 100px;
+            margin-bottom: 30px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            color: #622e2e;
-            font-weight: bold;
-          "
-        >
-          <div class="footer">
-            &copy; {{ new Date().getFullYear() }} Bana Mole. All rights
-            reserved.
+            align-items: center;
+            text-align: center;
+            font-size: 0.7rem; /* Extremely small text */
+            color: #6b21a8; /* Purple color for the text */
+          ">
+          <div style="font-weight: 800;">
+            <span style="color:black; margin-right: 10px;">Powered By</span>Grand Technology Solutions
           </div>
+          <div style="
+            font-size: 0.7rem; /* Smaller text for email and phone */
+            margin-top: 4px;
+          ">
+            Email: <a href="mailto:info@grandtechsolutions.com"
+              style="color: black ; text-decoration: none;">info@grandtechsolutions.com</a> |
+            Phone: <a href="tel:+251987014339" style="color:  black; text-decoration: none;">+251987014339</a>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -484,8 +310,6 @@ export default {
       userPhoneNumber:"",
       userGender:"",
       fullName:this.userCode + " " + "Bana User",
-
-      
       selectedPaymentLength: 0,
       selectedPayment: {},
       showList: true,
@@ -502,12 +326,8 @@ export default {
       tel: "",
       address: "",
       city: "Mekelle",
-
       receiptDate: new Date(),
-
       payments: [],
-
-      //
       payment: {
         userCode: "BM0002",
         urgent: {
@@ -693,14 +513,10 @@ this.$apiGetById('/api/v1/users',this.userId)
         * {
           margin: 0;
           padding: 0;
-          box-sizing: border-box;
+       
         
         }
         #printable-area {
-          height: 100%;
-          width: 100%;
-          border:2px dotted blue;
-        
         }
         @page {
           margin: 0; /* Remove default PDF margins */
@@ -747,14 +563,10 @@ this.$apiGetById('/api/v1/users',this.userId)
         * {
           margin: 0;
           padding: 0;
-          box-sizing: border-box;
         
         }
         #printable-area {
-          height: 100%;
-          width: 100%;
-          border:2px dotted blue;
-        
+     
         }
         @page {
           margin: 0; /* Remove default PDF margins */
@@ -831,150 +643,17 @@ this.$apiGetById('/api/v1/users',this.userId)
 <style>
 @media print {
   #printable-area {
-    display: flex !important;
-    flex-direction: row !important;
-    width: 100% !important;
+
   }
   .receipt {
-    flex: 1 !important;
-    min-width: 0 !important;
-    page-break-inside: avoid; /* Prevents page breaks inside receipts */
+     /* Prevents page breaks inside receipts */
   }
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
+  
   /* Ensure background color is set */
   #printable-area {
     background-color: white; /* Use a solid color or adjust as needed */
   }
 }
 
-@media print {
-  #printable-area {
-    display: flex !important;
-    flex-direction: row !important;
-    width: 100% !important;
-    height: 100%;
-  }
-  .receipt {
-    flex: 1 !important;
-    min-width: 0 !important;
-    page-break-inside: avoid; /* Prevents page breaks inside receipts */
-  }
-  body {
-    margin: 0 !important;
-    padding: 0 !important;
-  }
 
-  .container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-  }
-
-  .receipt {
-    flex: 1;
-    padding: 10px;
-    border: 1px dotted #622e2e; /* Red dotted border */
-  }
-
-  .receipt:nth-child(2) {
-    border-left: none;
-  }
-
-  .receipt-header {
-    background-color: #bbf7d0; /* Light green */
-    color: #1d4ed8; /* Dark blue text */
-    padding: 10px;
-  }
-
-  .receipt-header .info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .receipt-header .info .text {
-    font-size: 10px;
-    font-weight: bold;
-  }
-
-  .receipt-header .qr {
-    width: 80px;
-    height: 80px;
-    background: #e5e7eb; /* Placeholder for QR Code */
-    margin-left: 10px;
-  }
-
-  .section-title {
-    font-size: 12px;
-    font-weight: bold;
-    margin-top: 10px;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5px;
-    margin-top: 5px;
-  }
-
-  .box {
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    padding: 5px;
-  }
-
-  .table {
-    width: 100%;
-    font-size: 10px;
-    border-collapse: collapse;
-  }
-
-  .table th,
-  .table td {
-    padding: 2px;
-    text-align: left;
-  }
-
-  .table .right {
-    text-align: right;
-  }
-
-  .signature-section {
-    margin-top: 15px;
-    font-size: 10px;
-  }
-
-  .signature-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-
-  .signature-block {
-    width: 45%;
-    text-align: left;
-  }
-
-  .signature-block span {
-    display: block;
-    margin-bottom: 5px;
-  }
-
-  .approval-section {
-    margin-top: 10px;
-    font-size: 10px;
-  }
-
-  .approval-block span {
-    display: block;
-    margin-bottom: 5px;
-  }
-  /* Ensure background color is set */
-  #printable-area {
-    background-color: white; /* Use a solid color or adjust as needed */
-  }
-}
 </style>

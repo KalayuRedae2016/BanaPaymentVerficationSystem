@@ -13,6 +13,12 @@
         </div>
       </div>
 
+      <div class="justify-center items-center mb-5 lg:pl-16"> 
+          <p class="text-blue-500 font-extrabold ">
+        Bana General Market Mall</p>
+      </div>
+    
+
       <div
         v-if="showError"
         class="mt-5 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
@@ -319,6 +325,7 @@ export default {
         }
       }
     },
+
     login() {
   
       // If the form is valid, proceed with the login logic
@@ -332,7 +339,7 @@ export default {
           .post("/api/v1/users/login", userData)
           .then((response) => {
             // Handle successful login response
-            const { role, token, userId, userCode,email} = response.data;
+            const { role, token, userId, userCode,email,fullName} = response.data;
             if (response.data.status === 1) {
              // alert("the response was fetched")
               console.log("respomnse from login",response.data)
@@ -347,14 +354,16 @@ export default {
                  console.log("role is given from the server",role);
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
+                this.$store.dispatch("commitFullName", { fullName });
                 this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" } });
               } else if (role==="User") {
-                
+              
                 this.$store.dispatch("login", { token });
                 this.$store.dispatch("commitId", { userId });
                 this.$store.dispatch("commitRole", { role });
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
+                this.$store.dispatch("commitName", { fullName });
                 this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true" } });
               } 
             //   else if(role==="SuperAdmin"){
@@ -380,7 +389,7 @@ export default {
           })
           .catch((error) => {
             this.showError = true;
-            alert("error")
+           // alert("error")
             console.log("login errors",error)
             this.errorMessage = error.response?.data.message || "Something went wrong!";
           });
