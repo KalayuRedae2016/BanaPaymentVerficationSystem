@@ -28,6 +28,7 @@ const userSchema = new Schema(
       type: String,
       default: null
     },
+    balance:{type:String,default:0,required:true,min:0},
     userCode: {
       //auto-increment
       type: String,
