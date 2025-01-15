@@ -21,11 +21,8 @@ router.route('/resetAll').delete(paymentController.resetAll);//reset all files
 // Protect all routes after this middleware
 router.use(authoController.authenticationJwt);
 
-//router.use(authoController.requiredRole('admin'));
-router.use(paymentController.updateStatusAndPenality);
-
-// Route to create unconfirmed payments (initiated but not yet confirmed)
-router.route('/create/bills').post(paymentController.createUnconfirmedPayments);
+router.use(paymentController.updateStatusAndPenality);//router.use(authoController.requiredRole('admin'));
+router.route('/create/bills').post(paymentController.createUnconfirmedPayments);// Route to create unconfirmed payments (initiated but not yet confirmed)
 
 // ========== Routes for managing payments via the system ==========
 router.route('/search').get(paymentController.searchPayments);//search Bank Statement payment
@@ -34,26 +31,20 @@ router.route('/update') .patch(paymentController.editPayments);//update Bank Sta
 
 /// ========== Routes for Payments Management for all from Bank and from System ==========
 router.route('/getAllPayments').get(paymentController.getAllPayments); // Fetch all payments
-router.route('/latestPayment').get(paymentController.getLatestPayment);
- // Fetch the latest payment
+router.route('/latestPayment').get(paymentController.getLatestPayment);// Fetch the latest payment
+ 
 router.route('/deletePayment/:id').delete(paymentController.deletePayment);// Delete payment
-
 router.route('/deletePayments').delete(paymentController.deletePayments);// Delete payments
 router.route('/penality').get(paymentController.getPenality); // Handle penalties
 
-
-router.route('/transferFunds').post(paymentController.transferFunds); // Transfer funds
-
-
-//tadios change for payment transfer 
-// router.route('/transferFunds').post(paymentController.updateTransferFunds); // Transfer funds
-router.route('/transferFunds/:id').delete(paymentController.deleteTransfer);
-//end of tadios chnage for paymnet transfer update
-
+router.route('/transferFunds')
+  .post(paymentController.createTransferFunds)
+router.route('/transferFunds/:id')
+  .patch(paymentController.updateTransferFunds)
+  .delete(paymentController.deleteTransferFunds);
 
 // ========== Routes for Reporting ,reciept and Notifications ==========
 router.route('/paymentbyMonth').get(paymentController.getPaymentByMonth); // Payments grouped by month (for reports)
-// router.get('/paymentnotifications', paymentController.handlePaymentNotifications); // Handle payment notifications
 router.route('/getNotifications').get(paymentController.getPaymentNotifications); 
 router.route('/markPaymentAsSeen/:paymentId').put(paymentController.markPaymentAsSeen); 
 

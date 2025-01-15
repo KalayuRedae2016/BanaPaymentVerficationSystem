@@ -27,7 +27,7 @@ router.post('/signup', authoController.uploadUserImage,authoController.signup);
 
 router.post('/insertMultipleUsers',authoController.insertMultipleUsers);
 
-router.patch('/updatePassword',authoController.updatePassword);
+router.patch('/updatePassword/:userId',authoController.updatePassword);
 router.patch('/updateMe',authoController.uploadUserImage,userController.updateMe);
   
 //router.use(authoController.requiredRole('admin'));

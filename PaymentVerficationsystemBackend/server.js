@@ -4,7 +4,7 @@ const fs = require("fs");
 const dotenv = require("dotenv");
 const app = require("./index");
 const connectDB = require("./config/db");
-const createDefaultAdminUser = require("./utils/setupDefaultUser"); // Import the function
+const {createDefaultAdminUser} = require("./utils/userUtils"); // Import the function
 
 // Load environment variables based on the NODE_ENV
 const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
@@ -16,7 +16,7 @@ const initializeServer = async () => {
     console.log("Initializing server...");
     // Ensure the default admin user is created before starting the server
     await createDefaultAdminUser();
-    // console.log("Default admin user created successfully");
+    console.log("Default admin user created successfully");
 
     const PORT = process.env.PORT || 8081;
     const SSL = process.env.SSL
