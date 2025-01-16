@@ -87,19 +87,20 @@ exports.getUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User not found', 404));
   }
 
-  const encoding = 'base64';
-  // If the user has a profile image, attempt to read it
-  if (user.profileImage) {
-    const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
-
-    try {
-      // Try reading the image file
-      imageData = fs.readFileSync(imageFilePath, encoding);
-    } catch (err) {
-      // If the file doesn't exist, log the error and set imageData to null
-      console.error(`Error reading image file: ${imageFilePath}`, err.message);
-      imageData = null;
-    }
+  // Prepare profile image data and attachments data (if available)
+  let imageData = null;
+  if (uaer.profileImage) {
+    const imageFilePath = path.join(__dirname, '..', 'uploads', 'attachments', uaer.profileImage);
+    imageData = await convertFileToBase64(imageFilePath); // Handle base64 conversion of profile image
+  }
+  
+  let attachmentsData = null;
+  if (uaer.attachments) {
+    attachmentsData = await Promise.all(uaer.attachments.map(async (attachment) => {
+      const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
+      attachment.fileData = await convertFileToBase64(attachmentPath); // Handle base64 conversion of attachments
+      return attachment;
+    }));
   }
 
   const formattedCreatedAt = user.createdAt ? formatDate(user.createdAt) : null;
@@ -113,6 +114,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
       formattedUpdatedAt
     },
     imageData,
+    attachmentsData
   });
 });
 
@@ -230,7 +232,6 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     message: `User Deleted`
   });
 });
-
 exports.deleteUsers = catchAsync(async (req, res, next) => {
   const deletedUsers= await User.deleteMany({});  // Deletes all documents
   if (deletedUsers.deletedCount === 0) {
@@ -271,44 +272,109 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  const user=await User.findById(req.user,_id)
-  if(!user){
-    return next (new AppError("User is not found",400))
+  // Step 1: Fetch the user and validate existence
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    return next(new AppError('User not found', 404));
   }
 
-  if(!user.canEditDetials){
-    return next(new AppError("Editting access is not enabled,please contact for Admin",403))
+  // Step 2: Check if the user has permission to edit details
+  if (!user.canEditDetails) {
+    return next(new AppError('Editing access is not enabled. Please contact Admin.', 403));
   }
-  // Create error if user POSTs password data
+
+  // Step 3: Prevent password updates through this route
   if (req.body.password) {
     return next(
       new AppError('This route is not for password updates. Please use /updateMyPassword.', 400)
     );
   }
 
-  // Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, 'firstName', 'middleName', 'lastName', 'tigrignaName', 'phoneNumber', 'address', 'email', 'age', 'gender');
-  if (req.file) filteredBody.profileImage = req.file.filename;
+  // Step 4: Filter allowed fields to update
+  const filteredBody = filterObj(
+    req.body,
+    'firstName',
+    'middleName',
+    'lastName',
+    'tigrignaName',
+    'phoneNumber',
+    'address',
+    'email',
+    'age',
+    'gender'
+  );
 
-  // Update user document
+  // Step 5: Handle profile image upload
+  if (req.files && req.files.profileImage) {
+    const newProfileImage = req.files.profileImage[0].filename;
+
+    // Delete the existing profile image from the server, if not default
+    if (user.profileImage && user.profileImage !== 'default.png') {
+      const oldImagePath = path.join(__dirname, '..', 'uploads', 'profileImages', user.profileImage);
+      deleteFile(oldImagePath);
+    }
+
+    // Update profile image in the filtered body
+    filteredBody.profileImage = newProfileImage;
+  }
+
+  // Step 6: Handle attachments update
+  const updatedAttachments = req.body.attachments
+    ? JSON.parse(req.body.attachments) // Parse if attachments are sent as JSON
+    : [];
+  const existingAttachments = user.attachments || [];
+
+  // Determine attachments to remove (those not in the updated list)
+  const removedAttachments = existingAttachments.filter(
+    (attachment) => !updatedAttachments.some((updated) => updated.fileName === attachment.fileName)
+  );
+
+  // Delete removed attachments from the storage
+  for (const removed of removedAttachments) {
+    const filePath = path.join(__dirname, '..', 'uploads', 'attachments', removed.fileName);
+    deleteFile(filePath);
+  }
+
+  // Prepare the final list of attachments
+  let attachmentsToSave = [...updatedAttachments];
+
+  // Add new attachments from req.files.attachments
+  if (req.files && req.files.attachments && req.files.attachments.length > 0) {
+    const newAttachments = req.files.attachments.map((file) => ({
+      fileName: file.filename,
+      fileType: file.mimetype,
+      description: req.body.description || '',
+      uploadDate: new Date(),
+    }));
+
+    attachmentsToSave.push(...newAttachments); // Combine existing with new attachments
+  }
+
+  // Update attachments in the filtered body
+  filteredBody.attachments = attachmentsToSave;
+
+  // Step 7: Update user details in the database
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
     { $set: filteredBody },
     { new: true, runValidators: true }
   );
-  
-user.canEditDetails = false;// Revoke edit permission after successful update
-await user.save();
 
+  // Step 8: Revoke edit permission after successful update
+  user.canEditDetails = false;
+  await user.save();
+
+  // Step 9: Format timestamps for the response
   const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
   const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
 
+  // Step 10: Send success response
   res.status(200).json({
     status: 'success',
     message: {
       ...updatedUser._doc,
       formattedCreatedAt,
-      formattedUpdatedAt
+      formattedUpdatedAt,
     },
   });
 });
