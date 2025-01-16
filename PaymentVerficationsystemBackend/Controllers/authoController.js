@@ -11,8 +11,6 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { sendEmail } = require('../utils/email');
 const { deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
-const {changePasswordFlag}=require('../utils/userUtils')
-
 
 const signInToken = (user) => {
   const payload = { id: user._id, role: user.role };
@@ -42,10 +40,8 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  console.log("singup requestbody pro: " , req.body.profileImage);
   try {
     const organization = await Organization.findOne()
-    console.log("org",organization)
     if (!organization) {
       return next(new AppError("Create Organization profile before Creating User", 400));
     }
@@ -61,12 +57,14 @@ exports.signup = catchAsync(async (req, res, next) => {
       profileImage: req.file ? req.file.filename : undefined,
     });
 
-    const existingUser = await User.findOne({ email: user.email });
+    if(user.email){
+      const existingUser = await User.findOne({ email: user.email });
     if (existingUser) {
       if (req.file) {
         deleteFile(req.file.path);
       }
       return next(new AppError('Email already exists', 400));
+    }
     }
     ;
     const userCode = await user.generateUserCode(prefixCode, length);
@@ -87,27 +85,37 @@ exports.signup = catchAsync(async (req, res, next) => {
     if (user.role === "User") {
       await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
     }
+    if(!user.email){
+      res.status(200).json({
+        status: 1,
+        user: user,
+        message:'User registered & pending payments created successfully. No email provided, contact support for credentials.',
+      });
+
+    }
 
     const subject = 'Welcome to Our Platform, Bana Mole Marketing Group!';
     const email = user.email;
+    const loginLink = process.env.NODE_ENV === "development" ? "http://localhost:5173" : "https://banapvs.com";
     const message = `Hi ${user.fullName},
       Welcome to Our Platform! We're excited to have you on board.
       Here are your account details:
-      -LoginLink:http://localhost:5173
       - User Code/Name: ${user.userCode}
       - Email: ${email}
       - Password: ${password}
+
+      -LoginLink:${loginLink}
       
     Please visit our platform to explore and start using our services.
     If you have any questions or need assistance, feel free to contact our support team.
 
     Best regards,
     The Bana Marketing Group Team;`
-    //await sendEmail({ email, subject, message });
+    await sendEmail({ email, subject, message });
     res.status(200).json({
       status: 1,
       user: user,
-      message: 'User registered & pending payments created successfully',
+      message: 'User registered, pending payments created, and welcome email sent successfully.',
     });
   } catch (error) {
     console.error('Signup process error:', error);
@@ -405,6 +413,13 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
       The Bana Marketing Group Team`;
 
     await sendEmail({ email, subject, message });
+    return res.status(200).json({
+      status: 1,
+      userId: user._id,
+      role: user.role,
+      resetedPassword: password,
+      message: 'Password reset successfully. The password will be provided by the admin. Please contact support.',
+    });
   } catch (error) {
     console.log(error)
     return next(new AppError('There was an error sending the email. Try again later!', 500));

@@ -379,47 +379,53 @@ exports.exportUsers = catchAsync(async (req, res) => {
 });
 
 exports.sendEmailMessages = catchAsync(async (req, res, next) => {
-  // console.log(req.body)
-  // console.log("email")
   const { emailList, subject, message } = req.body;
 
-  if (!subject || !message) {
+  // Ensure subject and message are provided
+  if (!subject && !message) {
     return next(new AppError('Subject and message are required', 400));
   }
 
+  // Validate emailList is an array if provided
   if (emailList && !Array.isArray(emailList)) {
     return next(new AppError('emailList must be an array', 400));
   }
 
   let users;
   if (emailList && emailList.length > 0) {
-    if (!emailList.every(email => validator.isEmail(email))) {
-      return next(new AppError('Invalid email address in the list', 400));
+    // Validate and filter emails in emailList
+    const validEmails = emailList.filter(email => validator.isEmail(email));
+    if (validEmails.length === 0) {
+      return next(new AppError('No valid email addresses found in the provided list', 400));
     }
-    users = await User.find({ email: { $in: emailList } }, { email: 1, fullName: 1 }).sort({ createdAt: 1 });
+    users = await User.find({ email: { $in: validEmails } }, { email: 1, fullName: 1 }).sort({ createdAt: 1 });
   } else {
-    users = await User.find({}, { email: 1, fullName: 1 }).sort({ createdAt: 1 });
+    // Fetch all users with valid emails
+    users = await User.find({ email: { $ne: null } }, { email: 1, fullName: 1 }).sort({ createdAt: 1 });
   }
 
+  // Handle case where no users are found
   if (!users || users.length === 0) {
-    return next(new AppError('No users found to send emails to', 404));
+    return next(new AppError('No users found with valid email addresses', 404));
   }
 
+  // Prepare email sending promises
   const emailPromises = users.map(user => {
-    const personalizedMessage =
-      `Dear, ${user.fullName},
+    const emailSubject = subject || 'Welcome to Our Platform, Bana Mole Marketing Group!';
+    const emailMessage = message
+      ? `Dear ${user.fullName},\n\n${message}`
+      : `Hi ${user.fullName},\n\nWelcome to Our Platform! We're excited to have you on board.\n\nPlease use the following link to access our platform:\n- Login Link: ${
+          process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : 'https://banapvs.com'
+        }\n\nIf you have any questions or need assistance, feel free to contact our support team.\n\nBest regards,\nThe Bana Marketing Group Team`;
 
-      ${message}`;
-
-    return sendEmail({ email: user.email, subject: subject, message: personalizedMessage });
+    return sendEmail({ email: user.email, subject: emailSubject, message: emailMessage });
   });
 
   try {
     await Promise.all(emailPromises);
-    // console.log(`Messages successfully sent to all users.`);
     res.status(200).json({
       status: 1,
-      message: 'Messages sent to the specified email list or all users.',
+      message: 'Emails sent successfully to users with valid emails.',
     });
   } catch (error) {
     console.error('Error sending emails:', error);

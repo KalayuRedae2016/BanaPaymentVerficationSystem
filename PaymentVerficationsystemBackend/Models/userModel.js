@@ -37,11 +37,17 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, 'Please provide your email'],
+      // required: [true, 'Please provide your email'],
+      default:null,
       unique: [true, 'Email must be unique'],
       minlength: [4, 'Email must contain at least 8 characters'],
       lowercase: true,
-      validate: [validator.isEmail, 'Please provide a valid email'],
+      validate: {
+        validator: function (value) {
+          return value === null || validator.isEmail(value);// Only validate if email is not null
+        },
+        message: 'Please provide a valid email',
+      },
     },
     password: {
       type: String,
@@ -194,6 +200,9 @@ userSchema.methods.generateRandomPassword = async function (length = 6) {
   return passwordArray.join('');
 }
 userSchema.index({ firstName: 'text' }, { userCode: 'text' }, { firstName: 'text' }, { lastName: 'text' }, { phoneNumber: 'text' },{ userCode: 'text' });
+userSchema.index({ email: 1 }, { unique: true, sparse: true });
+
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
