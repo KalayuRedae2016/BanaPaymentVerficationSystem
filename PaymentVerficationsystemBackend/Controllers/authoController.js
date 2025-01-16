@@ -10,21 +10,24 @@ const createPendingPayments = require("../utils/createPendingPayments")
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 const { sendEmail } = require('../utils/email');
-const { deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
+const { deleteFile, createMulterMiddleware } = require('../utils/fileController');
 
 const signInToken = (user) => {
   const payload = { id: user._id, role: user.role };
   return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 };
 
-const userImageUpload = createMulterMiddleware(// Configure multer for user image uploads
-  'uploads/users/', // Destination folder
-  'User', // Prefix for filenames
-  ['image/jpeg', 'image/png', 'image/gif'], // Allowed file types
+const userAttachments = createMulterMiddleware(
+  'uploads/attachments', // Destination folder
+  'Att', // Prefix for filenames
+  ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword'] // Allowed types
 );
 
-// Middleware for handling single file upload
-exports.uploadUserImage = userImageUpload.single('profileImage');
+exports.uploadFilesMiddleware = userAttachments.fields([
+  { name: 'profileImage', maxCount: 1 }, // Single file for profileImage
+  { name: 'attachments', maxCount: 10 }, // Up to 10 files for attachments
+]);
+
 
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
@@ -41,97 +44,122 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 
 exports.signup = catchAsync(async (req, res, next) => {
   try {
-    const organization = await Organization.findOne()
+    // Validate organization existence
+    const organization = await Organization.findOne();
     if (!organization) {
       return next(new AppError("Create Organization profile before Creating User", 400));
     }
-    
+
     const prefixCode = organization.companyPrefixCode;
     const length = 4;
-    
+
+    console.log('Incoming Files:', req.files);
+
+    // Validate and process the uploaded files
+    const profileImage = req.files.profileImage
+      ? req.files.profileImage[0].filename
+      : null;
+
+    const attachments = req.files.attachments
+      ? req.files.attachments.map(file => ({
+          fileName: file.filename,
+          fileType: file.mimetype,
+          description: req.body.description || '',
+          uploadDate: new Date(),
+        }))
+      : [];
+
+    // Create user instance
     const user = new User({
       ...req.body,
+      profileImage,
+      attachments,
       isActive: true,
-      changePassword:false,
+      changePassword: false,
       hasMadePayment: false, // New user hasn't made a payment yet
-      profileImage: req.file ? req.file.filename : undefined,
     });
 
-    if(user.email){
+    // Check for existing user by email
+    if (user.email) {
       const existingUser = await User.findOne({ email: user.email });
-    if (existingUser) {
-      if (req.file) {
-        deleteFile(req.file.path);
+      if (existingUser) {
+        if (req.file) {
+          deleteFile(req.file.path); // Delete uploaded profile image if user already exists
+        }
+        return next(new AppError('Email already exists', 400));
       }
-      return next(new AppError('Email already exists', 400));
     }
-    }
-    ;
+
+    // Generate user code
     const userCode = await user.generateUserCode(prefixCode, length);
     user.userCode = userCode;
 
-    const password = req.body.password || await user.generateRandomPassword()
+    // Set user password (provided or generated)
+    const password = req.body.password || (await user.generateRandomPassword());
     user.password = await bcrypt.hash(password, 12);
-   
-    await user.save();
-    // Call the payment creation function to create pending payments for the new user
 
-    // Find the payment setting marked as latest
+    // Save user to the database
+    await user.save();
+
+    // Create pending payments if the user role is 'User'
     const latestSetting = await PaymentSetting.findOne({ latest: true });
     if (!latestSetting) {
       return next(new AppError('No active payment setting found.', 404));
     }
-
-    if (user.role === "User") {
+    if (user.role === 'User') {
       await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
     }
-    if(!user.email){
-      res.status(200).json({
-        status: 1,
-        user: user,
-        message:'User registered & pending payments created successfully. No email provided, contact support for credentials.',
-      });
 
+    // Handle response when no email is provided
+    if (!user.email) {
+      return res.status(200).json({
+        status: 1,
+        user,
+        message: 'User registered & pending payments created successfully. No email provided, contact support for credentials.',
+      });
     }
 
+    // Send welcome email
     const subject = 'Welcome to Our Platform, Bana Mole Marketing Group!';
     const email = user.email;
-    const loginLink = process.env.NODE_ENV === "development" ? "http://localhost:5173" : "https://banapvs.com";
+    const loginLink = process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : 'https://banapvs.com';
     const message = `Hi ${user.fullName},
       Welcome to Our Platform! We're excited to have you on board.
       Here are your account details:
       - User Code/Name: ${user.userCode}
       - Email: ${email}
       - Password: ${password}
-
-      -LoginLink:${loginLink}
       
+      Login here: ${loginLink}
+
     Please visit our platform to explore and start using our services.
     If you have any questions or need assistance, feel free to contact our support team.
 
     Best regards,
-    The Bana Marketing Group Team;`
+    The Bana Marketing Group Team`;
+
     await sendEmail({ email, subject, message });
+
     res.status(200).json({
       status: 1,
-      user: user,
+      user,
       message: 'User registered, pending payments created, and welcome email sent successfully.',
     });
   } catch (error) {
     console.error('Signup process error:', error);
+
+    // Handle errors and clean up
     if (req.file) {
-      deleteFile(req.file.path);
+      deleteFile(req.file.path); // Delete uploaded profile image in case of errors
     }
     if (error.code === 11000) {
       return next(new AppError('Email already exists', 400));
-    } else {
-      return res.status(500).json({ message: 'Error saving user: ' + error.message });
     }
+    return res.status(500).json({ message: 'Error saving user: ' + error.message });
   }
 });
 
 //tried t enter but some error by tadios
-
 exports.insertMultipleUsers = catchAsync(async (req, res, next) => {
   console.log("Signup request body:", req.body.users);
   
@@ -200,11 +228,19 @@ exports.insertMultipleUsers = catchAsync(async (req, res, next) => {
 
 exports.login = catchAsync(async (req, res, next) => {
   const { userCode, password } = req.body
+
   // Input validation
-  if (!userCode || !password) {
+  if (!userCode) {
     return res.status(200).json({
       status: 0,
-      message: 'Please provide userCode or password',
+      message: 'Please provide Valid userCode',
+    });
+  }
+
+  if (!password) {
+    return res.status(200).json({
+      status: 0,
+      message: 'Please provide valid password',
     });
   }
   const Upper_userCode = userCode.toUpperCase();
@@ -212,7 +248,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user) {
     return res.status(200).json({
       status: 0,
-      message: 'User is not found',
+      message: 'User is not found,Please Try agian with valid userCode',
     });
   }
 
@@ -234,11 +270,11 @@ exports.login = catchAsync(async (req, res, next) => {
     const email = user.email;
     const subject = 'Account Locked Due to Too Many Failed Login Attempts';
     const message = `Your account has been locked due to too many failed login attempts
- Please wait for 1 hour before trying again. If this wasn't you, please contact support.`
+  Please wait for 1 hour before trying again. If this wasn't you, please contact support.`
 
     await sendEmail({ email, message, subject })
     await user.save()
-    return res.status(401).json({ message: 'Invalid email or password' });
+    return res.status(401).json({ message: 'Invalid or Incorrect password' });
   }
 
   user.failedLoginAttempts = 0;
@@ -277,17 +313,23 @@ exports.authenticationJwt = catchAsync(async (req, _, next) => {
   ) {
     token = req.headers.authorization.split(' ')[1];
   }
+
   if (!token) {
-    return next(new AppError('You are not Unauthorized user', 403));
+    return next(new AppError('Unauthorized: No token provided', 403));
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return next(new AppError('Session expired', 401));
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      return next(new AppError('The user belonging to this token no longer exists', 404));
     }
-    req.user = decoded;
+    // Attach the user to the request object for further use in the route handler
+    req.user = user;  // You can also pass only selected fields like { id: decoded.id, role: decoded.role }
     next();
-  });
+  } catch (err) {
+    return next(new AppError('Session expired or invalid token', 401));
+  }
 });
 
 exports.requiredRole = (requiredrole) => {

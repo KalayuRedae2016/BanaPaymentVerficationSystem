@@ -13,9 +13,8 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { formatDate } = require("../utils/formatDate")
 const createPendingPayments = require("../utils/createPendingPayments")
-const { importFromExcel, exportToExcel, deleteFile, createMulterMiddleware } = require('../utils/excelFileController');
+const { importFromExcel, exportToExcel, deleteFile,convertFileToBase64,createMulterMiddleware } = require('../utils/fileController');
 
-const factory = require('./handlerFactoryController'); //implement latter for next factory function
 
 // Configure multer for user file uploads
 const userFileUpload = createMulterMiddleware(
@@ -118,33 +117,30 @@ exports.getUser = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = catchAsync(async (req, res) => {
-  try {
     const userId = req.params.id;
-    // console.log(userId)
     // Retrieve the existing user
     const existingUser = await User.findById(userId);
     if (!existingUser) {
       return res.status(404).json({ message: 'User not found' });
     }
+
     // Initialize update data
     let updateData = req.body;
 
+    // Handle userCode validation
     if (updateData.userCode) {
       let userCode = updateData.userCode.trim().toUpperCase();  // Trim any spaces and upper case
 
-      const prefix = userCode.slice(0, 2)  // Ensure the userCode starts with "BM"
+      const prefix = userCode.slice(0, 2);  // Ensure the userCode starts with "BM"
       if (prefix !== "BM") {
         return res.status(400).json({
           status: 'fail',
           message: 'User code must start with "BM".',
         });
       }
-
-      updateData.userCode = userCode;// Update the user data with the normalized userCode
-
+      updateData.userCode = userCode; // Update the user data with the normalized userCode
       const userCodeRegex = new RegExp('^' + userCode + '$', 'i'); // 'i' makes it case-insensitive
       const userCodeExists = await User.findOne({ userCode: userCodeRegex, _id: { $ne: userId } });
-      
       if (userCodeExists) {
         return res.status(400).json({
           status: 'fail',
@@ -152,60 +148,63 @@ exports.updateUser = catchAsync(async (req, res) => {
         });
       }
     }
-
-    if (req.file) {
-      updateData.profileImage = req.file.filename; // Set new profile image filename to update
-      let oldImagePath;
-      if (existingUser.profileImage && existingUser.profileImage.trim() !== '' && existingUser.profileImage !== 'default.png') {
-        const profileImage = existingUser.profileImage.trim();
-        if (['.png', '.jpg', '.jpeg'].some(ext => profileImage.toLowerCase().endsWith(ext))) {
-          oldImagePath = path.join(__dirname, '../uploads/users', profileImage);
-          if (fs.existsSync(oldImagePath)) {
-            try {
-              fs.unlinkSync(oldImagePath);
-            } catch (error) {
-              console.error(`Error deleting file: ${error.message}`);
-            }
-          }
+   
+    // Handle profile image upload
+    if (req.files && req.files.profileImage && req.files.profileImage[0]) {
+      updateData.profileImage = req.files.profileImage[0].filename;
+      if (existingUser.profileImage && existingUser.profileImage !== 'default.png') {
+          const oldImagePath = path.join(__dirname, '../uploads/attachments', existingUser.profileImage);
+          await deleteFile(oldImagePath);  // Using async version of deleteFile
         }
+
       }
-    }
 
-    Object.assign(existingUser, updateData);// Apply updates to the existing user object
-    const updatedUser = await existingUser.save();// Save the updated user document
+      if (req.files && req.files.attachments && req.files.attachments.length > 0) {
+        const attachments = req.files.attachments.map(file => ({
+          fileName: file.filename,
+          fileType: file.mimetype,
+          description: req.body.description || '',
+          uploadDate: new Date(),
+        }));
+        updateData.attachments=attachments
+      }
 
-  // If the user has a profile image, attempt to read it
+    // Apply updates to the existing user object
+    Object.assign(existingUser, updateData);
+    const updatedUser = await existingUser.save();
+
+    // Prepare profile image data and attachments data (if available)
+  let imageData = null;
   if (updatedUser.profileImage) {
-    const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', updatedUser.profileImage);
-
-    try {
-      imageData = fs.readFileSync(imageFilePath,'base64');
-    } catch (err) {
-      console.error(`Error reading image file: ${imageFilePath}`, err.message);
-      imageData = null;
-    }
+    const imageFilePath = path.join(__dirname, '..', 'uploads', 'attachments', updatedUser.profileImage);
+    imageData = await convertFileToBase64(imageFilePath); // Handle base64 conversion of profile image
+  }
+  
+  let attachmentsData = null;
+  if (updatedUser.attachments) {
+    attachmentsData = await Promise.all(updatedUser.attachments.map(async (attachment) => {
+      const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
+      attachment.fileData = await convertFileToBase64(attachmentPath); // Handle base64 conversion of attachments
+      return attachment;
+    }));
   }
 
-
+    // Prepare formatted dates
     const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
     const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
 
-
+    // Send the response with updated user data and image/attachments data
     res.status(200).json({
       status: 1,
-      Message: `${updatedUser.fullName} updated successfully`,
+      message: `${updatedUser.fullName} updated successfully`,
       updatedUser: {
         ...updatedUser._doc,
         formattedCreatedAt,
         formattedUpdatedAt
       },
-      imageData
-      // profileImage: updatedUser.profileImage,
+      imageData,
+      attachmentsData, // Add the attachments data in the response
     });
-  } catch (error) {
-    deleteFile(req.file?.path);
-    res.status(500).json({ message: 'Error saving user: ' + error.message });
-  }
 });
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
@@ -261,25 +260,34 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
 });
 
 exports.updateMe = catchAsync(async (req, res, next) => {
-  // 1) Create error if user POSTs password data
+  const user=await User.findById(req.user,_id)
+  if(!user){
+    return next (new AppError("User is not found",400))
+  }
+
+  if(!user.canEditDetials){
+    return next(new AppError("Editting access is not enabled,please contact for Admin",403))
+  }
+  // Create error if user POSTs password data
   if (req.body.password) {
     return next(
-      new AppError(
-        'This route is not for password updates. Please use /updateMyPassword.',
-        400
-      )
+      new AppError('This route is not for password updates. Please use /updateMyPassword.', 400)
     );
   }
-  // 2) Filtered out unwanted fields names that are not allowed to be updated
+
+  // Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(req.body, 'firstName', 'middleName', 'lastName', 'tigrignaName', 'phoneNumber', 'address', 'email', 'age', 'gender');
   if (req.file) filteredBody.profileImage = req.file.filename;
 
-  // 3) Update user document
+  // Update user document
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
     { $set: filteredBody },
     { new: true, runValidators: true }
   );
+  
+user.canEditDetails = false;// Revoke edit permission after successful update
+await user.save();
 
   const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
   const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
@@ -432,3 +440,119 @@ exports.sendEmailMessages = catchAsync(async (req, res, next) => {
     return next(new AppError('Failed to send one or more emails', 500));
   }
 });
+
+exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
+  const { userIds, editPermission } = req.body; // `userIds` is an array, `editPermission` is a boolean
+
+  if (!Array.isArray(userIds) || userIds.length === 0) {
+    return next(new AppError('Provide a valid array of user IDs', 400));
+  }
+
+  if (typeof editPermission !== 'boolean') {
+    return next(new AppError('Provide a valid editPermission value (true or false)', 400));
+  }
+
+  const updatedUsers = await User.updateMany(
+    { _id: { $in: userIds } }, // Target the specified users
+    { $set: { canEdit: editPermission } }, // Update the edit permission
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedUsers.modifiedCount) {
+    return next(new AppError('No users were updated. Check the provided user IDs.', 404));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    message: `Edit permissions have been ${editPermission ? 'granted' : 'revoked/Disabled'} for the specified users.`,
+    updatedCount: updatedUsers.modifiedCount,
+  });
+});
+
+// // Upload attachments
+// exports.uploadAttachments = [
+//   uploadAttachmentsMiddleware,
+//   catchAsync(async (req, res, next) => {
+//     const userId= req.body.userId; // Optional userId to upload for another user (admin use)
+    
+//     // Ensure the user is authenticated and has the necessary role
+//     if (!req.user || !req.user.role) {
+//       return next(new AppError('User role is missing. Unauthorized.', 401));
+//     }
+
+//     const userToUploadFor = (req.user.role === 'SuperAdmin'&& userId || (req.user.role === 'Admin' && userId))
+//       ? await User.findById(userId) // If SuperAdmin or Admin with userId, use userId, else use current user
+//       : await User.findById(req.user._id); // Regular user uploads for themselves
+
+//     console.log("userID", userId);
+//     console.log("reqUser", req.user.id);
+//     console.log("user to upload for", userToUploadFor)
+//     if (!userToUploadFor) {
+//       return next(new AppError('User not found', 404));
+//     }
+
+//     const { files } = req;
+//     console.log("attachenements",files)
+//     if (!files || files.length === 0) {
+//       return next(new AppError('No files uploaded', 400));
+//     }
+
+//     files.forEach(file => {
+//       userToUploadFor.attachments.push({
+//         fileName: file.filename,
+//         fileType: file.mimetype,
+//         description: req.body.description || '', // Optional description for each file
+//         uploadDate: new Date(),
+//       });
+//     });
+
+//   console.log(userToUploadFor.attachments)
+//     await userToUploadFor.save();
+
+//     res.status(200).json({
+//       status: 'success',
+//       message: 'Attachments uploaded successfully',
+//       attachments: userToUploadFor.attachments,
+//     });
+//   }),
+// ];
+
+// // Delete attachments
+// exports.deleteAttachments = catchAsync(async (req, res, next) => {
+//   const userId = req.body.userId || req.user._id; // If admin, pass userId, else use current user's ID
+//   const userToDeleteFrom = req.user.role === 'SuperAdmin' || req.user.role === 'Admin'
+//     ? await User.findById(userId)
+//     : await User.findById(req.user._id); // Only allow self-delete if the user is deleting their own attachments
+
+//   if (!userToDeleteFrom) {
+//     return next(new AppError('User not found', 404));
+//   }
+
+//   console.log("rrrrrr",req.body)
+//   const { filenames } = req.body;
+//   if (!filenames || !Array.isArray(filenames) || filenames.length === 0) {
+//     return next(new AppError('No filenames provided for deletion', 400));
+//   }
+
+//   filenames.forEach(filename => {
+//     const attachmentIndex = userToDeleteFrom.attachments.findIndex(att => att.fileName === filename);
+    
+//     if (attachmentIndex !== -1) {
+//       const filePath = path.join(__dirname, '../uploads/attachments', filename);
+      
+//       if (fs.existsSync(filePath)) {
+//         fs.unlinkSync(filePath);
+//       }
+
+//       userToDeleteFrom.attachments.splice(attachmentIndex, 1);
+//     }
+//   });
+
+//   await userToDeleteFrom.save();
+
+//   res.status(200).json({
+//     status: 'success',
+//     message: 'Attachments deleted successfully',
+//     attachments: userToDeleteFrom.attachments,
+//   });
+// });

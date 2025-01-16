@@ -3,7 +3,13 @@ const { Schema } = mongoose;
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const Joi = require("joi");
+
+const attachmentSchema = new mongoose.Schema({
+  fileName: { type: String, required: true },
+  fileType: { type: String, required: true },
+  description: { type: String },
+  uploadedDate: { type: Date, default: Date.now },
+});
 
 const userSchema = new Schema(
   {
@@ -59,6 +65,10 @@ const userSchema = new Schema(
     type: Boolean,
     default: true
   },
+  canEditDetails: {
+    type: Boolean,
+    default: false, // Default to false; admin must enable this for editing
+  },
     isActive: {
       type: Boolean,
       default: true,
@@ -93,6 +103,7 @@ const userSchema = new Schema(
       default: 'default.png',
       // required: true,
     },
+    attachments: [attachmentSchema], // Array of attachments
     createdAt: {
       type: Date,
       default: Date.now(),

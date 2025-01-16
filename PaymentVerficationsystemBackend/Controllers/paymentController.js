@@ -14,7 +14,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 const createPendingPayments = require("../utils/createPendingPayments")
-const { exportToExcel, importFromExcel, createMulterMiddleware } = require('../utils/excelFileController');
+const { exportToExcel, importFromExcel, createMulterMiddleware } = require('../utils/fileController');
 const { sendEmail } = require('../utils/email');
 const jwt = require('jsonwebtoken');
 
@@ -1635,7 +1635,6 @@ exports.deleteTransferFunds= catchAsync(async (req, res, next) => {
     message: `Successfully deleted paymentTransfer with ID ${transferId}`,
   });
 });
-
 
 exports.resetAll = catchAsync(async (req, res, next) => {
   console.log("all")
