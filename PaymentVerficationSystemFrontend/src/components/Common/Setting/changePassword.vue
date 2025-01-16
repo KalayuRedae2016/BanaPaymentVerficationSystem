@@ -60,6 +60,7 @@
             class="text-gray-500"
           ></i> -->
         </div>
+        
         <form
          
           class="flex flex-col  rounded-lg p-5 mt-2 mr-4 lg:mr-32"
@@ -285,20 +286,25 @@ export default {
         userId: this.userId,
       };
    
-      try { await this.$apiPatch("api/v1/users/updatePassword",'', payload)
+
+      try { 
+        
+        await this.$apiPatch("api/v1/users/updatePassword",this.userId, payload)
         .then((response) => {
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
             this.$reloadPage();
           } 
         })
+
       }catch(error)  {
             console.log("error", error.status,error.message);
             this.errorMessage=error.message;
             this.showError=true;
         }finally{
           console.log("change password finally")
-        };
+      };
+
     },
   },
 };

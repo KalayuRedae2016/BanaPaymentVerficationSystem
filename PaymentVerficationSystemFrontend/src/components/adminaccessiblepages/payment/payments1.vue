@@ -120,12 +120,10 @@
                       class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
                     >
                       <i class="fas fa-exchange-alt mr-2 text-indigo-500"></i
-                      >Make New Payment
+                      >New Payment
                     </label>
                   </div>
                 </div>
-
-
                 <hr class="border border-gray-300 mt-5" />
                 <!-- Conditional Components -->
                 <div class="mt-8">
@@ -141,8 +139,6 @@
               </div>
             </div>
           </div>
-
-
           <div v-show="activeTab === 2" class="">
             <div class="">
               <!-- Report Options -->
