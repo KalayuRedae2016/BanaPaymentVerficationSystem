@@ -126,7 +126,7 @@ exports.updateUser = catchAsync(async (req, res) => {
 
     // Initialize update data
     let updateData = req.body;
-
+    
     // Handle userCode validation
     if (updateData.userCode) {
       let userCode = updateData.userCode.trim().toUpperCase();  // Trim any spaces and upper case
@@ -159,16 +159,27 @@ exports.updateUser = catchAsync(async (req, res) => {
 
       }
 
-      if (req.files && req.files.attachments && req.files.attachments.length > 0) {
-        const attachments = req.files.attachments.map(file => ({
-          fileName: file.filename,
-          fileType: file.mimetype,
-          description: req.body.description || '',
-          uploadDate: new Date(),
-        }));
-        updateData.attachments=attachments
-      }
+      const updatedAttachments = req.body.attachments || []; // Final attachments provided by the client
+    let attachmentsToSave = [...updatedAttachments]; // Prepare the updated list of attachments
+      const removedAttachments = existingUser.attachments.filter(
+        (attachment) => !updatedAttachments.some((updated) => updated.fileName === attachment.fileName)
+      );
+  
+      removedAttachments.forEach((removed) => {
+        const filePath = path.join(__dirname, '../uploads/attachments', removed.fileName);
+        deleteFile(filePath); // Unlink removed files from storage
+      });
+    if (req.files && req.files.attachments && req.files.attachments.length > 0) {
+      const newAttachments = req.files.attachments.map(file => ({
+        fileName: file.filename,
+        fileType: file.mimetype,
+        description: req.body.description || '',
+        uploadDate: new Date(),
+      }));
 
+      // Add new attachments to the list to save
+      updateData.attachments = [...attachmentsToSave, ...newAttachments];
+    
     // Apply updates to the existing user object
     Object.assign(existingUser, updateData);
     const updatedUser = await existingUser.save();
@@ -188,7 +199,6 @@ exports.updateUser = catchAsync(async (req, res) => {
       return attachment;
     }));
   }
-
     // Prepare formatted dates
     const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
     const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
@@ -205,6 +215,7 @@ exports.updateUser = catchAsync(async (req, res) => {
       imageData,
       attachmentsData, // Add the attachments data in the response
     });
+  }
 });
 
 exports.deleteUser = catchAsync(async (req, res, next) => {

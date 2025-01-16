@@ -114,7 +114,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     if (!user.email) {
       return res.status(200).json({
         status: 1,
-        user,
+        user: user,
         message: 'User registered & pending payments created successfully. No email provided, contact support for credentials.',
       });
     }
@@ -142,7 +142,7 @@ exports.signup = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
       status: 1,
-      user,
+      user: user,
       message: 'User registered, pending payments created, and welcome email sent successfully.',
     });
   } catch (error) {
