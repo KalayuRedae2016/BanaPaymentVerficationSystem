@@ -198,7 +198,67 @@
           </div>
 
 
+
           <div v-show="activeTab === 3" class="">
+            <div class="">
+              <!-- Payment Options -->
+              <div class="bg-white shadow-sm border border-gray-200 pt-6 px-3">
+                <div class="flex flex-col sm:flex-row gap-6">
+                  <!-- All Payments -->
+                  <div class="flex items-center mx-4">
+                    <input
+                    @click="consistentRadio('serviceOffsets')"
+                      v-model="offsetPayments"
+                      type="radio"
+                      value="serviceOffsets"
+                      id="service-offsets"
+                      class="h-5 w-5 text-pink-600 focus:ring-pink-500 border-gray-300"
+                    />
+                    <label
+                      for="all-payments"
+                      class="ml-3 text-sm font-medium text-gray-700 hover:text-pink-600 transition"
+                    >
+                      <i class="fas fa-money-check-alt mr-2 text-pink-500"></i
+                      >Service Offsets
+                    </label>
+                  </div>
+
+                  <!-- Transferred Payments -->
+                  <div class="flex items-center mx-4 ">
+                    <input
+                    @click="consistentRadio('userOffsets')"
+                      v-model="offsetPayments"
+                      type="radio"
+                      value="userOffsets"
+                      id="user-offsets"
+                      class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
+                    />
+                    <label
+                      for="transfered-payments"
+                      class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+                    >
+                      <i class="fas fa-exchange-alt mr-2 text-indigo-500"></i
+                      >User Offsets
+                    </label>
+                  </div>
+                </div>
+                <hr class="border border-gray-300 mt-5" />
+                <!-- Conditional Components -->
+                <div class="mt-8">
+                  <service-offset
+                    v-if="offsetPayments === 'serviceOffsets'"
+                  />
+                  <user-offset ref="childComp"
+                    v-else-if="
+                      offsetPayments=== 'userOffsets'"
+                    
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-show="activeTab === 4" class="">
             <div class="">
               <!-- Report Options -->
               <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
@@ -263,27 +323,24 @@
 </template>
 <script>
 import blockPayment from "./paymentSetting/blockNewPayment.vue";
-
-
 import newPayment from "./newPayment/usersCanPay.vue";
-
 import allPaymentReport from "./Reports/paymentReport.vue";
 import confirmedPaymentReport from "./Reports/confirmedPaymentReport.vue";
 import paymentSettingHistory from "./paymentSetting/paymentSettingHistory.vue";
 import allPayments from "./allPayments/allPayments.vue";
 import transferedPayments from "./allPayments/transferedPayments.vue";
 import creditTransfer from "./newPayment/creditTransfer.vue";
+import userOffset from './offsets/userOffset.vue'
+import serviceOffset from './offsets/serviceOffset.vue'
 import axios from "axios";
-
 export default {
   components: {
     blockPayment,
-
+    userOffset ,
     newPayment,
-
     allPaymentReport,
     confirmedPaymentReport,
-
+    serviceOffset,
     paymentSettingHistory,
     allPayments,
     transferedPayments,
@@ -302,6 +359,7 @@ export default {
         "Payment Setting",
         "All Payments",
         "Payment Transfer",
+        "Offsets",
         "Payment Report",
   
       ],
@@ -370,10 +428,17 @@ export default {
 
       }
     }
-
-
     if (this.$route.query.activeTab == 3) {
       this.activeTab = 3;
+      if (this.$route.query.radioStatus== "serviceOffsets") {
+        this.offsetPayments = "serviceOffsets";
+      } else {
+        this.offsetPayments = "userOffsets";
+      }
+    }
+
+    if (this.$route.query.activeTab == 4) {
+      this.activeTab = 4;
       if (this.$route.query.radioStatus== "orgLevelReport") {
         this.paymentReportStatus = "orgLevelReport";
       } else {

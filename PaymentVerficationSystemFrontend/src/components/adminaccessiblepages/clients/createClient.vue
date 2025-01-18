@@ -219,6 +219,81 @@
 
       
       </div>
+      <div class="mx-5 mt-5">
+    <!-- Drag and Drop Area -->
+    <div
+      class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
+      :class="{ 'border-blue-400 bg-blue-50': isDragging }"
+      @dragover.prevent="onDragOver"
+      @dragleave="onDragLeave"
+      @drop.prevent="onDrop"
+    >
+      <p v-if="files.length === 0" class="text-center">
+        Drag & drop images or PDFs here, or click to select
+      </p>
+      <input
+        type="file"
+        accept="image/*,application/pdf"
+        class="hidden"
+        ref="fileInput"
+        multiple
+        @change="onFileChange"
+      />
+      <button
+        type="button"
+        class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        @click="selectFile"
+      >
+        Browse Files
+      </button>
+      <p class="text-blue-500">Add User Atachement either Image or PDF</p>
+    </div>
+
+    <!-- File List -->
+    <div v-if="files.length > 0" class="mt-4">
+      <p class="font-semibold text-blue-500">Choosen Files:</p>
+      <ul class="space-y-4 mt-2">
+        <li
+          v-for="(file, index) in files"
+          :key="index"
+          class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-gray-300 rounded"
+        >
+          <div v-if="isImage(file)" class="w-16 h-16">
+            <img
+              :src="file.preview"
+              alt="Preview"
+              class="object-cover w-full h-full rounded"
+            />
+          </div>
+          <div v-else class="w-16 h-16 flex items-center justify-center text-sm text-gray-600 bg-gray-100 rounded">
+            <p>PDF</p>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-gray-800">{{ file.name }}</p>
+            <p class="text-xs text-gray-500">{{ formatSize(file.size) }}</p>
+            <input
+              v-model="file.description"
+              type="text"
+              placeholder="Enter description"
+              class="custom-input"
+            />
+          </div>
+          <button
+            class="text-red-500 hover:text-red-600"
+            @click="removeFile(index)"
+          >
+          <i class="fa fa-x text-xs mt-10"></i>
+          </button>
+        </li>
+      </ul>
+      <!-- <button
+        @click="uploadFiles"
+        class="mt-4 px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+      >
+        Upload All
+      </button> --> 
+    </div>
+  </div>
 
       <div class="ml-4 mr-8 mt-5">
         <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
@@ -260,7 +335,6 @@
           </button>
         </div>
       </div>
- 
 
     </div>
 
@@ -404,6 +478,11 @@ export default {
   },
   data() {
     return {
+
+      files: [], // Array to store uploaded files and metadata
+      isDragging: false, // To style drag area on drag events
+
+
       role:"",
 
       userRole:"User",
@@ -519,6 +598,7 @@ export default {
       ],
     };
   },
+  
   mounted() {
     this.years = this.generateYearsArray(1914, 100).concat(
       this.generateYearsArray(2024, 100)
@@ -532,6 +612,99 @@ export default {
 
   },
   methods: {
+
+//
+
+// Format file size
+formatSize(size) {
+      if (size < 1024) return `${size} B`;
+      else if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`;
+      else return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+    },
+
+    // Trigger file input dialog
+    selectFile() {
+      this.$refs.fileInput.click();
+    },
+
+    // Handle file change event
+    onFileChange(event) {
+      const selectedFiles = Array.from(event.target.files);
+      this.addFiles(selectedFiles);
+    },
+
+    // Add files to the list
+    addFiles(fileList) {
+      fileList.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.files.push({
+            file,
+            name: file.name,
+            size: file.size,
+            description: "",
+            preview: file.type.startsWith("image/") ? reader.result : null,
+          });
+        };
+        if (file.type.startsWith("image/")) reader.readAsDataURL(file);
+        else this.files.push({ file, name: file.name, size: file.size, description: "" });
+      });
+    },
+
+    // Handle drag over
+    onDragOver() {
+      this.isDragging = true;
+    },
+
+    // Handle drag leave
+    onDragLeave() {
+      this.isDragging = false;
+    },
+
+    // Handle file drop
+    onDrop(event) {
+      this.isDragging = false;
+      const droppedFiles = event.dataTransfer.files;
+      this.addFiles(Array.from(droppedFiles));
+    },
+
+    // Remove a file from the list
+    removeFile(index) {
+      this.files.splice(index, 1);
+    },
+
+    // Upload files to the server
+    async uploadFiles() {
+      if (!this.files.length) {
+        alert("No files to upload!");
+        return;
+      }
+
+      const formData = new FormData();
+      // Append JSON stringified files data
+      formData.append("filesData", JSON.stringify(this.files));
+alert("Uploading files")
+      // try {
+      //   const response = await axios.post("/upload", formData, {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   });
+      //   console.log("Upload successful:", response.data);
+      //   alert("Files uploaded successfully!");
+      //   this.files = []; // Clear the list on successful upload
+      // } catch (error) {
+      //   console.error("Upload failed:", error);
+      //   alert("Error uploading files!");
+      // }
+    },
+
+    // Check if the file is an image
+    isImage(file) {
+      return file.preview !== null;
+    },
+
+    ///
     viewClients() {
       this.$router.push("/admindashboard/clients");
     },
@@ -687,7 +860,19 @@ export default {
         fullPhoneNumber
       );
 
-     console.log("file image  that will be passed",this.imageFile);
+      if (!this.files.length) {
+        alert("No files to upload!");
+        return;
+      }
+
+
+
+    console.log("and the length this.files",this.files.length,this.files);
+
+      // Append JSON stringified files data
+    
+// alert("Uploading files")
+//      console.log("file image  that will be passed",this.imageFile);
 
       const formData = new FormData();
       formData.append("firstName", this.firstName);
@@ -700,42 +885,39 @@ export default {
       formData.append("phoneNumber", fullPhoneNumber);
       formData.append("profileImage", this.imageFile);
       formData.append("role", this.userRole);
-      //formData.append("fullName", this.fullName);
       formData.append("tigrignaName",this.tigrignaFullName);
+      formData.append("attachements", JSON.stringify(this.files));
       console.log("image", this.imageFile);
       console.log("formData", formData);
+      console.log("image file ",this.imageFile);
 
 
+//         const customHeaders = {
+//     "Content-Type": "multipart/form-data",
+// };
+//       try {
 
-        console.log("image file ",this.imageFile);
+//         await this.$apiPost("/api/v1/users/signup", formData,customHeaders).then((response) => {
+//           if (response.status === 1) {
+//             this.$refs.toast.showSuccessToastMessage(response.message
+//             );
+//            this.$reloadPage();
+//           }
+//         });
+//        } catch (error){
+//           console.log("error from server",error.status,error.message);
+//           this.showErrorMessage=true;
+//           this.errorMessage=error.message;
 
+//           if(error.status===404){
+//           console.log("it is 404")
+//           this.errorMessage="";
+//          this.$refs.toast.showWarningToastMessage("Please Create a payment Setting")
+//         // this.$reloadPage();
+//           }
+//         }finally{
 
-        const customHeaders = {
-    "Content-Type": "multipart/form-data",
-};
-      try {
-
-        await this.$apiPost("/api/v1/users/signup", formData,customHeaders).then((response) => {
-          if (response.status === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.message
-            );
-           this.$reloadPage();
-          }
-        });
-       } catch (error){
-          console.log("error from server",error.status,error.message);
-          this.showErrorMessage=true;
-          this.errorMessage=error.message;
-
-          if(error.status===404){
-          console.log("it is 404")
-          this.errorMessage="";
-         this.$refs.toast.showWarningToastMessage("Please Create a payment Setting")
-         this.$reloadPage();
-          }
-        }finally{
-
-        }
+//         }
         ;
     },
   },

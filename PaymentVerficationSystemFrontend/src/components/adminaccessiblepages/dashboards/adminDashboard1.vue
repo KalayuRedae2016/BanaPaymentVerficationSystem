@@ -8,9 +8,34 @@
 
       <Toast ref="toast" />
 
+      <div class="mx-5 flex flex-row pt-3 space-x-12" >
+          <div class=" flex flex-row space-x-12  p-4 h-64 w-full rounded-lg  w-1/2 shadow-lg border-t border-gray-100">
+           <div class="w-1/3 border-r border-gray-300">
+            <canvas ref="pieChartCanvas" class="chart w-1/2" ></canvas>
+          </div>
+           <div class="w-2/3 items-center text-blue-500 " >
+            <p>No. Active Members  <span
+            class="ml-5 bg-blue-500 text-white text-sm px-3 py-1 rounded-full"
+          >
+            2000
+          </span></p>
+            <p>No.  Deactivated Members/Offsets 200  <span
+            class="ml-5 bg-yellow-400 text-white text-sm px-3 py-1 rounded-full"
+          >
+            2000
+          </span></p>
+          <p>No.Admins  <span
+            class="ml-5 bg-green-500 text-white text-sm px-3 py-1 rounded-full"
+          >
+            2000
+          </span></p>
+          </div>
+          </div>
+      </div>
+
       <div class="">
         <div class="mx-4 text-xs">
-          <div class="mt-5 mb-5 flex flex-col w-full border border-gray-300 p-4 rounded-lg">
+          <div class="shadow-lg mt-5 mb-5 flex flex-col w-full border border-gray-300 p-4 rounded-lg">
             <div class="flex flex-row space-x-3">
               <p class="text-blue-800 mb-5 text-sm">
                 {{ $t("Current Month Report") }} ( ({{ activeYear }} -{{
@@ -103,8 +128,8 @@
     </div>
 
     <!-- overdue section -->
-    <div class="mx-4 text-xs">
-      <div class="flex flex-col w-full border border-gray-300 p-4 rounded-lg">
+    <div class="mx-4 text-xs ">
+      <div class="shadow-lg flex flex-col w-full border border-gray-300 p-4 rounded-lg">
         <div class="flex flex-row space-x-3">
           <p class="text-blue-800 mb-5 text-sm">
             <i class="fas fa-exclamation-circle text-red-500 mr-2"></i>
@@ -139,9 +164,12 @@
         </div>
       </div>
     </div>
+
+
+ 
     <!-- //all years confirmed payments -->
 
-    <div class="border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
+    <div class="shadow-lg border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
       <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-xs">
           <i class="fas fa-check-circle text-green-500 text-xs"></i>
@@ -278,7 +306,6 @@
         </a>
       </div>
     </div>
-
     <div v-if="showOrgDetail">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-80 px-4">
@@ -504,10 +531,7 @@
                   </div>
 
                  <div class="my-5 text-xs">
-                  <p class="text-red-500" v-if="enterOldPassword">{{ errorMessage }} *</p>
-                  <p class="text-red-500" v-if="enterNewPassword">{{ errorMessage }} *</p>
-                  <p class="text-red-500" v-if="enterConfirmPassword">{{ errorMessage }} *</p>
-                  <p class="text-red-500" v-if="passwordMisMatch">{{ errorMessage }} *</p>
+                  <p class="text-red-500" v-if="showError">{{ errorMessage }} *</p>
                 </div>
 
                   <div class="flex flex-row space-x-3">
@@ -532,29 +556,22 @@
 // import Chart from "../payment/Reports/charts/charts.vue";
 import { mapGetters } from "vuex";
 import Toast from "../../Common/Toast.vue";
+import Chart from "chart.js/auto";
 export default {
   components: {
-    // Chart,
+    Chart,
     Toast,
   },
   name: "CapitalReport",
   data() {
     return {
-
+      barChart: null,
       showChangePassword: false,
-      
       oldPassword:"",
       newPassword:"",
       confirmPassword:"",
-
-      enterOldPassword:false,
-      enterNewPassword:false,
-      enterConfirmPassword:false,
-      passwordMisMatch:false,
       showError:false,
       errorMessage:"",
-
-
       showOrgDetail: false,
       showToast: false,
       paidClients: 1, // Number of clients who have paid
@@ -613,18 +630,29 @@ export default {
   },
 
   async mounted() {
+
+    const newData = [1500,500,200]; // Example new data
+    this. createPieChart(newData);
+
     if (this.$route.query.loginSuccess === "true") {
       const activeItem = "dashboard";
       this.$store.dispatch("commitActiveItem", { activeItem });
 
-      // this.$refs.toast.showLoginToastMessage(
-      //   "Successfully Login in to your dashboard"
-      // );
+    
 
-      this.showChangePassword = true;
-      // setTimeout(() => {
-      //   this.$router.push("/admindashboard");
-      // }, 2000);
+      if(this.$route.query.changePassword==="true"){
+        this.showChangePassword = true;
+      }else{
+        this.$refs.toast.showLoginToastMessage(
+        "Successfully Login in to your dashboard"
+      );
+        setTimeout(() => {
+        this.$router.push("/admindashboard");
+      }, 2000);
+
+      }
+
+     
     }
 
     await this.$apiGet("/api/v1/users")
@@ -678,11 +706,52 @@ export default {
   methods: {
 
 
+    createPieChart(newData) {
+    const pieChartLabels = ["Active Users", "Offset Users","Admins        "];
+    const pieChartData = {
+      labels: pieChartLabels,
+      datasets: [
+        {
+          label: "Project Report",
+          data: newData,
+          backgroundColor: [
+            "rgba(0, 122, 230)",
+            "rgba(255, 255, 0)",
+            "rgba(0, 255, 0)",
+          ],
+          borderColor: [
+            "rgb(255, 99, 132)",
+            "rgb(255, 159, 64)",
+            "rgb(255, 159, 64)",
+          ],
+          borderWidth: 1,
+        },
+      ],
+    };
+  
+    const pieChartConfig = {
+      type: "pie",
+      data: pieChartData,
+      options: {
+        // Add any additional options for the pie chart here
+      },
+    };
+  
+    const pieChartCanvas = this.$refs.pieChartCanvas;
+    const pieChartCtx = pieChartCanvas.getContext("2d");
+  
+    // Destroy the existing chart if it exists
+    if (this.pieChart) {
+      this.pieChart.destroy();
+    }
+  
+    // Create a new chart
+    this.pieChart = new Chart(pieChartCtx, pieChartConfig);
+    console.log(this.pieChart);
+  },
+  
+
     async changePassword(){
-        
-      this.enterOldPassword=false;
-      this.enterNewPassword=false;
-      this.enterConfirmPassword=false;
       this.showError=false;
       this.errorMessage="";
     
@@ -691,21 +760,21 @@ export default {
 
        if(!this.oldPassword){
         //alert("hiii ")
-         this.enterOldPassword=true;
+         this.showError=true;
          this.errorMessage="Old Password is Required "
          return;
        }
 
        if(!this.newPassword){
         // alert("change password called")
-         this.enterNewPassword=true;
+        this.showError=true;
          this.errorMessage="New Password is Required ";
          return;
        }
 
        if(!this.confirmPassword){
         //alert("p")
-         this.enterConfirmPassword=true;
+        this.showError=true;
          this.errorMessage="Confirm Password is Required"
          return;
        }
@@ -722,38 +791,55 @@ export default {
 
       const checkPassword= this.$isStrongPassword(this.newPassword);
 
-        if(checkPassword.valid===false){
+      console.log("validty and message",checkPassword.valid,checkPassword.errorMessage);
+
+
+      // alert(checkPassword.valid)
+
+        if(checkPassword.valid!=true){
          this.showError=true;
          this.errorMessage=checkPassword.message;
          return;
+        }else{
+          console.log("it is valid")
         }
      
 
 
-        const payload={
-          oldPassword:this.oldPassword,
-          newPassword:this.newPassword
-        }
+    const payload = {
+        currentPassword: this.oldPassword,
+        newPassword: this.newPassword,
+        userId: this.userId,
+      };
+   
 
 
 
         try {
-          await this.$apiPatch("api/v1/users/updatePassword",this.userId, payload)
+
+        await this.$apiPatch("api/v1/users/updatePassword",this.userId, payload)
         .then((response) => {
           if (response.status === 1) {
             console.log("response: " , response)
-            this.$refs.toast.showSuccessToastMessage(response.message);
             this.showChangePassword = false;
+            this.$refs.toast.showSuccessToastMessage(response.message);
+       
+            setTimeout(() => {
+                this.$router.push("/admindashboard");
+           }, 2000); 
             //this.$reloadPage();
           } 
         });
       }catch(error)  {
             console.log("error", error.status,error.message);
-            this.errorMessage=error.message;
             this.showError=true;
+            this.errorMessage=error.message;
+        
         }finally{
           console.log("change password finally")
         };
+
+        
     },
 
     safePercentage(value) {

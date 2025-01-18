@@ -8,6 +8,9 @@
       <button @click.prevent="navigateToCreateClient()" class="custom-button text-xs ">
         <i class="fa fa-add mr-2 "></i>Add
       </button>
+      <button class="custom-button text-xs" @click="editPermissionModal=true">
+        <i class="fa fa-cog icon" aria-hidden="true"></i> {{ $t("Open Edit Profile") }}
+      </button>
       <button class="custom-button text-xs" @click="showDeactivatedUsers()">
         <i class="fa fa-user-slash" aria-hidden="true"></i> {{ $t("View Deactivated Users") }}
       </button>
@@ -16,6 +19,138 @@
 </div>
 
 <clientTable></clientTable>
+
+<div v-if="editPermissionModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 w-96 lg:w-1/2">
+            <div class="flex flex-row items-center">
+              <!-- Text on the left -->
+              <div class="text-blue-500 font-bold">Grant Permissions </div>
+
+              <!-- Icon on the right -->
+              <div
+                class="ml-auto"
+                @click="
+                  editPermissionModal= !editPermissionModal;
+                "
+              >
+                <svg
+                  class="w-6 h-6 text-red-500 hover:text-red-700 transition-colors duration-300 cursor-pointer"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </div>
+            </div>
+
+            
+            
+            <div class="flex flex-row mb-5 mt-5">
+         
+              <input
+                v-model="searchQuery"
+                type="text"
+                :placeholder="$t('searchByNameEmailUsername')"
+                class="custom-input"
+              />
+            </div>
+
+            <div class="overflow-x-auto overflow-y-auto max-h-96 border border-gray-300 p-4">
+              <!-- Table -->
+              <table
+              class="table-auto min-w-full border-collapse  "
+              >
+                <!-- Table Head -->
+                <thead class=" text-white sticky top-0 z-0">
+                  <tr class="text-blue-500 ">
+                    <th class="w-24 p-4 font-bold text-left">
+                      {{ $t("check") }}
+                      <input
+                        type="checkbox"
+                        class="ml-2"
+                        v-model="selectAll"
+                        @change="selectDeselectAll()"
+                      />
+                    </th>
+                    <th class="w-24 p-4 font-bold text-left">
+                      {{ $t("userCode") }}
+                    </th>
+                    <th class="w-24 p-4 font-bold text-left">
+                      {{ $t("fullName") }}
+                    </th>
+                    
+                  </tr>
+                </thead>
+                <!-- Scrollable Table Body -->
+                <tbody
+                  class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto max-h-96"
+                >
+                  <tr
+                    @click="selectDeselectUser(searchClient._id)"
+                    v-for="(searchClient, index) in searchedusers"
+                    :key="searchClient._id"
+                    class="cursor-pointer bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg h-8"
+                  >
+                    <td class="text-md text-gray-700">
+                      <input
+                        type="checkbox"
+                        class="pl-4 rounded focus:ring focus:ring-indigo-300"
+                        :checked="selectedUsers.includes(searchClient._id)"
+                        @change="selectDeselectUser(searchClient._id)"
+                      />
+                    </td>
+                    <td class=" text-xs text-gray-700 hidden h-8">
+                      <span class="font-bold text-indigo-600">{{
+                        index + 1
+                      }}</span>
+                    </td>
+                    <td class=" text-xs text-gray-700 h-6">
+                      <span class="font-bold text-indigo-600">{{
+                        searchClient.userCode
+                      }}</span>
+                    </td>
+                    <td class="text-xs text-gray-700 font-bold h-6">
+                      {{ searchClient.fullName }}
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+            <div
+              class="w-full mt-5 bg-blue-100 border-t blue-200 p-4 text-blue-700"
+            >
+              Total selected :
+              <span class="text-gray-600 font-extrabold ">{{
+                selectedUsers.length
+              }}</span>
+            </div>
+
+         <p class="my-2 text-red-500 text-xs" v-if="selectAtLeastOneUser">Select At list One User??</p>
+
+            <div class="mt-6 flex space-x-5">
+              <button
+                @click="sendPermission()"
+                class="custom-button"
+              >
+               <i class="fa fa-arrow-right"></i> {{ $t("Submit") }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
 </div>
 
 </template>
@@ -30,6 +165,15 @@ export default {
   },
   data() {
     return {
+   //
+      selectAtLeastOneUser:false,
+      selectedUsers: [],
+      searchedusers: [],
+      clientId: "",
+      users: [],
+      selectAll:false,
+      //
+      editPermissionModal:false,
       successToastMessage: "",
       errorToastMessage: "",
       showErrorToast: false,
@@ -65,13 +209,26 @@ export default {
       perPage: 5,
       clientName: "",
       clientsPerpage: "",
+
     };
   },
+
+
   watch: {
+
+
     searchQuery: {
-      handler: "filteredClientsInSearch",
+      handler: "filteredusersInSearch",
       immediate: true,
     },
+
+    selectedUserIds(newIds) {
+      this.selectedUsers = this.users.filter((user) =>
+        newIds.includes(user._id)
+      );
+      console.log(this.selectedUsers);
+    },
+
   },
 
   computed: {
@@ -89,7 +246,8 @@ export default {
         (response) => {
           this.clients = response.users;
           this.searchedClients = this.clients;
-        }
+          this.searchedusers=this.clients;
+        }  
       );
     } catch (error) {
       console.log("from api error global", error.status, error.message);
@@ -99,7 +257,74 @@ export default {
   },
 
   methods: {
-   
+    selectDeselectUser(userId) {
+      console.log("selectDeselectEmail", userId);
+      const index = this.selectedUsers.indexOf(userId);
+      if (index === -1) {
+        // Email is not selected, add it to the 'emails' array
+        this.selectedUsers.push(userId);
+        console.log("selected userd", this.selectedUsers);
+      } else {
+        // Email is selected, remove it from the 'emails' array
+        this.selectedUsers.splice(index, 1);
+        console.log("Deselected user ", userId);
+      }
+      console.log("selected Users", this.selectedUsers);
+    },
+
+
+    selectDeselectAll() {
+      this.selectedUsers = [];
+      if (this.selectAll) {
+        this.selectedUsers= this.clients.map((user) => user._id);
+        console.log("selectedUsers", this.selectedUsers);
+      } else {
+        this.selectedUsers = [];
+        console.log("Deselected all users ", this.selectedUsers);
+      }
+    },
+
+    async sendPermission() {
+
+this.showError=false;
+
+this.selectAtLeastOneUser=false;
+
+
+
+if (this.selectedUsers == "" || this.selectedUsers.length===0) {
+  this.selectAtLeastOneUser=true;
+  return;
+}
+
+const userList = {
+  selectedUsers: this.selectedUsers,
+  permissionGivenBy:localStorage.getItem("userId"),
+}
+
+console.log("userList",userList);
+
+try { 
+  await this.$apiPost("/api/v1/users/canEdit", userList)
+  .then((response) => {
+    console.log("users", response.message);
+    if (response.status === 1) {
+      this.searchedusers = this.users; //response.data.message;
+      //this.displayedItems();
+     // this.$refs.toast.showSuccessToastMessage(response.message);
+      //this.$reloadPage();
+      
+    }
+  })
+ }catch(error)  {
+    console.error("Error fetching users:", error);
+    this.showErrorToastMessage("Something went wrong");
+  }finally{
+
+  };
+this.selectedUsers = [];
+},
+
     async resetPassword(user) {
       console.log("userId is", user._id);
       this.showResetModal = false;
@@ -175,19 +400,41 @@ export default {
     },
 
   
-    filteredClientsInSearch() {
-      console.log("this users=", this.clients);
+    // filteredClientsInSearch() {
+    //   console.log("this users=", this.clients);
 
-      this.searchedClients = this.clients.filter((client) => {
-        return (
-          client.fullName
-            .toLowerCase()
-            .includes(this.searchQuery.toLowerCase()) ||
-          client.userCode.toLowerCase().includes(this.searchQuery.toLowerCase())
+    //   this.searchedClients = this.clients.filter((client) => {
+    //     return (
+    //       client.fullName
+    //         .toLowerCase()
+    //         .includes(this.searchQuery.toLowerCase()) ||
+    //       client.userCode.toLowerCase().includes(this.searchQuery.toLowerCase())
+    //     );
+    //   });
+    // },
+
+
+  filteredusersInSearch() {
+     // alert("tadios");
+      console.log("search", this.searchQuery);
+      console.log("this.users", this.users);
+
+      if (this.searchQuery !== "") {
+        const query = this.searchQuery.toLowerCase();
+        this.searchedusers = this.clients.filter(
+          (client) =>
+            client.fullName.toLowerCase().includes(query) ||
+            client.userCode.toLowerCase().includes(query)
+          // Add more conditions for other table headers
         );
-      });
+        console.log("searched clients: ", this.searchedusers);
+        return this.searchedusers;
+      } else {
+        console.log("searchedusers and it is empty", this.searchedusers);
+        this.searchedusers = this.clients;
+        return this.displayedItems();
+      }
     },
-
     previosPage() {
       if (this.currentPage > 1 && this.currentPage <= this.totalPages) {
         this.currentPage--;

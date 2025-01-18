@@ -366,18 +366,7 @@ export default {
                 this.$store.dispatch("commitName", { fullName });
                 this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true",changePassword:true } });
               } 
-            //   else if(role==="SuperAdmin"){
-            //    // alert("Super Admin")
-            //     this.$store.dispatch("login", { token });
-            //     this.$store.dispatch("commitId", { userId });
-            //     this.$store.dispatch("commitRole", { role });
-            //     console.log("role is given from the server",role);
-            //     this.$store.dispatch("commitUserCode", { userCode });
-            //     this.$store.dispatch("commitEmail", { email });
-            //     console.log("responses for superadmin",token,userId,role,userCode,email);
-            //     this.$router.push({ path: "/superadmindashboard", query: { loginSuccess: "true" } });
-            // }
-              
+
               else {
                 this.showError = true;
                 this.errorMessage = response.data.message;
