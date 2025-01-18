@@ -30,30 +30,20 @@ const bankAccountSchema = new mongoose.Schema({
 });
 
 const transferSchema = new mongoose.Schema({
-  transferType:{
+  transferCase:{
     type:String,
-    enum:["block","service"],
-    required:true
+    enum: ["bankTransfer", "expenditure", "userWithdrawal"],
+    required: true
   },
-  fromBankType: {
-    type: String,
-    required: true,
-  },
-  toBankType: {
-    type: String,
-    required: true,
-  },
-  amount: {
-    type: Number,
-    required: true,
-  },
-  reason:{
-    type:String,
-  },
-  transferDate: {
-    type: Date,
-    default: Date.now,
-  },
+  transferType:{type:String,enum:["block","service"],required:true},
+  orgId: { type: mongoose.Schema.Types.ObjectId, ref: "Organization", default: null },
+  toWhat: { type:String,required:true},
+  fromBankType: {type: String,required: true},
+  toBankType: {type: String,},
+  amount: {type: Number,required: true,min:0},
+  reason:{type:String},
+  refNumber:{type:String,default:null},
+  transferDate: {type: Date,default: Date.now},
 });
 
 const organizationSchema = new mongoose.Schema({

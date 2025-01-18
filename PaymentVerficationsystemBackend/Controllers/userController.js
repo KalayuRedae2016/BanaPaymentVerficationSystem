@@ -89,14 +89,14 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
   // Prepare profile image data and attachments data (if available)
   let imageData = null;
-  if (uaer.profileImage) {
-    const imageFilePath = path.join(__dirname, '..', 'uploads', 'attachments', uaer.profileImage);
+  if (user.profileImage) {
+    const imageFilePath = path.join(__dirname, '..', 'uploads', 'attachments', user.profileImage);
     imageData = await convertFileToBase64(imageFilePath); // Handle base64 conversion of profile image
   }
   
   let attachmentsData = null;
-  if (uaer.attachments) {
-    attachmentsData = await Promise.all(uaer.attachments.map(async (attachment) => {
+  if (user.attachments) {
+    attachmentsData = await Promise.all(user.attachments.map(async (attachment) => {
       const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
       attachment.fileData = await convertFileToBase64(attachmentPath); // Handle base64 conversion of attachments
       return attachment;

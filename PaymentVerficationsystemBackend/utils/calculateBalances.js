@@ -5,12 +5,22 @@ function calculateBalances(payments, org) {
     totalRegularBalance: 0,
     totalUrgentBalance: 0,
     totalSubsidyBalance: 0,
+
     totalServiceBalance: 0,
     totalPenalityBalance: 0,
-    blockTransfered: 0,
-    serviceTransfered: 0,
+
+    blockBankTransfered: 0,
+    serviceBankTransfered: 0,
+
+    blockUserWithdrawal:0,
+    blockUserWithdrawal:0,
+
+    serviceExpenditure:0,
+    blockExpenditure:0,
+
     totalBlockBankAccount: 0,
     totalServiceBankAccount: 0,
+
     TotalOrgBalance: 0,
   };
 
@@ -213,45 +223,40 @@ function calculateBalances(payments, org) {
   // Process organization paymentTransfers
   if (org.paymentTransfers && Array.isArray(org.paymentTransfers)) {
     org.paymentTransfers.forEach((transfer) => {
-      const { transferType, fromBankType, toBankType, amount } = transfer;
-      if (transferType === "block") {
-        totalBalanceBankType[fromBankType].blockOutcoming += amount;
-        totalBalanceBankType[toBankType].blockIncoming += amount;
-        organization.blockTransfered+=amount
+      const {transferCase,transferType, fromBankType, toBankType, amount } = transfer;
+      if(transferCase==="bankTransfer"){
+        if (transferType === "block") {
+          totalBalanceBankType[fromBankType].blockOutcoming += amount;
+          totalBalanceBankType[toBankType].blockIncoming += amount;
+          organization.blockBankTransfered+=amount
+        }
+        if (transferType === "service") {
+          totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+          totalBalanceBankType[toBankType].serviceIncoming += amount;
+          organization.serviceBankTransfered+=amount
+        }
       }
-      if (transferType === "service") {
-        totalBalanceBankType[fromBankType].serviceOutcoming += amount;
-        totalBalanceBankType[toBankType].serviceIncoming += amount;
-        organization.serviceTransfered+=amount
+      else if(transferCase==="userWithdrawal"){
+        if (transferType === "block") {
+          totalBalanceBankType[fromBankType].blockOutcoming += amount;
+          organization.blockUserWithdrawal=amount
+        }
+        if (transferType === "service") {
+          totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+          organization.serviceUserWithdrawal=amount
+        }
       }
+      else{
+        if (transferType === "block") {
+          totalBalanceBankType[fromBankType].blockOutcoming += amount;
+          organization.blockExpenditure+=amount
+        }
+        if (transferType === "service") {
+          totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+          organization.serviceExpenditure+=amount
+        }
 
-
-// // tadios
-// if (!totalBalanceBankType[fromBankType]) {
-//   totalBalanceBankType[fromBankType] = {};
-// }
-// if (!totalBalanceBankType[toBankType]) {
-//   totalBalanceBankType[toBankType] = {};
-// }
-
-
-// if (transferType === "block") {
-//   totalBalanceBankType[fromBankType].blockOutcoming = totalBalanceBankType[fromBankType].blockOutcoming || 0;
-//   totalBalanceBankType[toBankType].blockIncoming = totalBalanceBankType[toBankType].blockIncoming || 0;
-
-//   totalBalanceBankType[fromBankType].blockOutcoming += amount;
-//   totalBalanceBankType[toBankType].blockIncoming += amount;
-// }
-
-// if (transferType === "service") {
-//   totalBalanceBankType[fromBankType].serviceOutcoming = totalBalanceBankType[fromBankType].serviceOutcoming || 0;
-//   totalBalanceBankType[toBankType].serviceIncoming = totalBalanceBankType[toBankType].serviceIncoming || 0;
-
-//   totalBalanceBankType[fromBankType].serviceOutcoming += amount;
-//   totalBalanceBankType[toBankType].serviceIncoming += amount;
-// }
-
-// //end of tadios
+      }
       
     });
   }
@@ -273,7 +278,9 @@ function calculateBalances(payments, org) {
     totalBalanceBankType[bank].totalBalance += totalBalanceBankType[bank].totalBlockBalance+ totalBalanceBankType[bank].totalServiceBalance 
 
   });
-organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
+  organization.totalBlockBankAccount
+  organization.totalServiceBalance
+  organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
 
   return {
     Organization: organization,

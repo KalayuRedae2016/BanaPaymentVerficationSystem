@@ -1352,10 +1352,20 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   });
 });
 exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
-  const payments = await Payment.find({});
-  if (!payments.length) {
-    return res.status(404).json({ error: 'No payments found!' });
-  }
+  
+const paymentTypes = ['regular', 'subsidy', 'urgent', 'service', 'penality'];
+const query = {
+  $or: [
+    { isPaid: true }, // Main payment isPaid
+    ...paymentTypes.map(type => ({ [`${type}.isPaid`]: true })) // Any payment type isPaid
+  ]
+};
+
+const payments = await Payment.find(query);
+if (!payments.length) {
+  return res.status(404).json({ error: 'No Paid payments found!' });
+}
+
   const organization = await Organization.findOne()
   if (!organization) {
     return next(new AppError("Organization is not found", 400))
@@ -1478,19 +1488,24 @@ exports.reports = catchAsync(async (req, res, next) => {
 });
 
 exports.createTransferFunds = catchAsync(async (req, res, next) => {
-  const { transferType, fromBankType, toBankType, amount, reason } = req.body;
-  if (!transferType || !fromBankType || !toBankType || !amount || !reason) {
+  console.log("Request Body:", req.body);
+  const transferCase=req.query.transferCase
+  const { transferType,orgId,toWhat,fromBankType, toBankType, amount, reason,refNumber} = req.body;
+
+  if(!transferCase) return next(new AppError("Missing Transfer Case",400))
+  if (!transferType || !orgId || !toWhat || !fromBankType|| !amount || !reason,refNumber) {
     return next(new AppError('Missing required fields for transfer', 400));
   }
-  if (typeof amount !== 'number' || amount <= 0) {
-    return next(new AppError('Amount must be a positive number', 400));
-  }
-  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
+  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();  
   if (transferDate > new Date()) {
     return next(new AppError('Transfer date cannot be in the future', 400));
   }
   if (isNaN(new Date(transferDate).getTime())) {
     return next(new AppError('Invalid transfer date', 400));
+  }
+
+  if (typeof amount !== 'number' || amount <= 0) {
+    return next(new AppError('Amount must be a positive number', 400));
   }
 
   const organization = await Organization.findOne();
@@ -1503,41 +1518,53 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   const payments = await Payment.find(paymentQuery);
   if (!payments) {
     return next(new AppError(`No confirmed Payments Found`, 400));
-
   }
+
   const bankBalances = calculateBalances(payments, organization);
+  
+  console.log(bankBalances)
+
   const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
   const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
-  // console.log(bankTypes[fromBankType]?.[balanceType])
-
+  
   const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
-
   const fromBankExists = banks.some(account => account.bankType === fromBankType);
-  const toBankExists = banks.some(account => account.bankType === toBankType);
   if (!fromBankExists) {
     return next(new AppError(`Invalid bank type: ${fromBankType} does not exist`, 400));
-  }
-
-  if (!toBankExists) {
-    return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
   }
   if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
     return next(new AppError('Insufficient funds', 400));
   }
+  if (transferCase==="bankTransfer"){
+    if(!toBankType){
+      return next(new AppError('toBankType field is required for bank transfers', 400));
+    }
+    const toBankExists = banks.some(account => account.bankType === toBankType);
+    if (!toBankExists) {
+      return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
+    }
+  }
+
+if (transferCase==="userWithdrawal"){
+  if(!toWhat) return next(new AppError('valid UserId is required for userWithdrawal', 400));
+} 
+
   organization[transferCollection].push({
+    transferCase,
     transferType,
+    orgId,
+    toWhat,
     fromBankType,
-    toBankType,
+    toBankType:transferCase==="bankTransfer"?toBankType:null,
     amount,
     reason,
+    refNumber,
+    transferDate
   });
-
-  // Save the updated organization document
   await organization.save();
-  // console.log(`Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,)
   res.status(200).json({
     status: 1,
-    message: `Successfully transferred ${amount} from ${fromBankType} to ${toBankType}`,
+    message: `Successfully transferred ${amount} Birr from ${fromBankType} to ${transferCase === "bankTransfer" ? toBankType : toWhat}`,
   });
 });
 
