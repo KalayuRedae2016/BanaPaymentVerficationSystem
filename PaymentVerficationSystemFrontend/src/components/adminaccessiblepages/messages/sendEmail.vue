@@ -190,7 +190,8 @@ export default {
       emails: [],
       users: [
        
-      ],
+       ],
+  
       showMoreChanged: false,
       filteredCleints: [],
       displayedusers: [],
@@ -266,6 +267,8 @@ export default {
         console.log("Deselected all emails ", this.emails);
       }
     },
+
+    
     async sendMessage() {
 
       this.showError=false;
