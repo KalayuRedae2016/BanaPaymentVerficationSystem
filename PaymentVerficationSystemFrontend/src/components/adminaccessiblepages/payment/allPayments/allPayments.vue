@@ -3,7 +3,7 @@
     <div class="pb-5 flex flex-col -mt-2">
       <div class="-ml-3 rounded-lg p-1 lg:p-3 text-xs">
         <div
-          class="border-t border-gray-200 flex flex-col lg:flex-row items-center justify-between mb-2 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg shadow-md space-y-3 lg:space-y-0">
+          class=" flex flex-col lg:flex-row items-center justify-between mb-2 space-x-0 lg:space-x-2 bg-white p-4 rounded-lg space-y-3 lg:space-y-0">
           <!-- Search Input -->
 
           <!-- Payment Status Select -->

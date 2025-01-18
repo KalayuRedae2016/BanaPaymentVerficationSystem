@@ -4,7 +4,7 @@
     <div class="pb-5 flex flex-col bg-white -mt-2">
       <div class=" ">
         <div
-          class="mb-2 flex flex-col lg:flex-row space-x-0 lg:space-x-3 bg-white p-4 rounded-lg shadow-md space-y-2 lg:space-y-0 lg:space-x-0"
+          class="mb-2 flex flex-col lg:flex-row space-x-0 lg:space-x-3 bg-white p-4 rounded-lg  space-y-2 lg:space-y-0 lg:space-x-0"
         >
           <select
             v-model="paymentType"

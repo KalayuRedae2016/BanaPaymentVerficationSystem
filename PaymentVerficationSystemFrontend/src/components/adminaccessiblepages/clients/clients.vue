@@ -66,10 +66,10 @@
               />
             </div>
 
-            <div class="overflow-x-auto overflow-y-auto max-h-96 border border-gray-300 p-4">
+            <div class="overflow-x-auto overflow-y-auto max-h-64 border border-gray-300 p-4">
               <!-- Table -->
               <table
-              class="table-auto min-w-full border-collapse  "
+              class="table-auto min-w-full border-collapse"
               >
                 <!-- Table Head -->
                 <thead class=" text-white sticky top-0 z-0">
@@ -94,7 +94,7 @@
                 </thead>
                 <!-- Scrollable Table Body -->
                 <tbody
-                  class="divide-y divide-gray-200 bg-gray-50 overflow-y-auto max-h-96"
+                  class="divide-y divide-gray-200 bg-gray-50 "
                 >
                   <tr
                     @click="selectDeselectUser(searchClient._id)"
@@ -128,8 +128,13 @@
                 </tbody>
               </table>
             </div>
+
+            <div class="flex flex-row mt-2">
+              <label for="" class="custom-label w-1/4 mt-3">Close Date</label>
+              <input type="text" class="custom-input w-2/3">
+            </div>
             <div
-              class="w-full mt-5 bg-blue-100 border-t blue-200 p-4 text-blue-700"
+              class="w-full my-2 bg-blue-100 border-t blue-200 p-2 text-blue-700"
             >
               Total selected :
               <span class="text-gray-600 font-extrabold ">{{
@@ -139,7 +144,7 @@
 
          <p class="my-2 text-red-500 text-xs" v-if="selectAtLeastOneUser">Select At list One User??</p>
 
-            <div class="mt-6 flex space-x-5">
+            <div class="mt-2 flex space-x-5">
               <button
                 @click="sendPermission()"
                 class="custom-button"
@@ -313,7 +318,6 @@ try {
       //this.displayedItems();
      // this.$refs.toast.showSuccessToastMessage(response.message);
       //this.$reloadPage();
-      
     }
   })
  }catch(error)  {

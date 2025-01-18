@@ -5,7 +5,7 @@
       <!-- search and searched users -->
       <div class="">
         <div
-          class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-sm border border-gray-200"
+          class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg  "
         >
           <!-- Search Input -->
           <div class="flex-1 mr-4">
