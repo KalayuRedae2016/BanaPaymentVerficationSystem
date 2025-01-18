@@ -13,7 +13,8 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     companyPrefixCode, 
     companyAddress, 
     serviceBankAccounts = [], 
-    blockBankAccounts = [] 
+    blockBankAccounts = [],
+    expenditure=[]
   } = req.body;
 
   // Check for required fields
@@ -45,6 +46,7 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     companyAddress,
     serviceBankAccounts,
     blockBankAccounts,
+    expenditure
   });
 
 // console.log("all size",allBankTypes.size)
