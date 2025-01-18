@@ -3,7 +3,13 @@ const { Schema } = mongoose;
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
-const Joi = require("joi");
+
+const attachmentSchema = new mongoose.Schema({
+  fileName: { type: String, required: true },
+  fileType: { type: String, required: true },
+  description: { type: String },
+  uploadedDate: { type: Date, default: Date.now },
+});
 
 const userSchema = new Schema(
   {
@@ -37,11 +43,17 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      required: [true, 'Please provide your email'],
+      // required: [true, 'Please provide your email'],
+      default:null,
       unique: [true, 'Email must be unique'],
       minlength: [4, 'Email must contain at least 8 characters'],
       lowercase: true,
-      validate: [validator.isEmail, 'Please provide a valid email'],
+      validate: {
+        validator: function (value) {
+          return value === null || validator.isEmail(value);// Only validate if email is not null
+        },
+        message: 'Please provide a valid email',
+      },
     },
     password: {
       type: String,
@@ -52,6 +64,10 @@ const userSchema = new Schema(
    changePassword:{
     type: Boolean,
     default: true
+  },
+  canEditDetails: {
+    type: Boolean,
+    default: false, // Default to false; admin must enable this for editing
   },
     isActive: {
       type: Boolean,
@@ -87,6 +103,7 @@ const userSchema = new Schema(
       default: 'default.png',
       // required: true,
     },
+    attachments: [attachmentSchema], // Array of attachments
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -194,6 +211,9 @@ userSchema.methods.generateRandomPassword = async function (length = 6) {
   return passwordArray.join('');
 }
 userSchema.index({ firstName: 'text' }, { userCode: 'text' }, { firstName: 'text' }, { lastName: 'text' }, { phoneNumber: 'text' },{ userCode: 'text' });
+userSchema.index({ email: 1 }, { unique: true, sparse: true });
+
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;

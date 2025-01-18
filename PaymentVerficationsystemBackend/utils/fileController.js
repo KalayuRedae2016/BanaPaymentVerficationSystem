@@ -152,13 +152,31 @@ exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) 
   return multer({ storage, fileFilter });
 };
 
-
-exports.deleteFile = (filePath) => {
-  if (filePath) {
-    fs.unlink(filePath, (err) => {
-      if (err) console.error('Failed to delete file:', err);
-      else console.log('File deleted:', filePath);
-    });
+exports.deleteFile = async (filePath) => {
+  if (!filePath) {
+    console.error('No file path provided for deletion.');
+    return;
+  }
+  
+  try {
+    await fs.promises.unlink(filePath); // Using fs.promises.unlink to return a promise
+    console.log('File deleted:', filePath);
+  } catch (err) {
+    console.error(`Failed to delete file at ${filePath}:`, err);
   }
 };
 
+// Synchronous Base64 conversion with error handling
+exports.convertFileToBase64 = (filePath) => {
+  try {
+    if (fs.existsSync(filePath)) {
+      return fs.readFileSync(filePath, 'base64');
+    } else {
+      console.error(`File not found at ${filePath}`);
+      return null;
+    }
+  } catch (err) {
+    console.error(`Error reading file at ${filePath}: ${err.message}`);
+    return null; // Return null if file can't be read
+  }
+};
