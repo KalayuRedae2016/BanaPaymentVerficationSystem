@@ -35,3 +35,30 @@ exports.sendEmail = catchAsync(async (options) => {
   return transporter.sendMail(mailOptions)
    
 });
+
+exports.sendWelcomeEmail = async (user, password) => {
+  const subject = defaultVariables.subject;
+  const email = user.email;
+  const loginLink = process.env.NODE_ENV === 'development' 
+    ? defaultVariables.localURL 
+    : defaultVariables.remoteUrl;
+
+  const message = `Hi ${user.fullName},
+  
+  Welcome to Our Platform! We're excited to have you on board.
+  
+  Here are your account details:
+  - User Code/Name: ${user.userCode}
+  - Email: ${email}
+  - Password: ${password}
+  
+  Login here: ${loginLink}
+  
+  Please visit our platform to explore and start using our services.
+  If you have any questions or need assistance, feel free to contact our support team.
+  
+  Best regards,
+  The Bana Marketing Group Team`;
+
+  await sendEmail({ email, subject, message });
+};

@@ -96,7 +96,15 @@ const userSchema = new Schema(
     },
     phoneNumber: {
       type: String,
-      required: true
+      required: [true, 'Phone number is required'],
+      unique: true, // Mongoose automatically creates a unique index for this field
+      validate: {
+        validator: function (v) {
+          // Regex to match a phone number that starts with a non-zero digit and is exactly 9 digits long
+          return /^[1-9]{1}[0-9]{8}$/.test(v);
+        },
+        message: 'Phone number must contain 9 characters excluding 0',
+      },
     },
     profileImage: {
       type: String,
@@ -211,8 +219,7 @@ userSchema.methods.generateRandomPassword = async function (length = 6) {
   return passwordArray.join('');
 }
 userSchema.index({ firstName: 'text' }, { userCode: 'text' }, { firstName: 'text' }, { lastName: 'text' }, { phoneNumber: 'text' },{ userCode: 'text' });
-userSchema.index({ email: 1 }, { unique: true, sparse: true });
-
+userSchema.index({ email: 1 }, { phoneNumber: 1 },{ unique: true, sparse: true });
 
 const User = mongoose.model('User', userSchema);
 

@@ -126,7 +126,6 @@ exports.updateUser = catchAsync(async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Initialize update data
     let updateData = req.body;
     
     // Handle userCode validation

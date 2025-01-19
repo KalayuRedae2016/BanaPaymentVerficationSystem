@@ -169,7 +169,8 @@ exports.deleteFile = async (filePath) => {
 exports.convertFileToBase64 = (filePath) => {
   try {
     if (fs.existsSync(filePath)) {
-      return fs.readFileSync(filePath, 'base64');
+      const fileBuffer = fs.readFileSync(filePath);
+      return fileBuffer.toString('base64');
     } else {
       console.error(`File not found at ${filePath}`);
       return null;
@@ -178,4 +179,18 @@ exports.convertFileToBase64 = (filePath) => {
     console.error(`Error reading file at ${filePath}: ${err.message}`);
     return null; // Return null if file can't be read
   }
+};
+
+exports.processUploadFiles = (files, body) => {
+  const profileImage = files?.profileImage?.[0]?.filename || null;
+  const attachments = files?.attachments
+    ? files.attachments.map((file) => ({
+        fileName: file.filename,
+        fileType: file.mimetype,
+        description: body.description || '',
+        uploadDate: new Date(),
+      }))
+    : [];
+  
+  return { profileImage, attachments };
 };
