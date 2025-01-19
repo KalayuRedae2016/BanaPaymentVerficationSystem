@@ -1,6 +1,7 @@
 const { formatDate } = require("../utils/formatDate");
+const mongoose = require('mongoose');
 
-function calculateBalances(payments, org) {
+function calculateBalances(payments, org,users) {
   let organization = {
     totalRegularBalance: 0,
     totalUrgentBalance: 0,
@@ -13,11 +14,11 @@ function calculateBalances(payments, org) {
     serviceBankTransfered: 0,
 
     blockUserWithdrawal:0,
-    blockUserWithdrawal:0,
+    serviceUserWithdrawal:0,
 
-    serviceExpenditure:0,
     blockExpenditure:0,
-
+    serviceExpenditure:0,
+   
     totalBlockBankAccount: 0,
     totalServiceBankAccount: 0,
 
@@ -26,7 +27,7 @@ function calculateBalances(payments, org) {
 
   const categorizedPayments = {};
   const totalBalanceBankType = {}; // To hold the summarized bank balances across all statuses
-  const notifications = []; // Placeholder for notifications
+  const userBalances=[]
 
   payments.forEach((payment) => {
     const paymentStatus = payment.status || "Undefined"; // Categorize by status (confirmed, pending, etc.)
@@ -62,12 +63,40 @@ function calculateBalances(payments, org) {
       };
     }
 
+    // Initialize userBalances for the current user
+    if (!userBalances[userCode]) {
+      userBalances[userCode] = {
+        totalRegularBalance: 0,
+        totalUrgentBalance: 0,
+        totalSubsidyBalance: 0,
+
+        totalServiceBalance: 0,
+        totalPenalityBalance: 0,
+
+        blockUserWithdrawal:0,
+        serviceUserWithdrawal:0,
+
+        totalServiceBankAccount:0,
+        totalBlockBankAccount:0
+
+        // totalPaidAmount: 0,
+        // totalExpectedAmount: 0,
+        // payments: [], // Payments specific to this user
+      };
+    }
+
     const statusObj = categorizedPayments[paymentStatus];
+    const userObj = userBalances[userCode];
+
     statusObj.uniqueUsers.add(userCode);
     statusObj.totalPayments.add(billCode);
     statusObj.totalExpectedAmount += payment.totalExpectedAmount || 0;
     statusObj.totalPaidAmount += payment.totalPaidAmount || 0;
     statusObj.totalRegistrationAmount += payment.registrationFee || 0;
+
+    // Update userBalances
+    // userObj.totalExpectedAmount += payment.totalExpectedAmount || 0;
+    // userObj.totalPaidAmount += payment.totalPaidAmount || 0;
 
     // Calculate different amounts based on the payment types
     const amounts = {
@@ -111,6 +140,7 @@ function calculateBalances(payments, org) {
             subsidyBalance: 0,
             serviceBalance: 0,
             penalityBalance: 0,
+
             totalBlockBalance: 0,
             totalServiceBalance: 0,
           };
@@ -122,13 +152,15 @@ function calculateBalances(payments, org) {
           // Update balances for each bankType and paymentType
           bankDetails[`${type}Balance`] += paymentType.amount || 0;
           organization[`total${type.charAt(0).toUpperCase() + type.slice(1)}Balance`] += paymentType.amount || 0;
-
+          userObj[`total${type.charAt(0).toUpperCase() + type.slice(1)}Balance`] += paymentType.amount || 0;
           if (["service", "penality"].includes(type)) {
             organization.totalServiceBankAccount += paymentType.amount || 0;
             bankDetails.totalServiceBalance += paymentType.amount || 0;
+            userObj[`totalServiceBankAccount`] += paymentType.amount || 0;
           } else {
             organization.totalBlockBankAccount += paymentType.amount || 0;
             bankDetails.totalBlockBalance += paymentType.amount || 0;
+            userObj[`totalBlockBankAccount`] += paymentType.amount || 0;
           }
         }
       }
@@ -156,6 +188,7 @@ function calculateBalances(payments, org) {
 
     // Push the payment to its respective statusObj
     statusObj.payments.push(formattedPayment);
+    // userObj.payments.push(payment);
   });
 
   // Clean up categorizedPayments for final output
@@ -223,37 +256,58 @@ function calculateBalances(payments, org) {
   // Process organization paymentTransfers
   if (org.paymentTransfers && Array.isArray(org.paymentTransfers)) {
     org.paymentTransfers.forEach((transfer) => {
-      const {transferCase,transferType, fromBankType, toBankType, amount } = transfer;
+      const {transferCase,transferType,fromBankType,toWhat,toBankType, amount } = transfer;
+          // Validate transferCase and transferType
+        const validTransferCases = ["bankTransfer", "userWithdrawal", "expenditure"];
+        const validTransferTypes = ["block", "service"];
+        if (!validTransferCases.includes(transferCase)) {
+          throw new Error(`Invalid transferCase: ${transferCase}`);
+        }
+        if (!validTransferTypes.includes(transferType)) {
+          throw new Error(`Invalid transferType: ${transferType}`);
+        }
+        
       if(transferCase==="bankTransfer"){
         if (transferType === "block") {
           totalBalanceBankType[fromBankType].blockOutcoming += amount;
           totalBalanceBankType[toBankType].blockIncoming += amount;
           organization.blockBankTransfered+=amount
         }
-        if (transferType === "service") {
+        else if (transferType === "service") {
           totalBalanceBankType[fromBankType].serviceOutcoming += amount;
           totalBalanceBankType[toBankType].serviceIncoming += amount;
           organization.serviceBankTransfered+=amount
         }
       }
       else if(transferCase==="userWithdrawal"){
+        const user = users.find((u) => u._id.toString() === toWhat);
+        if (!user) throw new Error(`User with ID ${toWhat} not found`);
+        const userCode = user.userCode;
+      
         if (transferType === "block") {
           totalBalanceBankType[fromBankType].blockOutcoming += amount;
-          organization.blockUserWithdrawal=amount
+          organization.blockUserWithdrawal+=amount
+          organization.totalBlockBankAccount-=amount
+          userBalances[userCode].blockUserWithdrawal+=amount
+          userBalances[userCode].totalBlockBankAccount-=amount
         }
-        if (transferType === "service") {
+        else if (transferType === "service") {
           totalBalanceBankType[fromBankType].serviceOutcoming += amount;
-          organization.serviceUserWithdrawal=amount
+          organization.serviceUserWithdrawal+=amount
+          organization.totalServiceBankAccount-=amount
+          userBalances[userCode].totalServiceBankAccount-=amount
         }
-      }
+    }
       else{
         if (transferType === "block") {
           totalBalanceBankType[fromBankType].blockOutcoming += amount;
           organization.blockExpenditure+=amount
+          organization.totalBlockBankAccount-=amount
         }
         if (transferType === "service") {
           totalBalanceBankType[fromBankType].serviceOutcoming += amount;
           organization.serviceExpenditure+=amount
+          organization.totalServiceBankAccount-=amount
         }
 
       }
@@ -278,13 +332,16 @@ function calculateBalances(payments, org) {
     totalBalanceBankType[bank].totalBalance += totalBalanceBankType[bank].totalBlockBalance+ totalBalanceBankType[bank].totalServiceBalance 
 
   });
-  organization.totalBlockBankAccount
-  organization.totalServiceBalance
   organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
 
+  const userBalanceArray = Object.entries(userBalances).map(([key, value]) => ({
+    userCode: key,
+    ...value,
+  }));
+  
   return {
     Organization: organization,
-    notifications,
+    userBalances:userBalanceArray,
     totalBalanceBankType,
     categorizedPayments: {
       confirmed: categorizedPayments.confirmed || {},
