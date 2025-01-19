@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const xlsx = require('xlsx'); //for import user from excel
-const ExcelJS = require('exceljs'); //for export users into excel
 
 const multer = require('multer');
 const catchAsync = require('./catchAsync');
