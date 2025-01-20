@@ -164,33 +164,57 @@ exports.deleteFile = async (filePath) => {
     console.error(`Failed to delete file at ${filePath}:`, err);
   }
 };
-
-// Synchronous Base64 conversion with error handling
-exports.convertFileToBase64 = (filePath) => {
-  try {
-    if (fs.existsSync(filePath)) {
-      const fileBuffer = fs.readFileSync(filePath);
-      return fileBuffer.toString('base64');
-    } else {
-      console.error(`File not found at ${filePath}`);
-      return null;
-    }
-  } catch (err) {
-    console.error(`Error reading file at ${filePath}: ${err.message}`);
-    return null; // Return null if file can't be read
+// Unified function to process file data (profile image and attachments)
+exports.processFileData = async (user) => {
+  const convertFileToBase64 = (filePath) => {
+    fs.existsSync(filePath) ? fs.readFileSync(filePath).toString('base64') : null;
   }
+  // Prepare profile image data (if available)
+  const imageData = user.profileImage
+    ? await convertFileToBase64(path.join(__dirname, '..', 'uploads', 'attachments', user.profileImage))
+    : null;
+
+  // Prepare attachments data (if available)
+  let attachmentsData = null;
+  if (user.attachments) {
+    attachmentsData = await Promise.all(user.attachments.map(async (attachment) => {
+      const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
+      attachment.fileData = await convertFileToBase64(attachmentPath); // Handle base64 conversion of attachments
+      return attachment;
+    }));
+  }
+
+  return { imageData, attachmentsData };
 };
 
-exports.processUploadFiles = (files, body) => {
+exports.processUploadFiles = async (files, body,existingUser=null) => {
   const profileImage = files?.profileImage?.[0]?.filename || null;
-  const attachments = files?.attachments
-    ? files.attachments.map((file) => ({
+
+  if (existingUser && profileImage) {
+    if (existingUser.profileImage && existingUser.profileImage !== 'default.png') {
+      const oldImagePath = path.join(__dirname, '../uploads/attachments', existingUser.profileImage);
+      // await deleteFile(oldImagePath);  
+      await exports.deleteFile(oldImagePath);  // Explicitly reference deleteFile using exports
+    }
+  }
+
+  const newAttachments = files?.attachments
+    ? files.attachments.map((file,index) => ({
         fileName: file.filename,
         fileType: file.mimetype,
-        description: body.description || '',
+        description: body.description ? body.description[index] : '',
         uploadDate: new Date(),
       }))
     : [];
+
+    // For updates, merge existing attachments
+  const attachments = existingUser
+  ? [
+      ...(body.attachments || []), // Attachments retained by the client
+      ...newAttachments, // Newly uploaded attachments
+    ]
+  : newAttachments; // For signup, only new attachments
   
   return { profileImage, attachments };
 };
+

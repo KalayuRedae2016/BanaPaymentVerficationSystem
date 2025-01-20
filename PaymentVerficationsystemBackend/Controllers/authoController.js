@@ -49,7 +49,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   
     const prefixCode = organization.companyPrefixCode;
     const length = 4;
-    const {profileImage,attachments}=processUploadFiles(req.files,req.body)
+    const {profileImage,attachments}=await processUploadFiles(req.files,req.body)
    
     const customProbs={...req.body,profileImage,attachments}
     const defaultsProbs={isActive: true,changePassword: false,hasMadePayment: false,}

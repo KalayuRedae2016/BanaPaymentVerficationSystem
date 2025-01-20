@@ -13,7 +13,8 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { formatDate } = require("../utils/formatDate")
 const createPendingPayments = require("../utils/createPendingPayments")
-const { importFromExcel, exportToExcel, deleteFile,convertFileToBase64,createMulterMiddleware } = require('../utils/fileController');
+const { importFromExcel,exportToExcel,processFileData,createMulterMiddleware, processUploadFiles,deleteFile} = require('../utils/fileController');
+const defaultVariables = require('../config/defaultVariables');
 
 
 // Configure multer for user file uploads
@@ -51,11 +52,12 @@ exports.uploadUserFile = userFileUpload.single('file');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const { isActive } = req.query;
+
   let userQuery = {};
-  if (isActive) {
-    userQuery.isActive = isActive === 'true';
-  }
-  userQuery.role = "User"
+  if (isActive) userQuery.isActive = isActive === 'true';
+  userQuery = req.user.role === "SuperAdmin"? { role: { $in: ["Admin", "User"] } }: req.user.role === "Admin"
+  ? { role: "User" }: { _id: req.user._id };
+  console.log(userQuery)
   const users = await User.find(userQuery).lean();
   if (!users) {
     return next(new AppError('No users found', 404));
@@ -67,9 +69,9 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
     const formattedUpdatedAt = user.updatedAt ? formatDate(user.updatedAt) : null;
 
     return {
-      ...user,  // Spread the original user data
-      formattedCreatedAt,  // Add formatted createdAt
-      formattedUpdatedAt   // Add formatted updatedAt
+      ...user,
+      formattedCreatedAt,
+      formattedUpdatedAt 
     };
   });
 
@@ -87,22 +89,8 @@ exports.getUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User not found', 404));
   }
 
-  // Prepare profile image data and attachments data (if available)
-  let imageData = null;
-  if (user.profileImage) {
-    const imageFilePath = path.join(__dirname, '..', 'uploads', 'attachments', user.profileImage);
-    imageData = await convertFileToBase64(imageFilePath); // Handle base64 conversion of profile image
-  }
+  const { imageData, attachmentsData } = await processFileData(user);
   
-  let attachmentsData = null;
-  if (user.attachments) {
-    attachmentsData = await Promise.all(user.attachments.map(async (attachment) => {
-      const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
-      attachment.fileData = await convertFileToBase64(attachmentPath); // Handle base64 conversion of attachments
-      return attachment;
-    }));
-  }
-
   const formattedCreatedAt = user.createdAt ? formatDate(user.createdAt) : null;
   const formattedUpdatedAt = user.updatedAt ? formatDate(user.updatedAt) : null;
 
@@ -120,91 +108,44 @@ exports.getUser = catchAsync(async (req, res, next) => {
 
 exports.updateUser = catchAsync(async (req, res) => {
     const userId = req.params.id;
-    // Retrieve the existing user
+  
     const existingUser = await User.findById(userId);
     if (!existingUser) {
-      return res.status(404).json({ message: 'User not found' });
+      return next(new AppError("User is not Found",400))
     }
 
-    let updateData = req.body;
+    const {userCode}=req.body
+    let updateData ={... req.body};
     
-    // Handle userCode validation
-    if (updateData.userCode) {
-      let userCode = updateData.userCode.trim().toUpperCase();  // Trim any spaces and upper case
+    if (userCode) {
+      const normalizedUserCode=userCode.trim().toUpperCase();
+      if (!normalizedUserCode.startsWith(defaultVariables.prefixCode)) {
+        return next(new AppError("User Code must start with 'BM'",400))
 
-      const prefix = userCode.slice(0, 2);  // Ensure the userCode starts with "BM"
-      if (prefix !== "BM") {
-        return res.status(400).json({
-          status: 'fail',
-          message: 'User code must start with "BM".',
-        });
       }
-      updateData.userCode = userCode; // Update the user data with the normalized userCode
-      const userCodeRegex = new RegExp('^' + userCode + '$', 'i'); // 'i' makes it case-insensitive
-      const userCodeExists = await User.findOne({ userCode: userCodeRegex, _id: { $ne: userId } });
+      const userCodeExists = await User.findOne({ userCode: normalizedUserCode, _id: { $ne: userId } });
       if (userCodeExists) {
-        return res.status(400).json({
-          status: 'fail',
-          message: 'User code already in use by another user.',
-        });
+        return next(new AppError("user Code already in use",400))
       }
+    updateData.userCode = normalizedUserCode;
     }
    
-    // Handle profile image upload
-    if (req.files && req.files.profileImage && req.files.profileImage[0]) {
-      updateData.profileImage = req.files.profileImage[0].filename;
-      if (existingUser.profileImage && existingUser.profileImage !== 'default.png') {
-          const oldImagePath = path.join(__dirname, '../uploads/attachments', existingUser.profileImage);
-          await deleteFile(oldImagePath);  // Using async version of deleteFile
-        }
+    const {profileImage,attachments}=await processUploadFiles(req.files,req.body,existingUser)
+    const { imageData, attachmentsData } = await processFileData(existingUser);
 
-      }
 
-      const updatedAttachments = req.body.attachments || []; // Final attachments provided by the client
-    let attachmentsToSave = [...updatedAttachments]; // Prepare the updated list of attachments
-      const removedAttachments = existingUser.attachments.filter(
-        (attachment) => !updatedAttachments.some((updated) => updated.fileName === attachment.fileName)
-      );
-  
-      removedAttachments.forEach((removed) => {
-        const filePath = path.join(__dirname, '../uploads/attachments', removed.fileName);
-        deleteFile(filePath); // Unlink removed files from storage
-      });
-    if (req.files && req.files.attachments && req.files.attachments.length > 0) {
-      const newAttachments = req.files.attachments.map(file => ({
-        fileName: file.filename,
-        fileType: file.mimetype,
-        description: req.body.description || '',
-        uploadDate: new Date(),
-      }));
+  updateData = {
+    ...updateData,
+    profileImage: profileImage || existingUser.profileImage, // Keep the existing image if no new one
+    attachments,
+  };
 
-      // Add new attachments to the list to save
-      updateData.attachments = [...attachmentsToSave, ...newAttachments];
     
-    // Apply updates to the existing user object
-    Object.assign(existingUser, updateData);
-    const updatedUser = await existingUser.save();
+  const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
 
-    // Prepare profile image data and attachments data (if available)
-  let imageData = null;
-  if (updatedUser.profileImage) {
-    const imageFilePath = path.join(__dirname, '..', 'uploads', 'attachments', updatedUser.profileImage);
-    imageData = await convertFileToBase64(imageFilePath); // Handle base64 conversion of profile image
-  }
-  
-  let attachmentsData = null;
-  if (updatedUser.attachments) {
-    attachmentsData = await Promise.all(updatedUser.attachments.map(async (attachment) => {
-      const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
-      attachment.fileData = await convertFileToBase64(attachmentPath); // Handle base64 conversion of attachments
-      return attachment;
-    }));
-  }
-    // Prepare formatted dates
     const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
     const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
 
-    // Send the response with updated user data and image/attachments data
     res.status(200).json({
       status: 1,
       message: `${updatedUser.fullName} updated successfully`,
@@ -216,7 +157,6 @@ exports.updateUser = catchAsync(async (req, res) => {
       imageData,
       attachmentsData, // Add the attachments data in the response
     });
-  }
 });
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
