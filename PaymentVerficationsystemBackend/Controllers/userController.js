@@ -129,22 +129,19 @@ exports.updateUser = catchAsync(async (req, res) => {
       }
     updateData.userCode = normalizedUserCode;
     }
-   
     const {profileImage,attachments}=await processUploadFiles(req.files,req.body,existingUser)
-    const { imageData, attachmentsData } = await processFileData(existingUser);
-
-
+  
   updateData = {
     ...updateData,
     profileImage: profileImage || existingUser.profileImage, // Keep the existing image if no new one
     attachments,
   };
 
-    
   const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
-
-    const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
-    const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
+  const { imageData, attachmentsData } = await processFileData(updatedUser);
+  
+  const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
+  const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
 
     res.status(200).json({
       status: 1,
