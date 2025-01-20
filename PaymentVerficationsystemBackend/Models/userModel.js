@@ -101,9 +101,9 @@ const userSchema = new Schema(
       validate: {
         validator: function (v) {
           // Regex to match a phone number that starts with a non-zero digit and is exactly 9 digits long
-          return /^[1-9]{1}[0-9]{8}$/.test(v);
+          return /^\+251[0-9]{9}$/.test(v);
         },
-        message: 'Phone number must contain 9 characters excluding 0',
+       message: 'Phone number must start with +251 and contain 9 additional digits'
       },
     },
     profileImage: {
