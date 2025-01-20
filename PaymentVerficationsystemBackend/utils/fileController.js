@@ -199,10 +199,10 @@ exports.processUploadFiles = async (files, body,existingUser=null) => {
   }
 
   const newAttachments = files?.attachments
-    ? files.attachments.map((file,index) => ({
+    ? files.attachments.map((file) => ({
         fileName: file.filename,
         fileType: file.mimetype,
-        description: body.description ? body.description[index] : '',
+        description: body.description||'',
         uploadDate: new Date(),
       }))
     : [];
