@@ -667,7 +667,7 @@ export default {
     // Upload files to the server
     async uploadFiles() {
       if (!this.files.length) {
-        alert("No files to upload!");
+        //alert("No files to upload!");
         return;
       }
 
@@ -773,17 +773,14 @@ export default {
         fullPhoneNumber
       );
 
-      if (!this.files.length) {
-        alert("No files to upload!");
-        return;
-      }
+   
 
-      if (!this.files.length) {
-        alert("No files to upload!");
-        return;
-      }else{
-        console.log("and the length this.files", this.files.length, this.files);
-      }
+      // if (!this.files.length) {
+      //   alert("No files to upload!");
+      //   return;
+      // }else{
+      //   console.log("and the length this.files", this.files.length, this.files);
+      // }
 
 
 
@@ -807,12 +804,15 @@ export default {
       formData.append("address", this.address);
       formData.append("email", this.email);
       formData.append("phoneNumber", fullPhoneNumber);
+
       formData.append("profileImage", this.imageFile);
+
+
       formData.append("role", this.userRole);
       formData.append("tigrignaName", this.tigrignaFullName);
       // formData.append("attachements", JSON.stringify(this.files));
 
-      formData.append("attachements", fileArray);
+     // formData.append("attachments", fileArray);
 
       console.log("image", this.imageFile);
       console.log("formData", formData);
