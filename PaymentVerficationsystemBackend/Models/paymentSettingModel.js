@@ -108,7 +108,7 @@ paymentSettingSchema.pre('findOneAndUpdate', async function (next) {
   if (Object.keys(updatedPaymentFields).length > 0) {
     const Payment = mongoose.model('Payment');
     await Payment.updateMany(
-      { paymentSetting: paymentSetting._id },
+      { paymentSetting: paymentSetting._id,isPaid:false },
       updatedPaymentFields
     );
   }

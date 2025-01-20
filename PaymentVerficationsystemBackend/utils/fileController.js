@@ -1,4 +1,5 @@
 const fs = require('fs');
+const fss = require('fs').promises;  // Use fs.promises for async file reading
 const path = require('path');
 const xlsx = require('xlsx'); //for import user from excel
 
@@ -111,40 +112,55 @@ exports.uploadMultipleFiles = (req, res) => {
 
 // Utility function to configure multer for file uploads
 exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) => {
-  console.log("Thissss")
+  console.log("Middleware initialization started");
   if (!fs.existsSync(destinationFolder)) {
     fs.mkdirSync(destinationFolder, { recursive: true });
   }
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      // Specify the directory where you want to save the uploaded files
-      cb(null, destinationFolder);
+      try {
+        cb(null, destinationFolder); // Ensure callback is invoked with the destination folder
+      } catch (err) {
+        console.error("Error in destination callback:", err.message);
+        cb(err, null); // Pass error to callback
+      }
     },
     filename: (req, file, cb) => {
-      console.log("file",file)
-      // Generate a unique filename for the uploaded file
-      const now = new Date();
-      const year = now.getFullYear(); // Full year (e.g., 2024)
-      const month = String(now.getMonth() + 1).padStart(2, '0'); // Month as a 2-digit string (01-12)
-      const date = String(now.getDate()).padStart(2, '0'); // Day of the month as a 2-digit string (01-31)
-
-      const uniqueSuffix = `${year}-${month}-${date}-${now.getTime()}`; // Combine date and timestamp
-      const { name } = path.parse(file.originalname);
-      const fileExt = path.extname(file.originalname);
-      cb(null, `${filenamePrefix}-${name}-${uniqueSuffix}${fileExt}`);
+      try {
+        console.log("Processing file:", file);
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const date = String(now.getDate()).padStart(2, '0');
+        const uniqueSuffix = `${year}-${month}-${date}-${now.getTime()}`;
+        const { name } = path.parse(file.originalname);
+        const fileExt = path.extname(file.originalname);
+        const uniqueFilename = `${filenamePrefix}-${name}-${uniqueSuffix}${fileExt}`;
+        cb(null, uniqueFilename); // Ensure callback is invoked with the unique filename
+      } catch (err) {
+        console.error("Error in filename callback:", err.message);
+        cb(err, null); // Pass error to callback
+      }
     },
-  })
+  });
   
-  console.log("second here")
+  console.log("Storage configured");
 
+  // Configure file filter
   const fileFilter = (req, file, cb) => {
     console.log('File upload middleware hit');
     console.log('File type:', file.mimetype);
-    // Accept only specified file types
-    if (fileTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('File type not allowed'), false);
+    try {
+      if (fileTypes.includes(file.mimetype)) {
+        console.log("requested fileType tadese",file.mimetype)
+        console.log("Allowed FileTypes kalayu",fileTypes)
+        cb(null, true); // Accept the file
+      } else {
+        cb(new Error('File type not allowed'), false); // Reject the file
+      }
+    } catch (err) {
+      console.error("Error in fileFilter:", err.message);
+      cb(err, false); // Pass error to callback
     }
   };
 
@@ -164,11 +180,16 @@ exports.deleteFile = async (filePath) => {
     console.error(`Failed to delete file at ${filePath}:`, err);
   }
 };
-// Unified function to process file data (profile image and attachments)
+
 exports.processFileData = async (user) => {
   const convertFileToBase64 = (filePath) => {
-    fs.existsSync(filePath) ? fs.readFileSync(filePath).toString('base64') : null;
-  }
+    // Ensure we return a value even if the file does not exist
+    if (fs.existsSync(filePath)) {
+      return fs.readFileSync(filePath).toString('base64');
+    }
+    return null;  // Explicitly return null when the file doesn't exist
+  };
+
   // Prepare profile image data (if available)
   const imageData = user.profileImage
     ? await convertFileToBase64(path.join(__dirname, '..', 'uploads', 'attachments', user.profileImage))
@@ -186,7 +207,6 @@ exports.processFileData = async (user) => {
 
   return { imageData, attachmentsData };
 };
-
 exports.processUploadFiles = async (files, body,existingUser=null) => {
   const profileImage = files?.profileImage?.[0]?.filename || null;
 
