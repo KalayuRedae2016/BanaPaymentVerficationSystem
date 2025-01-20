@@ -894,27 +894,25 @@ export default {
       formData.append("address", this.address);
       formData.append("email", this.email);
       formData.append("phoneNumber", fullPhoneNumber);
-<<<<<<< HEAD
-      
+
       formData.append("profileImage", this.imageFile);
 
-=======
+
       formData.append("profileImage", this.imageFile);
->>>>>>> 0e51f5e9ce2d8170ba9534567018fcd28e9a5906
+
       formData.append("role", this.userRole);
       formData.append("tigrignaName", this.tigrignaFullName);
       // formData.append("attachements", JSON.stringify(this.files));
 
-<<<<<<< HEAD
+
     //  formData.append("attachments", fileArray);
 
       fileArray.forEach(file => {
         formData.append('attachments', file); // Attach files to the form data
       });  
 
-=======
+
       formData.append("attachements", fileArray);
->>>>>>> 0e51f5e9ce2d8170ba9534567018fcd28e9a5906
 
       console.log("image", this.imageFile);
       console.log("formData", formData);
