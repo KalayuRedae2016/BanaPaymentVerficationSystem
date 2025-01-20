@@ -9,7 +9,9 @@ export default {
   ],
   theme: {
     extend: {
-
+      backgroundImage: {
+        'zigzag': 'repeating-linear-gradient(135deg, transparent 0, transparent 3px, gray 1px, purple 5px)',
+      },
       // animation: {
       //   'looping-border': 'looping-border 4s linear infinite',
       // },
@@ -110,7 +112,9 @@ export default {
         '20': '5rem',
         '24': '6rem',
         '32': '8rem',
+        '35': '9rem',
         '40': '10rem',
+        '45': '11rem',
         '48': '12rem',
         '56': '14rem',
         '64': '16rem',

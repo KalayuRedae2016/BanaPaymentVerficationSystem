@@ -6,8 +6,6 @@
       <div class="flex flex-row space-x-3">
         <p class="text-blue-500 text-md font-bold">{{ $t("Send Message") }}</p>
       </div>
- 
-
       <div class="border-t border-blue-500 mt-3 text-xs">
         <div
           class="border border-gray-200 flex flex-col bg-white rounded-lg shadow-md mt-8 border-t border-r border-l border-gray-200"
@@ -120,6 +118,8 @@
                 </tbody>
               </table>
             </div>
+
+
             <div
               class="w-full mt-5 bg-blue-100 border-t blue-200 p-4 text-blue-700"
             >
@@ -222,7 +222,6 @@ export default {
   },
 
   async mounted() {
-    this.searchedusers = this.users;
       try { await this.$apiGet("/api/v1/users", {
         params: {
           isActive: true,
@@ -232,6 +231,7 @@ export default {
         console.log("response active users are", response);
         this.users = response.users;
         this.searchedusers = this.users;
+        alert("hh")
       })
     }catch(error) {
         console.log("error", error);
@@ -241,8 +241,6 @@ export default {
   },
 
   methods: {
-    
-
     selectDeselectEmail(email) {
       console.log("selectDeselectEmail", email);
       const index = this.emails.indexOf(email);
@@ -267,8 +265,6 @@ export default {
         console.log("Deselected all emails ", this.emails);
       }
     },
-
-    
     async sendMessage() {
 
       this.showError=false;

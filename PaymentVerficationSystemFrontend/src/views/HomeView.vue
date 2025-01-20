@@ -355,7 +355,12 @@ export default {
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
                 this.$store.dispatch("commitFullName", { fullName });
-                this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" ,changePassword:true} });
+                if(changePassword==='true'){
+                  this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" ,changePassword:true} });
+                }else{
+                  this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true"} });
+                }
+              //  this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" ,changePassword:true} });
               } else if (role==="User") {
               
                 this.$store.dispatch("login", { token });
@@ -364,7 +369,15 @@ export default {
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
                 this.$store.dispatch("commitName", { fullName });
-                this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true",changePassword:true } });
+             
+                if(changePassword==='true'){
+                  this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true",changePassword:true } });
+                }else{
+                  this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true" } });
+                }
+             
+             
+                //this.$router.push({ path: "/userdashboard", query: { loginSuccess: "true",changePassword:true } });
               } 
 
               else {

@@ -129,6 +129,13 @@
             </div>
           </div>
 
+
+
+
+          <div class="border border-gray-500 p-4 rounded-lg">
+            <p>Attachements</p>
+          </div>
+
           <button @click="showEditModal = true" class="custom-button my-5 w-full lg:w-auto">
             <i class="fas fa-edit mr-2"></i>Edit
           </button>
@@ -140,7 +147,7 @@
     <div v-if="showEditModal" style="height: 400px">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 w-full lg:w-2/3">
             <div class="flex justify-between items-center">
               <div>Edit User Profile</div>
               <div>

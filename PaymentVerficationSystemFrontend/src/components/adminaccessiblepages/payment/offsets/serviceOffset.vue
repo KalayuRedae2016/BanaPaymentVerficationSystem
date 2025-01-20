@@ -3,7 +3,7 @@
     <Toast ref="toast" />
     <div
       v-if="role === 'SuperAdmin'"
-      class="border border-gray-300 mt-5 p-5 mx-0 rounded-lg shadow-md"
+      class="mt-5 p-5 mx-0 rounded-lg "
     >
       <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
         <label class="custom-label w-1/3 mt-3"> Offset Type: </label>

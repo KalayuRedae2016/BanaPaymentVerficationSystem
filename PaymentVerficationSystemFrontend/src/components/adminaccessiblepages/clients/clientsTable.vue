@@ -78,7 +78,7 @@
               class="cursor-pointer border-b border-gray-300 py-1 px-3 whitespace-nowrap"
               @click="navigateToInClient(user._id)"
             >
-              {{ user.tigrignaName }}
+              {{ user.phoneNumber}}
             </td>
            
 
@@ -386,7 +386,7 @@ export default {
       headers: [
         { key: "userCode", label: "Code" },
         { key: "fullName", label: "Full Name" },
-        { key: "tigrignaFullName", label: "TigFullName" },
+        { key: "phoneNumber", label: "Phone Number" },
         { key: "email", label: "Email" },
         { key: "actions", label: "Actions" },
       ],
