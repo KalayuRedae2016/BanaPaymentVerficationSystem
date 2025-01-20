@@ -16,7 +16,7 @@ const createDefaultAdminUser = catchAsync(async () => {
         firstName:"SuperAdmin",
         lastName:"User",
         role: 'SuperAdmin',
-        phoneNumber:"09090909091",    
+        phoneNumber:"+251943662611",    
         email: 'tadiosgb26@gmail.com',
         changePassword:true
       });
@@ -28,7 +28,7 @@ const createDefaultAdminUser = catchAsync(async () => {
         firstName:"Admin",
         lastName:"Default Admin",
         role: 'Admin',
-        phoneNumber:"09090909091",
+        phoneNumber:"+251943662612",   
         email: 'kalayuredae2016@gmail.com',
         changePassword:true
       
