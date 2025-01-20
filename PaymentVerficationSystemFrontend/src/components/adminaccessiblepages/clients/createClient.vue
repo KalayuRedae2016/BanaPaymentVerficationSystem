@@ -12,7 +12,6 @@
         </div>
       </div>
 
-     
       <div class="flex flex-row space-x-6 mt-5 ml-5">
         <label
           for="file-upload"
@@ -129,8 +128,6 @@
         </div>
 
         <div class="w-full space-y-3 md:space-y-3 md:w-1/2">
-          
-      
           <div class="w-full">
             <label class="custom-label" for="address">
               {{ $t("address") }}
@@ -167,11 +164,8 @@
               {{ $t("phoneNumber") }}
               <span class="text-red-500">*</span>
             </label>
-            <div class="flex flex-row ">
-              <select
-                v-model="phoneNumberCode"
-                class="custom-select w-1/4"
-              >
+            <div class="flex flex-row">
+              <select v-model="phoneNumberCode" class="custom-select w-1/4">
                 <option
                   v-for="country in countries"
                   :key="country.code"
@@ -182,7 +176,7 @@
               </select>
               <input
                 type="text"
-                class="rounded-sm custom-input h-10  text-xs ml-2 w-3/4"
+                class="rounded-sm custom-input h-10 text-xs ml-2 w-3/4"
                 required
                 :placeholder="$t('phoneNumber')"
                 style="padding-left: 16px"
@@ -197,103 +191,101 @@
               <span class="text-red-500 ml-1"></span>
             </label>
             <input
-              class="custom-input  text-xs"
+              class="custom-input text-xs"
               type="file"
               ref="fileInput"
               accept="image/*"
               @change="handleImageInput"
             />
           </div>
-          <div class="w-full" v-if="role==='SuperAdmin'">
+          <div class="w-full" v-if="role === 'SuperAdmin'">
             <label class="custom-label"> {{ $t("Role") }} <span>*</span></label>
-            <select
-                v-model="userRole"
-                class="custom-select "
-              >
-                <option value="">Select Role</option>
-                <option value="User">User</option>
-                <option value="Admin">Admin</option>
-              </select>
+            <select v-model="userRole" class="custom-select">
+              <option value="">Select Role</option>
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+            </select>
           </div>
         </div>
-
-      
       </div>
       <div class="mx-5 mt-5">
-    <!-- Drag and Drop Area -->
-    <div
-      class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
-      :class="{ 'border-blue-400 bg-blue-50': isDragging }"
-      @dragover.prevent="onDragOver"
-      @dragleave="onDragLeave"
-      @drop.prevent="onDrop"
-    >
-      <p v-if="files.length === 0" class="text-center">
-        Drag & drop images or PDFs here, or click to select
-      </p>
-      <input
-        type="file"
-        accept="image/*,application/pdf"
-        class="hidden"
-        ref="fileInput"
-        multiple
-        @change="onFileChange"
-      />
-      <button
-        type="button"
-        class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        @click="selectFile"
-      >
-        Browse Files
-      </button>
-      <p class="text-blue-500">Add User Atachement either Image or PDF</p>
-    </div>
-
-    <!-- File List -->
-    <div v-if="files.length > 0" class="mt-4">
-      <p class="font-semibold text-blue-500">Choosen Files:</p>
-      <ul class="space-y-4 mt-2">
-        <li
-          v-for="(file, index) in files"
-          :key="index"
-          class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-gray-300 rounded"
+        <!-- Drag and Drop Area -->
+        <div
+          class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
+          :class="{ 'border-blue-400 bg-blue-50': isDragging }"
+          @dragover.prevent="onDragOver"
+          @dragleave="onDragLeave"
+          @drop.prevent="onDrop"
         >
-          <div v-if="isImage(file)" class="w-16 h-16">
-            <img
-              :src="file.preview"
-              alt="Preview"
-              class="object-cover w-full h-full rounded"
-            />
-          </div>
-          <div v-else class="w-16 h-16 flex items-center justify-center text-sm text-gray-600 bg-gray-100 rounded">
-            <p>PDF</p>
-          </div>
-          <div class="flex-1">
-            <p class="text-sm font-medium text-gray-800">{{ file.name }}</p>
-            <p class="text-xs text-gray-500">{{ formatSize(file.size) }}</p>
-            <input
-              v-model="file.description"
-              type="text"
-              placeholder="Enter description"
-              class="custom-input"
-            />
-          </div>
+          <p v-if="files.length === 0" class="text-center">
+            Drag & drop images or PDFs here, or click to select
+          </p>
+          <input
+            type="file"
+            accept="image/*,application/pdf"
+            class="hidden"
+            ref="fileInput"
+            multiple
+            @change="onFileChange"
+          />
           <button
-            class="text-red-500 hover:text-red-600"
-            @click="removeFile(index)"
+            type="button"
+            class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            @click="selectFile"
           >
-          <i class="fa fa-x text-xs mt-10"></i>
+            Browse Files
           </button>
-        </li>
-      </ul>
-      <!-- <button
+          <p class="text-blue-500">Add User Atachement either Image or PDF</p>
+        </div>
+
+        <!-- File List -->
+        <div v-if="files.length > 0" class="mt-4">
+          <p class="font-semibold text-blue-500">Choosen Files:</p>
+          <ul class="space-y-4 mt-2">
+            <li
+              v-for="(file, index) in files"
+              :key="index"
+              class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-gray-300 rounded"
+            >
+              <div v-if="isImage(file)" class="w-16 h-16">
+                <img
+                  :src="file.preview"
+                  alt="Preview"
+                  class="object-cover w-full h-full rounded"
+                />
+              </div>
+              <div
+                v-else
+                class="w-16 h-16 flex items-center justify-center text-sm text-gray-600 bg-gray-100 rounded"
+              >
+                <p>PDF</p>
+              </div>
+              <!-- <div class="flex-1">
+                <p class="text-sm font-medium text-gray-800">{{ file.name }}</p>
+                <p class="text-xs text-gray-500">{{ formatSize(file.size) }}</p>
+                <input
+                  v-model="file.description"
+                  type="text"
+                  placeholder="Enter description"
+                  class="custom-input"
+                />
+              </div> -->
+              <button
+                class="text-red-500 hover:text-red-600"
+                @click="removeFile(index)"
+              >
+                <i class="fa fa-x text-xs mt-10"></i>
+              </button>
+            </li>
+          </ul>
+          <!-- <button
         @click="uploadFiles"
         class="mt-4 px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
       >
         Upload All
-      </button> --> 
-    </div>
-  </div>
+      </button> -->
+        </div>
+      </div>
 
       <div class="ml-4 mr-8 mt-5">
         <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
@@ -327,15 +319,11 @@
           {{ errorMessage }}
         </p>
         <div class="w-1/2">
-          <button
-            @click="register()"
-            class="mt-3 w-32 custom-button mb-5"
-          >
-          <i class="fa fa-arrow-right"></i> {{ $t("submit") }}
+          <button @click="register()" class="mt-3 w-32 custom-button mb-5">
+            <i class="fa fa-arrow-right"></i> {{ $t("submit") }}
           </button>
         </div>
       </div>
-
     </div>
 
     <div v-if="importExelFilePressed">
@@ -478,16 +466,14 @@ export default {
   },
   data() {
     return {
-
       files: [], // Array to store uploaded files and metadata
       isDragging: false, // To style drag area on drag events
 
+      role: "",
 
-      role:"",
+      userRole: "User",
 
-      userRole:"User",
-
-      errorMessage:"",
+      errorMessage: "",
       showErrorMessage: false,
       duplicateEmailError: false,
       duplicateEntry: false,
@@ -495,7 +481,7 @@ export default {
       firstName: "",
       middleName: "",
       lastName: "",
-      tigrignaFullName:"",
+      tigrignaFullName: "",
       email: "",
       address: "",
       phoneNumber: "",
@@ -598,7 +584,7 @@ export default {
       ],
     };
   },
-  
+
   mounted() {
     this.years = this.generateYearsArray(1914, 100).concat(
       this.generateYearsArray(2024, 100)
@@ -608,15 +594,13 @@ export default {
     // this.$apiClient = axios.create({
     //   baseURL: "http://localhost:8081/", // Set your base URL here
     // });
-    this.role=localStorage.getItem("role");
-
+    this.role = localStorage.getItem("role");
   },
   methods: {
+    //
 
-//
-
-// Format file size
-formatSize(size) {
+    // Format file size
+    formatSize(size) {
       if (size < 1024) return `${size} B`;
       else if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`;
       else return `${(size / (1024 * 1024)).toFixed(2)} MB`;
@@ -644,10 +628,17 @@ formatSize(size) {
             size: file.size,
             description: "",
             preview: file.type.startsWith("image/") ? reader.result : null,
+            
           });
         };
         if (file.type.startsWith("image/")) reader.readAsDataURL(file);
-        else this.files.push({ file, name: file.name, size: file.size, description: "" });
+        else
+          this.files.push({
+            file,
+            name: file.name,
+            size: file.size,
+            description: "",
+          });
       });
     },
 
@@ -683,7 +674,7 @@ formatSize(size) {
       const formData = new FormData();
       // Append JSON stringified files data
       formData.append("filesData", JSON.stringify(this.files));
-alert("Uploading files")
+      alert("Uploading files");
       // try {
       //   const response = await axios.post("/upload", formData, {
       //     headers: {
@@ -705,6 +696,158 @@ alert("Uploading files")
     },
 
     ///
+
+    base64ToFile(base64, fileName, mimeType) {
+      const byteString = atob(base64.split(",")[1]); // Decode base64
+      const ab = new ArrayBuffer(byteString.length); // Create ArrayBuffer
+      const ia = new Uint8Array(ab);
+
+      // Fill the Uint8Array with byte values
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      // Create a Blob and return it as a File
+      const blob = new Blob([ab], { type: mimeType });
+      return new File([blob], fileName, { type: mimeType });
+    },
+
+    async register() {
+      //alert("hadgo")
+      this.showErrorMessage = false;
+      this.firstNameIsRequired = false;
+      this.middleNameIsRequired = false;
+      this.lastNameIsRequired = false;
+      this.genderIsRequired = false;
+      this.ageIsRequired = false;
+      this.addressIsRequired = false;
+      this.emailIsRequired = false;
+      this.phoneNumberIsRequired = false;
+      this.imageIsRequired = false;
+      //  console.log("FamillyMembers", this.familyMembers);
+      console.log("register called");
+      if (this.firstName === "") {
+        this.firstNameIsRequired = true;
+        return;
+      }
+
+      if (this.middleName === "") {
+        this.middleNameIsRequired = true;
+        return;
+      }
+
+      if (this.lastName === "") {
+        this.lastNameIsRequired = true;
+        return;
+      }
+
+      if (this.gender === "") {
+        this.genderIsRequired = true;
+        return;
+      }
+
+      if (this.age === "") {
+        this.ageIsRequired = true;
+        return;
+      }
+
+      if (this.address === "") {
+        this.addressIsRequired = true;
+        return;
+      }
+      if (this.phoneNumber === "") {
+        this.phoneNumberIsRequired = true;
+        return;
+      }
+
+      const fullPhoneNumber = this.phoneNumberCode + this.phoneNumber;
+      console.log(
+        "data",
+        this.firstName,
+        this.middleName,
+        this.lastName,
+        this.gender,
+        this.age,
+        this.address,
+        this.email,
+        fullPhoneNumber
+      );
+
+      if (!this.files.length) {
+        alert("No files to upload!");
+        return;
+      }
+
+      if (!this.files.length) {
+        alert("No files to upload!");
+        return;
+      }else{
+        console.log("and the length this.files", this.files.length, this.files);
+      }
+
+
+
+      //console.log("and the length this.files", this.files.length, this.files);
+
+
+      const fileArray = this.files.map((file) => {
+        const { preview, name } = file;
+        const mimeType = preview.split(";")[0].split(":")[1]; // Extract MIME type
+        return this.base64ToFile(preview, name, mimeType);
+      });
+    console.log("file array is the atachements with no description are ",fileArray.length,fileArray);
+
+
+      const formData = new FormData();
+      formData.append("firstName", this.firstName);
+      formData.append("middleName", this.middleName);
+      formData.append("lastName", this.lastName);
+      formData.append("gender", this.gender);
+      formData.append("age", this.age);
+      formData.append("address", this.address);
+      formData.append("email", this.email);
+      formData.append("phoneNumber", fullPhoneNumber);
+      formData.append("profileImage", this.imageFile);
+      formData.append("role", this.userRole);
+      formData.append("tigrignaName", this.tigrignaFullName);
+      // formData.append("attachements", JSON.stringify(this.files));
+
+      formData.append("attachements", fileArray);
+
+      console.log("image", this.imageFile);
+      console.log("formData", formData);
+      console.log("image file ", this.imageFile);
+
+      const customHeaders = {
+        "Content-Type": "multipart/form-data",
+      };
+      try {
+        await this.$apiPost(
+          "/api/v1/users/signup",
+          formData,
+          customHeaders
+        ).then((response) => {
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
+            this.$reloadPage();
+          }
+        });
+      } catch (error) {
+        console.log("error from server", error.status, error.message);
+        this.showErrorMessage = true;
+        this.errorMessage = error.message;
+
+        if (error.status === 404) {
+          console.log("it is 404");
+          this.errorMessage = "";
+          this.$refs.toast.showWarningToastMessage(
+            "Please Create a payment Setting"
+          );
+          // this.$reloadPage();
+        }
+      } finally {
+      }
+    },
     viewClients() {
       this.$router.push("/admindashboard/clients");
     },
@@ -714,42 +857,39 @@ alert("Uploading files")
       console.log("This.exel", this.exelFile);
       const formData = new FormData();
       formData.append("file", this.exelFile);
-      
-    
-      
-  if (this.exelFile !== null) {
 
-     try{
-        this.$apiPost("/api/v1/users/importUsers", formData)
-          .then((response) => {
-            if (response.$apiPostsuccess === 1) {
-              this.$refs.toast.showSuccessToastMessage(response.message);
+      if (this.exelFile !== null) {
+        try {
+          this.$apiPost("/api/v1/users/importUsers", formData).then(
+            (response) => {
+              if (response.$apiPostsuccess === 1) {
+                this.$refs.toast.showSuccessToastMessage(response.message);
+              }
             }
-          });
-        } catch(error){
-            console.log("import error", error.status,error.message);
-            this.showErrorToastMessage("Something went wrong");
-        }finally{
-
+          );
+        } catch (error) {
+          console.log("import error", error.status, error.message);
+          this.showErrorToastMessage("Something went wrong");
+        } finally {
         }
       }
     },
 
-
     handleImageInput() {
-    //  alert("fileinput");
+      //  alert("fileinput");
       const fileInput = this.$refs.fileInput;
-      console.log("fileInput", fileInput);
+         console.log("fileInput", fileInput);
       if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
         this.imageFile = file;
       }
-      console.log("Selected file:", this.imageFile );
+
+      console.log("Selected file:", this.imageFile);
       console.log("File type:", this.imageFile.type); // This should be 'image/jpeg', 'image/png', etc.
       console.log("File size:", this.imageFile.size); // Check size to ensure it's within acceptable limits
       console.log("File name:", this.imageFile.name); // Check the name of the file
-     
-      if (!this.imageFile.type.startsWith('image/')) {
+
+      if (!this.imageFile.type.startsWith("image/")) {
         console.log("Not a valid image file.");
       } else {
         console.log("Image is valid.");
@@ -793,133 +933,7 @@ alert("Uploading files")
       return years;
     },
 
-   async  register() {
-    //alert("hadgo")
-      this.showErrorMessage = false;
-      this.firstNameIsRequired = false;
-      this.middleNameIsRequired = false;
-      this.lastNameIsRequired = false;
-      this.genderIsRequired = false;
-      this.ageIsRequired = false;
-      this.addressIsRequired = false;
-      this.emailIsRequired = false;
-      this.phoneNumberIsRequired = false;
-      this.imageIsRequired = false;
-      //  console.log("FamillyMembers", this.familyMembers);
-      console.log("register called");
-      if (this.firstName === "") {
-        this.firstNameIsRequired = true;
-        return;
-      }
-
-      if (this.middleName === "") {
-        this.middleNameIsRequired = true;
-        return;
-      }
-
-      if (this.lastName === "") {
-        this.lastNameIsRequired = true;
-        return;
-      }
-
-      if (this.gender === "") {
-        this.genderIsRequired = true;
-        return;
-      }
-
-      if (this.age === "") {
-        this.ageIsRequired = true;
-        return;
-      }
-
-      if (this.address === "") {
-        this.addressIsRequired = true;
-        return;
-      }
-
-      if (this.email === "") {
-        this.emailIsRequired = true;
-        return;
-      }
-
-      if (this.phoneNumber === "") {
-        this.phoneNumberIsRequired = true;
-        return;
-      }
-
-      const fullPhoneNumber = this.phoneNumberCode + this.phoneNumber;
-      console.log(
-        "data",
-        this.firstName,
-        this.middleName,
-        this.lastName,
-        this.gender,
-        this.age,
-        this.address,
-        this.email,
-        fullPhoneNumber
-      );
-
-      if (!this.files.length) {
-        alert("No files to upload!");
-        return;
-      }
-
-
-
-    console.log("and the length this.files",this.files.length,this.files);
-
-      // Append JSON stringified files data
-    
-// alert("Uploading files")
-//      console.log("file image  that will be passed",this.imageFile);
-
-      const formData = new FormData();
-      formData.append("firstName", this.firstName);
-      formData.append("middleName", this.middleName);
-      formData.append("lastName", this.lastName);
-      formData.append("gender", this.gender);
-      formData.append("age", this.age);
-      formData.append("address", this.address);
-      formData.append("email", this.email);
-      formData.append("phoneNumber", fullPhoneNumber);
-      formData.append("profileImage", this.imageFile);
-      formData.append("role", this.userRole);
-      formData.append("tigrignaName",this.tigrignaFullName);
-      formData.append("attachements", JSON.stringify(this.files));
-      console.log("image", this.imageFile);
-      console.log("formData", formData);
-      console.log("image file ",this.imageFile);
-
-
-//         const customHeaders = {
-//     "Content-Type": "multipart/form-data",
-// };
-//       try {
-
-//         await this.$apiPost("/api/v1/users/signup", formData,customHeaders).then((response) => {
-//           if (response.status === 1) {
-//             this.$refs.toast.showSuccessToastMessage(response.message
-//             );
-//            this.$reloadPage();
-//           }
-//         });
-//        } catch (error){
-//           console.log("error from server",error.status,error.message);
-//           this.showErrorMessage=true;
-//           this.errorMessage=error.message;
-
-//           if(error.status===404){
-//           console.log("it is 404")
-//           this.errorMessage="";
-//          this.$refs.toast.showWarningToastMessage("Please Create a payment Setting")
-//         // this.$reloadPage();
-//           }
-//         }finally{
-
-//         }
-        ;
-    },
+  
   },
 };
 </script>
