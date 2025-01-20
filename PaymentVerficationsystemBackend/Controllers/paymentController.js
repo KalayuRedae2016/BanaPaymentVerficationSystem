@@ -1352,7 +1352,7 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   });
 });
 exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
-  
+
 const paymentTypes = ['regular', 'subsidy', 'urgent', 'service', 'penality'];
 const query = {
   $or: [
@@ -1370,33 +1370,39 @@ if (!payments.length) {
   if (!organization) {
     return next(new AppError("Organization is not found", 400))
   }
-  const bankBalances = calculateBalances(payments, organization);
-  const organizationBalance = bankBalances.Organization
-  const orgBalancesBasedBankType = bankBalances.totalBalanceBankType
-
+  const users=await User.find()
+  if(!users){
+    return next(new AppError("Users is not found",400))
+  }
+  const balances = calculateBalances(payments, organization,users);
+  const organizationBalance = balances.Organization
+  const orgBalancesBasedBankType = balances.totalBalanceBankType
+  const userBalance=balances.userBalances
+  
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${organization.companyName}`,
     items: {
       organizationBalance,
-      orgBalancesBasedBankType
+      userBalance,
+      orgBalancesBasedBankType,
     }
   });
 });
-
 exports.reports = catchAsync(async (req, res, next) => {
-  const { paymentType, userCode, fullName, isPaid, status, bankType, year,semiYear, month,day,startingDate,endingDate,timeRange } = req.query;
-  const paymentQuery = {};
+  const {userCode,isPaid,year,semiYear, month,day,startingDate,endingDate,timeRange } = req.query;
+  // const paymentTypes = ['regular', 'subsidy', 'urgent', 'service', 'penality'];
+  // const paymentQuery = {$or: [
+  //   { isPaid: true }, // Main payment isPaid
+  //   ...paymentTypes.map(type => ({ [`${type}.isPaid`]: true })) // Any payment type isPaid
+  // ]};
+const paymentQuery={}
   if (!timeRange) {
     return next(new AppError("Time Range is required"), 400)
   }
-  if (paymentType) paymentQuery.paymentType = new RegExp(paymentType, 'i');
   if (userCode) paymentQuery.userCode = new RegExp(userCode, 'i');
-  if (fullName) paymentQuery.fullName = new RegExp(fullName, 'i');
   if (isPaid !== undefined) paymentQuery.isPaid = isPaid === 'true';
-  if (status) paymentQuery.status = status;
-  if (bankType) paymentQuery.bankType = new RegExp(bankType, 'i');
-
+    
   let startDate, endDate;
   const specifiedYear = parseInt(year, 10);
   const currentDate = new Date();
@@ -1455,9 +1461,6 @@ exports.reports = catchAsync(async (req, res, next) => {
         return next(new AppError(`${formatDateGC(endingDate)} should be greater than ${formatDateGC(startingDate)}`))
       }
 
-      console.log("d",startingDate)
-      console.log("h",startDate)
-
     case 'allTime':
       startDate = new Date(1970, 0, 1);  // Unix epoch start date (or any other earlier date)
       endDate = new Date();  // Current date
@@ -1472,8 +1475,17 @@ exports.reports = catchAsync(async (req, res, next) => {
   if (!payments.length) {
     return res.status(404).json({ error: 'No payments found for the given criteria' });
   }
+
   const organization = await Organization.findOne()
-  const categorizedPayments = calculateBalances(payments, organization);
+  if (!organization) {
+    return next(new AppError("Organization is not found", 400))
+  }
+
+  const users=await User.find()
+  if(!users){
+    return next(new AppError("Users is not found",400))
+  }
+  const categorizedPayments = calculateBalances(payments, organization,users);
 
   // console.log("payments:",payments)
   // console.log("catPa",categorizedPayments)

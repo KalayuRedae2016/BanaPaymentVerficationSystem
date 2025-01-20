@@ -1,5 +1,6 @@
 const User = require('../Models/userModel');
 const Organization = require("../Models/organizationModel")
+const defaultVariables= require("../config/defaultVariables");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
@@ -9,8 +10,10 @@ const createPendingPayments = require("../utils/createPendingPayments")
 
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const { sendEmail } = require('../utils/email');
-const { deleteFile, createMulterMiddleware } = require('../utils/fileController');
+const {validateExistence}=require("../utils/validateExistence")
+const {createInstance,sendResponse}=require("../utils/instanceUtil")
+const { sendEmail,sendWelcomeEmail} = require('../utils/email');
+const { deleteFile, createMulterMiddleware,processUploadFiles} = require('../utils/fileController');
 
 const signInToken = (user) => {
   const payload = { id: user._id, role: user.role };
@@ -28,7 +31,6 @@ exports.uploadFilesMiddleware = userAttachments.fields([
   { name: 'attachments', maxCount: 10 }, // Up to 10 files for attachments
 ]);
 
-
 exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
   if (!req.file) return next();
   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
@@ -43,120 +45,51 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-  try {
-    // Validate organization existence
-    const organization = await Organization.findOne();
-    if (!organization) {
-      return next(new AppError("Create Organization profile before Creating User", 400));
-    }
-
+    const organization=await validateExistence(Organization,{},"Create Organization Profile before creating User")
+  
     const prefixCode = organization.companyPrefixCode;
     const length = 4;
+    const {profileImage,attachments}=await processUploadFiles(req.files,req.body)
+   
+    const customProbs={...req.body,profileImage,attachments}
+    const defaultsProbs={isActive: true,changePassword: false,hasMadePayment: false,}
+    const user=createInstance(User,customProbs,defaultsProbs)
 
-    console.log('Incoming Files:', req.files);
-
-    // Validate and process the uploaded files
-    const profileImage = req.files.profileImage
-      ? req.files.profileImage[0].filename
-      : null;
-
-    const attachments = req.files.attachments
-      ? req.files.attachments.map(file => ({
-          fileName: file.filename,
-          fileType: file.mimetype,
-          description: req.body.description || '',
-          uploadDate: new Date(),
-        }))
-      : [];
-
-    // Create user instance
-    const user = new User({
-      ...req.body,
-      profileImage,
-      attachments,
-      isActive: true,
-      changePassword: false,
-      hasMadePayment: false, // New user hasn't made a payment yet
-    });
-
-    // Check for existing user by email
-    if (user.email) {
-      const existingUser = await User.findOne({ email: user.email });
+    if (user.email||user.phoneNumber) {
+    const existingUser = await User.findOne({$or: [{ email: user.email }, { phoneNumber: user.phoneNumber}]});
       if (existingUser) {
-        if (req.file) {
-          deleteFile(req.file.path); // Delete uploaded profile image if user already exists
-        }
-        return next(new AppError('Email already exists', 400));
+        if (req.files) deleteFile(req.files.path); 
+        return next(new AppError('Email Or Phone Number already exists', 400));
       }
     }
 
-    // Generate user code
-    const userCode = await user.generateUserCode(prefixCode, length);
-    user.userCode = userCode;
-
-    // Set user password (provided or generated)
-    const password = req.body.password || (await user.generateRandomPassword());
-    user.password = await bcrypt.hash(password, 12);
-
-    // Save user to the database
+    user.userCode = await user.generateUserCode(prefixCode, length);
+    const password=req.body.password || (await user.generateRandomPassword())
+    user.password = await bcrypt.hash(password,12);
+    
     await user.save();
 
     // Create pending payments if the user role is 'User'
-    const latestSetting = await PaymentSetting.findOne({ latest: true });
-    if (!latestSetting) {
-      return next(new AppError('No active payment setting found.', 404));
-    }
+    const latestSetting=await validateExistence(PaymentSetting,{latest:true},"No active Payment Setting Found")
     if (user.role === 'User') {
       await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
     }
-
-    // Handle response when no email is provided
     if (!user.email) {
       return res.status(200).json({
-        status: 1,
-        user: user,
-        message: 'User registered & pending payments created successfully. No email provided, contact support for credentials.',
-      });
+        status:1,
+        user:user,
+        message:'User registered successfully.No Email Sent.Contact for Admin for credentials.'
+      })
+      //return sendResponse(res,200,user,'User registered successfully.No Email Sent.Contact for Admin for credentials.')
     }
 
-    // Send welcome email
-    const subject = 'Welcome to Our Platform, Bana Mole Marketing Group!';
-    const email = user.email;
-    const loginLink = process.env.NODE_ENV === 'development' ? 'http://localhost:5173' : 'https://banapvs.com';
-    const message = `Hi ${user.fullName},
-      Welcome to Our Platform! We're excited to have you on board.
-      Here are your account details:
-      - User Code/Name: ${user.userCode}
-      - Email: ${email}
-      - Password: ${password}
-      
-      Login here: ${loginLink}
-
-    Please visit our platform to explore and start using our services.
-    If you have any questions or need assistance, feel free to contact our support team.
-
-    Best regards,
-    The Bana Marketing Group Team`;
-
-    await sendEmail({ email, subject, message });
-
-    res.status(200).json({
-      status: 1,
-      user: user,
-      message: 'User registered, pending payments created, and welcome email sent successfully.',
-    });
-  } catch (error) {
-    console.error('Signup process error:', error);
-
-    // Handle errors and clean up
-    if (req.file) {
-      deleteFile(req.file.path); // Delete uploaded profile image in case of errors
-    }
-    if (error.code === 11000) {
-      return next(new AppError('Email already exists', 400));
-    }
-    return res.status(500).json({ message: 'Error saving user: ' + error.message });
-  }
+    // await sendWelcomeEmail(user,password)
+    return res.status(200).json({
+      status:1,
+      user:user,
+      message:'User registered, pending payments created, and welcome email sent successfully.'
+    })
+    //return sendResponse(res,200,user,'User registered, pending payments created, and welcome email sent successfully.')
 });
 
 //tried t enter but some error by tadios

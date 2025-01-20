@@ -10,36 +10,29 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
   }
   const { regularAmount, urgentAmount, subsidyAmount, serviceAmount, regFeeRate } = paymentSetting;
 
-  let paymentTypeCode;
-  let baseAmount;
-  if (!urgentAmount && !subsidyAmount) {
-    paymentTypeCode = 'RE-SE';
-    baseAmount = regularAmount + serviceAmount;
-  } else if (!urgentAmount) {
-    paymentTypeCode = 'RE-SE-SU';
-    baseAmount = regularAmount + serviceAmount + subsidyAmount;
-  } else if (!subsidyAmount) {
-    paymentTypeCode = 'RE-SE-EM';
-    baseAmount = regularAmount + serviceAmount + urgentAmount;
-  } else {
-    paymentTypeCode = 'RE-SE-EM-SU';
-    baseAmount = regularAmount + serviceAmount + urgentAmount + subsidyAmount;
+  let paymentTypeCode = 'RE-SE';
+  let baseAmount = regularAmount + serviceAmount;
+
+  if (urgentAmount) {
+    paymentTypeCode = subsidyAmount ? 'RE-SE-UR-SU' : 'RE-SE-UR';
+    baseAmount += urgentAmount;
+  } 
+  if (subsidyAmount) {
+    paymentTypeCode = 'RE-SE-UR-SU';
+    baseAmount += subsidyAmount;
   }
+  const billCode = `${user.userCode}-${activeYear}-${activeMonth}-${paymentTypeCode}`;
 
   const existingPayment = await Payment.findOne({
     user: user._id,
-    paymentSetting: paymentSetting._id
+    paymentSetting: paymentSetting._id,
+    billCode:billCode
   });
 
   if (existingPayment) {
-    if (existingPayment.isPaid === true) {
-      // console.log('payment for the specifed month and years is Paid for user:', user.userCode);
-    }
-    else {
-      // console.log('Unconfirmed payment already exists for user:', user.userCode);
-    }
-    return; // Skip this user if an unconfirmed payment exists
+    return; // Skip creation if an existing payment is found
   }
+  
   if (user.role === 'Admin') {  
     return; // Skip Admin users and move to the next user
   }
@@ -54,31 +47,35 @@ const createPendingPayments = async (user, activeYear, activeMonth) => {
 
   const totalExpectedAmount = baseAmount + registrationFee;
   const totalServiceAmount=serviceAmount+registrationFee
-  const billCode = `${user.userCode}-${activeYear}-${activeMonth}-${paymentTypeCode}`;
-
-  // Create the payment record
-  const payment = new Payment({
-    user: user._id,
-    paymentSetting: paymentSetting._id,
-    userCode: user.userCode,
-    billCode,
-    fullName: user.fullName,
-    activeYear,
-    activeMonth,
-    registrationFee,
-    urgent: { amount: urgentAmount },
-    regular: { amount: regularAmount },
-    subsidy: { amount: subsidyAmount },
-    service: { amount:totalServiceAmount},
-    penality: { amount: 0 },
-    baseAmount,
-    totalExpectedAmount,
-    daysLate: 0,
-    confirmedDate: null,
-    isPaid: false,
-    status: 'pending',
-  });
-  // console.log("unconfirmed Payment created for user:", user.userCode)
-  await payment.save();
+ 
+  // Create or update the payment (upsert)
+  await Payment.updateOne(
+    { billCode: billCode }, // Find payment by billCode
+    { 
+      $setOnInsert: {
+        user: user._id,
+        paymentSetting: paymentSetting._id,
+        userCode: user.userCode,
+        billCode,
+        fullName: user.fullName,
+        activeYear,
+        activeMonth,
+        registrationFee,
+        urgent: { amount: urgentAmount },
+        regular: { amount: regularAmount },
+        subsidy: { amount: subsidyAmount },
+        service: { amount: totalServiceAmount },
+        penality: { amount: 0 },
+        baseAmount,
+        totalExpectedAmount,
+        daysLate: 0,
+        confirmedDate: null,
+        isPaid: false,
+        status: 'pending',
+      }
+    },
+    { upsert: true } // Use upsert to insert or update
+  );
 };
+
 module.exports = createPendingPayments;
