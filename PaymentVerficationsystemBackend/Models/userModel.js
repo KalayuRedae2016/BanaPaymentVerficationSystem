@@ -150,25 +150,19 @@ const userSchema = new Schema(
 
 //Pre-save hook to set the fullName
 userSchema.pre('save', async function (next) {
-  // Construct the fullName from firstName, middleName, and lastName
   this.fullName = [this.firstName, this.middleName, this.lastName].filter(Boolean).join(' ');
-
-  //object to hold fields to update payments
+  
   const updatedFields = {}
-
-  //check for name changes
   if (this.isModified("firstName") || this.isModified("middleName") || this.isModified("lastName")) {
     updatedFields.fullName = this.fullName
   }
-  //checks for userCode
   if (this.isModified("userCode")) updatedFields.userCode = this.userCode
 
-  //if any obejct changes it should change on the payment model
   if (Object.keys(updatedFields).length > 0) {
     const Payment = mongoose.model('Payment')
     await Payment.updateMany({ user: this._id }, updatedFields)
   }
-  next(); // Continue with the save operation
+  next(); 
 });
 
 // userSchema.pre(/^find/, function(next) {

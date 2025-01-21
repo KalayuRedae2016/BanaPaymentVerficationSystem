@@ -16,7 +16,6 @@ const createPendingPayments = require("../utils/createPendingPayments")
 const { importFromExcel,exportToExcel,processFileData,createMulterMiddleware, processUploadFiles,deleteFile} = require('../utils/fileController');
 const defaultVariables = require('../config/defaultVariables');
 
-
 // Configure multer for user file uploads
 const userFileUpload = createMulterMiddleware(
   'uploads/users/', // Destination folder
@@ -131,23 +130,23 @@ exports.updateUser = catchAsync(async (req, res) => {
     }
     const {profileImage,attachments}=await processUploadFiles(req.files,req.body,existingUser)
   
-  updateData = {
-    ...updateData,
-    profileImage: profileImage || existingUser.profileImage, // Keep the existing image if no new one
-    attachments,
-  };
-
+    existingUser.set({
+      ...req.body,
+      profileImage: profileImage || existingUser.profileImage,
+      attachments,
+    });
+    await existingUser.save();
   const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
-  const { imageData, attachmentsData } = await processFileData(updatedUser);
+  const { imageData, attachmentsData } = await processFileData(existingUser);
   
-  const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
-  const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
+  const formattedCreatedAt = existingUser.createdAt ? formatDate(existingUser.createdAt) : null;
+  const formattedUpdatedAt = existingUser.updatedAt ? formatDate(existingUser.updatedAt) : null;
 
     res.status(200).json({
       status: 1,
-      message: `${updatedUser.fullName} updated successfully`,
+      message: `${existingUser.fullName} updated successfully`,
       updatedUser: {
-        ...updatedUser._doc,
+        ...existingUser._doc,
         formattedCreatedAt,
         formattedUpdatedAt
       },
