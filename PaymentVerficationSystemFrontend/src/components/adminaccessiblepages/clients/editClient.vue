@@ -134,6 +134,46 @@
 
           <div class="border border-gray-500 p-4 rounded-lg">
             <p>Attachements</p>
+            <img 
+            :src="'data:image/jpeg;base64,' +  base64Image"
+            class="attachment-image"
+            style="width: 100px; height: auto;" 
+          />
+          
+    <div>
+    <div 
+      v-for="(attachment, index) in attachmentsData" 
+      :key="index"
+      class="attachment-item"
+    >
+      <!-- If the attachment is an image -->
+      <div v-if="attachment.type.startsWith('image/')">
+        <img 
+          
+        :src="'data:image/jpeg;base64,' + clientProfile.imageData"
+          :alt="attachment.name" 
+          class="attachment-image"
+          style="width: 100px; height: auto;" 
+        />
+        <p>Type: {{ attachment.type }}</p>
+        <p>Name: {{ attachment.name }}</p>
+      </div>
+      
+      <!-- If the attachment is a PDF -->
+      <div v-else-if="attachment.type === 'application/pdf'">
+        <iframe 
+          :src="'data:' + attachment.type + ';base64,' + attachment.preview" 
+          class="attachment-pdf" 
+          frameborder="0"
+          style="width: 100%; height: 300px;"
+        ></iframe>
+        <p>Type: {{ attachment.type }}</p>
+        <p>Name: {{ attachment.name }}</p>
+      </div>
+    </div>
+  </div>
+
+
           </div>
 
           <button @click="showEditModal = true" class="custom-button my-5 w-full lg:w-auto">
@@ -341,6 +381,8 @@
 import { mapGetters } from "vuex";
 import Toast from '../../Common/Toast.vue'
 import LoadingSpinner from '../../Common/LoadingSpinner.vue'
+import jsPDF from "jspdf";
+
 export default {
   components: {
     Toast,
@@ -348,6 +390,25 @@ export default {
   },
   data() {
     return {
+
+base64Image:"",
+      
+attachmentsData: [
+  {
+    name: "Image 1",
+    type: "image/png",
+    url: "image1.png",
+    preview: "R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==",
+  },
+  {
+    name: "PDF 1",
+    type: "application/pdf",
+    url: "file1.pdf",
+    preview: ""
+  }
+]
+,
+
       isLoading: false,
       showSuccessToast: false,
       showErrorToast: false,
@@ -397,9 +458,21 @@ export default {
     try {
       await this.$apiGetById('/api/v1/users', this.clientId)
         .then((response) => {
-          console.log("Response client profile", response);
+         // console.log("response of the users inn editing mounting", response)
+          console.log("Response client profile kkk" , response);
           this.clientProfile = response.clientProfile;
           this.imageData = "data:image/jpeg;base64," + response.imageData;
+          this.base64Image=response.imageData;
+
+
+          this.attachmentsData.forEach((attachment) => {
+          if(attachment.type!="application/pdf"){
+            attachment.preview ="data:image/jpeg;base64," + response.imageData;
+          }else{
+            attachment.preview ="data:application/pdf;base64," + this.createPdfAndConvertToBase64();
+          }
+
+          });
           this.isLoading = false;
         })
     } catch (error) {
@@ -409,6 +482,32 @@ export default {
     };
   },
   methods: {
+    async createPdfAndConvertToBase64() {
+      return new Promise((resolve, reject) => {
+        try {
+          // Step 1: Create a PDF from sample text
+          const doc = new jsPDF();
+          const sampleText = "This is a sample text to create a PDF and convert it to Base64.";
+          doc.text(sampleText, 10, 10); // Adding text to the PDF at position (10,10)
+
+          // Step 2: Convert PDF to Base64
+          const pdfData = doc.output("arraybuffer"); // Get the PDF as an array buffer
+
+          // Step 3: Convert the array buffer to Base64
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            // Base64-encoded string is available here
+            const base64Pdf = reader.result.split(",")[1]; // Remove the prefix (data:application/pdf;base64,)
+            resolve(base64Pdf); // Resolve the promise with the Base64 string
+          };
+
+          // Convert the PDF data to Base64
+          reader.readAsDataURL(new Blob([pdfData]));
+        } catch (error) {
+          reject(error); // In case of an error, reject the promise
+        }
+      });
+    },
     handleImageInput() {
       const fileInput = this.$refs.fileInput;
       console.log("fileInput", fileInput);
