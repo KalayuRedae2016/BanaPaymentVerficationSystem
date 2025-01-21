@@ -1,5 +1,6 @@
 const fs = require('fs');
 const fss = require('fs').promises;  // Use fs.promises for async file reading
+const sharp = require('sharp');
 const path = require('path');
 const xlsx = require('xlsx'); //for import user from excel
 
@@ -211,10 +212,11 @@ exports.processFileData = async (user) => {
           const description = attachment.description
           const uploadedDate = attachment.uploadedDate
           const id = attachment.id
+          const filePath=attachmentPath
         
         console.log('File successfully encoded for:', attachment.fileName);
 
-        return {filename,fileType,description,uploadedDate,id,fileData}; // Return a new object with fileData
+        return {filename,fileType,description,uploadedDate,id,fileData,filePath}; // Return a new object with fileData
       } catch (error) {
         console.error(`Error processing attachment ${attachment.fileName}:`, error.message);
         return { error: error.message }; // Include error details
@@ -228,7 +230,6 @@ exports.processFileData = async (user) => {
   return { imageData, attachmentsData };
 };
 
-
 exports.processUploadFiles = async (files, body, existingUser = null) => {
   const profileImage = files?.profileImage?.[0]?.filename || null;
 
@@ -241,10 +242,10 @@ exports.processUploadFiles = async (files, body, existingUser = null) => {
   }
 
   const newAttachments = files?.attachments
-    ? files.attachments.map((file) => ({
+    ? files.attachments.map((file,index) => ({
       fileName: file.filename,
       fileType: file.mimetype,
-      description: body.description || '',
+      description: body?.attachments?.[index]?.description || '',
       uploadDate: new Date(),
     }))
     : [];
