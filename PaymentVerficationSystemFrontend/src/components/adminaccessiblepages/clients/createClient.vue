@@ -193,7 +193,7 @@
             <input
               class="custom-input text-xs"
               type="file"
-              ref="fileInput"
+              ref="imageFileInput"
               accept="image/*"
               @change="handleImageInput"
             />
@@ -208,84 +208,98 @@
           </div>
         </div>
       </div>
+
       <div class="mx-5 mt-5">
-        <!-- Drag and Drop Area -->
-        <div
-          class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
-          :class="{ 'border-blue-400 bg-blue-50': isDragging }"
-          @dragover.prevent="onDragOver"
-          @dragleave="onDragLeave"
-          @drop.prevent="onDrop"
-        >
-          <p v-if="files.length === 0" class="text-center">
-            Drag & drop images or PDFs here, or click to select
-          </p>
-          <input
-            type="file"
-            accept="image/*,application/pdf"
-            class="hidden"
-            ref="fileInput"
-            multiple
-            @change="onFileChange"
+  <!-- Drag and Drop Area -->
+  <div
+    class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
+    :class="{ 'border-blue-400 bg-blue-50': isDragging }"
+    @dragover.prevent="onDragOver"
+    @dragleave="onDragLeave"
+    @drop.prevent="onDrop"
+  >
+    <p v-if="files.length === 0" class="text-center">
+      Drag & drop images or PDFs here, or click to select
+    </p>
+    <input
+      type="file"
+      accept="image/*,application/pdf"
+      class="hidden"
+      ref="fileInput"
+      multiple
+      @change="onFileChange"
+    />
+    <button
+      type="button"
+      class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      @click="selectFile"
+    >
+      Browse Files
+    </button>
+    <p class="text-blue-500">Add User Attachment (either Image or PDF)</p>
+  </div>
+
+  <!-- File List -->
+  <div v-if="files.length > 0" class="mt-4">
+    <p class="font-semibold text-blue-500">Chosen Files:</p>
+    <ul class="space-y-4 mt-2">
+      <li
+        v-for="(file, index) in files"
+        :key="index"
+        class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-gray-300 rounded"
+      >
+        <!-- For Image Files -->
+        <div v-if="file.preview && file.preview.startsWith('data:image/')" class="w-16 h-16">
+          <img
+            :src="file.preview"
+            alt="Image Preview"
+            class="object-cover w-full h-full rounded"
           />
-          <button
-            type="button"
-            class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            @click="selectFile"
-          >
-            Browse Files
-          </button>
-          <p class="text-blue-500">Add User Atachement either Image or PDF</p>
         </div>
 
-        <!-- File List -->
-        <div v-if="files.length > 0" class="mt-4">
-          <p class="font-semibold text-blue-500">Choosen Files:</p>
-          <ul class="space-y-4 mt-2">
-            <li
-              v-for="(file, index) in files"
-              :key="index"
-              class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-gray-300 rounded"
-            >
-              <div v-if="isImage(file)" class="w-16 h-16">
-                <img
-                  :src="file.preview"
-                  alt="Preview"
-                  class="object-cover w-full h-full rounded"
-                />
-              </div>
-              <div
-                v-else
-                class="w-16 h-16 flex items-center justify-center text-sm text-gray-600 bg-gray-100 rounded"
-              >
-                <p>PDF</p>
-              </div>
-              <!-- <div class="flex-1">
-                <p class="text-sm font-medium text-gray-800">{{ file.name }}</p>
-                <p class="text-xs text-gray-500">{{ formatSize(file.size) }}</p>
-                <input
-                  v-model="file.description"
-                  type="text"
-                  placeholder="Enter description"
-                  class="custom-input"
-                />
-              </div> -->
-              <button
-                class="text-red-500 hover:text-red-600"
-                @click="removeFile(index)"
-              >
-                <i class="fa fa-x text-xs mt-10"></i>
-              </button>
-            </li>
-          </ul>
-          <!-- <button
-        @click="uploadFiles"
-        class="mt-4 px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-      >
-        Upload All
-      </button> -->
+        <!-- For PDF Files (PDF Icon with Download Link) -->
+        <div v-else-if="file.preview && file.preview === 'fa fa-file-pdf-o'" class="w-16 h-16 flex items-center justify-center text-sm text-gray-600 bg-gray-100 rounded">
+          <i :class="file.preview" class="text-red-600 text-3xl"></i>
         </div>
-      </div>
+
+        <!-- File Details -->
+        <div class="flex-1">
+          <p class="text-sm font-medium text-gray-800">{{ file.name }}</p>
+          <p class="text-xs text-gray-500">{{ formatSize(file.size) }}</p>
+
+          <!-- For PDF Files, add a link to preview or download the PDF -->
+          <div v-if="file.pdfUrl" class="mt-2">
+            <a
+              :href="file.pdfUrl"
+              target="_blank"
+              class="text-blue-500 text-sm"
+            >
+              View PDF
+            </a>
+          </div>
+
+          <!-- Optional description input for the user -->
+          <input
+            v-model="file.description"
+            type="text"
+            placeholder="Enter description"
+            class="custom-input"
+          />
+        </div>
+
+        <button
+          class="text-red-500 hover:text-red-600"
+          @click="removeFile(index)"
+        >
+          <i class="fa fa-x text-xs mt-10"></i>
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
 
       <div class="ml-4 mr-8 mt-5">
         <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
@@ -470,9 +484,7 @@ export default {
       isDragging: false, // To style drag area on drag events
 
       role: "",
-
       userRole: "User",
-
       errorMessage: "",
       showErrorMessage: false,
       duplicateEmailError: false,
@@ -605,42 +617,62 @@ export default {
       else if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`;
       else return `${(size / (1024 * 1024)).toFixed(2)} MB`;
     },
-
     // Trigger file input dialog
     selectFile() {
       this.$refs.fileInput.click();
     },
-
     // Handle file change event
     onFileChange(event) {
       const selectedFiles = Array.from(event.target.files);
       this.addFiles(selectedFiles);
     },
 
-    // Add files to the list
     addFiles(fileList) {
-      fileList.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.files.push({
-            file,
-            name: file.name,
-            size: file.size,
-            description: "",
-            preview: file.type.startsWith("image/") ? reader.result : null,
-            
-          });
-        };
-        if (file.type.startsWith("image/")) reader.readAsDataURL(file);
-        else
-          this.files.push({
-            file,
-            name: file.name,
-            size: file.size,
-            description: "",
-          });
+  fileList.forEach((file) => {
+    const reader = new FileReader();
+
+    // Handle images (base64 encoding to preview)
+    if (file.type.startsWith("image/")) {
+      reader.onload = () => {
+        this.files.push({
+          file,
+          name: file.name,
+          size: file.size,
+          description: "",
+          preview: reader.result, // Base64 preview for images
+        });
+      };
+      reader.readAsDataURL(file);  // Read the image file as base64
+    }
+    // Handle PDFs and other files directly without base64 encoding
+    else if (file.type === "application/pdf") {
+      this.files.push({
+        file,  // Add the original file to the array for PDFs
+        name: file.name,
+        size: file.size,
+        description: "",
+        preview: null,  // No preview for PDF, as we are sending the actual file
       });
-    },
+    } else {
+      // Handle other file types if needed
+      this.files.push({
+        file,  // Add the original file
+        name: file.name,
+        size: file.size,
+        description: "",
+        preview: null,  // No preview for non-image, non-PDF files
+      });
+    }
+  });
+}
+,
+
+
+
+
+
+
+
 
     // Handle drag over
     onDragOver() {
@@ -698,19 +730,40 @@ export default {
     ///
 
     base64ToFile(base64, fileName, mimeType) {
-      const byteString = atob(base64.split(",")[1]); // Decode base64
-      const ab = new ArrayBuffer(byteString.length); // Create ArrayBuffer
-      const ia = new Uint8Array(ab);
+  // For image files, decode base64 to a byte string
+  if (mimeType.startsWith('image/')) {
+    const byteString = atob(base64.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
 
-      // Fill the Uint8Array with byte values
-      for (let i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i);
-      }
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
 
-      // Create a Blob and return it as a File
-      const blob = new Blob([ab], { type: mimeType });
-      return new File([blob], fileName, { type: mimeType });
-    },
+    // Create a Blob and return it as a File
+    const blob = new Blob([ab], { type: mimeType });
+    return new File([blob], fileName, { type: mimeType });
+  }
+  
+  // For PDF and other file types, return the file as is (without base64 encoding)
+  if (mimeType === 'application/pdf') {
+    const byteString = atob(base64.split(',')[1]); // Decode base64 to byte string
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    // Create a Blob and return it as a File
+    const blob = new Blob([ab], { type: mimeType });
+    return new File([blob], fileName, { type: mimeType });
+  }
+  
+  // For other files, just return them as is
+  return new File([base64], fileName, { type: mimeType });
+}
+
+,
 
     async register() {
       //alert("hadgo")
@@ -789,13 +842,47 @@ export default {
 
       //console.log("and the length this.files", this.files.length, this.files);
 
+  console.log("this.files to see pdf type",this.files)
+ 
+// this.files.map((file)=>{
+//   console.log("File Type",file.type);
+// })
 
-      const fileArray = this.files.map((file) => {
-        const { preview, name } = file;
-        const mimeType = preview.split(";")[0].split(":")[1]; // Extract MIME type
-        return this.base64ToFile(preview, name, mimeType);
-      });
+
+  const fileArray = this.files.map((file) => {
+  const { preview, name, type } = file;
+  console.log("name and file type",name,file.file.type)
+
+  // Check if preview is defined and contains a valid MIME type
+  if (preview && preview.includes("data:")) {
+
+    // Decode base64 to a byte string
+    const mimeType = preview.split(";")[0].split(":")[1]; // Extract MIME type
+
+    // If the file is an image, convert it appropriately to base64
+    
+    if (mimeType.startsWith('image/')) {
+      return this.base64ToFile(preview, name, mimeType);
+    }
+    
+    // If the file is a PDF, just send it as is without base64 encoding
+    if (mimeType === 'application/pdf') {
+      return new File([file], name, { type: mimeType });
+    }
+
+
+  }
+
+  // If preview is not defined or not base64-encoded, handle the file as is
+  return new File([file.file], name, { type: file.file.type });
+
+});
+
+
+
+
     console.log("file array is the atachements with no description are ",fileArray.length,fileArray);
+     console.log("the images ",this.imageFile)
 
 
       const formData = new FormData();
@@ -807,10 +894,23 @@ export default {
       formData.append("address", this.address);
       formData.append("email", this.email);
       formData.append("phoneNumber", fullPhoneNumber);
+
       formData.append("profileImage", this.imageFile);
+
+
+      formData.append("profileImage", this.imageFile);
+
       formData.append("role", this.userRole);
       formData.append("tigrignaName", this.tigrignaFullName);
       // formData.append("attachements", JSON.stringify(this.files));
+
+
+    //  formData.append("attachments", fileArray);
+
+      fileArray.forEach(file => {
+        formData.append('attachments', file); // Attach files to the form data
+      });  
+
 
       formData.append("attachements", fileArray);
 
@@ -829,7 +929,7 @@ export default {
         ).then((response) => {
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
-            this.$reloadPage();
+           //this.$reloadPage();
           }
         });
       } catch (error) {
@@ -876,8 +976,8 @@ export default {
     },
 
     handleImageInput() {
-      //  alert("fileinput");
-      const fileInput = this.$refs.fileInput;
+       //alert("fileinput");
+      const fileInput = this.$refs.imageFileInput;
          console.log("fileInput", fileInput);
       if (fileInput && fileInput.files.length > 0) {
         const file = fileInput.files[0];
@@ -895,6 +995,8 @@ export default {
         console.log("Image is valid.");
       }
     },
+
+
 
     handleFileInput() {
       console.log("This is the onchange calledddddd");
