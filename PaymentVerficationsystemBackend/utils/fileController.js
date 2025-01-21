@@ -35,7 +35,7 @@ exports.importFromExcel = catchAsync(async (filePath, Model, transformFn) => {
 exports.exportToExcel = async (data, sheetName, fileName, res) => {
   try {
     // Convert data to plain JavaScript objects, ensuring subdocuments are included
-    const dataObjects = data.map(item => item.toObject({ flattenMaps: true, minimize: false })); 
+    const dataObjects = data.map(item => item.toObject({ flattenMaps: true, minimize: false }));
     // minimize: false ensures empty objects or arrays are not removed.
 
     // Convert JSON data to worksheet
@@ -143,7 +143,7 @@ exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) 
       }
     },
   });
-  
+
   console.log("Storage configured");
 
   // Configure file filter
@@ -152,8 +152,8 @@ exports.createMulterMiddleware = (destinationFolder, filenamePrefix, fileTypes) 
     console.log('File type:', file.mimetype);
     try {
       if (fileTypes.includes(file.mimetype)) {
-        console.log("requested fileType tadese",file.mimetype)
-        console.log("Allowed FileTypes kalayu",fileTypes)
+        console.log("requested fileType tadese", file.mimetype)
+        console.log("Allowed FileTypes kalayu", fileTypes)
         cb(null, true); // Accept the file
       } else {
         cb(new Error('File type not allowed'), false); // Reject the file
@@ -172,7 +172,7 @@ exports.deleteFile = async (filePath) => {
     console.error('No file path provided for deletion.');
     return;
   }
-  
+
   try {
     await fs.promises.unlink(filePath); // Using fs.promises.unlink to return a promise
     console.log('File deleted:', filePath);
@@ -182,32 +182,54 @@ exports.deleteFile = async (filePath) => {
 };
 
 exports.processFileData = async (user) => {
-  const convertFileToBase64 = (filePath) => {
-    // Ensure we return a value even if the file does not exist
-    if (fs.existsSync(filePath)) {
-      return fs.readFileSync(filePath).toString('base64');
+  const convertFileToBase64 = async (filePath) => {
+    console.log("filePath", filePath)
+    try {
+      const fileBuffer = await fss.readFile(filePath); // Read file as binary
+      return fileBuffer.toString('base64'); // Convert to Base64
+    } catch (error) {
+      console.error(`Error reading file at ${filePath}:`, error);
+      throw error;
     }
-    return null;  // Explicitly return null when the file doesn't exist
-  };
-
+  }
+  console.log("userProfile", user.attachments)
   // Prepare profile image data (if available)
   const imageData = user.profileImage
     ? await convertFileToBase64(path.join(__dirname, '..', 'uploads', 'attachments', user.profileImage))
     : null;
 
-  // Prepare attachments data (if available)
-  let attachmentsData = null;
-  if (user.attachments) {
+  // Process attachments
+  let attachmentsData = [];
+  if (user.attachments && user.attachments.length > 0) {
     attachmentsData = await Promise.all(user.attachments.map(async (attachment) => {
       const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
-      attachment.fileData = await convertFileToBase64(attachmentPath); // Handle base64 conversion of attachments
-      return attachment;
+      console.log(attachment)
+      try {
+          const fileData = await convertFileToBase64(attachmentPath)
+          const filename = attachment.fileName
+          const fileType = attachment.fileType
+          const description = attachment.description
+          const uploadedDate = attachment.uploadedDate
+          const id = attachment.id
+        
+        console.log('File successfully encoded for:', attachment.fileName);
+
+        return {filename,fileType,description,uploadedDate,id,fileData}; // Return a new object with fileData
+      } catch (error) {
+        console.error(`Error processing attachment ${attachment.fileName}:`, error.message);
+        return { error: error.message }; // Include error details
+      }
     }));
+  } else {
+    console.log('No attachments found.');
   }
 
+  // console.log('Processed Attachments Data:', attachmentsData); // Debug final result
   return { imageData, attachmentsData };
 };
-exports.processUploadFiles = async (files, body,existingUser=null) => {
+
+
+exports.processUploadFiles = async (files, body, existingUser = null) => {
   const profileImage = files?.profileImage?.[0]?.filename || null;
 
   if (existingUser && profileImage) {
@@ -220,21 +242,21 @@ exports.processUploadFiles = async (files, body,existingUser=null) => {
 
   const newAttachments = files?.attachments
     ? files.attachments.map((file) => ({
-        fileName: file.filename,
-        fileType: file.mimetype,
-        description: body.description||'',
-        uploadDate: new Date(),
-      }))
+      fileName: file.filename,
+      fileType: file.mimetype,
+      description: body.description || '',
+      uploadDate: new Date(),
+    }))
     : [];
 
-    // For updates, merge existing attachments
+  // For updates, merge existing attachments
   const attachments = existingUser
-  ? [
+    ? [
       ...(body.attachments || []), // Attachments retained by the client
       ...newAttachments, // Newly uploaded attachments
     ]
-  : newAttachments; // For signup, only new attachments
-  
+    : newAttachments; // For signup, only new attachments
+
   return { profileImage, attachments };
 };
 
