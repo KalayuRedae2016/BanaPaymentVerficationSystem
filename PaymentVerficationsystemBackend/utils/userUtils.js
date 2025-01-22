@@ -44,36 +44,27 @@ const createDefaultAdminUser = catchAsync(async () => {
 const changePasswordFlag = catchAsync(async (user, passwordChanger) => {
   let changePassword = false;
 
-  // Validate user object
   if (!user || typeof user !== 'object') {
-    throw new Error('User object is missing or invalid');
+    return next(new AppError("User Object is missing or invalid",400))
   }
-
-  // Destructure necessary properties from user
   const { isFirstLogin, _id, passwordChangedBy } = user;
 
-  // If passwordChanger is not provided, we only check first login
   if (!passwordChanger) {
     if (isFirstLogin) {
-      changePassword = true; // User needs to change password on first login
+      changePassword = true; 
     }
     return changePassword;
   }
-
-  // Destructure the role from passwordChanger and check for missing role
   const { role } = passwordChanger;
 
   if (!role) {
-    throw new Error('Password changer is missing the role field');
+    return next(new AppError("Password Changer is missing the role field",400))
   }
 
-  // Check if password was changed by someone else (Admin or SuperAdmin)
   if (passwordChangedBy && !_id.equals(passwordChangedBy) && (role === 'Admin' || role === 'SuperAdmin')) {
     changePassword = true; // Password changed by Admin or SuperAdmin
   }
-
   return changePassword;
 });
-
 
 module.exports = {createDefaultAdminUser,changePasswordFlag};

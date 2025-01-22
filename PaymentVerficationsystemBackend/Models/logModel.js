@@ -1,14 +1,17 @@
 const mongoose = require('mongoose');
 
 const logSchema = new mongoose.Schema({
-    // log: {type: String,required: true}, it same as activity
     timestamp: {type: Date,default: Date.now,required: true},
-    activity: {
-        type: String,
-        required: true,
-        enum: ['Payment Verification', 'User Registration', 'User Authentication', 'Setting Update', 'Setting Request'],
-      },
-    details:mongoose.Schema.Types.Mixed
-    
-})
-const Log=mongoose.model('Log',logSchema)
+    model:{ type:String,required:true},
+    action:{type:String,required:true},
+    affectedData:{type:String,required:true},
+    actor:{type:mongoose,required:true},
+    ipAddress:{type:String,default:null},
+    },
+    {
+      timestamps: true,
+      toJSON: { virtuals: true },
+      toObject: { virtuals: true }
+    } 
+  )
+  module.exports=mongoose.model('Log',logSchema)

@@ -48,5 +48,6 @@ router.route('/sendEmails').post(userController.sendEmailMessages)
 
 router.post('/importUsers',userController.uploadUserFile,userController.importUsers);
 router.get('/exportUsers',userController.exportUsers);
+router.get("/logs",userController.getLogs)
 
 module.exports = router;
