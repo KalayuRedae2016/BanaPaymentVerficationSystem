@@ -107,9 +107,8 @@ const organizationSchema = new mongoose.Schema({
   orgBalance:{
     type: Number,
     default:0
-  }
-  
-  
+  },
+    
   //add some other specific to the organization
 });
 

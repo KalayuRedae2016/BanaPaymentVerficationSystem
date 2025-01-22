@@ -5,7 +5,8 @@ const User = require('../Models/userModel');
 const Payment = require('../Models/paymentModel');
 const Apikey = require('../Models/apiKeyModel');
 
-const createDefaultAdminUser = require("../utils/userUtils"); 
+const createDefaultAdminUser = require("../utils/userUtils");
+const { validateExistence } = require("../utils/validateExistence")
 const { calculateBalances } = require('../utils/calculateBalances')
 const { formatDate, formatDateGC } = require("../utils/formatDate")
 const { calculatePenalty } = require("../utils/calculatePenality")
@@ -14,9 +15,8 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 const createPendingPayments = require("../utils/createPendingPayments")
-const { exportToExcel, importFromExcel, createMulterMiddleware } = require('../utils/fileController');
+const { deleteFile, exportToExcel, importFromExcel, createMulterMiddleware, processFileData, processUploadFiles } = require('../utils/fileController');
 const { sendEmail } = require('../utils/email');
-const jwt = require('jsonwebtoken');
 
 const fs = require('fs');
 const path = require('path');
@@ -407,7 +407,7 @@ exports.confirmBills = async (req, res) => {
         unpaidBill.confirmedDate = new Date();
         unpaidBill.latest = true;
         unpaidBill.confirmedID = req.apiKeyData.id,
-        unpaidBill.confirmationMethod = "Bank-confirmed"
+          unpaidBill.confirmationMethod = "Bank-confirmed"
       }
 
       // Save the updated bill
@@ -465,7 +465,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
   // Fetch payments
   const payments = await Payment.find(paymentQuery)
     .populate({ path: 'user', select: 'fullName' })
-    .sort({ activeYear:1,activeMonth: 1});
+    .sort({ activeYear: 1, activeMonth: 1 });
 
   if (!payments.length) {
     return res.status(200).json({
@@ -545,7 +545,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.confirmPayments = catchAsync(async (req, res, next) => {
-  const { billCode, userId, urgent, regular, subsidy, service, penality} = req.body;
+  const { billCode, userId, urgent, regular, subsidy, service, penality } = req.body;
   if (!billCode || !userId) {
     return next(new AppError(`billCode and UserId is required to confirm payments`))
   }
@@ -593,13 +593,13 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     if (unpaidTypes.length > 0) {
       return next(new AppError(`Cannot pay penality. The following payment types must be fully paid first: ${unpaidTypes.join(', ')}`, 400))
     }
-  unpaidBill.penality.amount = penality.amount,
-  unpaidBill.penality.bankType = penality.bankType,
-  unpaidBill.penality.TTNumber = penality.TTNumber,
-  unpaidBill.penality.penality = 0
-  unpaidBill.penality.isPaid = penality.isPaid,
-  unpaidBill.penality.paidAt = penality.paidAt || Date.now() || null
-  unpaidBill.penality.daysLate = penality.daysLate || null
+    unpaidBill.penality.amount = penality.amount,
+      unpaidBill.penality.bankType = penality.bankType,
+      unpaidBill.penality.TTNumber = penality.TTNumber,
+      unpaidBill.penality.penality = 0
+    unpaidBill.penality.isPaid = penality.isPaid,
+      unpaidBill.penality.paidAt = penality.paidAt || Date.now() || null
+    unpaidBill.penality.daysLate = penality.daysLate || null
 
   }
 
@@ -630,7 +630,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
     unpaidBill.confirmedID = userId,
-    unpaidBill.confirmationMethod = "Admin-confirmed"
+      unpaidBill.confirmationMethod = "Admin-confirmed"
   }
 
   // Save the updated bill
@@ -661,40 +661,40 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
 });
 exports.editPayments = catchAsync(async (req, res, next) => {
 
-  console.log("req.body",req.body)
-  const { userId,billCode, urgent, regular, subsidy, service, penality} = req.body;
+  console.log("req.body", req.body)
+  const { userId, billCode, urgent, regular, subsidy, service, penality } = req.body;
   if (!billCode || !userId) {
     return next(new AppError(`billCode and userId is required to edit Confirmed Payment`))
   }
   if (!urgent && !regular && !subsidy && !service && !penality) {
-    return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required",404))
+    return next(new AppError("At least one payment type (urgent, regular, subsidy, service,penality) is required", 404))
 
   }
 
   const user = await User.findById(userId)
   if (!user) {
     return next(new AppError("User is not found"), 400)
-  } 
+  }
   // Find the uPaid bill by billCode and ispaid:false
- // let payment = await Payment.findOne({ isPaid: false, billCode });
+  // let payment = await Payment.findOne({ isPaid: false, billCode });
 
   //tadios
   let payment = await Payment.findOne({ isPaid: { $in: [true, false] }, billCode });
 
   //eind of tadios
   if (!payment) {
-    return next(new AppError("No paid Bill found",404))
+    return next(new AppError("No paid Bill found", 404))
   }
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
     const paidAt = isPaid ? (updates.paidAt ? new Date(updates.paidAt) : new Date(existing.paidAt)) : null;
-    
+
     return {
       amount: updates.amount ?? existing.amount,
       bankType: isPaid ? updates.bankType ?? existing.bankType : null,
       TTNumber: isPaid ? updates.TTNumber ?? existing.TTNumber : null,
-      penality: isPaid ?updates.penality ?? existing.penality:0,
+      penality: isPaid ? updates.penality ?? existing.penality : 0,
       isPaid,
       paidAt,
       daysLate: updates.daysLate ?? existing.daysLate,
@@ -727,15 +727,15 @@ exports.editPayments = catchAsync(async (req, res, next) => {
     payment.status = 'confirmed';
     payment.confirmedDate = new Date();
     payment.confirmedID = userId,
-    payment.confirmationMethod = "Admin-confirmed"
+      payment.confirmationMethod = "Admin-confirmed"
     //should be exist separate field to hold payemnt editer id
   } else {
     payment.isPaid = false;
     payment.status = 'pending';
     payment.confirmedDate = null;
     payment.latest = false
-    payment.confirmationMethod=null
-    payment.confirmedID=null
+    payment.confirmationMethod = null
+    payment.confirmedID = null
 
     const nearestRelevantBill = await Payment.findOne({
       userCode: payment.userCode, isPaid: true, _id: { $ne: payment._id }, // Exclude the current bill
@@ -824,7 +824,7 @@ exports.getPenality = catchAsync(async (req, res, next) => {
   } else if (daysLate > 5 && daysLate <= 10) {
     penality = Number((amount * penalityLate10Days).toFixed(2));
   } else if (daysLate > 10) {
-    penality =Number((amount * penalityLateAbove10Days).toFixed(2));
+    penality = Number((amount * penalityLateAbove10Days).toFixed(2));
   }
 
   // Special condition for service payment type (penalty is always 0)
@@ -863,7 +863,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
       continue;
     }
 
-    const {startingDate,endingDate,regularAmount,urgentAmount,subsidyAmount} = paymentSetting;
+    const { startingDate, endingDate, regularAmount, urgentAmount, subsidyAmount } = paymentSetting;
 
     let status = 'unknown';
     let updateData = {};
@@ -882,9 +882,9 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
     } else if (paymentDate > new Date(endingDate)) {
       status = 'overdue';
       // Calculate penalties for each payment type
-      const regularPenalty = calculatePenalty(paymentSetting,regular, regularAmount,paymentDate);
-      const urgentPenalty = calculatePenalty(paymentSetting,urgent, urgentAmount,paymentDate);
-      const subsidyPenalty = calculatePenalty(paymentSetting,subsidy, subsidyAmount,paymentDate);
+      const regularPenalty = calculatePenalty(paymentSetting, regular, regularAmount, paymentDate);
+      const urgentPenalty = calculatePenalty(paymentSetting, urgent, urgentAmount, paymentDate);
+      const subsidyPenalty = calculatePenalty(paymentSetting, subsidy, subsidyAmount, paymentDate);
 
       const totalPenalityAmount = parseFloat((regularPenalty.penality + urgentPenalty.penality + subsidyPenalty.penality).toFixed(2));
       updateData = {
@@ -899,7 +899,7 @@ exports.updateStatusAndPenality = catchAsync(async (req, res, next) => {
       };
 
     }
-  // console.log("status",status)
+    // console.log("status",status)
     // Add the status and penalty updates to the bulk operations
     bulkUpdates.push({
       updateOne: {
@@ -949,9 +949,9 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   paymentTypes.forEach((type) => {
     if (formattedPayment[type]) {
       if (formattedPayment[type].paidAt) {
-        formattedPayment[type].paidAtGC = formatDateGC(formattedPayment[type].paidAt); 
+        formattedPayment[type].paidAtGC = formatDateGC(formattedPayment[type].paidAt);
         formattedPayment[type].paidAt = formatDate(formattedPayment[type].paidAt);
-        
+
       }
       if (formattedPayment[type].createdAt) {
         formattedPayment[type].createdAt = formatDate(formattedPayment[type].createdAt); // Format createdAt date
@@ -1353,32 +1353,32 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
 });
 exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
 
-const paymentTypes = ['regular', 'subsidy', 'urgent', 'service', 'penality'];
-const query = {
-  $or: [
-    { isPaid: true }, // Main payment isPaid
-    ...paymentTypes.map(type => ({ [`${type}.isPaid`]: true })) // Any payment type isPaid
-  ]
-};
+  const paymentTypes = ['regular', 'subsidy', 'urgent', 'service', 'penality'];
+  const query = {
+    $or: [
+      { isPaid: true }, // Main payment isPaid
+      ...paymentTypes.map(type => ({ [`${type}.isPaid`]: true })) // Any payment type isPaid
+    ]
+  };
 
-const payments = await Payment.find(query);
-if (!payments.length) {
-  return res.status(404).json({ error: 'No Paid payments found!' });
-}
+  const payments = await Payment.find(query);
+  if (!payments.length) {
+    return res.status(404).json({ error: 'No Paid payments found!' });
+  }
 
   const organization = await Organization.findOne()
   if (!organization) {
     return next(new AppError("Organization is not found", 400))
   }
-  const users=await User.find()
-  if(!users){
-    return next(new AppError("Users is not found",400))
+  const users = await User.find()
+  if (!users) {
+    return next(new AppError("Users is not found", 400))
   }
-  const balances = calculateBalances(payments, organization,users);
+  const balances = calculateBalances(payments, organization, users);
   const organizationBalance = balances.Organization
   const orgBalancesBasedBankType = balances.totalBalanceBankType
-  const userBalance=balances.userBalances
-  
+  const userBalance = balances.userBalances
+
   res.status(200).json({
     status: 'success',
     message: `Reports generated for ${organization.companyName}`,
@@ -1390,19 +1390,19 @@ if (!payments.length) {
   });
 });
 exports.reports = catchAsync(async (req, res, next) => {
-  const {userCode,isPaid,year,semiYear, month,day,startingDate,endingDate,timeRange } = req.query;
+  const { userCode, isPaid, year, semiYear, month, day, startingDate, endingDate, timeRange } = req.query;
   // const paymentTypes = ['regular', 'subsidy', 'urgent', 'service', 'penality'];
   // const paymentQuery = {$or: [
   //   { isPaid: true }, // Main payment isPaid
   //   ...paymentTypes.map(type => ({ [`${type}.isPaid`]: true })) // Any payment type isPaid
   // ]};
-const paymentQuery={}
+  const paymentQuery = {}
   if (!timeRange) {
     return next(new AppError("Time Range is required"), 400)
   }
   if (userCode) paymentQuery.userCode = new RegExp(userCode, 'i');
   if (isPaid !== undefined) paymentQuery.isPaid = isPaid === 'true';
-    
+
   let startDate, endDate;
   const specifiedYear = parseInt(year, 10);
   const currentDate = new Date();
@@ -1415,13 +1415,13 @@ const paymentQuery={}
       break;
     case 'semiAnnually':
       if (!specifiedYear) return res.status(400).json({ error: 'Year is required for semiannual time range' });
-      if (!semiYear || (semiYear!=="1st"&semiYear!=="2nd"))
+      if (!semiYear || (semiYear !== "1st" & semiYear !== "2nd"))
         return res.status(400).json({ error: 'Valid semiYear is required for semiannual time range(1st or 2nd)' });
-      if(semiYear==="1st"){
+      if (semiYear === "1st") {
         startDate = new Date(specifiedYear, 0, 1);
         endDate = new Date(specifiedYear, 6, 0);
         // console.log("1st date",startDate,endDate)
-      }else{
+      } else {
         startDate = new Date(specifiedYear, 6, 1);
         endDate = new Date(specifiedYear, 12, 0);
         // console.log("2nd date",startDate,endDate)
@@ -1439,25 +1439,25 @@ const paymentQuery={}
       endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), startOfWeek + 7);
       break;
     case 'daily':
-      if (!specifiedYear || !month||!day)
+      if (!specifiedYear || !month || !day)
         return res.status(400).json({ error: 'Year or  month or day is are required for daily time range' });
-      startDate = new Date(specifiedYear, month-1, day, 0, 0, 0);
-      endDate = new Date(specifiedYear, month-1, day, 23, 59, 59);
+      startDate = new Date(specifiedYear, month - 1, day, 0, 0, 0);
+      endDate = new Date(specifiedYear, month - 1, day, 23, 59, 59);
       // console.log("Daily date",startDate,endDate)
       break;
     case "other":
-      if(!startingDate ||!endingDate){
+      if (!startingDate || !endingDate) {
         return next(new AppError("StartingDate and endingDate are required", 400));
       }
-     
+
       if (isNaN(new Date(startingDate).getTime()) || isNaN(new Date(endingDate).getTime())) {
         return res.status(400).json({ error: 'Invalid date format. Please use a valid date format.' });
       }
-      
+
       startDate = new Date(startingDate);
       endDate = new Date(endingDate);
 
-      if(startDate>endDate){
+      if (startDate > endDate) {
         return next(new AppError(`${formatDateGC(endingDate)} should be greater than ${formatDateGC(startingDate)}`))
       }
 
@@ -1481,11 +1481,11 @@ const paymentQuery={}
     return next(new AppError("Organization is not found", 400))
   }
 
-  const users=await User.find()
-  if(!users){
-    return next(new AppError("Users is not found",400))
+  const users = await User.find()
+  if (!users) {
+    return next(new AppError("Users is not found", 400))
   }
-  const categorizedPayments = calculateBalances(payments, organization,users);
+  const categorizedPayments = calculateBalances(payments, organization, users);
 
   // console.log("payments:",payments)
   // console.log("catPa",categorizedPayments)
@@ -1501,14 +1501,15 @@ const paymentQuery={}
 
 exports.createTransferFunds = catchAsync(async (req, res, next) => {
   console.log("Request Body:", req.body);
-  const transferCase=req.query.transferCase
-  const { transferType,orgId,toWhat,fromBankType, toBankType, amount, reason,refNumber} = req.body;
-
-  if(!transferCase) return next(new AppError("Missing Transfer Case",400))
-  if (!transferType || !orgId || !toWhat || !fromBankType|| !amount || !reason,refNumber) {
+  console.log("Request files:", req.files);
+  // const transferCase=req.query.transferCase
+  const { transferCase, transferType, fromBankType, toBankType, reason, refNumber } = req.body;
+  const amount = Number(req.body.amount)
+  if (!transferCase) return next(new AppError("Missing Transfer Case", 400))
+  if (!transferType || !fromBankType || !amount || !reason, refNumber) {
     return next(new AppError('Missing required fields for transfer', 400));
   }
-  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();  
+  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
   if (transferDate > new Date()) {
     return next(new AppError('Transfer date cannot be in the future', 400));
   }
@@ -1525,6 +1526,18 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError("Organization is not found", 400))
   }
 
+  const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
+  let users
+  if (transferCase === "userWithdrawal") {
+    users = await User.findById(userQuery)
+  } else {
+    users = await User.find()
+  }
+
+  if (!users) {
+    return next(new AppError("User/s is not found", 400))
+  }
+
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
@@ -1532,13 +1545,10 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError(`No confirmed Payments Found`, 400));
   }
 
-  const bankBalances = calculateBalances(payments, organization);
-  
-  console.log(bankBalances)
-
+  const bankBalances = calculateBalances(payments, organization, users);
   const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
   const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
-  
+
   const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
   const fromBankExists = banks.some(account => account.bankType === fromBankType);
   if (!fromBankExists) {
@@ -1547,30 +1557,34 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
     return next(new AppError('Insufficient funds', 400));
   }
-  if (transferCase==="bankTransfer"){
-    if(!toBankType){
+  if (transferCase === "bankTransfer") {
+    if (!toBankType) {
       return next(new AppError('toBankType field is required for bank transfers', 400));
     }
+    toWhat = organization.id
     const toBankExists = banks.some(account => account.bankType === toBankType);
     if (!toBankExists) {
       return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
     }
   }
 
-if (transferCase==="userWithdrawal"){
-  if(!toWhat) return next(new AppError('valid UserId is required for userWithdrawal', 400));
-} 
+  if (transferCase === "userWithdrawal") {
+    if (!toWhat) return next(new AppError('valid UserId is required for userWithdrawal', 400));
+  }
+
+  const { attachments } = await processUploadFiles(req.files, req.body)
 
   organization[transferCollection].push({
     transferCase,
     transferType,
-    orgId,
-    toWhat,
+    orgId: organization.id,
+    toWhat: transferCase === "userWithdrawal" ? req.body.toWhat : organization.id,
     fromBankType,
-    toBankType:transferCase==="bankTransfer"?toBankType:null,
+    toBankType: transferCase === "bankTransfer" ? toBankType : null,
     amount,
     reason,
     refNumber,
+    attachments,
     transferDate
   });
   await organization.save();
@@ -1580,78 +1594,154 @@ if (transferCase==="userWithdrawal"){
   });
 });
 
-exports.updateTransferFunds = catchAsync(async (req, res, next) => {
-  const transferId=req.params.id
-  const {transferType, fromBankType, toBankType, amount, reason } = req.body;
+exports.getTransferFunds = catchAsync(async (req, res, next) => {
+  const { transferCase, transferId, userId, transferType, fromBankType, toBankType, amount } = req.query;
 
-  if (!transferId || !transferType || !fromBankType || !toBankType || !amount || !reason) {
-    return next(new AppError('Missing required fields for transfer update', 400));
-  }
+  let transferQuery = {}
+  if (userId) transferQuery.toWhat = userId;  // Query by userId (toWhat
+  if (transferId) transferQuery._id = transferId;
+  if (transferCase) transferQuery.transferCase = transferCase;
+  if (transferType) transferQuery.transferType = transferType;
+  if (fromBankType) transferQuery.fromBankType = fromBankType;
+  if (toBankType) transferQuery.toBankType = toBankType;
+  if (amount) transferQuery.amount = amount;
+  console.log(transferQuery)
+  const organization = await validateExistence(Organization, {}, "Organization is not found")
+  const transferFunds = organization.paymentTransfers.filter(transfer => {
+    return Object.keys(transferQuery).every(key => {
+      return transfer[key] && transfer[key] == transferQuery[key];
+    });
+  });
 
-  if (typeof amount !== 'number' || amount <= 0) {
-    return next(new AppError('Amount must be a positive number', 400));
-  }
+  // Process each transfer object
+  const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
+    return processFileData(transfer);  // Process each transfer individually
+  }));
+  console.log("transferFunds", transferFunds)
 
-  const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
-  if (transferDate > new Date()) {
-    return next(new AppError('Transfer date cannot be in the future', 400));
-  }
-    if (isNaN(new Date(transferDate).getTime())) {
-      return next(new AppError('Invalid transfer date', 400));
-    }
-  console.log("tansferDate:",transferDate)
-  console.log(new Date(req.body.transferDate))
-  const organization = await Organization.findOne();
-  if (!organization) {
-    return next(new AppError("Organization not found", 400));
-  }
 
-  const transfer = organization.paymentTransfers.find(t => t._id.toString() === transferId);
-  if (!transfer) {
-    return next(new AppError('Transfer record not found', 400));
-  }
-  const paymentQuery = { isPaid: true, status: 'confirmed' };
-  const payments = await Payment.find(paymentQuery);
-  if (!payments) {
-    return next(new AppError('No confirmed Payments Found', 400));
-  }
-
-  const bankBalances = calculateBalances(payments, organization);
-  const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
-  const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
-
-  const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
-  const fromBankExists = banks.some(account => account.bankType === fromBankType);
-  const toBankExists = banks.some(account => account.bankType === toBankType);
-
-  if (!fromBankExists) {
-    return next(new AppError(`Invalid bank type: ${fromBankType} does not exist`, 400));
-  }
-
-  if (!toBankExists) {
-    return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
-  }
-
-  if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
-    return next(new AppError('Insufficient funds', 400));
-  }
-
-  transfer.transferType = transferType;
-  transfer.fromBankType = fromBankType;
-  transfer.toBankType = toBankType;
-  transfer.amount = amount;
-  transfer.reason = reason;
-  transfer.transferDate = transferDate;
-
-  await organization.save();
   res.status(200).json({
     status: 1,
-    message: `Successfully updated the transfer of ${amount} from ${fromBankType} to ${toBankType}`,
+    transferFunds,
+    attachmentsData
   });
 });
+exports.updateTransferFunds = catchAsync(async (req, res, next) => {
+  console.log("Request Body:", req.body);
+  console.log("Request Files:", req.files);
+  console.log("request params",req.params)
 
-exports.deleteTransferFunds= catchAsync(async (req, res, next) => {
-  const transferId = req.params.id 
+  const transferId=req.params.id
+  const {reason, refNumber, transferDate, toWhat } = req.body;
+  if (!transferId) return next(new AppError("Missing Transfer ID", 400));
+
+  const organization = await Organization.findOne();
+  if (!organization) return next(new AppError("Organization is not found", 400));
+
+  const transfer = organization.paymentTransfers.find(t => t._id.toString() === transferId);
+  if (!transfer) return next(new AppError("Transfer record not found", 404));
+
+  const validateBankType = (type, accounts) => {
+    if (type && !accounts.some(account => account.bankType === type)) {
+      throw new AppError(`Invalid bank type: ${type} does not exist`, 400);
+    }
+  };
+
+  try {
+    const transferCase = req.body.transferCase|| transfer.transferCase;
+    const transferType = req.body.transferType || transfer.transferType;
+    const fromBankType=req.body.fromBankType||transfer.fromBankType
+    const toBankType=req.body.toBankType||transfer.toBankType
+    const amount=req.body.amount||transfer.amount
+    
+    if (fromBankType) {
+      const banks = transfer.transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
+      validateBankType(fromBankType, banks);
+      transfer.fromBankType = fromBankType;
+    }
+
+    if (toBankType) {
+      const banks = transfer.transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
+      validateBankType(toBankType, banks);
+      transfer.toBankType = toBankType;
+    }
+
+    if (amount !== undefined) {
+      const parsedAmount = Number(amount);
+      if (isNaN(parsedAmount) || parsedAmount <= 0) {
+        throw new AppError("Amount must be a positive number", 400);
+      }
+      transfer.amount = parsedAmount;
+    }
+
+  const payments = await Payment.find({ isPaid: true, status: 'confirmed' });
+  if (!payments) {
+    return next(new AppError(`No confirmed Payments Found`, 400));
+  }
+  const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
+  let users
+  if (transferCase === "userWithdrawal") {
+    users = await User.findById(userQuery)
+  } else {
+    users = await User.find()
+  }
+
+  if (!users) {
+    return next(new AppError("User/s is not found", 400))
+  }
+  console.log(`ffB${fromBankType} and Amount${amount}`)
+  console.log(`ffB${transfer.fromBankType} and Amount${amount}`)
+  if (fromBankType && amount !== undefined) {
+    const bankBalances = calculateBalances(payments, organization, users);
+    const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
+  
+    const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
+    const availableFunds = (bankTypes[fromBankType]?.[balanceType] || 0);
+  console.log("avaf",availableFunds)
+    if (availableFunds < amount) {
+      return next(new AppError('Insufficient funds', 400));
+    }
+  }
+    if (reason) transfer.reason = reason;
+    if (refNumber) transfer.refNumber = refNumber;
+
+    if (transferDate) {
+      const parsedDate = new Date(transferDate);
+      if (isNaN(parsedDate.getTime()) || parsedDate > new Date()) {
+        throw new AppError("Invalid or future transfer date", 400);
+      }
+      transfer.transferDate = parsedDate;
+    }
+
+    if (toWhat) {
+      if (transfer.transferCase === "userWithdrawal" && !await User.findById(toWhat)) {
+        throw new AppError("Valid UserId is required for userWithdrawal", 400);
+      }
+      transfer.toWhat = toWhat;
+    }
+
+    if (req.files) {
+      const { attachments } = await processUploadFiles(req.files, req.body);
+      transfer.attachments = attachments;
+    }
+
+    await organization.save();
+
+  const {attachmentsData } = await processFileData(transfer);
+
+    res.status(200).json({
+      status: 1,
+      message: `Successfully updated transfer ${transferId}.`,
+      updatedTransferFunds:transfer,
+      attachmentsData
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
+  const transferId = req.params.id
   if (!transferId) {
     return next(new AppError('Transfer ID is required for deletion', 400));
   }
@@ -1666,7 +1756,7 @@ exports.deleteTransferFunds= catchAsync(async (req, res, next) => {
   if (transferIndex === -1) {
     return next(new AppError(`Transfer with ID ${transferId} is not found`, 404));
   }
-   organization.paymentTransfers.splice(transferIndex, 1); // Remove the transfer from the array
+  organization.paymentTransfers.splice(transferIndex, 1); // Remove the transfer from the array
   await organization.save();// Save the updated organization document
 
   res.status(200).json({
@@ -1685,7 +1775,7 @@ exports.resetAll = catchAsync(async (req, res, next) => {
     const deletedApikeys = await Apikey.deleteMany({});
 
     await createDefaultAdminUser();
-  
+
     res.status(200).json({
       status: 'success',
       message: `All Files Deleted and Default Admin created`,

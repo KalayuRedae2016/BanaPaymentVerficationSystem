@@ -137,16 +137,16 @@ exports.updateUser = catchAsync(async (req, res) => {
     });
     await existingUser.save();
   const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
-  const { imageData, attachmentsData } = await processFileData(existingUser);
+  const { imageData, attachmentsData } = await processFileData(updatedUser);
   
-  const formattedCreatedAt = existingUser.createdAt ? formatDate(existingUser.createdAt) : null;
-  const formattedUpdatedAt = existingUser.updatedAt ? formatDate(existingUser.updatedAt) : null;
+  const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
+  const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
 
     res.status(200).json({
       status: 1,
-      message: `${existingUser.fullName} updated successfully`,
+      message: `${updatedUser.fullName} updated successfully`,
       updatedUser: {
-        ...existingUser._doc,
+        ...updatedUser._doc,
         formattedCreatedAt,
         formattedUpdatedAt
       },

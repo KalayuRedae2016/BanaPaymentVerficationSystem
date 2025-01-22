@@ -183,6 +183,7 @@ exports.deleteFile = async (filePath) => {
 };
 
 exports.processFileData = async (user) => {
+  console.log("TTT,",user)
   const convertFileToBase64 = async (filePath) => {
     console.log("filePath", filePath)
     try {
