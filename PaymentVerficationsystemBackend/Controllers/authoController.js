@@ -47,7 +47,6 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 
 exports.signup = catchAsync(async (req, res, next) => {
     const organization=await validateExistence(Organization,{},"Create Organization Profile before creating User")
-  
     const prefixCode = organization.companyPrefixCode;
     const length = 4;
     console.log("uploadingFIles",req.files)
@@ -74,25 +73,21 @@ exports.signup = catchAsync(async (req, res, next) => {
     
     user.userCode = await user.generateUserCode(prefixCode, length);
     const password=req.body.password || (await user.generateRandomPassword())
-    user.password = await bcrypt.hash(password,12);
-    console.log("Ipaddress",req.ip)
-    
-    await user.save();
+    user.password = await bcrypt.hash(password,12);    
+ 
+await logAction({
+  model: 'users',
+  action: 'Create',
+  actor: req.user.id,
+  description: 'User created successfully',
+  data: { userId: user.id },
+  ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+  severity: 'info',
+  sessionId: req.session?.id || 'generated-session-id',
+});
 
-    const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null;
-    const sessionId = req.session?.id || 'generated-session-id'||null;
-    console.log("logsndd",ipAddress,sessionId)
-    await logAction(
-      "users", // Model
-      "Create", // Action
-      req.user.id, // Actor
-      "User created successfully", // Description
-      { userId: user.id}, // Affected data
-      ipAddress, // IP Address
-      "info", // Severity
-      sessionId // Session ID
-    );
-    
+
+await user.save();
     // Create pending payments if the user role is 'User'
     const latestSetting=await validateExistence(PaymentSetting,{latest:true},"No active Payment Setting Found")
     if (user.role === 'User') {
