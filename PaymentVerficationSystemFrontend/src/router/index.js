@@ -51,7 +51,7 @@ import parentModal from "../components/adminaccessiblepages/commonFiles/parentMo
 import empty from "../components/adminaccessiblepages/commonFiles/empty.vue";
 import emptyCompaney from "../components/adminaccessiblepages/commonFiles/emptyCompany.vue";
 import emptyClient from "../components/adminaccessiblepages/commonFiles/emptyClient.vue";
-import Logs from "../components/adminaccessiblepages/logs/logs.vue";
+import Logs from "../components/adminaccessiblepages/logsManagment/logs.vue";
 
 // User components
 //import userdashboard from "../components/UserAccessiblepages/userdashboard/Userdashboard.vue";

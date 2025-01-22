@@ -345,6 +345,18 @@
 
                   <div class="mb-4">
                     <label class="custom-label">
+                      {{ $t("Transfer Date") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="date"
+                      v-model="paymentToBeEdited.transferDate"
+                      class="custom-input"
+                      placeholder="Ref Number"
+                    />
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label">
                       {{ $t("Ref Number") }}
                       <span class="custom-star ml-1">*</span>
                     </label>
@@ -481,7 +493,7 @@
                 </div>
 
                 <button
-                  @click="handleOffsetPayment()"
+                  @click.prevent="handleTransferPayment()"
                   type="submit"
                   class="custom-button"
                 >
@@ -641,6 +653,7 @@ export default {
   },
 
   computed: {
+
     selectedAttachmentsData() {
       return this.createOffset ? this.newAttachmentsData : this.attachmentsData;
     },
@@ -686,63 +699,67 @@ export default {
         console.error("Error while adding files:", error);
       }
     },
-    async handleOffsetPayment() {
+    async handleTransferPayment() {
+
+    //  alert("hii");
+
       console.log(
         "data",
-        this.transferType,
-        this.fromBankType,
-        this.toBankType,
-        this.transferDate,
-        this.amount,
-        this.reason
+        this.paymentToBeEdited.transferType,
+        this.paymentToBeEdited.fromBankType,
+        this.paymentToBeEdited.toBankType,
+        this.paymentToBeEdited.transferDate,
+        this.paymentToBeEdited.amount,
+        this.paymentToBeEdited.refNumber,
+        this.paymentToBeEdited.reason
       );
 
-      this.selectTransferType = false;
-      this.selectTransferFrom = false;
-      this.selectTransferTo = false;
-      this.enterAmount = false;
-      this.notEqualFromTo = false;
-      this.amountNotZero = false;
-      this.enterTransferDate = false;
-      this.showError = false;
+      // this.selectTransferType = false;
+      // this.selectTransferFrom = false;
+      // this.selectTransferTo = false;
+      // this.enterAmount = false;
+      // this.notEqualFromTo = false;
+      // this.amountNotZero = false;
+      // this.enterTransferDate = false;
+      // this.showError = false;
 
-      // Validation
-      if (this.transferType == "" || this.transferType == null) {
-        this.selectTransferType = true;
-        return;
-      }
-      if (this.fromBankType == "" || this.fromBankType == null) {
-        this.selectTransferFrom = true;
-        return;
-      }
-      if (this.toBankType == "" || this.toBankType == null) {
-        this.selectTransferTo = true;
-        return;
-      }
-      if (this.fromBankType == this.toBankType) {
-        this.notEqualFromTo = true;
-        return;
-      }
-      if (this.amount === "" || this.amount == null || this.amount === 0) {
-        this.enterAmount = true;
-        return;
-      }
-      if (this.transferDate == "") {
-        this.enterTransferDate = true;
-        return;
-      }
+      // // Validation
+      // if (this.paymentToBeEdited.transferType == "" || this.paymentToBeEdited.transferType == null) {
+      //   this.selectTransferType = true;
+      //   return;
+      // }
+      // if (this.paymentToBeEdited.fromBankType == "" || this.paymentToBeEdited.fromBankType == null) {
+      //   this.selectTransferFrom = true;
+      //   return;
+      // }
+      // if (this.paymentToBeEdited.toBankType == "" || this.paymentToBeEdited.toBankType == null) {
+      //   this.selectTransferTo = true;
+      //   return;
+      // }
+      // if (this.paymentToBeEdited.fromBankType == this.paymentToBeEdited.toBankType) {
+      //   this.notEqualFromTo = true;
+      //   return;
+      // }
+      // if (this.paymentToBeEdited.amount === "" || this.paymentToBeEdited.amount == null || this.paymentToBeEdited.amount === 0) {
+      //   this.enterAmount = true;
+      //   return;
+      // }
+      // if (this.paymentToBeEdited.transferDate == "") {
+      //   this.enterTransferDate = true;
+      //   return;
+      // }
 
-      // Prepare the payload
-      const payload = {
-        transferType: this.transferType,
-        fromBankType: this.fromBankType,
-        toBankType: this.toBankType,
-        amount: this.amount,
-        reason: this.reason,
-        transferDate: this.transferDate,
-      };
+      // // Prepare the payload
+      // const payload = {
+      //   transferType: this.paymentToBeEdited.transferType,
+      //   fromBankType: this.paymentToBeEdited.fromBankType,
+      //   toBankType: this.paymentToBeEdited.toBankType,
+      //   amount: this.paymentToBeEdited.amount,
+      //   reason: this.paymentToBeEdited.reason,
+      //   transferDate: this.paymentToBeEdited.transferDate,
+      // };
 
-      console.log("payload", payload);
+      // console.log("payload", payload);
 
       // Process the attachments (could be the same data for both cases)
       const fileArray = (
@@ -751,19 +768,17 @@ export default {
         console.log(file.fileData, file.filename, file.fileType);
         return this.$base64ToFile(file.fileData, file.filename, file.fileType);
       });
-
       const formData = new FormData();
       formData.append("transferCase", "bankTransfer");
-      formData.append("transferType", this.transferType);
-      formData.append("fromBankType", this.fromBankType);
-      formData.append("toBankType", this.toBankType);
-      formData.append("transferDate", this.transferDate);
-      formData.append("amount", this.amount);
-      formData.append("refNumber", this.refNumber);
-      formData.append("reason", this.reason);
-      formData.append("orgId", this.orgId);
-      formData.append("organization", this.organization);
-
+      formData.append("transferType", this.paymentToBeEdited.transferType);
+      formData.append("fromBankType", this.paymentToBeEdited.fromBankType);
+      formData.append("toBankType", this.paymentToBeEdited.toBankType);
+      formData.append("transferDate", this.paymentToBeEdited.transferDate);
+      formData.append("amount", this.paymentToBeEdited.amount);
+      formData.append("refNumber", this.paymentToBeEdited.refNumber);
+      formData.append("reason", this.paymentToBeEdited.reason);
+      formData.append("toWhat",null);
+      formData.append("orgId", null);
       // Append files to form data
       fileArray.forEach((file) => {
         formData.append("attachments", file);
@@ -777,10 +792,8 @@ export default {
 
       try {
         const apiRequest = this.createOffset ? this.$apiPost : this.$apiPatch; // Use apiPost for add (POST), apiPatch for edit (PATCH)
-
         await apiRequest(
-          "/api/v1/payments/offsetPayments",
-          this.transfer_id,
+          "/api/v1/payments/transferFunds",
           formData,
           customHeaders
         ).then((response) => {
