@@ -481,6 +481,18 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
   });
 });
 
+exports.getLogs = catchAsync(async (req, res, next) => {
+  const logs = await User.find({}).lean();
+  if (!logs) {
+    return next(new AppError('No users found', 404));
+  }
+  res.status(200).json({
+    status: 1,
+    result: logs.length,
+    logs: logs
+  });
+});
+
 // // Upload attachments
 // exports.uploadAttachments = [
 //   uploadAttachmentsMiddleware,

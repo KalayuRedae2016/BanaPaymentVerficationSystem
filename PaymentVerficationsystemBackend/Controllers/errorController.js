@@ -1,4 +1,5 @@
 const AppError = require('./../utils/appError');
+const {logError}=require("../utils/logUtils")
 
 const handleCastErrorDB = err => {
   const message = `Invalid ${err.path}: ${err.value}.`;
@@ -93,6 +94,7 @@ const sendErrorProd = (err, req, res) => {
 
 module.exports = (err, req, res, next) => {
   console.log(err.stack);
+  logError(err, req);//log error added last
 
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 0;
