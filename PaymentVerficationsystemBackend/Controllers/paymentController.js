@@ -1506,7 +1506,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   const { transferCase, transferType, fromBankType, toBankType, reason, refNumber } = req.body;
   const amount = Number(req.body.amount)
   if (!transferCase) return next(new AppError("Missing Transfer Case", 400))
-  if (!transferType || !fromBankType || !amount || !reason, refNumber) {
+  if (!transferType || !fromBankType || !amount || !reason || !refNumber) {
     return next(new AppError('Missing required fields for transfer', 400));
   }
   const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
