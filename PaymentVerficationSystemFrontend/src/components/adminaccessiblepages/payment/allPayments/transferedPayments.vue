@@ -768,7 +768,6 @@ export default {
         console.log(file.fileData, file.filename, file.fileType);
         return this.$base64ToFile(file.fileData, file.filename, file.fileType);
       });
-
       const formData = new FormData();
       formData.append("transferCase", "bankTransfer");
       formData.append("transferType", this.paymentToBeEdited.transferType);
