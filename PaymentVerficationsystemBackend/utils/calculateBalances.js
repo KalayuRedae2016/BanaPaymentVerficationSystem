@@ -1,7 +1,7 @@
 const { formatDate } = require("../utils/formatDate");
 const mongoose = require('mongoose');
 
-function calculateBalances(payments, org,users) {
+function calculateBalances(payments, org,users={}) {
   let organization = {
     totalRegularBalance: 0,
     totalUrgentBalance: 0,

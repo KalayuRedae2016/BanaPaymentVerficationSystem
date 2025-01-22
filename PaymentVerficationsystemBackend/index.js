@@ -63,7 +63,8 @@ app.use(compression());
 
 // Development logging
 if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
+  //app.use(morgan('dev'));
+  app.use(morgan("combined"))
 }
 
 // Limit requests from Same API (Configure rate limiting in express-rate-limit to use the correct IP source.)

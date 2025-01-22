@@ -38,9 +38,10 @@ router.route('/deletePayments').delete(paymentController.deletePayments);// Dele
 router.route('/penality').get(paymentController.getPenality); // Handle penalties
 
 router.route('/transferFunds')
-  .post(paymentController.createTransferFunds)
+  .post(authoController.uploadFilesMiddleware,paymentController.createTransferFunds)
+  .get(paymentController.getTransferFunds)
 router.route('/transferFunds/:id')
-  .patch(paymentController.updateTransferFunds)
+  .patch(authoController.uploadFilesMiddleware,paymentController.updateTransferFunds)
   .delete(paymentController.deleteTransferFunds);
 
 // ========== Routes for Reporting ,reciept and Notifications ==========

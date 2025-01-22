@@ -14,6 +14,13 @@ const validateUniqueBankTypes = (accounts) => {
   return true;
 };
 
+const attachmentSchema = new mongoose.Schema({
+  fileName: { type: String, required: true },
+  fileType: { type: String, required: true },
+  description: { type: String },
+  uploadedDate: { type: Date, default: Date.now },
+});
+
 const bankAccountSchema = new mongoose.Schema({
   bankType: {
     type: String,
@@ -44,6 +51,7 @@ const transferSchema = new mongoose.Schema({
   reason:{type:String},
   refNumber:{type:String,default:null},
   transferDate: {type: Date,default: Date.now},
+  attachments: [attachmentSchema], // Array of attachments
 });
 
 const organizationSchema = new mongoose.Schema({
@@ -99,9 +107,8 @@ const organizationSchema = new mongoose.Schema({
   orgBalance:{
     type: Number,
     default:0
-  }
-  
-  
+  },
+    
   //add some other specific to the organization
 });
 

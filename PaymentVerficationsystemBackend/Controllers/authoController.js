@@ -13,6 +13,7 @@ const catchAsync = require('../utils/catchAsync');
 const {validateExistence}=require("../utils/validateExistence")
 const {createInstance,sendResponse}=require("../utils/instanceUtil")
 const { sendEmail,sendWelcomeEmail} = require('../utils/email');
+const {logAction}=require("../utils/logUtils")
 const { deleteFile, createMulterMiddleware,processUploadFiles} = require('../utils/fileController');
 
 const signInToken = (user) => {
@@ -61,16 +62,37 @@ exports.signup = catchAsync(async (req, res, next) => {
     const existingUser = await User.findOne({$or: [{ email: user.email }, { phoneNumber: user.phoneNumber}]});
       if (existingUser) {
         if (req.files) deleteFile(req.files.path); 
-        return next(new AppError('Email Or Phone Number already exists', 400));
+        if (existingUser.email === user.email) {
+          return next(new AppError('Email already exists', 400));
+        }
+        if (existingUser.phoneNumber === user.phoneNumber) {
+          return next(new AppError('Phone Number already exists', 400));
+        }
+       
       }
     }
-
+    
     user.userCode = await user.generateUserCode(prefixCode, length);
     const password=req.body.password || (await user.generateRandomPassword())
     user.password = await bcrypt.hash(password,12);
+    console.log("Ipaddress",req.ip)
     
     await user.save();
 
+    const ipAddress = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null;
+    const sessionId = req.session?.id || 'generated-session-id'||null;
+    console.log("logsndd",ipAddress,sessionId)
+    await logAction(
+      "users", // Model
+      "Create", // Action
+      req.user.id, // Actor
+      "User created successfully", // Description
+      { userId: user.id}, // Affected data
+      ipAddress, // IP Address
+      "info", // Severity
+      sessionId // Session ID
+    );
+    
     // Create pending payments if the user role is 'User'
     const latestSetting=await validateExistence(PaymentSetting,{latest:true},"No active Payment Setting Found")
     if (user.role === 'User') {
