@@ -1,36 +1,38 @@
 <template>
   <div class="root div">
     <div class="px-3 md:px-4 py-3">
-      <h1 class="text-blue-500 font-bold text-md">{{ $t("Payment Management") }}</h1>
+      <h1 class="text-blue-500 font-bold text-md">
+        {{ $t("Payment Management") }}
+      </h1>
     </div>
 
     <div class="border-t border-blue-500 mt-1 py-4">
       <div class="m-2 mb-10">
         <div class="flex flex-wrap">
-    <button
-      v-for="(tab, index) in tabs"
-      :key="index"
-      :class="`py-2 px-2 mb-2 mr-2 ${
-        activeTab === index
-          ? 'bg-gray-100 border-b-4 border-blue-500 text-blue-500 font-bold text-md'
-          : 'text-blue-500 font-semibold text-md'
-      }`"
-      @click="activateTab(index)"
-    >
-      <i :class="`${icons[index]} mr-2`"></i>{{ tab }}
-    </button>
-  </div>
+          <button
+            v-for="(tab, index) in tabs"
+            :key="index"
+            :class="`py-2 px-2 mb-2 mr-2 ${
+              activeTab === index
+                ? 'bg-gray-100 border-b-4 border-blue-500 text-blue-500 font-bold text-md'
+                : 'text-blue-500 font-semibold text-md'
+            }`"
+            @click="activateTab(index)"
+          >
+            <i :class="`${icons[index]} mr-2`"></i>{{ tab }}
+          </button>
+        </div>
 
-        <div class="border-t  border-blue-300  ">
+        <div class="border-t border-blue-300">
           <div v-show="activeTab === 0" class="">
             <div class="">
               <!-- Payment Settings Options -->
               <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
-                <div class="flex flex-col sm:flex-row gap-6 ">
+                <div class="flex flex-col sm:flex-row gap-6">
                   <!-- Current Payment Setting -->
-                  <div class="flex items-center mx-4 ">
+                  <div class="flex items-center mx-4">
                     <input
-                     @click="consistentRadio('currentSetting')"
+                      @click="consistentRadio('currentSetting')"
                       v-model="paymentSettingStatus"
                       type="radio"
                       value="currentSetting"
@@ -39,7 +41,7 @@
                     />
                     <label
                       for="current-setting"
-                      class="ml-3 text-sm font-medium  hover:text-indigo-600 transition"
+                      class="ml-3 text-sm font-medium hover:text-indigo-600 transition"
                     >
                       <i class="fas fa-cog mr-2 text-indigo-500"></i
                       >{{ $t("currentPaymentSetting") }}
@@ -49,7 +51,7 @@
                   <!-- Payment Setting History -->
                   <div class="flex items-center mx-4">
                     <input
-                    @click="consistentRadio('paymentSettingHistory')"
+                      @click="consistentRadio('paymentSettingHistory')"
                       v-model="paymentSettingStatus"
                       type="radio"
                       value="paymentSettingHistory"
@@ -65,7 +67,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="h-2 w-full bg-zigzag mt-5"></div>
+                <div class="h-1 w-full bg-zigzag mt-5"></div>
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <block-payment
@@ -75,8 +77,6 @@
                     v-else-if="paymentSettingStatus === 'paymentSettingHistory'"
                   />
                 </div>
-
-
               </div>
             </div>
           </div>
@@ -89,7 +89,7 @@
                   <!-- All Payments -->
                   <div class="flex items-center mx-4">
                     <input
-                    @click="consistentRadio('allPayments')"
+                      @click="consistentRadio('allPayments')"
                       v-model="paymentStatus"
                       type="radio"
                       value="allPayments"
@@ -106,9 +106,9 @@
                   </div>
 
                   <!-- Transferred Payments -->
-                  <div class="flex items-center mx-4 ">
+                  <div class="flex items-center mx-4">
                     <input
-                    @click="consistentRadio('newPayment')"
+                      @click="consistentRadio('newPayment')"
                       v-model="paymentStatus"
                       type="radio"
                       value="newPayment"
@@ -124,90 +124,45 @@
                     </label>
                   </div>
                 </div>
-                <div class="h-2 w-full bg-zigzag mt-5"></div>
+                <div class="h-1 w-full bg-zigzag mt-5"></div>
                 <!-- Conditional Components -->
                 <div class="mt-8">
-                  <all-payments
-                    v-if="paymentStatus === 'allPayments'"
-                  />
-                  <new-payment ref="childComp"
-                    v-else-if="
-                      paymentStatus=== 'newPayment'
-                    "
+                  <all-payments v-if="paymentStatus === 'allPayments'" />
+                  <new-payment
+                    ref="childComp"
+                    v-else-if="paymentStatus === 'newPayment'"
                   />
                 </div>
               </div>
             </div>
           </div>
+
           <div v-show="activeTab === 2" class="">
-            <div class="">
-              <!-- Report Options -->
-              <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
-                <div class="flex flex-col sm:flex-row gap-6">
-                  <!-- User Level Report -->
-                  <div class="flex items-center mx-4">
-                    <input
-                    @click="consistentRadio('allTransfers')"
-                       v-model="transferStatus"
-                      type="radio"
-                      value="alltransfer"
-                      id="all-transfer"
-                      class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
-                    />
-                    <label
-                      for=""
-                      class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
-                    >
-                      <i class="fas fa-user-alt mr-2 text-indigo-500"></i>All Transfers
-                    </label>
-                  </div>
-
-                  <!-- Org Level Report -->
-                  <div class="flex items-center mx-4">
-                    <input
-                     @click="consistentRadio('newTransfer')"
-                      v-model="transferStatus"
-                      type="radio"
-                      value="newTransfer"
-                      id="new-transfer"
-                      class="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300"
-                    />
-                    <label
-                      for=""
-                      class="ml-3 text-sm font-medium text-gray-700 hover:text-blue-600 transition"
-                    >
-                      <i class="fas fa-building mr-2 text-blue-500"></i>New Transfer
-                    </label>
-                  </div>
-                </div>
-
-                <div class="h-2 w-full bg-zigzag mt-5"></div>
-                <!-- Conditional Components -->
-                <div class="mt-8">
-                  <transfered-payments
-                    v-if="
-                      transferStatus === 'allTransfers'
-                    "
-                  />
-                  <credit-transfer
-                    v-else-if="transferStatus === 'newTransfer'"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-
-          <div v-show="activeTab === 3" class="">
             <div class="">
               <!-- Payment Options -->
               <div class="bg-white shadow-sm border border-gray-200 pt-6 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
+                  <div class="flex items-center mx-4">
+                    <input
+                     @click="consistentRadio('transferOffsets')"
+                      v-model="offsetPayments"
+                      type="radio"
+                      value="transferOffsets"
+                      id="transfer-offsets"
+                      class="h-5 w-5 text-pink-600 focus:ring-pink-500 border-gray-300"
+                    />
+                    <label
+                      for="transfer-offsets"
+                      class="ml-3 text-sm font-medium text-gray-700 hover:text-pink-600 transition"
+                    >
+                      <i class="fas fa-money-check-alt mr-2 text-pink-500"></i>
+                      Transfers
+                    </label>
+                  </div>
                   <!-- All Payments -->
                   <div class="flex items-center mx-4">
                     <input
-                    @click="consistentRadio('serviceOffsets')"
+                      @click="consistentRadio('serviceOffsets')"
                       v-model="offsetPayments"
                       type="radio"
                       value="serviceOffsets"
@@ -224,9 +179,9 @@
                   </div>
 
                   <!-- Transferred Payments -->
-                  <div class="flex items-center mx-4 ">
+                  <div class="flex items-center mx-4">
                     <input
-                    @click="consistentRadio('userOffsets')"
+                      @click="consistentRadio('userOffsets')"
                       v-model="offsetPayments"
                       type="radio"
                       value="userOffsets"
@@ -242,24 +197,24 @@
                     </label>
                   </div>
                 </div>
-                <div class="h-2 w-full bg-zigzag mt-5"></div>
+                <div class="h-1 w-full bg-zigzag mt-5"></div>
 
                 <!-- Conditional Components -->
                 <div class="mt-8">
-                  <service-offset
-                    v-if="offsetPayments === 'serviceOffsets'"
+                  <transfered-payments
+                    v-if="offsetPayments === 'transferOffsets'"
                   />
-                  <user-offset ref="childComp"
-                    v-else-if="
-                      offsetPayments=== 'userOffsets'"
-                    
+                  <service-offset v-if="offsetPayments === 'serviceOffsets'" />
+                  <user-offset
+                    ref="childComp"
+                    v-else-if="offsetPayments === 'userOffsets'"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <div v-show="activeTab === 4" class="">
+          <div v-show="activeTab === 3" class="">
             <div class="">
               <!-- Report Options -->
               <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
@@ -267,7 +222,7 @@
                   <!-- User Level Report -->
                   <div class="flex items-center mx-4">
                     <input
-                    @click="consistentRadio('userLevelReport')"
+                      @click="consistentRadio('userLevelReport')"
                       v-model="paymentReportStatus"
                       type="radio"
                       value="userLevelReport"
@@ -286,7 +241,7 @@
                   <!-- Org Level Report -->
                   <div class="flex items-center mx-4">
                     <input
-                     @click="consistentRadio('orgLevelReport')"
+                      @click="consistentRadio('orgLevelReport')"
                       v-model="paymentReportStatus"
                       type="radio"
                       value="orgLevelReport"
@@ -303,7 +258,7 @@
                   </div>
                 </div>
 
-              <div class="h-2 w-full bg-zigzag mt-5"></div>
+                <div class="h-1 w-full bg-zigzag mt-5"></div>
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <all-payment-report
@@ -316,7 +271,6 @@
               </div>
             </div>
           </div>
-      
         </div>
       </div>
     </div>
@@ -331,13 +285,13 @@ import paymentSettingHistory from "./paymentSetting/paymentSettingHistory.vue";
 import allPayments from "./allPayments/allPayments.vue";
 import transferedPayments from "./allPayments/transferedPayments.vue";
 import creditTransfer from "./newPayment/creditTransfer.vue";
-import userOffset from './offsets/userOffset.vue'
-import serviceOffset from './offsets/serviceOffset.vue'
+import userOffset from "./offsets/userOffset.vue";
+import serviceOffset from "./offsets/serviceOffset.vue";
 import axios from "axios";
 export default {
   components: {
     blockPayment,
-    userOffset ,
+    userOffset,
     newPayment,
     allPaymentReport,
     confirmedPaymentReport,
@@ -352,23 +306,20 @@ export default {
       icons: [
         "fa-solid fa-cogs", // Payment Setting
         "fa-solid fa-money-bill", // All Payments
-        "fa-solid fa-exchange-alt", // All Transfers
         "fa-solid fa-balance-scale", // Offsets
         "fa-solid fa-chart-line", // Report
       ],
-      transferStatus:"allTransfers",
       paymentReportStatus: "userLevelReport",
       paymentStatus: "allPayments",
       paymentSettingStatus: "currentSetting",
+      offsetPayments: "transferOffsets",
 
       activeTab: 0,
       tabs: [
         "Payment Setting",
         "All Payments",
-        "Payment Transfer",
-        "Offsets",
+        "Transfer and Offsets",
         "Payment Report",
-  
       ],
       clientId: "",
       userCode: "",
@@ -386,114 +337,97 @@ export default {
   mounted() {
     console.log("active tab here", this.$route.query.activeTab);
 
-
-
     if (this.$route.query.activeTab == 0) {
       this.activeTab = 0;
 
-      if(this.$route.query.radioStatus== "paymentSettingHistory"){
+      if (this.$route.query.radioStatus == "paymentSettingHistory") {
         this.paymentSettingStatus = "paymentSettingHistory";
-      }else{
+      } else {
         this.paymentSettingStatus = "currentSetting";
       }
-
     }
-
-
 
     if (this.$route.query.activeTab == 1) {
       //alert("itcomes from unpaid false")
       // alert(this.$route.query.usercode)
-     // alert("active status",1)
+      // alert("active status",1)
       this.activeTab = 1;
-       //alert("this.$route.query.radioStatus")
-      if(this.$route.query.radioStatus== "newPayment"){
+      //alert("this.$route.query.radioStatus")
+      if (this.$route.query.radioStatus == "newPayment") {
         //alert("in new")
         this.paymentStatus = "newPayment";
-      }else{
-       // alert("in all")
+      } else {
+        // alert("in all")
         this.paymentStatus = "allPayments";
         if (this.$route.query.userSelected) {
-        this.$refs.childComp.navigateToPayment(
-          this.$route.query.userCode,
-          this.$route.query.fullName
-        );
+          this.$refs.childComp.navigateToPayment(
+            this.$route.query.userCode,
+            this.$route.query.fullName
+          );
         }
       }
-      
-
     }
 
     if (this.$route.query.activeTab == 2) {
       //alert(this.$route.query.radioStatus)
       this.activeTab = 2;
-      if(this.$route.query.radioStatus== "newTransfer"){
-        this.transferStatus = "newTransfer";
-      }else{
+      if (this.$route.query.radioStatus == "transferOffsets") {
+        this.offsetPayments = "transferOffsets";
+      } else if (this.$route.query.radioStatus == "serviceOffsets") {
         //alert("in else")
-        this.transferStatus = "allTransfers";
-
-      }
-    }
-    if (this.$route.query.activeTab == 3) {
-      this.activeTab = 3;
-      if (this.$route.query.radioStatus== "serviceOffsets") {
         this.offsetPayments = "serviceOffsets";
       } else {
         this.offsetPayments = "userOffsets";
       }
     }
 
-    if (this.$route.query.activeTab == 4) {
-      this.activeTab = 4;
-      if (this.$route.query.radioStatus== "orgLevelReport") {
+    if (this.$route.query.activeTab == 3) {
+      this.activeTab = 3;
+      if (this.$route.query.radioStatus == "orgLevelReport") {
         this.paymentReportStatus = "orgLevelReport";
       } else {
         this.paymentReportStatus = "userLevelReport";
       }
     }
-    
-   
   },
   methods: {
-    consistentRadio(status){
-     
-    if(this.activeTab==0){
-      this.paymentSettingStatus=status;
-    }
+    consistentRadio(status) {
+      if (this.activeTab == 0) {
+        this.paymentSettingStatus = status;
+      }
 
-    if(this.activeTab==1){
-      this.paymentStatus=status; 
-    }
+      if (this.activeTab == 1) {
+        this.paymentStatus = status;
+      }
 
-
-    if(this.activeTab==2){
-     // alert(this.activeTab);
-      this.transferStatus=status;
-    }
-    if(this.activeTab==3){
-      this.paymentReportStatus=status;
-    }
-    this.$router.push({
-          path: "/admindashboard/payments1",
-          query:{
-            activeTab:this.activeTab,
-            radioStatus:status,
-          }
-        });
+      if (this.activeTab == 2) {
+       // alert("hi")
+        // alert(this.activeTab);
+        this.offsetPayments = status;
+      }
+      if (this.activeTab == 3) {
+        this.paymentReportStatus = status;
+      }
+      this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: this.activeTab,
+          radioStatus: status,
+        },
+      });
     },
 
     activateTab(index) {
-      this.activeTab=index;
+      this.activeTab = index;
       this.$router.push({
-          path: "/admindashboard/payments1",
-          query:{
-            activeTab:index,
-          }
-        });
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: index,
+        },
+      });
       this.activeTab = index;
     },
-   
+
     fetchClientData(clientId) {
       const userData = {
         clientId: clientId,

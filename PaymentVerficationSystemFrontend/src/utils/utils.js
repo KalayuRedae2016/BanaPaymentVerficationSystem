@@ -323,3 +323,137 @@ export function validateField(formName, fieldName, value, formSchema) {
       .toString()
       .padStart(2, "0")}`;
   }
+
+  export function getPdfBlobUrl(base64Data) {
+    const binaryData = atob(base64Data);  // Decode base64 string to binary data
+    const arrayBuffer = new ArrayBuffer(binaryData.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < binaryData.length; i++) {
+      uint8Array[i] = binaryData.charCodeAt(i);
+    }
+
+    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
+    return URL.createObjectURL(blob);
+  }
+  //
+
+  export function base64ToFile(base64, fileName, mimeType) {
+    // Decode base64 to byte string
+    const byteString = atob(base64);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+
+    // Fill the ArrayBuffer with byte data
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+
+    // Create a Blob and return it as a File
+    const blob = new Blob([ab], { type: mimeType });
+    return new File([blob], fileName, { type: mimeType });
+  }
+
+
+ export  function processFilesToAdd(fileList) {
+    return new Promise((resolve) => {
+      const processedFiles = [];
+      let processedCount = 0;
+  
+      fileList.forEach((file) => {
+        const reader = new FileReader();
+  
+        reader.onload = () => {
+          processedFiles.push({
+            filename: file.name,
+            fileType: file.type,
+            size: file.size,
+            description: "",
+            fileData: reader.result.split(",")[1], // Base64-encoded data
+            preview: reader.result.split(",")[1], // Base64 preview (if needed)
+            uploadedDate: "Not Uploaded/Not Saved",
+          });
+  
+          processedCount += 1;
+  
+          // Resolve when all files are processed
+          if (processedCount === fileList.length) {
+            resolve(processedFiles);
+          }
+        };
+  
+        // Read the file as Base64
+        reader.readAsDataURL(file);
+      });
+  
+      // Handle empty file list
+      if (fileList.length === 0) {
+        resolve(processedFiles);
+      }
+    });
+  }
+
+ export function triggerFileInput(ref) {
+  console.log("triggerFileInput")
+    if (ref && ref.click) {
+      ref.click();
+    }
+  }
+
+  export function handleFileInput(event, method, callback) {
+    console.log("handle")
+    let files = []; // Initialize an empty array for files
+    if (method === "input") {
+      files = Array.from(event.target.files); // Use `files` property for input
+    } else if (method === "drop") {
+      files = Array.from(event.dataTransfer.files); // Use `files` property for drag and drop
+    }
+  
+    if (typeof callback === "function") {
+      callback(files); // Pass the files to the callback function
+    }
+  }
+  
+
+  export function toggleDragState(context, isDragging) {
+    console.log("toggleDragState")
+    if (context) {
+      context.isDragging = isDragging;
+    }
+  }
+
+  export function removeAttachment(filesArray, index) {
+    console.log("removeAttachment")
+    if (Array.isArray(filesArray) && index >= 0 && index < filesArray.length) {
+      filesArray.splice(index, 1);
+    }
+  }
+
+
+  export function handleAnyFileInput(refName) {
+    const fileInput = this.$refs[refName];
+    if (fileInput && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+
+      // Log details about the file
+      console.log("Selected file:", file);
+      console.log("File type:", file.type);
+      console.log("File size:", file.size);
+      console.log("File name:", file.name);
+
+      // Validate file type
+      if (file.type.startsWith("image/")) {
+        console.log("This is a valid image file.");
+      } else if (file.type.startsWith("application/pdf")) {
+        console.log("This is a valid PDF file.");
+      } else {
+        console.log("Unsupported file type.");
+      }
+
+      // Return the file object for further use
+      return file;
+    } else {
+      console.error("No file selected.");
+      return null;
+    }
+  }

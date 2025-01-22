@@ -126,7 +126,22 @@
               </a>
             </li>
 
-
+            <li
+              v-if="role === 'Admin' || role==='SuperAdmin'"
+              @click="setActive('logs')"
+              class=" items-center bg-white hover:bg-gray-100 transition"
+              :class="
+                activeItem === 'logs' ? 'border-r-4 border-indigo-600' : ''
+              "
+            >
+              <a
+                class="ml-4 flex items-center text-blue-500 py-3 font-bold"
+                href="#"
+              >
+                <i class="fas fa-id-card mr-3 text-teal-600"></i>
+                <span>{{ $t("Logs") }}</span>
+              </a>
+            </li>
             <li
               v-if="role === 'User'"
               @click="setActive('userDashboard')"
@@ -297,7 +312,12 @@ export default {
           activeTab: 0,
         },
       });
-      } else if (item === "idCard") {
+      } else if(item === "logs") {
+      //alert("logs")
+
+      this.$router.push("/admindashboard/logs");
+      }
+      else if (item === "idCard") {
         this.$router.push("/admindashboard/id-card");
       } else if (item === "message") {
         this.$router.push("/admindashboard/send-email");
@@ -347,12 +367,6 @@ export default {
       });
     },
 
-
-
-   
-    
-
- 
     setScreenSize() {
       const screenWidth = window.innerWidth;
       if (screenWidth < 640) {

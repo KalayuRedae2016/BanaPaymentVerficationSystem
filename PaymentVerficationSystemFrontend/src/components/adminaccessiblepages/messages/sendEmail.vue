@@ -231,7 +231,7 @@ export default {
         console.log("response active users are", response);
         this.users = response.users;
         this.searchedusers = this.users;
-        alert("hh")
+   
       })
     }catch(error) {
         console.log("error", error);

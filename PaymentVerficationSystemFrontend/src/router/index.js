@@ -51,6 +51,7 @@ import parentModal from "../components/adminaccessiblepages/commonFiles/parentMo
 import empty from "../components/adminaccessiblepages/commonFiles/empty.vue";
 import emptyCompaney from "../components/adminaccessiblepages/commonFiles/emptyCompany.vue";
 import emptyClient from "../components/adminaccessiblepages/commonFiles/emptyClient.vue";
+import Logs from "../components/adminaccessiblepages/logs/logs.vue";
 
 // User components
 //import userdashboard from "../components/UserAccessiblepages/userdashboard/Userdashboard.vue";
@@ -107,6 +108,7 @@ const routes = [
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
       { path: "", component: adminDashboard },
       { path: "res-dash", component: adminDashboard },
+      { path: "logs", component: Logs },
       { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },
       { path: "display-companey", name: "display-companey", component: displayCompaney },
       { path: "edit-companey", name: "edit-companey", component: editCompaney },
