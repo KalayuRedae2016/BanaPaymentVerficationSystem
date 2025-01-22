@@ -2,9 +2,7 @@
   <div>
     <Toast ref="toast" />
     <div class="" style="">
-      <div
-        class="flex items-center justify-between p-3 bg-white border-b border-blue-500"
-      >
+      <div class="flex items-center justify-between p-3 bg-white border-b border-blue-500">
         <div class="flex items-center space-x-6">
           <h1 class="text-xl text-blue-500 font-bold">
             {{ $t("registerClient") }}
@@ -13,59 +11,35 @@
       </div>
 
       <div class="flex flex-row space-x-6 mt-5 ml-5">
-        <label
-          for="file-upload"
-          class="px-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 rounded-lg"
-        >
+        <label for="file-upload"
+          class="px-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 rounded-lg">
           <span> {{ $t("Import users(excel)") }}</span>
-          <input
-            id="file-upload"
-            type="file"
-            class="hidden"
-            ref="fileInputExcel"
-            @change="handleFileInput"
-          />
+          <input id="file-upload" type="file" class="hidden" ref="fileInputExcel" 
+          @change="exelFile = $handleAnyFileInput('fileInputExcel'); this.importExelFilePressed = true;" />
         </label>
-        <a
-          href="#"
-          @click="viewClients()"
-          class="text-blue-500 font-medium hover:underline"
-        >
+        <a href="#" @click="viewClients()" class="text-blue-500 font-medium hover:underline">
           {{ $t("viewClients") }}
         </a>
       </div>
 
       <div
-        class="mt-3 flex flex-col mx-4 space-y-3 md:space-y-0 md:flex-row md:space-x-5 border border-gray-300 p-3 rounded-lg"
-      >
+        class="mt-3 flex flex-col mx-4 space-y-3 md:space-y-0 md:flex-row md:space-x-5 border border-gray-300 p-3 rounded-lg">
         <div class="w-full space-y-3 md:w-1/2">
           <div class="w-full">
             <label class="custom-label" for="firstName">
               {{ $t("firstName") }}
               <span class="text-red-500 ml-1">*</span>
             </label>
-            <input
-              id="firstName"
-              type="text"
-              class="custom-input text-xs"
-              :placeholder="$t('firstName')"
-              style="padding-left: 16px"
-              v-model="firstName"
-            />
+            <input id="firstName" type="text" class="custom-input text-xs" :placeholder="$t('firstName')"
+              style="padding-left: 16px" v-model="firstName" />
           </div>
           <div class="w-full">
             <label class="custom-label" for="middleName">
               {{ $t("middleName") }}
               <span class="text-red-500 ml-1">*</span>
             </label>
-            <input
-              id="midleName"
-              type="text"
-              class="custom-input text-xs"
-              :placeholder="$t('middleName')"
-              style="padding-left: 16px"
-              v-model="middleName"
-            />
+            <input id="midleName" type="text" class="custom-input text-xs" :placeholder="$t('middleName')"
+              style="padding-left: 16px" v-model="middleName" />
           </div>
 
           <div class="w-full">
@@ -73,28 +47,16 @@
               {{ $t("lastName") }}
               <span class="text-red-500 ml-1">*</span>
             </label>
-            <input
-              id="lastName"
-              type="text"
-              class="custom-input text-xs"
-              :placeholder="$t('lastName')"
-              style="padding-left: 16px"
-              v-model="lastName"
-            />
-          </div>
+            <input id="lastName" type="text" class="custom-input text-xs" :placeholder="$t('lastName')"
+              style="padding-left: 16px" v-model="lastName" />
+          </div>exelFile
           <div class="w-full">
             <label class="custom-label" for="lastName">
               <span class="text-cyan-500"> {{ $t("tigrignaFullName") }}</span>
               <span class="text-red-500 ml-1">*</span>
             </label>
-            <input
-              id="Full Name"
-              type="text"
-              class="custom-input text-xs"
-              :placeholder="$t('tigrignaFullName')"
-              style="padding-left: 16px"
-              v-model="tigrignaFullName"
-            />
+            <input id="Full Name" type="text" class="custom-input text-xs" :placeholder="$t('tigrignaFullName')"
+              style="padding-left: 16px" v-model="tigrignaFullName" />
           </div>
 
           <div class="w-full">
@@ -102,12 +64,7 @@
               {{ $t("gender") }}
               <span class="text-red-500">*</span>
             </label>
-            <select
-              id="gender"
-              class="custom-select text-xs"
-              style="padding-left: 16px"
-              v-model="gender"
-            >
+            <select id="gender" class="custom-select text-xs" style="padding-left: 16px" v-model="gender">
               <option value="" disabled selected>{{ $t("gender") }}</option>
               <option value="Male">{{ $t("male") }}</option>
               <option value="Female">{{ $t("female") }}</option>
@@ -115,15 +72,8 @@
           </div>
           <div class="w-full">
             <label class="custom-label"> {{ $t("age") }} <span>*</span></label>
-            <input
-              id="age"
-              type="number"
-              class="custom-input text-xs"
-              required
-              :placeholder="$t('age')"
-              style="padding-left: 16px"
-              v-model="age"
-            />
+            <input id="age" type="number" class="custom-input text-xs" required :placeholder="$t('age')"
+              style="padding-left: 16px" v-model="age" />
           </div>
         </div>
 
@@ -133,28 +83,16 @@
               {{ $t("address") }}
               <span class="text-red-500 ml-1">*</span>
             </label>
-            <input
-              id="address"
-              type="text"
-              class="custom-input text-xs"
-              placeholder="Address"
-              style="padding-left: 16px"
-              v-model="address"
-            />
+            <input id="address" type="text" class="custom-input text-xs" placeholder="Address"
+              style="padding-left: 16px" v-model="address" />
           </div>
           <div class="w-full">
             <label class="custom-label" for="email">
               {{ $t("email") }}
               <span class="text-red-500 ml-1">*</span>
             </label>
-            <input
-              id="email"
-              type="text"
-              class="custom-input text-xs"
-              :placeholder="$t('email')"
-              style="padding-left: 16px"
-              v-model="email"
-            />
+            <input id="email" type="text" class="custom-input text-xs" :placeholder="$t('email')"
+              style="padding-left: 16px" v-model="email" />
             <p v-if="emailIsRequired" class="text-red-500 text-sm mt-1 ml-10">
               {{ $t("emailRequired") }}
             </p>
@@ -166,22 +104,12 @@
             </label>
             <div class="flex flex-row">
               <select v-model="phoneNumberCode" class="custom-select w-1/4">
-                <option
-                  v-for="country in countries"
-                  :key="country.code"
-                  :value="country.code"
-                >
+                <option v-for="country in countries" :key="country.code" :value="country.code">
                   {{ country.code }} ({{ country.name }})
                 </option>
               </select>
-              <input
-                type="text"
-                class="rounded-sm custom-input h-10 text-xs ml-2 w-3/4"
-                required
-                :placeholder="$t('phoneNumber')"
-                style="padding-left: 16px"
-                v-model="phoneNumber"
-              />
+              <input type="text" class="rounded-sm custom-input h-10 text-xs ml-2 w-3/4" required
+                :placeholder="$t('phoneNumber')" style="padding-left: 16px" v-model="phoneNumber" />
             </div>
           </div>
 
@@ -190,13 +118,8 @@
               {{ $t("chooseProfileImage") }}
               <span class="text-red-500 ml-1"></span>
             </label>
-            <input
-              class="custom-input text-xs"
-              type="file"
-              ref="imageFileInput"
-              accept="image/*"
-              @change="handleImageInput"
-            />
+            <input class="custom-input text-xs" type="file" ref="imageFileInput" accept="image/*"
+            @change="imageFile = $handleAnyFileInput('imageFileInput')"/>
           </div>
           <div class="w-full" v-if="role === 'SuperAdmin'">
             <label class="custom-label"> {{ $t("Role") }} <span>*</span></label>
@@ -210,93 +133,59 @@
       </div>
 
       <div class="mx-5 mt-5">
-  <!-- Drag and Drop Area -->
-  <div
-    class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
-    :class="{ 'border-blue-400 bg-blue-50': isDragging }"
-    @dragover.prevent="onDragOver"
-    @dragleave="onDragLeave"
-    @drop.prevent="onDrop"
-  >
-    <p v-if="files.length === 0" class="text-center">
-      Drag & drop images or PDFs here, or click to select
-    </p>
-    <input
-      type="file"
-      accept="image/*,application/pdf"
-      class="hidden"
-      ref="fileInput"
-      multiple
-      @change="onFileChange"
-    />
-    <button
-      type="button"
-      class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      @click="selectFile"
-    >
-      Browse Files
-    </button>
-    <p class="text-blue-500">Add User Attachment (either Image or PDF)</p>
-  </div>
+        <div v-for="(attachment, index) in attachmentsData" :key="index" class="attachment-item">
+          <!-- If the attachment is an image -->
+          <div class="border-b border-gray-300 shadow-lg mb-3" v-if="attachment.fileType.startsWith('image/')">
+            <img :src="'data:image/jpeg;base64,' + attachment.fileData" :alt="attachment.name"
+              class="attachment-image m-4 w-1/2 " style=" height: auto;" />
+            <div class="m-4 text-blue-800">
 
-  <!-- File List -->
-  <div v-if="files.length > 0" class="mt-4">
-    <p class="font-semibold text-blue-500">Chosen Files:</p>
-    <ul class="space-y-4 mt-2">
-      <li
-        v-for="(file, index) in files"
-        :key="index"
-        class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-gray-300 rounded"
-      >
-        <!-- For Image Files -->
-        <div v-if="file.preview && file.preview.startsWith('data:image/')" class="w-16 h-16">
-          <img
-            :src="file.preview"
-            alt="Image Preview"
-            class="object-cover w-full h-full rounded"
-          />
-        </div>
-
-        <!-- For PDF Files (PDF Icon with Download Link) -->
-        <div v-else-if="file.preview && file.preview === 'fa fa-file-pdf-o'" class="w-16 h-16 flex items-center justify-center text-sm text-gray-600 bg-gray-100 rounded">
-          <i :class="file.preview" class="text-red-600 text-3xl"></i>
-        </div>
-
-        <!-- File Details -->
-        <div class="flex-1">
-          <p class="text-sm font-medium text-gray-800">{{ file.name }}</p>
-          <p class="text-xs text-gray-500">{{ formatSize(file.size) }}</p>
-
-          <!-- For PDF Files, add a link to preview or download the PDF -->
-          <div v-if="file.pdfUrl" class="mt-2">
-            <a
-              :href="file.pdfUrl"
-              target="_blank"
-              class="text-blue-500 text-sm"
-            >
-              View PDF
-            </a>
+              <p>Type: {{ attachment.fileType }}</p>
+              <p>Name: {{ attachment.filename }}</p>
+              <p>Uploaded Date: {{ attachment.uploadedDate }}</p>
+              <div class="flex flex-row space-x-4 my-4 ">
+                <a href="#" @click="$removeAttachment(attachmentsData, index)" class="text-blue-500">Remove</a>
+              </div>
+            </div>
           </div>
 
-          <!-- Optional description input for the user -->
-          <input
-            v-model="file.description"
-            type="text"
-            placeholder="Enter description"
-            class="custom-input"
-          />
+          <!-- If the attachment is a PDF -->
+          <div class="border-b border-gray-300 shadow-lg mb-3" v-if="attachment.fileType === 'application/pdf'">
+            <iframe :src="'data:application/pdf;base64,' + attachment.fileData" class="attachment-pdf m-4 scroll-hidden"
+              frameborder="0" style="width: 100%; height: 100px;"></iframe>
+            <div class="m-4 text-blue-800">
+
+              <p>Type: {{ attachment.fileType }}</p>
+              <p>Name: {{ attachment.filename }}</p>
+              <p>Uploaded Date: {{ attachment.uploadedDate }}</p>
+
+
+              <div class="flex flex-row space-x-4 my-4 ">
+                <a href="#" @click="$removeAttachment(attachmentsData, index)" class="text-blue-500">Remove</a>
+                <a :href="this.$getPdfBlobUrl(attachment.fileData)" target="_blank" class="text-blue-500">
+                  View Pdf
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <button
-          class="text-red-500 hover:text-red-600"
-          @click="removeFile(index)"
-        >
-          <i class="fa fa-x text-xs mt-10"></i>
-        </button>
-      </li>
-    </ul>
-  </div>
-</div>
+        <div
+          class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
+          :class="{ 'border-blue-400 bg-blue-50': isDragging }" @dragover.prevent="$toggleDragState(this, true)"
+          @dragleave="$toggleDragState(this, false)" @drop.prevent="$handleFileInput($event, 'drop', addFiles)">
+          <p v-if="attachmentsData.length === 0" class="text-center">
+            Drag & drop images or PDFs here, or click to select
+          </p>
+          <input type="file" accept="image/*,application/pdf" class="hidden" ref="fileInput" multiple
+            @change="$handleFileInput($event, 'input', addFiles)" />
+          <button type="button" class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            @click="$triggerFileInput($refs.fileInput)">
+            Browse Files
+          </button>
+          <p class="text-blue-500">Add User Attachment (either Image or PDF)</p>
+        </div>
+      </div>
 
 
 
@@ -342,9 +231,7 @@
 
     <div v-if="importExelFilePressed">
       <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
+        <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
           <!-- Modal Content -->
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="fixed inset-0 flex items-center justify-center z-50">
@@ -354,27 +241,15 @@
                     {{ $t("doYouWantToImportFile") }}
                   </p>
 
-                  <svg
-                    @click="importExelFilePressed = !importExelFilePressed"
-                    class="w-10 h-10 text-red-500"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
+                  <svg @click="importExelFilePressed = !importExelFilePressed" class="w-10 h-10 text-red-500"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
                   </svg>
                 </div>
 
-                <button
-                  @click="importClientsFromExel()"
-                  class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500"
-                >
+                <button @click="importClientsFromExel()"
+                  class="mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-green-500">
                   {{ $t("Yes") }}
                 </button>
               </div>
@@ -386,36 +261,22 @@
     </div>
     <div v-if="showSuccess">
       <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
+        <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
           <!-- Modal Content -->
           <div class="bg-white rounded-lg p-6 border border-cyan-500">
             <div class="fixed inset-0 flex items-center justify-center z-50">
               <div class="bg-white rounded-lg shadow-lg p-8 w-96">
                 <div class="flex items-center mb-4 ml-32">
-                  <svg
-                    class="w-8 h-8 text-green-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M5 13l4 4L19 7"
-                    ></path>
+                  <svg class="w-8 h-8 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                   </svg>
                   <h2 class="text-md text-green-800">{{ $t("success") }}</h2>
                 </div>
                 <p class="text-blue-800 text-md ml-8">
                   {{ successMessage }}
                 </p>
-                <button
-                  @click="showSuccess = false"
-                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
+                <button @click="showSuccess = false"
+                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
                   {{ $t("ok") }}
                 </button>
               </div>
@@ -425,29 +286,17 @@
         </div>
       </transition>
     </div>
-
     <div v-if="showError">
       <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
+        <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
           <!-- Modal Content -->
           <div class="bg-white rounded-lg p-6 border border-red-500">
             <div class="fixed inset-0 flex items-center justify-center z-50">
               <div class="bg-white rounded-lg shadow-lg p-8 w-96">
                 <div class="flex items-center justify-center mb-4">
-                  <svg
-                    class="w-8 h-8 text-red-500 mr-2"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
+                  <svg class="w-8 h-8 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
                   </svg>
                   <h2 class="text-sm font-bold text-gray-800">
                     {{ $t("error") }}
@@ -456,10 +305,8 @@
                 <p class="text-gray-600 text-sm">
                   {{ errorMessage }}
                 </p>
-                <button
-                  @click="showError = false"
-                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                >
+                <button @click="showError = false"
+                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
                   {{ $t("ok") }}
                 </button>
               </div>
@@ -480,9 +327,10 @@ export default {
   },
   data() {
     return {
-      files: [], // Array to store uploaded files and metadata
-      isDragging: false, // To style drag area on drag events
-
+      attachmentsData: [], // Array to store uploaded files and metadata
+      isDragging: false,
+      
+      // To style drag area on drag events
       role: "",
       userRole: "User",
       errorMessage: "",
@@ -608,163 +456,15 @@ export default {
     // });
     this.role = localStorage.getItem("role");
   },
+
+
   methods: {
-    //
 
-    // Format file size
-    formatSize(size) {
-      if (size < 1024) return `${size} B`;
-      else if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`;
-      else return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+
+    async addFiles(fileList) {
+      const newFiles = await this.$processFilesToAdd(fileList); // Process the files
+      this.attachmentsData = [...this.attachmentsData, ...newFiles]; // Merge old and new files
     },
-    // Trigger file input dialog
-    selectFile() {
-      this.$refs.fileInput.click();
-    },
-    // Handle file change event
-    onFileChange(event) {
-      const selectedFiles = Array.from(event.target.files);
-      this.addFiles(selectedFiles);
-    },
-
-    addFiles(fileList) {
-  fileList.forEach((file) => {
-    const reader = new FileReader();
-
-    // Handle images (base64 encoding to preview)
-    if (file.type.startsWith("image/")) {
-      reader.onload = () => {
-        this.files.push({
-          file,
-          name: file.name,
-          size: file.size,
-          description: "",
-          preview: reader.result, // Base64 preview for images
-        });
-      };
-      reader.readAsDataURL(file);  // Read the image file as base64
-    }
-    // Handle PDFs and other files directly without base64 encoding
-    else if (file.type === "application/pdf") {
-      this.files.push({
-        file,  // Add the original file to the array for PDFs
-        name: file.name,
-        size: file.size,
-        description: "",
-        preview: null,  // No preview for PDF, as we are sending the actual file
-      });
-    } else {
-      // Handle other file types if needed
-      this.files.push({
-        file,  // Add the original file
-        name: file.name,
-        size: file.size,
-        description: "",
-        preview: null,  // No preview for non-image, non-PDF files
-      });
-    }
-  });
-}
-,
-
-
-
-
-
-
-
-
-    // Handle drag over
-    onDragOver() {
-      this.isDragging = true;
-    },
-
-    // Handle drag leave
-    onDragLeave() {
-      this.isDragging = false;
-    },
-
-    // Handle file drop
-    onDrop(event) {
-      this.isDragging = false;
-      const droppedFiles = event.dataTransfer.files;
-      this.addFiles(Array.from(droppedFiles));
-    },
-
-    // Remove a file from the list
-    removeFile(index) {
-      this.files.splice(index, 1);
-    },
-
-    // Upload files to the server
-    async uploadFiles() {
-      if (!this.files.length) {
-        alert("No files to upload!");
-        return;
-      }
-
-      const formData = new FormData();
-      // Append JSON stringified files data
-      formData.append("filesData", JSON.stringify(this.files));
-      alert("Uploading files");
-      // try {
-      //   const response = await axios.post("/upload", formData, {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   });
-      //   console.log("Upload successful:", response.data);
-      //   alert("Files uploaded successfully!");
-      //   this.files = []; // Clear the list on successful upload
-      // } catch (error) {
-      //   console.error("Upload failed:", error);
-      //   alert("Error uploading files!");
-      // }
-    },
-
-    // Check if the file is an image
-    isImage(file) {
-      return file.preview !== null;
-    },
-
-    ///
-
-    base64ToFile(base64, fileName, mimeType) {
-  // For image files, decode base64 to a byte string
-  if (mimeType.startsWith('image/')) {
-    const byteString = atob(base64.split(',')[1]);
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    // Create a Blob and return it as a File
-    const blob = new Blob([ab], { type: mimeType });
-    return new File([blob], fileName, { type: mimeType });
-  }
-  
-  // For PDF and other file types, return the file as is (without base64 encoding)
-  if (mimeType === 'application/pdf') {
-    const byteString = atob(base64.split(',')[1]); // Decode base64 to byte string
-    const ab = new ArrayBuffer(byteString.length);
-    const ia = new Uint8Array(ab);
-    for (let i = 0; i < byteString.length; i++) {
-      ia[i] = byteString.charCodeAt(i);
-    }
-
-    // Create a Blob and return it as a File
-    const blob = new Blob([ab], { type: mimeType });
-    return new File([blob], fileName, { type: mimeType });
-  }
-  
-  // For other files, just return them as is
-  return new File([base64], fileName, { type: mimeType });
-}
-
-,
-
     async register() {
       //alert("hadgo")
       this.showErrorMessage = false;
@@ -826,64 +526,12 @@ export default {
         fullPhoneNumber
       );
 
-      if (!this.files.length) {
-        alert("No files to upload!");
-        return;
-      }
+      const fileArray = this.attachmentsData.map((file) => {
+        console.log(file.fileData, file.filename, file.fileType);
+        return this.$base64ToFile(file.fileData, file.filename, file.fileType);
+      });
 
-      if (!this.files.length) {
-        alert("No files to upload!");
-        return;
-      }else{
-        console.log("and the length this.files", this.files.length, this.files);
-      }
-
-
-
-      //console.log("and the length this.files", this.files.length, this.files);
-
-  console.log("this.files to see pdf type",this.files)
- 
-// this.files.map((file)=>{
-//   console.log("File Type",file.type);
-// })
-
-
-  const fileArray = this.files.map((file) => {
-  const { preview, name, type } = file;
-  console.log("name and file type",name,file.file.type)
-
-  // Check if preview is defined and contains a valid MIME type
-  if (preview && preview.includes("data:")) {
-
-    // Decode base64 to a byte string
-    const mimeType = preview.split(";")[0].split(":")[1]; // Extract MIME type
-
-    // If the file is an image, convert it appropriately to base64
-    
-    if (mimeType.startsWith('image/')) {
-      return this.base64ToFile(preview, name, mimeType);
-    }
-    
-    // If the file is a PDF, just send it as is without base64 encoding
-    if (mimeType === 'application/pdf') {
-      return new File([file], name, { type: mimeType });
-    }
-
-
-  }
-
-  // If preview is not defined or not base64-encoded, handle the file as is
-  return new File([file.file], name, { type: file.file.type });
-
-});
-
-
-
-
-    console.log("file array is the atachements with no description are ",fileArray.length,fileArray);
-     console.log("the images ",this.imageFile)
-
+      console.log("fileArray", fileArray);
 
       const formData = new FormData();
       formData.append("firstName", this.firstName);
@@ -894,22 +542,17 @@ export default {
       formData.append("address", this.address);
       formData.append("email", this.email);
       formData.append("phoneNumber", fullPhoneNumber);
-
       formData.append("profileImage", this.imageFile);
-
-
-      formData.append("profileImage", this.imageFile);
-
       formData.append("role", this.userRole);
       formData.append("tigrignaName", this.tigrignaFullName);
       // formData.append("attachements", JSON.stringify(this.files));
 
 
-    //  formData.append("attachments", fileArray);
+      //  formData.append("attachments", fileArray);
 
       fileArray.forEach(file => {
         formData.append('attachments', file); // Attach files to the form data
-      });  
+      });
 
 
       formData.append("attachements", fileArray);
@@ -929,7 +572,7 @@ export default {
         ).then((response) => {
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
-           //this.$reloadPage();
+            this.$reloadPage();
           }
         });
       } catch (error) {
@@ -951,13 +594,11 @@ export default {
     viewClients() {
       this.$router.push("/admindashboard/clients");
     },
-
     importClientsFromExel() {
       this.importExelFilePressed = false;
       console.log("This.exel", this.exelFile);
       const formData = new FormData();
       formData.append("file", this.exelFile);
-
       if (this.exelFile !== null) {
         try {
           this.$apiPost("/api/v1/users/importUsers", formData).then(
@@ -974,44 +615,6 @@ export default {
         }
       }
     },
-
-    handleImageInput() {
-       //alert("fileinput");
-      const fileInput = this.$refs.imageFileInput;
-         console.log("fileInput", fileInput);
-      if (fileInput && fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        this.imageFile = file;
-      }
-
-      console.log("Selected file:", this.imageFile);
-      console.log("File type:", this.imageFile.type); // This should be 'image/jpeg', 'image/png', etc.
-      console.log("File size:", this.imageFile.size); // Check size to ensure it's within acceptable limits
-      console.log("File name:", this.imageFile.name); // Check the name of the file
-
-      if (!this.imageFile.type.startsWith("image/")) {
-        console.log("Not a valid image file.");
-      } else {
-        console.log("Image is valid.");
-      }
-    },
-
-
-
-    handleFileInput() {
-      console.log("This is the onchange calledddddd");
-      const fileInput = this.$refs.fileInputExel;
-      if (fileInput && fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        this.exelFile = file;
-        this.importExelFilePressed = true;
-        console.log("this.presses", this.importExelFilePressed);
-        // Rest of your code to handle the file
-      } else {
-        this.showErrorToastMessage("No file selected,Or Invalid format");
-      }
-    },
-
     handleFocus() {
       this.isFocused = true;
     },
@@ -1035,7 +638,7 @@ export default {
       return years;
     },
 
-  
+
   },
 };
 </script>
@@ -1043,6 +646,7 @@ export default {
 .label-top {
   top: -0.17rem;
 }
+
 .w-full input::placeholder {
   margin-left: 16px;
 }

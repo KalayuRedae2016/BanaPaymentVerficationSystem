@@ -1,206 +1,437 @@
 <template>
   <div>
     <Toast ref="toast" />
-    <div
-      v-if="role === 'SuperAdmin'"
-      class="mt-5 p-5 mx-0 rounded-lg "
-    >
-      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
-        <label class="custom-label w-1/3 mt-3"> Offset Type: </label>
-        <select
-          name="type"
-          id=""
-          class="custom-input text-xs"
-          v-model="transferType"
-        >
-          <option value="" disabled>Select Transfer Type</option>
-          <option value="block">Block</option>
-          <option value="service">Service</option>
-        </select>
-      </div>
-      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
-        <label class="custom-label w-1/3 mt-3"> Offseted Bank: </label>
-        <select
-          name="type"
-          id=""
-          class="custom-input text-xs"
-          v-model="fromBankType"
-        >
-          <option value="" disabled>Transfer From</option>
 
-          <template v-if="transferType === 'block'">
-            <option
-              v-for="(bank, index) in blockBanks"
-              :key="'block-' + index"
-              :value="bank.bankType"
-            >
-              {{ bank.bankType }}
-            </option>
-          </template>
-          <template v-else-if="transferType === 'service'">
-            <option
-              v-for="(bank, index) in serviceBanks"
-              :key="'service-' + index"
-              :value="bank.bankType"
-            >
-              {{ bank.bankType }}
-            </option>
-          </template>
-        </select>
-      </div>
-
-      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
-        <label class="custom-label w-1/3 mt-3"> amount: </label>
-        <input
-          type="number"
-          class="custom-input text-xs"
-          v-model="amount"
-          placeholder="amount"
-        />
-      </div>
-      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
-        <label class="custom-label w-1/3 mt-3">Offset Date: </label>
-        <input
-          type="date"
-          class="custom-input text-xs"
-          v-model="transferDate"
-          placeholder="amount"
-        />
-      </div>
-      <div class="mb-4 flex flex-col lg:flex-row mx-0 lg:mx-32">
-        <label class="custom-label w-1/3 mt-3"> Reason: </label>
-        <div class="flex flex-col w-full space-y-5">
-          <input
-            type="text"
-            class="custom-input text-xs"
-            v-model="reason"
-            placeholder="Reason"
-          />
-          <div class="mt-5">
-            <!-- Drag and Drop Area -->
-            <div
-              class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
-              :class="{ 'border-blue-400 bg-blue-50': isDragging }"
-              @dragover.prevent="onDragOver"
-              @dragleave="onDragLeave"
-              @drop.prevent="onDrop"
-            >
-              <p v-if="files.length === 0" class="text-center">
-                Drag & drop images or PDFs here, or click to select
-              </p>
-              <input
-                type="file"
-                accept="image/*,application/pdf"
-                class="hidden"
-                ref="fileInput"
-                multiple
-                @change="onFileChange"
-              />
-              <button
-                type="button"
-                class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                @click="selectFile"
+    <div>
+      <div class="overflow-x-auto h-96">
+        <table class="w-full border-b border-t border-gray-300">
+          <thead>
+            <tr class="bg-blue-50 text-xs text-blue-500">
+              <th
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
               >
-                Browse Files
-              </button>
-              <p class="text-blue-500">
-                Add User Atachement either Image or PDF
-              </p>
-            </div>
-            <!-- File List -->
-            <div v-if="files.length > 0" class="mt-4">
-              <p class="font-semibold text-blue-500">Choosen Files:</p>
-              <ul class="space-y-4 mt-2">
-                <li
-                  v-for="(file, index) in files"
-                  :key="index"
-                  class="flex flex-col md:flex-row items-start md:items-center gap-4 p-4 border border-gray-300 rounded"
+                Offset Type
+              </th>
+              <th
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
+              >
+               Offseted From
+              </th>
+              <th
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
+              >
+                Offseted By
+              </th>
+              <th
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
+              >
+                Offset Date
+              </th>
+              <th
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
+              >
+                Amount
+              </th>
+              <th
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
+              >
+               Ref Number
+              </th>
+              <th
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
+              >
+                Reason
+              </th>
+              <th
+                v-if="role === 'SuperAdmin'"
+                class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="text-xs">
+            <tr
+              class="hover:bg-blue-100 border-t border-b border-gray-300"
+              v-for="searchedTransferedPayment in paymentTransfersss"
+              :key="searchedTransferedPayment._id"
+            >
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                <p
+                  v-if="searchedTransferedPayment.transferType === 'block'"
+                  class="px-2 rounded-lg"
                 >
-                  <div v-if="isImage(file)" class="w-16 h-16">
-                    <img
-                      :src="file.preview"
-                      alt="Preview"
-                      class="object-cover w-full h-full rounded"
-                    />
-                  </div>
-                  <div
-                    v-else
-                    class="w-16 h-16 flex items-center justify-center text-sm text-gray-600 bg-gray-100 rounded"
-                  >
-                    <p>PDF</p>
-                  </div>
-                  <div class="flex-1">
-                    <p class="text-sm font-medium text-gray-800">
-                      {{ file.name }}
-                    </p>
-                    <p class="text-xs text-gray-500">
-                      {{ formatSize(file.size) }}
-                    </p>
-                    <input
-                      v-model="file.description"
-                      type="text"
-                      placeholder="Enter description"
-                      class="custom-input"
-                    />
-                  </div>
-                  <button
-                    class="text-red-500 hover:text-red-600"
-                    @click="removeFile(index)"
-                  >
-                    <i class="fa fa-x text-xs mt-10"></i>
-                  </button>
-                </li>
-              </ul>
-              <!-- <button
-          @click="uploadFiles"
-          class="mt-4 px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  {{ searchedTransferedPayment.transferType.toUpperCase() }}
+                </p>
+                <p v-else class="bg-yellow-100 px-2 rounded-lg">
+                  {{ searchedTransferedPayment.transferType.toUpperCase() }}
+                </p>
+              </td>
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                {{ searchedTransferedPayment.fromBankType }}
+              </td>
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                {{ searchedTransferedPayment.toBankType }}
+              </td>
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                {{ searchedTransferedPayment.formattedTransferDate }}
+              </td>
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                {{ searchedTransferedPayment.amount }}
+              </td>
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                {{ searchedTransferedPayment.refNumber }}
+              </td>
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                {{ searchedTransferedPayment.reason }}
+              </td>
+              <td
+                v-if="role === 'SuperAdmin'"
+                class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap"
+              >
+                <button
+                  class="custom-button"
+                  @click="
+                    showEditTransferForm = true;
+                    paymentToBeEdited = searchedTransferedPayment;
+                    createOffset = false;
+                  "
+                >
+                  <i class="fa fa-edit"></i>Edit
+                </button>
+
+                <button
+                  @click="
+                    showDelateModal = !showDelateModal;
+                    paymentToBeDelated = searchedTransferedPayment;
+                  "
+                  class="bg-red-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
+                >
+                  <i class="fas fa-trash"></i>
+                  <span></span>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    
+        <button
+          class="custom-button m-5"
+          @click="
+            showEditTransferForm = true;
+            paymentToBeEdited = {
+              transferType: '',     // Reset dropdown
+              fromBankType: '',       // Reset text field
+              toBankType: '',         // Reset text field
+              transferDate: '',       // Reset date field
+              amount: 0,              // Reset numeric field
+              reason: '',             // Reset text field
+              refNumber: ''           // Reset text field
+            };
+            createOffset = true;
+          "
         >
-          Upload All
-        </button> -->
-            </div>
-          </div>
-          <p v-if="selectTransferType" class="text-red-500 text-xs mt-2">
-            Please Select Transfer Type!
-          </p>
-          <p v-if="selectTransferFrom" class="text-red-500 text-xs mt-2">
-            Please select a bank from where to be transfer!
-          </p>
-          <p v-if="selectTransferTo" class="text-red-500 text-xs mt-2">
-            Please select a bank to where to be transfer!
-          </p>
-          <p v-if="notEqualFromTo" class="text-red-500 text-xs mt-2">
-            Transfer to and transfer from can not be equal!
-          </p>
-          <p v-if="enterAmount" class="text-red-500 text-xs mt-2">
-            Please Enter amount!
-          </p>
-          <p v-if="amountNotZero" class="text-red-500 text-xs mt-2">
-            amount can not be zero!
-          </p>
-          <p v-if="enterTransferDate" class="text-red-500 text-xs mt-2">
-            Please Enter Transfer Date!
-          </p>
-          <p v-if="showError" class="text-red-500 text-xs mt-2">
-            {{ errorMessage }}
-          </p>
-          <button
-            @click.prevent="addCreditTransfer()"
-            class="custom-button w-full lg:w-1/4"
-          >
-            <i class="fa fa-arrow-right"></i> Submit
-          </button>
-        </div>
+       <i class="fa fa-plus"></i>   New Offset
+        </button>
       </div>
     </div>
-    <div v-else class="mx-5">
-      <p class="text-pink-800">
-        You have no permision to make transfer payments !!!
-      </p>
+    <div v-if="showEditTransferForm">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <div
+            class="bg-white rounded-lg p-6 border border-cyan-500 px-5 w-2/3"
+          >
+          <div class="flex flex-row justify-between items-center">
+  <div>
+    <label class="custom-label text-lg font-bold">
+      {{ $t("Edit Transfer Payment") }}
+    </label>
+  </div>
+  <div>
+    <svg
+      @click="showEditTransferForm = !showEditTransferForm"
+      class="w-6 h-6 custom-star hover:text-red-700 transition-colors duration-300 cursor-pointer"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M6 18L18 6M6 6l12 12"
+      />
+    </svg>
+  </div>
+</div>
+
+
+            <hr class="my-4 md:min-w-full bg-red-500" />
+
+            <div class="">
+              <form class="px-5 py-5">
+                <div class="overflow-x-auto h-64">
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("Offset Type") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+
+                    <select
+                      name=""
+                      id=""
+                      class="custom-select"
+                      v-model="paymentToBeEdited.transferType"
+                    >
+                       <option value="" disabled> Select Account Type</option>
+                      <option value="block">Block</option>
+                      <option value="service">Service</option>
+                    </select>
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label w-1/3 mt-3">
+                      Offseted From <span class="custom-star ml-1">*</span>
+                    </label>
+                    <select
+                      name="type"
+                      id=""
+                      class="custom-input text-xs"
+                      v-model="paymentToBeEdited.fromBankType"
+                    >
+                      <option value="" disabled>Transfer From</option>
+
+                      <template
+                        v-if="paymentToBeEdited.transferType === 'block'"
+                      >
+                        <option
+                          v-for="(bank, index) in blockBanks"
+                          :key="'block-' + index"
+                          :value="bank.bankType"
+                        >
+                          {{ bank.bankType }}
+                        </option>
+                      </template>
+                      <template
+                        v-else-if="paymentToBeEdited.transferType === 'service'"
+                      >
+                        <option
+                          v-for="(bank, index) in serviceBanks"
+                          :key="'service-' + index"
+                          :value="bank.bankType"
+                        >
+                          {{ bank.bankType }}
+                        </option>
+                      </template>
+                    </select>
+                  </div>
+                  <div class="mb-4">
+                    <label class="custom-label w-1/3 mt-3">
+                      Offseted To <span class="custom-star ml-1">*</span>
+                    </label>
+                    <select
+                      name="type"
+                      id=""
+                      class="custom-input text-xs"
+                      v-model="paymentToBeEdited.toBankType"
+                    >
+                      <option value="" disabled>Transfer To</option>
+                      <template
+                        v-if="paymentToBeEdited.transferType === 'block'"
+                      >
+                        <option
+                          v-for="(bank, index) in blockBanks"
+                          :key="'block-' + index"
+                          :value="bank.bankType"
+                        >
+                          {{ bank.bankType }}
+                        </option>
+                      </template>
+
+                      <template
+                        v-else-if="paymentToBeEdited.transferType === 'service'"
+                      >
+                        <option
+                          v-for="(bank, index) in serviceBanks"
+                          :key="'service-' + index"
+                          :value="bank.bankType"
+                        >
+                          {{ bank.bankType }}
+                        </option>
+                      </template>
+                    </select>
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("Amount") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      v-model="paymentToBeEdited.amount"
+                      class="custom-input"
+                      placeholder="Amount"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("Ref Number") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      v-model="paymentToBeEdited.refNumber"
+                      class="custom-input"
+                      placeholder="Ref Number"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("Reason") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+
+                    <input
+                      type="text"
+                      v-model="paymentToBeEdited.reason"
+                      class="custom-input"
+                      placeholder="Reason"
+                    />
+                  </div>
+                  <div class="mt-5 mb-32">
+                    <div
+                      v-for="(attachment, index) in selectedAttachmentsData"
+                      :key="index"
+                      class="attachment-item"
+                    >
+                      <div
+                        class="border-b border-gray-300 shadow-lg mb-3"
+                        v-if="attachment.fileType.startsWith('image/')"
+                      >
+                        <img
+                          :src="'data:image/jpeg;base64,' + attachment.fileData"
+                          :alt="attachment.name"
+                          class="attachment-image m-4 w-1/2"
+                          style="height: auto"
+                        />
+                        <div class="m-4 text-blue-800">
+                          <p>Type: {{ attachment.fileType }}</p>
+                          <p>Name: {{ attachment.filename }}</p>
+                          <p>Uploaded Date: {{ attachment.uploadedDate }}</p>
+                          <div class="flex flex-row space-x-4 my-4">
+                            <a
+                              href="#"
+                              @click="
+                                $removeAttachment(
+                                  selectedAttachmentsData,
+                                  index
+                                )
+                              "
+                              class="text-blue-500"
+                              >Remove</a
+                            >
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- If the attachment is a PDF -->
+                      <div
+                        class="border-b border-gray-300 shadow-lg mb-3"
+                        v-if="attachment.fileType === 'application/pdf'"
+                      >
+                        <iframe
+                          :src="
+                            'data:application/pdf;base64,' + attachment.fileData
+                          "
+                          class="attachment-pdf m-4 scroll-hidden"
+                          frameborder="0"
+                          style="width: 100%; height: 100px"
+                        ></iframe>
+                        <div class="m-4 text-blue-800">
+                          <p>Type: {{ attachment.fileType }}</p>
+                          <p>Name: {{ attachment.filename }}</p>
+                          <p>Uploaded Date: {{ attachment.uploadedDate }}</p>
+                          <div class="flex flex-row space-x-4 my-4">
+                            <a
+                              href="#"
+                              @click="
+                                $removeAttachment(
+                                  selectedAttachmentsData,
+                                  index
+                                )
+                              "
+                              class="text-blue-500"
+                              >Remove</a
+                            >
+                            <a
+                              :href="this.$getPdfBlobUrl(attachment.fileData)"
+                              target="_blank"
+                              class="text-blue-500"
+                              >View Pdf</a
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
+                      :class="{ 'border-blue-400 bg-blue-50': isDragging }"
+                      @dragover.prevent="$toggleDragState(this, true)"
+                      @dragleave="$toggleDragState(this, false)"
+                      @drop.prevent="$handleFileInput($event, 'drop', addFiles)"
+                    >
+                      <p
+                        v-if="selectedAttachmentsData.length === 0"
+                        class="text-center"
+                      >
+                        Drag & drop images or PDFs here, or click to select
+                      </p>
+                      <input
+                        type="file"
+                        accept="image/*,application/pdf"
+                        class="hidden"
+                        ref="fileInput"
+                        multiple
+                        @change="$handleFileInput($event, 'input', addFiles)"
+                      />
+                      <button
+                        type="button"
+                        class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        @click="$triggerFileInput($refs.fileInput)"
+                      >
+                        Browse Files
+                      </button>
+                      <p class="text-blue-500">
+                        Add User Attachment (either Image or PDF)
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  @click="handleOffsetPayment()"
+                  type="submit"
+                  class="custom-button"
+                >
+                  <i class="fas fa-save"> </i>
+                  Save
+                </button>
+              </form>
+            </div>
+            <hr class="my-4 md:min-w-full bg-red-500" />
+          </div>
+        </div>
+      </transition>
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import Toast from "../../../Common/Toast.vue";
 
 export default {
@@ -211,11 +442,41 @@ export default {
   data() {
     return {
       //
-
-      files: [], // Array to store uploaded files and metadata
-      isDragging: false, // To style drag area on drag events
-
+      attachmentsData: [],
+      newAttachmentsData: [], // Array to store uploaded files and metadata
+      isDragging: false,
       //
+      createOffset: false,
+
+      paymentToBeEdited: "",
+      showEditTransferForm: false,
+      // searchedTransferedPayments: [
+      //   {
+      //     _id: "1",
+      //     transferType: "block",
+      //     fromBankType: "LIB",
+      //     toBankType: "CBE",
+      //     formattedTransferDate: "2025-01-21",
+      //     amount: "1000.00",
+      //     reason: "service payment",
+      //   },
+      // ],
+
+      paymentTransfersss: [
+        {
+          _id: "1",
+          transferType: "block",
+          fromBankType: "CBE",
+          toBankType: "LIB",
+          formattedTransferDate: "2025-01-21",
+          amount: "1000.00",
+          reason: "service payment",
+          orgId: "1",
+          organization: "Bana",
+          refNumber: "BMrf324",
+        },
+      ],
+
       role: "",
       successToastMessage: "",
       errorToastMessage: "",
@@ -228,6 +489,7 @@ export default {
       reason: "",
       amount: 0,
       transferDate: "",
+      refNumber: "",
 
       showError: false,
       showSuccess: false,
@@ -246,6 +508,9 @@ export default {
     this.role = localStorage.getItem("role");
   },
   computed: {
+    selectedAttachmentsData() {
+    return this.createOffset ? this.newAttachmentsData : this.attachmentsData;
+  },
     serviceBanks() {
       return this.$store.getters.serviceBanks;
     },
@@ -255,188 +520,139 @@ export default {
   },
 
   methods: {
-    //
+  
 
-    // Format file size
-    formatSize(size) {
-      if (size < 1024) return `${size} B`;
-      else if (size < 1024 * 1024) return `${(size / 1024).toFixed(2)} KB`;
-      else return `${(size / (1024 * 1024)).toFixed(2)} MB`;
-    },
-
-    // Trigger file input dialog
-    selectFile() {
-      this.$refs.fileInput.click();
-    },
-
-    // Handle file change event
-    onFileChange(event) {
-      const selectedFiles = Array.from(event.target.files);
-      this.addFiles(selectedFiles);
-    },
-
-    // Add files to the list
-    addFiles(fileList) {
-      fileList.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.files.push({
-            file,
-            name: file.name,
-            size: file.size,
-            description: "",
-            preview: file.type.startsWith("image/") ? reader.result : null,
-          });
-        };
-        if (file.type.startsWith("image/")) reader.readAsDataURL(file);
-        else
-          this.files.push({
-            file,
-            name: file.name,
-            size: file.size,
-            description: "",
-          });
-      });
-    },
-
-    // Handle drag over
-    onDragOver() {
-      this.isDragging = true;
-    },
-
-    // Handle drag leave
-    onDragLeave() {
-      this.isDragging = false;
-    },
-
-    // Handle file drop
-    onDrop(event) {
-      this.isDragging = false;
-      const droppedFiles = event.dataTransfer.files;
-      this.addFiles(Array.from(droppedFiles));
-    },
-
-    // Remove a file from the list
-    removeFile(index) {
-      this.files.splice(index, 1);
-    },
-
-    // Upload files to the server
-    async uploadFiles() {
-      if (!this.files.length) {
-        alert("No files to upload!");
-        return;
-      }
-
-      const formData = new FormData();
-      // Append JSON stringified files data
-      formData.append("filesData", JSON.stringify(this.files));
-      alert("Uploading files");
-      // try {
-      //   const response = await axios.post("/upload", formData, {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   });
-      //   console.log("Upload successful:", response.data);
-      //   alert("Files uploaded successfully!");
-      //   this.files = []; // Clear the list on successful upload
-      // } catch (error) {
-      //   console.error("Upload failed:", error);
-      //   alert("Error uploading files!");
-      // }
-    },
-
-    // Check if the file is an image
-    isImage(file) {
-      return file.preview !== null;
-    },
-
-    //
-
-    async addCreditTransfer() {
-      console.log(
-        "data",
-        this.transferType,
-        this.fromBankType,
-        this.toBankType,
-        this.transferDate,
-        this.amount,
-        this.reason
-      );
-      this.selectTransferType = false;
-      this.selectTransferFrom = false;
-      this.selectTransferTo = false;
-      this.enterAmount = false;
-      this.notEqualFromTo = false;
-      this.amountNotZero = false;
-      this.enterTransferDate = false;
-      this.showError = false;
-
-      if (this.transferType == "" || this.transferType == null) {
-        //this.$refs.toast.showErrorToastMessage("Transfer Type(Either service or Block)is required");
-        this.selectTransferType = true;
-        return;
-      }
-      if (this.fromBankType == "" || this.fromBankType == null) {
-        // this.showErrorToastMessage("Transfer-From is required");
-        this.selectTransferFrom = true;
-        return;
-      }
-      if (this.amount == "" || this.amount == null)
-        if (this.toBankType == "" || this.toBankType == null) {
-          //this.$refs.toast.showErrorToastMessage("Transfer-To  is required");
-          this.selectTransferTo = true;
-          return;
-        }
-
-      if (this.fromBankType == this.toBankType) {
-        //alert("Hiii")
-        //this.showErrorToastMessage("You can't transfer from the same bank");
-        this.notEqualFromTo = true;
-        return;
-      }
-
-      if (this.amount === "" || this.amount == null || this.ammount === 0) {
-        //this.showErrorToastMessage("amount is required");
-        this.enterAmount = true;
-        return;
-      }
-
-      if (this.transferDate == "") {
-        //this.showErrorToastMessage("Transfer Date is required");
-        this.enterTransferDate = true;
-        return;
-      }
-      // this depends on the type
-      const payload = {
-        transferType: this.transferType,
-        fromBankType: this.fromBankType,
-        toBankType: this.toBankType,
-        amount: this.amount,
-        reason: this.reason,
-        transferDate: this.transferDate,
-        // other properties
-      };
-
-      //
-
+    async addFiles(fileList) {
       try {
-        await this.$apiPost("api/v1/payments/transferFunds", payload).then(
-          (response) => {
-            console.log("response", response);
-            if (response.status === 1) {
-              this.$refs.toast.showSuccessToastMessage(response.message);
-            }
-          }
+        const newFiles = await this.$processFilesToAdd(fileList); // Process the files
+        if (this.createOffset) {
+        //  alert("new");
+          // Update newAttachmentsData when createOffset is true
+          this.newAttachmentsData = [...this.newAttachmentsData, ...newFiles];
+          console.log("newAttachmentsData",this.newAttachmentsData);
+          this.selectedAttachmentsData();
+        } else {
+          //alert("old");
+          // Update attachmentsData when createOffset is false
+          this.attachmentsData = [...this.attachmentsData, ...newFiles];
+          console.log("AttachmentsData",this.attachmentsData);
+          this.selectedAttachmentsData();
+        }
+        console.log(
+          "Files successfully added:",
+          this.createOffset ? this.newAttachmentsData : this.attachmentsData
         );
       } catch (error) {
-        console.log("error", error.status, error.message);
-        this.showError = true;
-        this.errorMessage = error.message;
-      } finally {
+        console.error("Error while adding files:", error);
       }
     },
+  async handleOffsetPayment() {
+  console.log(
+    "data",
+    this.transferType,
+    this.fromBankType,
+    this.toBankType,
+    this.transferDate,
+    this.amount,
+    this.reason
+  );
+  
+  this.selectTransferType = false;
+  this.selectTransferFrom = false;
+  this.selectTransferTo = false;
+  this.enterAmount = false;
+  this.notEqualFromTo = false;
+  this.amountNotZero = false;
+  this.enterTransferDate = false;
+  this.showError = false;
+
+  // Validation
+  if (this.transferType == "" || this.transferType == null) {
+    this.selectTransferType = true;
+    return;
+  }
+  if (this.fromBankType == "" || this.fromBankType == null) {
+    this.selectTransferFrom = true;
+    return;
+  }
+  if (this.toBankType == "" || this.toBankType == null) {
+    this.selectTransferTo = true;
+    return;
+  }
+  if (this.fromBankType == this.toBankType) {
+    this.notEqualFromTo = true;
+    return;
+  }
+  if (this.amount === "" || this.amount == null || this.amount === 0) {
+    this.enterAmount = true;
+    return;
+  }
+  if (this.transferDate == "") {
+    this.enterTransferDate = true;
+    return;
+  }
+
+  // Prepare the payload
+  const payload = {
+    transferType: this.transferType,
+    fromBankType: this.fromBankType,
+    toBankType: this.toBankType,
+    amount: this.amount,
+    reason: this.reason,
+    transferDate: this.transferDate,
+  };
+
+  console.log("payload", payload);
+
+  // Process the attachments (could be the same data for both cases)
+const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachmentsData).map((file) => {
+  console.log(file.fileData, file.filename, file.fileType);
+  return this.$base64ToFile(file.fileData, file.filename, file.fileType);
+});
+
+  const formData = new FormData();
+  formData.append("transferCase", "bankTransfer");
+  formData.append("transferType", this.transferType);
+  formData.append("fromBankType", this.fromBankType);
+  formData.append("toBankType", this.toBankType);
+  formData.append("transferDate", this.transferDate);
+  formData.append("amount", this.amount);
+  formData.append("refNumber", this.refNumber);
+  formData.append("reason", this.reason);
+  formData.append("orgId", this.orgId);
+  formData.append("organization", this.organization);
+
+  // Append files to form data
+  fileArray.forEach((file) => {
+    formData.append("attachments", file);
+  });
+
+  console.log("Form data", formData);
+
+  const customHeaders = {
+    "Content-Type": "multipart/form-data",
+  };
+
+  try {
+
+  const apiRequest= this.createOffset ? this.$apiPost : this.$apiPatch; // Use apiPost for add (POST), apiPatch for edit (PATCH)
+
+    await apiRequest("/api/v1/payments/offsetPayments", this.transfer_id,formData, customHeaders)
+      .then((response) => {
+        console.log("response from the update/add: ", response);
+        if (response.status === 1) {
+          this.paymentTransfers = response.organization.paymentTransfers;
+          this.searchedTransferedPayments = this.paymentTransfers;
+        }
+      });
+  } catch (error) {
+    console.log("Error in the process", error.status, error.message);
+    this.$refs.toast.showErrorToastMessage("Something went wrong!!");
+  } finally {
+    this.isLoading = false;
+  }
+},
+
   },
 };
 </script>

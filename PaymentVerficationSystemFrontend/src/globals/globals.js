@@ -1,6 +1,10 @@
 import axios from "axios";
 
-import { reloadPage,apiGet,apiGetById,apiPost,apiPut,apiPatch,apiDelete,isStrongPassword,validateField,gregorianToEthiopian} from "../utils/utils"; // Adjust the path to match your project structure
+import { reloadPage,apiGet,apiGetById,apiPost,apiPut,
+  apiPatch,apiDelete,isStrongPassword,validateField,
+  gregorianToEthiopian,getPdfBlobUrl,base64ToFile,
+  processFilesToAdd,triggerFileInput,handleFileInput,toggleDragState,removeAttachment,
+  handleAnyFileInput} from "../utils/utils"; // Adjust the path to match your project structure
 export default {
   async install(app) {
     // Check environment and set base URL
@@ -69,8 +73,15 @@ export default {
       $apiDelete:apiDelete,
       $isStrongPassword:isStrongPassword,
       $validateField:validateField,
-      $gcEthio:gregorianToEthiopian,      
-    
+      $gcEthio:gregorianToEthiopian, 
+      $getPdfBlobUrl:getPdfBlobUrl, 
+      $base64ToFile:base64ToFile,
+      $processFilesToAdd:processFilesToAdd, 
+      $triggerFileInput:triggerFileInput,
+      $handleFileInput:handleFileInput,
+      $toggleDragState:toggleDragState,
+      $removeAttachment:removeAttachment,
+      $handleAnyFileInput:handleAnyFileInput
     };
     // Assign to the global properties in the Vue app
     app.config.globalProperties = {
