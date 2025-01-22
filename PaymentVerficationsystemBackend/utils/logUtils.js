@@ -2,36 +2,36 @@ const Log=require('../Models/logModel')
 const AppError = require('./appError')
 const catchAsync = require('./catchAsync')
 
-exports.logAction=catchAsync(async(model,action,actor,description,data={},ipAddress,severity = 'info')=>{
-    console.log("model",model)
-    console.log("action",action)
-    console.log("actor",actor)
-    console.log("description",description)
-    console.log("data",data)
-    console.log("ipaddress",ipAddress)
-    console.log("severity",severity)
-    console.log("sessionId",sessionId)
+exports.logAction = catchAsync(async ({ model, action, actor, description = 'No description provided', data = {}, ipAddress = null, severity = 'info', sessionId = null }) => {
+    console.log('Logging Action:');
+    console.log('Model:', model);
+    console.log('Action:', action);
+    console.log('Actor:', actor);
+    console.log('Description:', description);
+    console.log('Data:', data);
+    console.log('IPAddress:', ipAddress);
+    console.log('Severity:', severity);
+    console.log('Session ID:', sessionId);
+  
     if (!model || !action || !actor) {
-        return next(new AppError("'Model, action, and actor are required for logging.'",400))
+      throw new AppError('Model, action, and actor are required for logging.', 400);
     }
-    const timeStamp = new Date().toISOString();
-    const logMessage = `Time-${timeStamp}-Model${model}-Action${action}-Data${JSON.stringify(data)}-actor-${actor}-ipaddress-${ipAddress}`;
-    // console.log(logMessage)
-
+  
     const log = new Log({
-        model,
-        action,
-        actor,
-        description,
-        affectedData: JSON.stringify(data),
-        ipAddress,
-        severity,
+      model,
+      action,
+      actor,
+      description,
+      affectedData: JSON.stringify(data),
+      ipAddress,
+      severity,
+      sessionId,
     });
-
-    await log.save()
-
+  
+    await log.save();
     console.log(`[${severity.toUpperCase()}] ${model} - ${action}: Log saved.`);
-})
+  });
+  
 
 exports.logError = async (error, req) => {
     try {
