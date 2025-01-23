@@ -71,6 +71,8 @@
               <tr class="hover:bg-blue-100 border-t border-b border-gray-300"
                 v-for="searchedTransferedPayment in searchedTransferedPayments" :key="searchedTransferedPayment._id">
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+
+                  {{searchedTransferedPayment._id}}
                   <p v-if="searchedTransferedPayment.transferType === 'block'" class="px-2 rounded-lg">
                     {{ searchedTransferedPayment.transferType.toUpperCase() }}
                   </p>
@@ -102,7 +104,8 @@
                     showEditTransferForm = true;
                   paymentToBeEdited = searchedTransferedPayment;
                   createOffset = false;
-                  fetchAttachments(searchedTransferedPayment._id);
+                  attachmentsData=searchedTransferedPayment.attachments
+                  transferId=searchedTransferedPayment._id
                   ">
                     <i class="fa fa-edit"></i>Edit
                   </button>
@@ -533,7 +536,7 @@ export default {
       }
     },
     async handleTransferPayment() {
-
+   console.log("transferiD",this.transferId);
       //  alert("hii");
 
       console.log(
@@ -677,13 +680,12 @@ export default {
           console.log("response from fetch transfers", response);
           if (response.status == 1) {
             this.paymentTransfers = response.transferFunds;
-            this.paymentTransfers= Object.keys(response.transferFunds)
-              .filter(key => !isNaN(key)) // Keep only numeric keys
-              .map(key =>response.transferFunds[key]);
+            // this.paymentTransfers= Object.keys(response.transferFunds)
+            //   .filter(key => !isNaN(key)) // Keep only numeric keys
+            //   .map(key =>response.transferFunds[key]);
             console.log("payments transfers and searched transfer payments in org called in mounted", this.paymentTransfers)
             this.searchedTransferedPayments = this.paymentTransfers;
-            this.attachmentsData=this.response.transferFunds.attachmentsData;
-           
+           // this.attachmentsData=this.response.transferFunds.attachments
             console.log("attachments data", this.attachmentsData);
           }
         });
