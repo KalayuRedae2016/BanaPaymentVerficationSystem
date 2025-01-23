@@ -1748,6 +1748,7 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
       reason: transfer.reason,
       refNumber: transfer.refNumber,
       transferDate: transfer.transferDate,
+      transferId:transfer._id,
       attachments,
     };
   });
@@ -1763,6 +1764,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   console.log("request params", req.params)
 
   const transferId = req.params.id
+  console.log(transferId)
   const { reason, refNumber, transferDate, toWhat } = req.body;
   if (!transferId) return next(new AppError("Missing Transfer ID", 400));
 
