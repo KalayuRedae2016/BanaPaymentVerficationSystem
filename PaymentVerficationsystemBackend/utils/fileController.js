@@ -8,28 +8,41 @@ const multer = require('multer');
 const catchAsync = require('./catchAsync');
 const AppError = require('./appError');
 
-exports.importFromExcel = catchAsync(async (filePath, Model, transformFn) => {
+exports.importFromExcel = catchAsync(async (req,Model, transformFn) => {
+    console.log("hereexcel")
+    console.log("request File",req.file)
+  if (!req.file || !req.file.path) {
+    return next(new AppError('File not uploaded or path is invalid.', 400));
+  }
+
+  if (!req.file.mimetype.includes('spreadsheetml') && !req.file.originalname.endsWith('.xlsx')) {
+    return next(new AppError('Please upload a valid Excel file (.xlsx)', 400));
+  }
+
+  const filePath = req.file.path;
   const workbook = xlsx.readFile(filePath);
   const worksheet = workbook.Sheets[workbook.SheetNames[0]];
   const jsonData = xlsx.utils.sheet_to_json(worksheet);
-  // console.log(jsonData)
+  console.log(jsonData)
   if (!Array.isArray(jsonData) || jsonData.length === 0) {
     throw new AppError("Excel file is empty or data is not in the correct format.", 400);
   }
 
   const importedData = [];
+  const errors = [];
   for (const [index, data] of jsonData.entries()) {
     try {
       const document = transformFn ? await transformFn(data) : new Model(data);
+      console.log("Transformed Data:", document); // Log transformed user data
       const savedDocument = await document.save();
       importedData.push(savedDocument);
     } catch (error) {
-      console.error(`Error processing row ${index + 1}: ${error.message}`);
+      errors.push({ row: index + 1, error: error.message, data });
       continue; // Ensure processing continues for subsequent rows
     }
   }
-  // console.log(importedData)
-  return importedData; // Always return an array
+  console.log("Returning from importFromExcel:", { importedData, errors });
+return { importedData, errors };
 });
 
 // Utility function to export data to Excel
@@ -82,8 +95,6 @@ exports.uploadFile = async (req, res) => {
     });
 
     await file.save();
-    //console.log(req.file.buffer);
-
     res.send('File uploaded and saved to the database.');
   } catch (error) {
     console.error('Error uploading file:', error);
@@ -91,20 +102,13 @@ exports.uploadFile = async (req, res) => {
   }
 };
 exports.uploadMultipleFiles = (req, res) => {
-  // Use the "upload.array" method to handle multiple file uploads
   upload.array('files')(req, res, (err) => {
     if (err) {
-      // Handle any error that occurred during file upload
       console.error(err);
       return res.status(500).json({ error: 'Error uploading files' });
     }
 
-    // Access uploaded files through "req.files" array
     const files = req.files;
-
-    // Process the uploaded files as needed
-
-    // Return a response indicating successful file upload
     res
       .status(200)
       .json({ message: 'Files uploaded successfully', files: files });

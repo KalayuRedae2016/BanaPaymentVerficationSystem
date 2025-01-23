@@ -12,10 +12,11 @@ const { sendEmail } = require('../utils/email');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { formatDate } = require("../utils/formatDate")
+const {validateExistence}=require("../utils/validateExistence")
+const {normalizePhoneNumber}=require("../utils/userUtils")
 const createPendingPayments = require("../utils/createPendingPayments")
-const { importFromExcel,exportToExcel,processFileData,createMulterMiddleware, processUploadFiles,deleteFile} = require('../utils/fileController');
+const {exportToExcel,processFileData,createMulterMiddleware, processUploadFiles,deleteFile} = require('../utils/fileController');
 const defaultVariables = require('../config/defaultVariables');
-const { error } = require('console');
 
 // Configure multer for user file uploads
 const userFileUpload = createMulterMiddleware(
@@ -316,8 +317,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.importUsers = catchAsync(async (req, res, next) => {
-  
-  const validateFilePath=()=>{
     if (!req.file || !req.file.path) {
       return next(new AppError('File not uploaded or path is invalid.', 400));
     }
@@ -327,11 +326,9 @@ exports.importUsers = catchAsync(async (req, res, next) => {
     }
   
     const filePath = req.file.path;
-    return filePath
-
-  }
-
+   
   const validateAndTransformUserData = async (data) => {
+    console.log("Validating data:", data); // Log incoming data
     const requiredFields = ['firstName', 'middleName', 'lastName', 'phoneNumber', 'role', 'gender', 'age'];
     const missingFields = requiredFields.filter((field) => !data[field]);
     if (missingFields.length > 0) {
@@ -340,10 +337,7 @@ exports.importUsers = catchAsync(async (req, res, next) => {
     if (data.email && !validator.isEmail(data.email)) {
       return next(new AppError('Invalid email format', 400))
     }
-    if (data.phoneNumber && !/^\+251[0-9]{9}$/.test(data.phoneNumber)) {
-      return next(new AppError('Invalid phone number format', 400))
-    }
-
+    console.log("mr",missingFields)
     const organization = await validateExistence(Organization, {}, 'Create Organization Profile before creating User');
     const prefixCode = organization.companyPrefixCode;
     const length = 4;
@@ -352,15 +346,16 @@ exports.importUsers = catchAsync(async (req, res, next) => {
     user.userCode = await user.generateUserCode(prefixCode, length); // Assuming generateUserCode is a method in User model
     const password = await user.generateRandomPassword(); // Assuming generateRandomPassword is a method in User model
     user.password = await bcrypt.hash(password, 12); // Hash the password for security
-
+    user.phoneNumber = normalizePhoneNumber(user.phoneNumber); // Update phone number
+    // console.log("uu",user)
     return user;
   };
 
   const importFromExcel = async () => {
-    const {filePath}=validateFilePath()
     const workbook = xlsx.readFile(filePath);
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = xlsx.utils.sheet_to_json(worksheet); // Convert the sheet to JSON
+    // console.log("jd",jsonData)
 
     if (!Array.isArray(jsonData) || jsonData.length === 0) {
       throw new AppError('Excel file is empty or data is not in the correct format.', 400);
@@ -371,18 +366,22 @@ exports.importUsers = catchAsync(async (req, res, next) => {
 
     for (const [index, data] of jsonData.entries()) {
       try {
+
         const userDocument = await validateAndTransformUserData(data);
+        console.log("Transformed User:", userDocument); // Log transformed user data
         const savedUser = await userDocument.save(); // Save the user to the database
         importedData.push(savedUser);
+        console.log("Saved User:", savedUser); // Log saved user
       } catch (error) {
         errors.push({ row: index + 1, error: error.message, data });
       }
     }
-
+    console.log("Imported Data:", importedData); // Log final imported data
     return { importedData, errors };
   };
 
   const { importedData, errors } = await importFromExcel();
+  console.log("imd",importedData)
 
   if (!importedData.length) {
     return next(new AppError('No valid users were imported from the file.', 400));

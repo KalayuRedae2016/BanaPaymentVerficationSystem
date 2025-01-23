@@ -1210,11 +1210,18 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
 });
 
 exports.importPayments = catchAsync(async (req, res, next) => {
-  if (!req.file) {
-    return next(new AppError('No file uploaded', 400));
+  console.log("here")
+  console.log("request File", req.file)
+  if (!req.file || !req.file.path) {
+    return next(new AppError('File not uploaded or path is invalid.', 400));
   }
-  const filePath = req.file.path; // Path to the uploaded file
-  console.log(filePath)
+
+  if (!req.file.mimetype.includes('spreadsheetml') && !req.file.originalname.endsWith('.xlsx')) {
+    return next(new AppError('Please upload a valid Excel file (.xlsx)', 400));
+  }
+
+  const filePath = req.file.path;
+  
   try {
     const result = await importFromExcel(filePath, Payment);
     console.log(result)
@@ -1629,10 +1636,10 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
 exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   console.log("Request Body:", req.body);
   console.log("Request Files:", req.files);
-  console.log("request params",req.params)
+  console.log("request params", req.params)
 
-  const transferId=req.params.id
-  const {reason, refNumber, transferDate, toWhat } = req.body;
+  const transferId = req.params.id
+  const { reason, refNumber, transferDate, toWhat } = req.body;
   if (!transferId) return next(new AppError("Missing Transfer ID", 400));
 
   const organization = await Organization.findOne();
@@ -1648,12 +1655,12 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   };
 
   try {
-    const transferCase = req.body.transferCase|| transfer.transferCase;
+    const transferCase = req.body.transferCase || transfer.transferCase;
     const transferType = req.body.transferType || transfer.transferType;
-    const fromBankType=req.body.fromBankType||transfer.fromBankType
-    const toBankType=req.body.toBankType||transfer.toBankType
-    const amount=req.body.amount||transfer.amount
-    
+    const fromBankType = req.body.fromBankType || transfer.fromBankType
+    const toBankType = req.body.toBankType || transfer.toBankType
+    const amount = req.body.amount || transfer.amount
+
     if (fromBankType) {
       const banks = transfer.transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
       validateBankType(fromBankType, banks);
@@ -1674,34 +1681,34 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       transfer.amount = parsedAmount;
     }
 
-  const payments = await Payment.find({ isPaid: true, status: 'confirmed' });
-  if (!payments) {
-    return next(new AppError(`No confirmed Payments Found`, 400));
-  }
-  const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
-  let users
-  if (transferCase === "userWithdrawal") {
-    users = await User.findById(userQuery)
-  } else {
-    users = await User.find()
-  }
-
-  if (!users) {
-    return next(new AppError("User/s is not found", 400))
-  }
-  console.log(`ffB${fromBankType} and Amount${amount}`)
-  console.log(`ffB${transfer.fromBankType} and Amount${amount}`)
-  if (fromBankType && amount !== undefined) {
-    const bankBalances = calculateBalances(payments, organization, users);
-    const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
-  
-    const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
-    const availableFunds = (bankTypes[fromBankType]?.[balanceType] || 0);
-  console.log("avaf",availableFunds)
-    if (availableFunds < amount) {
-      return next(new AppError('Insufficient funds', 400));
+    const payments = await Payment.find({ isPaid: true, status: 'confirmed' });
+    if (!payments) {
+      return next(new AppError(`No confirmed Payments Found`, 400));
     }
-  }
+    const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
+    let users
+    if (transferCase === "userWithdrawal") {
+      users = await User.findById(userQuery)
+    } else {
+      users = await User.find()
+    }
+
+    if (!users) {
+      return next(new AppError("User/s is not found", 400))
+    }
+    console.log(`ffB${fromBankType} and Amount${amount}`)
+    console.log(`ffB${transfer.fromBankType} and Amount${amount}`)
+    if (fromBankType && amount !== undefined) {
+      const bankBalances = calculateBalances(payments, organization, users);
+      const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
+
+      const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
+      const availableFunds = (bankTypes[fromBankType]?.[balanceType] || 0);
+      console.log("avaf", availableFunds)
+      if (availableFunds < amount) {
+        return next(new AppError('Insufficient funds', 400));
+      }
+    }
     if (reason) transfer.reason = reason;
     if (refNumber) transfer.refNumber = refNumber;
 
@@ -1727,12 +1734,12 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
 
     await organization.save();
 
-  const {attachmentsData } = await processFileData(transfer);
+    const { attachmentsData } = await processFileData(transfer);
 
     res.status(200).json({
       status: 1,
       message: `Successfully updated transfer ${transferId}.`,
-      updatedTransferFunds:transfer,
+      updatedTransferFunds: transfer,
       attachmentsData
     });
   } catch (err) {

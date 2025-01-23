@@ -67,4 +67,26 @@ const changePasswordFlag = catchAsync(async (user, passwordChanger) => {
   return changePassword;
 });
 
-module.exports = {createDefaultAdminUser,changePasswordFlag};
+const normalizePhoneNumber = (phone) => {
+  if (!phone) {
+    return next(new AppError("Phone number is required",400))
+  }
+
+  const digitsOnly = phone.replace(/\D/g, '');// Remove all non-digit characters
+
+  // Ensure the phone number starts with "251" and has a total of 12 digits
+  if (digitsOnly.startsWith('251') && digitsOnly.length === 12) {
+    return `+${digitsOnly}`; // Format as +251XXXXXXXXX
+  }
+
+  // If the phone number starts with "0" (local format), convert it to +251 format
+  if (digitsOnly.startsWith('0') && digitsOnly.length === 10) {
+    return `+251${digitsOnly.slice(1)}`; // Convert "0XXXXXXXXX" to "+251XXXXXXXXX"
+  }
+  
+  throw new Error('Invalid phone number format. Must be in +251XXXXXXXXX or 0XXXXXXXXX format.');
+
+};
+
+
+module.exports = {createDefaultAdminUser,changePasswordFlag,normalizePhoneNumber};
