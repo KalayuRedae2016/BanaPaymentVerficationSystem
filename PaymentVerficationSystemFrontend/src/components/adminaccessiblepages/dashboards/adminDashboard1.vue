@@ -12,24 +12,25 @@
           <div class=" flex flex-row space-x-12  p-4 h-64 w-full rounded-lg  w-1/2 shadow-lg border-t border-gray-100">
            <div class="w-1/3 border-r border-gray-300">
             <canvas ref="pieChartCanvas" class="chart w-1/2" ></canvas>
+         
           </div>
-           <div class="w-2/3 items-center text-blue-500 " >
-            <p>No. Active Members  <span
-            class="ml-5 bg-blue-500 text-white text-sm px-3 py-1 rounded-full"
-          >
-            2000
-          </span></p>
-            <p>No.  Deactivated Members/Offsets 200  <span
-            class="ml-5 bg-yellow-400 text-white text-sm px-3 py-1 rounded-full"
-          >
-            2000
-          </span></p>
-          <p>No.Admins  <span
-            class="ml-5 bg-green-500 text-white text-sm px-3 py-1 rounded-full"
-          >
-            2000
-          </span></p>
-          </div>
+  <div class=" grid grid-cols-2 gap-y-0 items-center text-blue-500">
+  <p>No. Active Members</p>
+  <span class="hover:bg-blue-600 w-32 ml-5 bg-blue-500 text-white text-sm px-3 py-1 rounded-full">
+    2000
+  </span>
+  <p>No. Admins</p>
+  <span class="hover:bg-green-600 w-32 ml-5 bg-green-500 text-white text-sm px-3 py-1 rounded-full">
+    2000
+  </span>
+  <p>No. Deactivated Members/Offsets</p>
+  <span class="hover:bg-yellow-500 w-32 ml-5 bg-yellow-400 text-white text-sm px-3 py-1 rounded-full">
+    200
+  </span>
+  
+
+</div>
+
           </div>
       </div>
 
@@ -170,6 +171,10 @@
     <!-- //all years confirmed payments -->
 
     <div class="shadow-lg border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
+
+    
+    
+
       <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-xs">
           <i class="fas fa-check-circle text-green-500 text-xs"></i>
@@ -299,12 +304,37 @@
         </tbody>
       </table>
 
-      <div class="my-5 mx-3">
+    
+      <canvas ref="barChartCanvas" class="chart w-1/2" ></canvas>
+      <div class="flex flex-col lg:flex-row lg:space-x-4 items-center justify-center my-5">
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-blue-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Regular </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-yellow-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Urgent </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class="bg-green-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Subsidy </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-blue-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Service </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-red-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Penality</p>
+        </div>
+      </div>
+      <div class=" my-3 ml-16">
         <a @click="showOrgDetail = true"
           class="text-blue-600 hover:text-blue-800 underline font-medium cursor-pointer transition duration-200 ease-in-out">
           Organization Payment Detail
         </a>
       </div>
+
     </div>
     <div v-if="showOrgDetail">
       <transition name="fade" mode="out-in">
@@ -581,7 +611,6 @@ export default {
       monthlyCapital: "",
       monthlyCharge: "",
       totalOvedue: "",
-
       activeYear: "",
       activeMonth: "",
       allOverDueClients: 54,
@@ -630,16 +659,14 @@ export default {
   },
 
   async mounted() {
-
-    const newData = [1500,500,200]; // Example new data
+    const newData = [1500,500,200];
+    const newData1=[1500,2000,1200,1100,1000] // Example new data
     this. createPieChart(newData);
+    this. createBarChart(newData1);
 
     if (this.$route.query.loginSuccess === "true") {
       const activeItem = "dashboard";
       this.$store.dispatch("commitActiveItem", { activeItem });
-
-    
-
       if(this.$route.query.changePassword==="true"){
         this.showChangePassword = true;
       }else{
@@ -650,9 +677,7 @@ export default {
         this.$router.push("/admindashboard");
       }, 2000);
 
-      }
-
-     
+      }     
     }
 
     await this.$apiGet("/api/v1/users")
@@ -712,7 +737,7 @@ export default {
       labels: pieChartLabels,
       datasets: [
         {
-          label: "Project Report",
+        
           data: newData,
           backgroundColor: [
             "rgba(0, 122, 230)",
@@ -749,7 +774,102 @@ export default {
     this.pieChart = new Chart(pieChartCtx, pieChartConfig);
     console.log(this.pieChart);
   },
-  
+  createBarChart(newData) {
+  const barChartLabels = ["Regular", "Urgent", "Subsidy", "Service", "Penalty"];
+     const barChartData = {
+    labels: barChartLabels,
+    datasets: [
+      {
+        label: "Project Report",
+        data: newData,
+        backgroundColor: [
+          "rgba(0, 122, 230, 0.5)", // Semi-transparent blue
+          "rgba(255, 255, 0, 0.5)", // Semi-transparent yellow
+          "rgba(0, 255, 0, 0.5)",   // Semi-transparent green
+          "rgba(0, 65, 106, 0.5)", // Semi-transparent cyan
+          "rgba(255, 0, 0, 0.5)",   // Semi-transparent red
+        ],
+        borderColor: [
+          "rgb(0, 122, 230)", // Solid blue border
+          "rgb(255, 255, 0)", // Solid yellow border
+          "rgb(0, 255, 0)",   // Solid green border
+          "rgb(0, 65, 0)", // Solid cyan border
+          "rgb(255, 0, 0)",   // Solid red border
+        ],
+        borderWidth: 1, // Width of the border
+      },
+    ],
+  };
+
+  const barChartConfig = {
+    type: "bar", // Set chart type to bar
+    data: barChartData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true, // Display legend
+          position: "top", // Position the legend at the top
+        },
+        tooltip: {
+          enabled: true, // Enable tooltips
+        },
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "------Payment Types------",
+            color:'rgb(0, 122, 230)',
+            font: { size: 14 },
+          },
+        },
+        y: {
+          title: {
+            display: true,
+            text: "-----Amount-----",
+            font: { size: 14 },
+            color:'rgb(0, 122, 230)'
+          },
+          beginAtZero: true, // Ensure y-axis starts at 0
+        },
+        
+      },
+      // Custom plugin to draw labels and values on top of bars
+      plugins: {
+        afterDatasetsDraw(chart) {
+          const { ctx, data } = chart;
+          chart.data.datasets.forEach((dataset, i) => {
+            const meta = chart.getDatasetMeta(i);
+            meta.data.forEach((bar, index) => {
+              const value = dataset.data[index];
+              ctx.fillStyle = "black";
+              ctx.font = "12px Arial";
+              ctx.textAlign = "center";
+              ctx.fillText(value, bar.x, bar.y - 5); // Positioning the text above the bar
+            });
+          });
+        },
+      },
+    },
+  };
+
+  const barChartCanvas = this.$refs.barChartCanvas;
+  const barChartCtx = barChartCanvas.getContext("2d");
+
+  // Destroy the existing chart if it exists
+  if (this.barChart) {
+    this.barChart.destroy();
+  }
+
+  // Create a new chart
+  this.barChart = new Chart(barChartCtx, barChartConfig);
+  console.log(this.barChart);
+}
+,
+
+
+
 
     async changePassword(){
       this.showError=false;

@@ -580,10 +580,10 @@ export default {
   // console.log("payload", payload);
 
   // Process the attachments (could be the same data for both cases)
-const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachmentsData).map((file) => {
-  console.log(file.fileData, file.filename, file.fileType);
-  return this.$base64ToFile(file.fileData, file.filename, file.fileType);
-});
+      const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachmentsData).map((file) => {
+        console.log(file.fileData, file.filename, file.fileType);
+        return this.$base64ToFile(file.fileData, file.filename, file.fileType);
+      });
 
       const formData = new FormData();
       formData.append("transferCase", "expenditure");
@@ -621,16 +621,16 @@ const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachment
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
            
-      //       setTimeout(() => {
-      //         this.showEditTransferForm=false;
-      //         this.$router.push({
-      //   path: "/admindashboard/payments1",
-      //   query: {
-      //     activeTab: 2,
-      //     radioStatus:"transferOffsets"
-      //   },
-      // });
-      //     }, 2000);
+            setTimeout(() => {
+              this.showEditTransferForm=false;
+              this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 2,
+          radioStatus:"serviceOffsets"
+        },
+      });
+          }, 2000);
           
             // this.paymentTransfers = response.updatedTransferFunds;
             // console.log("paymentTransfers: ", this.paymentTransfers);

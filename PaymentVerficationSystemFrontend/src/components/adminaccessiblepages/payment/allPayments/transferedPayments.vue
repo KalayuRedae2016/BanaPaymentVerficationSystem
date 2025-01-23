@@ -72,10 +72,10 @@
                 v-for="searchedTransferedPayment in searchedTransferedPayments" :key="searchedTransferedPayment._id">
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   <p v-if="searchedTransferedPayment.transferType === 'block'" class="px-2 rounded-lg">
-                    {{ searchedTransferedPayment.transferType.toUpperCase()}}
+                    {{ searchedTransferedPayment.transferType.toUpperCase() }}
                   </p>
                   <p v-else class="bg-yellow-100 px-2 rounded-lg">
-                    {{ searchedTransferedPayment.transferType.toUppperCase()}}
+                    {{ searchedTransferedPayment.transferType.toUpperCase() }}
                   </p>
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
@@ -85,7 +85,7 @@
                   {{ searchedTransferedPayment.toBankType }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ searchedTransferedPayment.formattedTransferDate }}
+                  {{ searchedTransferedPayment.transferDate }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   {{ searchedTransferedPayment.amount }}
@@ -471,7 +471,7 @@ export default {
   },
   created() {
     this.role = localStorage.getItem("role");
-    this.fetchOrganization();
+    this.fetchTransferPayments();
   },
   mounted() {
     // this.displayedItems();
@@ -632,22 +632,22 @@ export default {
         // Make the API request
         await apiRequest(...params).then((response) => {
           console.log("Response from the update/add: ", response);
-          console.log("response message",response.message)
-     
+          console.log("response message", response.message)
+
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
-           
+
             setTimeout(() => {
-              this.showEditTransferForm=false;
+              this.showEditTransferForm = false;
               this.$router.push({
-        path: "/admindashboard/payments1",
-        query: {
-          activeTab: 2,
-          radioStatus:"transferOffsets"
-        },
-      });
-          }, 2000);
-          
+                path: "/admindashboard/payments1",
+                query: {
+                  activeTab: 2,
+                  radioStatus: "transferOffsets"
+                },
+              });
+            }, 2000);
+
             // this.paymentTransfers = response.updatedTransferFunds;
             // console.log("paymentTransfers: ", this.paymentTransfers);
             // this.searchedTransferedPayments = this.paymentTransfers;
@@ -655,7 +655,7 @@ export default {
 
             // this.attachmentsData = response.organization.paymentTransfers.attachments;
             // console.log("Attachments are", this.attachmentsData);
-      
+
           }
         });
       } catch (error) {
@@ -667,14 +667,24 @@ export default {
     },
 
 
-    async fetchOrganization() {
+    async fetchTransferPayments() {
+
       try {
-        await this.$apiGet("/api/v1/organization/").then((response) => {
-          console.log("organization", response.organization);
+        const params = {
+          transferCase: "bankTransfer",
+        }
+        await this.$apiGet("/api/v1/payments/transferFunds", params).then((response) => {
+          console.log("response from fetch transfers", response);
           if (response.status == 1) {
-            this.paymentTransfers = response.organization.paymentTransfers;
+            this.paymentTransfers = response.transferFunds;
+            this.paymentTransfers= Object.keys(response.transferFunds)
+              .filter(key => !isNaN(key)) // Keep only numeric keys
+              .map(key =>response.transferFunds[key]);
+            console.log("payments transfers and searched transfer payments in org called in mounted", this.paymentTransfers)
             this.searchedTransferedPayments = this.paymentTransfers;
-            console.log("payments transfers and searched transfer payments", this.paymentTransfersss, this.searchedTransferedPayments)
+            this.attachmentsData=this.response.transferFunds.attachmentsData;
+           
+            console.log("attachments data", this.attachmentsData);
           }
         });
       } catch (error) {
