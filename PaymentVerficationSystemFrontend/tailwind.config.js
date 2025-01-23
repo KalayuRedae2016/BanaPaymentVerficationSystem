@@ -119,6 +119,7 @@ export default {
         '56': '14rem',
         '64': '16rem',
         '80': '20rem',
+        '90': '25rem',
       },
       screens: {//sm,md,lg,xl,2xl:
         'sm': '640px',

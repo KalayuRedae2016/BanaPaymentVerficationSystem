@@ -5,32 +5,27 @@
         Dashboard
         <span class=""></span>
       </h2>
-
       <Toast ref="toast" />
-
-      <div class="mx-5 flex flex-row pt-3 space-x-12" >
-          <div class=" flex flex-row space-x-12  p-4 h-64 w-full rounded-lg  w-1/2 shadow-lg border-t border-gray-100">
-           <div class="w-1/3 border-r border-gray-300">
-            <canvas ref="pieChartCanvas" class="chart w-1/2" ></canvas>
+      <div class="mx-5 flex flex-row pt-3 space-x-12">
+        <div class=" flex flex-col lg:flex-row space-x-12  p-4 h-64 w-full rounded-lg  w-1/2 shadow-lg border-t border-gray-100">
+          <div class="w-full lg:w-1/3 border-r border-gray-300">
+            <canvas ref="pieChartCanvas" class="chart w-1/2"></canvas>
           </div>
-           <div class="w-2/3 items-center text-blue-500 " >
-            <p>No. Active Members  <span
-            class="ml-5 bg-blue-500 text-white text-sm px-3 py-1 rounded-full"
-          >
-            2000
-          </span></p>
-            <p>No.  Deactivated Members/Offsets 200  <span
-            class="ml-5 bg-yellow-400 text-white text-sm px-3 py-1 rounded-full"
-          >
-            2000
-          </span></p>
-          <p>No.Admins  <span
-            class="ml-5 bg-green-500 text-white text-sm px-3 py-1 rounded-full"
-          >
-            2000
-          </span></p>
+          <div class=" grid grid-cols-2 gap-y-0 items-center text-blue-500">
+            <p>No. Active Members</p>
+            <span class="hover:bg-blue-600 w-16 ml-5 bg-blue-500 text-white text-sm px-3 py-1 rounded-full">
+              2000
+            </span>
+            <p>No. Admins</p>
+            <span class="hover:bg-green-600 w-16 ml-5 bg-green-500 text-white text-sm px-3 py-1 rounded-full">
+              2000
+            </span>
+            <p>No. Deactivated Members/Offsets</p>
+            <span class="hover:bg-yellow-500 w-16 ml-5 bg-yellow-400 text-white text-sm px-3 py-1 rounded-full">
+              200
+            </span>
           </div>
-          </div>
+        </div>
       </div>
 
       <div class="">
@@ -166,10 +161,14 @@
     </div>
 
 
- 
+
     <!-- //all years confirmed payments -->
 
     <div class="shadow-lg border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
+
+
+
+
       <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-xs">
           <i class="fas fa-check-circle text-green-500 text-xs"></i>
@@ -299,12 +298,37 @@
         </tbody>
       </table>
 
-      <div class="my-5 mx-3">
+
+      <canvas ref="barChartCanvas" class="chart w-1/2"></canvas>
+      <div class="flex flex-col lg:flex-row lg:space-x-4 items-center justify-center my-5">
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-blue-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Regular </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-yellow-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Urgent </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class="bg-green-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Subsidy </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-blue-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Service </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-red-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Penality</p>
+        </div>
+      </div>
+      <div class=" my-3 ml-16">
         <a @click="showOrgDetail = true"
           class="text-blue-600 hover:text-blue-800 underline font-medium cursor-pointer transition duration-200 ease-in-out">
           Organization Payment Detail
         </a>
       </div>
+
     </div>
     <div v-if="showOrgDetail">
       <transition name="fade" mode="out-in">
@@ -500,16 +524,16 @@
             <div class="fixed inset-0 flex items-center justify-center z-50">
               <div class="bg-white rounded-lg shadow-lg p-8 mx-5 lg:w-1/2">
                 <div class="text-green-500 mb-5 font-bold text-md italic">
-               You have Succussfully Login and to Be secure change your password !!!
+                  You have Succussfully Login and to Be secure change your password !!!
                 </div>
-              
+
                 <form action="" class="mx-5">
                   <div class="mb-4">
                     <label class="custom-label" for="oldPassword">
                       {{ $t("oldPassword") }}
                     </label>
-                    <input class="custom-input" id="old-password" type="password" :placeholder="$t('oldPassword')" 
-                    v-model="oldPassword"/>
+                    <input class="custom-input" id="old-password" type="password" :placeholder="$t('oldPassword')"
+                      v-model="oldPassword" />
                   </div>
                   <div class="mb-4 relative">
                     <label class="custom-label" for="newPassword">
@@ -517,8 +541,7 @@
                     </label>
                     <div class="relative">
                       <input :type="isPasswordVisible ? 'text' : 'password'" class="custom-input pr-12" id="newPassword"
-                      v-model="newPassword"
-                        :placeholder="$t('enterNewPassword')" />
+                        v-model="newPassword" :placeholder="$t('enterNewPassword')" />
                     </div>
                   </div>
                   <div class="mb-4">
@@ -526,13 +549,12 @@
                       {{ $t("confirmPassword") }}
                     </label>
                     <input class="custom-input" id="confirmPassword" type="password"
-                      :placeholder="$t('enterConfirmPassword')"
-                      v-model="confirmPassword" />
+                      :placeholder="$t('enterConfirmPassword')" v-model="confirmPassword" />
                   </div>
 
-                 <div class="my-5 text-xs">
-                  <p class="text-red-500" v-if="showError">{{ errorMessage }} *</p>
-                </div>
+                  <div class="my-5 text-xs">
+                    <p class="text-red-500" v-if="showError">{{ errorMessage }} *</p>
+                  </div>
 
                   <div class="flex flex-row space-x-3">
                     <button @click.prevent="changePassword()"
@@ -540,7 +562,7 @@
                       <i class="fa fa-arrow-right"></i>
                       <span>{{ $t("submit") }}</span>
                     </button>
-                    
+
                   </div>
                 </form>
               </div>
@@ -567,11 +589,11 @@ export default {
     return {
       barChart: null,
       showChangePassword: false,
-      oldPassword:"",
-      newPassword:"",
-      confirmPassword:"",
-      showError:false,
-      errorMessage:"",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+      showError: false,
+      errorMessage: "",
       showOrgDetail: false,
       showToast: false,
       paidClients: 1, // Number of clients who have paid
@@ -581,7 +603,6 @@ export default {
       monthlyCapital: "",
       monthlyCharge: "",
       totalOvedue: "",
-
       activeYear: "",
       activeMonth: "",
       allOverDueClients: 54,
@@ -630,29 +651,25 @@ export default {
   },
 
   async mounted() {
-
-    const newData = [1500,500,200]; // Example new data
-    this. createPieChart(newData);
+    const newData = [1500, 500, 200];
+    const newData1 = [1500, 2000, 1200, 1100, 1000] // Example new data
+    this.createPieChart(newData);
+    this.createBarChart(newData1);
 
     if (this.$route.query.loginSuccess === "true") {
       const activeItem = "dashboard";
       this.$store.dispatch("commitActiveItem", { activeItem });
-
-    
-
-      if(this.$route.query.changePassword==="true"){
+      if (this.$route.query.changePassword === "true") {
         this.showChangePassword = true;
-      }else{
+      } else {
         this.$refs.toast.showLoginToastMessage(
-        "Successfully Login in to your dashboard"
-      );
+          "Successfully Login in to your dashboard"
+        );
         setTimeout(() => {
-        this.$router.push("/admindashboard");
-      }, 2000);
+          this.$router.push("/admindashboard");
+        }, 2000);
 
       }
-
-     
     }
 
     await this.$apiGet("/api/v1/users")
@@ -707,139 +724,234 @@ export default {
 
 
     createPieChart(newData) {
-    const pieChartLabels = ["Active Users", "Offset Users","Admins        "];
-    const pieChartData = {
-      labels: pieChartLabels,
-      datasets: [
-        {
-          label: "Project Report",
-          data: newData,
-          backgroundColor: [
-            "rgba(0, 122, 230)",
-            "rgba(255, 255, 0)",
-            "rgba(0, 255, 0)",
-          ],
-          borderColor: [
-            "rgb(255, 99, 132)",
-            "rgb(255, 159, 64)",
-            "rgb(255, 159, 64)",
-          ],
-          borderWidth: 1,
+      const pieChartLabels = ["Active Users", "Offset Users", "Admins        "];
+      const pieChartData = {
+        labels: pieChartLabels,
+        datasets: [
+          {
+
+            data: newData,
+            backgroundColor: [
+              "rgba(0, 122, 230)",
+              "rgba(255, 255, 0)",
+              "rgba(0, 255, 0)",
+            ],
+            borderColor: [
+              "rgb(255, 99, 132)",
+              "rgb(255, 159, 64)",
+              "rgb(255, 159, 64)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      const pieChartConfig = {
+        type: "pie",
+        data: pieChartData,
+        options: {
+          // Add any additional options for the pie chart here
         },
-      ],
-    };
-  
-    const pieChartConfig = {
-      type: "pie",
-      data: pieChartData,
-      options: {
-        // Add any additional options for the pie chart here
-      },
-    };
-  
-    const pieChartCanvas = this.$refs.pieChartCanvas;
-    const pieChartCtx = pieChartCanvas.getContext("2d");
-  
-    // Destroy the existing chart if it exists
-    if (this.pieChart) {
-      this.pieChart.destroy();
+      };
+
+      const pieChartCanvas = this.$refs.pieChartCanvas;
+      const pieChartCtx = pieChartCanvas.getContext("2d");
+
+      // Destroy the existing chart if it exists
+      if (this.pieChart) {
+        this.pieChart.destroy();
+      }
+
+      // Create a new chart
+      this.pieChart = new Chart(pieChartCtx, pieChartConfig);
+      console.log(this.pieChart);
+    },
+    createBarChart(newData) {
+      const barChartLabels = ["Regular", "Urgent", "Subsidy", "Service", "Penalty"];
+      const barChartData = {
+        labels: barChartLabels,
+        datasets: [
+          {
+            label: "Project Report",
+            data: newData,
+            backgroundColor: [
+              "rgba(0, 122, 230, 0.5)", // Semi-transparent blue
+              "rgba(255, 255, 0, 0.5)", // Semi-transparent yellow
+              "rgba(0, 255, 0, 0.5)",   // Semi-transparent green
+              "rgba(0, 65, 106, 0.5)", // Semi-transparent cyan
+              "rgba(255, 0, 0, 0.5)",   // Semi-transparent red
+            ],
+            borderColor: [
+              "rgb(0, 122, 230)", // Solid blue border
+              "rgb(255, 255, 0)", // Solid yellow border
+              "rgb(0, 255, 0)",   // Solid green border
+              "rgb(0, 65, 0)", // Solid cyan border
+              "rgb(255, 0, 0)",   // Solid red border
+            ],
+            borderWidth: 1, // Width of the border
+          },
+        ],
+      };
+
+      const barChartConfig = {
+        type: "bar", // Set chart type to bar
+        data: barChartData,
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              display: true, // Display legend
+              position: "top", // Position the legend at the top
+            },
+            tooltip: {
+              enabled: true, // Enable tooltips
+            },
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: "------Payment Types------",
+                color: 'rgb(0, 122, 230)',
+                font: { size: 14 },
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "-----Amount-----",
+                font: { size: 14 },
+                color: 'rgb(0, 122, 230)'
+              },
+              beginAtZero: true, // Ensure y-axis starts at 0
+            },
+
+          },
+          // Custom plugin to draw labels and values on top of bars
+          plugins: {
+            afterDatasetsDraw(chart) {
+              const { ctx, data } = chart;
+              chart.data.datasets.forEach((dataset, i) => {
+                const meta = chart.getDatasetMeta(i);
+                meta.data.forEach((bar, index) => {
+                  const value = dataset.data[index];
+                  ctx.fillStyle = "black";
+                  ctx.font = "12px Arial";
+                  ctx.textAlign = "center";
+                  ctx.fillText(value, bar.x, bar.y - 5); // Positioning the text above the bar
+                });
+              });
+            },
+          },
+        },
+      };
+
+      const barChartCanvas = this.$refs.barChartCanvas;
+      const barChartCtx = barChartCanvas.getContext("2d");
+
+      // Destroy the existing chart if it exists
+      if (this.barChart) {
+        this.barChart.destroy();
+      }
+
+      // Create a new chart
+      this.barChart = new Chart(barChartCtx, barChartConfig);
+      console.log(this.barChart);
     }
-  
-    // Create a new chart
-    this.pieChart = new Chart(pieChartCtx, pieChartConfig);
-    console.log(this.pieChart);
-  },
-  
+    ,
 
-    async changePassword(){
-      this.showError=false;
-      this.errorMessage="";
-    
-       console.log("passwords are",this.newPassword,this.newPassword,this.confirmPassword);
- 
 
-       if(!this.oldPassword){
+
+
+    async changePassword() {
+      this.showError = false;
+      this.errorMessage = "";
+
+      console.log("passwords are", this.newPassword, this.newPassword, this.confirmPassword);
+
+
+      if (!this.oldPassword) {
         //alert("hiii ")
-         this.showError=true;
-         this.errorMessage="Old Password is Required "
-         return;
-       }
+        this.showError = true;
+        this.errorMessage = "Old Password is Required "
+        return;
+      }
 
-       if(!this.newPassword){
+      if (!this.newPassword) {
         // alert("change password called")
-        this.showError=true;
-         this.errorMessage="New Password is Required ";
-         return;
-       }
+        this.showError = true;
+        this.errorMessage = "New Password is Required ";
+        return;
+      }
 
-       if(!this.confirmPassword){
+      if (!this.confirmPassword) {
         //alert("p")
-        this.showError=true;
-         this.errorMessage="Confirm Password is Required"
-         return;
-       }
+        this.showError = true;
+        this.errorMessage = "Confirm Password is Required"
+        return;
+      }
 
 
-       if(this.newPassword !=this.confirmPassword){
+      if (this.newPassword != this.confirmPassword) {
 
-        this.passwordMisMatch=true
-        this.errorMessage="Password Mis Match"
+        this.passwordMisMatch = true
+        this.errorMessage = "Password Mis Match"
         return;
 
-       }
+      }
 
 
-      const checkPassword= this.$isStrongPassword(this.newPassword);
+      const checkPassword = this.$isStrongPassword(this.newPassword);
 
-      console.log("validty and message",checkPassword.valid,checkPassword.errorMessage);
+      console.log("validty and message", checkPassword.valid, checkPassword.errorMessage);
 
 
       // alert(checkPassword.valid)
 
-        if(checkPassword.valid!=true){
-         this.showError=true;
-         this.errorMessage=checkPassword.message;
-         return;
-        }else{
-          console.log("it is valid")
-        }
-     
+      if (checkPassword.valid != true) {
+        this.showError = true;
+        this.errorMessage = checkPassword.message;
+        return;
+      } else {
+        console.log("it is valid")
+      }
 
 
-    const payload = {
+
+      const payload = {
         currentPassword: this.oldPassword,
         newPassword: this.newPassword,
         userId: this.userId,
       };
-   
 
 
 
-        try {
 
-        await this.$apiPatch("api/v1/users/updatePassword",this.userId, payload)
-        .then((response) => {
-          if (response.status === 1) {
-            console.log("response: " , response)
-            this.showChangePassword = false;
-            this.$refs.toast.showSuccessToastMessage(response.message);
-       
-            setTimeout(() => {
+      try {
+
+        await this.$apiPatch("api/v1/users/updatePassword", this.userId, payload)
+          .then((response) => {
+            if (response.status === 1) {
+              console.log("response: ", response)
+              this.showChangePassword = false;
+              this.$refs.toast.showSuccessToastMessage(response.message);
+
+              setTimeout(() => {
                 this.$router.push("/admindashboard");
-           }, 2000); 
-            //this.$reloadPage();
-          } 
-        });
-      }catch(error)  {
-            console.log("error", error.status,error.message);
-            this.showError=true;
-            this.errorMessage=error.message;
-        
-        }finally{
-          console.log("change password finally")
-        };
+              }, 2000);
+              //this.$reloadPage();
+            }
+          });
+      } catch (error) {
+        console.log("error", error.status, error.message);
+        this.showError = true;
+        this.errorMessage = error.message;
 
-        
+      } finally {
+        console.log("change password finally")
+      };
+
+
     },
 
     safePercentage(value) {
