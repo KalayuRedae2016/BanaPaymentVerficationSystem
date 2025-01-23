@@ -266,3 +266,33 @@ exports.processUploadFiles = async (files, body, existingUser = null) => {
   return { profileImage, attachments };
 };
 
+exports.mergeAttachmentsData = async (transfers, processFileDataFn) => {
+  return Promise.all(
+    transfers.map(async (transfer) => {
+      const attachmentsData = await processFileDataFn(transfer);
+
+      // Log the returned `attachmentsData` for debugging
+      console.log("Attachments Data:", attachmentsData);
+
+      // Ensure attachmentsData is an array
+      if (!Array.isArray(attachmentsData)) {
+        throw new Error("processFileData did not return an array");
+      }
+
+      const enrichedAttachments = transfer.attachments.map((attachment) => {
+        const matchingData = attachmentsData.find(data => data.filename === attachment.fileName);
+
+        return matchingData
+          ? { ...attachment, fileData: matchingData.fileData, filePath: matchingData.filePath }
+          : attachment;
+      });
+
+      return {
+        ...transfer.toObject(), // Ensure it's a plain object for modification
+        attachments: enrichedAttachments,
+      };
+    })
+  );
+};
+
+

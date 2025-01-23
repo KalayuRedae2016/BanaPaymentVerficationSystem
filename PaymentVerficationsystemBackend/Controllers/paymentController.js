@@ -1221,28 +1221,70 @@ exports.importPayments = catchAsync(async (req, res, next) => {
   }
 
   const filePath = req.file.path;
-  
-  try {
-    const result = await importFromExcel(filePath, Payment);
-    console.log(result)
-    if (!result || result.length === 0) {
-      return next(new AppError('No valid payment data found in the file', 400));
+
+  const validateAndTransformPaymentData = async (data) => {
+    console.log("Validating data:", data); // Log incoming data
+    const requiredFields = [];
+    const missingFields = requiredFields.filter((field) => !data[field]);
+    if (missingFields.length > 0) {
+      return next(new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400))
+    }
+   
+    console.log("mr",missingFields)
+    const organization = await validateExistence(Organization, {}, 'Create Organization Profile before creating User');
+    const prefixCode = organization.companyPrefixCode;
+    const length = 4;
+
+    const payment = new Payment(data);
+    return payment;
+  };
+  const importFromExcel = async () => {
+    const workbook = xlsx.readFile(filePath);
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = xlsx.utils.sheet_to_json(worksheet); // Convert the sheet to JSON
+    // console.log("jd",jsonData)
+
+    if (!Array.isArray(jsonData) || jsonData.length === 0) {
+      throw new AppError('Excel file is empty or data is not in the correct format.', 400);
     }
 
-    fs.unlinkSync(filePath);// Clean up the file after successful processing
+    const importedData = [];
+    const errors = [];
 
-    res.status(200).json({
-      status: 'success',
-      message: 'Data imported successfully',
-      importedRecords: result.length,
-    });
-  } catch (error) {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+    for (const [index, data] of jsonData.entries()) {
+      try {
+
+        const paymentDocument = await validateAndTransformPaymentData(data);
+        console.log("Transformed Payment:", paymentDocument); // Log transformed user data
+        const savedPayment = await paymentDocument.save(); // Save the user to the database
+        importedData.push(savedPayment);
+        console.log("Saved Payment:", savedPayment); // Log saved user
+      } catch (error) {
+        errors.push({ row: index + 1, error: error.message, data });
+      }
     }
-    return next(error);
+    console.log("Imported Data:", importedData); // Log final imported data
+    return { importedData, errors };
+  };
+
+  const { importedData, errors } = await importFromExcel();
+  console.log("imd",importedData)
+
+  if (!importedData.length) {
+    return next(new AppError('No valid users were imported from the file.', 400));
   }
+    fs.unlinkSync(filePath); // Cleanup uploaded file
+
+  res.status(200).json({
+    status: 1,
+    message: errors.length > 0 ? 'Import completed with some errors' : 'Data imported successfully',
+    successCount: importedData.length,
+    errorCount: errors.length,
+    errors,
+    importedPayments: importedData,
+  });
 });
+
 exports.exportPayments = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({});
   await exportToExcel(payments, 'Payments', 'paymentData.xlsx', res);
@@ -1548,7 +1590,8 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
-  if (!payments) {
+  console.log("confirmed Payments",payments)
+  if (payments.length===0) {
     return next(new AppError(`No confirmed Payments Found`, 400));
   }
 
@@ -1612,7 +1655,7 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
   if (fromBankType) transferQuery.fromBankType = fromBankType;
   if (toBankType) transferQuery.toBankType = toBankType;
   if (amount) transferQuery.amount = amount;
-  console.log(transferQuery)
+  
   const organization = await validateExistence(Organization, {}, "Organization is not found")
   const transferFunds = organization.paymentTransfers.filter(transfer => {
     return Object.keys(transferQuery).every(key => {
@@ -1620,17 +1663,21 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
     });
   });
 
+  console.log("transferFunds",transferFunds)
   // Process each transfer object
   const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
     return processFileData(transfer);  // Process each transfer individually
   }));
-  console.log("transferFunds", transferFunds)
-
+console.log("transferFunds", transferFunds)
+console.log("attachments",attachmentsData)
 
   res.status(200).json({
     status: 1,
-    transferFunds,
-    attachmentsData
+    transferFunds:{
+      ...transferFunds,
+      attachmentsData:attachmentsData[0].attachmentsData
+    }
+    
   });
 });
 exports.updateTransferFunds = catchAsync(async (req, res, next) => {
