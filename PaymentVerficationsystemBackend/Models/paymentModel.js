@@ -16,7 +16,7 @@ const paymentSchema = new mongoose.Schema(
     userCode: {type: String,required: true,},
     fullName: {type: String,required: true,default: null},
     billCode: {type: String,required: true,unique: true},
-    activeYear: {type: Number,default: new Date().getFullYear()},
+    activeYear: {type: Number,required: true,default: new Date().getFullYear()},
     activeMonth: {type: Number,required: true,default: new Date().getMonth()},
     registrationFee: {type: Number,default: 0},
     urgent: paymentTypeSchema,

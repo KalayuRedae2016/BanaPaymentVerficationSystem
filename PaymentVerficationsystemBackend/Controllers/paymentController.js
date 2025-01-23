@@ -1,25 +1,31 @@
 const mongoose = require('mongoose');
+const xlsx = require('xlsx'); //for import user from excel
+const fs = require('fs');
+const path = require('path');
+
 const Organization = require('../Models/organizationModel');
 const PaymentSetting = require('../Models/paymentSettingModel');
 const User = require('../Models/userModel');
 const Payment = require('../Models/paymentModel');
 const Apikey = require('../Models/apiKeyModel');
 
+const createPendingPayments = require("../utils/createPendingPayments")
 const createDefaultAdminUser = require("../utils/userUtils");
+
 const { validateExistence } = require("../utils/validateExistence")
 const { calculateBalances } = require('../utils/calculateBalances')
 const { formatDate, formatDateGC } = require("../utils/formatDate")
 const { calculatePenalty } = require("../utils/calculatePenality")
 const { calculateTotalPaidAndPenalityAmount } = require('../utils/calculateTotalPaidAndPenalityAMount')
+const {mergedTransferFunds,createMulterMiddleware, processFileData, processUploadFiles } = require('../utils/fileController');
+const { deleteFile, exportToExcel} = require('../utils/fileController');
+const { sendEmail } = require('../utils/email');
+
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-const createPendingPayments = require("../utils/createPendingPayments")
-const { deleteFile, exportToExcel, importFromExcel, createMulterMiddleware, processFileData, processUploadFiles } = require('../utils/fileController');
-const { sendEmail } = require('../utils/email');
 
-const fs = require('fs');
-const path = require('path');
+
 // Configure multer for payment file uploads
 const paymentFileUpload = createMulterMiddleware(
   'uploads/payments/', // Destination folder
@@ -1229,7 +1235,7 @@ exports.importPayments = catchAsync(async (req, res, next) => {
     console.log("Validating data:", data); // Log incoming data
     
     // Required fields for validation
-    const requiredFields = ['user', 'paymentSetting', 'userCode', 'fullName', 'billCode', 'activeMonth'];
+    const requiredFields = ['user', 'paymentSetting', 'userCode', 'fullName', 'billCode', 'activeMonth','activeMonth'];
     const missingFields = requiredFields.filter((field) => !data[field]);
     
     if (missingFields.length > 0) {
@@ -1702,23 +1708,55 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
     });
   });
 
-  console.log("transferFunds",transferFunds)
   // Process each transfer object
   const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
     return processFileData(transfer);  // Process each transfer individually
   }));
-console.log("transferFunds", transferFunds)
-console.log("attachments",attachmentsData)
 
+  // console.log("TransferFunds",transferFunds)
+  // console.log("AttachmentData",attachmentsData)
+
+  const mergedTransferFunds = transferFunds.map((transfer) => {
+    const relatedAttachment = attachmentsData.find((attachment) =>
+      transfer.attachments.some((transferAttachment) =>
+        attachment.attachmentsData.some((attachmentData) => attachmentData.attachmentId === transferAttachment.attachmentId)
+      )
+    );
+
+    const attachments = transfer.attachments.map((transferAttachment) => {
+    const extraData =relatedAttachment?.attachmentsData.find((attachmentData) => attachmentData.attachmentId === transferAttachment.attachmentId) || {};
+      return {
+        fileName: transferAttachment.fileName || null,
+        fileType: extraData.fileType || null,
+        description: extraData.description || null,
+        _id: transferAttachment._id,
+        uploadedDate: extraData.uploadedDate || null,
+        fileData:extraData.fileData,
+        filePath:extraData.filePath
+      };
+    });
+
+    // Return the structured transfer object
+    return {
+      transferCase: transfer.transferCase,
+      transferType: transfer.transferType,
+      orgId: transfer.orgId,
+      toWhat: transfer.toWhat,
+      fromBankType: transfer.fromBankType,
+      toBankType: transfer.toBankType,
+      amount: transfer.amount,
+      reason: transfer.reason,
+      refNumber: transfer.refNumber,
+      transferDate: transfer.transferDate,
+      attachments,
+    };
+  });
   res.status(200).json({
-    status: 1,
-    transferFunds:{
-      ...transferFunds,
-      attachmentsData:attachmentsData[0].attachmentsData
-    }
-    
+    status: 1,   
+    transferFunds:mergedTransferFunds
   });
 });
+
 exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   console.log("Request Body:", req.body);
   console.log("Request Files:", req.files);
