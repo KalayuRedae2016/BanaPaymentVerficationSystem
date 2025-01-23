@@ -1210,8 +1210,10 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
 });
 
 exports.importPayments = catchAsync(async (req, res, next) => {
-  console.log("here")
-  console.log("request File", req.file)
+  console.log("paymentexcelhere");
+  console.log("request File", req.file);
+  
+  // Check if the file exists and is an Excel file
   if (!req.file || !req.file.path) {
     return next(new AppError('File not uploaded or path is invalid.', 400));
   }
@@ -1222,28 +1224,61 @@ exports.importPayments = catchAsync(async (req, res, next) => {
 
   const filePath = req.file.path;
 
+  // Validate and transform payment data
   const validateAndTransformPaymentData = async (data) => {
     console.log("Validating data:", data); // Log incoming data
-    const requiredFields = [];
+    
+    // Required fields for validation
+    const requiredFields = ['user', 'paymentSetting', 'userCode', 'fullName', 'billCode', 'activeMonth'];
     const missingFields = requiredFields.filter((field) => !data[field]);
+    
     if (missingFields.length > 0) {
-      return next(new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400))
+      return next(new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400));
     }
-   
-    console.log("mr",missingFields)
-    const organization = await validateExistence(Organization, {}, 'Create Organization Profile before creating User');
-    const prefixCode = organization.companyPrefixCode;
-    const length = 4;
+    
+    const payment = {
+      user: data.user,
+      paymentSetting: data.paymentSetting,
+      userCode: data.userCode,
+      fullName: data.fullName || null,
+      billCode: data.billCode,
+      activeYear: data.activeYear || new Date().getFullYear(),
+      activeMonth: data.activeMonth,
+      registrationFee: data.registrationFee || 0,
+      urgent: data.urgent || { amount: 0 },
+      regular: data.regular || { amount: 0 },
+      subsidy: data.subsidy || { amount: 0 },
+      service: data.service || { amount: 0 },
+      penality: data.penality || { amount: 0 },
+      baseAmount: data.baseAmount || 0,
+      totalExpectedAmount: data.totalExpectedAmount || 0,
+      totalPaidAmount: data.totalPaidAmount || 0,
+      confirmedDate: data.confirmedDate || null,
+      confirmationMethod: data.confirmationMethod || null,
+      confirmedID: data.confirmedID || null,
+      status: data.status || 'pending',
+      isPaid: data.isPaid || false,
+      latest: data.latest || false,
+      seen: data.seen || false,
+      adminSeen: data.adminSeen || false,
+    };
 
-    const payment = new Payment(data);
+    // Validate amounts cannot be negative
+    ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach(type => {
+      if (payment[type].amount < 0) {
+        throw new Error(`Amount for '${type}' cannot be negative`);
+      }
+    });
+
     return payment;
   };
+
+  // Process the Excel file and import payments
   const importFromExcel = async () => {
     const workbook = xlsx.readFile(filePath);
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = xlsx.utils.sheet_to_json(worksheet); // Convert the sheet to JSON
-    // console.log("jd",jsonData)
-
+    
     if (!Array.isArray(jsonData) || jsonData.length === 0) {
       throw new AppError('Excel file is empty or data is not in the correct format.', 400);
     }
@@ -1253,27 +1288,29 @@ exports.importPayments = catchAsync(async (req, res, next) => {
 
     for (const [index, data] of jsonData.entries()) {
       try {
-
         const paymentDocument = await validateAndTransformPaymentData(data);
-        console.log("Transformed Payment:", paymentDocument); // Log transformed user data
-        const savedPayment = await paymentDocument.save(); // Save the user to the database
+        console.log("Transformed Payment:", paymentDocument); // Log transformed payment data
+        const savedPayment = await Payment.create(paymentDocument); // Save the payment to the database
         importedData.push(savedPayment);
-        console.log("Saved Payment:", savedPayment); // Log saved user
+        console.log("Saved Payment:", savedPayment); // Log saved payment
       } catch (error) {
         errors.push({ row: index + 1, error: error.message, data });
       }
     }
+
     console.log("Imported Data:", importedData); // Log final imported data
     return { importedData, errors };
   };
 
   const { importedData, errors } = await importFromExcel();
-  console.log("imd",importedData)
+  console.log("Imported Data:", importedData);
+
+  // Cleanup: Remove uploaded file after processing
+  fs.unlinkSync(filePath);
 
   if (!importedData.length) {
-    return next(new AppError('No valid users were imported from the file.', 400));
+    return next(new AppError('No valid payments were imported from the file.', 400));
   }
-    fs.unlinkSync(filePath); // Cleanup uploaded file
 
   res.status(200).json({
     status: 1,
@@ -1571,6 +1608,8 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   }
 
   const organization = await Organization.findOne();
+  console.log("orgID",organization.id)
+  console.log("orgID",organization._id)
   if (!organization) {
     return next(new AppError("Organization is not found", 400))
   }
@@ -1590,7 +1629,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
-  console.log("confirmed Payments",payments)
+  // console.log("confirmed Payments",payments)
   if (payments.length===0) {
     return next(new AppError(`No confirmed Payments Found`, 400));
   }
@@ -1611,7 +1650,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     if (!toBankType) {
       return next(new AppError('toBankType field is required for bank transfers', 400));
     }
-    toWhat = organization.id
+    toWhat = organization._id
     const toBankExists = banks.some(account => account.bankType === toBankType);
     if (!toBankExists) {
       return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
@@ -1628,7 +1667,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     transferCase,
     transferType,
     orgId: organization.id,
-    toWhat: transferCase === "userWithdrawal" ? req.body.toWhat : organization.id,
+    toWhat: transferCase === "userWithdrawal" ? req.body.toWhat :organization._id,
     fromBankType,
     toBankType: transferCase === "bankTransfer" ? toBankType : null,
     amount,
@@ -1640,7 +1679,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   await organization.save();
   res.status(200).json({
     status: 1,
-    message: `Successfully transferred ${amount} Birr from ${fromBankType} to ${transferCase === "bankTransfer" ? toBankType : toWhat}`,
+    message: `Successfully transferred ${amount} Birr from ${fromBankType} to ${transferCase === "bankTransfer" ? toBankType : organization._id}`,
   });
 });
 
