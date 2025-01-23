@@ -12,8 +12,10 @@ const { sendEmail } = require('../utils/email');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { formatDate } = require("../utils/formatDate")
+const {validateExistence}=require("../utils/validateExistence")
+const {normalizePhoneNumber}=require("../utils/userUtils")
 const createPendingPayments = require("../utils/createPendingPayments")
-const { importFromExcel,exportToExcel,processFileData,createMulterMiddleware, processUploadFiles,deleteFile} = require('../utils/fileController');
+const {exportToExcel,processFileData,createMulterMiddleware, processUploadFiles,deleteFile} = require('../utils/fileController');
 const defaultVariables = require('../config/defaultVariables');
 
 // Configure multer for user file uploads
@@ -315,62 +317,73 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 });
 
 exports.importUsers = catchAsync(async (req, res, next) => {
-  const filePath = req.file.path;
-
-  const transformUserData = async (data) => {
-    // console.log("Processing Row Data:", data); // Log input data for debugging
-  
-    const organization = await Organization.findOne();
-    if (!organization) throw new AppError('Organization not found', 404);
-
-    const prefixCode = organization.companyPrefixCode;
-    const length = 4; // Length for the generated userCode
-
-    const requiredFields = ['firstName', 'middleName', 'lastName', 'email', 'tigrignaName', 'phoneNumber', 'role', 'gender', 'age'];
-    const missingFields = requiredFields.filter(field => !data[field]);
-    if (missingFields.length > 0) {
-      console.error(`Row skipped. Missing fields: ${missingFields.join(', ')}`);
-      throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+    if (!req.file || !req.file.path) {
+      return next(new AppError('File not uploaded or path is invalid.', 400));
     }
+  
+    if (!req.file.mimetype.includes('spreadsheetml') && !req.file.originalname.endsWith('.xlsx')) {
+      return next(new AppError('Please upload a valid Excel file (.xlsx)', 400));
+    }
+  
+    const filePath = req.file.path;
+   
+  const validateAndTransformUserData = async (data) => {
+    console.log("Validating data:", data); // Log incoming data
+    const requiredFields = ['firstName', 'middleName', 'lastName', 'phoneNumber', 'role', 'gender', 'age'];
+    const missingFields = requiredFields.filter((field) => !data[field]);
+    if (missingFields.length > 0) {
+      return next(new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400))
+    }
+    if (data.email && !validator.isEmail(data.email)) {
+      return next(new AppError('Invalid email format', 400))
+    }
+    console.log("mr",missingFields)
+    const organization = await validateExistence(Organization, {}, 'Create Organization Profile before creating User');
+    const prefixCode = organization.companyPrefixCode;
+    const length = 4;
 
     const user = new User(data);
     user.userCode = await user.generateUserCode(prefixCode, length); // Assuming generateUserCode is a method in User model
     const password = await user.generateRandomPassword(); // Assuming generateRandomPassword is a method in User model
     user.password = await bcrypt.hash(password, 12); // Hash the password for security
-
-    // console.log("Transformed User Data:", user); // Log the transformed user data for debugging
+    user.phoneNumber = normalizePhoneNumber(user.phoneNumber); // Update phone number
+    // console.log("uu",user)
     return user;
   };
 
-  const importFromExcel = async (filePath, Model, transformFn) => {
+  const importFromExcel = async () => {
     const workbook = xlsx.readFile(filePath);
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = xlsx.utils.sheet_to_json(worksheet); // Convert the sheet to JSON
+    // console.log("jd",jsonData)
+
     if (!Array.isArray(jsonData) || jsonData.length === 0) {
-      throw new AppError("Excel file is empty or data is not in the correct format.", 400);
+      throw new AppError('Excel file is empty or data is not in the correct format.', 400);
     }
 
     const importedData = [];
+    const errors = [];
+
     for (const [index, data] of jsonData.entries()) {
       try {
-        const userDocument = await transformFn(data);
+
+        const userDocument = await validateAndTransformUserData(data);
+        console.log("Transformed User:", userDocument); // Log transformed user data
         const savedUser = await userDocument.save(); // Save the user to the database
-        importedData.push(savedUser); // Push the saved user to the imported data array
+        importedData.push(savedUser);
+        console.log("Saved User:", savedUser); // Log saved user
       } catch (error) {
-        console.error(`Error processing row ${index + 1}: ${error.message}`);
-        continue; // Continue processing the next row if there's an error
+        errors.push({ row: index + 1, error: error.message, data });
       }
     }
-    return importedData; // Return the list of saved users
+    console.log("Imported Data:", importedData); // Log final imported data
+    return { importedData, errors };
   };
 
-  let importedUsers = await importFromExcel(filePath, User, transformUserData);
-  console.log("After calling importFromExcel:", importedUsers);
+  const { importedData, errors } = await importFromExcel();
+  console.log("imd",importedData)
 
-  importedUsers = Array.isArray(importedUsers) ? importedUsers : [];
-  // console.log("Final Imported Users after validation:", importedUsers);
-
-  if (importedUsers.length === 0) {
+  if (!importedData.length) {
     return next(new AppError('No valid users were imported from the file.', 400));
   }
 
@@ -379,17 +392,21 @@ exports.importUsers = catchAsync(async (req, res, next) => {
     return next(new AppError('No active payment setting found.', 404));
   }
 
-  for (const user of importedUsers) {
+  for (const user of importedData) {
     if (user.isActive && user.role === 'User') {
       await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
     }
   }
 
-  // fs.unlinkSync(filePath);
+  fs.unlinkSync(filePath); // Cleanup uploaded file
+
   res.status(200).json({
     status: 1,
-    message: 'Data imported successfully',
-    data: { importedUsers },
+    message: errors.length > 0 ? 'Import completed with some errors' : 'Data imported successfully',
+    successCount: importedData.length,
+    errorCount: errors.length,
+    errors,
+    importedUsers: importedData,
   });
 });
 

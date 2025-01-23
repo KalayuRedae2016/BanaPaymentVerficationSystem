@@ -1210,32 +1210,118 @@ exports.generateReceipt = catchAsync(async (req, res, next) => {
 });
 
 exports.importPayments = catchAsync(async (req, res, next) => {
-  if (!req.file) {
-    return next(new AppError('No file uploaded', 400));
+  console.log("paymentexcelhere");
+  console.log("request File", req.file);
+  
+  // Check if the file exists and is an Excel file
+  if (!req.file || !req.file.path) {
+    return next(new AppError('File not uploaded or path is invalid.', 400));
   }
-  const filePath = req.file.path; // Path to the uploaded file
-  console.log(filePath)
-  try {
-    const result = await importFromExcel(filePath, Payment);
-    console.log(result)
-    if (!result || result.length === 0) {
-      return next(new AppError('No valid payment data found in the file', 400));
+
+  if (!req.file.mimetype.includes('spreadsheetml') && !req.file.originalname.endsWith('.xlsx')) {
+    return next(new AppError('Please upload a valid Excel file (.xlsx)', 400));
+  }
+
+  const filePath = req.file.path;
+
+  // Validate and transform payment data
+  const validateAndTransformPaymentData = async (data) => {
+    console.log("Validating data:", data); // Log incoming data
+    
+    // Required fields for validation
+    const requiredFields = ['user', 'paymentSetting', 'userCode', 'fullName', 'billCode', 'activeMonth'];
+    const missingFields = requiredFields.filter((field) => !data[field]);
+    
+    if (missingFields.length > 0) {
+      return next(new AppError(`Missing required fields: ${missingFields.join(', ')}`, 400));
     }
+    
+    const payment = {
+      user: data.user,
+      paymentSetting: data.paymentSetting,
+      userCode: data.userCode,
+      fullName: data.fullName || null,
+      billCode: data.billCode,
+      activeYear: data.activeYear || new Date().getFullYear(),
+      activeMonth: data.activeMonth,
+      registrationFee: data.registrationFee || 0,
+      urgent: data.urgent || { amount: 0 },
+      regular: data.regular || { amount: 0 },
+      subsidy: data.subsidy || { amount: 0 },
+      service: data.service || { amount: 0 },
+      penality: data.penality || { amount: 0 },
+      baseAmount: data.baseAmount || 0,
+      totalExpectedAmount: data.totalExpectedAmount || 0,
+      totalPaidAmount: data.totalPaidAmount || 0,
+      confirmedDate: data.confirmedDate || null,
+      confirmationMethod: data.confirmationMethod || null,
+      confirmedID: data.confirmedID || null,
+      status: data.status || 'pending',
+      isPaid: data.isPaid || false,
+      latest: data.latest || false,
+      seen: data.seen || false,
+      adminSeen: data.adminSeen || false,
+    };
 
-    fs.unlinkSync(filePath);// Clean up the file after successful processing
-
-    res.status(200).json({
-      status: 'success',
-      message: 'Data imported successfully',
-      importedRecords: result.length,
+    // Validate amounts cannot be negative
+    ['urgent', 'regular', 'subsidy', 'service', 'penality'].forEach(type => {
+      if (payment[type].amount < 0) {
+        throw new Error(`Amount for '${type}' cannot be negative`);
+      }
     });
-  } catch (error) {
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
+
+    return payment;
+  };
+
+  // Process the Excel file and import payments
+  const importFromExcel = async () => {
+    const workbook = xlsx.readFile(filePath);
+    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+    const jsonData = xlsx.utils.sheet_to_json(worksheet); // Convert the sheet to JSON
+    
+    if (!Array.isArray(jsonData) || jsonData.length === 0) {
+      throw new AppError('Excel file is empty or data is not in the correct format.', 400);
     }
-    return next(error);
+
+    const importedData = [];
+    const errors = [];
+
+    for (const [index, data] of jsonData.entries()) {
+      try {
+        const paymentDocument = await validateAndTransformPaymentData(data);
+        console.log("Transformed Payment:", paymentDocument); // Log transformed payment data
+        const savedPayment = await Payment.create(paymentDocument); // Save the payment to the database
+        importedData.push(savedPayment);
+        console.log("Saved Payment:", savedPayment); // Log saved payment
+      } catch (error) {
+        errors.push({ row: index + 1, error: error.message, data });
+      }
+    }
+
+    console.log("Imported Data:", importedData); // Log final imported data
+    return { importedData, errors };
+  };
+
+  const { importedData, errors } = await importFromExcel();
+  console.log("Imported Data:", importedData);
+
+  // Cleanup: Remove uploaded file after processing
+  fs.unlinkSync(filePath);
+
+  if (!importedData.length) {
+    return next(new AppError('No valid payments were imported from the file.', 400));
   }
+
+  res.status(200).json({
+    status: 1,
+    message: errors.length > 0 ? 'Import completed with some errors' : 'Data imported successfully',
+    successCount: importedData.length,
+    errorCount: errors.length,
+    errors,
+    importedPayments: importedData,
+  });
 });
+
 exports.exportPayments = catchAsync(async (req, res, next) => {
   const payments = await Payment.find({});
   await exportToExcel(payments, 'Payments', 'paymentData.xlsx', res);
@@ -1522,6 +1608,8 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   }
 
   const organization = await Organization.findOne();
+  console.log("orgID",organization.id)
+  console.log("orgID",organization._id)
   if (!organization) {
     return next(new AppError("Organization is not found", 400))
   }
@@ -1541,7 +1629,8 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
-  if (!payments) {
+  // console.log("confirmed Payments",payments)
+  if (payments.length===0) {
     return next(new AppError(`No confirmed Payments Found`, 400));
   }
 
@@ -1561,7 +1650,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     if (!toBankType) {
       return next(new AppError('toBankType field is required for bank transfers', 400));
     }
-    toWhat = organization.id
+    toWhat = organization._id
     const toBankExists = banks.some(account => account.bankType === toBankType);
     if (!toBankExists) {
       return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
@@ -1578,7 +1667,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     transferCase,
     transferType,
     orgId: organization.id,
-    toWhat: transferCase === "userWithdrawal" ? req.body.toWhat : organization.id,
+    toWhat: transferCase === "userWithdrawal" ? req.body.toWhat :organization._id,
     fromBankType,
     toBankType: transferCase === "bankTransfer" ? toBankType : null,
     amount,
@@ -1590,7 +1679,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   await organization.save();
   res.status(200).json({
     status: 1,
-    message: `Successfully transferred ${amount} Birr from ${fromBankType} to ${transferCase === "bankTransfer" ? toBankType : toWhat}`,
+    message: `Successfully transferred ${amount} Birr from ${fromBankType} to ${transferCase === "bankTransfer" ? toBankType : organization._id}`,
   });
 });
 
@@ -1605,7 +1694,7 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
   if (fromBankType) transferQuery.fromBankType = fromBankType;
   if (toBankType) transferQuery.toBankType = toBankType;
   if (amount) transferQuery.amount = amount;
-  console.log(transferQuery)
+  
   const organization = await validateExistence(Organization, {}, "Organization is not found")
   const transferFunds = organization.paymentTransfers.filter(transfer => {
     return Object.keys(transferQuery).every(key => {
@@ -1613,26 +1702,30 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
     });
   });
 
+  console.log("transferFunds",transferFunds)
   // Process each transfer object
   const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
     return processFileData(transfer);  // Process each transfer individually
   }));
-  console.log("transferFunds", transferFunds)
-
+console.log("transferFunds", transferFunds)
+console.log("attachments",attachmentsData)
 
   res.status(200).json({
     status: 1,
-    transferFunds,
-    attachmentsData
+    transferFunds:{
+      ...transferFunds,
+      attachmentsData:attachmentsData[0].attachmentsData
+    }
+    
   });
 });
 exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   console.log("Request Body:", req.body);
   console.log("Request Files:", req.files);
-  console.log("request params",req.params)
+  console.log("request params", req.params)
 
-  const transferId=req.params.id
-  const {reason, refNumber, transferDate, toWhat } = req.body;
+  const transferId = req.params.id
+  const { reason, refNumber, transferDate, toWhat } = req.body;
   if (!transferId) return next(new AppError("Missing Transfer ID", 400));
 
   const organization = await Organization.findOne();
@@ -1648,12 +1741,12 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   };
 
   try {
-    const transferCase = req.body.transferCase|| transfer.transferCase;
+    const transferCase = req.body.transferCase || transfer.transferCase;
     const transferType = req.body.transferType || transfer.transferType;
-    const fromBankType=req.body.fromBankType||transfer.fromBankType
-    const toBankType=req.body.toBankType||transfer.toBankType
-    const amount=req.body.amount||transfer.amount
-    
+    const fromBankType = req.body.fromBankType || transfer.fromBankType
+    const toBankType = req.body.toBankType || transfer.toBankType
+    const amount = req.body.amount || transfer.amount
+
     if (fromBankType) {
       const banks = transfer.transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
       validateBankType(fromBankType, banks);
@@ -1674,34 +1767,34 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       transfer.amount = parsedAmount;
     }
 
-  const payments = await Payment.find({ isPaid: true, status: 'confirmed' });
-  if (!payments) {
-    return next(new AppError(`No confirmed Payments Found`, 400));
-  }
-  const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
-  let users
-  if (transferCase === "userWithdrawal") {
-    users = await User.findById(userQuery)
-  } else {
-    users = await User.find()
-  }
-
-  if (!users) {
-    return next(new AppError("User/s is not found", 400))
-  }
-  console.log(`ffB${fromBankType} and Amount${amount}`)
-  console.log(`ffB${transfer.fromBankType} and Amount${amount}`)
-  if (fromBankType && amount !== undefined) {
-    const bankBalances = calculateBalances(payments, organization, users);
-    const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
-  
-    const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
-    const availableFunds = (bankTypes[fromBankType]?.[balanceType] || 0);
-  console.log("avaf",availableFunds)
-    if (availableFunds < amount) {
-      return next(new AppError('Insufficient funds', 400));
+    const payments = await Payment.find({ isPaid: true, status: 'confirmed' });
+    if (!payments) {
+      return next(new AppError(`No confirmed Payments Found`, 400));
     }
-  }
+    const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
+    let users
+    if (transferCase === "userWithdrawal") {
+      users = await User.findById(userQuery)
+    } else {
+      users = await User.find()
+    }
+
+    if (!users) {
+      return next(new AppError("User/s is not found", 400))
+    }
+    console.log(`ffB${fromBankType} and Amount${amount}`)
+    console.log(`ffB${transfer.fromBankType} and Amount${amount}`)
+    if (fromBankType && amount !== undefined) {
+      const bankBalances = calculateBalances(payments, organization, users);
+      const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
+
+      const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
+      const availableFunds = (bankTypes[fromBankType]?.[balanceType] || 0);
+      console.log("avaf", availableFunds)
+      if (availableFunds < amount) {
+        return next(new AppError('Insufficient funds', 400));
+      }
+    }
     if (reason) transfer.reason = reason;
     if (refNumber) transfer.refNumber = refNumber;
 
@@ -1727,12 +1820,12 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
 
     await organization.save();
 
-  const {attachmentsData } = await processFileData(transfer);
+    const { attachmentsData } = await processFileData(transfer);
 
     res.status(200).json({
       status: 1,
       message: `Successfully updated transfer ${transferId}.`,
-      updatedTransferFunds:transfer,
+      updatedTransferFunds: transfer,
       attachmentsData
     });
   } catch (err) {
