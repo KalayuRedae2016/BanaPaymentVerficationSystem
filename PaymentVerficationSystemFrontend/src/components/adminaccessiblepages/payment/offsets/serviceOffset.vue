@@ -53,7 +53,7 @@
           <tbody class="text-xs">
             <tr
               class="hover:bg-blue-100 border-t border-b border-gray-300"
-              v-for="searchedTransferedPayment in paymentTransfersss"
+              v-for="searchedTransferedPayment in searchedTransferedPayments"
               :key="searchedTransferedPayment._id"
             >
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
@@ -71,10 +71,7 @@
                 {{ searchedTransferedPayment.fromBankType }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.toBankType }}
-              </td>
-              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.formattedTransferDate }}
+                {{ searchedTransferedPayment.transferDate }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.amount }}
@@ -89,16 +86,18 @@
                 v-if="role === 'SuperAdmin'"
                 class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap"
               >
-                <button
-                  class="custom-button"
-                  @click="
-                    showEditTransferForm = true;
-                    paymentToBeEdited = searchedTransferedPayment;
-                    createOffset = false;
-                  "
-                >
-                  <i class="fa fa-edit"></i>Edit
-                </button>
+               
+
+
+                <button class="custom-button" @click="
+                  showEditTransferForm = true;
+                  paymentToBeEdited = searchedTransferedPayment;
+                  createOffset = false;
+                  attachmentsData=searchedTransferedPayment.attachments
+                  transferId=searchedTransferedPayment.transferId">
+                    <i class="fa fa-edit"></i>Detail/Edit
+                  </button>
+
 
                 <button
                   @click="
@@ -406,40 +405,17 @@ export default {
   data() {
     return {
       //
+      transferId:"",
       attachmentsData: [],
       newAttachmentsData: [], // Array to store uploaded files and metadata
       isDragging: false,
-      //
       createOffset: false,
-
       paymentToBeEdited: "",
       showEditTransferForm: false,
-      // searchedTransferedPayments: [
-      //   {
-      //     _id: "1",
-      //     transferType: "block",
-      //     fromBankType: "LIB",
-      //     toBankType: "CBE",
-      //     formattedTransferDate: "2025-01-21",
-      //     amount: "1000.00",
-      //     reason: "service payment",
-      //   },
-      // ],
-
-      paymentTransfersss: [
-        {
-          _id: "1",
-          transferType: "block",
-          fromBankType: "CBE",
-          toBankType: "LIB",
-          formattedTransferDate: "2025-01-21",
-          amount: "1000.00",
-          reason: "service payment",
-          orgId: "1",
-          organization: "Bana",
-          refNumber: "BMrf324",
-        },
+      searchedTransferedPayments: [
       ],
+
+      paymentTransfers: [],
 
       role: "",
       successToastMessage: "",
@@ -483,9 +459,11 @@ export default {
     },
   },
 
+  async mounted(){
+    this.fetchServiceOffsets();
+  },
   methods: {
-
-    async addFiles(fileList) {
+  async addFiles(fileList) {
       try {
         const newFiles = await this.$processFilesToAdd(fileList); // Process the files
         if (this.createOffset) {
@@ -589,7 +567,6 @@ export default {
       formData.append("transferCase", "expenditure");
       formData.append("transferType", this.paymentToBeEdited.transferType);
       formData.append("fromBankType", this.paymentToBeEdited.fromBankType);
-      formData.append("toBankType", this.paymentToBeEdited.toBankType);
       formData.append("transferDate", this.paymentToBeEdited.transferDate);
       formData.append("amount", this.paymentToBeEdited.amount);
       formData.append("refNumber", this.paymentToBeEdited.refNumber);
@@ -648,8 +625,30 @@ export default {
       } finally {
 
       }
+  },
+  async fetchServiceOffsets() {
+    try {
+      const params = {
+        transferCase: "expenditure",
+      }
+      await this.$apiGet("/api/v1/payments/transferFunds", params).then((response) => {
+        console.log("response from fetch transfers", response);
+        if (response.status == 1) {
+          this.paymentTransfers = response.transferFunds;
+          // this.paymentTransfers= Object.keys(response.transferFunds)
+          //   .filter(key => !isNaN(key)) // Keep only numeric keys
+          //   .map(key =>response.transferFunds[key]);
+          console.log("payments transfers and searched expenditurepayments in org called in mounted", this.paymentTransfers)
+          this.searchedTransferedPayments = this.paymentTransfers;
+        // this.attachmentsData=this.response.transferFunds.attachments
+          console.log("attachments data", this.attachmentsData);
+        }
+      });
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+    }
 },
-
   },
 };
 </script>
