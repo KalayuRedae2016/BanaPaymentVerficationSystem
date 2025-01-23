@@ -371,13 +371,13 @@ export default {
     if (this.$route.query.activeTab == 2) {
       //alert(this.$route.query.radioStatus)
       this.activeTab = 2;
-      if (this.$route.query.radioStatus == "transferOffsets") {
-        this.offsetPayments = "transferOffsets";
+      if (this.$route.query.radioStatus == "userOffsets") {
+        this.offsetPayments = "userOffsets";
       } else if (this.$route.query.radioStatus == "serviceOffsets") {
         //alert("in else")
         this.offsetPayments = "serviceOffsets";
       } else {
-        this.offsetPayments = "userOffsets";
+        this.offsetPayments = "transferOffsets";
       }
     }
 

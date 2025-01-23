@@ -17,11 +17,11 @@
               >
                Offseted From
               </th>
-              <th
+              <!-- <th
                 class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
               >
                 Offseted By
-              </th>
+              </th> -->
               <th
                 class="w-24 p-3 text-md font-extrabold tracking-wide text-left"
               >
@@ -226,43 +226,7 @@
                       </template>
                     </select>
                   </div>
-                  <div class="mb-4">
-                    <label class="custom-label w-1/3 mt-3">
-                      Offseted To <span class="custom-star ml-1">*</span>
-                    </label>
-                    <select
-                      name="type"
-                      id=""
-                      class="custom-input text-xs"
-                      v-model="paymentToBeEdited.toBankType"
-                    >
-                      <option value="" disabled>Transfer To</option>
-                      <template
-                        v-if="paymentToBeEdited.transferType === 'block'"
-                      >
-                        <option
-                          v-for="(bank, index) in blockBanks"
-                          :key="'block-' + index"
-                          :value="bank.bankType"
-                        >
-                          {{ bank.bankType }}
-                        </option>
-                      </template>
-
-                      <template
-                        v-else-if="paymentToBeEdited.transferType === 'service'"
-                      >
-                        <option
-                          v-for="(bank, index) in serviceBanks"
-                          :key="'service-' + index"
-                          :value="bank.bankType"
-                        >
-                          {{ bank.bankType }}
-                        </option>
-                      </template>
-                    </select>
-                  </div>
-
+         
                   <div class="mb-4">
                     <label class="custom-label">
                       {{ $t("Amount") }}
@@ -414,7 +378,7 @@
                 </div>
 
                 <button
-                  @click="handleOffsetPayment()"
+                  @click.prevent="handleOffsetPayment()"
                   type="submit"
                   class="custom-button"
                 >
@@ -520,7 +484,6 @@ export default {
   },
 
   methods: {
-  
 
     async addFiles(fileList) {
       try {
@@ -547,62 +510,74 @@ export default {
       }
     },
   async handleOffsetPayment() {
-  console.log(
-    "data",
-    this.transferType,
-    this.fromBankType,
-    this.toBankType,
-    this.transferDate,
-    this.amount,
-    this.reason
-  );
+
+    console.log(
+        "data",
+        this.paymentToBeEdited.transferType,
+        this.paymentToBeEdited.fromBankType,
+        this.paymentToBeEdited.toBankType,
+        this.paymentToBeEdited.transferDate,
+        this.paymentToBeEdited.amount,
+        this.paymentToBeEdited.refNumber,
+        this.paymentToBeEdited.reason
+      );
+
+  // console.log(
+  //   "data",
+  //   this.transferType,
+  //   this.fromBankType,
+  //   this.toBankType,
+  //   this.transferDate,
+  //   this.amount,
+  //   this.reason
+  // );
   
-  this.selectTransferType = false;
-  this.selectTransferFrom = false;
-  this.selectTransferTo = false;
-  this.enterAmount = false;
-  this.notEqualFromTo = false;
-  this.amountNotZero = false;
-  this.enterTransferDate = false;
-  this.showError = false;
+  // this.selectTransferType = false;
+  // this.selectTransferFrom = false;
+  // this.selectTransferTo = false;
+  // this.enterAmount = false;
+  // this.notEqualFromTo = false;
+  // this.amountNotZero = false;
+  // this.enterTransferDate = false;
+  // this.showError = false;
 
-  // Validation
-  if (this.transferType == "" || this.transferType == null) {
-    this.selectTransferType = true;
-    return;
-  }
-  if (this.fromBankType == "" || this.fromBankType == null) {
-    this.selectTransferFrom = true;
-    return;
-  }
-  if (this.toBankType == "" || this.toBankType == null) {
-    this.selectTransferTo = true;
-    return;
-  }
-  if (this.fromBankType == this.toBankType) {
-    this.notEqualFromTo = true;
-    return;
-  }
-  if (this.amount === "" || this.amount == null || this.amount === 0) {
-    this.enterAmount = true;
-    return;
-  }
-  if (this.transferDate == "") {
-    this.enterTransferDate = true;
-    return;
-  }
+  // // Validation
+  // if (this.transferType == "" || this.transferType == null) {
+  //   this.selectTransferType = true;
+  //   return;
+  // }
+  // if (this.fromBankType == "" || this.fromBankType == null) {
+  //   this.selectTransferFrom = true;
+  //   return;
+  // }
+  // if (this.toBankType == "" || this.toBankType == null) {
+  //   this.selectTransferTo = true;
+  //   return;
+  // }
+  // if (this.fromBankType == this.toBankType) {
+  //   this.notEqualFromTo = true;
+  //   return;
+  // }
+  // if (this.amount === "" || this.amount == null || this.amount === 0) {
+  //   this.enterAmount = true;
+  //   return;
+  // }
+  // if (this.transferDate == "") {
+  //   this.enterTransferDate = true;
+  //   return;
+  // }
 
-  // Prepare the payload
-  const payload = {
-    transferType: this.transferType,
-    fromBankType: this.fromBankType,
-    toBankType: this.toBankType,
-    amount: this.amount,
-    reason: this.reason,
-    transferDate: this.transferDate,
-  };
+  // // Prepare the payload
+  // const payload = {
+  //   transferType: this.transferType,
+  //   fromBankType: this.fromBankType,
+  //   toBankType: this.toBankType,
+  //   amount: this.amount,
+  //   reason: this.reason,
+  //   transferDate: this.transferDate,
+  // };
 
-  console.log("payload", payload);
+  // console.log("payload", payload);
 
   // Process the attachments (could be the same data for both cases)
 const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachmentsData).map((file) => {
@@ -610,22 +585,21 @@ const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachment
   return this.$base64ToFile(file.fileData, file.filename, file.fileType);
 });
 
-  const formData = new FormData();
-  formData.append("transferCase", "bankTransfer");
-  formData.append("transferType", this.transferType);
-  formData.append("fromBankType", this.fromBankType);
-  formData.append("toBankType", this.toBankType);
-  formData.append("transferDate", this.transferDate);
-  formData.append("amount", this.amount);
-  formData.append("refNumber", this.refNumber);
-  formData.append("reason", this.reason);
-  formData.append("orgId", this.orgId);
-  formData.append("organization", this.organization);
-
-  // Append files to form data
-  fileArray.forEach((file) => {
-    formData.append("attachments", file);
-  });
+      const formData = new FormData();
+      formData.append("transferCase", "expenditure");
+      formData.append("transferType", this.paymentToBeEdited.transferType);
+      formData.append("fromBankType", this.paymentToBeEdited.fromBankType);
+      formData.append("toBankType", this.paymentToBeEdited.toBankType);
+      formData.append("transferDate", this.paymentToBeEdited.transferDate);
+      formData.append("amount", this.paymentToBeEdited.amount);
+      formData.append("refNumber", this.paymentToBeEdited.refNumber);
+      formData.append("reason", this.paymentToBeEdited.reason);
+      formData.append("toWhat", "123uyttyy567433nhsdff");
+      formData.append("orgId", null);
+      // Append files to form data
+      fileArray.forEach((file) => {
+        formData.append("attachments", file);
+      });
 
   console.log("Form data", formData);
 
@@ -634,23 +608,46 @@ const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachment
   };
 
   try {
+        // Determine the appropriate request method and parameters
+        const apiRequest = this.createOffset ? this.$apiPost : this.$apiPatch;
+        const params = this.createOffset
+          ? ["/api/v1/payments/transferFunds", formData, customHeaders] // For POST
+          : ["/api/v1/payments/transferFunds", this.transferId, formData, customHeaders]; // For PATCH
+        // Make the API request
+        await apiRequest(...params).then((response) => {
+          console.log("Response from the update/add: ", response);
+          console.log("response message",response.message)
+     
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
+           
+      //       setTimeout(() => {
+      //         this.showEditTransferForm=false;
+      //         this.$router.push({
+      //   path: "/admindashboard/payments1",
+      //   query: {
+      //     activeTab: 2,
+      //     radioStatus:"transferOffsets"
+      //   },
+      // });
+      //     }, 2000);
+          
+            // this.paymentTransfers = response.updatedTransferFunds;
+            // console.log("paymentTransfers: ", this.paymentTransfers);
+            // this.searchedTransferedPayments = this.paymentTransfers;
+            // console.log("searched Transfered Payments: ", this.searchedTransferedPayments);
 
-  const apiRequest= this.createOffset ? this.$apiPost : this.$apiPatch; // Use apiPost for add (POST), apiPatch for edit (PATCH)
+            // this.attachmentsData = response.organization.paymentTransfers.attachments;
+            // console.log("Attachments are", this.attachmentsData);
+      
+          }
+        });
+      } catch (error) {
+        console.error("Error in the process", error.status, error.message);
+        this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
+      } finally {
 
-    await apiRequest("/api/v1/payments/offsetPayments", this.transfer_id,formData, customHeaders)
-      .then((response) => {
-        console.log("response from the update/add: ", response);
-        if (response.status === 1) {
-          this.paymentTransfers = response.organization.paymentTransfers;
-          this.searchedTransferedPayments = this.paymentTransfers;
-        }
-      });
-  } catch (error) {
-    console.log("Error in the process", error.status, error.message);
-    this.$refs.toast.showErrorToastMessage("Something went wrong!!");
-  } finally {
-    this.isLoading = false;
-  }
+      }
 },
 
   },
