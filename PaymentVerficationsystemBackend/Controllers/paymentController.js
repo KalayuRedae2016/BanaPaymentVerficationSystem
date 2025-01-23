@@ -1717,42 +1717,39 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
   // console.log("AttachmentData",attachmentsData)
 
   const mergedTransferFunds = transferFunds.map((transfer) => {
-    const relatedAttachment = attachmentsData.find((attachment) =>
-      transfer.attachments.some((transferAttachment) =>
-        attachment.attachmentsData.some((attachmentData) => attachmentData.attachmentId === transferAttachment.attachmentId)
-      )
-    );
-
-    const attachments = transfer.attachments.map((transferAttachment) => {
-    const extraData =relatedAttachment?.attachmentsData.find((attachmentData) => attachmentData.attachmentId === transferAttachment.attachmentId) || {};
-      return {
-        fileName: transferAttachment.fileName || null,
-        fileType: extraData.fileType || null,
-        description: extraData.description || null,
-        _id: transferAttachment._id,
-        uploadedDate: extraData.uploadedDate || null,
-        fileData:extraData.fileData,
-        filePath:extraData.filePath
-      };
-    });
+    // Find all related attachments for the current transfer
+    const relatedAttachments = transfer.attachments.flatMap((transferAttachment) =>
+        attachmentsData.flatMap((attachment) =>
+            attachment.attachmentsData.map((attachmentData) => 
+                attachmentData.attachmentId === transferAttachment.attachmentId ? {
+                    ...attachmentData,
+                    fileName: transferAttachment.fileName,
+                    _id: transferAttachment._id,
+                    uploadedDate: attachmentData.uploadedDate || null,
+                    fileData: attachmentData.fileData,
+                    filePath: attachmentData.filePath
+                } : null
+            )
+        )
+    ).filter(Boolean); // Remove null values
 
     // Return the structured transfer object
     return {
-      transferCase: transfer.transferCase,
-      transferType: transfer.transferType,
-      orgId: transfer.orgId,
-      toWhat: transfer.toWhat,
-      fromBankType: transfer.fromBankType,
-      toBankType: transfer.toBankType,
-      amount: transfer.amount,
-      reason: transfer.reason,
-      refNumber: transfer.refNumber,
-      transferDate: transfer.transferDate,
-      transferId:transfer._id,
-      attachments,
+        transferCase: transfer.transferCase,
+        transferType: transfer.transferType,
+        orgId: transfer.orgId,
+        toWhat: transfer.toWhat,
+        fromBankType: transfer.fromBankType,
+        toBankType: transfer.toBankType,
+        amount: transfer.amount,
+        reason: transfer.reason,
+        refNumber: transfer.refNumber,
+        transferDate: transfer.transferDate,
+        transferId: transfer._id,
+        attachments: relatedAttachments,
     };
-  });
-  res.status(200).json({
+});
+res.status(200).json({
     status: 1,   
     transferFunds:mergedTransferFunds
   });
