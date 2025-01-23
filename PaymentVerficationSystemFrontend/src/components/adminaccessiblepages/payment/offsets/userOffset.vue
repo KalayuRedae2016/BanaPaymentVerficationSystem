@@ -52,7 +52,7 @@
           <tbody class="text-xs">
             <tr
               class="hover:bg-blue-100 border-t border-b border-gray-300"
-              v-for="searchedTransferedPayment in paymentTransfersss"
+              v-for="searchedTransferedPayment in searchedTransferedPayments"
               :key="searchedTransferedPayment._id"
             >
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
@@ -70,17 +70,18 @@
                 {{ searchedTransferedPayment.fromBankType }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.toBankType }}
+                {{ searchedTransferedPayment.toWhat }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.formattedTransferDate }}
+                {{ searchedTransferedPayment.transferDate }}
+              </td>
+              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
+                {{ searchedTransferedPayment.refNumber}}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.amount }}
               </td>
-              <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.refNumber }}
-              </td>
+            
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.reason }}
               </td>
@@ -95,6 +96,8 @@
                     showAddEditForm = true;
                     paymentToBeEdited = searchedTransferedPayment;
                     createOffset = false;
+                    attachmentsData=searchedTransferedPayment.attachments
+                    userOffsetId=searchedTransferedPayment.transferId
                   "
                 >
                   <i class="fa fa-edit"></i>Edit
@@ -286,43 +289,6 @@
                     </select>
                   </div>
                   <div class="mb-4">
-                    <label class="custom-label w-1/3 mt-3">
-                      Offseted To <span class="custom-star ml-1">*</span>
-                    </label>
-                    <select
-                      name="type"
-                      id=""
-                      class="custom-input text-xs"
-                      v-model="paymentToBeEdited.toBankType"
-                    >
-                      <option value="" disabled>Transfer To</option>
-                      <template
-                        v-if="paymentToBeEdited.transferType === 'block'"
-                      >
-                        <option
-                          v-for="(bank, index) in blockBanks"
-                          :key="'block-' + index"
-                          :value="bank.bankType"
-                        >
-                          {{ bank.bankType }}
-                        </option>
-                      </template>
-
-                      <template
-                        v-else-if="paymentToBeEdited.transferType === 'service'"
-                      >
-                        <option
-                          v-for="(bank, index) in serviceBanks"
-                          :key="'service-' + index"
-                          :value="bank.bankType"
-                        >
-                          {{ bank.bankType }}
-                        </option>
-                      </template>
-                    </select>
-                  </div>
-
-                  <div class="mb-4">
                     <label class="custom-label">
                       {{ $t("Amount") }}
                       <span class="custom-star ml-1">*</span>
@@ -473,7 +439,7 @@
                 </div>
 
                 <button
-                  @click="handleOffsetPayment()"
+                  @click.prevent="handleOffsetPayment()"
                   type="submit"
                   class="custom-button"
                 >
@@ -500,35 +466,15 @@ export default {
   name: "creditTransfer",
   data() {
     return {
+
+      userOffsetId:"",
+
+      userId:"6791f57835ba41e701b5fde9",
       showAddEditForm: false,
-      // searchedTransferedPayments: [
-      //   {
-      //     _id: "1",
-      //     transferType: "block",
-      //     fromBankType: "LIB",
-      //     toBankType: "CBE",
-      //     formattedTransferDate: "2025-01-21",
-      //     amount: "1000.00",
-      //     reason: "user payments",
-      //   },
-      // ],
+      searchedTransferedPayments: [],
+      paymentTransfersss: [],
 
-      paymentTransfersss: [
-        {
-          _id: "1",
-          transferType: "block",
-          fromBankType: "CBE",
-          toBankType: "LIB",
-          formattedTransferDate: "2025-01-21",
-          amount: "1000.00",
-          reason: "user payments",
-          orgId: "1",
-          organization: "Bana",
-          refNumber: "BMrf324",
-        },
-      ],
-
-      //
+      
       attachmentsData: [],
       newAttachmentsData: [], // Array to store uploaded files and metadata
       isDragging: false,
@@ -605,6 +551,8 @@ export default {
       console.log("error", error);
     } finally {
     }
+
+    await this.fetchUserOffsets()
   },
   methods: {
     async addFiles(fileList) {
@@ -654,8 +602,148 @@ export default {
         console.log("finally");
       }
     },
+  async handleOffsetPayment() {
 
-    filteredUsersInSearch() {
+    console.log(
+        "data",
+        this.paymentToBeEdited.transferType,
+        this.paymentToBeEdited.fromBankType,
+        this.paymentToBeEdited.toBankType,
+        this.paymentToBeEdited.transferDate,
+        this.paymentToBeEdited.amount,
+        this.paymentToBeEdited.refNumber,
+        this.paymentToBeEdited.reason
+      );
+
+  // console.log(
+  //   "data",
+  //   this.transferType,
+  //   this.fromBankType,
+  //   this.toBankType,
+  //   this.transferDate,
+  //   this.amount,
+  //   this.reason
+  // );
+  
+  // this.selectTransferType = false;
+  // this.selectTransferFrom = false;
+  // this.selectTransferTo = false;
+  // this.enterAmount = false;
+  // this.notEqualFromTo = false;
+  // this.amountNotZero = false;
+  // this.enterTransferDate = false;
+  // this.showError = false;
+
+  // // Validation
+  // if (this.transferType == "" || this.transferType == null) {
+  //   this.selectTransferType = true;
+  //   return;
+  // }
+  // if (this.fromBankType == "" || this.fromBankType == null) {
+  //   this.selectTransferFrom = true;
+  //   return;
+  // }
+  // if (this.toBankType == "" || this.toBankType == null) {
+  //   this.selectTransferTo = true;
+  //   return;
+  // }
+  // if (this.fromBankType == this.toBankType) {
+  //   this.notEqualFromTo = true;
+  //   return;
+  // }
+  // if (this.amount === "" || this.amount == null || this.amount === 0) {
+  //   this.enterAmount = true;
+  //   return;
+  // }
+  // if (this.transferDate == "") {
+  //   this.enterTransferDate = true;
+  //   return;
+  // }
+
+  // // Prepare the payload
+  // const payload = {
+  //   transferType: this.transferType,
+  //   fromBankType: this.fromBankType,
+  //   toBankType: this.toBankType,
+  //   amount: this.amount,
+  //   reason: this.reason,
+  //   transferDate: this.transferDate,
+  // };
+
+  // console.log("payload", payload);
+
+  // Process the attachments (could be the same data for both cases)
+      const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachmentsData).map((file) => {
+        console.log(file.fileData, file.filename, file.fileType);
+        return this.$base64ToFile(file.fileData, file.filename, file.fileType);
+      });
+
+   console.log("fileArray", fileArray);
+
+      const formData = new FormData();
+      formData.append("transferCase", "userWithdrawal");
+      formData.append("transferType", this.paymentToBeEdited.transferType);
+      formData.append("fromBankType", this.paymentToBeEdited.fromBankType);
+      formData.append("transferDate", this.paymentToBeEdited.transferDate);
+      formData.append("amount", this.paymentToBeEdited.amount);
+      formData.append("refNumber", this.paymentToBeEdited.refNumber);
+      formData.append("reason", this.paymentToBeEdited.reason);
+      formData.append("toWhat", this.userId);
+      formData.append("orgId", null);
+      // Append files to form data
+      fileArray.forEach((file) => {
+        formData.append("attachments", file);
+      });
+
+  console.log("Form data", formData);
+
+  const customHeaders = {
+    "Content-Type": "multipart/form-data",
+  };
+
+  try {
+        // Determine the appropriate request method and parameters
+        const apiRequest = this.createOffset ? this.$apiPost : this.$apiPatch;
+        const params = this.createOffset
+          ? ["/api/v1/payments/transferFunds", formData, customHeaders] // For POST
+          : ["/api/v1/payments/transferFunds", this.userOffsetId, formData, customHeaders]; // For PATCH
+        // Make the API request
+        await apiRequest(...params).then((response) => {
+          console.log("Response from the update/add: ", response);
+          console.log("response message",response.message)
+     
+          if (response.status === 1) {
+            this.$refs.toast.showSuccessToastMessage(response.message);
+           
+            setTimeout(() => {
+              this.showEditTransferForm=false;
+              this.$router.push({
+        path: "/admindashboard/payments1",
+        query: {
+          activeTab: 2,
+          radioStatus:"serviceOffsets"
+        },
+      });
+          }, 2000);
+          
+            // this.paymentTransfers = response.updatedTransferFunds;
+            // console.log("paymentTransfers: ", this.paymentTransfers);
+            // this.searchedTransferedPayments = this.paymentTransfers;
+            // console.log("searched Transfered Payments: ", this.searchedTransferedPayments);
+
+            // this.attachmentsData = response.organization.paymentTransfers.attachments;
+            // console.log("Attachments are", this.attachmentsData);
+      
+          }
+        });
+      } catch (error) {
+        console.error("Error in the process", error.status, error.message);
+        this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
+      } finally {
+
+      }
+  },
+  filteredUsersInSearch() {
       this.showList = true;
       this.showPaymentAmount = false;
       this.showOffsetForm = false;
@@ -674,90 +762,30 @@ export default {
         // Reset to the full list when search query is empty
         this.searchedUsers = [...this.users];
       }
-    },
-    async addCreditTransfer() {
-      console.log(
-        "data",
-        this.transferType,
-        this.fromBankType,
-        this.toBankType,
-        this.transferDate,
-        this.amount,
-        this.reason
-      );
-      this.selectTransferType = false;
-      this.selectTransferFrom = false;
-      this.selectTransferTo = false;
-      this.enterAmount = false;
-      this.notEqualFromTo = false;
-      this.amountNotZero = false;
-      this.enterTransferDate = false;
-      this.showError = false;
-
-      if (this.transferType == "" || this.transferType == null) {
-        //this.$refs.toast.showErrorToastMessage("Transfer Type(Either service or Block)is required");
-        this.selectTransferType = true;
-        return;
+  },
+  async fetchUserOffsets() {
+    try {
+      const params = {
+        transferCase: "userWithdrawal",
       }
-      if (this.fromBankType == "" || this.fromBankType == null) {
-        // this.showErrorToastMessage("Transfer-From is required");
-        this.selectTransferFrom = true;
-        return;
-      }
-      if (this.amount == "" || this.amount == null)
-        if (this.toBankType == "" || this.toBankType == null) {
-          //this.$refs.toast.showErrorToastMessage("Transfer-To  is required");
-          this.selectTransferTo = true;
-          return;
+      await this.$apiGet("/api/v1/payments/transferFunds", params).then((response) => {
+        console.log("response from fetch transfers", response);
+        if (response.status == 1) {
+          this.paymentTransfers = response.transferFunds;
+          // this.paymentTransfers= Object.keys(response.transferFunds)
+          //   .filter(key => !isNaN(key)) // Keep only numeric keys
+          //   .map(key =>response.transferFunds[key]);
+          console.log("payments transfers and searched user offsets in org called in mounted", this.paymentTransfers)
+          this.searchedTransferedPayments = this.paymentTransfers;
+        // this.attachmentsData=this.response.transferFunds.attachments
+          console.log("attachments data", this.attachmentsData);
         }
-
-      if (this.fromBankType == this.toBankType) {
-        //alert("Hiii")
-        //this.showErrorToastMessage("You can't transfer from the same bank");
-        this.notEqualFromTo = true;
-        return;
-      }
-
-      if (this.amount === "" || this.amount == null || this.ammount === 0) {
-        //this.showErrorToastMessage("amount is required");
-        this.enterAmount = true;
-        return;
-      }
-
-      if (this.transferDate == "") {
-        //this.showErrorToastMessage("Transfer Date is required");
-        this.enterTransferDate = true;
-        return;
-      }
-      // this depends on the type
-      const payload = {
-        transferType: this.transferType,
-        fromBankType: this.fromBankType,
-        toBankType: this.toBankType,
-        amount: this.amount,
-        reason: this.reason,
-        transferDate: this.transferDate,
-        // other properties
-      };
-
-      //
-
-      try {
-        await this.$apiPost("api/v1/payments/transferFunds", payload).then(
-          (response) => {
-            console.log("response", response);
-            if (response.status === 1) {
-              this.$refs.toast.showSuccessToastMessage(response.message);
-            }
-          }
-        );
-      } catch (error) {
-        console.log("error", error.status, error.message);
-        this.showError = true;
-        this.errorMessage = error.message;
-      } finally {
-      }
-    },
+      });
+    } catch (error) {
+      console.log("error", error);
+    } finally {
+    }
+},
   },
 };
 </script>

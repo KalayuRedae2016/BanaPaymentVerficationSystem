@@ -94,7 +94,7 @@
                   paymentToBeEdited = searchedTransferedPayment;
                   createOffset = false;
                   attachmentsData=searchedTransferedPayment.attachments
-                  transferId=searchedTransferedPayment.transferId">
+                  serviceOffsetId=searchedTransferedPayment.transferId">
                     <i class="fa fa-edit"></i>Detail/Edit
                   </button>
 
@@ -405,6 +405,7 @@ export default {
   data() {
     return {
       //
+      serviceOffsetId:"",
       transferId:"",
       attachmentsData: [],
       newAttachmentsData: [], // Array to store uploaded files and metadata
@@ -571,7 +572,7 @@ export default {
       formData.append("amount", this.paymentToBeEdited.amount);
       formData.append("refNumber", this.paymentToBeEdited.refNumber);
       formData.append("reason", this.paymentToBeEdited.reason);
-      formData.append("toWhat", "123uyttyy567433nhsdff");
+      formData.append("toWhat", null);
       formData.append("orgId", null);
       // Append files to form data
       fileArray.forEach((file) => {
@@ -589,7 +590,7 @@ export default {
         const apiRequest = this.createOffset ? this.$apiPost : this.$apiPatch;
         const params = this.createOffset
           ? ["/api/v1/payments/transferFunds", formData, customHeaders] // For POST
-          : ["/api/v1/payments/transferFunds", this.transferId, formData, customHeaders]; // For PATCH
+          : ["/api/v1/payments/transferFunds", this.serviceOffsetId, formData, customHeaders]; // For PATCH
         // Make the API request
         await apiRequest(...params).then((response) => {
           console.log("Response from the update/add: ", response);
