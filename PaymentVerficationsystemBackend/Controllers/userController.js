@@ -474,6 +474,7 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
   const { userIds, editPermission,permittedBy} = req.body; // `userIds` is an array, `editPermission` is a boolean
 
   console.log(typeof editPermission)
+  console.log("reqes per",req.body)
 
   if (!Array.isArray(userIds) || userIds.length === 0) {
     return next(new AppError('Provide a valid array of user IDs', 400));
