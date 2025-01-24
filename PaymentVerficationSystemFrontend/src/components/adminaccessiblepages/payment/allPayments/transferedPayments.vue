@@ -107,7 +107,6 @@
                   transferId=searchedTransferedPayment.transferId">
                     <i class="fa fa-edit"></i>Detail/Edit
                   </button>
-
                   <button @click="
                     showDelateModal = !showDelateModal;
                   paymentToBeDelated = searchedTransferedPayment;
@@ -697,7 +696,6 @@ export default {
       } finally {
       }
     },
-
     async changeSearched(paymentType) {
       this.openBlockBank = false;
       this.openServiceBank = false;
