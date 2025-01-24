@@ -652,7 +652,7 @@ export default {
 
   async mounted() {
     const newData = [1500, 500, 200];
-    const newData1 = [1500, 2000, 1200, 1100, 1000] // Example new data
+    const newData1 = [10000, 40000, 20000, 1100, 30000] // Example new data
     this.createPieChart(newData);
     this.createBarChart(newData1);
 

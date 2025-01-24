@@ -72,7 +72,6 @@
                 v-for="searchedTransferedPayment in searchedTransferedPayments" :key="searchedTransferedPayment._id">
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
 
-                  {{searchedTransferedPayment._id}}
                   <p v-if="searchedTransferedPayment.transferType === 'block'" class="px-2 rounded-lg">
                     {{ searchedTransferedPayment.transferType.toUpperCase() }}
                   </p>
@@ -105,9 +104,8 @@
                   paymentToBeEdited = searchedTransferedPayment;
                   createOffset = false;
                   attachmentsData=searchedTransferedPayment.attachments
-                  transferId=searchedTransferedPayment._id
-                  ">
-                    <i class="fa fa-edit"></i>Edit
+                  transferId=searchedTransferedPayment.transferId">
+                    <i class="fa fa-edit"></i>Detail/Edit
                   </button>
 
                   <button @click="
@@ -151,7 +149,7 @@
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold">
-                  {{ $t("Edit Transfer Payment") }}
+                  {{ $t("Detail And Edit ") }}
                 </label>
               </div>
               <div>
@@ -598,12 +596,17 @@ export default {
       // console.log("payload", payload);
 
       // Process the attachments (could be the same data for both cases)
+
+      console.log("attachments are", this.attachmentsData);
       const fileArray = (
         this.createOffset ? this.newAttachmentsData : this.attachmentsData
       ).map((file) => {
         console.log(file.fileData, file.filename, file.fileType);
         return this.$base64ToFile(file.fileData, file.filename, file.fileType);
       });
+
+      console.log("file array",fileArray);
+
       const formData = new FormData();
       formData.append("transferCase", "bankTransfer");
       formData.append("transferType", this.paymentToBeEdited.transferType);
