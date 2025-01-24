@@ -455,8 +455,8 @@
     </div>
   </div>
 </template>
-  
-  <script>
+
+<script>
 import Toast from "../../../Common/Toast.vue";
 
 export default {

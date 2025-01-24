@@ -169,7 +169,6 @@
             </div>
           </div>
         </div>
-
         <div
           class="border-2 border-dashed border-blue-400 rounded-lg p-6 flex flex-col items-center justify-center text-gray-500"
           :class="{ 'border-blue-400 bg-blue-50': isDragging }" @dragover.prevent="$toggleDragState(this, true)"
@@ -186,10 +185,6 @@
           <p class="text-blue-500">Add User Attachment (either Image or PDF)</p>
         </div>
       </div>
-
-
-
-
       <div class="ml-4 mr-8 mt-5">
         <p v-if="firstNameIsRequired" class="text-red-500 text-sm mt-1 ml-10">
           {{ $t("firstNameRequired") }}
@@ -255,63 +250,6 @@
               </div>
             </div>
             <hr class="my-4 md:min-w-full bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
-    <div v-if="showSuccess">
-      <transition name="fade" mode="out-in">
-        <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-cyan-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center mb-4 ml-32">
-                  <svg class="w-8 h-8 text-green-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                  </svg>
-                  <h2 class="text-md text-green-800">{{ $t("success") }}</h2>
-                </div>
-                <p class="text-blue-800 text-md ml-8">
-                  {{ successMessage }}
-                </p>
-                <button @click="showSuccess = false"
-                  class="ml-8 mt-6 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 md:min-w-full bg-red-500" />
-          </div>
-        </div>
-      </transition>
-    </div>
-    <div v-if="showError">
-      <transition name="fade" mode="out-in">
-        <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <!-- Modal Content -->
-          <div class="bg-white rounded-lg p-6 border border-red-500">
-            <div class="fixed inset-0 flex items-center justify-center z-50">
-              <div class="bg-white rounded-lg shadow-lg p-8 w-96">
-                <div class="flex items-center justify-center mb-4">
-                  <svg class="w-8 h-8 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                  </svg>
-                  <h2 class="text-sm font-bold text-gray-800">
-                    {{ $t("error") }}
-                  </h2>
-                </div>
-                <p class="text-gray-600 text-sm">
-                  {{ errorMessage }}
-                </p>
-                <button @click="showError = false"
-                  class="mt-6 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
-                  {{ $t("ok") }}
-                </button>
-              </div>
-            </div>
-            <hr class="my-4 bg-red-500" />
           </div>
         </div>
       </transition>

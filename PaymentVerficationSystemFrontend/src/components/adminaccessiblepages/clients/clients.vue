@@ -53,9 +53,6 @@
                 </svg>
               </div>
             </div>
-
-            
-            
             <div class="flex flex-row mb-5 mt-5">
          
               <input
@@ -303,28 +300,26 @@ if (this.selectedUsers == "" || this.selectedUsers.length===0) {
 }
 
 const userList = {
-  selectedUsers: this.selectedUsers,
-  permissionGivenBy:localStorage.getItem("userId"),
+  userIds:this.selectedUsers,
+  permittedBy:localStorage.getItem("userId"),
+  editPermission:true,
 }
 
 console.log("userList",userList);
 
+
 try { 
-  await this.$apiPost("/api/v1/users/canEdit", userList)
+  await this.$apiPatch("/api/v1/users/editPermission",'', userList)
   .then((response) => {
     console.log("users", response.message);
     if (response.status === 1) {
       this.searchedusers = this.users; //response.data.message;
-      //this.displayedItems();
-     // this.$refs.toast.showSuccessToastMessage(response.message);
-      //this.$reloadPage();
     }
   })
  }catch(error)  {
     console.error("Error fetching users:", error);
     this.showErrorToastMessage("Something went wrong");
   }finally{
-
   };
 this.selectedUsers = [];
 },
