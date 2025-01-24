@@ -471,7 +471,9 @@ exports.sendEmailMessages = catchAsync(async (req, res, next) => {
 });
 
 exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
-  const { userIds, editPermission } = req.body; // `userIds` is an array, `editPermission` is a boolean
+  const { userIds, editPermission,permittedBy} = req.body; // `userIds` is an array, `editPermission` is a boolean
+
+  console.log(typeof editPermission)
 
   if (!Array.isArray(userIds) || userIds.length === 0) {
     return next(new AppError('Provide a valid array of user IDs', 400));
@@ -483,7 +485,7 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
 
   const updatedUsers = await User.updateMany(
     { _id: { $in: userIds } }, // Target the specified users
-    { $set: { canEdit: editPermission } }, // Update the edit permission
+    { $set: {canEditDetails: editPermission } }, // Update the edit permission
     { new: true, runValidators: true }
   );
 
