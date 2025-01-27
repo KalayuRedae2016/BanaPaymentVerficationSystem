@@ -1,11 +1,6 @@
 <template>
   <div class="border border border-gray-400 mt-5">
     <div class="report-table hidden" id="printable-area">
-      <!-- <div style="border-radius: 5px; font-size: 15px; font-weight: bold; text-align: center; margin: 10px 0; color:white; background-color:#9494b8; padding-top:3px; padding-bottom:5px; display: flex; align-items: center;">
-    <img src="../../../../assets/img/banamall2.png" alt="" style="width: 25px; height: 25px; margin-right: 10px;margin-left:10px;">
-   <h1 style="margin: 0;">Bana Mall Report </h1>
- </div>  -->
-
       <div style="width: 90%; max-width: 100%; min-width: 100%">
         <img
           src="../../../../assets/img/banaReport.jpg"
@@ -13,7 +8,6 @@
           style="max-width: 100%; height: auto; display: block"
         />
       </div>
-
       <div
         style="
           display: flex;
@@ -35,11 +29,6 @@
       >
         Date(Day-Month-Year): {{ this.year }}
         <p v-if="month">-{{ this.month }}</p>
-        <!-- <span
-                >{{ new endDate.getDate() }}-{{
-                  changeMonthIntoString(receiptDate.getMonth() + 1)
-                }}-{{ receiptDate.getFullYear() }}</span
-              > -->
       </div>
       <div
         style="
@@ -345,7 +334,7 @@
 
     <div class="flex flex-col p-4 text-xs">
       <div class="flex flex-row border-b pb-5 border-blue-500">
-        <label class="custom-label"> Report Type: </label>
+        <label class="custom-label w-1/2 ml-5"> Report Type: </label>
         <select
           v-model="reportType"
           @change="changeReportType()"
@@ -362,8 +351,7 @@
           </option>
         </select>
       </div>
- <div class="border border-gray-300 my-5 px-5 rounded-lg">
-
+ <div class="border border-gray-300 my-5 px-5 rounded-lg" v-if="reportType!='allTime'">
       <div class="flex flex-col">
         <div
           class="mt-5 w-full flex flex-col space-y-3 md:flex-row md:space-x-3 md:space-y-0"
@@ -495,7 +483,7 @@
 
 
         <div
-          class="flex flex-col lg:flex-row space-y-3 lg:space-y-0 space-x-0 lg:space-x-2 border border gray-300 p-5 rounded-lg"
+          class="mt-3 flex flex-col lg:flex-row space-y-3 lg:space-y-0 space-x-0 lg:space-x-2 border border gray-300 p-5 rounded-lg"
         >
           <div class="flex flex-row space-x-2">
             <button
@@ -1003,13 +991,10 @@ export default {
       }
       return years;
     },
-    //   reportLength() {
-    //   return this.reports.length;
-    // }
   },
   async created() {
     this.year = new Date().getFullYear();
-    this.reportType = "annually";
+    this.reportType = "allTime";
     await this.fetchPayments();
 
     try {
@@ -1089,6 +1074,13 @@ export default {
       // });
 
       this.annuallySelected = false;
+      
+
+      if (this.reportType === "allTime") {
+        this.otherSelected = false;
+        this.annuallySelected = false;
+        this.fetchPayments();
+      }
 
       if (this.reportType === "annually") {
         this.otherSelected = false;
@@ -1154,13 +1146,19 @@ export default {
     },
 
     async fetchPayments() {
-
+    // alert("hhh")
       console.log("called");
 
       const params = { timeRange: this.reportType, year: this.year };
 
       // Set the selected flags based on the hierarchical nature of this.reportType
       //this.annuallySelected = true; // Always true
+      if(this.reportType ==="allTime"){
+        
+        params.timeRange=this.reportType;
+        params.year='';
+      }
+
       this.semiAnnuallySelected = this.reportType === "semiAnnually";
       this.monthlySelected = ["monthly", "weekly", "daily"].includes(
         this.reportType
@@ -1187,7 +1185,7 @@ export default {
       }
       // Validation logic
       const isValid =
-        this.year &&
+         (this.reportType==='allTime')|| this.year &&
         (this.reportType === "annually" ||
           (this.reportType === "semiAnnually" && this.semiYear) ||
           (this.reportType === "monthly" && this.month) ||
@@ -1205,6 +1203,10 @@ export default {
     },
 
     async fetchData(params) {
+
+      console.log("params",params);
+
+
       //alert("ooo")
       try {
         const response = await this.$apiGet("/api/v1/payments/reports", params);

@@ -6,9 +6,13 @@
       </h2>
       <Toast ref="toast" />
       <div class="mx-5 flex flex-row pt-3 space-x-12">
+       
         <div class=" flex flex-col lg:flex-row lg:space-x-12  p-4  w-full rounded-lg  w-1/2 shadow-lg border-t border-gray-100">
           <div class="w-1/2 lg:w-1/3 border-none lg:border-r border-gray-300">
+            <p class="text-blue-800 text-sm"  >Members</p>
+            <div class="w-48 h-48">
             <canvas ref="pieChartCanvas" class="chart w-1/2"></canvas>
+          </div>
           </div>
           <div class="grid grid-cols-2 gap-y-1 lg:gap-y-0 items-center text-blue-500">
             <p>No. Active Members</p>
@@ -114,10 +118,6 @@
             </a>
           </div>
         </div>
-        <!-- <div class="chart w-full lg:w-1/2 lg:mb-0" @click="viewPaidUnPaid()">
-          <Chart class="-ml-5 mr-5 lg: ml-0 mr-0"></Chart>
-          
-        </div> -->
       </div>
     </div>
 
@@ -165,9 +165,6 @@
 
     <div class="shadow-lg border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
 
-
-
-
       <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-xs">
           <i class="fas fa-check-circle text-green-500 text-xs"></i>
@@ -177,8 +174,10 @@
           <h1 class="text-xs">{{ $t("allReportDetails") }}</h1>
         </a>
       </div>
-
-      <table class="min-w-full divide-y divide-gray-300 text-xs">
+      <div class="w-96 h-96">
+      <canvas ref="barChartCanvas" class="chart "></canvas>
+    </div>
+      <table class="min-w-full divide-y divide-gray-300 text-xs -mt-48">
         <thead class="bg-gray-50">
           <tr>
             <th rowspan="3" class="px-4 py-2 text-blue-800 text-left border border-gray-300">
@@ -296,9 +295,6 @@
           </tr>
         </tbody>
       </table>
-
-
-      <canvas ref="barChartCanvas" class="chart w-1/2"></canvas>
       <div class="flex flex-col lg:flex-row lg:space-x-4 items-center justify-center my-5">
         <div class="flex flex-row space-x-5">
           <div class=" bg-blue-400 w-16 h-4"></div>
@@ -358,7 +354,6 @@
                 <h3 class="text-lg font-semibold text-blue-800 mb-4">
                   {{ bank }}
                 </h3>
-
                 <!-- Balance Details in Two Columns -->
                 <div class="grid lg:grid-cols-2 gap-6 text-sm ml-3">
                   <!-- Left Column -->
@@ -651,9 +646,8 @@ export default {
 
   async mounted() {
     const newData = [1500, 500, 200];
-    const newData1 = [10000, 40000, 20000, 1100, 30000] // Example new data
-    this.createPieChart(newData);
-    this.createBarChart(newData1);
+  this.createPieChart(newData);
+
 
     if (this.$route.query.loginSuccess === "true") {
       const activeItem = "dashboard";
@@ -706,9 +700,13 @@ export default {
 
     await this.$apiGet("api/v1/payments/orgBalance")
       .then((response) => {
-        console.log("response org balance nnnnnnnn", response);
+        console.log("response org balance check r,u,s,s,p", response);
         this.totalBalance = response.items;
         this.totalOrgBalance = response.items.organizationBalance;
+        const newData1 = [this.totalOrgBalance.totalRegularBalance,this.totalOrgBalance.totalSubsidyBalance, this.totalOrgBalance.totalUrgentBalance,this.totalOrgBalance.totalServiceBalance,this.totalOrgBalance.totalPenalityBalance] // Example new data
+        this.createBarChart(newData1);
+
+
       })
       .catch((error) => {
         console.error(

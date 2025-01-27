@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { Logger } from "../utils/logger"; 
 import { reloadPage,apiGet,apiGetById,apiPost,apiPut,
   apiPatch,apiDelete,isStrongPassword,validateField,
   gregorianToEthiopian,getPdfBlobUrl,base64ToFile,
@@ -17,8 +17,6 @@ export default {
       baseURL: baseUrl,
     });
 
-
-
     let banks = [];
     banks = [
       { value: "LIB", name: "LIB" },
@@ -26,7 +24,6 @@ export default {
       { value: "ABSINIA", name: "ABSINIA" },
       { value: "CBE", name: "CBE" },
     ];
-
     // Generate the array of years (from now - 5 years up to now + 50 years)
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: 56 }, (v, i) => currentYear - 5 + i);
@@ -47,6 +44,7 @@ export default {
     ];
 
     const reportTypes = [
+      { value: "allTime", name: "All Time" },
       { value: "annually", name: "Annually" },
       { value: "semiAnnually", name: "Semi-Annually" },
       { value: "monthly", name: "Monthly" },
@@ -81,7 +79,8 @@ export default {
       $handleFileInput:handleFileInput,
       $toggleDragState:toggleDragState,
       $removeAttachment:removeAttachment,
-      $handleAnyFileInput:handleAnyFileInput
+      $handleAnyFileInput:handleAnyFileInput,
+      $logger: Logger, 
     };
     // Assign to the global properties in the Vue app
     app.config.globalProperties = {

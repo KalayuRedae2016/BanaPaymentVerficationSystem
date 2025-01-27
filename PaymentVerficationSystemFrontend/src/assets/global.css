@@ -1,7 +1,7 @@
 /* src/assets/global.css */
 
 .custom-input {
-  @apply w-full h-10 px-4 py-2 mt-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
+  @apply w-full h-10 px-4 py-2 mt-2 border border-gray-300  shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
 }
 
 .custom-input::placeholder {
@@ -13,13 +13,13 @@
 }
 
 .custom-input:focus {
-  @apply bg-blue-100 border-blue-600 shadow-lg ring-2 ring-blue-300 transform scale-101 text-blue-500;
+  @apply bg-blue-100 border-blue-600 ring-2 ring-blue-300 transform scale-101 text-blue-500;
 }
 
   
 
 .custom-input-error {
-  @apply w-full h-10 px-4 py-2 mt-2 border border-red-500 rounded-lg shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
+  @apply w-full h-10 px-4 py-2 mt-2 border border-red-500  shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
 }
 
 .custom-input-error::placeholder {
@@ -31,12 +31,12 @@
 }
 
 .custom-input-error:focus {
-  @apply bg-blue-100 border-blue-600 shadow-lg ring-2 ring-blue-300 transform scale-101 text-blue-500;
+  @apply bg-blue-100 border-blue-600 ring-2 ring-blue-300 transform scale-101 text-blue-500;
 }
 
 
 .custom-text-area {
-  @apply w-full h-20 px-4 py-2 mt-2 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
+  @apply w-full h-20 px-4 py-2 mt-2 border border-gray-300  shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
 }
 
 .custom-text-area::placeholder {
@@ -48,7 +48,7 @@
 }
 
 .custom-text-area:focus {
-  @apply bg-blue-100 border-blue-600 shadow-lg ring-2 ring-blue-300 transform scale-101 text-blue-500;
+  @apply bg-blue-100 border-blue-600  ring-2 ring-blue-300 transform scale-101 text-blue-500;
 }
 
   .custom-button {
@@ -63,7 +63,7 @@
   }
 
   .custom-select {
-    @apply text-xs  w-full h-10 px-3 mt-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ease-in-out bg-gray-50;
+    @apply text-xs  w-full h-10 px-3 mt-2 border border-gray-300  shadow-sm bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ease-in-out bg-gray-50;
   }
   .custom-select::placeholder {
     @apply text-gray-500  text-xs;

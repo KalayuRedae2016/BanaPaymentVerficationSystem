@@ -161,7 +161,6 @@
             </div>
 
             <hr class="my-4 md:min-w-full bg-red-500" />
-
             <div class="">
               <form class="px-5 py-5 ">
                 <div class="overflow-x-auto h-80 overflow-y-auto">
@@ -322,6 +321,7 @@
                   <i class="fas fa-save"> </i>
                   Save
                 </button>
+
               </form>
             </div>
             <hr class="my-4 md:min-w-full bg-red-500" />
@@ -382,36 +382,19 @@ export default {
   data() {
     return {
       //
+
+      showError:false,
+      errorMessage:"",
+
       transferId: "",
       attachmentsData: [],
       newAttachmentsData: [], // Array to store uploaded files and metadata
       isDragging: false,
-      //
       createOffset: false,
-
       searchedTransferedPayments: [],
       paymentTransfersss: [],
-      // paymentTransfersss: [
-      //   {
-      //     _id: "1",
-      //     transferType: "block",
-      //     fromBankType: "CBE",
-      //     toBankType: "LIB",
-      //     transferDate: "2025-01-21",
-      //     amount: "1000.00",
-      //     reason: "transfer payment",
-      //     refNumber: "BMrf324",
-      //     orgId: "1",
-      //     organization: "Bana",
-
-      //   },
-      // ],
-      //
-
-
       role: "",
       paymentToBeDelated: "",
-
       paymentToBeEdited: {
         transferType: null,
         fromBankType: "",
@@ -420,18 +403,14 @@ export default {
         amount: "",
         reason: "",
       },
-
       showDelateModal: false,
-
       showEditTransferForm: false,
       openBlockBank: false,
       openServiceBank: false,
       serviceBank: "all",
       blockBank: "all",
-
       outGoingIncoming: "",
       openOutGoingInComing: false,
-
       selectMonth: false,
       paymentType: "",
       activeYear: new Date().getFullYear(),
@@ -547,54 +526,46 @@ export default {
         this.paymentToBeEdited.reason
       );
 
-      // this.selectTransferType = false;
-      // this.selectTransferFrom = false;
-      // this.selectTransferTo = false;
-      // this.enterAmount = false;
-      // this.notEqualFromTo = false;
-      // this.amountNotZero = false;
-      // this.enterTransferDate = false;
-      // this.showError = false;
+   
+      this.showError = false;
+      this.errorMessage = "";
 
-      // // Validation
-      // if (this.paymentToBeEdited.transferType == "" || this.paymentToBeEdited.transferType == null) {
-      //   this.selectTransferType = true;
-      //   return;
-      // }
-      // if (this.paymentToBeEdited.fromBankType == "" || this.paymentToBeEdited.fromBankType == null) {
-      //   this.selectTransferFrom = true;
-      //   return;
-      // }
-      // if (this.paymentToBeEdited.toBankType == "" || this.paymentToBeEdited.toBankType == null) {
-      //   this.selectTransferTo = true;
-      //   return;
-      // }
-      // if (this.paymentToBeEdited.fromBankType == this.paymentToBeEdited.toBankType) {
-      //   this.notEqualFromTo = true;
-      //   return;
-      // }
-      // if (this.paymentToBeEdited.amount === "" || this.paymentToBeEdited.amount == null || this.paymentToBeEdited.amount === 0) {
-      //   this.enterAmount = true;
-      //   return;
-      // }
-      // if (this.paymentToBeEdited.transferDate == "") {
-      //   this.enterTransferDate = true;
-      //   return;
-      // }
+      if (this.paymentToBeEdited.transferType == "" || this.paymentToBeEdited.transferType == null) {
+        alert
+        this.showError = true;
+        this.errorMessage = "Transfer Type is Required"
+        return;
+      }
 
-      // // Prepare the payload
-      // const payload = {
-      //   transferType: this.paymentToBeEdited.transferType,
-      //   fromBankType: this.paymentToBeEdited.fromBankType,
-      //   toBankType: this.paymentToBeEdited.toBankType,
-      //   amount: this.paymentToBeEdited.amount,
-      //   reason: this.paymentToBeEdited.reason,
-      //   transferDate: this.paymentToBeEdited.transferDate,
-      // };
+      if (this.paymentToBeEdited.fromBankType == "" || this.paymentToBeEdited.fromBankType == null) {
+        this.showError = true;
+        this.errorMessage = "From Bank Type is Required"
+        return;
+      }
 
-      // console.log("payload", payload);
+      if (this.paymentToBeEdited.toBankType == "" || this.paymentToBeEdited.toBankType == null) {
+        this.showError = true;
+        this.errorMessage = "To bank Type is Required"
+        return;
+      }
 
-      // Process the attachments (could be the same data for both cases)
+      if (this.paymentToBeEdited.fromBankType == this.paymentToBeEdited.toBankType) {
+        this.showError = true;
+        this.errorMessage = "Can not be transfered to the same bank type"
+        return;
+      }
+
+      if (this.paymentToBeEdited.amount === "" || this.paymentToBeEdited.amount == null || this.paymentToBeEdited.amount === 0) {
+        this.showError = true;
+        this.errorMessage = "Amount is Required"
+        return;
+      }
+
+      if (this.paymentToBeEdited.transferDate == "") {
+        this.showError = true;
+        this.errorMessage = "Transfer Date is Required"
+        return;
+      }
 
       console.log("attachments are", this.attachmentsData);
       const fileArray = (
@@ -682,12 +653,8 @@ export default {
           console.log("response from fetch transfers", response);
           if (response.status == 1) {
             this.paymentTransfers = response.transferFunds;
-            // this.paymentTransfers= Object.keys(response.transferFunds)
-            //   .filter(key => !isNaN(key)) // Keep only numeric keys
-            //   .map(key =>response.transferFunds[key]);
             console.log("payments transfers and searched transfer payments in org called in mounted", this.paymentTransfers)
             this.searchedTransferedPayments = this.paymentTransfers;
-           // this.attachmentsData=this.response.transferFunds.attachments
             console.log("attachments data", this.attachmentsData);
           }
         });

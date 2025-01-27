@@ -88,17 +88,17 @@
         </table>
         <button class="custom-button m-5" @click="
           showEditTransferForm = true;
-        showAddEditForm = false;
-        paymentToBeEdited = {
-          transferType: '',     // Reset dropdown
-          fromBankType: '',       // Reset text field
-          toBankType: '',         // Reset text field
-          transferDate: '',       // Reset date field
-          amount: 0,              // Reset numeric field
-          reason: '',             // Reset text field
-          refNumber: ''           // Reset text field
-        };
-        createOffset = true;
+            showAddEditForm = false;
+            paymentToBeEdited = {
+              transferType: '',     // Reset dropdown
+              fromBankType: '',       // Reset text field
+              toBankType: '',         // Reset text field
+              transferDate: '',       // Reset date field
+              amount: 0,              // Reset numeric field
+              reason: '',             // Reset text field
+              refNumber: ''           // Reset text field
+            };
+            createOffset = true;
         ">
           <i class="fa fa-plus"></i> New Offset
         </button>
@@ -152,7 +152,6 @@
                     </div>
                   </div>
                 </div>
-
                 <div v-if="showPaymentAmount" class="mx-5 flex flex-col border border-gray-300 p-4 my-4 rounded-lg">
                   <div v-for="(userBalance, index) in userBalances" :key="index">
                     <div class="p-4 bg-gray-100 rounded-lg shadow-md overflow-y-auto max-h-64">
@@ -203,6 +202,11 @@
                         </tbody>
                       </table>
                     </div>
+
+
+                    <!-- <div v-if="showError" class="text-red-500 text-sm">{{ errorMessage }}</div> -->
+
+
                     <button @click="
                     (showAddEditForm = true), (showPaymentAmount = false);
                     " class="custom-button w-full lg:w-1/4 mt-3">
@@ -255,6 +259,14 @@
                       <span class="custom-star ml-1">*</span>
                     </label>
                     <input type="text" v-model="paymentToBeEdited.amount" class="custom-input" placeholder="Amount" />
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="custom-label">
+                      {{ $t("Offset Date") }}
+                      <span class="custom-star ml-1">*</span>
+                    </label>
+                    <input type="date" v-model="paymentToBeEdited.transferDate" class="custom-input" placeholder="Offset Date" />
                   </div>
 
                   <div class="mb-4">
@@ -340,13 +352,19 @@
                   </div>
                 </div>
 
-                <button @click.prevent="handleOffsetPayment()" type="submit" class="custom-button">
-                  <i class="fas fa-save"> </i>
-                  Save
-                </button>
+
+            
               </form>
             </div>
+            <div v-if="showAddEditForm" class="p-4 ml-5 border-t  border-gray-300">
+            <div v-if="showError" class="text-red-500 text-sm mb-3">{{ errorMessage }}</div>
+
+            <button @click.prevent="handleOffsetPayment()" type="submit" class="custom-button">
+              <i class="fas fa-save"> </i>
+              Save
+            </button>
             </div>
+          </div>
             <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
         </div>
@@ -512,64 +530,34 @@ export default {
         this.paymentToBeEdited.reason
       );
 
-      // console.log(
-      //   "data",
-      //   this.transferType,
-      //   this.fromBankType,
-      //   this.toBankType,
-      //   this.transferDate,
-      //   this.amount,
-      //   this.reason
-      // );
+      this.showError = false;
+      this.errorMessage = "";
 
-      // this.selectTransferType = false;
-      // this.selectTransferFrom = false;
-      // this.selectTransferTo = false;
-      // this.enterAmount = false;
-      // this.notEqualFromTo = false;
-      // this.amountNotZero = false;
-      // this.enterTransferDate = false;
-      // this.showError = false;
+      if (this.paymentToBeEdited.transferType == "" || this.paymentToBeEdited.transferType == null) {
+        alert
+        this.showError = true;
+        this.errorMessage = "Transfer Type is Required"
+        return;
+      }
 
-      // // Validation
-      // if (this.transferType == "" || this.transferType == null) {
-      //   this.selectTransferType = true;
-      //   return;
-      // }
-      // if (this.fromBankType == "" || this.fromBankType == null) {
-      //   this.selectTransferFrom = true;
-      //   return;
-      // }
-      // if (this.toBankType == "" || this.toBankType == null) {
-      //   this.selectTransferTo = true;
-      //   return;
-      // }
-      // if (this.fromBankType == this.toBankType) {
-      //   this.notEqualFromTo = true;
-      //   return;
-      // }
-      // if (this.amount === "" || this.amount == null || this.amount === 0) {
-      //   this.enterAmount = true;
-      //   return;
-      // }
-      // if (this.transferDate == "") {
-      //   this.enterTransferDate = true;
-      //   return;
-      // }
+      if (this.paymentToBeEdited.fromBankType == "" || this.paymentToBeEdited.fromBankType == null) {
+        this.showError = true;
+        this.errorMessage = "From Bank Type is Required"
+        return;
+      }
 
-      // // Prepare the payload
-      // const payload = {
-      //   transferType: this.transferType,
-      //   fromBankType: this.fromBankType,
-      //   toBankType: this.toBankType,
-      //   amount: this.amount,
-      //   reason: this.reason,
-      //   transferDate: this.transferDate,
-      // };
+      if (this.paymentToBeEdited.amount === "" || this.paymentToBeEdited.amount == null || this.paymentToBeEdited.amount === 0) {
+        this.showError = true;
+        this.errorMessage = "Amount is Required"
+        return;
+      }
 
-      // console.log("payload", payload);
-
-      // Process the attachments (could be the same data for both cases)
+      if (this.paymentToBeEdited.transferDate == "") {
+        this.showError = true;
+        this.errorMessage = "Transfer Date is Required"
+        return;
+      }
+     
       const fileArray = (this.createOffset ? this.newAttachmentsData : this.attachmentsData).map((file) => {
         console.log(file.fileData, file.filename, file.fileType);
         return this.$base64ToFile(file.fileData, file.filename, file.fileType);

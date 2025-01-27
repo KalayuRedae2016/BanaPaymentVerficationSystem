@@ -160,12 +160,10 @@
 <script>
 import { mapGetters } from "vuex";
 import { formSchema } from "@/utils/formSchema"; // Import the global form schema
-
 export default {
   data() {
     return {
       formSchema: formSchema,
-
       showPassword: false,
       showError: true,
       errorMessage: "",
@@ -183,9 +181,7 @@ export default {
       forgetPasswordVisible: false,
       resetPasswordVisible: false,
       resetEmail: "",
-
       showForgetPasswordForm: false,
-
       notifyToSeeEmail: false,
       resetEmailIsRequired: false,
       emailNotFound: false,
