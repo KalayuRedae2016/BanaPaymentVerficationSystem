@@ -116,8 +116,8 @@ app.use((req, res, next) => {
 
 // #2 Routers
 app.use('/api/v1/organization', organizationRoutes);
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/logs', logRouter);
+app.use('/api/v1/users',userRouter);
+app.use('/api/v1/logs',logRouter);
 app.use('/api/v1/paymentSetting', paymentSettingRouter);
 app.use('/api/v1/payments', paymentRouter);
 

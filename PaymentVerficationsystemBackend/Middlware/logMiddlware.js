@@ -1,5 +1,5 @@
 log = require('../Models/logModel');
-exports.logMiddleware = async (req, res, next) => {
+module.exports = async (req, res, next) => {
     const { method, originalUrl, ip, user, body } = req;
     console.log(req)
     // Basic information about the request

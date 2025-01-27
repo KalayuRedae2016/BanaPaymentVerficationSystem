@@ -13,3 +13,5 @@ app.use(function (req, res, next) {
 });
 
 router.get("/",logController.getLogs)
+
+module.exports = router;

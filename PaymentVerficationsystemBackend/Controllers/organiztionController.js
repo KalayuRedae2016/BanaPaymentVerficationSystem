@@ -2,6 +2,7 @@ const Organization = require('../Models/organizationModel');
 const ApiKey = require('../Models/apiKeyModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const {logAction}=require("../utils/logUtils")
 const { generateUniqueApiKey } = require('../utils/generateUniqueApiKeyToken');
 const {formatDate,formatDateGC}=require("../utils/formatDate")
 
@@ -65,6 +66,17 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
     }
   }
  }
+
+ await logAction({
+  model: 'organizations',
+  action: 'Create',
+  actor: req.user.id,
+  description: 'Organization Profie Created',
+  data: { orgId:organization.id},
+  ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+  severity: 'info',
+  sessionId: req.session?.id || 'generated-session-id',
+});
 
   res.status(201).json({
     status: 1,
@@ -186,6 +198,18 @@ exports.updateOrganization = catchAsync(async (req, res, next) => {
     }
   }
 
+  await logAction({
+    model: 'organizations',
+    action: 'Update',
+    actor: req.user.id,
+    description: 'organization Profie Updated',
+    data: { orgId: organization.id, body: req.body },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
+
   res.status(200).json({
     status: 1,
     message: 'Organizational Profile updated successfully',
@@ -251,6 +275,7 @@ exports.addBankAccount = catchAsync(async (req, res, next) => {
     });
     await apiKey.save();
   }
+  
   // Send a success response
   res.status(200).json({
     status: 1,
