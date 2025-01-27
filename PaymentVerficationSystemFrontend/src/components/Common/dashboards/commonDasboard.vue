@@ -310,7 +310,7 @@
               </li>
 
               <li
-                v-if="role === 'User'"
+                v-if="checkPermission"
                 @click="setActive('userProfile')"
                 class="items-center bg-white hover:bg-gray-100 transition"
                 :class="{
@@ -438,6 +438,7 @@ export default {
   },
   data() {
     return {
+      checkPermission:false,
       profileData:"",
       imageData:"",
       notificationLength: 0,
@@ -554,6 +555,28 @@ export default {
    //setInterval(this.fetchNotifications, 5000);
   },
   methods: {
+    async checkPermission(){
+   
+    try {
+      const userId=localStorage.getItem("userId");
+      await this.$apiGetById("/api/v1/users", userId).then(
+        (response) => {
+          // console.log("response of the users inn editing mounting", response)
+          console.log("Response client profile kkk", response);
+       if(response.clientProfile.canEditDetails===true){
+        console.log("true")
+        return true;
+       }else{
+        console.log("false")
+        return false;
+       }
+    }
+    );
+    } catch (error) {
+      console.error("Error fetching client datakk:", error);
+    } finally {
+    }
+    },
     toggleDarkMode() {
       document.body.classList.toggle('dark');
     },

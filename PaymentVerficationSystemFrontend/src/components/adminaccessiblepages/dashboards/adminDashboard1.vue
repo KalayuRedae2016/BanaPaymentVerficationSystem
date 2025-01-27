@@ -3,15 +3,14 @@
     <div class="">
       <h2 class="w-full border-b border-blue-500 text-blue-500 pt-4 px-4 pb-3 font-bold">
         Dashboard
-        <span class=""></span>
       </h2>
       <Toast ref="toast" />
       <div class="mx-5 flex flex-row pt-3 space-x-12">
-        <div class=" flex flex-col lg:flex-row space-x-12  p-4 h-64 w-full rounded-lg  w-1/2 shadow-lg border-t border-gray-100">
-          <div class="w-full lg:w-1/3 border-r border-gray-300">
+        <div class=" flex flex-col lg:flex-row lg:space-x-12  p-4  w-full rounded-lg  w-1/2 shadow-lg border-t border-gray-100">
+          <div class="w-1/2 lg:w-1/3 border-none lg:border-r border-gray-300">
             <canvas ref="pieChartCanvas" class="chart w-1/2"></canvas>
           </div>
-          <div class=" grid grid-cols-2 gap-y-0 items-center text-blue-500">
+          <div class="grid grid-cols-2 gap-y-1 lg:gap-y-0 items-center text-blue-500">
             <p>No. Active Members</p>
             <span class="hover:bg-blue-600 w-16 ml-5 bg-blue-500 text-white text-sm px-3 py-1 rounded-full">
               2000

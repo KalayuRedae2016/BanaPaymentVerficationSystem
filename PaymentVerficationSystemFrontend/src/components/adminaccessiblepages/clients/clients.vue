@@ -1,30 +1,28 @@
 <template>
-    <div class="mb-48">
+  <div class="mb-48">
     <Toast ref="toast" />
     <div class="container mx-auto p-4 flex flex-col">
-  <div class="flex flex-row w-full border-b border-blue-500 pb-1">
-    <p class="text-blue-500 text-md font-bold">{{ $t("Active Clients") }}</p>
-    <div class="ml-auto flex space-x-2">
-      <button @click.prevent="navigateToCreateClient()" class="custom-button text-xs ">
-        <i class="fa fa-add mr-2 "></i>Add
-      </button>
-      <button class="custom-button text-xs" @click="editPermissionModal=true">
-        <i class="fa fa-cog icon" aria-hidden="true"></i> {{ $t("Open Edit Profile") }}
-      </button>
-      <button class="custom-button text-xs" @click="showDeactivatedUsers()">
-        <i class="fa fa-user-slash" aria-hidden="true"></i> {{ $t("View Deactivated Users") }}
-      </button>
+      <div class="flex flex-row w-full border-b border-blue-500 pb-1">
+        <p class="text-blue-500 text-md font-bold">{{ $t("Active Clients") }}</p>
+        <div class="ml-auto flex space-x-2">
+          <button @click.prevent="navigateToCreateClient()" class="custom-button text-xs ">
+            <i class="fa fa-add mr-2 "></i>Add
+          </button>
+          <button class="custom-button text-xs" @click="editPermissionModal = true">
+            <i class="fa fa-cog icon" aria-hidden="true"></i> {{ $t("Open Edit Profile") }}
+          </button>
+          <button class="custom-button text-xs" @click="showDeactivatedUsers()">
+            <i class="fa fa-user-slash" aria-hidden="true"></i> {{ $t("View Deactivated Users") }}
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<clientTable></clientTable>
+    <clientTable></clientTable>
 
-<div v-if="editPermissionModal">
+    <div v-if="editPermissionModal">
       <transition name="fade" mode="out-in">
-        <div
-          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-        >
+        <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
           <!-- Modal Content -->
           <div class="bg-white rounded-lg p-6 border border-cyan-500 w-96 lg:w-1/2">
             <div class="flex flex-row items-center">
@@ -32,53 +30,30 @@
               <div class="text-blue-500 font-bold">Grant Permissions </div>
 
               <!-- Icon on the right -->
-              <div
-                class="ml-auto"
-                @click="
-                  editPermissionModal= !editPermissionModal;
-                "
-              >
-                <svg
-                  class="w-6 h-6 text-red-500 hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+              <div class="ml-auto" @click="
+                editPermissionModal = !editPermissionModal;
+              ">
+                <svg class="w-6 h-6 text-red-500 hover:text-red-700 transition-colors duration-300 cursor-pointer"
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </div>
             </div>
             <div class="flex flex-row mb-5 mt-5">
-         
-              <input
-                v-model="searchQuery"
-                type="text"
-                :placeholder="$t('searchByNameEmailUsername')"
-                class="custom-input"
-              />
+
+              <input v-model="searchQuery" type="text" :placeholder="$t('searchByNameEmailUsername')"
+                class="custom-input" />
             </div>
 
             <div class="overflow-x-auto overflow-y-auto max-h-64 border border-gray-300 p-4">
               <!-- Table -->
-              <table
-              class="table-auto min-w-full border-collapse"
-              >
+              <table class="table-auto min-w-full border-collapse">
                 <!-- Table Head -->
                 <thead class=" text-white sticky top-0 z-0">
                   <tr class="text-blue-500 ">
                     <th class="w-24 p-4 font-bold text-left">
                       {{ $t("check") }}
-                      <input
-                        type="checkbox"
-                        class="ml-2"
-                        v-model="selectAll"
-                        @change="selectDeselectAll()"
-                      />
+                      <input type="checkbox" class="ml-2" v-model="selectAll" @change="selectDeselectAll()" />
                     </th>
                     <th class="w-24 p-4 font-bold text-left">
                       {{ $t("userCode") }}
@@ -86,26 +61,18 @@
                     <th class="w-24 p-4 font-bold text-left">
                       {{ $t("fullName") }}
                     </th>
-                    
+
                   </tr>
                 </thead>
                 <!-- Scrollable Table Body -->
-                <tbody
-                  class="divide-y divide-gray-200 bg-gray-50 "
-                >
-                  <tr
-                    @click="selectDeselectUser(searchClient._id)"
-                    v-for="(searchClient, index) in searchedusers"
+                <tbody class="divide-y divide-gray-200 bg-gray-50 ">
+                  <tr @click="selectDeselectUser(searchClient._id)" v-for="(searchClient, index) in searchedusers"
                     :key="searchClient._id"
-                    class="cursor-pointer bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg h-8"
-                  >
+                    class="cursor-pointer bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg h-8">
                     <td class="text-md text-gray-700">
-                      <input
-                        type="checkbox"
-                        class="pl-4 rounded focus:ring focus:ring-indigo-300"
+                      <input type="checkbox" class="pl-4 rounded focus:ring focus:ring-indigo-300"
                         :checked="selectedUsers.includes(searchClient._id)"
-                        @change="selectDeselectUser(searchClient._id)"
-                      />
+                        @change="selectDeselectUser(searchClient._id)" />
                     </td>
                     <td class=" text-xs text-gray-700 hidden h-8">
                       <span class="font-bold text-indigo-600">{{
@@ -126,34 +93,32 @@
               </table>
             </div>
 
-            <div class="flex flex-row mt-2">
+            <!-- <div class="flex flex-row mt-2">
               <label for="" class="custom-label w-1/4 mt-3">Close Date</label>
               <input type="text" class="custom-input w-2/3">
-            </div>
-            <div
-              class="w-full my-2 bg-blue-100 border-t blue-200 p-2 text-blue-700"
-            >
+            </div> -->
+            <div class="w-full my-2 bg-blue-100 border-t blue-200 p-2 text-blue-700">
               Total selected :
               <span class="text-gray-600 font-extrabold ">{{
                 selectedUsers.length
               }}</span>
             </div>
 
-         <p class="my-2 text-red-500 text-xs" v-if="selectAtLeastOneUser">Select At list One User??</p>
+            <p class="my-2 text-red-500 text-xs" v-if="selectAtLeastOneUser">Select At list One User??</p>
 
             <div class="mt-2 flex space-x-5">
-              <button
-                @click="sendPermission()"
-                class="custom-button"
-              >
-               <i class="fa fa-arrow-right"></i> {{ $t("Submit") }}
+              <button @click="giveRejectPermission(true)" class="custom-button">
+                <i class="fa fa-check"></i> {{ $t("Give Permission") }}
+              </button>
+              <button @click="giveRejectPermission(false)" class="custom-button bg-red-500">
+                <i class="fa fa-times text-white"></i> {{ $t("Reject Permission") }}
               </button>
             </div>
           </div>
         </div>
       </transition>
     </div>
-</div>
+  </div>
 
 </template>
 <script>
@@ -167,15 +132,15 @@ export default {
   },
   data() {
     return {
-   //
-      selectAtLeastOneUser:false,
+      //
+      selectAtLeastOneUser: false,
       selectedUsers: [],
       searchedusers: [],
       clientId: "",
       users: [],
-      selectAll:false,
+      selectAll: false,
       //
-      editPermissionModal:false,
+      editPermissionModal: false,
       successToastMessage: "",
       errorToastMessage: "",
       showErrorToast: false,
@@ -193,8 +158,8 @@ export default {
       showDeactivateModal: false,
       showResetModal: false,
       deactivationReason: "",
-     
-    
+
+
       showFamilyMemberModal: false,
       addingSuccess: false,
       screenSize: "",
@@ -240,16 +205,16 @@ export default {
   },
 
   async mounted() {
-   const params= {
-    isActive: true 
-   }
+    const params = {
+      isActive: true
+    }
     try {
-      await this.$apiGet("/api/v1/users",params).then(
+      await this.$apiGet("/api/v1/users", params).then(
         (response) => {
           this.clients = response.users;
           this.searchedClients = this.clients;
-          this.searchedusers=this.clients;
-        }  
+          this.searchedusers = this.clients;
+        }
       );
     } catch (error) {
       console.log("from api error global", error.status, error.message);
@@ -260,6 +225,7 @@ export default {
 
   methods: {
     selectDeselectUser(userId) {
+    
       console.log("selectDeselectEmail", userId);
       const index = this.selectedUsers.indexOf(userId);
       if (index === -1) {
@@ -278,7 +244,7 @@ export default {
     selectDeselectAll() {
       this.selectedUsers = [];
       if (this.selectAll) {
-        this.selectedUsers= this.clients.map((user) => user._id);
+        this.selectedUsers = this.clients.map((user) => user._id);
         console.log("selectedUsers", this.selectedUsers);
       } else {
         this.selectedUsers = [];
@@ -286,44 +252,41 @@ export default {
       }
     },
 
-    async sendPermission() {
+  async giveRejectPermission(editPermission) {
+  this.showError = false;
+  this.selectAtLeastOneUser = false;
 
-this.showError=false;
+  // Validate selected users
+  if (this.selectedUsers == "" || this.selectedUsers.length === 0) {
+    this.selectAtLeastOneUser = true;
+    return;
+  }
 
-this.selectAtLeastOneUser=false;
+  // Prepare the payload
+  const userList = {
+    userIds: this.selectedUsers,
+    permittedBy: localStorage.getItem("userId"),
+    editPermission: editPermission, // Pass true or false dynamically
+  };
+  console.log("userList", userList);
 
-
-
-if (this.selectedUsers == "" || this.selectedUsers.length===0) {
-  this.selectAtLeastOneUser=true;
-  return;
-}
-
-const userList = {
-  userIds:this.selectedUsers,
-  permittedBy:localStorage.getItem("userId"),
-  editPermission:true,
-}
-
-console.log("userList",userList);
-
-
-try { 
-  await this.$apiPatch("/api/v1/users/editPermission",'', userList)
-  .then((response) => {
-    console.log("users", response.message);
-    if (response.status === 1) {
-      this.searchedusers = this.users; //response.data.message;
-    }
-  })
- }catch(error)  {
+  try {
+    // Make the API call
+    await this.$apiPatch("/api/v1/users/edituserPermission", '', userList)
+      .then((response) => {
+        console.log("users", response.message);
+        this.$refs.toast.showSuccessToastMessage(response.message);
+        this.searchedusers = this.users; // Update the users
+        this.editPermissionModal = false; // Close the modal
+      });
+  } catch (error) {
     console.error("Error fetching users:", error);
     this.showErrorToastMessage("Something went wrong");
-  }finally{
-  };
-this.selectedUsers = [];
-},
-
+  } finally {
+    this.selectedUsers = []; // Reset selected users
+  }
+}
+,
     async resetPassword(user) {
       console.log("userId is", user._id);
       this.showResetModal = false;
@@ -331,24 +294,24 @@ this.selectedUsers = [];
         id: user._id,
         email: user.email,
       };
-      try{
-      await this.$apiPatch("/api/v1/users/resetPasswordByAdmin",'', payload)
-        .then((response) => {
-          console.log("users", response);
-          if (response.status === 1) {
-            this.showResetedPasswordModal = true;
-            this.resetedPassword = response.resetedPassword;
-            this.$refs.toast.showSuccessToastMessage(response.message);
-            this.displayedItems();
-          }
-        })
-      }catch(error){
-          this.errorMessage = error.message;
-          this.showError = true;
-          conmsole.log("error during reseting",error.status,error.message)
-        }finally{
+      try {
+        await this.$apiPatch("/api/v1/users/resetPasswordByAdmin", '', payload)
+          .then((response) => {
+            console.log("users", response);
+            if (response.status === 1) {
+              this.showResetedPasswordModal = true;
+              this.resetedPassword = response.resetedPassword;
+              this.$refs.toast.showSuccessToastMessage(response.message);
+              this.displayedItems();
+            }
+          })
+      } catch (error) {
+        this.errorMessage = error.message;
+        this.showError = true;
+        conmsole.log("error during reseting", error.status, error.message)
+      } finally {
 
-        };
+      };
     },
 
     async deactivate(userId) {
@@ -360,25 +323,25 @@ this.selectedUsers = [];
       console.log("payload", payload);
       this.showDeactivateModal = false;
 
-      try{
-        await this.$apiPut("/api/v1/users/active-deactive",userId, payload)
-        .then((response) => {
-          console.log("users", response);
-          if (response.status === 1) {
-            this.$refs.toast.showSuccessToastMessage(response.message);
-            this.$reloadPage();
-          } else {
-            this.showErrorToastMessage("Something went wrong!!");
-          }
-        })
-       }catch(error) {
-          console.log("error during activating",error.status,error.message);
-          this.$refs.toast.showErrorToastMessage("Something went wrong!!");
-        }finally{
+      try {
+        await this.$apiPut("/api/v1/users/active-deactive", userId, payload)
+          .then((response) => {
+            console.log("users", response);
+            if (response.status === 1) {
+              this.$refs.toast.showSuccessToastMessage(response.message);
+              this.$reloadPage();
+            } else {
+              this.showErrorToastMessage("Something went wrong!!");
+            }
+          })
+      } catch (error) {
+        console.log("error during activating", error.status, error.message);
+        this.$refs.toast.showErrorToastMessage("Something went wrong!!");
+      } finally {
 
-        }
+      }
     },
- 
+
 
     navigateToInClient(clientId) {
       this.$router.push(`/admindashboard/edit-client/${clientId}`);
@@ -398,7 +361,7 @@ this.selectedUsers = [];
       this.displayedItems();
     },
 
-  
+
     // filteredClientsInSearch() {
     //   console.log("this users=", this.clients);
 
@@ -413,8 +376,8 @@ this.selectedUsers = [];
     // },
 
 
-  filteredusersInSearch() {
-     // alert("tadios");
+    filteredusersInSearch() {
+      // alert("tadios");
       console.log("search", this.searchQuery);
       console.log("this.users", this.users);
 

@@ -32,7 +32,7 @@ import deactivate from "../components/adminaccessiblepages/clients/deactivate.vu
 import importUsers from "../components/adminaccessiblepages/clients/insertMultiple.vue";
 
 import createClient from "../components/adminaccessiblepages/clients/createClient.vue";
-import editClient from "../components/adminaccessiblepages/clients/editClient.vue";
+import editClient from "../components/Common/Setting/editProfile.vue";
 import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEditProfile.vue";
 import overdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/overdue.vue";
 import paidUnpaid from "../components/adminaccessiblepages/payment/Reports//paymentStatus/paidUnpaid.vue"
@@ -56,7 +56,7 @@ import Logs from "../components/adminaccessiblepages/logsManagment/logs.vue";
 // User components
 //import userdashboard from "../components/UserAccessiblepages/userdashboard/Userdashboard.vue";
 import userdashboardFirst from "../components/UserAccessiblepages/userdashboard/Userdashboardfirst.vue";
-import profile from "../components/UserAccessiblepages/profile/editProfile.vue";
+import profile from "../components/Common/Setting/editProfile.vue"
 import idCard from "../components/UserAccessiblepages/idCard/idCard.vue";
 import infoPayment from "../components/UserAccessiblepages/information/info.vue";
 
