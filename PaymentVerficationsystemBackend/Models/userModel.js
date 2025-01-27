@@ -3,6 +3,7 @@ const { Schema } = mongoose;
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
+const { type } = require('os');
 
 const attachmentSchema = new mongoose.Schema({
   fileName: { type: String, required: true },
@@ -68,6 +69,11 @@ const userSchema = new Schema(
   canEditDetails: {
     type: Boolean,
     default: false, // Default to false; admin must enable this for editing
+  },
+  permittedEditBy: {
+    type: String,
+    default: 'SuperAdmin', // Default role that can allow editing
+    enum: ['Admin', 'SuperAdmin'] // Validate against specific roles
   },
     isActive: {
       type: Boolean,

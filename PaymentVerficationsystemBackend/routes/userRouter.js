@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose=require("mongoose")
 const app = express();
 const router = express.Router();
 
@@ -38,18 +39,17 @@ router.patch('/edituserPermission',userController.toggleEdiUserPermission);
 router.route('/')
       .get(userController.getAllUsers)
       .delete(userController.deleteUsers)
+
 router.route('/:id')
   .get(userController.getUser)
   .patch(authoController.uploadFilesMiddleware,userController.updateUser)
   .delete(userController.deleteUser);
-
-
 
 router.route('/active-deactive/:userId').put(userController.activateDeactiveUser);
 router.route('/sendEmails').post(userController.sendEmailMessages)
 
 router.post('/importUsers',userController.uploadUserFile,userController.importUsers);
 router.get('/exportUsers',userController.exportUsers);
-router.get("/logs",userController.getLogs)
+
 
 module.exports = router;

@@ -1,82 +1,27 @@
-const Log = require('../Models/logModel');
-exports.log = (req, res, next) => {
-  if (req.path === '/api/pa/verify') {
-    const { paymentId, amount } = req.body;
+log = require('../Models/logModel');
+exports.logMiddleware = async (req, res, next) => {
+    const { method, originalUrl, ip, user, body } = req;
+    console.log(req)
+    // Basic information about the request
+    const logData = {
+      model: 'request',
+      action: `${method} ${originalUrl}`,
+      actor: user?.id || 'anonymous',
+      description: 'Request received',
+      data: {
+        body,
+      },
+      ipAddress: ip,
+      severity: 'info',
+      sessionId: req.sessionID || null,
+    };
 
-    const log = new Log({
-      activity: 'Payment Verification',
-      details: { paymentId, amount },
-    });
-
-    log
-      .save()
-      .then(() => console.log('Payment verification logged'))
-      .catch((err) =>
-        console.error('Failed to log payment verification:', err)
-      );
-  } else if (req.path === '/api/user/register') {
-    const { username, email } = req.body;
-
-    const log = new Log({
-      activity: 'User Registration',
-      details: { username, email },
-    });
-
-    log
-      .save()
-      .then(() => console.log('User registration logged'))
-      .catch((err) => console.error('Failed to log user registration:', err));
-  } else if (req.path === '/api/v1/users/signup') {
-    const { username } = req.body;
-
-    const log = new Log({
-      activity: 'User Authentication',
-      details: { username },
-    });
-
-    log
-      .save()
-      .then(() => console.log('User authentication logged'))
-      .catch((err) => console.error('Failed to log user authentication:', err));
-  } else if (req.path === '/api/setting/update') {
-    const { settingId, value } = req.body;
-
-    const log = new Log({
-      activity: 'Setting Update',
-      details: { settingId, value },
-    });
-
-    log
-      .save()
-      .then(() => console.log('Setting update logged'))
-      .catch((err) => console.error('Failed to log setting update:', err));
-  } else if (req.path === '/api/setting/request') {
-    const { settingId } = req.body;
-
-    const log = new Log({
-      activity: 'Setting Request',
-      details: { settingId },
-    });
-
-    log
-      .save()
-      .then(() => console.log('Setting request logged'))
-      .catch((err) => console.error('Failed to log setting request:', err));
-  } else if (req.path === '/api/v1/users') {
-    const { users } = req.body;
-    const log = new Log({
-      activity: 'User Export',
-      details: users,
-    });
-
-    log
-      .save()
-      .then(() => console.log('User export logged'))
-      .catch((err) => console.error('Failed to log user export:', err));
-  }
-
-  next();
+    // Save the log
+    const log = new log(logData);
+    await log.save();
+    next();
 };
+
 
 //Simplified Version for the above middleware
 // exports.log = (req, res, next) => {
