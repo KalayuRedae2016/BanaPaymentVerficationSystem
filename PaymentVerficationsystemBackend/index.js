@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const Log = require('./Middlware/logMiddlware');
+const logmiddlware= require('./Middlware/logMiddlware');
 
 const path = require('path');
 const cors = require('cors');
@@ -20,10 +20,10 @@ const globalErrorHandler = require('./Controllers/errorController');
 
 const organizationRoutes = require('./routes/organizationRouter');
 const userRouter = require('./routes/userRouter');
+const logRouter = require('./routes/logRouter');
 const paymentSettingRouter = require('./routes/paymentSettingRouter');
 const paymentRouter = require('./routes/paymentRouter');
 //const smsRoutes=require('./routes/smsRoutes');
-
 
 const app = express(); //start Express app
 
@@ -88,6 +88,7 @@ app.use(limiter); // Apply rate limiter to all routes
 
 // Body parser, reading data from body into req.body
 app.use(bodyparser.json());
+// app.use(logmiddlware); // Apply log middleware to all routes
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.json()); // built-in middleware
 app.use(express.urlencoded({ extended: true }));
@@ -115,7 +116,8 @@ app.use((req, res, next) => {
 
 // #2 Routers
 app.use('/api/v1/organization', organizationRoutes);
-app.use('/api/v1/users', userRouter);
+app.use('/api/v1/users',userRouter);
+app.use('/api/v1/logs',logRouter);
 app.use('/api/v1/paymentSetting', paymentSettingRouter);
 app.use('/api/v1/payments', paymentRouter);
 

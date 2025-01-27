@@ -11,7 +11,7 @@ const Apikey = require('../Models/apiKeyModel');
 
 const createPendingPayments = require("../utils/createPendingPayments")
 const createDefaultAdminUser = require("../utils/userUtils");
-
+const {logAction}=require("../utils/logUtils")
 const { validateExistence } = require("../utils/validateExistence")
 const { calculateBalances } = require('../utils/calculateBalances')
 const { formatDate, formatDateGC } = require("../utils/formatDate")
@@ -23,8 +23,6 @@ const { sendEmail } = require('../utils/email');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
-
-
 
 // Configure multer for payment file uploads
 const paymentFileUpload = createMulterMiddleware(
@@ -655,6 +653,18 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   //     The Bana Marketing Group Team;`
   //await sendEmail({ email, subject, message });
   //console.log(unpaidBill)
+
+  await logAction({
+    model: 'Payments',
+    action: 'Confirm',
+    actor: req.user.id,
+    description: 'PaymentS ConfirmedCreated',
+    data: { paymentId: unpaidBill.id, body: req.body },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     message: 'Payment types updated successfully',
     items: {
@@ -760,6 +770,18 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   const formattedUpdatedAt = payment.updatedAt ? formatDate(payment.updatedAt) : null;
   const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate) : null;
   console.log(payment)
+
+   await logAction({
+    model: 'Payments',
+    action: 'Edit',
+    actor: req.user.id,
+    description: 'PaymentS Editted',
+    data: { paymentId: payment.id, body: req.body },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     message: 'Payment updated successfully',
     items: {

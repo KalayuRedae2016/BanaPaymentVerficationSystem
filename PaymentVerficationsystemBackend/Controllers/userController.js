@@ -1,14 +1,17 @@
 const bcrypt = require('bcrypt');
 const sharp = require('sharp');
 const User = require('./../Models/userModel');
+const Log = require('./../Models/logModel');
 const Organization = require("../Models/organizationModel")
 const PaymentSetting = require("../Models/paymentSettingModel")
 const fs = require('fs');
 const path = require('path');
 const validator = require('validator'); // Ensure you have this library installed
 const xlsx = require('xlsx'); //for import user from excel
+const mongoose=require("mongoose")
 
 const { sendEmail } = require('../utils/email');
+const {logAction}=require("../utils/logUtils")
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { formatDate } = require("../utils/formatDate")
@@ -84,6 +87,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 exports.getUser = catchAsync(async (req, res, next) => {
+  console.log("herre")
   const userId = req.params.id;
   const user = await User.findById(userId);
   if (!user) {
@@ -143,6 +147,17 @@ exports.updateUser = catchAsync(async (req, res) => {
   
   const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
   const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
+  
+  await logAction({
+    model: 'users',
+    action: 'Update',
+    actor: req.user.id,
+    description: 'User Profie Updated',
+    data: { userId: updatedUser.id,updateData },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
 
     res.status(200).json({
       status: 1,
@@ -159,10 +174,22 @@ exports.updateUser = catchAsync(async (req, res) => {
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
   //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
-  const deleteUser = await User.findByIdAndDelete(req.params.id)
-  if (!deleteUser) {
+  const deletedUser = await User.findByIdAndDelete(req.params.id)
+  if (!deletedUser) {
     return next(new AppError("user entry not found", 404))
   }
+
+  await logAction({
+    model: 'users',
+    action: 'Delete',
+    actor: req.user.id,
+    description: 'User Profie Deleted',
+    data: { userId: deletedUser.id},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     status: 'success',
     //data: null,
@@ -201,6 +228,18 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
   user.isActive = isActive === true ? true : false;
   user.reason = reason;
   await user.save();
+
+  await logAction({
+    model: 'users',
+    action: 'Update',
+    actor: req.user.id,
+    description: `${user.fullName} is ${user.isActive ? 'Activated' : 'Deactivated'}`,
+    data: { userId: user.id},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     status: 1,
     message: `${user.fullName} is ${user.isActive ? 'Activated' : 'Deactivated'
@@ -300,6 +339,17 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // Step 8: Revoke edit permission after successful update
   user.canEditDetails = false;
   await user.save();
+
+  await logAction({
+    model: 'users',
+    action: 'Update',
+    actor: req.user.id,
+    description: `${user.fullName} update his Profile`,
+    data: { userId: user.id,filteredBody},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
 
   // Step 9: Format timestamps for the response
   const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
@@ -475,7 +525,8 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
 
   console.log(typeof editPermission)
   console.log("reqes per",req.body)
-
+  console.log("reqes user",req.user)
+  
   if (!Array.isArray(userIds) || userIds.length === 0) {
     return next(new AppError('Provide a valid array of user IDs', 400));
   }
@@ -484,15 +535,36 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
     return next(new AppError('Provide a valid editPermission value (true or false)', 400));
   }
 
+  // if (!mongoose.Types.ObjectId.isValid(permittedBy)) {
+  //   return next(new AppError('Invalid Admin ID (permittedBy). Must be a valid ObjectId.', 400));
+  // }
+
+  // Validate the logged-in user's role
+  const actor = await User.findById(req.user.id);
+  if (!actor || !['Admin', 'SuperAdmin'].includes(actor.role)) {
+    return next(new AppError('You are not authorized to perform this action.', 403));
+  }
   const updatedUsers = await User.updateMany(
     { _id: { $in: userIds } }, // Target the specified users
-    { $set: {canEditDetails: editPermission } }, // Update the edit permission
+    { $set: { canEditDetails: editPermission, PermitEditBy:req.user.id}}, // Update the edit permission
     { new: true, runValidators: true }
   );
 
   if (!updatedUsers.modifiedCount) {
     return next(new AppError('No users were updated. Check the provided user IDs.', 404));
   }
+  // Log the action
+  const userCount = updatedUsers.modifiedCount;
+  await logAction({
+    model: 'users',
+    action: 'Update',
+    actor: req.user.id,
+    description: `${userCount} user(s) ${editPermission ? 'granted' : 'revoked/Disabled'} edit permissions.`,
+    data: { userIds, updatedUsers },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
 
   res.status(200).json({
     status: 'success',
@@ -501,17 +573,7 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getLogs = catchAsync(async (req, res, next) => {
-  const logs = await User.find({}).lean();
-  if (!logs) {
-    return next(new AppError('No users found', 404));
-  }
-  res.status(200).json({
-    status: 1,
-    result: logs.length,
-    logs: logs
-  });
-});
+
 
 // // Upload attachments
 // exports.uploadAttachments = [

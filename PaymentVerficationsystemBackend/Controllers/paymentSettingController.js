@@ -4,6 +4,7 @@ const User=require("../Models/userModel")
 
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const {logAction}=require("../utils/logUtils")
 const createPendingPayments=require("../utils/createPendingPayments")
 const {formatDate,formatDateGC}=require("../utils/formatDate")
 
@@ -50,6 +51,17 @@ exports.createPaymentSetting = catchAsync(async (req, res, next) => {
   const users = await User.find({ isActive: true, role: "User" });
   const createPayments = users.map((user) => createPendingPayments(user, activeYear, activeMonth));
   await Promise.allSettled(createPayments);
+
+  await logAction({
+    model: 'PaymentSettings',
+    action: 'Create',
+    actor: req.user.id,
+    description: 'PaymentSetting Created',
+    data: { settingId: PaymentSetting.id, body: req.body },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
 
   res.status(200).json({
     status: 1,
@@ -170,6 +182,17 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
   const formattedStartDate = paymentSetting.startingDate ? formatDate(paymentSetting.startingDate) : null;
   const formattedEndDate = paymentSetting.endingDate ? formatDate(paymentSetting.endingDate) : null;
 
+  await logAction({
+    model: 'PaymentSettings',
+    action: 'Create',
+    actor: req.user.id,
+    description: 'PaymentSetting Created',
+    data: { orgId: organization.id, body: req.body },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   // Send the response with the updated payment setting
   res.status(200).json({
     status: 1,
@@ -190,6 +213,16 @@ exports.deleteSetting = catchAsync(async (req, res, next) => {
   if (!deletedSetting) {
     return next(new AppError("Payment entry not found", 404))
   }
+  await logAction({
+    model: 'PaymentSettings',
+    action: 'Create',
+    actor: req.user.id,
+    description: 'PaymentSetting Created',
+    data: { settingId: deletedSetting.id},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
   res.status(200).json({
     status: 'success',
     //data: null,

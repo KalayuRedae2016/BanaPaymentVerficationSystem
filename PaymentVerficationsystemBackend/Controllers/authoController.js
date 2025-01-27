@@ -74,6 +74,8 @@ exports.signup = catchAsync(async (req, res, next) => {
     user.userCode = await user.generateUserCode(prefixCode, length);
     const password=req.body.password || (await user.generateRandomPassword())
     user.password = await bcrypt.hash(password,12);    
+
+await user.save();
  
 await logAction({
   model: 'users',
@@ -85,9 +87,6 @@ await logAction({
   severity: 'info',
   sessionId: req.session?.id || 'generated-session-id',
 });
-
-
-await user.save();
     // Create pending payments if the user role is 'User'
     const latestSetting=await validateExistence(PaymentSetting,{latest:true},"No active Payment Setting Found")
     if (user.role === 'User') {
@@ -448,6 +447,18 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.password = hashedNewPassword
   user.changePassword=false
   await user.save();
+
+  await logAction({
+    model: 'users',
+    action: 'Update',
+    actor: req.user.id,
+    description: 'User Password Updated',
+    data: { userId: user.id },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     status: 1,
     message: 'Password updated successfully'
