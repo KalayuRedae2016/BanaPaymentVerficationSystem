@@ -655,7 +655,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   //console.log(unpaidBill)
 
   await logAction({
-    model: 'Payments',
+    model: 'payments',
     action: 'Confirm',
     actor: req.user.id,
     description: 'PaymentS ConfirmedCreated',
@@ -772,7 +772,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   console.log(payment)
 
    await logAction({
-    model: 'Payments',
+    model: 'payments',
     action: 'Edit',
     actor: req.user.id,
     description: 'PaymentS Editted',
@@ -1081,6 +1081,18 @@ exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
 
   const payment = await Payment.findByIdAndUpdate(filter, update, { new: true });
   if (!payment) return next(new AppError(" 'Payment not found'"), 400)
+
+    
+  await logAction({
+    model: 'payments',
+    action: 'Edit',
+    actor: req.user.id,
+    description: 'Mark Payment as seen',
+    data: { paymentId: payment.id, body: req.body },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
 
   res.status(200).json({
     message: 'Notification marked as seen.',
@@ -1690,6 +1702,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   }
 
   const { attachments } = await processUploadFiles(req.files, req.body)
+  
 
   organization[transferCollection].push({
     transferCase,
@@ -1704,7 +1717,20 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     attachments,
     transferDate
   });
+  const createdTransfer = organization[transferCollection][organization[transferCollection].length - 1];
   await organization.save();
+     
+  await logAction({
+    model: `${transferCase}`,
+    action: 'Create',
+    actor: req.user.id,
+    description:  `${transferCase} is Created`,
+    data: { paymentId: createdTransfer.id, body: req.body },
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     status: 1,
     message: `Successfully transferred ${amount} Birr from ${fromBankType} to ${transferCase === "bankTransfer" ? toBankType : organization._id}`,
