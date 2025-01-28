@@ -15,10 +15,10 @@ exports.getLogs = catchAsync(async (req, res, next) => {
   if (!model) {
     return next(new AppError("Model is required.", 400));
   }
-
-  const filters = { model };
+  const filters = { model};
 
   if (action) filters.action = action;
+  
   if (severity) filters.severity = severity;
   if (startDate || endDate) {
     filters.createdAt = {};

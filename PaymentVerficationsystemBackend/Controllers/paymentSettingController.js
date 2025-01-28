@@ -68,6 +68,7 @@ exports.createPaymentSetting = catchAsync(async (req, res, next) => {
     message: `Payment Setting is created for Month-${activeMonth}-Year-${activeYear}.`,
     paymentSetting: newSetting,
   });
+  
 });
 
 exports.getPaymentSetting = catchAsync(async (req, res, next) => {
@@ -187,7 +188,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
     action: 'Create',
     actor: req.user.id,
     description: 'PaymentSetting Created',
-    data: { orgId: organization.id, body: req.body },
+    data: { settingId:settingId, body: updatedData },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
