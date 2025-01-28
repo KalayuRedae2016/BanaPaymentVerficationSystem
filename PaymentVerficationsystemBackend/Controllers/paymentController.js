@@ -1903,7 +1903,19 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       transfer.attachments = attachments;
     }
 
+    const createdTransfer = organization['paymentTransfers'][organization['paymentTransfers'].length - 1];
     await organization.save();
+       
+    await logAction({
+      model: `${transferCase}`,
+      action: 'Update',
+      actor: req.user.id,
+      description:  `${transferCase} is Updated`,
+      data: { paymentId: createdTransfer.id, body: req.body },
+      ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+      severity: 'info',
+      sessionId: req.session?.id || 'generated-session-id',
+    });
 
     const { attachmentsData } = await processFileData(transfer);
 
@@ -1935,7 +1947,20 @@ exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError(`Transfer with ID ${transferId} is not found`, 404));
   }
   organization.paymentTransfers.splice(transferIndex, 1); // Remove the transfer from the array
-  await organization.save();// Save the updated organization document
+
+  await organization.save();
+     
+  await logAction({
+    model: `${transferCase}`,
+    action: 'delete',
+    actor: req.user.id,
+    description:  `Transfer is Deleted`,
+    data: { transferId: transferId.id},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+  
 
   res.status(200).json({
     status: 1,
