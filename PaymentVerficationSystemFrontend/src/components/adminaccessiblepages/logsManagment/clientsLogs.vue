@@ -121,9 +121,9 @@
             </div>
 
           <hr class="my-4 md:min-w-full bg-red-500" />
-  <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
-      <div class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0">
-        <div class="mx-4 p-4 w-full h-full lg:w-1/4 h-64">
+        <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
+         <div class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0">
+         <div class="mx-4 p-4 w-full h-full lg:w-1/4 h-64">
           <img
             :src="imageData"
             alt="User Profile Image"
