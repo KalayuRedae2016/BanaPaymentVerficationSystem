@@ -1,9 +1,8 @@
 <template>
   <div class="container mx-auto flex flex-col">
     <Toast ref="toast" />
-    <div class="pb-5 flex flex-col bg-white -mt-2">
-      <div class="mt-5 ">
-
+      <div class="pb-5 flex flex-col bg-white -mt-2">
+      <div class="mt-5">
         <div class="overflow-x-auto h-96 ">
           <table class="w-full border border-gray-300">
             <thead>
@@ -50,12 +49,9 @@
                 <td class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap">
                   <button class="custom-button" @click="
                     logDetail = true;
-
                   ">
                     <i class="fa fa-edit"></i>Detail
                   </button>
-
-
                 </td>
               </tr>
             </tbody>
@@ -267,8 +263,7 @@ export default {
   try {
     const response = await this.$apiGet("/api/v1/logs", params);
     console.log("response log payments", response);
-this.logsData=response.logs;
-
+    this.logsData=response.logs;
   } catch (error) {
     console.log("error", error);
   } finally {
@@ -276,22 +271,7 @@ this.logsData=response.logs;
   }
 
     },
-    async fetchClient(logsData){
-      
-      try {
-      await this.$apiGetById("/api/v1/users", userId).then(
-        (response) => {
-          console.log("Response client profile kkk", response);
-          this.clientProfile = response.clientProfile;
-          this.logsData=logsData;
-          this.logsData.actor=response.clientProfile.fullName
-        }
-      );
-    } catch (error) {
-      console.error("Error fetching client datakk:", error);
-    } finally {
-    } 
-    }
+   
   },
 };
 </script>

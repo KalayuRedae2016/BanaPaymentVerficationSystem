@@ -40,7 +40,10 @@
             </div>
   
             <div v-show="activeTab === 4" class="">
-              <offsets-log></offsets-log>
+              <service-offset-logs></service-offset-logs>
+            </div>
+            <div v-show="activeTab === 5" class="">
+              <users-offset-logs></users-offset-logs>
             </div>
            
           </div>
@@ -49,18 +52,22 @@
     </div>
   </template>
   <script>
+  import settingLog from './settingLogs.vue';
  import clientsLog from './clientsLogs.vue'
  import paymentsLog from './paymentsLogs.vue'
- import offsetsLog from './offsetsLogs.vue';
- import settingLog from './settingLogs.vue';
  import transferLog from './transferLogs.vue';
+
+import ServiceOffsetLogs from './serviceOffsetLogs.vue';
+import UsersOffsetLogs from './usersOffsetLogs.vue';
+
   export default {
     components: {
+      settingLog,
         clientsLog,
         paymentsLog,
-        offsetsLog,
-        settingLog,
         transferLog,
+        ServiceOffsetLogs,
+        UsersOffsetLogs,
     },
     data() {
       return {
@@ -76,16 +83,32 @@
           "Settings Log",
           "Clients Log",
           "Payments Log",
-          "Transfer Payments Log",
-          "Offsets Log",
+          "Bank Transfer Logs",
+          "Service Offset Logs",
+          "User Offset Logs",
         ],
       };
     },
 
+    mounted(){
+      const activeTabFromRoute = parseInt(this.$route.query.activeTab);  // Ensure it's treated as a number
+  if (!isNaN(activeTabFromRoute)) {
+    this.activeTab = activeTabFromRoute;
+  } else {
+    this.activeTab = 0;  // Default to 0 if the query param is missing or invalid
+  }
+    },
     methods: {
   
       activateTab(index) {
         this.activeTab = index;
+
+        this.$router.push({
+        path: "/admindashboard/logs",
+        query: {
+          activeTab: index,
+        },
+      });
       },
     },
   };
