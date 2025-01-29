@@ -46,7 +46,7 @@ exports.resizeUserPhoto = catchAsync(async (req, res, next) => {
 });
 
 exports.signup = catchAsync(async (req, res, next) => {
-    const organization=await validateExistence(Organization,{},"Create Organization Profile before creating User")
+    const organization=await validateExistence(Organization,{},"Create Organization Profile before creating User",next)
     const prefixCode = organization.companyPrefixCode;
     const length = 4;
     console.log("uploadingFIles",req.files)
@@ -88,7 +88,11 @@ await logAction({
   sessionId: req.session?.id || 'generated-session-id',
 });
     // Create pending payments if the user role is 'User'
-    const latestSetting=await validateExistence(PaymentSetting,{latest:true},"No active Payment Setting Found")
+    //const latestSetting=await validateExistence(PaymentSetting,{latest:true},"No active Payment Setting Found",next)
+  const latestSetting=await PaymentSetting.findOne({latest:true})
+  if(!latestSetting){
+    return next(new AppError('User Registered But,No active payment setting found.', 404));
+  }
     if (user.role === 'User') {
       await createPendingPayments(user, latestSetting.activeYear, latestSetting.activeMonth);
     }

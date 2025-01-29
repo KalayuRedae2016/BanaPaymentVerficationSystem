@@ -31,20 +31,32 @@ exports.getLogs = catchAsync(async (req, res, next) => {
   const totalLogs = await Log.countDocuments(filters);
 
   if (logs.length === 0) {
-    return next(new AppError('No logs found for the given query parameters.', 404));
+    return next(new AppError(`No logs found for the given query.`, 404));
   }
 
+  // Get user details for all actors in logs
+  const actorIds = logs.map(log => log.actor); // Extract all actor IDs
+  const users = await User.find({ _id: { $in: actorIds } }).select("_id fullName"); // Fetch user names
+
+  // Create a map of user IDs to full names
+  const userMap = {};
+  users.forEach(user => {userMap[user._id.toString()] = user.fullName});
+
+  console.log(logs)
   const formattedLogs = logs.map(log => ({
     id: log._id,
     model: log.model,
     action: log.action,
     actor: log.actor,
+    actorName: userMap[log.actor.toString()] || "Unknown",
     description: log.description,
     affectedData: JSON.parse(log.affectedData), // Parse affectedData to JSON object
     ipAddress: log.ipAddress,
     severity: log.severity,
     createdAt: formatDate(log.createdAt), // Format date using formatDate utility
   }));
+
+  console.log(formattedLogs)
 
   res.status(200).json({
     status: 1,

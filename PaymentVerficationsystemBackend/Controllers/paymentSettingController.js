@@ -53,7 +53,7 @@ exports.createPaymentSetting = catchAsync(async (req, res, next) => {
   await Promise.allSettled(createPayments);
 
   await logAction({
-    model: 'PaymentSettings',
+    model: 'paymentSettings',
     action: 'Create',
     actor: req.user.id,
     description: 'PaymentSetting Created',
@@ -216,10 +216,10 @@ exports.deleteSetting = catchAsync(async (req, res, next) => {
   }
   await logAction({
     model: 'PaymentSettings',
-    action: 'Create',
+    action: 'Delete',
     actor: req.user.id,
-    description: 'PaymentSetting Created',
-    data: { settingId: deletedSetting.id},
+    description: 'PaymentSetting Deleting',
+    data: { settingId: deletedSetting.id, details: deletedSetting },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -227,7 +227,7 @@ exports.deleteSetting = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     //data: null,
-    message: `Payment Deleted`
+    message: `PaymentSetting Deleted`
   });
 });
 exports.deleteSettings = catchAsync(async (req, res, next) => {

@@ -256,6 +256,7 @@ function calculateBalances(payments, org,users={}) {
   // Process organization paymentTransfers
   if (org.paymentTransfers && Array.isArray(org.paymentTransfers)) {
     org.paymentTransfers.forEach((transfer) => {
+      
       const {transferCase,transferType,fromBankType,toWhat,toBankType, amount } = transfer;
           // Validate transferCase and transferType
         const validTransferCases = ["bankTransfer", "userWithdrawal", "expenditure"];
@@ -266,6 +267,45 @@ function calculateBalances(payments, org,users={}) {
         if (!validTransferTypes.includes(transferType)) {
           throw new Error(`Invalid transferType: ${transferType}`);
         }
+
+        if (!totalBalanceBankType[fromBankType]) {
+          totalBalanceBankType[fromBankType] = {
+            regularBalance: 0,
+            urgentBalance: 0,
+            subsidyBalance: 0,
+            serviceBalance: 0,
+            penalityBalance: 0,
+        
+            blockIncoming: 0,
+            blockOutcoming: 0,
+            serviceIncoming: 0,
+            serviceOutcoming: 0,
+        
+            totalBlockBalance: 0,
+            totalServiceBalance: 0,
+            totalBalance: 0
+          };
+        }
+        
+        if (!totalBalanceBankType[toBankType]) {
+          totalBalanceBankType[toBankType] = {
+            regularBalance: 0,
+            urgentBalance: 0,
+            subsidyBalance: 0,
+            serviceBalance: 0,
+            penalityBalance: 0,
+        
+            blockIncoming: 0,
+            blockOutcoming: 0,
+            serviceIncoming: 0,
+            serviceOutcoming: 0,
+        
+            totalBlockBalance: 0,
+            totalServiceBalance: 0,
+            totalBalance: 0
+          };
+        }
+        
         
       if(transferCase==="bankTransfer"){
         if (transferType === "block") {
