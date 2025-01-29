@@ -78,7 +78,7 @@ app.get("/", (req, res) => {
 // git init --initial-branch=main
 // git remote add gitlab https://gitlab.com/Kalayuredae/payment-verfication-system-backend.git
           //or(consider the gitlab and origin)
-//git remote add origin https://github.com/KalayuRedae2016/payment-verfication-system-backend.git
+//git remote add origin https://github.com/KalayuRedae2016/BanaPaymentVerficationSystem.git
 // git add .
 // git commit -m "Initial commit"
 // git push --set-upstream origin main
