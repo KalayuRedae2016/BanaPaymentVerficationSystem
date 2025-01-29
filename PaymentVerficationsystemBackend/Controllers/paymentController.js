@@ -1372,19 +1372,22 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   if (!userCode) {
     return next(new AppError('User Code has not been provided, please try again.', 400))
   }
+
+  console.log(req.query)
   // Parse activeYear or default to the current year
-  const year = parseInt(activeYear, 10) || new Date().getFullYear();
+  //const year = parseInt(activeYear, 10) || new Date().getFullYear();
+  
   const searchPattern = new RegExp(userCode, 'i')
   // Construct filter object for querying payments
   const paymentQuery = {
     userCode: { $regex: searchPattern },
-    ...(year && { activeYear: year }),
     isPaid: true,
     status: 'confirmed'
   };
 
+  if(activeYear) paymentQuery.activeYear = activeYear;
   const paymentsWithYear = await Payment.find(paymentQuery);
-  if (!paymentsWithYear.length) {
+  if (!paymentsWithYear) {
     return next(new AppError(`No payments for Year ${activeYear}`), 400)
   }
 
