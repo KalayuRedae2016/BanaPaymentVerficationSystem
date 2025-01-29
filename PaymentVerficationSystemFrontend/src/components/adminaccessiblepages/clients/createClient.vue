@@ -49,7 +49,7 @@
             </label>
             <input id="lastName" type="text" class="custom-input text-xs" :placeholder="$t('lastName')"
               style="padding-left: 16px" v-model="lastName" />
-          </div>exelFile
+          </div>
           <div class="w-full">
             <label class="custom-label" for="lastName">
               <span class="text-cyan-500"> {{ $t("tigrignaFullName") }}</span>
