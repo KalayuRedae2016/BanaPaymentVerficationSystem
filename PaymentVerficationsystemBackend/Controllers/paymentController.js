@@ -1633,12 +1633,16 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   console.log("Request Body:", req.body);
   console.log("Request files:", req.files);
   // const transferCase=req.query.transferCase
-  const { transferCase, transferType, fromBankType, toBankType, reason, refNumber } = req.body;
+  let { transferCase, transferType, fromBankType, toBankType, toWhat,reason, refNumber } = req.body;
   const amount = Number(req.body.amount)
   if (!transferCase) return next(new AppError("Missing Transfer Case", 400))
   if (!transferType || !fromBankType || !amount || !reason || !refNumber) {
     return next(new AppError('Missing required fields for transfer', 400));
   }
+  if (toWhat && mongoose.Types.ObjectId.isValid(toWhat)) {
+    toWhat = new mongoose.Types.ObjectId(toWhat);
+}
+
   const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
   if (transferDate > new Date()) {
     return next(new AppError('Transfer date cannot be in the future', 400));
@@ -1652,16 +1656,17 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   }
 
   const organization = await Organization.findOne();
-  console.log("orgID",organization.id)
-  console.log("orgID",organization._id)
+  // console.log("orgID",organization.id)
+  // console.log("orgID",organization._id)
   if (!organization) {
     return next(new AppError("Organization is not found", 400))
   }
 
-  const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
-  console.log("uu",userQuery)
+  const userQuery = transferCase === "userWithdrawal" ? toWhat : {}
+  // console.log("uu",userQuery)
   let users
   if (transferCase === "userWithdrawal") {
+    // users = await User.findById(new mongoose.Types.ObjectId(userQuery))
     users = await User.findById(userQuery)
   } else {
     users = await User.find()
@@ -1670,6 +1675,8 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   if (!users) {
     return next(new AppError("User/s is not found", 400))
   }
+
+  console.log("uusers",users)
 
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
@@ -1695,7 +1702,6 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     if (!toBankType) {
       return next(new AppError('toBankType field is required for bank transfers', 400));
     }
-    toWhat = organization._id
     const toBankExists = banks.some(account => account.bankType === toBankType);
     if (!toBankExists) {
       return next(new AppError(`Invalid bank type: ${toBankType} does not exist`, 400));
@@ -1736,9 +1742,24 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     sessionId: req.session?.id || 'generated-session-id',
   });
 
+let message = "";
+
+if (transferCase === "bankTransfer") {
+    message = `Successfully transferred ${amount} Birr from ${fromBankType} to ${toBankType}--> Bank Transfer`;
+} else if (transferCase === "userWithdrawal") {
+    message = `Successfully transferred ${amount} Birr from ${fromBankType} to ${users.fullName}--> User Withdrawal`;
+} else if (transferCase === "expenditure") {
+    message = `Successfully transferred ${amount} Birr from ${fromBankType} to ${organization.companyName}--> Expenditure`;
+} else {
+    message = "Invalid transfer case.";
+}
+
+console.log(message);
+
+
   res.status(200).json({
     status: 1,
-    message: `Successfully transferred ${amount} Birr from ${fromBankType} to ${transferCase === "bankTransfer" ? toBankType : organization._id}`,
+    message:message,
   });
 });
 
