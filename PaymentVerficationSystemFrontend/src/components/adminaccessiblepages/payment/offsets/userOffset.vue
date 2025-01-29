@@ -142,7 +142,8 @@
                     :key="user._id" :class="[
                       'bg-white p-4 border-b cursor-pointer hover:bg-blue-100',
                     ]" @click="
-                      showPaymentAmmount(user);
+                    userId=user._id;
+                    showPaymentAmmount(user);
                     showList = false;
                     showAddEditForm = false;
                     ">
@@ -205,8 +206,6 @@
 
 
                     <!-- <div v-if="showError" class="text-red-500 text-sm">{{ errorMessage }}</div> -->
-
-
                     <button @click="
                     (showAddEditForm = true), (showPaymentAmount = false);
                     " class="custom-button w-full lg:w-1/4 mt-3">
@@ -215,7 +214,7 @@
                   </div>
                  
                 </div>
-             
+
               </div>
         <div class="max-h-64 overflow-y-auto">
   
@@ -351,9 +350,6 @@
                     </div>
                   </div>
                 </div>
-
-
-            
               </form>
             </div>
             <div v-if="showAddEditForm" class="p-4 ml-5 border-t  border-gray-300">
@@ -385,7 +381,7 @@ export default {
 
       userBalances: [],
       userOffsetId: "",
-      userId: "6791f57835ba41e701b5fde9",
+      userId: "",
       showAddEditForm: false,
       searchedTransferedPayments: [],
       paymentTransfersss: [],
@@ -564,6 +560,9 @@ export default {
       });
 
       console.log("fileArray", fileArray);
+
+
+      console.log("check the id whether it is string or object id",this.userId);
 
       const formData = new FormData();
       formData.append("transferCase", "userWithdrawal");

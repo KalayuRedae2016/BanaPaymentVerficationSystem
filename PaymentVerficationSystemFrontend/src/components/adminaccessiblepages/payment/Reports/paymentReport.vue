@@ -18,7 +18,7 @@
         v-for="(user, userIndex) in filteredUsers" :key="userIndex" :class="[
           'p-4 border-b cursor-pointer bg-white hover:bg-blue-100',
 
-        ]" @click="toggleUserSelection(user.userCode, user.fullName)">
+        ]" @click="fetchTotalUserBalance(user._id, user.userCode, user.fullName)">
         <div class="flex flex-row space-x-5 md:space-x-12 text-xs text-gray-500">
           <p class="font-bold text-blue-800 ">{{ user.userCode }}</p>
           <p class="text-gray-500 font-bold">{{ user.fullName }}</p>
@@ -31,67 +31,84 @@
       <!-- All Years Report -->
       <div class="text-xs mt-3 border-b border-t border-gray-500 py-3">
         <p class="text-blue-500">All Years Report</p>
-        <div v-if="totalUserBalances.totalAmountPaid>0" class="mt-3 bg-white p-4">
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
-            <div>
-              <ul class="space-y-2">
+        <div class="" v-if="totalUserBalanceLength > 0">
+
+          <div class="mt-3 bg-white p-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs">
+              <div>
+                <ul class="space-y-2">
+                  <li class="grid grid-cols-2">
+                    <strong>Total Regular Amount Paid:</strong> <span>{{ totalUserBalances.totalRegularBalance }}
+                      ETB</span>
+                  </li>
+                  <li class="grid grid-cols-2">
+                    <strong>Total Subsidy Amount Paid:</strong> <span>{{ totalUserBalances.totalSubsidyBalance }}
+                      ETB</span>
+                  </li>
+                  <li class="grid grid-cols-2">
+                    <strong>Total Urgent Amount Paid:</strong> <span>{{ totalUserBalances.totalUrgentBalance }}
+                      ETB</span>
+                  </li>
+
+                  <li class="grid grid-cols-2">
+                    <strong class="text-blue-500">Total Block Bank Account Paid:</strong> <span>{{
+                      totalUserBalances.totalBlockBankAccount
+                      }} ETB</span>
+                  </li>
+
+
+
+
+
+                </ul>
+              </div>
+              <div>
+                <ul class="space-y-2">
+
+                  <li class="grid grid-cols-2">
+                    <strong>Total Service Amount Paid:</strong> <span>{{ totalUserBalances.totalServiceBalance }}
+                      ETB</span>
+                  </li>
+                  <li class="grid grid-cols-2">
+                    <strong>Total Penalty Amount Paid:</strong> <span>{{ totalUserBalances.totalPenalityBalance }}
+                      ETB</span>
+                  </li>
+
+
+                  <li class="grid grid-cols-2">
+                    <strong class="text-blue-500">Total Service Bank Account Paid:</strong> <span>{{
+                      totalUserBalances.totalServiceBankAccount }} ETB</span>
+                  </li>
+
+                </ul>
+
+
+              </div>
+              <u>
                 <li class="grid grid-cols-2">
-                  <strong>Total Amount Paid:</strong> <span>{{ totalUserBalances.totalAmountPaid }} ETB</span>
+                  <strong class="text-green-500">Total Amount Paid:</strong> <span>{{
+                    totalUserBalances.totalBlockBankAccount + totalUserBalances.totalServiceBankAccount}} ETB</span>
                 </li>
-                <li class="grid grid-cols-2">
-                  <strong>Total Block Bank Account Paid:</strong> <span>{{ totalUserBalances.totalBlockBankAccountPaid
-                    }} ETB</span>
-                </li>
-                <li class="grid grid-cols-2">
-                  <strong>Total Penalty Amount Paid:</strong> <span>{{ totalUserBalances.totalPenalityAmountPaid }}
-                    ETB</span>
-                </li>
-                <li class="grid grid-cols-2">
-                  <strong>Total Registration Paid:</strong> <span>{{ totalUserBalances.totalRegistrationPaid }}
-                    ETB</span>
-                </li>
-                <li class="grid grid-cols-2">
-                  <strong>Total Regular Amount Paid:</strong> <span>{{ totalUserBalances.totalRegularAmountPaid }}
-                    ETB</span>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <ul class="space-y-2">
-                <li class="grid grid-cols-2">
-                  <strong>Total Service Amount Paid:</strong> <span>{{ totalUserBalances.totalServiceAmountPaid }}
-                    ETB</span>
-                </li>
-                <li class="grid grid-cols-2">
-                  <strong>Total Service Bank Account Paid:</strong> <span>{{
-                    totalUserBalances.totalServiceBankAccountPaid }} ETB</span>
-                </li>
-                <li class="grid grid-cols-2">
-                  <strong>Total Subsidy Amount Paid:</strong> <span>{{ totalUserBalances.totalSubsidyAmountPaid }}
-                    ETB</span>
-                </li>
-                <li class="grid grid-cols-2">
-                  <strong>Total Urgent Amount Paid:</strong> <span>{{ totalUserBalances.totalUrgentAmountPaid }}
-                    ETB</span>
-                </li>
-              </ul>
+
+              </u>
             </div>
           </div>
         </div>
-        <div v-else class="mt-5 ml-5"> <span class="text-blue-800 font-bold">{{fullName}} ({{ userCode }})</span> This user does not have a balance!!!!</div>
+        <div v-else class="text-pink-800 mt-5 ml-5"> <span class="text-blue-800 font-bold">{{ fullName }} ({{ userCode
+            }})</span> does not have a balance!!!!</div>
+
       </div>
 
       <!-- Yearly Report -->
-      <div class="border-b border-gray-500 mt-2">
+      <div class="border-b border-gray-500 mt-2" v-if="totalUserBalanceLength > 0">
         <div class="text-xs text-blue-500 mt-3">Yearly Report</div>
-        <div class="flex flex-row w-full lg:w-1/2 space-x-4 mt-3 ml-3">
-          <label for="month" class="custom-label text-gray-500 mt-2 mr-4 lg:mr-0">Year</label>
+        <div class="flex flex-row w-2/3 lg:w-1/2 space-x-4 mt-3 ml-3 mb-3">
+          <label for="month" class="custom-label text-gray-500 mt-2 ">Year</label>
           <select @change="getPaymentBasedOnYear()" v-model="year" class="rounded-md custom-select h-7">
             <option v-for="year in $years" :key="year" :value="year">{{ year }}</option>
           </select>
         </div>
-        <!-- Table -->
-        <div class="overflow-x-auto text-xs ml-3">
+        <div class="overflow-x-auto text-xs ml-3" v-if="showPaymentTable">
           <table class="w-full border border-gray-300 mt-5">
             <thead>
               <tr class="bg-gray-200">
@@ -131,15 +148,18 @@
             </tbody>
           </table>
           <div class="justify-center items-center my-3">
-        <p class="text-pink-900 text-sm">No balance for the selected user !!!</p>
-      </div>
+            <p class="text-pink-900 text-sm mx-3"> <span class="text-blue-800 font-bold mr-3"> {{ fullName }} ({{ userCode
+                }})</span>does not have a balance in the selected year</p>
+          </div>
         </div>
         <div v-if="showPaymentNotFound" class="text-blue-500 my-5 mx-5">
-          <span class="text-pink-800">{{ fullName }}({{ userCode }})</span> has no paid payment in the selected year.
+          <span class="text-blue-800 font-bold"> {{ fullName }} ({{ userCode }})</span> has no paid payment in the
+          selected year.
         </div>
       </div>
-      
+
     </div>
+
   </div>
 </template>
 
@@ -147,7 +167,9 @@
 export default {
   data() {
     return {
+      showPaymentTable: false,
       totalUserBalances: {},
+      totalUserBalanceLength: 0,
       showList: true,
       showTable: false,
       showPaymentNotFound: false,
@@ -197,9 +219,7 @@ export default {
     console.log("mounted filtered users", this.filteredUsers);
   },
   methods: {
-    getPaymentBasedOnYear() {
-      this.toggleUserSelection(this.userCode)
-    },
+
     paymentHistoryDetail(month) {
 
       console.log("active month", this.month);
@@ -211,7 +231,9 @@ export default {
         }
       });
     },
-
+    getPaymentBasedOnYear() {
+      this.fetchPaymentReportByYear(this.userCode, this.fullName);
+    },
     async showPaymentMethod() {
       if (this.year === '') {
         try {
@@ -231,8 +253,42 @@ export default {
 
       }
     },
-    async toggleUserSelection(userCode, fullName) {
 
+    async fetchTotalUserBalance(userId, userCode, fullName) {
+      this.showList = false;
+      this.showTable = true;
+      this.totalUserBalanceLength = 0;
+      this.userCode = userCode;
+      this.fullName = fullName;
+      const params = {
+        userId: userId,
+        userCode: userCode,
+        timeRange: "allTime",
+      };
+      try {
+        await this.$apiGet("/api/v1/payments/reports", params).then(response => {
+          console.log("user response all time userlevel report: ", response)
+          // this.totalUserBalanceLength=response.items.userBalances.length ;
+          this.totalUserBalances = response.items.userBalances.length > 0 ? response.items.userBalances[0] : null;
+          console.log("total User balances", this.totalUserBalances);
+          this.userCode = this.totalUserBalances.userCode;
+          console.log("user code", this.userCode);
+          //console.log("length of the fetched reports: ", response.items.userBalances.length );
+          if ((this.totalUserBalances.totalBlockBankAccount + this.totalUserBalances.totalServiceBankAccount) > 0) {
+            this.totalUserBalanceLength = response.items.userBalances.length
+          }
+        })
+      } catch (error) {
+        console.log("error for user balance fetching", error.status, error.message);
+      } finally {
+
+      }
+
+    },
+    async fetchPaymentReportByYear(userCode, fullName) {
+      //alert("hii")
+      this.showPaymentTable = false;
+      //alert("hii")
       this.fullName = fullName
       //alert("toggle selection");
       console.log("usercode is", this.userCode)
@@ -243,26 +299,31 @@ export default {
 
       this.showTable = true;
       this.filteredUsers = "";
-      if (this.year === '') {
-        this.selectYear = true;
-        return;
-      }
+
       const params = {
-        activeYear: this.year,
-        activeMonth: this.month,
         userCode: this.userCode,
       }
+      if (this.year != '') {
+        params.activeYear = this.year;
+      }
+      console.log("params", params);
       try {
         await this.$apiGet(
           '/api/v1/payments/userBalance', params).then((response) => {
             console.log("response userbalance", response);
-            this.payments = response.payments;
+
+            if (this.year === '') {
+              this.payments = [];
+            } else {
+              this.payments = response.payments;
+              this.showPaymentTable = true;
+            }
             this.showTable = true;
             this.showPaymentNotFound = false;
-            this.totalUserBalances = response.userBalances;
+  
+
           })
       } catch (error) {
-        this.showTable = false;
         this.showPaymentNotFound = true;
         console.error("Error fetching user balance:", error.status, error.message);
       } finally {
