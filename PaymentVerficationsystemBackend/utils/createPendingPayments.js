@@ -3,7 +3,6 @@ const Payment = require('../Models/paymentModel');
 const AppError = require('../utils/appError');
 
 const createPendingPayments = async (user, activeYear, activeMonth) => {
-
   const paymentSetting = await PaymentSetting.findOne({ activeYear, activeMonth });
   if (!paymentSetting) {
     throw new AppError('Payment setting not found for the current active month and year', 404);

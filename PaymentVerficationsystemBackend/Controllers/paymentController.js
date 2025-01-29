@@ -1516,18 +1516,19 @@ exports.calculateOrganizationBalances = catchAsync(async (req, res, next) => {
   });
 });
 exports.reports = catchAsync(async (req, res, next) => {
-  const { userCode, isPaid, year, semiYear, month, day, startingDate, endingDate, timeRange } = req.query;
+  const { userCode, isPaid, year, semiYear, month, day, startingDate, endingDate, timeRange,activeMonth} = req.query;
+  
   // const paymentTypes = ['regular', 'subsidy', 'urgent', 'service', 'penality'];
-  // const paymentQuery = {$or: [
-  //   { isPaid: true }, // Main payment isPaid
-  //   ...paymentTypes.map(type => ({ [`${type}.isPaid`]: true })) // Any payment type isPaid
-  // ]};
+  // const paymentQuery = {$or: [{ isPaid: true },...paymentTypes.map(type => ({ [`${type}.isPaid`]: true }))]};
+  
   const paymentQuery = {}
   if (!timeRange) {
     return next(new AppError("Time Range is required"), 400)
   }
   if (userCode) paymentQuery.userCode = new RegExp(userCode, 'i');
+  if (activeMonth) paymentQuery.activeMonth = Number(activeMonth);
   if (isPaid !== undefined) paymentQuery.isPaid = isPaid === 'true';
+  
 
   let startDate, endDate;
   const specifiedYear = parseInt(year, 10);
@@ -1599,7 +1600,7 @@ exports.reports = catchAsync(async (req, res, next) => {
   paymentQuery.updatedAt = { $gte: startDate, $lte: endDate };
   const payments = await Payment.find(paymentQuery).populate('user', 'phoneNumber').lean()
   if (!payments.length) {
-    return res.status(404).json({ error: 'No payments found for the given criteria' });
+    return res.status(404).json({ error: 'No Paid payments found for the given criteria' });
   }
 
   const organization = await Organization.findOne()
