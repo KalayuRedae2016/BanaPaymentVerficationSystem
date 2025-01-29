@@ -320,9 +320,32 @@ function calculateBalances(payments, org,users={}) {
         }
       }
       else if(transferCase==="userWithdrawal"){
-        const user = users.find((u) => u._id.toString() === toWhat);
+
+        console.log("userWithdrawal here is already");
+          console.log("Is users an array?", Array.isArray(users));  // Check if it's an array
+          console.log("useruuu", users);
+
+          let user;
+          if (Array.isArray(users)) {
+              user = users.find((u) => u._id.toString() === toWhat.toString()); // If users is an array
+          } else {
+              user = users; // If users is a single user object, assign it directly
+          }
+
+          console.log("Found user:", user);
+
+        
         if (!user) throw new Error(`User with ID ${toWhat} not found`);
         const userCode = user.userCode;
+        // Ensure userBalances[userCode] exists and is initialized
+      if (!userBalances[userCode]) {
+      userBalances[userCode] = {
+          blockUserWithdrawal: 0,
+          serviceUserWithdrawal: 0,
+          totalBlockBankAccount: 0,
+          totalServiceBankAccount: 0,
+      };
+       }
       
         if (transferType === "block") {
           totalBalanceBankType[fromBankType].blockOutcoming += amount;
