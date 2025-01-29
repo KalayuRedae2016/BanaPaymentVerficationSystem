@@ -1836,11 +1836,19 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
 
   const transferId = req.params.id
   console.log(transferId)
-  const { reason, refNumber, transferDate, toWhat } = req.body;
+  let { reason, refNumber, transferDate, toWhat } = req.body;
   if (!transferId) return next(new AppError("Missing Transfer ID", 400));
+
+  if (toWhat && mongoose.Types.ObjectId.isValid(toWhat)) {
+    toWhat = new mongoose.Types.ObjectId(toWhat);
+}
 
   const organization = await Organization.findOne();
   if (!organization) return next(new AppError("Organization is not found", 400));
+
+  if (toWhat && mongoose.Types.ObjectId.isValid(toWhat)) {
+    toWhat = new mongoose.Types.ObjectId(toWhat);
+}
 
   const transfer = organization.paymentTransfers.find(t => t._id.toString() === transferId);
   if (!transfer) return next(new AppError("Transfer record not found", 404));
@@ -1857,6 +1865,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     const fromBankType = req.body.fromBankType || transfer.fromBankType
     const toBankType = req.body.toBankType || transfer.toBankType
     const amount = req.body.amount || transfer.amount
+    const toWhat = req.body.toWhat || transfer.toWhat
 
     if (fromBankType) {
       const banks = transfer.transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
@@ -1882,7 +1891,8 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     if (!payments) {
       return next(new AppError(`No confirmed Payments Found`, 400));
     }
-    const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
+    const userQuery = transferCase === "userWithdrawal" ?toWhat : {}
+  
     let users
     if (transferCase === "userWithdrawal") {
       users = await User.findById(userQuery)
