@@ -1376,7 +1376,7 @@ exports.calculateUserBalances = catchAsync(async (req, res, next) => {
   console.log(req.query)
   // Parse activeYear or default to the current year
   //const year = parseInt(activeYear, 10) || new Date().getFullYear();
-  
+
   const searchPattern = new RegExp(userCode, 'i')
   // Construct filter object for querying payments
   const paymentQuery = {
@@ -1659,6 +1659,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   }
 
   const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
+  console.log("uu",userQuery)
   let users
   if (transferCase === "userWithdrawal") {
     users = await User.findById(userQuery)
