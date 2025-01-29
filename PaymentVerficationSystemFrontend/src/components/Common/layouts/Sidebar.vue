@@ -4,7 +4,7 @@
     style="margin-top: 67px ;margin-left:-255px;"
   >
     <!-- Sidebar Header -->
-    <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center justify-between mb-2">
       <h1 class="text-lg text-blue-600 font-bold">
         {{ $t("Payment Management") }}
       </h1>
@@ -95,7 +95,7 @@
       </li>
 
       <li
-        v-if="role === 'User'"
+        v-if="role === 'User' && canEditDetails ===true"
         @click="setActive('userProfile')"
         class="flex items-center p-3 rounded-md transition cursor-pointer"
         :class="activeItem === 'userProfile' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'"
@@ -133,6 +133,8 @@ export default {
   name: "SideBar",
   data() {
     return {
+
+      canEditDetails:false,
       paymentSubmenu: [
         { key: "paymentSetting", label: "paymentSetting", icon: "fas fa-cogs" },
         { key: "newPayment", label: "newPayments", icon: "fas fa-credit-card" },
@@ -186,10 +188,30 @@ export default {
     // Remove resize event listener
     window.removeEventListener("resize", this.checkScreenSize);
   },
-  created() {
+  async created() {
     this.role=localStorage.getItem("role");
     this.setScreenSize();
     window.addEventListener("resize", this.setScreenSize);
+
+    // if(this.role==="User"){
+    // const userId=localStorage.getItem("userId");
+    //  console.log("check it can edit",userId)
+    // try {
+    //   await this.$apiGetById("/api/v1/users", userId).then(
+    //     (response) => {
+    //       console.log("chack it can edit response",response);
+    //       this.canEditDetails= response.clientProfile.canEditDetails;
+    //       console.log("canedit",this.canEditDetails);
+    //     }
+    //   );
+    // } catch (error) {
+    //   console.error("Error fetching client datakk:", error);
+    // } finally {
+    // }
+    // }
+
+
+
   },
   unmounted() {
     window.removeEventListener("resize", this.setScreenSize);

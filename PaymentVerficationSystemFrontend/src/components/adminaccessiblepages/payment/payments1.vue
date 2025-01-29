@@ -67,7 +67,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="h-1 w-full bg-zigzag mt-5"></div>
+                <div class="h-2  border-b-2 border-gray-300"></div>
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <block-payment
@@ -124,7 +124,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="h-1 w-full bg-zigzag mt-5"></div>
+                <div class="h-2  border-b-2 border-gray-300"></div>
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <all-payments v-if="paymentStatus === 'allPayments'" />
@@ -197,7 +197,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="h-1 w-full bg-zigzag mt-5"></div>
+                <div class="h-2  border-b-2 border-gray-300"></div>
 
                 <!-- Conditional Components -->
                 <div class="mt-8">
@@ -258,7 +258,7 @@
                   </div>
                 </div>
 
-                <div class="h-1 w-full bg-zigzag mt-5"></div>
+                <div class="h-2  border-b-2 border-gray-300"></div>
                 <!-- Conditional Components -->
                 <div class="mt-8">
                   <all-payment-report

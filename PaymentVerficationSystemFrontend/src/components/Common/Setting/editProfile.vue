@@ -271,13 +271,12 @@
               </div>
             </div>
           </div>
-
-          <button
-            @click="showEditModal = true"
-            class="custom-button my-5 w-full lg:w-auto"
-          >
-            <i class="fas fa-edit mr-2"></i>Edit
-          </button>
+  <button v-if="role === 'SuperAdmin' || role === 'Admin' || (role === 'User' && canEditDetails)"
+  @click="showEditModal = true"
+  class="custom-button my-5 w-full lg:w-auto"
+>
+  <i class="fas fa-edit mr-2"></i>Edit
+</button>
         </div>
       </div>
     </div>
@@ -698,6 +697,8 @@ export default {
   },
   data() {
     return {
+      role:"",
+      canEditDetails:false,
       attachmentsData: [], // Array to store uploaded files and metadata
       isDragging: false, // To style drag area on drag events
 
@@ -748,7 +749,6 @@ export default {
     this.clientId = localStorage.getItem("userId");
   }
     console.log("client Id", this.clientId);
-
     try {
       await this.$apiGetById("/api/v1/users", this.clientId).then(
         (response) => {
@@ -775,8 +775,32 @@ export default {
       console.error("Error fetching client datakk:", error);
     } finally {
     }
+
+
+
+
+  },
+  async created() {
+    this.role=localStorage.getItem("role");
+    if(this.role==="User"){
+    const userId=localStorage.getItem("userId");
+     console.log("check it can edit",userId)
+    try {
+      await this.$apiGetById("/api/v1/users", userId).then(
+        (response) => {
+          console.log("chack it can edit response",response);
+          this.canEditDetails= response.clientProfile.canEditDetails;
+          console.log("canedit",this.canEditDetails);
+        }
+      );
+    } catch (error) {
+      console.error("Error fetching client datakk:", error);
+    } finally {
+    }
+  }
   },
   methods: {
+  
     removeAttachment(index){
       this.$removeAttachment(this.attachmentsData, index)
       this.editDetail();

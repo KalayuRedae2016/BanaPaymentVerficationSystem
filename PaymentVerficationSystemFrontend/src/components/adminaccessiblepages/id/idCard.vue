@@ -9,7 +9,7 @@
     </div>
     <div class="py-6 -mt-1">
       <div
-        class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg shadow-md border border-gray-200"
+        class="flex items-center justify-between mb-6 bg-white p-4 rounded-lg  border border-gray-200"
       >
         <div class="flex-1 mr-4">
           <input

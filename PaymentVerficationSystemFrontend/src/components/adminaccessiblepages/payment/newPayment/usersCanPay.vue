@@ -197,7 +197,7 @@
                           </template>
                           <template v-else>
                             <select
-                              class="custom-select text-xs rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
+                              class="h-8 custom-select text-xs rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
                               v-model="payment.regular.bankType"
                             >
                               <option value="" disabled selected>
@@ -344,7 +344,7 @@
                           </template>
                           <template v-else>
                             <select
-                              class="custom-select text-xs rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
+                              class="h-8 custom-select text-xs rounded border border-gray-300 w-full focus:outline-none focus:ring focus:ring-blue-200"
                               v-model="payment.subsidy.bankType"
                             >
                               <option value="" disabled selected>
@@ -409,8 +409,6 @@
                           v-if="!payment.subsidy.isPaid"
                           class="text-xs text-gray-700 whitespace-nowrap"
                         >
-                     
-
                           <button
                          
                               @click="
@@ -472,7 +470,7 @@
                           <input
                             v-if="!payment.urgent.isPaid"
                             type="date"
-                            class="custom-input h-7 mb-2"
+                            class="rounded-lg custom-input h-8 "
                            @change="payment.status !== 'pending' ? fetchPenality(payment, 'urgent') : null"
                             :value="payment.urgent.paidAt"
                             @input="payment.urgent.paidAt = $event.target.value"
@@ -498,7 +496,7 @@
                               payment.urgent.amount > 0 &&
                               !payment.urgent.isPaid
                             "
-                            class="custom-select w-64 text-xs py-2.5 leading-tight"
+                            class="h-8  rounded-md custom-select w-64 text-xs py-1.5 leading-tight"
                             v-model="payment.urgent.bankType"
                           >
                             <option value="" disabled selected>
@@ -534,7 +532,7 @@
                               !payment.urgent.isPaid
                             "
                             type="text"
-                            class="custom-input h-7"
+                            class="custom-input h-8 rounded-md"
                             v-model="payment.urgent.TTNumber"
                           />
                           <p
@@ -614,7 +612,7 @@
                             style="width: 100px"
                             v-if="!payment.service.isPaid"
                             type="text"
-                            class="custom-input h-7 w-32"
+                            class="custom-input h-8 rounded-md w-32"
                             :value="payment.service.amount"
                             @input="
                               payment.service.amount = $event.target.value
@@ -628,7 +626,7 @@
                           <input
                             v-if="!payment.service.isPaid"
                             type="Date"
-                            class="custom-input h-7 mb-2"
+                            class="rounded-lg custom-input h-8 "
                             :value="payment.service.paidAt"
                             @input="
                               payment.service.paidAt = $event.target.value
@@ -647,7 +645,7 @@
                           </p>
                           <select
                             v-if="!payment.service.isPaid"
-                            class="custom-select w-64 text-xs py-2.5 leading-tight"
+                            class="h-8 rounded-md custom-select w-64 text-xs py-2.5 leading-tight"
                             v-model="payment.service.bankType"
                           >
                             <option value="" disabled selected>
@@ -676,7 +674,7 @@
                           <input
                             v-if="!payment.service.isPaid"
                             type="text"
-                            class="custom-input h-7"
+                            class="rounded-md custom-input h-8"
                             v-model="payment.service.TTNumber"
                           />
                           <p

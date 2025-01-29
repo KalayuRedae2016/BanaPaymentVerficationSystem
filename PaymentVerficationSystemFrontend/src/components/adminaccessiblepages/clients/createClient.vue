@@ -15,7 +15,7 @@
           class="px-3 cursor-pointer text-blue-700 font-medium hover:text-white hover:bg-blue-500 rounded-lg">
           <span> {{ $t("Import users(excel)") }}</span>
           <input id="file-upload" type="file" class="hidden" ref="fileInputExcel" 
-          @change="exelFile = $handleAnyFileInput('fileInputExcel'); this.importExelFilePressed = true;" />
+           @change="exelFile = $handleAnyFileInput('fileInputExcel'); this.importExelFilePressed = true;" />
         </label>
         <a href="#" @click="viewClients()" class="text-blue-500 font-medium hover:underline">
           {{ $t("viewClients") }}
@@ -49,7 +49,7 @@
             </label>
             <input id="lastName" type="text" class="custom-input text-xs" :placeholder="$t('lastName')"
               style="padding-left: 16px" v-model="lastName" />
-          </div>exelFile
+          </div>
           <div class="w-full">
             <label class="custom-label" for="lastName">
               <span class="text-cyan-500"> {{ $t("tigrignaFullName") }}</span>
@@ -223,7 +223,6 @@
         </div>
       </div>
     </div>
-
     <div v-if="importExelFilePressed">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
@@ -537,13 +536,15 @@ export default {
       console.log("This.exel", this.exelFile);
       const formData = new FormData();
       formData.append("file", this.exelFile);
+
       if (this.exelFile !== null) {
         try {
-          this.$apiPost("/api/v1/users/importUsers", formData).then(
+          const customHeaders = {
+            "Content-Type": "multipart/form-data",
+          };
+          this.$apiPost("/api/v1/users/importUsers", formData,customHeaders).then(
             (response) => {
-              if (response.$apiPostsuccess === 1) {
-                this.$refs.toast.showSuccessToastMessage(response.message);
-              }
+             this.$refs.toast.showSuccessToastMessage(response.message);
             }
           );
         } catch (error) {

@@ -1,10 +1,9 @@
 <template>
-  <div class="container mx-auto flex flex-col">
+  <div class="container mx-auto flex flex-col ">
     <Toast ref="toast" />
-    <div class="pb-5 flex flex-col bg-white -mt-2">
-      <div class="mt-5 ">
-
-        <div class="overflow-x-auto h-96 ">
+      <div class="pb-5 flex flex-col bg-white -mt-2">
+      <div class="mt-5">
+        <div class="overflow-x-auto h-96 border-t border-gray-300">
           <table class="w-full border border-gray-300">
             <thead>
               <tr class="bg-blue-50 text-xs text-blue-500">
@@ -48,14 +47,21 @@
                   {{ logData.description }}
                 </td>
                 <td class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap">
-                  <button class="custom-button" @click="
+                  <button class="custom-button" 
+                    @click="
                     logDetail = true;
-
-                  ">
+                    handleLogDetail(
+                      logData.affectedData.body.service ? 'service' :
+                      logData.affectedData.body.urgent ? 'urgent' :
+                      logData.affectedData.body.regular ? 'regular' :
+                      logData.affectedData.body.penalty ? 'penality' :
+                      logData.affectedData.body.subsidy ? 'subsidy' :
+                      null,
+                      logData.affectedData.paymentId
+                    )
+                    ">
                     <i class="fa fa-edit"></i>Detail
                   </button>
-
-
                 </td>
               </tr>
             </tbody>
@@ -74,7 +80,7 @@
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold">
-                  {{ $t("Setting Logs") }}
+                  {{ $t("Payments Logs") }}
                 </label>
               </div>
               <div>
@@ -88,112 +94,7 @@
 
             <hr class="my-4 md:min-w-full bg-red-500" />
 
-            <div class="grid grid-cols-1 md:grid-cols-2 overflow-y-auto h-96 lg:h-80 ">
-              <!-- Left Column (First 6 Items) -->
-              <div class="mt-3">
-                <div class="bg-white border-b border-dotted  rounded-md border-b border-gray-500 ">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-money-bill-alt text-green-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('regularAmount') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.regularAmount }}</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-hand-holding-usd text-yellow-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('subsidyAmount') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.subsidyAmount > 0 ?
-                      paymentSetting.subsidyAmount : '0' }}</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-exclamation-circle text-red-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('urgentAmount') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.urgentAmount > 0 ? paymentSetting.urgentAmount
-                      : '0' }}</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-cogs text-indigo-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('serviceAmount') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.serviceAmount }}</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-percent text-blue-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('registrationFee') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.regFeeRate }} %</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-calendar-check text-teal-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('activeYear') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.activeYear }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Right Column (Remaining Items) -->
-              <div class="">
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-calendar-day text-purple-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('activeMonth') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.activeMonth }}</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-calendar-alt text-orange-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('startingDay') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.formattedStartDate }}</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-calendar-times text-red-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('endingDay') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.formattedEndDate }}</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-clock text-yellow-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('penaltyPerFiveDaysPercentage') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.penalityLate5Days }}%</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-clock text-yellow-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('penaltyPerTenDaysPercentage') }}:</span>
-                    <span class="text-lg text-gray-800"><span>{{ paymentSetting.penalityLate10Days.toFixed(0) }}</span>
-                      %</span>
-                  </div>
-                </div>
-
-                <div class="bg-white border-b border-dotted py-2  rounded-md shadow-sm border-b border-gray-500">
-                  <div class="flex items-center space-x-3">
-                    <i class="fas fa-clock text-red-500"></i>
-                    <span class="font-semibold text-sm">{{ $t('penaltyPerAboveTenDaysPercentage') }}:</span>
-                    <span class="text-lg text-gray-800">{{ paymentSetting.penalityLateAbove10Days }}%</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+          here
             <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
         </div>
@@ -210,6 +111,16 @@ export default {
   name: "paymentTransfersView",
   data() {
     return {
+      paymentType:"",
+      payment:{
+        fullName:"Hagose hadgu",
+        activeMonth:1,
+        activeYear:345,
+        service:{
+          
+        }
+
+      },
       logsData: [
         {
           _id: "1",
@@ -220,22 +131,11 @@ export default {
           description: "This is the delate function",
         },
       ],
-      logDetail: false,
-      paymentSetting: {
-        regularAmount: 5000,
-        subsidyAmount: 3000,
-        urgentAmount: 1200,
-        serviceAmount: 800,
-        regFeeRate: 5,
-        activeYear: 2025,
-        activeMonth: "January",
-        formattedStartDate: "2025-01-01",
-        formattedEndDate: "2025-01-31",
-        penalityLate5Days: 2,
-        penalityLate10Days: 5,
-        penalityLateAbove10Days: 10
-      }
 
+      logDetail: false,
+      affectedPayments:{
+         
+      }
     };
 
 
@@ -260,38 +160,31 @@ export default {
     this.fetchPaymentSettingLogs();
   },
   methods: {
-    async fetchPaymentSettingLogs() {
+
+
+
+    handleLogDetail(paymentType,paymentId){
+      this.paymentType = paymentType;
+      this.fetchPaymentDetail(paymentId);
+    },
+    fetchPaymentDetail(paymentId){
+      
+    },
+  async fetchPaymentSettingLogs() {
   const params = {
     model: "payments",
   };
   try {
     const response = await this.$apiGet("/api/v1/logs", params);
-    console.log("response log payments", response);
-this.logsData=response.logs;
-
+    console.log("response log paymentsmm", response);
+    this.logsData=response.logs;
   } catch (error) {
     console.log("error", error);
   } finally {
     // Optional: Any final cleanup code
   }
-
-    },
-    async fetchClient(logsData){
-      
-      try {
-      await this.$apiGetById("/api/v1/users", userId).then(
-        (response) => {
-          console.log("Response client profile kkk", response);
-          this.clientProfile = response.clientProfile;
-          this.logsData=logsData;
-          this.logsData.actor=response.clientProfile.fullName
-        }
-      );
-    } catch (error) {
-      console.error("Error fetching client datakk:", error);
-    } finally {
-    } 
-    }
+  },
+   
   },
 };
 </script>
