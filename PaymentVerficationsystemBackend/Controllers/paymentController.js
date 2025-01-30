@@ -1663,7 +1663,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   }
 
   const userQuery = transferCase === "userWithdrawal" ? toWhat : {}
-  // console.log("uu",userQuery)
+  console.log("uuqq",userQuery)
   let users
   if (transferCase === "userWithdrawal") {
     // users = await User.findById(new mongoose.Types.ObjectId(userQuery))
@@ -1676,7 +1676,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError("User/s is not found", 400))
   }
 
-  console.log("uusers",users)
+
 
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
@@ -1688,7 +1688,9 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
 
   const bankBalances = calculateBalances(payments, organization, users);
   const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
+  const userBalances = bankBalances.userBalances;
   const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
+  console.log(userBalances)
 
   const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
   const fromBankExists = banks.some(account => account.bankType === fromBankType);
@@ -1698,6 +1700,11 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
     return next(new AppError('Insufficient funds', 400));
   }
+
+  if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
+    return next(new AppError('Insufficient funds', 400));
+  }
+
   if (transferCase === "bankTransfer") {
     if (!toBankType) {
       return next(new AppError('toBankType field is required for bank transfers', 400));
@@ -1710,6 +1717,20 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
 
   if (transferCase === "userWithdrawal") {
     if (!toWhat) return next(new AppError('valid UserId is required for userWithdrawal', 400));
+    users = await User.findById(toWhat)
+    if (!users) {
+      return next(new AppError(`User does not exist`, 400));
+    }
+    const userCode=users.userCode;
+    const user = userBalances.find(user => user.userCode === userCode);
+    if (!user) {
+      return next(new AppError(`Withdrawal is not allowed,User does not exist or has no payment`, 400));
+    }
+    const userBankaccount=transferType==="block"?user.totalBlockBankAccount||0:user.totalServiceBankAccount||0
+    if ((userBankaccount|| 0) < amount) {
+      return next(new AppError(`Insufficient userWithdrawal from userCode:${userCode}`, 400));
+    }
+  
   }
 
   const { attachments } = await processUploadFiles(req.files, req.body)
