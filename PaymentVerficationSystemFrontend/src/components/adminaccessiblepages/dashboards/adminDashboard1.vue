@@ -17,15 +17,15 @@
           <div class="grid grid-cols-2 gap-y-1 lg:gap-y-0 items-center text-blue-500">
             <p>No. Active Members</p>
             <span class="hover:bg-blue-600 w-16 ml-5 bg-blue-500 text-white text-sm px-3 py-1 rounded-full">
-              2000
+             {{ activeUsers }}
             </span>
-            <p>No. Admins</p>
+            <p>No.Admins</p>
             <span class="hover:bg-green-600 w-16 ml-5 bg-green-500 text-white text-sm px-3 py-1 rounded-full">
-              2000
+            {{ admins }}
             </span>
             <p>No. Deactivated Members/Offsets</p>
             <span class="hover:bg-yellow-500 w-16 ml-5 bg-yellow-400 text-white text-sm px-3 py-1 rounded-full">
-              200
+             {{ inActiveUsers }}
             </span>
           </div>
         </div>
@@ -715,8 +715,6 @@ export default {
   },
 
   async mounted() {
-    const newData = [1500, 500, 200];
-  this.createPieChart(newData);
 
 
     if (this.$route.query.loginSuccess === "true") {
@@ -737,10 +735,13 @@ export default {
 
     await this.$apiGet("/api/v1/users")
       .then((response) => {
-
-
         console.log("allUsers",response);
-        this.totalClients = response.result;
+        this.totalClients = response.totalUsers;
+        this.admins=response.adminUsers;
+        this.activeUsers=response.activeUsers;
+        this.inActiveUsers=response.offsetUsers;
+        const newData = [this.activeMonth, this.inActiveUsers, this.admins];
+        this.createPieChart(newData);
       })
       .catch((error) => {
         console.log("error status and message", error.status, error.message);

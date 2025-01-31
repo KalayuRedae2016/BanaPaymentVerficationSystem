@@ -623,15 +623,6 @@ export default {
                 },
               });
             }, 2000);
-
-            // this.paymentTransfers = response.updatedTransferFunds;
-            // console.log("paymentTransfers: ", this.paymentTransfers);
-            // this.searchedTransferedPayments = this.paymentTransfers;
-            // console.log("searched Transfered Payments: ", this.searchedTransferedPayments);
-
-            // this.attachmentsData = response.organization.paymentTransfers.attachments;
-            // console.log("Attachments are", this.attachmentsData);
-
           }
         });
       } catch (error) {
@@ -644,15 +635,12 @@ export default {
 
 
     async fetchTransferPayments() {
-
       try {
         const params = {
           transferCase: "bankTransfer",
         }
         await this.$apiGet("/api/v1/payments/transferFunds", params).then((response) => {
-          console.log("response from fetch transfers", response);
-
-          
+          console.log("response from fetch transfers by banktransfer", response);
           if (response.status == 1) {
             this.paymentTransfers = [...response.transferFunds];
             this.searchedTransferedPayments = [...this.paymentTransfers];
