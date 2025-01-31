@@ -651,11 +651,11 @@ export default {
         }
         await this.$apiGet("/api/v1/payments/transferFunds", params).then((response) => {
           console.log("response from fetch transfers", response);
+
+          
           if (response.status == 1) {
-            this.paymentTransfers = response.transferFunds;
-            console.log("payments transfers and searched transfer payments in org called in mounted", this.paymentTransfers)
-            this.searchedTransferedPayments = this.paymentTransfers;
-            console.log("attachments data", this.attachmentsData);
+            this.paymentTransfers = [...response.transferFunds];
+            this.searchedTransferedPayments = [...this.paymentTransfers];
           }
         });
       } catch (error) {

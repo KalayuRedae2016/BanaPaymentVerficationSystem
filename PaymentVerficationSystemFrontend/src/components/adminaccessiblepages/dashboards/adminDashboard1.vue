@@ -646,6 +646,11 @@ export default {
   name: "CapitalReport",
   data() {
     return {
+    activeUsers:0,
+    inActiveUsers:0,
+    admins:0,
+
+
       barChart: null,
       showChangePassword: false,
       oldPassword: "",
@@ -732,6 +737,9 @@ export default {
 
     await this.$apiGet("/api/v1/users")
       .then((response) => {
+
+
+        console.log("allUsers",response);
         this.totalClients = response.result;
       })
       .catch((error) => {
@@ -770,8 +778,6 @@ export default {
         this.totalOrgBalance = response.items.organizationBalance;
         const newData1 = [this.totalOrgBalance.totalRegularBalance,this.totalOrgBalance.totalSubsidyBalance, this.totalOrgBalance.totalUrgentBalance,this.totalOrgBalance.totalServiceBalance,this.totalOrgBalance.totalPenalityBalance] // Example new data
         this.createBarChart(newData1);
-
-
       })
       .catch((error) => {
         console.error(

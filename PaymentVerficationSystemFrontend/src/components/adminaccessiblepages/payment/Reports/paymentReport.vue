@@ -108,8 +108,8 @@
             <option v-for="year in $years" :key="year" :value="year">{{ year }}</option>
           </select>
         </div>
-        <div class="overflow-x-auto text-xs ml-3" v-if="showPaymentTable">
-          <table class="w-full border border-gray-300 mt-5">
+        <div class="overflow-x-auto text-xs ml-3">
+          <table  v-if="showPaymentTable" class="w-full border border-gray-300 mt-5">
             <thead>
               <tr class="bg-gray-200">
                 <th class="w-24 p-3 text-xs font-extrabold tracking-wide text-left text-indigo-800">UserCode</th>
@@ -147,7 +147,7 @@
               </tr>
             </tbody>
           </table>
-          <div class="justify-center items-center my-3">
+          <div v-else class="justify-center items-center my-3">
             <p class="text-pink-900 text-sm mx-3"> <span class="text-blue-800 font-bold mr-3"> {{ fullName }} ({{ userCode
                 }})</span>does not have a balance in the selected year</p>
           </div>
@@ -176,7 +176,7 @@ export default {
       selectYear: false,
       selectMonth: false,
       userCode: "",
-      year: "",
+      year: new Date().getFullYear(),
       showConfirmModal: false,
       keyword: "",
       filteredUsers: [],
@@ -277,14 +277,15 @@ export default {
           if ((this.totalUserBalances.totalBlockBankAccount + this.totalUserBalances.totalServiceBankAccount) > 0) {
             this.totalUserBalanceLength = response.items.userBalances.length
           }
+          this.getPaymentBasedOnYear(this.userCode,this.fullName,this.totalllName)
         })
       } catch (error) {
         console.log("error for user balance fetching", error.status, error.message);
       } finally {
 
       }
-
     },
+
     async fetchPaymentReportByYear(userCode, fullName) {
       //alert("hii")
       this.showPaymentTable = false;
