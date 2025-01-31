@@ -289,6 +289,17 @@ exports.deleteOrgs = catchAsync(async (req, res, next) => {
   if (deletedOrg.deletedCount === 0) {
     return next(new AppError("No Org found to delete", 404));
   }
+
+  await logAction({
+    model: 'organizations',
+    action: 'Delete',
+    actor: req.user.id,
+    description: 'Org Profie Deleted',
+    data: {deletedOrg},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
   res.status(200).json({
     status: 'success',
     message: `${deletedOrg.deletedCount} Organization Deleted`

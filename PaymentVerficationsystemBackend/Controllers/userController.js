@@ -56,33 +56,42 @@ exports.uploadUserFile = userFileUpload.single('file');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
   const { isActive } = req.query;
-
   let userQuery = {};
-  if (isActive) userQuery.isActive = isActive === 'true';
+
   userQuery = req.user.role === "SuperAdmin"? { role: { $in: ["Admin", "User"] } }: req.user.role === "Admin"
   ? { role: "User" }: { _id: req.user._id };
+  if (isActive !== undefined) userQuery.isActive = isActive === 'true';
   console.log(userQuery)
+
   const users = await User.find(userQuery).lean();
   if (!users) {
     return next(new AppError('No users found', 404));
   }
 
+const activeUsers=users.filter(user => user.isActive===true &&user.role==="User").length
+console.log("a",activeUsers)
+const offsetUsers=users.filter(user => user.isActive===false).length
+const adminUsers=users.filter(user => user.role==="SuperAdmin"||user.role=="Admin").length
+
   // Format createdAt and updatedAt for each user
-  const formattedsers = users.map(user => {
+  const formattedUsers = users.map(user => {
     const formattedCreatedAt = user.createdAt ? formatDate(user.createdAt) : null;
     const formattedUpdatedAt = user.updatedAt ? formatDate(user.updatedAt) : null;
 
     return {
       ...user,
       formattedCreatedAt,
-      formattedUpdatedAt 
+      formattedUpdatedAt  
     };
   });
 
   res.status(200).json({
     status: 1,
-    result: users.length,
-    users: formattedsers
+    totalUsers: users.length,
+    activeUsers:activeUsers,
+    offsetUsers:offsetUsers,
+    adminUsers:adminUsers,
+    users: formattedUsers
   });
 });
 
@@ -184,7 +193,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
     action: 'Delete',
     actor: req.user.id,
     description: 'User Profie Deleted',
-    data: { userId: deletedUser.id},
+    data: { userId: deletedUser.id,deletedUser},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
