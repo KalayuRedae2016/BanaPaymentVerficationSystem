@@ -215,11 +215,11 @@ exports.deleteSetting = catchAsync(async (req, res, next) => {
     return next(new AppError("Payment entry not found", 404))
   }
   await logAction({
-    model: 'PaymentSettings',
+    model: 'paymentSettings',
     action: 'Delete',
     actor: req.user.id,
     description: 'PaymentSetting Deleting',
-    data: { settingId: deletedSetting.id, details: deletedSetting },
+    data: { settingId: req.query.id,deletedSetting },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -235,6 +235,17 @@ exports.deleteSettings = catchAsync(async (req, res, next) => {
   if (deletedSettings.deletedCount === 0) {
     return next(new AppError("No Setting entries found to delete", 404));
   }
+  await logAction({
+    model: 'paymentSettings',
+    action: 'Delete',
+    actor: req.user.id,
+    description: 'User Profie Deleted',
+    data: {deletedsettings},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     status: 'success',
     message: `${deletedSettings.deletedCount} Settings Deleted`

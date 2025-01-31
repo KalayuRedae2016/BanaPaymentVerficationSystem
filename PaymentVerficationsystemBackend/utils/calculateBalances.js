@@ -390,26 +390,12 @@ function calculateBalances(payments, org,users={}) {
           userBalances[userCode].totalServiceBankAccount-=amount
         }
     }
-      // else{
-      // //   // if (transferType === "block") {
-      //   //   totalBalanceBankType[fromBankType].blockOutcoming += amount;
-      //   //   organization.blockExpenditure+=amount
-      //   //   organization.totalBlockBankAccount-=amount
-      //   // }
-      //   // if (transferType === "service") {
-      //   //   totalBalanceBankType[fromBankType].serviceOutcoming += amount;
-      //   //   organization.serviceExpenditure+=amount
-      //   //   organization.totalServiceBankAccount-=amount
-      //   // }
-      //     throw new Error(`Invalid transferType: ${transferType}`);
-  
-      // }
     
     });
   }
 
   Object.keys(totalBalanceBankType).forEach((bank) => {
-   
+       
     totalBalanceBankType[bank].totalBlockBalance +=
       totalBalanceBankType[bank].regularBalance +
       totalBalanceBankType[bank].subsidyBalance +
@@ -428,21 +414,20 @@ function calculateBalances(payments, org,users={}) {
       totalBalanceBankType[bank].serviceExpenditure
 
     totalBalanceBankType[bank].totalBalance += totalBalanceBankType[bank].totalBlockBalance+ totalBalanceBankType[bank].totalServiceBalance 
-
-    console.log(totalBalanceBankType[bank].regularBalance)
-    console.log(totalBalanceBankType[bank].urgentBalance)
-    console.log(totalBalanceBankType[bank].serviceBalance)
-    console.log(totalBalanceBankType[bank].subsidyBalance)
    
-
   });
+
+  if (totalBalanceBankType["null"]) {
+    delete totalBalanceBankType["null"]; // Remove the "null" key
+}
+
   organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
 
   const userBalanceArray = Object.entries(userBalances).map(([key, value]) => ({
     userCode: key,
     ...value,
   }));
-  
+  console.log(totalBalanceBankType)
   return {
     Organization: organization,
     userBalances:userBalanceArray,

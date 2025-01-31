@@ -659,7 +659,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     action: 'Confirm',
     actor: req.user.id,
     description: 'PaymentS ConfirmedCreated',
-    data: { paymentId: unpaidBill.id, body: req.body },
+    data: { paymentId: unpaidBill.id, unpaidBill,body: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -773,10 +773,10 @@ exports.editPayments = catchAsync(async (req, res, next) => {
 
    await logAction({
     model: 'payments',
-    action: 'Edit',
+    action: 'Update/Edit',
     actor: req.user.id,
-    description: 'PaymentS Editted',
-    data: { paymentId: payment.id, body: req.body },
+    description: 'Payments Editted',
+    data: { paymentId: payment.id,payment,body: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -1088,7 +1088,7 @@ exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
     action: 'Edit',
     actor: req.user.id,
     description: 'Mark Payment as seen',
-    data: { paymentId: payment.id, body: req.body },
+    data: { paymentId: payment.id, payment,body: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -1195,10 +1195,23 @@ exports.getLatestPayment = catchAsync(async (req, res, next) => {
 });
 exports.deletePayment = catchAsync(async (req, res, next) => {
   //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
+  const deleteId=req.query.id;
   const deletedPayment = await Payment.findByIdAndDelete(req.query.id)
   if (!deletedPayment) {
     return next(new AppError("Payment entry not found", 404))
   }
+
+  await logAction({
+    model: 'payments',
+    action: 'Delete',
+    actor: req.user.id,
+    description: 'Payments Deleted',
+    data: { paymentId:deleteId,deletedPayment},
+    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    severity: 'info',
+    sessionId: req.session?.id || 'generated-session-id',
+  });
+
   res.status(200).json({
     status: 'success',
     //data: null,
@@ -1757,7 +1770,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     action: 'Create',
     actor: req.user.id,
     description:  `${transferCase} is Created`,
-    data: { paymentId: createdTransfer.id, body: req.body },
+    data: { transferId: createdTransfer.id,body: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -1968,7 +1981,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       action: 'Update',
       actor: req.user.id,
       description:  `${transferCase} is Updated`,
-      data: { paymentId: createdTransfer.id, body: req.body },
+      data: { transferId: createdTransfer.id,organization,body: req.body },
       ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
       severity: 'info',
       sessionId: req.session?.id || 'generated-session-id',
@@ -2012,7 +2025,7 @@ exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
     action: 'delete',
     actor: req.user.id,
     description:  `Transfer is Deleted`,
-    data: { transferId: transferId.id},
+    data: { transferId: transferId.id,data:organization.paymentTransfers.findOne({ transferId: transferId})},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
