@@ -190,7 +190,7 @@ exports.deleteFile = async (filePath) => {
 exports.processFileData = async (user) => {
   console.log("TTT,",user)
   const convertFileToBase64 = async (filePath) => {
-    console.log("filePath", filePath)
+    //console.log("filePath", filePath)
     try {
       const fileBuffer = await fss.readFile(filePath); // Read file as binary
       return fileBuffer.toString('base64'); // Convert to Base64
@@ -199,7 +199,7 @@ exports.processFileData = async (user) => {
       throw error;
     }
   }
-  console.log("userProfile", user.attachments)
+  //console.log("attachemnt to be proceced", user.attachments)
   // Prepare profile image data (if available)
   const imageData = user.profileImage
     ? await convertFileToBase64(path.join(__dirname, '..', 'uploads', 'attachments', user.profileImage))
@@ -210,16 +210,17 @@ exports.processFileData = async (user) => {
   if (user.attachments && user.attachments.length > 0) {
     attachmentsData = await Promise.all(user.attachments.map(async (attachment) => {
       const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
-      console.log(attachment)
+      //console.log("gg",attachment)
       try {
           const fileData = await convertFileToBase64(attachmentPath)
+          // const fileData = []
           const filename = attachment.fileName
           const fileType = attachment.fileType
           const description = attachment.description
           const uploadedDate = attachment.uploadedDate
           const id = attachment.id
           const filePath=attachmentPath
-        console.log('File successfully encoded for:', attachment.fileName);
+        //console.log('File successfully encoded for:', attachment.fileName);
 
         return {filename,fileType,description,uploadedDate,id,fileData,filePath}; // Return a new object with fileData
       } catch (error) {
@@ -231,7 +232,7 @@ exports.processFileData = async (user) => {
     console.log('No attachments found.');
   }
 
-  // console.log('Processed Attachments Data:', attachmentsData); // Debug final result
+  console.log('Processed Attachments Data:', attachmentsData); // Debug final result
   return { imageData, attachmentsData };
 };
 
