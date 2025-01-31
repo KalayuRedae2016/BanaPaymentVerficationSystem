@@ -159,10 +159,6 @@
       </div>
     </div>
 
-
-
-    <!-- //all years confirmed payments -->
-
     <div class="shadow-lg border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
 
       <div class="flex flex-row space-x-4 m-4">
@@ -174,10 +170,32 @@
           <h1 class="text-xs">{{ $t("allReportDetails") }}</h1>
         </a>
       </div>
-      <div class="w-96 h-96">
+    <div class="w-96 h-96">
       <canvas ref="barChartCanvas" class="chart "></canvas>
     </div>
-      <table class="min-w-full divide-y divide-gray-300 text-xs -mt-48">
+    <div class="flex flex-col sm:flex-row sm:space-x-4 items-center justify-center my-5 -mt-40">
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-blue-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Regular </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-yellow-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Urgent </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class="bg-green-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Subsidy </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-blue-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Service </p>
+        </div>
+        <div class="flex flex-row space-x-5">
+          <div class=" bg-red-400 w-16 h-4"></div>
+          <p class="-mt-1 text-blue-400">Penality</p>
+        </div>
+      </div>
+      <table class="min-w-full divide-y divide-gray-300 text-xs ">
         <thead class="bg-gray-50">
           <tr>
             <th rowspan="3" class="px-4 py-2 text-blue-800 text-left border border-gray-300">
@@ -295,28 +313,7 @@
           </tr>
         </tbody>
       </table>
-      <div class="flex flex-col lg:flex-row lg:space-x-4 items-center justify-center my-5">
-        <div class="flex flex-row space-x-5">
-          <div class=" bg-blue-400 w-16 h-4"></div>
-          <p class="-mt-1 text-blue-400">Regular </p>
-        </div>
-        <div class="flex flex-row space-x-5">
-          <div class=" bg-yellow-400 w-16 h-4"></div>
-          <p class="-mt-1 text-blue-400">Urgent </p>
-        </div>
-        <div class="flex flex-row space-x-5">
-          <div class="bg-green-400 w-16 h-4"></div>
-          <p class="-mt-1 text-blue-400">Subsidy </p>
-        </div>
-        <div class="flex flex-row space-x-5">
-          <div class=" bg-blue-400 w-16 h-4"></div>
-          <p class="-mt-1 text-blue-400">Service </p>
-        </div>
-        <div class="flex flex-row space-x-5">
-          <div class=" bg-red-400 w-16 h-4"></div>
-          <p class="-mt-1 text-blue-400">Penality</p>
-        </div>
-      </div>
+
       <div class=" my-3 ml-16">
         <a @click="showOrgDetail = true"
           class="text-blue-600 hover:text-blue-800 underline font-medium cursor-pointer transition duration-200 ease-in-out">
