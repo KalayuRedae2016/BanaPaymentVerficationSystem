@@ -1663,7 +1663,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   }
 
   const userQuery = transferCase === "userWithdrawal" ? toWhat : {}
-  // console.log("uu",userQuery)
+  console.log("uuqq",userQuery)
   let users
   if (transferCase === "userWithdrawal") {
     // users = await User.findById(new mongoose.Types.ObjectId(userQuery))
@@ -1676,7 +1676,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError("User/s is not found", 400))
   }
 
-  console.log("uusers",users)
+
 
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
@@ -1688,7 +1688,9 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
 
   const bankBalances = calculateBalances(payments, organization, users);
   const bankTypes = bankBalances.categorizedPayments.confirmed.bankTypes;
+  const userBalances = bankBalances.userBalances;
   const balanceType = transferType === 'block' ? 'totalBlockBalance' : 'totalServiceBalance';
+  console.log(userBalances)
 
   const banks = transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || []
   const fromBankExists = banks.some(account => account.bankType === fromBankType);
@@ -1698,6 +1700,11 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
     return next(new AppError('Insufficient funds', 400));
   }
+
+  if ((bankTypes[fromBankType]?.[balanceType] || 0) < amount) {
+    return next(new AppError('Insufficient funds', 400));
+  }
+
   if (transferCase === "bankTransfer") {
     if (!toBankType) {
       return next(new AppError('toBankType field is required for bank transfers', 400));
@@ -1710,6 +1717,20 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
 
   if (transferCase === "userWithdrawal") {
     if (!toWhat) return next(new AppError('valid UserId is required for userWithdrawal', 400));
+    users = await User.findById(toWhat)
+    if (!users) {
+      return next(new AppError(`User does not exist`, 400));
+    }
+    const userCode=users.userCode;
+    const user = userBalances.find(user => user.userCode === userCode);
+    if (!user) {
+      return next(new AppError(`Withdrawal is not allowed,User does not exist or has no payment`, 400));
+    }
+    const userBankaccount=transferType==="block"?user.totalBlockBankAccount||0:user.totalServiceBankAccount||0
+    if ((userBankaccount|| 0) < amount) {
+      return next(new AppError(`Insufficient userWithdrawal from userCode:${userCode}`, 400));
+    }
+  
   }
 
   const { attachments } = await processUploadFiles(req.files, req.body)
@@ -1836,11 +1857,19 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
 
   const transferId = req.params.id
   console.log(transferId)
-  const { reason, refNumber, transferDate, toWhat } = req.body;
+  let { reason, refNumber, transferDate, toWhat } = req.body;
   if (!transferId) return next(new AppError("Missing Transfer ID", 400));
+
+  if (toWhat && mongoose.Types.ObjectId.isValid(toWhat)) {
+    toWhat = new mongoose.Types.ObjectId(toWhat);
+}
 
   const organization = await Organization.findOne();
   if (!organization) return next(new AppError("Organization is not found", 400));
+
+  if (toWhat && mongoose.Types.ObjectId.isValid(toWhat)) {
+    toWhat = new mongoose.Types.ObjectId(toWhat);
+}
 
   const transfer = organization.paymentTransfers.find(t => t._id.toString() === transferId);
   if (!transfer) return next(new AppError("Transfer record not found", 404));
@@ -1857,6 +1886,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     const fromBankType = req.body.fromBankType || transfer.fromBankType
     const toBankType = req.body.toBankType || transfer.toBankType
     const amount = req.body.amount || transfer.amount
+    const toWhat = req.body.toWhat || transfer.toWhat
 
     if (fromBankType) {
       const banks = transfer.transferType === 'block' ? organization.blockBankAccounts || [] : organization.serviceBankAccounts || [];
@@ -1882,7 +1912,8 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     if (!payments) {
       return next(new AppError(`No confirmed Payments Found`, 400));
     }
-    const userQuery = transferCase === "userWithdrawal" ? req.body.toWhat : {}
+    const userQuery = transferCase === "userWithdrawal" ?toWhat : {}
+  
     let users
     if (transferCase === "userWithdrawal") {
       users = await User.findById(userQuery)

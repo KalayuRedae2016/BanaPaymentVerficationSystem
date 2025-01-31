@@ -2,6 +2,7 @@ const { formatDate } = require("../utils/formatDate");
 const mongoose = require('mongoose');
 
 function calculateBalances(payments, org,users={}) {
+
   let organization = {
     totalRegularBalance: 0,
     totalUrgentBalance: 0,
@@ -233,14 +234,27 @@ function calculateBalances(payments, org,users={}) {
           serviceBalance: 0,
           penalityBalance: 0,
 
-          blockIncoming:0,
-          blockOutcoming:0,
-          serviceIncoming:0,
-          serviceOutcoming:0,
+          // blockIncoming:0,
+          // blockOutcoming:0,
+          // serviceIncoming:0,
+          // serviceOutcoming:0,
+          
+            blockBankIncoming: 0,
+            blockBankOutcoming: 0,
+            serviceBankIncoming: 0,
+            serviceBankOutcoming: 0,
 
-          totalBlockBalance:0,
-          totalServiceBalance:0,
-          totalBalance:0
+            blockUserWithdrawal:0,
+            serviceUserWithdrawal:0,
+
+            blockExpenditure:0,
+            serviceExpenditure:0,
+          
+            totalBlockBalance:0,
+            totalServiceBalance:0,
+            totalBalance:0
+
+          
         };
       }
      
@@ -276,10 +290,16 @@ function calculateBalances(payments, org,users={}) {
             serviceBalance: 0,
             penalityBalance: 0,
         
-            blockIncoming: 0,
-            blockOutcoming: 0,
-            serviceIncoming: 0,
-            serviceOutcoming: 0,
+            blockBankIncoming: 0,
+            blockBankOutcoming: 0,
+            serviceBankIncoming: 0,
+            serviceBankOutcoming: 0,
+
+            blockUserWithdrawal:0,
+            serviceUserWithdrawal:0,
+
+            blockExpenditure:0,
+            serviceExpenditure:0,
         
             totalBlockBalance: 0,
             totalServiceBalance: 0,
@@ -295,10 +315,16 @@ function calculateBalances(payments, org,users={}) {
             serviceBalance: 0,
             penalityBalance: 0,
         
-            blockIncoming: 0,
-            blockOutcoming: 0,
-            serviceIncoming: 0,
-            serviceOutcoming: 0,
+            blockBankIncoming: 0,
+            blockBankOutcoming: 0,
+            serviceBankIncoming: 0,
+            serviceBankOutcoming: 0,
+
+            blockUserWithdrawal:0,
+            serviceUserWithdrawal:0,
+
+            blockExpenditure:0,
+            serviceExpenditure:0,
         
             totalBlockBalance: 0,
             totalServiceBalance: 0,
@@ -309,22 +335,27 @@ function calculateBalances(payments, org,users={}) {
         
       if(transferCase==="bankTransfer"){
         if (transferType === "block") {
-          totalBalanceBankType[fromBankType].blockOutcoming += amount;
-          totalBalanceBankType[toBankType].blockIncoming += amount;
+          totalBalanceBankType[fromBankType].blockBankOutcoming+= amount;
+          totalBalanceBankType[toBankType].blockBankIncoming+= amount;
           organization.blockBankTransfered+=amount
         }
         else if (transferType === "service") {
-          totalBalanceBankType[fromBankType].serviceOutcoming += amount;
-          totalBalanceBankType[toBankType].serviceIncoming += amount;
+          totalBalanceBankType[fromBankType].serviceBankOutcoming+= amount;
+          totalBalanceBankType[toBankType].serviceBankIncoming += amount;
           organization.serviceBankTransfered+=amount
         }
       }
+      else if(transferCase==="expenditure"){
+        if (transferType === "block") {
+          totalBalanceBankType[fromBankType].blockExpenditure += amount;
+          organization.blockExpenditure+=amount
+        }
+        else if (transferType === "service") {
+          totalBalanceBankType[fromBankType].serviceExpenditure += amount;
+          organization.serviceExpenditure+=amount
+        }
+      }
       else if(transferCase==="userWithdrawal"){
-
-        console.log("userWithdrawal here is already");
-          console.log("Is users an array?", Array.isArray(users));  // Check if it's an array
-          console.log("useruuu", users);
-
           let user;
           if (Array.isArray(users)) {
               user = users.find((u) => u._id.toString() === toWhat.toString()); // If users is an array
@@ -332,9 +363,7 @@ function calculateBalances(payments, org,users={}) {
               user = users; // If users is a single user object, assign it directly
           }
 
-          console.log("Found user:", user);
-
-        
+          // console.log("Found user:", user);
         if (!user) throw new Error(`User with ID ${toWhat} not found`);
         const userCode = user.userCode;
         // Ensure userBalances[userCode] exists and is initialized
@@ -348,51 +377,63 @@ function calculateBalances(payments, org,users={}) {
        }
       
         if (transferType === "block") {
-          totalBalanceBankType[fromBankType].blockOutcoming += amount;
+          totalBalanceBankType[fromBankType].blockUserWithdrawal+= amount;
           organization.blockUserWithdrawal+=amount
           organization.totalBlockBankAccount-=amount
           userBalances[userCode].blockUserWithdrawal+=amount
           userBalances[userCode].totalBlockBankAccount-=amount
         }
         else if (transferType === "service") {
-          totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+          totalBalanceBankType[fromBankType].serviceUserWithdrawal+= amount;
           organization.serviceUserWithdrawal+=amount
           organization.totalServiceBankAccount-=amount
           userBalances[userCode].totalServiceBankAccount-=amount
         }
     }
-      else{
-        if (transferType === "block") {
-          totalBalanceBankType[fromBankType].blockOutcoming += amount;
-          organization.blockExpenditure+=amount
-          organization.totalBlockBankAccount-=amount
-        }
-        if (transferType === "service") {
-          totalBalanceBankType[fromBankType].serviceOutcoming += amount;
-          organization.serviceExpenditure+=amount
-          organization.totalServiceBankAccount-=amount
-        }
-
-      }
-      
+      // else{
+      // //   // if (transferType === "block") {
+      //   //   totalBalanceBankType[fromBankType].blockOutcoming += amount;
+      //   //   organization.blockExpenditure+=amount
+      //   //   organization.totalBlockBankAccount-=amount
+      //   // }
+      //   // if (transferType === "service") {
+      //   //   totalBalanceBankType[fromBankType].serviceOutcoming += amount;
+      //   //   organization.serviceExpenditure+=amount
+      //   //   organization.totalServiceBankAccount-=amount
+      //   // }
+      //     throw new Error(`Invalid transferType: ${transferType}`);
+  
+      // }
+    
     });
   }
 
   Object.keys(totalBalanceBankType).forEach((bank) => {
+   
     totalBalanceBankType[bank].totalBlockBalance +=
       totalBalanceBankType[bank].regularBalance +
       totalBalanceBankType[bank].subsidyBalance +
       totalBalanceBankType[bank].urgentBalance+
-      totalBalanceBankType[bank].blockIncoming-
-      totalBalanceBankType[bank].blockOutcoming
+      totalBalanceBankType[bank].blockBankIncoming-
+      totalBalanceBankType[bank].blockBankOutcoming-
+      totalBalanceBankType[bank].blockUserWithdrawal-
+      totalBalanceBankType[bank].blockExpenditure
 
     totalBalanceBankType[bank].totalServiceBalance +=
       totalBalanceBankType[bank].serviceBalance +
       totalBalanceBankType[bank].penalityBalance+
-      totalBalanceBankType[bank].serviceIncoming-
-      totalBalanceBankType[bank].serviceOutcoming
+      totalBalanceBankType[bank].serviceBankIncoming-
+      totalBalanceBankType[bank].serviceBankOutcoming-
+      totalBalanceBankType[bank].serviceUserWithdrawal-
+      totalBalanceBankType[bank].serviceExpenditure
 
     totalBalanceBankType[bank].totalBalance += totalBalanceBankType[bank].totalBlockBalance+ totalBalanceBankType[bank].totalServiceBalance 
+
+    console.log(totalBalanceBankType[bank].regularBalance)
+    console.log(totalBalanceBankType[bank].urgentBalance)
+    console.log(totalBalanceBankType[bank].serviceBalance)
+    console.log(totalBalanceBankType[bank].subsidyBalance)
+   
 
   });
   organization.TotalOrgBalance = (organization.totalBlockBankAccount || 0) + (organization.totalServiceBankAccount || 0);
