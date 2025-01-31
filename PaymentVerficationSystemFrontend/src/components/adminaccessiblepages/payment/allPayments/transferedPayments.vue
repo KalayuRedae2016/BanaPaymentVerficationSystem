@@ -640,7 +640,7 @@ export default {
           transferCase: "bankTransfer",
         }
         await this.$apiGet("/api/v1/payments/transferFunds", params).then((response) => {
-          console.log("response from fetch transfers by banktransfer", response);
+          console.log("response for transfer payments", response);
           if (response.status == 1) {
             this.paymentTransfers = [...response.transferFunds];
             this.searchedTransferedPayments = [...this.paymentTransfers];
