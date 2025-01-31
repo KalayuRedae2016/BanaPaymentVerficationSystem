@@ -1797,11 +1797,82 @@ console.log(message);
   });
 });
 
+// exports.getTransferFunds = catchAsync(async (req, res, next) => {
+//   const { transferCase, transferId, userId, transferType, fromBankType, toBankType, amount } = req.query;
+
+//   let transferQuery = {};
+//   if (userId) transferQuery.toWhat = userId;  // Query by userId (toWhat)
+//   if (transferId) transferQuery._id = transferId;
+//   if (transferCase) transferQuery.transferCase = transferCase;
+//   if (transferType) transferQuery.transferType = transferType;
+//   if (fromBankType) transferQuery.fromBankType = fromBankType;
+//   if (toBankType) transferQuery.toBankType = toBankType;
+//   if (amount) transferQuery.amount = amount;
+  
+//   const organization = await validateExistence(Organization, {}, "Organization is not found");
+
+//   // Filter paymentTransfers based on transferQuery criteria
+//   const transferFunds = organization.paymentTransfers.filter(transfer => {
+//     return Object.keys(transferQuery).every(key => transfer[key] && transfer[key] == transferQuery[key]);
+//   });
+
+//   const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
+//     return processFileData(transfer);
+//   }));
+// console.log(attachmentsData)
+//   // Merge transfer data with attachment details
+//   const mergedTransferFunds = transferFunds.map((transfer) => {
+//     const uniqueAttachments = new Map(); // Store unique attachments by attachmentId
+
+//     transfer.attachments.forEach((transferAttachment) => {
+//         attachmentsData.forEach((attachment) => {
+//             attachment.attachmentsData.forEach((attachmentData) => {
+//                 if (attachmentData.attachmentId === transferAttachment.attachmentId) {
+//                     uniqueAttachments.set(attachmentData.attachmentId, {
+//                         ...attachmentData,
+//                         fileName: transferAttachment.fileName,
+//                         _id: transferAttachment._id,
+//                         uploadedDate: attachmentData.uploadedDate || null,
+//                         //fileData: attachmentData.fileData,
+//                         filePath: attachmentData.filePath
+//                     });
+//                 }
+//             });
+//         });
+//     });
+
+//     return {
+//         transferCase: transfer.transferCase,
+//         transferType: transfer.transferType,
+//         orgId: transfer.orgId,
+//         toWhat: transfer.toWhat,
+//         fromBankType: transfer.fromBankType,
+//         toBankType: transfer.toBankType,
+//         amount: transfer.amount,
+//         reason: transfer.reason,
+//         refNumber: transfer.refNumber,
+//         transferDate: transfer.transferDate,
+//         transferId: transfer._id,
+//         attachments: Array.from(uniqueAttachments.values()), // Convert Map to Array
+//     };
+//   });
+
+//   // Correct attachment length calculation
+//   const totalAttachments = mergedTransferFunds.reduce((sum, transfer) => sum + transfer.attachments.length, 0);
+
+//   res.status(200).json({
+//     status: 1,
+//     attachementLength: totalAttachments,
+//     transferFunds: mergedTransferFunds
+//   });
+// });
 exports.getTransferFunds = catchAsync(async (req, res, next) => {
+  // Destructure query parameters for filtering
   const { transferCase, transferId, userId, transferType, fromBankType, toBankType, amount } = req.query;
 
-  let transferQuery = {};
-  if (userId) transferQuery.toWhat = userId;  // Query by userId (toWhat)
+  // Build dynamic transfer query based on filters
+  const transferQuery = {};
+  if (userId) transferQuery.toWhat = userId;
   if (transferId) transferQuery._id = transferId;
   if (transferCase) transferQuery.transferCase = transferCase;
   if (transferType) transferQuery.transferType = transferType;
@@ -1809,61 +1880,67 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
   if (toBankType) transferQuery.toBankType = toBankType;
   if (amount) transferQuery.amount = amount;
 
+  // Validate existence of Organization
   const organization = await validateExistence(Organization, {}, "Organization is not found");
 
-  // Filter paymentTransfers based on transferQuery criteria
-  const transferFunds = organization.paymentTransfers.filter(transfer => {
-    return Object.keys(transferQuery).every(key => transfer[key] && transfer[key] == transferQuery[key]);
-  });
+  // Filter transferFunds based on transferQuery criteria
+  const transferFunds = organization.paymentTransfers.filter(transfer => 
+    Object.keys(transferQuery).every(key => transfer[key] === transferQuery[key])
+  );
 
-  const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
-    return processFileData(transfer);
-  }));
+  console.log("tt to be send",transferFunds)
+  // Process attachment data in parallel for all transfers
+  const attachmentsData = await Promise.all(transferFunds.map(transfer => processFileData(transfer)));
 
-  // Merge transfer data with attachment details
-  const mergedTransferFunds = transferFunds.map((transfer) => {
-    const uniqueAttachments = new Map(); // Store unique attachments by attachmentId
+  console.log("res",attachmentsData );
+  // Merge transfer data with attachment details, ensuring uniqueness of attachments
+  // Merge transfer data with attachments, ensuring uniqueness of attachments
+  const mergedTransferFunds = transferFunds.map(transfer => {
+    const uniqueAttachments = new Map(); // Map for unique attachment filtering
 
-    transfer.attachments.forEach((transferAttachment) => {
-        attachmentsData.forEach((attachment) => {
-            attachment.attachmentsData.forEach((attachmentData) => {
-                if (attachmentData.attachmentId === transferAttachment.attachmentId) {
-                    uniqueAttachments.set(attachmentData.attachmentId, {
-                        ...attachmentData,
-                        fileName: transferAttachment.fileName,
-                        _id: transferAttachment._id,
-                        uploadedDate: attachmentData.uploadedDate || null,
-                        fileData: attachmentData.fileData,
-                        filePath: attachmentData.filePath
-                    });
-                }
+    // For each attachment in transfer, match with processed attachment data
+    transfer.attachments.forEach(transferAttachment => {
+      attachmentsData.forEach(attachment => {
+        attachment.attachmentsData.forEach(attachmentData => {
+          // Match the attachment ID (ensure the right match between processed and original)
+          if (attachmentData.id === transferAttachment._id.toString()) {
+            uniqueAttachments.set(attachmentData.id, {
+              ...attachmentData, 
+              fileName: transferAttachment.fileName, // Ensure we keep the original filename
+              _id: transferAttachment._id,  // Keep the original attachment _id
+              uploadedDate: attachmentData.uploadedDate || null,
+              filePath: attachmentData.filePath, // Ensure file path is correctly set
             });
+          }
         });
+      });
     });
 
+    // Return transfer data merged with unique attachments
     return {
-        transferCase: transfer.transferCase,
-        transferType: transfer.transferType,
-        orgId: transfer.orgId,
-        toWhat: transfer.toWhat,
-        fromBankType: transfer.fromBankType,
-        toBankType: transfer.toBankType,
-        amount: transfer.amount,
-        reason: transfer.reason,
-        refNumber: transfer.refNumber,
-        transferDate: transfer.transferDate,
-        transferId: transfer._id,
-        attachments: Array.from(uniqueAttachments.values()), // Convert Map to Array
+      transferCase: transfer.transferCase,
+      transferType: transfer.transferType,
+      orgId: transfer.orgId,
+      toWhat: transfer.toWhat,
+      fromBankType: transfer.fromBankType,
+      toBankType: transfer.toBankType,
+      amount: transfer.amount,
+      reason: transfer.reason,
+      refNumber: transfer.refNumber,
+      transferDate: transfer.transferDate,
+      transferId: transfer._id,
+      attachments: Array.from(uniqueAttachments.values()), // Convert Map to Array
     };
   });
 
-  // Correct attachment length calculation
+  // Calculate total number of attachments in merged data
   const totalAttachments = mergedTransferFunds.reduce((sum, transfer) => sum + transfer.attachments.length, 0);
 
+  // Respond with the merged transfer data and attachment count
   res.status(200).json({
     status: 1,
-    attachementLength: totalAttachments,
-    transferFunds: mergedTransferFunds
+    attachmentLength: totalAttachments,
+    transferFunds: mergedTransferFunds,
   });
 });
 
