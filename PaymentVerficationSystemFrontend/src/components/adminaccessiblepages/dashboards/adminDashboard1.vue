@@ -346,13 +346,16 @@
             <div class="p-4 h-96 overflow-y-auto space-y-4">
               <!-- Cards for each bank -->
               <div v-for="(balance, bank) in totalBalance.orgBalancesBasedBankType" :key="bank"
-                class="bg-white shadow-md rounded-lg p-4 border border-gray-300">
+                class="bg-white shadow-md rounded-lg p-4 border border-gray-300" >
                 <!-- Centered Bank Name -->
-                <h3 class="text-lg font-semibold text-blue-800 mb-4">
+
+
+              <div v-if="bank!='null'">
+                <h3 v-if="bank!='null'" class="text-lg font-semibold text-blue-800 mb-4">
                   {{ bank }}
                 </h3>
                 <!-- Balance Details in Two Columns -->
-                <div class="grid lg:grid-cols-2 gap-6 text-sm ml-3">
+                <div class="grid lg:grid-cols-2 gap-6 text-sm ml-3" >
                   <!-- Left Column -->
                   <div class="space-y-2 lg:border-r border-blue-500 pr-10">
                     <div class="flex justify-between">
@@ -370,16 +373,31 @@
 
                     <div class="flex justify-between">
                       <span class="font-medium">{{
-                        $t("Outcoming Block Balance")
+                        $t("Outgoing Block Balance")
                       }}</span>
-                      <span>{{ balance.blockOutcoming || 0 }}</span>
+                      <span>{{ balance.blockBankOutcoming || 0 }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="font-medium">{{
                         $t("Incoming Block Balance")
                       }}</span>
-                      <span>{{ balance.blockIncoming || 0 }}</span>
+                      <span>{{ balance.blockBankIncoming || 0 }}</span>
                     </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{
+                        $t("Block Expenditure Offset")
+                      }}</span>
+                      <span>{{ balance.blockExpenditure || 0 }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{
+                        $t("Block Expenditure Offset")
+                      }}</span>
+                      <span>{{ balance.blockUserWithdrawal|| 0 }}</span>
+                    </div>
+
                     <div class="flex justify-between">
                       <span class="font-medium">{{ $t("totalBlock") }}</span>
                       <span class="bg-gray-100 px-2 py-1 rounded text-blue-500">{{ balance.totalBlockBalance || 0
@@ -402,16 +420,33 @@
 
                     <div class="flex justify-between">
                       <span class="font-medium">{{
-                        $t("OutComing Service Balance")
+                        $t("Outgoing Service Balance")
                       }}</span>
-                      <span>{{ balance.serviceOutcoming || 0 }}</span>
+                      <span>{{ balance.serviceBankOutcoming || 0 }}</span>
                     </div>
                     <div class="flex justify-between">
                       <span class="font-medium">{{
                         $t("Incoming Service Balance")
                       }}</span>
-                      <span>{{ balance.serviceIncoming || 0 }}</span>
+                      <span>{{ balance.serviceBankIncoming || 0 }}</span>
                     </div>
+
+
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{
+                        $t("Service Expenditure Offset")
+                      }}</span>
+                      <span>{{ balance.serviceExpenditure || 0 }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{
+                        $t("Service User Withdrawal Offset")
+                      }}</span>
+                      <span>{{ balance.serviceUserWithdrawal|| 0 }}</span>
+                    </div>
+
                     <div class="flex justify-between">
                       <span class="font-medium">{{ $t("totalService") }}</span>
                       <span class="bg-gray-100 px-2 py-1 rounded text-blue-500">{{ balance.totalServiceBalance || 0
@@ -419,7 +454,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="flex justify-between border-t border-gray-500 mt-5 pt-5 pr-10">
+                <div class="flex justify-between border-t border-gray-500 mt-5 pt-5 pr-10" >
                   <span class="font-medium text-blue-500">{{
                     $t("Total Balance")
                   }}</span>
@@ -431,13 +466,13 @@
                   </span>
                 </div>
               </div>
+              </div>
 
               <!-- Total Summary Card -->
               <div class="bg-gray-50 shadow-md rounded-lg p-4 border-r border-gray-300">
                 <h3 class="text-lg font-bold text-blue-800 mb-4">
                   {{ $t("total") }}
                 </h3>
-
                 <div class="grid lg:grid-cols-2 gap-6 text-sm ml-3">
                   <!-- Left Column -->
                   <div class="space-y-2 lg:border-r border-blue-500 pr-10">
@@ -457,6 +492,23 @@
                       <span class="font-medium">{{ $t("urgent") }}</span>
                       <span>{{ totalOrgBalance.totalUrgentBalance || 0 }}</span>
                     </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{ $t("Total Transfered") }}</span>
+                      <span>{{ totalOrgBalance.blockBankTransfered || 0 }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{ $t("Total Expenditure Offset") }}</span>
+                      <span>{{ totalOrgBalance.blockExpenditure || 0 }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{ $t("Total User Withdrawal") }}</span>
+                      <span>{{ totalOrgBalance.blockUserWithdrawal || 0 }}</span>
+                    </div>
+
+
                     <div class="flex justify-between">
                       <span class="font-medium">{{ $t("totalBlock") }}</span>
                       <span class="bg-gray-100 px-2 py-1 rounded">{{
@@ -481,6 +533,22 @@
                         totalOrgBalance.totalServiceBalance || 0
                       }}</span>
                     </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{ $t("Total Transfered") }}</span>
+                      <span>{{ totalOrgBalance.serviceBankTransfered || 0 }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{ $t("Total Expenditure Offset") }}</span>
+                      <span>{{ totalOrgBalance.serviceExpenditure || 0 }}</span>
+                    </div>
+
+                    <div class="flex justify-between">
+                      <span class="font-medium">{{ $t("Total User Withdrawal") }}</span>
+                      <span>{{ totalOrgBalance.serviceUserWithdrawal || 0 }}</span>
+                    </div>
+
                     <div class="flex justify-between">
                       <span class="font-medium">{{ $t("totalService") }}</span>
                       <span class="bg-gray-100 px-2 py-1 rounded">{{
