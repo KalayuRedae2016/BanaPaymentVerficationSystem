@@ -204,7 +204,7 @@
                       <div class="border-b border-gray-300 shadow-lg mb-3"
                         v-if="attachment.fileType.startsWith('image/')">
                         <img :src="'data:image/jpeg;base64,' + attachment.fileData" :alt="attachment.name"
-                          class="attachment-image m-4 w-1/2" style="height: auto" />
+                          class="attachment-image m-4 w-1/2" style="height: 100px;width:100px;"  />
                         <div class="m-4 text-blue-800">
                           <p>Type: {{ attachment.fileType }}</p>
                           <p>Name: {{ attachment.filename }}</p>
