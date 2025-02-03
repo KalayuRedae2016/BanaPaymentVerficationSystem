@@ -26,8 +26,8 @@ const AppError = require('../utils/appError');
 
 // Configure multer for payment file uploads
 const paymentFileUpload = createMulterMiddleware(
-  'uploads/payments/', // Destination folder
-  'Payment', // Prefix for filenames
+  'uploads/importedPayments/', // Destination folder
+  'payment', // Prefix for filenames
   ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'] // Allowed file types
 );
 // Middleware for handling single file upload
@@ -1033,7 +1033,8 @@ exports.getPaymentNotifications = catchAsync(async (req, res, next) => {
       let imageData = null;
 
       if (user && user.profileImage) {
-        const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
+        //const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
+        const imageFilePath=path.join(__dirname, '..', 'uploads', 'userAttachements',user.profileImage);
 
         try {
           imageData = fs.readFileSync(imageFilePath, 'base64');
@@ -1797,75 +1798,6 @@ console.log(message);
   });
 });
 
-// exports.getTransferFunds = catchAsync(async (req, res, next) => {
-//   const { transferCase, transferId, userId, transferType, fromBankType, toBankType, amount } = req.query;
-
-//   let transferQuery = {};
-//   if (userId) transferQuery.toWhat = userId;  // Query by userId (toWhat)
-//   if (transferId) transferQuery._id = transferId;
-//   if (transferCase) transferQuery.transferCase = transferCase;
-//   if (transferType) transferQuery.transferType = transferType;
-//   if (fromBankType) transferQuery.fromBankType = fromBankType;
-//   if (toBankType) transferQuery.toBankType = toBankType;
-//   if (amount) transferQuery.amount = amount;
-  
-//   const organization = await validateExistence(Organization, {}, "Organization is not found");
-
-//   // Filter paymentTransfers based on transferQuery criteria
-//   const transferFunds = organization.paymentTransfers.filter(transfer => {
-//     return Object.keys(transferQuery).every(key => transfer[key] && transfer[key] == transferQuery[key]);
-//   });
-
-//   const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
-//     return processFileData(transfer);
-//   }));
-// console.log(attachmentsData)
-//   // Merge transfer data with attachment details
-//   const mergedTransferFunds = transferFunds.map((transfer) => {
-//     const uniqueAttachments = new Map(); // Store unique attachments by attachmentId
-
-//     transfer.attachments.forEach((transferAttachment) => {
-//         attachmentsData.forEach((attachment) => {
-//             attachment.attachmentsData.forEach((attachmentData) => {
-//                 if (attachmentData.attachmentId === transferAttachment.attachmentId) {
-//                     uniqueAttachments.set(attachmentData.attachmentId, {
-//                         ...attachmentData,
-//                         fileName: transferAttachment.fileName,
-//                         _id: transferAttachment._id,
-//                         uploadedDate: attachmentData.uploadedDate || null,
-//                         //fileData: attachmentData.fileData,
-//                         filePath: attachmentData.filePath
-//                     });
-//                 }
-//             });
-//         });
-//     });
-
-//     return {
-//         transferCase: transfer.transferCase,
-//         transferType: transfer.transferType,
-//         orgId: transfer.orgId,
-//         toWhat: transfer.toWhat,
-//         fromBankType: transfer.fromBankType,
-//         toBankType: transfer.toBankType,
-//         amount: transfer.amount,
-//         reason: transfer.reason,
-//         refNumber: transfer.refNumber,
-//         transferDate: transfer.transferDate,
-//         transferId: transfer._id,
-//         attachments: Array.from(uniqueAttachments.values()), // Convert Map to Array
-//     };
-//   });
-
-//   // Correct attachment length calculation
-//   const totalAttachments = mergedTransferFunds.reduce((sum, transfer) => sum + transfer.attachments.length, 0);
-
-//   res.status(200).json({
-//     status: 1,
-//     attachementLength: totalAttachments,
-//     transferFunds: mergedTransferFunds
-//   });
-// });
 exports.getTransferFunds = catchAsync(async (req, res, next) => {
   // Destructure query parameters for filtering
   const { transferCase, transferId, userId, transferType, fromBankType, toBankType, amount } = req.query;
@@ -1890,10 +1822,9 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
 
   console.log("tt to be send",transferFunds)
   // Process attachment data in parallel for all transfers
-  const attachmentsData = await Promise.all(transferFunds.map(transfer => processFileData(transfer)));
+  const attachmentsData = await Promise.all(transferFunds.map(transfer => processFileData(transfer,"payment")));
 
   console.log("res",attachmentsData );
-  // Merge transfer data with attachment details, ensuring uniqueness of attachments
   // Merge transfer data with attachments, ensuring uniqueness of attachments
   const mergedTransferFunds = transferFunds.map(transfer => {
     const uniqueAttachments = new Map(); // Map for unique attachment filtering
@@ -1943,8 +1874,6 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
     transferFunds: mergedTransferFunds,
   });
 });
-
-
 exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   console.log("Request Body:", req.body);
   console.log("Request Files:", req.files);
@@ -2069,7 +1998,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       sessionId: req.session?.id || 'generated-session-id',
     });
 
-    const { attachmentsData } = await processFileData(transfer);
+    const { attachmentsData } = await processFileData(transfer,"payment");
 
     res.status(200).json({
       status: 1,

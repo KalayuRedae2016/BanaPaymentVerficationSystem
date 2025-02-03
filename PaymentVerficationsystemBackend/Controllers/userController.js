@@ -6,8 +6,8 @@ const Organization = require("../Models/organizationModel")
 const PaymentSetting = require("../Models/paymentSettingModel")
 const fs = require('fs');
 const path = require('path');
-const validator = require('validator'); // Ensure you have this library installed
-const xlsx = require('xlsx'); //for import user from excel
+const validator = require('validator');
+const xlsx = require('xlsx'); 
 const mongoose=require("mongoose")
 
 const { sendEmail } = require('../utils/email');
@@ -23,7 +23,7 @@ const defaultVariables = require('../config/defaultVariables');
 
 // Configure multer for user file uploads
 const userFileUpload = createMulterMiddleware(
-  'uploads/users/', // Destination folder
+  'uploads/importedUsers/', // Destination folder
   'User', // Prefix for filenames
   ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'] // Allowed file types
 );
@@ -103,7 +103,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User not found', 404));
   }
 
-  const { imageData, attachmentsData } = await processFileData(user);
+  const { imageData, attachmentsData } = await processFileData(user,"user");
   
   const formattedCreatedAt = user.createdAt ? formatDate(user.createdAt) : null;
   const formattedUpdatedAt = user.updatedAt ? formatDate(user.updatedAt) : null;
@@ -152,7 +152,7 @@ exports.updateUser = catchAsync(async (req, res) => {
     });
     await existingUser.save();
   const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
-  const { imageData, attachmentsData } = await processFileData(updatedUser);
+  const { imageData, attachmentsData } = await processFileData(updatedUser,"user");
   
   const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
   const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
@@ -295,7 +295,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
     // Delete the existing profile image from the server, if not default
     if (user.profileImage && user.profileImage !== 'default.png') {
-      const oldImagePath = path.join(__dirname, '..', 'uploads', 'profileImages', user.profileImage);
+      //const oldImagePath = path.join(__dirname, '..', 'uploads', 'profileImages', user.profileImage);
+      const oldImagePath =path.join(__dirname, '..', 'uploads', 'userAttachements',user.profileImage);
       deleteFile(oldImagePath);
     }
 
@@ -316,7 +317,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   // Delete removed attachments from the storage
   for (const removed of removedAttachments) {
-    const filePath = path.join(__dirname, '..', 'uploads', 'attachments', removed.fileName);
+    const filePath = path.join(__dirname, '..', 'uploads', 'userAattachments', removed.fileName);
     deleteFile(filePath);
   }
 
@@ -581,8 +582,6 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
     updatedCount: updatedUsers.modifiedCount,
   });
 });
-
-
 
 // // Upload attachments
 // exports.uploadAttachments = [

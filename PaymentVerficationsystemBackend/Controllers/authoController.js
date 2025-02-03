@@ -22,7 +22,7 @@ const signInToken = (user) => {
 };
 
 const userAttachments = createMulterMiddleware(
-  'uploads/attachments', // Destination folder
+  'uploads/userAttachements', // Destination folder
   'Att', // Prefix for filenames
   ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword'] // Allowed types
 );
@@ -52,6 +52,7 @@ exports.signup = catchAsync(async (req, res, next) => {
     console.log("uploadingFIles",req.files)
     const {profileImage,attachments}=await processUploadFiles(req.files,req.body)
     console.log("processedFIles",attachments)
+    // if(profileImage===null) profileImage="default.png"
    
     const customProbs={...req.body,profileImage,attachments}
     const defaultsProbs={isActive: true,changePassword: false,hasMadePayment: false,}
