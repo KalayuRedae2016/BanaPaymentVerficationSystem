@@ -18,6 +18,11 @@ router.use(function (req, res, next) {
 
 router.route('/resetAll').delete(paymentController.resetAll);//reset all files
 
+// =====Routes for managing payments via integrated 3rd party BankAPI========
+router.route('/search/bills') .get(authenticateApiKey,paymentController.searchBills);//search payments
+router.route('/query_more_bill/:paymentTypeIds').get(authenticateApiKey,paymentController.getMoreBills);//getMoreBills
+router.route('/c2b-payment-validation-request').post(authenticateApiKey,paymentController.confirmBills);//confirm payment
+
 // Protect all routes after this middleware
 router.use(authoController.authenticationJwt);
 
@@ -60,9 +65,5 @@ router.route('/orgBalance').get(paymentController.calculateOrganizationBalances)
 router.post('/importPayments', paymentController.uploadPaymentFile, paymentController.importPayments); // Import payments
 router.get('/exportPayments', paymentController.exportPayments); // Export payments
 
-// =====Routes for managing payments via integrated 3rd party BankAPI========
-router.route('/search/bills') .get(authenticateApiKey,paymentController.searchBills);//search payments
-router.route('/query_more_bill/:paymentTypeIds').get(authenticateApiKey,paymentController.getMoreBills);//getMoreBills
-router.route('/c2b-payment-validation-request').post(authenticateApiKey,paymentController.confirmBills);//confirm payment
 
 module.exports = router;

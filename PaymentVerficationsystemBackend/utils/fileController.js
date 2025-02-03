@@ -188,7 +188,7 @@ exports.deleteFile = async (filePath) => {
 };
 
 exports.processFileData = async (user,type) => {
-  console.log("TTT,",user)
+  // console.log("TTT,",user)
   const convertFileToBase64 = async (filePath) => {
     //console.log("filePath", filePath)
     try {
@@ -239,7 +239,7 @@ exports.processFileData = async (user,type) => {
     console.log('No attachments found.');
   }
 
-  console.log('Processed Attachments Data:', attachmentsData); // Debug final result
+  // console.log('Processed Attachments Data:', attachmentsData); // Debug final result
   return { imageData, attachmentsData };
 };
 

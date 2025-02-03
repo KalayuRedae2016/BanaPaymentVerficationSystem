@@ -358,7 +358,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 });
 
 exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
-  const userId = req.body.id
+  const userId = req.params.userId;
   const user = await User.findById(userId)
   if (!user) {
     return next(new AppError('User is not found', 404));

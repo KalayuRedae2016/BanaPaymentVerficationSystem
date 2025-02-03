@@ -1,6 +1,6 @@
 const dateString1 = "2024-12-26"; 
 const dateString2="2024-11-01"
-function formatDateGC(dateString){
+function formatDate(dateString){
   if (!dateString) return null;
   const d = new Date(dateString);
   const year = d.getFullYear();
@@ -13,7 +13,7 @@ function formatDateGC(dateString){
 // // Format date fields to 'YYYY-MM-DD'
 // const formatDate = (date) => date.toISOString().split('T')[0];
 
-function formatDate(dateString) {
+function formatDateGCtoEC(dateString) {
     if (!dateString) return null;
     // console.log("Input date string: ", dateString);
     const gregorianDate = new Date(dateString);
@@ -216,6 +216,6 @@ function formatDate(dateString) {
 // formatDate(dateString2);
 
 module.exports = {
-  formatDate,formatDateGC
+  formatDate,formatDateGCtoEC
 };
 

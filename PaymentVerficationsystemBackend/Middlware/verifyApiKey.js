@@ -3,6 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
 const authenticateApiKey = catchAsync(async (req, res, next) => {
+  console.log("AuthenticatedPage....")
   
     console.log("headers",req.headers)
     // console.log("query",req.query)
@@ -16,10 +17,7 @@ const authenticateApiKey = catchAsync(async (req, res, next) => {
     // const bankType = apiKeyData.bankType;
     // req.bankType = bankType;
     req.apiKeyData = apiKeyData;
-
-    // console.log("bankType",bankType)
-    // console.log("apikeydata",apiKeyData)
-    // console.log("apikey",apiKeyData.key)
+  console.log(req.apiKeyData)
     next();
   })
 

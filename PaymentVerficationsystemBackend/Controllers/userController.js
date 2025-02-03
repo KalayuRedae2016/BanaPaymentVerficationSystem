@@ -69,7 +69,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   }
 
 const activeUsers=users.filter(user => user.isActive===true &&user.role==="User").length
-console.log("a",activeUsers)
+// console.log("a",activeUsers)
 const offsetUsers=users.filter(user => user.isActive===false).length
 const adminUsers=users.filter(user => user.role==="SuperAdmin"||user.role=="Admin").length
 
@@ -124,9 +124,11 @@ exports.updateUser = catchAsync(async (req, res) => {
     const userId = req.params.id;
   
     const existingUser = await User.findById(userId);
+
     if (!existingUser) {
       return next(new AppError("User is not Found",400))
     }
+    const originalUserData = JSON.parse(JSON.stringify(existingUser));
 
     const {userCode}=req.body
     let updateData ={... req.body};
@@ -162,7 +164,7 @@ exports.updateUser = catchAsync(async (req, res) => {
     action: 'Update',
     actor: req.user.id,
     description: 'User Profie Updated',
-    data: { userId: updatedUser.id,updateData },
+    data: { userId: updatedUser.id,BeforeUpdate:originalUserData,updateData},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -258,6 +260,7 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // Step 1: Fetch the user and validate existence
+  console.log("requestUser",req.user)
   const user = await User.findById(req.user._id);
   if (!user) {
     return next(new AppError('User not found', 404));

@@ -114,8 +114,7 @@ exports.searchBills = async (req, res) => {
     };
 
     const payments = await Payment.find(paymentQuery)
-      .populate('user', 'fullName phoneNumber')
-      .lean();
+    // console.log("payment",payments)
 
     if (!payments.length) {
       return res.status(200).json({
@@ -140,7 +139,7 @@ exports.searchBills = async (req, res) => {
         if (payment[type] && payment[type].amount && payment[type].isPaid != true) {
           items.push({
             _id: payment._id,
-            customerName: payment.user.fullName,
+            customerName: payment.fullName,
             mobile: payment.user.phoneNumber || '',
             amount: payment[type].amount,
             penality: type === 'penality' ? payment[type].amount : payment[type].penality || 0, // Use accumulated penality for service type
@@ -160,7 +159,7 @@ exports.searchBills = async (req, res) => {
         }
       }
     }
-    console.log(items)
+    // console.log(items)
     return res.status(200).json({
       error: false,
       status: 1,
@@ -323,8 +322,8 @@ exports.confirmBills = async (req, res) => {
       });
 
       if (!unpaidBill) {
-        console.error(`Payment with paymentID ${billCode} not found`);
-        continue;
+        return next(new AppError(`Payment with paymentID ${billCode} not found`,400))
+        
       }
 
       // Determine which subdocument (urgent, regular, subsidy, service, penality) to update
@@ -404,20 +403,32 @@ exports.confirmBills = async (req, res) => {
           }
         }
 
-
         // Update the unpaid bill with the QR code URL and other details
         unpaidBill.isPaid = true;
         unpaidBill.status = 'confirmed';
         unpaidBill.confirmedDate = new Date();
         unpaidBill.latest = true;
         unpaidBill.confirmedID = req.apiKeyData.id,
-          unpaidBill.confirmationMethod = "Bank-confirmed"
+        unpaidBill.confirmationMethod = "Bank-confirmed"
       }
 
       // Save the updated bill
       await unpaidBill.save();
+      
     }
 
+    console.log(unpaidBill);
+    //await logAction({
+    //   model: 'payments',
+    //   action: 'Confirm',
+    //   actor: req.user.id,
+    //   description: 'PaymentS ConfirmedCreated',
+    //   data: { paymentId: unpaidBill.id, unpaidBill,body: req.body },
+    //   ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+    //   severity: 'info',
+    //   sessionId: req.session?.id || 'generated-session-id',
+    // });
+    
     // Send success response after processing all transactions
     res.status(200).json({
       error: false,
@@ -426,6 +437,7 @@ exports.confirmBills = async (req, res) => {
       message: 'Payment types updated successfully',
       items: transactions,
     });
+
   } catch (error) {
     console.error('Error confirming payments:', error);
     res.status(500).json({

@@ -33,7 +33,7 @@ router.patch('/updateMe',authoController.uploadFilesMiddleware,userController.up
 
 //router.use(authoController.requiredRole('admin'));
 
-router.patch('/resetPasswordByAdmin',authoController.resetPasswordByAdmin);
+router.patch('/resetPasswordByAdmin/:userId',authoController.resetPasswordByAdmin);
 router.patch('/edituserPermission',userController.toggleEdiUserPermission);
 
 router.route('/')
