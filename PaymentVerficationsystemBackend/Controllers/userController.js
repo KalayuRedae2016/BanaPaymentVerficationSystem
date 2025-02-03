@@ -6,8 +6,8 @@ const Organization = require("../Models/organizationModel")
 const PaymentSetting = require("../Models/paymentSettingModel")
 const fs = require('fs');
 const path = require('path');
-const validator = require('validator'); // Ensure you have this library installed
-const xlsx = require('xlsx'); //for import user from excel
+const validator = require('validator');
+const xlsx = require('xlsx'); 
 const mongoose=require("mongoose")
 
 const { sendEmail } = require('../utils/email');
@@ -23,7 +23,7 @@ const defaultVariables = require('../config/defaultVariables');
 
 // Configure multer for user file uploads
 const userFileUpload = createMulterMiddleware(
-  'uploads/users/', // Destination folder
+  'uploads/importedUsers/', // Destination folder
   'User', // Prefix for filenames
   ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'] // Allowed file types
 );
@@ -69,7 +69,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
   }
 
 const activeUsers=users.filter(user => user.isActive===true &&user.role==="User").length
-console.log("a",activeUsers)
+// console.log("a",activeUsers)
 const offsetUsers=users.filter(user => user.isActive===false).length
 const adminUsers=users.filter(user => user.role==="SuperAdmin"||user.role=="Admin").length
 
@@ -103,7 +103,7 @@ exports.getUser = catchAsync(async (req, res, next) => {
     return next(new AppError('User not found', 404));
   }
 
-  const { imageData, attachmentsData } = await processFileData(user);
+  const { imageData, attachmentsData } = await processFileData(user,"user");
   
   const formattedCreatedAt = user.createdAt ? formatDate(user.createdAt) : null;
   const formattedUpdatedAt = user.updatedAt ? formatDate(user.updatedAt) : null;
@@ -124,9 +124,11 @@ exports.updateUser = catchAsync(async (req, res) => {
     const userId = req.params.id;
   
     const existingUser = await User.findById(userId);
+
     if (!existingUser) {
       return next(new AppError("User is not Found",400))
     }
+    const originalUserData = JSON.parse(JSON.stringify(existingUser));
 
     const {userCode}=req.body
     let updateData ={... req.body};
@@ -152,7 +154,7 @@ exports.updateUser = catchAsync(async (req, res) => {
     });
     await existingUser.save();
   const updatedUser = await User.findByIdAndUpdate(userId, updateData, { new: true });
-  const { imageData, attachmentsData } = await processFileData(updatedUser);
+  const { imageData, attachmentsData } = await processFileData(updatedUser,"user");
   
   const formattedCreatedAt = updatedUser.createdAt ? formatDate(updatedUser.createdAt) : null;
   const formattedUpdatedAt = updatedUser.updatedAt ? formatDate(updatedUser.updatedAt) : null;
@@ -162,7 +164,7 @@ exports.updateUser = catchAsync(async (req, res) => {
     action: 'Update',
     actor: req.user.id,
     description: 'User Profie Updated',
-    data: { userId: updatedUser.id,updateData },
+    data: { userId: updatedUser.id,BeforeUpdate:originalUserData,updateData},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -258,6 +260,7 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
   // Step 1: Fetch the user and validate existence
+  console.log("requestUser",req.user)
   const user = await User.findById(req.user._id);
   if (!user) {
     return next(new AppError('User not found', 404));
@@ -295,7 +298,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
     // Delete the existing profile image from the server, if not default
     if (user.profileImage && user.profileImage !== 'default.png') {
-      const oldImagePath = path.join(__dirname, '..', 'uploads', 'profileImages', user.profileImage);
+      //const oldImagePath = path.join(__dirname, '..', 'uploads', 'profileImages', user.profileImage);
+      const oldImagePath =path.join(__dirname, '..', 'uploads', 'userAttachements',user.profileImage);
       deleteFile(oldImagePath);
     }
 
@@ -316,7 +320,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   // Delete removed attachments from the storage
   for (const removed of removedAttachments) {
-    const filePath = path.join(__dirname, '..', 'uploads', 'attachments', removed.fileName);
+    const filePath = path.join(__dirname, '..', 'uploads', 'userAattachments', removed.fileName);
     deleteFile(filePath);
   }
 
@@ -581,8 +585,6 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
     updatedCount: updatedUsers.modifiedCount,
   });
 });
-
-
 
 // // Upload attachments
 // exports.uploadAttachments = [

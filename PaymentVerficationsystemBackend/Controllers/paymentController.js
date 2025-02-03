@@ -26,8 +26,8 @@ const AppError = require('../utils/appError');
 
 // Configure multer for payment file uploads
 const paymentFileUpload = createMulterMiddleware(
-  'uploads/payments/', // Destination folder
-  'Payment', // Prefix for filenames
+  'uploads/importedPayments/', // Destination folder
+  'payment', // Prefix for filenames
   ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'] // Allowed file types
 );
 // Middleware for handling single file upload
@@ -114,8 +114,7 @@ exports.searchBills = async (req, res) => {
     };
 
     const payments = await Payment.find(paymentQuery)
-      .populate('user', 'fullName phoneNumber')
-      .lean();
+    // console.log("payment",payments)
 
     if (!payments.length) {
       return res.status(200).json({
@@ -140,7 +139,7 @@ exports.searchBills = async (req, res) => {
         if (payment[type] && payment[type].amount && payment[type].isPaid != true) {
           items.push({
             _id: payment._id,
-            customerName: payment.user.fullName,
+            customerName: payment.fullName,
             mobile: payment.user.phoneNumber || '',
             amount: payment[type].amount,
             penality: type === 'penality' ? payment[type].amount : payment[type].penality || 0, // Use accumulated penality for service type
@@ -160,7 +159,7 @@ exports.searchBills = async (req, res) => {
         }
       }
     }
-    console.log(items)
+    // console.log(items)
     return res.status(200).json({
       error: false,
       status: 1,
@@ -276,6 +275,7 @@ exports.getMoreBills = async (req, res) => {
   }
 };
 exports.confirmBills = async (req, res) => {
+  // console.log("request",req.apiKeyData.id)
   try {
     const bankType = req.apiKeyData.bankType;
     // console.log(req.apiKeyData.id)
@@ -308,10 +308,11 @@ exports.confirmBills = async (req, res) => {
 
     // Process each transaction
     for (const transaction of transactions) {
+      let unpaidBill=null
       const { transType, amount, transactionNumber, billCode } = transaction;
 
       // Find the corresponding payment document with the matching billCode
-      const unpaidBill = await Payment.findOne({
+      unpaidBill = await Payment.findOne({
         isPaid: false,
         $or: [
           { 'urgent._id': billCode },
@@ -323,8 +324,8 @@ exports.confirmBills = async (req, res) => {
       });
 
       if (!unpaidBill) {
-        console.error(`Payment with paymentID ${billCode} not found`);
-        continue;
+        return next(new AppError(`Payment with paymentID ${billCode} not found`,400))
+        
       }
 
       // Determine which subdocument (urgent, regular, subsidy, service, penality) to update
@@ -354,6 +355,10 @@ exports.confirmBills = async (req, res) => {
           message: `${subdocumentField} payment is already paid for billCode: ${billCode}`
         });
       }
+      const orginalSUbdocumentedBill= JSON.parse(JSON.stringify(unpaidBill[subdocumentField]));
+
+      console.log("orsu",orginalSUbdocumentedBill)
+
       if (subdocumentField === "penality") {
         const penalityAmount = unpaidBill.penality.amount
         unpaidBill["penality"].amount = penalityAmount || amount;//check
@@ -372,6 +377,8 @@ exports.confirmBills = async (req, res) => {
         unpaidBill[subdocumentField].paidAt = new Date();
         // Save the updated bill
       }
+      
+     
       await unpaidBill.save();
 
       const calculateTotalPaidAmount = () => {
@@ -404,18 +411,28 @@ exports.confirmBills = async (req, res) => {
           }
         }
 
-
         // Update the unpaid bill with the QR code URL and other details
         unpaidBill.isPaid = true;
         unpaidBill.status = 'confirmed';
         unpaidBill.confirmedDate = new Date();
         unpaidBill.latest = true;
         unpaidBill.confirmedID = req.apiKeyData.id,
-          unpaidBill.confirmationMethod = "Bank-confirmed"
+        unpaidBill.confirmationMethod = "Bank-confirmed"
       }
-
       // Save the updated bill
-      await unpaidBill.save();
+    await unpaidBill.save();
+    console.log("Updated unpaidBill:", unpaidBill);
+    await logAction({
+      model: 'payments',
+      action: 'Confirm',
+      actor: req.apiKeyData.id,
+      description: 'PaymentS ConfirmedCreated',
+      data: {paymentId:unpaidBill.id,billCode:unpaidBill.billCode,OrginalData:orginalSUbdocumentedBill,UpdatedData: req.body },
+      ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+      severity: 'info',
+      sessionId: req.session?.id || 'generated-session-id',
+    });
+    
     }
 
     // Send success response after processing all transactions
@@ -426,6 +443,7 @@ exports.confirmBills = async (req, res) => {
       message: 'Payment types updated successfully',
       items: transactions,
     });
+
   } catch (error) {
     console.error('Error confirming payments:', error);
     res.status(500).json({
@@ -436,7 +454,6 @@ exports.confirmBills = async (req, res) => {
     });
   }
 };
-
 exports.searchPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid, activeYear, activeMonth } = req.query;
 
@@ -559,13 +576,16 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   }
   const user = await User.findById(userId)
   if (!user) {
-    return next(new AppError("User is not found"), 400)
+    return next(new AppError("User is not found", 400))
   }
   // Find the unpaid bill by billCode
   let unpaidBill = await Payment.findOne({ isPaid: false, billCode });
   if (!unpaidBill) {
     return next(new AppError(`No unpaid bill found for billCode->${billCode}`, 400))
   }
+
+  const originalPaymentData = JSON.parse(JSON.stringify(unpaidBill));
+
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
@@ -658,8 +678,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     model: 'payments',
     action: 'Confirm',
     actor: req.user.id,
-    description: 'PaymentS ConfirmedCreated',
-    data: { paymentId: unpaidBill.id, unpaidBill,body: req.body },
+    description: 'PaymentS Confirmed',
+    data: { paymentId: unpaidBill.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -701,6 +721,8 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   if (!payment) {
     return next(new AppError("No paid Bill found", 404))
   }
+
+  const originalPaymentData = JSON.parse(JSON.stringify(payment));
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
@@ -771,12 +793,13 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate) : null;
   console.log(payment)
 
-   await logAction({
+   
+  await logAction({
     model: 'payments',
-    action: 'Update/Edit',
+    action: 'Update',
     actor: req.user.id,
-    description: 'Payments Editted',
-    data: { paymentId: payment.id,payment,body: req.body },
+    description: 'PaymentS Editted',
+    data: { paymentId: unpaidBill.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -1033,7 +1056,8 @@ exports.getPaymentNotifications = catchAsync(async (req, res, next) => {
       let imageData = null;
 
       if (user && user.profileImage) {
-        const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
+        //const imageFilePath = path.join(__dirname, '..', 'uploads', 'users', user.profileImage);
+        const imageFilePath=path.join(__dirname, '..', 'uploads', 'userAttachements',user.profileImage);
 
         try {
           imageData = fs.readFileSync(imageFilePath, 'base64');
@@ -1797,75 +1821,6 @@ console.log(message);
   });
 });
 
-// exports.getTransferFunds = catchAsync(async (req, res, next) => {
-//   const { transferCase, transferId, userId, transferType, fromBankType, toBankType, amount } = req.query;
-
-//   let transferQuery = {};
-//   if (userId) transferQuery.toWhat = userId;  // Query by userId (toWhat)
-//   if (transferId) transferQuery._id = transferId;
-//   if (transferCase) transferQuery.transferCase = transferCase;
-//   if (transferType) transferQuery.transferType = transferType;
-//   if (fromBankType) transferQuery.fromBankType = fromBankType;
-//   if (toBankType) transferQuery.toBankType = toBankType;
-//   if (amount) transferQuery.amount = amount;
-  
-//   const organization = await validateExistence(Organization, {}, "Organization is not found");
-
-//   // Filter paymentTransfers based on transferQuery criteria
-//   const transferFunds = organization.paymentTransfers.filter(transfer => {
-//     return Object.keys(transferQuery).every(key => transfer[key] && transfer[key] == transferQuery[key]);
-//   });
-
-//   const attachmentsData = await Promise.all(transferFunds.map(async (transfer) => {
-//     return processFileData(transfer);
-//   }));
-// console.log(attachmentsData)
-//   // Merge transfer data with attachment details
-//   const mergedTransferFunds = transferFunds.map((transfer) => {
-//     const uniqueAttachments = new Map(); // Store unique attachments by attachmentId
-
-//     transfer.attachments.forEach((transferAttachment) => {
-//         attachmentsData.forEach((attachment) => {
-//             attachment.attachmentsData.forEach((attachmentData) => {
-//                 if (attachmentData.attachmentId === transferAttachment.attachmentId) {
-//                     uniqueAttachments.set(attachmentData.attachmentId, {
-//                         ...attachmentData,
-//                         fileName: transferAttachment.fileName,
-//                         _id: transferAttachment._id,
-//                         uploadedDate: attachmentData.uploadedDate || null,
-//                         //fileData: attachmentData.fileData,
-//                         filePath: attachmentData.filePath
-//                     });
-//                 }
-//             });
-//         });
-//     });
-
-//     return {
-//         transferCase: transfer.transferCase,
-//         transferType: transfer.transferType,
-//         orgId: transfer.orgId,
-//         toWhat: transfer.toWhat,
-//         fromBankType: transfer.fromBankType,
-//         toBankType: transfer.toBankType,
-//         amount: transfer.amount,
-//         reason: transfer.reason,
-//         refNumber: transfer.refNumber,
-//         transferDate: transfer.transferDate,
-//         transferId: transfer._id,
-//         attachments: Array.from(uniqueAttachments.values()), // Convert Map to Array
-//     };
-//   });
-
-//   // Correct attachment length calculation
-//   const totalAttachments = mergedTransferFunds.reduce((sum, transfer) => sum + transfer.attachments.length, 0);
-
-//   res.status(200).json({
-//     status: 1,
-//     attachementLength: totalAttachments,
-//     transferFunds: mergedTransferFunds
-//   });
-// });
 exports.getTransferFunds = catchAsync(async (req, res, next) => {
   // Destructure query parameters for filtering
   const { transferCase, transferId, userId, transferType, fromBankType, toBankType, amount } = req.query;
@@ -1890,10 +1845,9 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
 
   console.log("tt to be send",transferFunds)
   // Process attachment data in parallel for all transfers
-  const attachmentsData = await Promise.all(transferFunds.map(transfer => processFileData(transfer)));
+  const attachmentsData = await Promise.all(transferFunds.map(transfer => processFileData(transfer,"payment")));
 
   console.log("res",attachmentsData );
-  // Merge transfer data with attachment details, ensuring uniqueness of attachments
   // Merge transfer data with attachments, ensuring uniqueness of attachments
   const mergedTransferFunds = transferFunds.map(transfer => {
     const uniqueAttachments = new Map(); // Map for unique attachment filtering
@@ -1943,8 +1897,6 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
     transferFunds: mergedTransferFunds,
   });
 });
-
-
 exports.updateTransferFunds = catchAsync(async (req, res, next) => {
   console.log("Request Body:", req.body);
   console.log("Request Files:", req.files);
@@ -2069,7 +2021,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       sessionId: req.session?.id || 'generated-session-id',
     });
 
-    const { attachmentsData } = await processFileData(transfer);
+    const { attachmentsData } = await processFileData(transfer,"payment");
 
     res.status(200).json({
       status: 1,

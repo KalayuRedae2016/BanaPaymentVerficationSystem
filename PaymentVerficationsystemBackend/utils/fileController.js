@@ -187,8 +187,8 @@ exports.deleteFile = async (filePath) => {
   }
 };
 
-exports.processFileData = async (user) => {
-  console.log("TTT,",user)
+exports.processFileData = async (user,type) => {
+  // console.log("TTT,",user)
   const convertFileToBase64 = async (filePath) => {
     //console.log("filePath", filePath)
     try {
@@ -202,14 +202,21 @@ exports.processFileData = async (user) => {
   //console.log("attachemnt to be proceced", user.attachments)
   // Prepare profile image data (if available)
   const imageData = user.profileImage
-    ? await convertFileToBase64(path.join(__dirname, '..', 'uploads', 'attachments', user.profileImage))
+    ? await convertFileToBase64(path.join(__dirname, '..', 'uploads','userAttachements',user.profileImage))
     : null;
 
   // Process attachments
   let attachmentsData = [];
   if (user.attachments && user.attachments.length > 0) {
     attachmentsData = await Promise.all(user.attachments.map(async (attachment) => {
-      const attachmentPath = path.join(__dirname, '..', 'uploads', 'attachments', attachment.fileName);
+      let attachmentPath
+      if(type==="user") attachmentPath = path.join(__dirname, '..', 'uploads', 'userAttachements',attachment.fileName);
+      else if(type==="payment"){
+        attachmentPath = path.join(__dirname, '..', 'uploads', 'TransferAttachments',attachment.fileName);
+      }
+      else{
+        return null;
+      }
       //console.log("gg",attachment)
       try {
           const fileData = await convertFileToBase64(attachmentPath)
@@ -232,16 +239,23 @@ exports.processFileData = async (user) => {
     console.log('No attachments found.');
   }
 
-  console.log('Processed Attachments Data:', attachmentsData); // Debug final result
+  // console.log('Processed Attachments Data:', attachmentsData); // Debug final result
   return { imageData, attachmentsData };
 };
 
-exports.processUploadFiles = async (files, body, existingUser = null) => {
-  const profileImage = files?.profileImage?.[0]?.filename || null;
+exports.processUploadFiles = async (files, body,type,existingUser = null) => {
+  let profileImage = null;
+  if (files.profileImage && files.profileImage.length > 0) {
+    profileImage = files?.profileImage?.[0]?.filename;
+  } else {
+    profileImage = "default.png"; // Set default profile image if none uploaded
+  }
+  //const profileImage = files?.profileImage?.[0]?.filename || null;
 
   if (existingUser && profileImage) {
     if (existingUser.profileImage && existingUser.profileImage !== 'default.png') {
-      const oldImagePath = path.join(__dirname, '../uploads/attachments', existingUser.profileImage);
+      //const oldImagePath = path.join(__dirname, '../uploads/attachments', existingUser.profileImage);
+      const oldImagePath=path.join(__dirname, '..', 'uploads','userAttachements',existingUser.profileImage)
       // await deleteFile(oldImagePath);  
       await exports.deleteFile(oldImagePath);  // Explicitly reference deleteFile using exports
     }

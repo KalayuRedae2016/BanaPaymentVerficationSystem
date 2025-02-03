@@ -1,10 +1,7 @@
-const mongoose = require("mongoose")
 const User = require('./../Models/userModel');
+const ApiKey = require('../Models/apiKeyModel');
 const Log = require('./../Models/logModel');
-const Organization = require("../Models/organizationModel")
-const PaymentSetting = require("../Models/paymentSettingModel")
 
-const { logAction } = require("../utils/logUtils")
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const { formatDate } = require("../utils/formatDate")
@@ -12,13 +9,13 @@ const { formatDate } = require("../utils/formatDate")
 exports.getLogs = catchAsync(async (req, res, next) => {
   console.log("Fetching logs...");
   const { model, action, severity, startDate, endDate, page = 1, limit = 10 } = req.query;
+  
   if (!model) {
     return next(new AppError("Model is required.", 400));
   }
-  const filters = { model};
 
+  const filters = { model };
   if (action) filters.action = action;
-  
   if (severity) filters.severity = severity;
   if (startDate || endDate) {
     filters.createdAt = {};
@@ -26,43 +23,54 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     if (endDate) filters.createdAt.$lte = new Date(endDate);
   }
 
-  const skip = (page - 1) * limit;
-  const logs = await Log.find(filters).sort({ createdAt: -1 }).skip(skip).limit(Number(limit));
+  const pageNum = Number(page) || 1;
+  const limitNum = Number(limit) || 10;
+  const skip = (pageNum - 1) * limitNum;
+
+  const logs = await Log.find(filters).sort({ createdAt: -1 }).skip(skip).limit(limitNum);
   const totalLogs = await Log.countDocuments(filters);
 
   if (logs.length === 0) {
-    return next(new AppError(`No logs found for the given query.`, 404));
+    return next(new AppError("No logs found for the given query.", 404));
   }
 
   // Get user details for all actors in logs
-  const actorIds = logs.map(log => log.actor); // Extract all actor IDs
-  const users = await User.find({ _id: { $in: actorIds } }).select("_id fullName"); // Fetch user names
+  const actorIds = logs.map(log => log.actor); 
+  const users = await User.find({ _id: { $in: actorIds } }).select("_id fullName");
+  const banks = await ApiKey.find({ _id: { $in: actorIds } }).select("_id bankType");
 
-  // Create a map of user IDs to full names
+  // Create lookup maps
   const userMap = {};
-  users.forEach(user => {userMap[user._id.toString()] = user.fullName});
+  const bankMap = {};
+  users.forEach(user => { userMap[user._id.toString()] = user.fullName });
+  banks.forEach(bank => { bankMap[bank._id.toString()] = bank.bankType });
 
-  console.log(logs)
   const formattedLogs = logs.map(log => ({
     id: log._id,
     model: log.model,
     action: log.action,
     actor: log.actor,
-    actorName: userMap[log.actor.toString()] || "Unknown",
+    actorName: userMap[log.actor?.toString()] || bankMap[log.actor?.toString()] || "Unknown",
     description: log.description,
-    affectedData: JSON.parse(log.affectedData), // Parse affectedData to JSON object
+    affectedData: (() => {
+      try {
+        return JSON.parse(log.affectedData);
+      } catch {
+        return log.affectedData;
+      }
+    })(),
     ipAddress: log.ipAddress,
     severity: log.severity,
-    createdAt: formatDate(log.createdAt), // Format date using formatDate utility
+    createdAt: formatDate(log.createdAt),
   }));
 
-  console.log(formattedLogs)
+  console.log(formattedLogs);
 
   res.status(200).json({
     status: 1,
     total: totalLogs,
-    page: Number(page),
-    limit: Number(limit),
+    page: pageNum,
+    limit: limitNum,
     result: logs.length,
     logs: formattedLogs,
   });
