@@ -275,6 +275,7 @@ exports.getMoreBills = async (req, res) => {
   }
 };
 exports.confirmBills = async (req, res) => {
+  // console.log("request",req.apiKeyData.id)
   try {
     const bankType = req.apiKeyData.bankType;
     // console.log(req.apiKeyData.id)
@@ -307,10 +308,11 @@ exports.confirmBills = async (req, res) => {
 
     // Process each transaction
     for (const transaction of transactions) {
+      let unpaidBill=null
       const { transType, amount, transactionNumber, billCode } = transaction;
 
       // Find the corresponding payment document with the matching billCode
-      const unpaidBill = await Payment.findOne({
+      unpaidBill = await Payment.findOne({
         isPaid: false,
         $or: [
           { 'urgent._id': billCode },
@@ -353,6 +355,10 @@ exports.confirmBills = async (req, res) => {
           message: `${subdocumentField} payment is already paid for billCode: ${billCode}`
         });
       }
+      const orginalSUbdocumentedBill= JSON.parse(JSON.stringify(unpaidBill[subdocumentField]));
+
+      console.log("orsu",orginalSUbdocumentedBill)
+
       if (subdocumentField === "penality") {
         const penalityAmount = unpaidBill.penality.amount
         unpaidBill["penality"].amount = penalityAmount || amount;//check
@@ -371,6 +377,8 @@ exports.confirmBills = async (req, res) => {
         unpaidBill[subdocumentField].paidAt = new Date();
         // Save the updated bill
       }
+      
+     
       await unpaidBill.save();
 
       const calculateTotalPaidAmount = () => {
@@ -411,24 +419,22 @@ exports.confirmBills = async (req, res) => {
         unpaidBill.confirmedID = req.apiKeyData.id,
         unpaidBill.confirmationMethod = "Bank-confirmed"
       }
-
       // Save the updated bill
-      await unpaidBill.save();
-      
+    await unpaidBill.save();
+    console.log("Updated unpaidBill:", unpaidBill);
+    await logAction({
+      model: 'payments',
+      action: 'Confirm',
+      actor: req.apiKeyData.id,
+      description: 'PaymentS ConfirmedCreated',
+      data: {paymentId:unpaidBill.id,billCode:unpaidBill.billCode,OrginalData:orginalSUbdocumentedBill,UpdatedData: req.body },
+      ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+      severity: 'info',
+      sessionId: req.session?.id || 'generated-session-id',
+    });
+    
     }
 
-    console.log(unpaidBill);
-    //await logAction({
-    //   model: 'payments',
-    //   action: 'Confirm',
-    //   actor: req.user.id,
-    //   description: 'PaymentS ConfirmedCreated',
-    //   data: { paymentId: unpaidBill.id, unpaidBill,body: req.body },
-    //   ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
-    //   severity: 'info',
-    //   sessionId: req.session?.id || 'generated-session-id',
-    // });
-    
     // Send success response after processing all transactions
     res.status(200).json({
       error: false,
@@ -448,7 +454,6 @@ exports.confirmBills = async (req, res) => {
     });
   }
 };
-
 exports.searchPayments = catchAsync(async (req, res, next) => {
   const { keyword, isPaid, activeYear, activeMonth } = req.query;
 
@@ -571,13 +576,16 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   }
   const user = await User.findById(userId)
   if (!user) {
-    return next(new AppError("User is not found"), 400)
+    return next(new AppError("User is not found", 400))
   }
   // Find the unpaid bill by billCode
   let unpaidBill = await Payment.findOne({ isPaid: false, billCode });
   if (!unpaidBill) {
     return next(new AppError(`No unpaid bill found for billCode->${billCode}`, 400))
   }
+
+  const originalPaymentData = JSON.parse(JSON.stringify(unpaidBill));
+
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
@@ -670,8 +678,8 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     model: 'payments',
     action: 'Confirm',
     actor: req.user.id,
-    description: 'PaymentS ConfirmedCreated',
-    data: { paymentId: unpaidBill.id, unpaidBill,body: req.body },
+    description: 'PaymentS Confirmed',
+    data: { paymentId: unpaidBill.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -713,6 +721,8 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   if (!payment) {
     return next(new AppError("No paid Bill found", 404))
   }
+
+  const originalPaymentData = JSON.parse(JSON.stringify(payment));
   // Function to update specific payment fields if provided
   const updatePaymentField = (existing, updates) => {
     const isPaid = updates.isPaid !== undefined ? updates.isPaid : existing.isPaid;
@@ -783,12 +793,13 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate) : null;
   console.log(payment)
 
-   await logAction({
+   
+  await logAction({
     model: 'payments',
-    action: 'Update/Edit',
+    action: 'Update',
     actor: req.user.id,
-    description: 'Payments Editted',
-    data: { paymentId: payment.id,payment,body: req.body },
+    description: 'PaymentS Editted',
+    data: { paymentId: unpaidBill.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
