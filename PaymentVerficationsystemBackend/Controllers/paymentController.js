@@ -2049,6 +2049,7 @@ exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError('Organization not found', 400));
   }
 
+ const deletedTransfer= organization.paymentTransfers.findOne({ transferId: transferId})
   // Check if the transfer exists
   const transferIndex = organization.paymentTransfers.findIndex(transfer => transfer._id.toString() === transferId);
   if (transferIndex === -1) {
@@ -2060,10 +2061,10 @@ exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
      
   await logAction({
     model: `${transferCase}`,
-    action: 'delete',
+    action: 'Delete',
     actor: req.user.id,
     description:  `Transfer is Deleted`,
-    data: { transferId: transferId.id,deletedData:organization.paymentTransfers.findOne({ transferId: transferId})},
+    data: { transferId:transferId,deletedData:deletedTransfer},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
