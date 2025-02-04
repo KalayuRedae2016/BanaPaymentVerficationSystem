@@ -1922,7 +1922,8 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     toWhat = new mongoose.Types.ObjectId(toWhat);
 }
 
-  const orginalTransferData = organization.paymentTransfers.find(t => t._id.toString() === transferId);
+  const orginalTransferData =  JSON.parse(JSON.stringify(organization.paymentTransfers.find(t => t._id.toString() === transferId)));
+  console.log("oo",orginalTransferData)
   const transfer = organization.paymentTransfers.find(t => t._id.toString() === transferId);
   if (!transfer) return next(new AppError("Transfer record not found", 404));
 
