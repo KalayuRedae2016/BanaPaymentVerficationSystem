@@ -1922,6 +1922,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     toWhat = new mongoose.Types.ObjectId(toWhat);
 }
 
+  const orginalTransferData = organization.paymentTransfers.find(t => t._id.toString() === transferId);
   const transfer = organization.paymentTransfers.find(t => t._id.toString() === transferId);
   if (!transfer) return next(new AppError("Transfer record not found", 404));
 
@@ -2019,7 +2020,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       action: 'Update',
       actor: req.user.id,
       description:  `${transferCase} is Updated`,
-      data: { transferId: createdTransfer.id,originalData:transfer,updatedData: req.body },
+      data: { transferId: createdTransfer.id,originalData:orginalTransferData,updatedData: req.body },
       ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
       severity: 'info',
       sessionId: req.session?.id || 'generated-session-id',
