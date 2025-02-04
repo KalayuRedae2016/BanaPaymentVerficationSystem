@@ -507,7 +507,7 @@ exports.searchPayments = catchAsync(async (req, res, next) => {
     TTNumber: payment[type]?.TTNumber || null,
     isPaid: payment[type]?.isPaid || false,
     paidAt: payment[type]?.paidAt ? formatDate(payment[type].paidAt) : null,
-    paidAtGC: payment[type]?.paidAt ? formatDateGC(payment[type].paidAt) : null,
+    paidAtGC: payment[type]?.paidAt ? formatDate(payment[type].paidAt) : null,
   });
 
   // Process payment details
@@ -1000,7 +1000,7 @@ exports.getPaymentByMonth = catchAsync(async (req, res, next) => {
   paymentTypes.forEach((type) => {
     if (formattedPayment[type]) {
       if (formattedPayment[type].paidAt) {
-        formattedPayment[type].paidAtGC = formatDateGC(formattedPayment[type].paidAt);
+        formattedPayment[type].paidAtGC = formatDate(formattedPayment[type].paidAt);
         formattedPayment[type].paidAt = formatDate(formattedPayment[type].paidAt);
 
       }
@@ -1625,7 +1625,7 @@ exports.reports = catchAsync(async (req, res, next) => {
       endDate = new Date(endingDate);
 
       if (startDate > endDate) {
-        return next(new AppError(`${formatDateGC(endingDate)} should be greater than ${formatDateGC(startingDate)}`))
+        return next(new AppError(`${formatDate(endingDate)} should be greater than ${formatDate(startingDate)}`))
       }
 
     case 'allTime':

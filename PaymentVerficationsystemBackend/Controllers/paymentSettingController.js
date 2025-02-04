@@ -98,8 +98,8 @@ exports.getPaymentSetting = catchAsync(async (req, res, next) => {
       : "Latest payment setting fetched successfully.",
     paymentSetting: {
       ...rest,
-      startingDate: formatDateGC(startingDate),
-      endingDate: formatDateGC(endingDate),
+      startingDate: formatDate(startingDate),
+      endingDate: formatDate(endingDate),
       penalityLate5Days: Math.round(penalityLate5Days * 100),
       penalityLate10Days: Math.round(penalityLate10Days * 100),
       penalityLateAbove10Days: Math.round(penalityLateAbove10Days * 100),
@@ -120,20 +120,20 @@ exports.getLatestPaymentSetting = catchAsync(async (req, res, next) => {
     });
   }
 
-  const today = new Date(formatDateGC(new Date()));
+  const today = new Date(formatDate(new Date()));
   const { startingDate, endingDate, penalityLate5Days, penalityLate10Days, penalityLateAbove10Days, ...rest } = latestPaymentSetting._doc;
 
   const formattedStartDate = startingDate ? formatDate(startingDate) : null;
   const formattedEndDate = endingDate ? formatDate(endingDate) : null;
-  const activate = today > new Date(formatDateGC(endingDate));
+  const activate = today > new Date(formatDate(endingDate));
 
   res.status(200).json({
     status: 1,
     message: "Latest payment setting fetched successfully.",
     paymentSetting: {
       ...rest,
-      startingDate: formatDateGC(startingDate),
-      endingDate: formatDateGC(endingDate),
+      startingDate: formatDate(startingDate),
+      endingDate: formatDate(endingDate),
       penalityLate5Days: Math.round((penalityLate5Days || 0) * 100),
       penalityLate10Days: Math.round((penalityLate10Days || 0) * 100),
       penalityLateAbove10Days: Math.round((penalityLateAbove10Days || 0) * 100),
@@ -200,8 +200,8 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
     message: `Payment setting updated for Month-${paymentSetting.activeMonth}-Year-${paymentSetting.activeYear}`,
     paymentSetting: {
       ...paymentSetting._doc,
-      startingDate: formatDateGC(paymentSetting.startingDate),
-      endingDate: formatDateGC(paymentSetting.endingDate),
+      startingDate: formatDate(paymentSetting.startingDate),
+      endingDate: formatDate(paymentSetting.endingDate),
       formattedStartDate,
       formattedEndDate
     }
