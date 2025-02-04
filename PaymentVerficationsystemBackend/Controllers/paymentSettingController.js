@@ -57,7 +57,7 @@ exports.createPaymentSetting = catchAsync(async (req, res, next) => {
     action: 'Create',
     actor: req.user.id,
     description: 'PaymentSetting Created',
-    data: { settingId: PaymentSetting.id, body: req.body },
+    data: { settingId: PaymentSetting.id, createdData:req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -151,6 +151,11 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
     return next(new AppError('Setting ID is required', 404));
   }
 
+  const orginalSetting = await PaymentSetting.findOneAndUpdate({ _id: settingId, latest: true });
+  if(orginalSetting){
+    return next(new AppError('PaymentSetting is not found', 404));
+  }
+
   let updatedData = req.body;
   
   // Function to normalize values (from percentage to decimal)
@@ -188,7 +193,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
     action: 'Create',
     actor: req.user.id,
     description: 'PaymentSetting Created',
-    data: { settingId:settingId, body: updatedData },
+    data: { settingId:settingId, orginalData:orginalSetting,updatedData:updatedData},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -219,7 +224,7 @@ exports.deleteSetting = catchAsync(async (req, res, next) => {
     action: 'Delete',
     actor: req.user.id,
     description: 'PaymentSetting Deleting',
-    data: { settingId: req.query.id,deletedSetting },
+    data: { settingId: req.query.id,deletedData:deletedSetting },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
@@ -240,7 +245,7 @@ exports.deleteSettings = catchAsync(async (req, res, next) => {
     action: 'Delete',
     actor: req.user.id,
     description: 'User Profie Deleted',
-    data: {deletedsettings},
+    data: {deletedData:deletedSettings},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
