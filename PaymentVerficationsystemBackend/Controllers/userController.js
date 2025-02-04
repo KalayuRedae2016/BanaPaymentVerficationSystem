@@ -164,7 +164,7 @@ exports.updateUser = catchAsync(async (req, res) => {
     action: 'Update',
     actor: req.user.id,
     description: 'User Profie Updated',
-    data: { userId: updatedUser.id,BeforeUpdate:originalUserData,existingUser},
+    data: { userId: updatedUser.id,BeforeUpdate:originalUserData,updatedData:existingUser},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
