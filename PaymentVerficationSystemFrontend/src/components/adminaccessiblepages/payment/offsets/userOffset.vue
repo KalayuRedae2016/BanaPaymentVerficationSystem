@@ -228,7 +228,6 @@
 
                     <select name="" id="" class="custom-select" v-model="paymentToBeEdited.transferType">
                       <option value="" disabled> Select Account Type</option>
-                      <option value="all">All</option>
                       <option value="block">Block</option>
                       <option value="service">Service</option>
                     </select>
