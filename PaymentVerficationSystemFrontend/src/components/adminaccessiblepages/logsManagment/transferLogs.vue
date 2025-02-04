@@ -50,8 +50,8 @@
                 <td class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap">
                   <button class="custom-button" @click="
                     logDetail = true;
-                    detail(logData)
-                  ">
+                  detail(logData)
+                    ">
                     <i class="fa fa-edit"></i>Detail
                   </button>
                 </td>
@@ -85,11 +85,8 @@
             </div>
 
             <hr class="my-4 md:min-w-full bg-red-500" />
-          
-  
-  <div class="h-96 overflow-y-auto">
-    <div class="space-y-4 mr-0 lg:mr-32">
-      <div class="text-black-500 font-bold">
+            <div class="h-96 overflow-y-auto">
+              <div class="text-black-500 font-bold">
                   {{
                     action === "Create"
                       ? "Created User"
@@ -100,119 +97,109 @@
                           : "Unknown Action"
                   }}
                 </div>
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Amount:</span>
-        <span class="text-gray-900">{{ affectedPayment.amount | currency }}</span>
-      </div>
+              <div class="space-y-4 mr-0 lg:ml-3 lg:mr-32">
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Transfer Case:</span>
+                  <span class="text-gray-900">{{ affectedPayment.transferCase }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">From Bank:</span>
-        <span class="text-gray-900">{{ affectedPayment.fromBankType }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Transfer Date:</span>
+                  <span class="text-gray-900">{{ affectedPayment.transferDate }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Organization ID:</span>
-        <span class="text-gray-900">{{ affectedPayment.orgId }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Transfer Type:</span>
+                  <span class="text-gray-900">{{ affectedPayment.transferType }}</span>
+                </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Amount:</span>
+                  <span class="text-gray-900">{{ affectedPayment.amount | currency }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Reason:</span>
-        <span class="text-gray-900">{{ affectedPayment.reason }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">From Bank:</span>
+                  <span class="text-gray-900">{{ affectedPayment.fromBankType }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Reference Number:</span>
-        <span class="text-gray-900">{{ affectedPayment.refNumber }}</span>
-      </div>
+               
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Reason:</span>
+                  <span class="text-gray-900">{{ affectedPayment.reason }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">To Bank:</span>
-        <span class="text-gray-900">{{ affectedPayment.toBankType }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Reference Number:</span>
+                  <span class="text-gray-900">{{ affectedPayment.refNumber }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Recipient Account:</span>
-        <span class="text-gray-900">{{ affectedPayment.toWhat }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">To Bank:</span>
+                  <span class="text-gray-900">{{ affectedPayment.toBankType }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Transfer Case:</span>
-        <span class="text-gray-900">{{ affectedPayment.transferCase }}</span>
-      </div>
+             
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Transfer Date:</span>
-        <span class="text-gray-900">{{ affectedPayment.transferDate }}</span>
-      </div>
+               
+              </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Transfer Type:</span>
-        <span class="text-gray-900">{{ affectedPayment.transferType }}</span>
-      </div>
-    </div>
-    <div class="space-y-4 mr-0 lg:mr-32">
-      <div class="text-black-500 font-bold">
+          <div class="" v-if="action==='Update'">
+
+              <div class="text-black-500 font-bold my-4">
                   {{
-                    action === "Create"
-                      ? "Created User"
-                      : action === "Delete"
-                        ? "Deleted User"
-                        : action === "Update"
-                          ? "Data Before Update"
+            
+                      action === "Update"
+                          ? "Data After Update"
                           : "Unknown Action"
                   }}
                 </div>
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Amount:</span>
-        <span class="text-gray-900">{{ affectedPayment.amount | currency }}</span>
-      </div>
+              <div class="space-y-4 mr-0 lg:ml-3 lg:mr-32">
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Transfer Case:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.transferCase }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">From Bank:</span>
-        <span class="text-gray-900">{{ affectedPayment.fromBankType }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Transfer Date:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.transferDate }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Organization ID:</span>
-        <span class="text-gray-900">{{ affectedPayment.orgId }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Transfer Type:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.transferType }}</span>
+                </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Amount:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.amount | currency }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Reason:</span>
-        <span class="text-gray-900">{{ affectedPayment.reason }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">From Bank:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.fromBankType }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Reference Number:</span>
-        <span class="text-gray-900">{{ affectedPayment.refNumber }}</span>
-      </div>
+             
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">To Bank:</span>
-        <span class="text-gray-900">{{ affectedPayment.toBankType }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Reason:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.reason }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Recipient Account:</span>
-        <span class="text-gray-900">{{ affectedPayment.toWhat }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">Reference Number:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.refNumber }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Transfer Case:</span>
-        <span class="text-gray-900">{{ affectedPayment.transferCase }}</span>
-      </div>
+                <div class="flex justify-between text-gray-700">
+                  <span class="font-medium">To Bank:</span>
+                  <span class="text-gray-900">{{ affectedDataAfterUpdate.toBankType }}</span>
+                </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Transfer Date:</span>
-        <span class="text-gray-900">{{ affectedPayment.transferDate }}</span>
-      </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Transfer Type:</span>
-        <span class="text-gray-900">{{ affectedPayment.transferType }}</span>
-      </div>
-    </div>
-  </div>
+               
+              </div>
+            </div>
+            </div>
 
             <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
@@ -230,37 +217,12 @@ export default {
   name: "paymentTransfersView",
   data() {
     return {
-
-      action:"",
-
-      logsData: [
-        // {
-        //   _id: "1",
-        //   model: "user",
-        //   action: "Delate",
-        //   actor: "admin1",
-        //   ipAddress: "49.102.23.45",
-        //   description: "This is the delate function",
-        // },
-      ],
+      action: "",
+      affectedPayment: {},
+      affectedDataAfterUpdate: {},
+      logsData: [],
       logDetail: false,
-      affectedPayment:{
-        // amount:300,
-        // fromBankType:"CBE",
-        // orgId:"1234567",
-        // reason:"For checking",
-        // refNumber:"12345",
-        // toBankType:"LIB",
-        // toWhat:"886545",
-        // transferCase:"Bank Transfer",
-        // transferDate:"1/23/2024",
-        // transferType:"Block"
-      }
-
     };
-
-
-
   },
 
   watch: {
@@ -281,14 +243,18 @@ export default {
     this.fetchPaymentSettingLogs();
   },
   methods: {
-    detail(logData){
-
-      if(logData.action==='Create' || logData.action==='Delete'){
-
+    detail(logData) {
+      const actionMapping = {
+        Create: logData.affectedData.createdData,
+        Delete: logData.affectedData.deletedData,
+        Update: logData.affectedData.originalData,
+      };
+      this.action = logData.action;
+      this.affectedPayment = actionMapping[logData.action] || null;
+      if (logData.action === "Update") {
+        this.affectedDataAfterUpdate = logData.affectedData.updatedData;
       }
-
-    this.affectedPayment=logData.affectedData;
-    console.log("Affected data",this.affectedPayment);
+      console.log('')
     },
     async fetchPaymentSettingLogs() {
       const params = {
