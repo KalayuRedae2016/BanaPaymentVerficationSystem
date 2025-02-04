@@ -1883,7 +1883,8 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
       amount: transfer.amount,
       reason: transfer.reason,
       refNumber: transfer.refNumber,
-      transferDate: formatDate(transfer.transfer),
+      transferDate: transfer.transferDate,
+      formattedTransferDate: formatDate(transfer.transferDate),
       transferId: transfer._id,
       attachments: Array.from(uniqueAttachments.values()), // Convert Map to Array
     };
