@@ -353,15 +353,7 @@
                   <div
                     class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0"
                   >
-                    <!-- <div class="mx-4 p-4 w-full h-full lg:w-1/4 h-64">
-            <img
-              :src="imageData"
-              alt="User Profile Image"
-              class="h-64 w-64 lg:w-96"
-            />
-          </div> -->
-      
-  
+          
                     <div class="mt-3 lg:w-full mx-4 lg:mx-0 p-4">
                       <!-- Grid container -->
                       <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
