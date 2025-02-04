@@ -169,11 +169,11 @@
           <h1 class="text-xs">{{ $t("allReportDetails") }}</h1>
         </a>
 </div>
-  <div class="flex flex-col lg:flex-row space-x-12">
+  <div class="flex flex-col ">
     <div class="w-96 h-96">
       <canvas ref="barChartCanvas" class="chart "></canvas>
     </div>
-    <div class="flex flex-row -mt-48 lg:mt-10 space-x-2">
+    <div class="flex flex-row -mt-45  space-x-2 mx-5 mb-3">
         <div class="flex flex-row space-x-5">
           <div class=" bg-blue-400 w-4 h-4"></div>
           <p class="-mt-1 text-blue-400">Regular </p>
@@ -196,7 +196,7 @@
         </div>
       </div>
   </div>
-      <table class="min-w-full divide-y divide-gray-300 text-xs mt-0  lg:-mt-48">
+      <table class="min-w-full divide-y divide-gray-300 text-xs ml-1 ">
         <thead class="bg-gray-50">
           <tr>
             <th rowspan="3" class="px-4 py-2 text-blue-800 text-left border border-gray-300">
