@@ -2039,7 +2039,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
-  const transferId = req.params.id
+  const transferId = req.params.id;
   if (!transferId) {
     return next(new AppError('Transfer ID is required for deletion', 400));
   }
@@ -2049,27 +2049,30 @@ exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError('Organization not found', 400));
   }
 
- const deletedTransfer= organization.paymentTransfers.findOne({ transferId: transferId})
-  // Check if the transfer exists
+  if (!organization.paymentTransfers || !Array.isArray(organization.paymentTransfers)) {
+    return next(new AppError('No payment transfers found for the organization', 400));
+  }
+
   const transferIndex = organization.paymentTransfers.findIndex(transfer => transfer._id.toString() === transferId);
   if (transferIndex === -1) {
     return next(new AppError(`Transfer with ID ${transferId} is not found`, 404));
   }
-  organization.paymentTransfers.splice(transferIndex, 1); // Remove the transfer from the array
+
+  const deletedTransfer = organization.paymentTransfers[transferIndex];
+  organization.paymentTransfers.splice(transferIndex, 1); // Remove the transfer
 
   await organization.save();
-     
+
   await logAction({
-    model: `${transferCase}`,
+    model: `${deletedTransfer?.transferCase || 'Transfer'}`,
     action: 'Delete',
     actor: req.user.id,
-    description:  `Transfer is Deleted`,
-    data: { transferId:transferId,deletedData:deletedTransfer},
+    description: 'Transfer is Deleted',
+    data: { transferId, deletedData: deletedTransfer },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
   });
-  
 
   res.status(200).json({
     status: 1,
