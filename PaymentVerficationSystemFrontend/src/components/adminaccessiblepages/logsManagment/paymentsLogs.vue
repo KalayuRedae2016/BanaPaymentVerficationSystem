@@ -92,11 +92,11 @@
                 <div class="text-black-500 font-bold mb-3">
                   {{
                     action === "Confirm"
-                      ? "Payment After Confirmed"
+                      ? "Payment Before Confirmed"
                       : action === "Delete"
                         ? "Deleted Payment"
                         : action === "Update"
-                          ? "Payment After Update"
+                          ? "Payment Before  Update "
                       : "Unknown Action"
                   }}
                 </div>
@@ -145,15 +145,17 @@
               <div class="bg-white p-4 rounded-lg  text-sm">
 
                 <div class="text-black-500 font-bold mb-3">
+                  <div class="text-black-500 font-bold mb-3">
                   {{
                     action === "Confirm"
-                      ? "Payment Before Confirmed"
+                      ? "Payment After Confirmed"
                       : action === "Delete"
                         ? "Deleted Payment"
                         : action === "Update"
-                          ? "Payment Before Update"
-                          : "Unknown Action"
+                          ? "Payment After  Update "
+                      : "Unknown Action"
                   }}
+                </div>
                 </div>
                 <table class="w-full border-collapse border border-gray-300">
                   <tbody>
