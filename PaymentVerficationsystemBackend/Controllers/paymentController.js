@@ -715,10 +715,12 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   // Find the uPaid bill by billCode and ispaid:false
   // let payment = await Payment.findOne({ isPaid: false, billCode });
 
-  //tadios
-  let payment = await Payment.findOne({ isPaid: { $in: [true, false] }, billCode });
+  // tadios
+  // let payment = await Payment.findOne({ isPaid: { $in: [true, false] }, billCode });
+  // console.log("payment",payment)
 
   //eind of tadios
+  let payment = await Payment.findOne({billCode });
   if (!payment) {
     return next(new AppError("No paid Bill found", 404))
   }
@@ -766,7 +768,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
     payment.status = 'confirmed';
     payment.confirmedDate = new Date();
     payment.confirmedID = userId,
-      payment.confirmationMethod = "Admin-confirmed"
+    payment.confirmationMethod = "Admin-confirmed"
     //should be exist separate field to hold payemnt editer id
   } else {
     payment.isPaid = false;
@@ -794,13 +796,12 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   const formattedConfirmedAt = payment.confirmedDate ? formatDate(payment.confirmedDate) : null;
   console.log(payment)
 
-   
   await logAction({
     model: 'payments',
     action: 'Update',
     actor: req.user.id,
-    description: 'PaymentS Editted',
-    data: { paymentId: unpaidBill.id, OrginalData:originalPaymentData,UpdatedData: req.body },
+    description: 'Payments Editted',
+    data: { paymentId: payment.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
     severity: 'info',
     sessionId: req.session?.id || 'generated-session-id',
