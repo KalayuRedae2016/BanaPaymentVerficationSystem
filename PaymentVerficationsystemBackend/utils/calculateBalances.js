@@ -332,7 +332,7 @@ function calculateBalances(payments, org,users={}) {
           };
         }
         
-        
+      console.log("-----------------------",transferCase)
       if(transferCase==="bankTransfer"){
         if (transferType === "block") {
           totalBalanceBankType[fromBankType].blockBankOutcoming+= amount;
@@ -364,7 +364,10 @@ function calculateBalances(payments, org,users={}) {
           }
 
           // console.log("Found user:", user);
-        if (!user) throw new Error(`User with ID ${toWhat} not found`);
+        // if (!user) throw new Error(`User with ID ${toWhat} not found`);
+        if (!user){//see it carefully
+          return null
+        }
         const userCode = user.userCode;
         // Ensure userBalances[userCode] exists and is initialized
       if (!userBalances[userCode]) {

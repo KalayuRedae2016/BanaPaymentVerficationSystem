@@ -83,7 +83,7 @@ await logAction({
   action: 'Create',
   actor: req.user.id,
   description: 'User created successfully',
-  data: { userId: user.id },
+  data: { userId: user.id,user},
   ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
   severity: 'info',
   sessionId: req.session?.id || 'generated-session-id',
