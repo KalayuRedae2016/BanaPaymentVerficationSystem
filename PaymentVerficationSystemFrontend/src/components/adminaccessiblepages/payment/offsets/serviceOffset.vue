@@ -63,9 +63,6 @@
               </td>
               <td v-if="role === 'SuperAdmin'"
                 class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap">
-
-
-
                 <button class="custom-button" @click="
                   showEditTransferForm = true;
                 paymentToBeEdited = searchedTransferedPayment;

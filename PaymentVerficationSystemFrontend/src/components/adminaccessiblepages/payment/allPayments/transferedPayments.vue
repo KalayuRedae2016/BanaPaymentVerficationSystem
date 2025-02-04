@@ -779,7 +779,8 @@ export default {
       }
     },
     confirmPaymentDelete(paymentToBeDeleted) {
-      this.$apiDelete("/api/v1/payments/transferFunds", paymentToBeDeleted._id)
+      console.log("hiii",paymentToBeDeleted);
+      this.$apiDelete("/api/v1/payments/transferFunds", paymentToBeDeleted.transferId)
         .then((response) => {
           console.log("Response:", response);
           this.showDelateModal = false;

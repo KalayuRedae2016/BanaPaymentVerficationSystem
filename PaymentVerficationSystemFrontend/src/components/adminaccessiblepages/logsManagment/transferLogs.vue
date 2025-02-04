@@ -50,13 +50,10 @@
                 <td class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap">
                   <button class="custom-button" @click="
                     logDetail = true;
-                    affectedPayment=logData.affectedData.body;
-                    
+                    detail(logData)
                   ">
                     <i class="fa fa-edit"></i>Detail
                   </button>
-
-
                 </td>
               </tr>
             </tbody>
@@ -90,8 +87,19 @@
             <hr class="my-4 md:min-w-full bg-red-500" />
           
   
-
+  <div class="h-96 overflow-y-auto">
     <div class="space-y-4 mr-0 lg:mr-32">
+      <div class="text-black-500 font-bold">
+                  {{
+                    action === "Create"
+                      ? "Created User"
+                      : action === "Delete"
+                        ? "Deleted User"
+                        : action === "Update"
+                          ? "Data Before Update"
+                          : "Unknown Action"
+                  }}
+                </div>
       <div class="flex justify-between text-gray-700">
         <span class="font-medium">Amount:</span>
         <span class="text-gray-900">{{ affectedPayment.amount | currency }}</span>
@@ -142,7 +150,69 @@
         <span class="text-gray-900">{{ affectedPayment.transferType }}</span>
       </div>
     </div>
+    <div class="space-y-4 mr-0 lg:mr-32">
+      <div class="text-black-500 font-bold">
+                  {{
+                    action === "Create"
+                      ? "Created User"
+                      : action === "Delete"
+                        ? "Deleted User"
+                        : action === "Update"
+                          ? "Data Before Update"
+                          : "Unknown Action"
+                  }}
+                </div>
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Amount:</span>
+        <span class="text-gray-900">{{ affectedPayment.amount | currency }}</span>
+      </div>
 
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">From Bank:</span>
+        <span class="text-gray-900">{{ affectedPayment.fromBankType }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Organization ID:</span>
+        <span class="text-gray-900">{{ affectedPayment.orgId }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Reason:</span>
+        <span class="text-gray-900">{{ affectedPayment.reason }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Reference Number:</span>
+        <span class="text-gray-900">{{ affectedPayment.refNumber }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">To Bank:</span>
+        <span class="text-gray-900">{{ affectedPayment.toBankType }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Recipient Account:</span>
+        <span class="text-gray-900">{{ affectedPayment.toWhat }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Transfer Case:</span>
+        <span class="text-gray-900">{{ affectedPayment.transferCase }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Transfer Date:</span>
+        <span class="text-gray-900">{{ affectedPayment.transferDate }}</span>
+      </div>
+
+      <div class="flex justify-between text-gray-700">
+        <span class="font-medium">Transfer Type:</span>
+        <span class="text-gray-900">{{ affectedPayment.transferType }}</span>
+      </div>
+    </div>
+  </div>
 
             <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
@@ -160,6 +230,9 @@ export default {
   name: "paymentTransfersView",
   data() {
     return {
+
+      action:"",
+
       logsData: [
         // {
         //   _id: "1",
@@ -208,6 +281,15 @@ export default {
     this.fetchPaymentSettingLogs();
   },
   methods: {
+    detail(logData){
+
+      if(logData.action==='Create' || logData.action==='Delete'){
+
+      }
+
+    this.affectedPayment=logData.affectedData;
+    console.log("Affected data",this.affectedPayment);
+    },
     async fetchPaymentSettingLogs() {
       const params = {
         model: "bankTransfer"

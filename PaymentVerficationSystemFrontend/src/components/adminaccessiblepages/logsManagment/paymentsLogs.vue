@@ -38,7 +38,7 @@
                   {{ logData.action }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ logData.actor }}
+                  {{ logData.actorName }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   {{ logData.ipAddress }}
@@ -49,8 +49,8 @@
                 <td class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap">
                   <button class="custom-button" @click="
                     logDetail = true;
-                    action=logData.action;
-                    handleLogDetail(logData,getPaymentType(logData.affectedData.UpdatedData));
+                  action = logData.action;
+                  handleLogDetail(logData, getPaymentType(logData.affectedData.UpdatedData));
                   ">
                     <i class="fa fa-edit"></i>Detail
                   </button>
@@ -85,10 +85,66 @@
             </div>
 
             <hr class="my-4 md:min-w-full bg-red-500" />
+            
             <div class="h-96 overflow-y-auto">
-            <div  class="bg-white p-4 rounded-lg  text-sm">
-              
-              <div class="text-black-500 font-bold mb-3">
+
+              <div class="bg-white p-4 rounded-lg  text-sm">
+                <div class="text-black-500 font-bold mb-3">
+                  {{
+                    action === "Confirm"
+                      ? "Payment After Confirmed"
+                      : action === "Delete"
+                        ? "Deleted Payment"
+                        : action === "Update"
+                          ? "Payment After Update"
+                      : "Unknown Action"
+                  }}
+                </div>
+                <table class="w-full border-collapse border border-gray-300">
+                  <tbody>
+                    <tr class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Type:</td>
+                      <td class="p-2 text-blue-500 font-bold">{{ paymentType.toUpperCase() }}</td>
+                    </tr>
+                 
+                    <tr v-if="originalData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">TT Number:</td>
+                      <td class="p-2">{{ originalData[paymentType].TTNumber || 'N/A'}}</td>
+                    </tr>
+                    <tr v-if="originalData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Amount:</td>
+                      <td class="p-2">{{ originalData[paymentType].amount ||0 }} ETB</td>
+                    </tr>
+                    <tr v-if="originalData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Bank Type:</td>
+                      <td class="p-2">{{ originalData[paymentType].bankType || 'N/A'}}</td>
+                    </tr>
+                    <tr v-if="originalData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Days Late:</td>
+                      <td class="p-2">{{ originalData[paymentType].daysLate || 0 }}</td>
+                    </tr>
+                    <tr v-if="originalData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Is Paid:</td>
+                      <td class="p-2">
+                        <span :class="originalData[paymentType].isPaid ? 'text-green-600' : 'text-red-600'">
+                          {{ originalData[paymentType].isPaid ? 'Yes' : 'No' }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr v-if="originalData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Paid At</td>
+                      <td class="p-2">{{ originalData[paymentType].paidAt || 'N/A' }}</td>
+                    </tr>
+                    <tr v-if="originalData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Penalty:</td>
+                      <td class="p-2">{{ originalData[paymentType].penality || 0 }} ETB</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="bg-white p-4 rounded-lg  text-sm">
+
+                <div class="text-black-500 font-bold mb-3">
                   {{
                     action === "Confirm"
                       ? "Payment Before Confirmed"
@@ -99,112 +155,53 @@
                           : "Unknown Action"
                   }}
                 </div>
-              <table class="w-full border-collapse border border-gray-300">
-                <tbody>
-                  <tr class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Type:</td>
-                    <td class="p-2 text-blue-500 font-bold">{{ paymentType.toUpperCase() }}</td>
-                  </tr>
-                  <tr class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Bill Code:</td>
-                    <td class="p-2 text-blue-500 font-bold">{{ updatedData.billCode }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">TT Number:</td>
-                    <td class="p-2">{{ updatedData[paymentType].TTNumber }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Amount:</td>
-                    <td class="p-2">{{ updatedData[paymentType].amount }} ETB</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Bank Type:</td>
-                    <td class="p-2">{{ updatedData[paymentType].bankType }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Days Late:</td>
-                    <td class="p-2">{{ updatedData[paymentType].daysLate ||0}}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Is Paid:</td>
-                    <td class="p-2">
-                      <span :class="updatedData[paymentType].isPaid ? 'text-green-600' : 'text-red-600'">
-                        {{ updatedData[paymentType].isPaid ? 'Yes' : 'No' }}
-                      </span>
-                    </td>
-                  </tr>
-
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Paid At</td>
-                    <td class="p-2">{{ updatedData[paymentType].paidAt || 'N/A' }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Penalty:</td>
-                    <td class="p-2">{{ updatedData[paymentType].penality ||0}} ETB</td>
-                  </tr>
-                </tbody>
-              </table>
+                <table class="w-full border-collapse border border-gray-300">
+                  <tbody>
+                    <tr class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Type:</td>
+                      <td class="p-2 text-blue-500 font-bold">{{ paymentType.toUpperCase() }}</td>
+                    </tr>
+                    <tr class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Bill Code:</td>
+                      <td class="p-2 text-blue-500 font-bold">{{ updatedData.billCode }}</td>
+                    </tr>
+                    <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">TT Number:</td>
+                      <td class="p-2">{{ updatedData[paymentType].TTNumber }}</td>
+                    </tr>
+                    <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Amount:</td>
+                      <td class="p-2">{{ updatedData[paymentType].amount ||0 }} ETB</td>
+                    </tr>
+                    <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Bank Type:</td>
+                      <td class="p-2">{{ updatedData[paymentType].bankType }}</td>
+                    </tr>
+                    <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Days Late:</td>
+                      <td class="p-2">{{ updatedData[paymentType].daysLate || 0 }}</td>
+                    </tr>
+                    <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Is Paid:</td>
+                      <td class="p-2">
+                        <span :class="updatedData[paymentType].isPaid ? 'text-green-600' : 'text-red-600'">
+                          {{ updatedData[paymentType].isPaid ? 'Yes' : 'No' }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Paid At</td>
+                      <td class="p-2">{{ updatedData[paymentType].paidAt || 'N/A' }}</td>
+                    </tr>
+                    <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+                      <td class="font-semibold p-2">Penalty:</td>
+                      <td class="p-2">{{ updatedData[paymentType].penality || 0 }} ETB</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+    
             </div>
-            <div class="bg-white p-4 rounded-lg  text-sm">
-              
-              <div class="text-black-500 font-bold mb-3">
-                  {{
-                    action === "Confirm"
-                      ? "Payment After Confirmed"
-                      : action === "Delete"
-                        ? "Deleted Payment"
-                        : action === "Update"
-                          ? "Payment After Update"
-                         : "Unknown Action"
-                  }}
-                </div>
-              <table class="w-full border-collapse border border-gray-300">
-                <tbody>
-                  <tr class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Type:</td>
-                    <td class="p-2 text-blue-500 font-bold">{{ paymentType.toUpperCase() }}</td>
-                  </tr>
-                  <tr class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Bill Code:</td>
-                    <td class="p-2 text-blue-500 font-bold">{{ updatedData.billCode }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">TT Number:</td>
-                    <td class="p-2">{{ updatedData[paymentType].TTNumber }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Amount:</td>
-                    <td class="p-2">{{ updatedData[paymentType].amount }} ETB</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Bank Type:</td>
-                    <td class="p-2">{{ updatedData[paymentType].bankType }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Days Late:</td>
-                    <td class="p-2">{{ updatedData[paymentType].daysLate ||0 }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Is Paid:</td>
-                    <td class="p-2">
-                      <span :class="updatedData[paymentType].isPaid ? 'text-green-600' : 'text-red-600'">
-                        {{ updatedData[paymentType].isPaid ? 'Yes' : 'No' }}
-                      </span>
-                    </td>
-                  </tr>
-
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Paid At</td>
-                    <td class="p-2">{{ updatedData[paymentType].paidAt || 'N/A' }}</td>
-                  </tr>
-                  <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
-                    <td class="font-semibold p-2">Penalty:</td>
-                    <td class="p-2">{{ updatedData[paymentType].penality ||0}} ETB</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
             <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
         </div>
@@ -221,10 +218,11 @@ export default {
   name: "paymentTransfersView",
   data() {
     return {
-      
-      action:"",
+
+      action: "",
       paymentType: "",
       updatedData: {},
+      originalData: {},
       payment: {
         fullName: "Hagose hadgu",
         activeMonth: 1,
@@ -243,15 +241,10 @@ export default {
           description: "This is the delate function",
         },
       ],
-
       logDetail: false,
       affectedPayments: {
-
       }
     };
-
-
-
   },
 
   watch: {
@@ -277,15 +270,13 @@ export default {
       const paymentTypes = ['service', 'urgent', 'regular', 'penalty', 'subsidy'];
       return paymentTypes.find(type => updatedData[type]) || null;
     },
-
-
-    handleLogDetail(logData,paymentType) {
-      console.log("action",this.action);
-      console.log("log data",logData)
+    handleLogDetail(logData, paymentType) {
+      console.log("action", this.action);
+      console.log("log data", logData)
       this.paymentType = paymentType;
       this.updatedData = logData.affectedData.UpdatedData;
-      this.originalData=logData.affectedData.UpdatedData;
-      console.log("payment and data", paymentType, this.updatedData);
+      this.originalData = logData.affectedData.OrginalData;
+      console.log("payment and updateddata with orignalData", paymentType, this.updatedData, this.originalData);
       //console.log("paymentType is from",this.updatedData[paymentType]);
     },
 
@@ -295,7 +286,7 @@ export default {
       };
       try {
         const response = await this.$apiGet("/api/v1/logs", params);
-        console.log("response log paymentsmm", response);
+        console.log("response log payments", response);
         this.logsData = response.logs;
       } catch (error) {
         console.log("error", error);

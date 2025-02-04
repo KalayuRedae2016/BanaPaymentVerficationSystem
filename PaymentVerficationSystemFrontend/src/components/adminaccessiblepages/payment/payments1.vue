@@ -1,5 +1,5 @@
 <template>
-  <div class="root div">
+  <div class="root div ">
     <div class="px-3 md:px-4 py-3">
       <h1 class="text-blue-500 font-bold text-md">
         {{ $t("Payment Management") }}
@@ -189,6 +189,7 @@
                       class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300"
                     />
                     <label
+                 
                       for="transfered-payments"
                       class="ml-3 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
                     >
