@@ -2019,7 +2019,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
       action: 'Update',
       actor: req.user.id,
       description:  `${transferCase} is Updated`,
-      data: { transferId: createdTransfer.id,originalData:organization,updatedData: req.body },
+      data: { transferId: createdTransfer.id,originalData:transfer,updatedData: req.body },
       ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
       severity: 'info',
       sessionId: req.session?.id || 'generated-session-id',
