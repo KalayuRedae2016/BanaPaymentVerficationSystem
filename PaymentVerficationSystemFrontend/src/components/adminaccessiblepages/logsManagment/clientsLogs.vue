@@ -363,7 +363,7 @@
                             <i class="fas fa-id-badge text-green-500"></i>
                             <span class="text-sm text-gray-800"
                               >{{ $t("User Code") }}:
-                              {{ clientProfile.userCode }}</span
+                              {{ updatedClientProfile.userCode }}</span
                             >
                           </div>
                         </div>
@@ -375,7 +375,7 @@
                             <i class="fas fa-user text-yellow-500"></i>
                             <span class="text-sm text-gray-800"
                               >Full Name :
-                              {{ clientProfile.fullName }}</span
+                              {{ updatedClientProfile.fullName }}</span
                             >
                           </div>
                         </div>
