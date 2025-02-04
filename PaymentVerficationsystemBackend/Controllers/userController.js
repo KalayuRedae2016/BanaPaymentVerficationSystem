@@ -566,18 +566,18 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
   if (!updatedUsers.modifiedCount) {
     return next(new AppError('No users were updated. Check the provided user IDs.', 404));
   }
-  // Log the action
-  const userCount = updatedUsers.modifiedCount;
-  await logAction({
-    model: 'users',
-    action: 'Update',
-    actor: req.user.id,
-    description: `${userCount} user(s) ${editPermission ? 'granted' : 'revoked/Disabled'} edit permissions.`,
-    data: { userIds, updatedUsers },
-    ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
-    severity: 'info',
-    sessionId: req.session?.id || 'generated-session-id',
-  });
+  // // Log the action
+  // const userCount = updatedUsers.modifiedCount;
+  // await logAction({
+  //   model: 'users',
+  //   action: 'Update',
+  //   actor: req.user.id,
+  //   description: `${userCount} user(s) ${editPermission ? 'granted' : 'revoked/Disabled'} edit permissions.`,
+  //   data: { userIds, updatedUsers },
+  //   ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
+  //   severity: 'info',
+  //   sessionId: req.session?.id || 'generated-session-id',
+  // });
 
   res.status(200).json({
     status: 'success',
@@ -585,91 +585,3 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
     updatedCount: updatedUsers.modifiedCount,
   });
 });
-
-// // Upload attachments
-// exports.uploadAttachments = [
-//   uploadAttachmentsMiddleware,
-//   catchAsync(async (req, res, next) => {
-//     const userId= req.body.userId; // Optional userId to upload for another user (admin use)
-    
-//     // Ensure the user is authenticated and has the necessary role
-//     if (!req.user || !req.user.role) {
-//       return next(new AppError('User role is missing. Unauthorized.', 401));
-//     }
-
-//     const userToUploadFor = (req.user.role === 'SuperAdmin'&& userId || (req.user.role === 'Admin' && userId))
-//       ? await User.findById(userId) // If SuperAdmin or Admin with userId, use userId, else use current user
-//       : await User.findById(req.user._id); // Regular user uploads for themselves
-
-//     console.log("userID", userId);
-//     console.log("reqUser", req.user.id);
-//     console.log("user to upload for", userToUploadFor)
-//     if (!userToUploadFor) {
-//       return next(new AppError('User not found', 404));
-//     }
-
-//     const { files } = req;
-//     console.log("attachenements",files)
-//     if (!files || files.length === 0) {
-//       return next(new AppError('No files uploaded', 400));
-//     }
-
-//     files.forEach(file => {
-//       userToUploadFor.attachments.push({
-//         fileName: file.filename,
-//         fileType: file.mimetype,
-//         description: req.body.description || '', // Optional description for each file
-//         uploadDate: new Date(),
-//       });
-//     });
-
-//   console.log(userToUploadFor.attachments)
-//     await userToUploadFor.save();
-
-//     res.status(200).json({
-//       status: 'success',
-//       message: 'Attachments uploaded successfully',
-//       attachments: userToUploadFor.attachments,
-//     });
-//   }),
-// ];
-
-// // Delete attachments
-// exports.deleteAttachments = catchAsync(async (req, res, next) => {
-//   const userId = req.body.userId || req.user._id; // If admin, pass userId, else use current user's ID
-//   const userToDeleteFrom = req.user.role === 'SuperAdmin' || req.user.role === 'Admin'
-//     ? await User.findById(userId)
-//     : await User.findById(req.user._id); // Only allow self-delete if the user is deleting their own attachments
-
-//   if (!userToDeleteFrom) {
-//     return next(new AppError('User not found', 404));
-//   }
-
-//   console.log("rrrrrr",req.body)
-//   const { filenames } = req.body;
-//   if (!filenames || !Array.isArray(filenames) || filenames.length === 0) {
-//     return next(new AppError('No filenames provided for deletion', 400));
-//   }
-
-//   filenames.forEach(filename => {
-//     const attachmentIndex = userToDeleteFrom.attachments.findIndex(att => att.fileName === filename);
-    
-//     if (attachmentIndex !== -1) {
-//       const filePath = path.join(__dirname, '../uploads/attachments', filename);
-      
-//       if (fs.existsSync(filePath)) {
-//         fs.unlinkSync(filePath);
-//       }
-
-//       userToDeleteFrom.attachments.splice(attachmentIndex, 1);
-//     }
-//   });
-
-//   await userToDeleteFrom.save();
-
-//   res.status(200).json({
-//     status: 'success',
-//     message: 'Attachments deleted successfully',
-//     attachments: userToDeleteFrom.attachments,
-//   });
-// });
