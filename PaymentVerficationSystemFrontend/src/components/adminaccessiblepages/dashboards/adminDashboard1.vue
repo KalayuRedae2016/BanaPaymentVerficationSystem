@@ -42,7 +42,7 @@
               </p>
             </div>
             <div class="overflow-x-auto">
-              <table class="min-w-full divide-y divide-gray-300 text-xs">
+              <!-- <table class="min-w-full divide-y divide-gray-300 text-xs">
                 <thead class="bg-gray-50">
                   <tr>
                     <th class="px-4 py-2 text-left border border-gray-300 text-blue-800">
@@ -64,7 +64,7 @@
                   </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-300">
-                  <!-- Data Rows -->
+               
                   <tr>
                     <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
                       {{ $t("yearMonth") }} {{ activeYear }} -{{ activeMonth }}
@@ -91,15 +91,15 @@
                     </td>
                   </tr>
                 </tbody>
-              </table>
+              </table> -->
             </div>
-            <div class="w-full mx-auto mt-6">
+            <div class="w-full mx-auto ">
               <div v-if="monthlyPaid > 0" class="text-sm font-medium text-gray-700 mb-2">
-                {{ monthlyPaid }} of {{ totalClients }} Clients Paid In This
+                {{ intendedForCurrentMonth }} of {{ activeUsers }} Clients Paid In This
                 Month
               </div>
               <div v-else class="text-sm font-medium text-gray-700 mb-2">
-                0 of {{ totalClients }} Clients Paid In This Month
+                0 of {{activeUsers }} Clients Paid In This Month
               </div>
               <div class="relative w-full h-4 bg-gray-200 rounded">
                 <div class="absolute top-0 left-0 h-4 bg-green-500 rounded"
@@ -141,11 +141,11 @@
         </div>
         <div class="">
           <div v-if="totalOvedue > 0" class="text-sm font-medium text-gray-700 mb-2">
-            {{ totalOvedue }} of {{ totalClients }} Clients Have Overdue
+            {{ totalOvedue }} of {{activeUsers }} Clients Have Overdue
             Payments
           </div>
           <div v-else>
-            0 of {{ totalClients }} Clients Have Overdue Payments
+            0 of {{ activeUsers }} Clients Have Overdue Payments
           </div>
           <div class="relative w-full h-4 bg-gray-200 rounded">
             <div class="absolute top-0 left-0 h-4 bg-red-500 rounded"
@@ -159,9 +159,8 @@
       </div>
     </div>
 
-    <div class="shadow-lg border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
-
-      <div class="flex flex-row space-x-4 m-4">
+<div class="shadow-lg border border-gray-300 mx-4 mb-32 mt-2 rounded-lg overflow-x-auto">
+    <div class="flex flex-row space-x-4 m-4">
         <h2 class="text-blue-800 text-xs">
           <i class="fas fa-check-circle text-green-500 text-xs"></i>
           {{ $t("allYearsConfirmedReport") }}<span class=""></span>
@@ -169,33 +168,35 @@
         <a href="#" class="text-blue-800 hover:underline font-semibold text-sm underline" @click="viewPaymentsReport()">
           <h1 class="text-xs">{{ $t("allReportDetails") }}</h1>
         </a>
-      </div>
+</div>
+  <div class="flex flex-col ">
     <div class="w-96 h-96">
       <canvas ref="barChartCanvas" class="chart "></canvas>
     </div>
-    <div class="flex flex-col sm:flex-row sm:space-x-4 items-center justify-center my-5 -mt-40">
+    <div class="flex flex-row -mt-45  space-x-2 mx-5 mb-3">
         <div class="flex flex-row space-x-5">
-          <div class=" bg-blue-400 w-16 h-4"></div>
+          <div class=" bg-blue-400 w-4 h-4"></div>
           <p class="-mt-1 text-blue-400">Regular </p>
         </div>
         <div class="flex flex-row space-x-5">
-          <div class=" bg-yellow-400 w-16 h-4"></div>
+          <div class=" bg-yellow-400 w-4 h-4"></div>
           <p class="-mt-1 text-blue-400">Urgent </p>
         </div>
         <div class="flex flex-row space-x-5">
-          <div class="bg-green-400 w-16 h-4"></div>
+          <div class="bg-green-400 w-4 h-4"></div>
           <p class="-mt-1 text-blue-400">Subsidy </p>
         </div>
         <div class="flex flex-row space-x-5">
-          <div class=" bg-blue-400 w-16 h-4"></div>
+          <div class=" bg-blue-400 w-4 h-4"></div>
           <p class="-mt-1 text-blue-400">Service </p>
         </div>
         <div class="flex flex-row space-x-5">
-          <div class=" bg-red-400 w-16 h-4"></div>
+          <div class=" bg-red-400 w-4 h-4"></div>
           <p class="-mt-1 text-blue-400">Penality</p>
         </div>
       </div>
-      <table class="min-w-full divide-y divide-gray-300 text-xs ">
+  </div>
+      <table class="min-w-full divide-y divide-gray-300 text-xs ml-1 ">
         <thead class="bg-gray-50">
           <tr>
             <th rowspan="3" class="px-4 py-2 text-blue-800 text-left border border-gray-300">
@@ -646,10 +647,11 @@ export default {
   name: "CapitalReport",
   data() {
     return {
+    
     activeUsers:0,
     inActiveUsers:0,
     admins:0,
-
+    intendedForCurrentMonth:0,
 
       barChart: null,
       showChangePassword: false,
@@ -737,6 +739,7 @@ export default {
       .then((response) => {
         console.log("allUsers",response);
         this.totalClients = response.totalUsers;
+
         this.admins=response.adminUsers;
         this.activeUsers=response.activeUsers;
         this.inActiveUsers=response.offsetUsers;
@@ -993,9 +996,6 @@ export default {
         userId: this.userId,
       };
 
-
-
-
       try {
 
         await this.$apiPatch("api/v1/users/updatePassword", this.userId, payload)
@@ -1004,7 +1004,6 @@ export default {
               console.log("response: ", response)
               this.showChangePassword = false;
               this.$refs.toast.showSuccessToastMessage(response.message);
-
               setTimeout(() => {
                 this.$router.push("/admindashboard");
               }, 2000);
@@ -1079,6 +1078,12 @@ export default {
             console.log("active month ", this.activeMonth);
             console.log("monthly report based on the latest setting", response);
             this.monthlyReport = response.items;
+
+
+          this.intendedForCurrentMonth = response.items.categorizedPayments.confirmed.payments
+  .filter(payment => payment.activeMonth === this.activeMonth).length;
+            console.log("current month ",this.intendedForCurrentMonth);
+
             this.monthlyPaid =
               response.items.categorizedPayments.confirmed.uniqueUsers;
             console.log("confirmed", this.monthlyPaid);

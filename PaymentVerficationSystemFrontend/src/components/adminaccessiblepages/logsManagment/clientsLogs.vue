@@ -46,7 +46,6 @@
                 v-for="logData in logsData"
                 :key="logData._id"
               >
-              
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   {{ logData.model }}
                 </td>
@@ -54,7 +53,7 @@
                   {{ logData.action }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ logData.actor }}
+                  {{ logData.actorName }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   {{ logData.ipAddress }}
@@ -75,8 +74,6 @@
                   >
                     <i class="fa fa-edit"></i>Detail
                   </button>
-
-                 
                 </td>
               </tr>
             </tbody>
@@ -355,9 +352,6 @@ export default {
       }
 
     };
-
-
- 
   },
 
   watch: {
@@ -413,7 +407,7 @@ export default {
       }
       try {
         await this.$apiGet("/api/v1/logs",params).then((response) => {
-          console.log("response",response);
+          console.log("response client logs",response);
           this.logsData = response.logs;
         });
       } catch (error) {

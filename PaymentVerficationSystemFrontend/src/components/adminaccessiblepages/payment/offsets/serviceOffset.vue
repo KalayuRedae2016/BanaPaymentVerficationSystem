@@ -180,8 +180,6 @@
                     <input type="date" v-model="paymentToBeEdited.transferDate" class="custom-input" placeholder="Offset Date" />
                   </div>
 
-
-
                   <div class="mb-4">
                     <label class="custom-label">
                       {{ $t("Ref Number") }}

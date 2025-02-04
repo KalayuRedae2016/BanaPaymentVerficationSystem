@@ -208,11 +208,8 @@ export default {
     role() {
       return this.getRole;
     },
-  },
-
-  
+  },  
   created(){
-   // alert("Created");
     this.newEmail=localStorage.getItem("email");
      console.log("email",this.newEmail);
     this.role=localStorage.getItem("role")
