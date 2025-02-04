@@ -1845,12 +1845,21 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
   const transferFunds = organization.paymentTransfers.filter(transfer => 
     Object.keys(transferQuery).every(key => transfer[key] === transferQuery[key])
   );
+  
+  // Extract unique user IDs from transferFunds
+  const userIds = [...new Set(transferFunds.map(t => t.toWhat))];
+  const users = await User.find({ _id: { $in: userIds } }, { _id: 1, userCode: 1 });
+  const userCodeMap = users.reduce((map, user) => {
+    map[user._id.toString()] = user.userCode;
+    return map;
+  }, {});
 
-  console.log("tt to be send",transferFunds)
+  
+  // console.log("tt to be send",transferFunds)
   // Process attachment data in parallel for all transfers
   const attachmentsData = await Promise.all(transferFunds.map(transfer => processFileData(transfer,"payment")));
 
-  console.log("res",attachmentsData );
+  // console.log("res",attachmentsData );
   // Merge transfer data with attachments, ensuring uniqueness of attachments
   const mergedTransferFunds = transferFunds.map(transfer => {
     const uniqueAttachments = new Map(); // Map for unique attachment filtering
@@ -1879,6 +1888,7 @@ exports.getTransferFunds = catchAsync(async (req, res, next) => {
       transferType: transfer.transferType,
       orgId: transfer.orgId,
       toWhat: transfer.toWhat,
+      offSettedUserCode:userCodeMap[transfer.toWhat] || null, // Include user code
       fromBankType: transfer.fromBankType,
       toBankType: transfer.toBankType,
       amount: transfer.amount,
