@@ -50,7 +50,7 @@
                 {{ searchedTransferedPayment.toWhat }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.transferDate }}
+                {{ searchedTransferedPayment.formattedTransferDate }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.refNumber }}
@@ -228,7 +228,6 @@
 
                     <select name="" id="" class="custom-select" v-model="paymentToBeEdited.transferType">
                       <option value="" disabled> Select Account Type</option>
-                      <option value="all">All</option>
                       <option value="block">Block</option>
                       <option value="service">Service</option>
                     </select>
@@ -366,6 +365,47 @@
         </div>
       </transition>
     </div>
+
+    <div v-if="showDelateModal">
+      <transition name="fade" mode="out-in">
+        <div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" role="dialog"
+          aria-modal="true" aria-labelledby="deleteModalTitle">
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg shadow-lg w-96">
+            <!-- Modal Header -->
+            <div class="bg-blue-500 text-white flex items-center justify-between rounded-t-lg px-4 py-3">
+              <h2 id="deleteModalTitle" class="text-lg font-semibold">
+                Confirm Deletion
+              </h2>
+              <button @click="showDelateModal = false" class="text-white hover:text-gray-200 focus:outline-none"
+                aria-label="Close Modal">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-4 text-gray-700">
+              <p>
+                Are you sure you want to delete this Transfered Payment? This
+                action cannot be undone.
+              </p>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex space-x-3 p-4">
+              <button @click="confirmPaymentDelete(paymentToBeDelated)"
+                class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500">
+                <i class="fas fa-check mr-2"></i> Yes, Delete
+              </button>
+              <button @click="showDelateModal = false"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500">
+                <i class="fas fa-times mr-2"></i> Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -378,6 +418,9 @@ export default {
   name: "creditTransfer",
   data() {
     return {
+
+      showDelateModal :false,
+      paymentToBeDelated:'',
 
       userBalances: [],
       userOffsetId: "",
@@ -466,6 +509,23 @@ export default {
     await this.fetchUserOffsets()
   },
   methods: {
+    confirmPaymentDelete(paymentToBeDeleted) {
+      console.log("hiii",paymentToBeDeleted);
+      this.$apiDelete("/api/v1/payments/transferFunds", paymentToBeDeleted.transferId)
+        .then((response) => {
+          console.log("Response:", response);
+          this.showDelateModal = false;
+
+          this.$refs.toast.showSuccessToastMessage(response.message);
+
+          setTimeout(() => {
+            this.$reloadPage();
+          }, 2000);
+        })
+        .catch((error) => {
+          console.log("Error:", error);
+        });
+    },
     async addFiles(fileList) {
       try {
         const newFiles = await this.$processFilesToAdd(fileList); // Process the files

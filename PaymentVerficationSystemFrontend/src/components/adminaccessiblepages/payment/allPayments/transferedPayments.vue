@@ -86,7 +86,7 @@
                   {{ searchedTransferedPayment.toBankType }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ searchedTransferedPayment.transferDate }}
+                  {{ searchedTransferedPayment.formattedTransferDate }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   {{ searchedTransferedPayment.amount }}
@@ -779,7 +779,8 @@ export default {
       }
     },
     confirmPaymentDelete(paymentToBeDeleted) {
-      this.$apiDelete("/api/v1/payments/transferFunds", paymentToBeDeleted._id)
+      console.log("hiii",paymentToBeDeleted);
+      this.$apiDelete("/api/v1/payments/transferFunds", paymentToBeDeleted.transferId)
         .then((response) => {
           console.log("Response:", response);
           this.showDelateModal = false;
