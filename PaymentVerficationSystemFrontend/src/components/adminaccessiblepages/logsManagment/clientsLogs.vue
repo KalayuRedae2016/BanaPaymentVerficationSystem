@@ -141,7 +141,7 @@
         </div> -->
 
                   <div class="text-black-500 font-bold"></div>
-                  <div class="mt-3 lg:w-2/3 mx-4 lg:mx-0 p-4">
+                  <div class="mt-3 lg:w-full mx-4 lg:mx-0 p-4">
                     <!-- Grid container -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
                       <!-- First Column -->
@@ -243,7 +243,7 @@
                           </div>
                         </div>
 
-                        <div class="bg-white p-1 rounded-md shadow-sm">
+                        <div v-if="action==='Create' || action==='Update'" class="bg-white p-1 rounded-md shadow-sm">
                           <div
                             class="flex items-center space-x-3 border-b border-gray-300"
                           >
@@ -264,8 +264,18 @@
                             class="flex items-center space-x-3 border-b border-gray-300"
                           >
                             <i class="fas fa-map-marker-alt text-blue-500"></i>
+
+                            <span>{{
+                    action === "Create"
+                      ? "Updated At"
+                      : action === "Delete"
+                      ? "Deleted At"
+                      : action === "Update"
+                      ? "Updated At"
+                      : "Unknown Action"
+                  }}</span>
                             <span class="text-sm text-gray-800"
-                              >{{ $t("Updated At") }}:
+                              >
                               {{
                                 new Date(
                                   clientProfile.updatedAt
@@ -350,6 +360,7 @@
             class="h-64 w-64 lg:w-96"
           />
         </div> -->
+    
 
                   <div class="mt-3 lg:w-full mx-4 lg:mx-0 p-4">
                     <!-- Grid container -->
@@ -375,7 +386,7 @@
                             <i class="fas fa-user text-yellow-500"></i>
                             <span class="text-sm text-gray-800"
                               >Full Name :
-                              {{ updatedClientProfile.fullName }}</span
+                              {{updatedClientProfile.fullName }}</span
                             >
                           </div>
                         </div>
@@ -508,7 +519,6 @@
                             </span>
                           </div>
                         </div>
-
                         <div
                           v-if="updatedClientProfile.reason"
                           class="bg-white p-1 rounded-md shadow-sm"
@@ -589,8 +599,9 @@ export default {
       this.action = logData.action;
       this.clientProfile = actionMapping[logData.action] || null;
       if (logData.action === "Update") {
-        this.updatedClientProfile = logData.affectedData.updateData;
-        this.updatedClientProfile.updatedAt = logData.createdAt;
+        //alert("hh")
+        //console.log('logData.affectedData.updateData',logData.affectedData.updatedData);
+        this.updatedClientProfile = logData.affectedData.updatedData;
       }
     },
     async fetchUserLogs() {

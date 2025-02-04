@@ -43,7 +43,9 @@
             <div v-show="activeTab === 4" class="">
               <users-offset-logs></users-offset-logs>
             </div>
-           
+            <div v-show="activeTab === 5" class="">
+              <error-logs></error-logs>
+            </div>
           </div>
         </div>
       </div>
@@ -55,6 +57,7 @@
  import transferLog from './transferLogs.vue';
 import ServiceOffsetLogs from './serviceOffsetLogs.vue';
 import UsersOffsetLogs from './usersOffsetLogs.vue';
+import ErrorLogs from './errorLogs.vue';
 
   export default {
     components: {
@@ -64,6 +67,7 @@ import UsersOffsetLogs from './usersOffsetLogs.vue';
         transferLog,
         ServiceOffsetLogs,
         UsersOffsetLogs,
+        ErrorLogs,
     },
     data() {
       return {
@@ -72,7 +76,8 @@ import UsersOffsetLogs from './usersOffsetLogs.vue';
         "fa-solid fa-money-bill", // All Payments
         "fa-solid fa-balance-scale", // Offsets
         "fa-solid fa-chart-line", // Report
-        "fa-solid fa-chart-line", // Report
+        "fa fa-user",
+        "fa fa-exclamation-triangle" // Report
       ],
         activeTab: 0,
         tabs: [
@@ -81,6 +86,7 @@ import UsersOffsetLogs from './usersOffsetLogs.vue';
           "Bank Transfer Logs",
           "Service Offset Logs",
           "User Offset Logs",
+          "Error Logs",
         ],
       };
     },
