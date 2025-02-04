@@ -46,9 +46,13 @@
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.fromBankType }}
               </td>
+
+              
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.toWhat }}
               </td>
+
+
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.formattedTransferDate }}
               </td>
@@ -551,6 +555,8 @@ export default {
       }
     },
     async showPaymentAmmount(user) {
+      alert("hh")
+      this.userBalances=[];
       this.showPaymentAmount = true;
       this.userCode = user.userCode;
 

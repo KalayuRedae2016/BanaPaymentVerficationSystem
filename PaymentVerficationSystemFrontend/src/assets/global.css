@@ -1,7 +1,7 @@
 /* src/assets/global.css */
 
 .custom-input {
-  @apply w-full h-10 px-4 py-2 mt-2 border border-gray-300  shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
+  @apply rounded-md w-full h-10 px-4 py-2 mt-2 border border-gray-300  shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
 }
 
 .custom-input::placeholder {
@@ -36,7 +36,7 @@
 
 
 .custom-text-area {
-  @apply w-full h-20 px-4 py-2 mt-2 border border-gray-300  shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
+  @apply rounded-md w-full h-20 px-4 py-2 mt-2 border border-gray-300  shadow-sm bg-white text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 ease-in-out bg-gray-50 ;
 }
 
 .custom-text-area::placeholder {
