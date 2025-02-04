@@ -50,7 +50,7 @@
                 {{ searchedTransferedPayment.fromBankType }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.transferDate }}
+                {{ searchedTransferedPayment.formattedTransferDate }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.amount }}
@@ -90,7 +90,7 @@
 
         <button class="custom-button m-5" @click="
           showEditTransferForm = true;
-        paymentToBeEdited = {
+          paymentToBeEdited = {
           transferType: '',     // Reset dropdown
           fromBankType: '',       // Reset text field
           toBankType: '',         // Reset text field

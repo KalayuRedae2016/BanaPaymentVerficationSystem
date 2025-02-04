@@ -50,7 +50,7 @@
                 {{ searchedTransferedPayment.toWhat }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.transferDate }}
+                {{ searchedTransferedPayment.formattedTransferDate }}
               </td>
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                 {{ searchedTransferedPayment.refNumber }}
