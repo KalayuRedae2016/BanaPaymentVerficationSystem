@@ -23,6 +23,7 @@ const { sendEmail } = require('../utils/email');
 
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const { constants } = require('perf_hooks');
 
 // Configure multer for payment file uploads
 const paymentFileUpload = createMulterMiddleware(
@@ -1681,6 +1682,8 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
 }
 
   const transferDate = req.body.transferDate ? new Date(req.body.transferDate) : new Date();
+  console.log("Date",transferDate,new Date());
+  
   if (transferDate > new Date()) {
     return next(new AppError('Transfer date cannot be in the future', 400));
   }
@@ -1713,8 +1716,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
     return next(new AppError("User/s is not found", 400))
   }
 
-
-
+  //console.log("u",users)
   const transferCollection = "paymentTransfers"
   const paymentQuery = { isPaid: true, status: 'confirmed' };
   const payments = await Payment.find(paymentQuery);
