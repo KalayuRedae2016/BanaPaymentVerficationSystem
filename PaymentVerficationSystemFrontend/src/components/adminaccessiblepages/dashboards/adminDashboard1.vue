@@ -718,7 +718,7 @@ export default {
 
   async mounted() {
 
-
+    this.$store.dispatch("commitActiveItem", { activeItem: 'dashboard'});
     if (this.$route.query.loginSuccess === "true") {
       const activeItem = "dashboard";
       this.$store.dispatch("commitActiveItem", { activeItem });

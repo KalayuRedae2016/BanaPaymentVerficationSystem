@@ -49,16 +49,8 @@
                 <td class="flex flex-row space-x-2 p-3 text-md text-blue-500 whitespace-nowrap">
                   <button class="custom-button" 
                     @click="
-                    logDetail = true;
-                    handleLogDetail(
-                      logData.affectedData.body.service ? 'service' :
-                      logData.affectedData.body.urgent ? 'urgent' :
-                      logData.affectedData.body.regular ? 'regular' :
-                      logData.affectedData.body.penalty ? 'penality' :
-                      logData.affectedData.body.subsidy ? 'subsidy' :
-                      null,
-                      logData.affectedData.paymentId
-                    )
+                      logDetail = true;
+                      handleLogDetail(getPaymentType(logData.affectedData.UpdatedData), logData.affectedData.UpdatedData);
                     ">
                     <i class="fa fa-edit"></i>Detail
                   </button>
@@ -93,8 +85,54 @@
             </div>
 
             <hr class="my-4 md:min-w-full bg-red-500" />
+            <div class="bg-white p-4 rounded-lg  text-sm">
+  <table class="w-full border-collapse border border-gray-300">
+    <tbody>
+      <tr class="border-b border-gray-300">
+        <td class="font-semibold p-2">Type:</td>
+        <td class="p-2 text-blue-500 font-bold">{{ paymentType }}</td>
+      </tr>
+      <tr class="border-b border-gray-300">
+        <td class="font-semibold p-2">Bill Code:</td>
+        <td class="p-2 text-blue-500 font-bold">{{ updatedData.billCode }}</td>
+      </tr>
+      <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+        <td class="font-semibold p-2">TT Number:</td>
+        <td class="p-2">{{ updatedData[paymentType].TTNumber }}</td>
+      </tr>
+      <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+        <td class="font-semibold p-2">Amount:</td>
+        <td class="p-2">{{ updatedData[paymentType].amount }} ETB</td>
+      </tr>
+      <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+        <td class="font-semibold p-2">Bank Type:</td>
+        <td class="p-2">{{ updatedData[paymentType].bankType }}</td>
+      </tr>
+      <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+        <td class="font-semibold p-2">Days Late:</td>
+        <td class="p-2">{{ updatedData[paymentType].daysLate }}</td>
+      </tr>
+      <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+        <td class="font-semibold p-2">Is Paid:</td>
+        <td class="p-2">
+          <span :class="updatedData[paymentType].isPaid ? 'text-green-600' : 'text-red-600'">
+            {{ updatedData[paymentType].isPaid ? 'Yes' : 'No' }}
+          </span>
+        </td>
+      </tr>
 
-          here
+      <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+        <td class="font-semibold p-2">Paid At</td>
+        <td class="p-2">{{ updatedData[paymentType].paidAt || 'N/A' }}</td>
+      </tr>
+      <tr v-if="updatedData[paymentType]" class="border-b border-gray-300">
+        <td class="font-semibold p-2">Penalty:</td>
+        <td class="p-2">{{ updatedData[paymentType].penality }} ETB</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
             <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
         </div>
@@ -111,7 +149,9 @@ export default {
   name: "paymentTransfersView",
   data() {
     return {
+     
       paymentType:"",
+      updatedData:{},
       payment:{
         fullName:"Hagose hadgu",
         activeMonth:1,
@@ -119,7 +159,6 @@ export default {
         service:{
           
         }
-
       },
       logsData: [
         {
@@ -161,15 +200,18 @@ export default {
   },
   methods: {
 
+    getPaymentType(updatedData) {
+      const paymentTypes = ['service', 'urgent', 'regular', 'penalty', 'subsidy'];
+      return paymentTypes.find(type => updatedData[type]) || null;
+    },
 
-
-    handleLogDetail(paymentType,paymentId){
+    handleLogDetail(paymentType,data){
       this.paymentType = paymentType;
-      this.fetchPaymentDetail(paymentId);
+      this.updatedData = data;
+      console.log("payment and data",paymentType,this.updatedData);
+      //console.log("paymentType is from",this.updatedData[paymentType]);
     },
-    fetchPaymentDetail(paymentId){
-      
-    },
+
   async fetchPaymentSettingLogs() {
   const params = {
     model: "payments",

@@ -222,6 +222,7 @@ export default {
     },
     setActive(item) {
       this.$store.dispatch("commitActiveItem", { activeItem: item });
+      this.activeItem = item;
       // Update the active item
       // You can also handle route navigation here if needed
       if (item === "dashboard") {

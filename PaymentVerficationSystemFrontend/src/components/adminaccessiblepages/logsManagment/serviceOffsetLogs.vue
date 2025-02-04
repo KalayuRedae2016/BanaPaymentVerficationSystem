@@ -3,7 +3,6 @@
       <Toast ref="toast" />
       <div class="pb-5 flex flex-col bg-white -mt-2">
         <div class="mt-5 ">
-  
           <div class="overflow-x-auto h-96 ">
             <table class="w-full border border-gray-300">
               <thead>
@@ -39,7 +38,7 @@
                     {{ logData.action }}
                   </td>
                   <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                    {{ logData.actor }}
+                    {{ logData.actorName }}
                   </td>
                   <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                     {{ logData.ipAddress }}
@@ -54,8 +53,6 @@
                     ">
                       <i class="fa fa-edit"></i>Detail
                     </button>
-  
-  
                   </td>
                 </tr>
               </tbody>
@@ -74,7 +71,7 @@
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold">
-                  {{ $t("Transfer Payment Log Detail") }}
+                  {{ $t("Service Expenditure Log Detail") }}
                 </label>
               </div>
               <div>
@@ -116,15 +113,6 @@
         <span class="text-gray-900">{{affectedServiceOffset.refNumber }}</span>
       </div>
 
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">To Bank:</span>
-        <span class="text-gray-900">{{affectedServiceOffset.toBankType }}</span>
-      </div>
-
-      <div class="flex justify-between text-gray-700">
-        <span class="font-medium">Recipient Account:</span>
-        <span class="text-gray-900">{{affectedServiceOffset.toWhat }}</span>
-      </div>
 
       <div class="flex justify-between text-gray-700">
         <span class="font-medium">Transfer Case:</span>
@@ -160,14 +148,14 @@
     data() {
       return {
         logsData: [
-          {
-            _id: "1",
-            model: "user",
-            action: "Delate",
-            actor: "admin1",
-            ipAddress: "49.102.23.45",
-            description: "This is the delate function",
-          },
+          // {
+          //   _id: "1",
+          //   model: "user",
+          //   action: "Delate",
+          //   actor: "admin1",
+          //   ipAddress: "49.102.23.45",
+          //   description: "This is the delate function",
+          // },
         ],
         logDetail: false,
        affectedServiceOffset:{

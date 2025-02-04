@@ -39,7 +39,7 @@
                   {{ logData.action }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                  {{ logData.actor }}
+                  {{ logData.actorName }}
                 </td>
                 <td class="p-3 text-md text-gray-700 whitespace-nowrap">
                   {{ logData.ipAddress }}
