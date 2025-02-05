@@ -359,7 +359,6 @@ export function validateField(formName, fieldName, value, formSchema) {
     return new Promise((resolve) => {
       const processedFiles = [];
       let processedCount = 0;
-  
       fileList.forEach((file) => {
         const reader = new FileReader();
   
@@ -375,7 +374,6 @@ export function validateField(formName, fieldName, value, formSchema) {
           });
   
           processedCount += 1;
-  
           // Resolve when all files are processed
           if (processedCount === fileList.length) {
             resolve(processedFiles);
@@ -456,4 +454,13 @@ export function validateField(formName, fieldName, value, formSchema) {
       console.error("No file selected.");
       return null;
     }
+  }
+
+  export function convertImageToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+    });
   }

@@ -345,7 +345,7 @@
                         type="file"
                         ref="imageFileInput"
                         accept="image/*"
-                        @change="imageFile = $handleAnyFileInput('imageFileInput')"
+                        @change="handleImageFile()"
                         class="hidden"
                       />
                       <p class="text-sm text-gray-500 mt-2">JPG, PNG, or GIF</p>
@@ -775,6 +775,14 @@ export default {
     }
   },
   methods: {
+    async handleImageFile(){
+      alert("kk")
+      this.imageFile = await this.$handleAnyFileInput('imageFileInput');
+      if (this.imageFile) {
+       this.imageData=await this.$convertImageToBase64(this.imageFile);
+       console.log("imagePreview: " , this.imagePreview);
+      }
+    },
     removeAttachment(index){
       this.$removeAttachment(this.attachmentsData, index)
       this.editDetail();

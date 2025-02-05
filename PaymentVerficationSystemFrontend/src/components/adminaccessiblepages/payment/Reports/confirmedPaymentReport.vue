@@ -31,11 +31,11 @@
         <div>Reported Date:{{ new Date().toLocaleDateString() }}</div>
       </div>
 
-      <h2 class="section-title" style="color: #622e2e; font-weight: bold; margin-bottom: 15px">
-        Total Balance
+      <h2 class="section-title" style="font-size:10px;color: #622e2e; font-weight: bold;">
+        Total Deposited 
       </h2>
       <table>
-        <thead style="font-size: 12px">
+        <thead style="font-size: 10px">
           <tr>
             <th rowspan="3" style="text-align: center">Banks</th>
             <th colspan="8" style="text-align: center">Balance</th>
@@ -48,16 +48,16 @@
             </th>
           </tr>
           <tr>
-            <th>Regular</th>
-            <th>Subsidy</th>
-            <th>Urgent</th>
-            <th>Total Block</th>
-            <th>Penalty</th>
-            <th>Monthly Service</th>
-            <th>Total Service</th>
+            <th>Regular Deposited</th>
+            <th>Subsidy Deposited</th>
+            <th>Urgent Deposited</th>
+            <th>Total Block(Deposited + Offsets(Expenditure + User) +-Transfers)</th>
+            <th>Penalty Deposited</th>
+            <th>Monthly Service Deposited</th>
+            <th>Total Service(Deposited + Penality + Offsets(Expenditure + User) +- Transfers)</th>
           </tr>
         </thead>
-        <tbody v-if="reportLength > 0" style="background-color: white; font-size: 12px">
+        <tbody v-if="reportLength > 0" style="background-color: white; font-size: 10px">
           <tr v-for="(bank, index) in reports.items.totalBalanceBankType" :key="index">
             <td class="border border-gray-300 px-4 py-2">
               {{ index }}
@@ -77,7 +77,7 @@
               {{ bank.totalBlockBalance }}
             </td>
             <td class="border border-gray-300 px-4 py-2">
-              {{ bank.penalityBalance }}
+              {{ bank.penalityBalance}}
             </td>
             <td class="border border-gray-300 px-4 py-2">
               {{ bank.serviceBalance }}
@@ -98,23 +98,23 @@
             <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
               {{ reports.items.Organization.totalRegularBalance }}
             </td>
-            <!-- Total Regular -->
+          
             <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
               {{ reports.items.Organization.totalSubsidyBalance }}
             </td>
-            <!-- Total Subsidy -->
+          
             <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
               {{ reports.items.Organization.totalUrgentBalance }}
             </td>
-            <!-- Total Urgent -->
+         
             <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
               {{ reports.items.Organization.totalBlockBankAccount }}
             </td>
-            <!-- Total Urgent -->
+         
             <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
               {{ reports.items.Organization.totalPenalityBalance }}
             </td>
-            <!-- Total Block -->
+           
             <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
               {{ reports.items.Organization.totalServiceBalance }}
             </td>
@@ -130,6 +130,113 @@
           </tr>
         </tbody>
       </table>
+      <!-- <h2 class="section-title" style="font-size:10px;color: #622e2e; font-weight: bold;">
+       Total Transfers,Offsets(Expenditure,User)
+      </h2>
+      <table>
+        <thead style="font-size: 10px">
+       
+          <tr>
+            <th>Bank</th>
+            <th>Incoming Payment</th>
+            <th>OutGoing Payment</th>
+            <th>Expenditure Offset</th>
+            <th>User Offset</th>
+           
+          </tr>
+        </thead>
+    <tbody v-if="reportLength > 0" style="background-color: white; font-size: 10px">
+      <tr v-for="(balance, bank) in totalBalance.orgBalancesBasedBankType" :key="bank" class="bg-white shadow-md rounded-lg p-4 border border-gray-300">
+        <td class="px-4 py-2">{{ bank || 0 }}</td>
+        <td class="px-4 py-2">{{ balance.blockBankOutcoming || 0 }}</td>
+        <td class="px-4 py-2">{{ balance.blockBankIncoming || 0 }}</td>
+        <td class="px-4 py-2">{{ balance.blockExpenditure || 0 }}</td>
+        <td class="px-4 py-2">{{ balance.blockUserWithdrawal || 0 }}</td>
+      </tr>
+      </tbody>
+    </table> -->
+    <!-- <h2 class="section-title" style="font-size:10px;color: #622e2e; font-weight: bold; ">
+        TotalBalance
+      </h2>
+      <table>
+        <thead style="font-size: 10px">
+       
+          <tr>
+            <th>Bank</th>
+            <th>T.Block Deposited</th>
+            <th>T.Service Deposited</th>
+            <th>T.Incoming</th>
+            <th>T.OutGoing</th>
+            <th>T.Expenditure</th>
+            <th>T.User Offset</th>
+            <th>T.Balance</th>
+          </tr>
+        </thead>
+        <tbody v-if="reportLength > 0" style="background-color: white; font-size: 10px">
+          <tr v-for="(bank, index) in reports.items.totalBalanceBankType" :key="index">
+            <td class="border border-gray-300 px-4 py-2">
+              {{ index }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{ bank.regularBalance + bank.subsidyBalance + bank.urgentBalance}}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{ bank.totalBlockBalance }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{ bank.penalityBalance}}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{ bank.serviceBalance }}
+            </td>
+
+            <td class="border border-gray-300 px-4 py-2">
+              {{ bank.totalServiceBalance }}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">
+              {{ bank.totalServiceBalance + bank.totalBlockBalance }}
+            </td>
+          </tr>
+          <tr class="font-bold bg-gray-100" rowspan="4">
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ $t("total") }}
+            </td>
+
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ reports.items.Organization.totalRegularBalance }}
+            </td>
+          
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ reports.items.Organization.totalSubsidyBalance }}
+            </td>
+          
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ reports.items.Organization.totalUrgentBalance }}
+            </td>
+         
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ reports.items.Organization.totalBlockBankAccount }}
+            </td>
+         
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ reports.items.Organization.totalPenalityBalance }}
+            </td>
+           
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ reports.items.Organization.totalServiceBalance }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{ reports.items.Organization.totalServiceBankAccount }}
+            </td>
+            <td class="px-4 py-2 text-left border border-gray-300 text-blue-800">
+              {{
+                reports.items.Organization.totalBlockBankAccount +
+                reports.items.Organization.totalServiceBankAccount
+              }}
+            </td>
+          </tr>
+        </tbody>
+      </table> -->
 
       <div v-if="reportType === 'monthly'">
         <h2 class="section-title" style="
@@ -225,7 +332,6 @@
             position: absolute;
             left: 50%;
             transform: translateX(-50%);
-            top: 40px;
             background-color: lightgray;
           ">
           QR Code
@@ -233,9 +339,9 @@
       </div>
 
       <div style="
+            margin-top:30px;
             display: flex;
             justify-content: center;
-            margin-top: 200px;
             color: #622e2e;
             font-weight: bold;
           ">
@@ -246,8 +352,7 @@
       </div>
 
 
-      <div style="
-            margin-top: 25px;
+         <div style="
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -417,9 +522,8 @@
             </button>
           </div>
 
-
-          <div class="overflow-x-auto rounded- mx-5" v-if="reportLength > 0">
-            <table class="min-w-full divide-y divide-gray-300 text-xs">
+          <div class="overflow-x-auto rounded- mx-5 " v-if="reportLength > 0">
+            <table class="min-w-full divide-y divide-gray-300 text-xxs">
               <thead class="bg-gray-50">
                 <tr>
                   <th rowspan="3" class="px-4 py-2 text-blue-800 text-left border border-gray-300">
@@ -442,25 +546,25 @@
                 </tr>
                 <tr>
                   <th class="px-4 py-2 text-blue-800 text-left border border-gray-300">
-                    {{ $t("regular") }}
+                    {{ $t("Regular") }}
                   </th>
                   <th class="px-4 py-2 text-blue-800 text-left border border-gray-300">
-                    {{ $t("subsidy") }}
+                    {{ $t("Subsidy") }}
                   </th>
                   <th class="px-4 py-2 text-blue-800 text-left border border-gray-300">
-                    {{ $t("urgent") }}
+                    {{ $t("Urgent") }}
                   </th>
                   <th class="px-4 py-2 text-blue-800 text-left border border-gray-300">
-                    {{ $t("totalBlock") }}
+                    {{ $t("Total Block(Deposited + Offsets(Expenditure + User) +-Transfers)") }}
                   </th>
                   <th class="px-4 py-2 text-blue-800 text-left border border-gray-300">
-                    {{ $t("penality") }}
+                    {{ $t("Penality") }}
                   </th>
                   <th class="px-4 py-2 text-blue-800 text-left border border-gray-300">
                     {{ $t("Monthly Service") }}
                   </th>
                   <th class="px-4 py-2 text-blue-800 text-left border border-gray-300">
-                    {{ $t("totalService") }}
+                    {{ $t("Total Service(Deposited + Offsets(Expenditure + User) +-Transfers)") }}
                   </th>
                 </tr>
               </thead>
@@ -1286,7 +1390,7 @@ export default {
 
         document.getElementById(
           "qrCodeImageContainer"
-        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code" />`;
+        ).innerHTML = `<img src="${qrCodeImage}" alt="QR Code"  style="width:100px; height:100px;"/>`;
       } catch (error) {
         console.error("Error generating QR code:", error);
       }

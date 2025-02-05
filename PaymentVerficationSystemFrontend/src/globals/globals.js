@@ -4,7 +4,7 @@ import { reloadPage,apiGet,apiGetById,apiPost,apiPut,
   apiPatch,apiDelete,isStrongPassword,validateField,
   gregorianToEthiopian,getPdfBlobUrl,base64ToFile,
   processFilesToAdd,triggerFileInput,handleFileInput,toggleDragState,removeAttachment,
-  handleAnyFileInput} from "../utils/utils"; // Adjust the path to match your project structure
+  handleAnyFileInput,convertImageToBase64} from "../utils/utils"; // Adjust the path to match your project structure
 export default {
   async install(app) {
     // Check environment and set base URL
@@ -81,6 +81,7 @@ export default {
       $removeAttachment:removeAttachment,
       $handleAnyFileInput:handleAnyFileInput,
       $logger: Logger, 
+      $convertImageToBase64:convertImageToBase64,
     };
     // Assign to the global properties in the Vue app
     app.config.globalProperties = {

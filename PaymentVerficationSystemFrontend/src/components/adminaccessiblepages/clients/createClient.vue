@@ -112,15 +112,6 @@
                 :placeholder="$t('phoneNumber')" style="padding-left: 16px" v-model="phoneNumber" />
             </div>
           </div>
-
-          <div class="w-full">
-            <label class="custom-label">
-              {{ $t("chooseProfileImage") }}
-              <span class="text-red-500 ml-1"></span>
-            </label>
-            <input class="custom-input text-xs" type="file" ref="imageFileInput" accept="image/*"
-            @change="imageFile = $handleAnyFileInput('imageFileInput')"/>
-          </div>
           <div class="w-full" v-if="role === 'SuperAdmin'">
             <label class="custom-label"> {{ $t("Role") }} <span>*</span></label>
             <select v-model="userRole" class="custom-select">
@@ -129,6 +120,23 @@
               <option value="Admin">Admin</option>
             </select>
           </div>
+          <div class="w-full">
+            <label class="custom-label">
+              {{ $t("chooseProfileImage") }}
+              <span class="text-red-500 ml-1"></span>
+            </label>
+            <input class="custom-input text-xs" type="file" ref="imageFileInput" accept="image/*"
+            @change="handleImageFile()"/>
+
+
+
+            <img v-if="imagePreview"
+                        :src="imagePreview || 'https://via.placeholder.com/128'"
+                        alt="User Profile Image"
+                        class=" mt-1 h-20 w-20 h-full rounded-lg border-4 border-gray-300 object-cover shadow-md"
+                      />
+          </div>
+  
         </div>
       </div>
 
@@ -266,7 +274,7 @@ export default {
     return {
       attachmentsData: [], // Array to store uploaded files and metadata
       isDragging: false,
-      
+      imagePreview:"",
       // To style drag area on drag events
       role: "",
       userRole: "User",
@@ -388,16 +396,22 @@ export default {
     );
   },
   created() {
-    // this.$apiClient = axios.create({
-    //   baseURL: "http://localhost:8081/", // Set your base URL here
-    // });
     this.role = localStorage.getItem("role");
   },
 
 
   methods: {
+    async handleImageFile(){
+      this.imageFile = await this.$handleAnyFileInput('imageFileInput');
+
+      if (this.imageFile) {
+       this.imagePreview=await this.$convertImageToBase64(this.imageFile);
+       console.log("imagePreview: " , this.imagePreview);
 
 
+      }
+
+    },
     async addFiles(fileList) {
       const newFiles = await this.$processFilesToAdd(fileList); // Process the files
       this.attachmentsData = [...this.attachmentsData, ...newFiles]; // Merge old and new files
@@ -536,7 +550,6 @@ export default {
       console.log("This.exel", this.exelFile);
       const formData = new FormData();
       formData.append("file", this.exelFile);
-
       if (this.exelFile !== null) {
         try {
           const customHeaders = {

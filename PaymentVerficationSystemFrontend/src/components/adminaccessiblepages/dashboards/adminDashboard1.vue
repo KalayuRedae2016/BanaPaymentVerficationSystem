@@ -167,9 +167,9 @@
         </h2>
         <a href="#" class="text-blue-800 hover:underline font-semibold text-sm underline" @click="viewPaymentsReport()">
           <h1 class="text-xs">{{ $t("allReportDetails") }}</h1>
-        </a>
+     </a>
 </div>
-  <div class="flex flex-col ">
+  <!-- <div class="flex flex-col ">
     <div class="w-96 h-96">
       <canvas ref="barChartCanvas" class="chart "></canvas>
     </div>
@@ -195,7 +195,7 @@
           <p class="-mt-1 text-blue-400">Penality</p>
         </div>
       </div>
-  </div>
+  </div> -->
       <table class="min-w-full divide-y divide-gray-300 text-xs ml-1 ">
         <thead class="bg-gray-50">
           <tr>
@@ -715,9 +715,7 @@ export default {
   created() {
     this.latestPaymentSetting();
   },
-
   async mounted() {
-
     this.$store.dispatch("commitActiveItem", { activeItem: 'dashboard'});
     if (this.$route.query.loginSuccess === "true") {
       const activeItem = "dashboard";

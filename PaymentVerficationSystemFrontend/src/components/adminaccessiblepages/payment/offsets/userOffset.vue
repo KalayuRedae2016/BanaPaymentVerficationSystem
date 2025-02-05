@@ -49,7 +49,7 @@
 
               
               <td class="p-3 text-md text-gray-700 whitespace-nowrap">
-                {{ searchedTransferedPayment.toWhat }}
+                {{ searchedTransferedPayment.offSettedUserCode }}
               </td>
 
 
@@ -565,6 +565,10 @@ export default {
         userCode: user.userCode,
         timeRange: "allTime",
       };
+
+      
+     console.log("params",params)
+
 
       try {
         await this.$apiGet("/api/v1/payments/reports", params).then(response => {
