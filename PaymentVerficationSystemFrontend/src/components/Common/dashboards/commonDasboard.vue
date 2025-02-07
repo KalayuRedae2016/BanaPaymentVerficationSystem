@@ -555,28 +555,7 @@ export default {
    //setInterval(this.fetchNotifications, 5000);
   },
   methods: {
-    async checkPermission(){
-   
-    try {
-      const userId=localStorage.getItem("userId");
-      await this.$apiGetById("/api/v1/users", userId).then(
-        (response) => {
-          // console.log("response of the users inn editing mounting", response)
-          console.log("Response client profile kkk", response);
-       if(response.clientProfile.canEditDetails===true){
-        console.log("true")
-        return true;
-       }else{
-        console.log("false")
-        return false;
-       }
-    }
-    );
-    } catch (error) {
-      console.error("Error fetching client datakk:", error);
-    } finally {
-    }
-    },
+
     toggleDarkMode() {
       document.body.classList.toggle('dark');
     },
@@ -588,7 +567,7 @@ this.$router.push('/admindashboard/user-manual')
     },
 
     fetchNotifications() {
-      this.$toast.success("This is a success message!");
+     // this.$toast.success("This is a success message!");
 
       const params = {
         userId: this.userId,
@@ -616,8 +595,6 @@ this.$router.push('/admindashboard/user-manual')
         paymentId: notification._id,
         role: this.role,
       };
-
-      
       this.$apiPut("/api/v1/payments/markPaymentAsSeen", notification._id, payload)
         .then((response) => {
           console.log("response for payment update", response);

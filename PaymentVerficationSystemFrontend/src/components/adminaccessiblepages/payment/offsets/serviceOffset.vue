@@ -84,7 +84,9 @@
             </tr>
           </tbody>
         </table>
-
+        <div v-if="!searchedTransferedPayments.length" class="mx-5 mt-1 text-blue-500">
+            No Expenditure Offset Payments
+          </div>
         <button class="custom-button m-5" @click="
           showEditTransferForm = true;
           paymentToBeEdited = {

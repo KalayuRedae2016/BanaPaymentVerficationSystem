@@ -35,7 +35,7 @@
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search by Name, Email, Username"
-                class="text-xs w-full pl-10  py-3 text-gray-700 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                class="text-xs w-full pl-10  py-3 text-gray-700 border border-gray-300 rounded-lg  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -71,10 +71,10 @@
         <td class="p-4">
           <button
            @click="userOverdueDetails(searchPayment.userCode)"
-            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded shadow-lg"
+            class="bg-gray-300 hover:bg-blue-600 text-red-500 font-semibold py-1 px-4 rounded"
           
           >
-            <i class="fas fa-info-circle"></i> View All Overdue
+            <i class="fas fa-info-circle"></i> View Unpaid
           </button>
         </td>
       </tr>
@@ -200,9 +200,8 @@ export default {
     verify(paymentId) {
       this.$router.push(`/admindashboard/verify/${paymentId}`);
     },
-
     filteredClientsInSearch() {
-      console.log("called");
+     
       if (this.searchQuery) {
         const query = this.searchQuery.toLowerCase();
         return (this.searchedPayments = this.payments.filter(

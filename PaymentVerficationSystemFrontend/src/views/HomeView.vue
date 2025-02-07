@@ -336,6 +336,9 @@ export default {
           .then((response) => {
             // Handle successful login response
             const { role, token, userId, userCode,email,fullName,changePassword} = response.data;
+
+            console.log("change password is",changePassword);
+
             if (response.data.status === 1) {
              // alert("the response was fetched")
               console.log("respomnse from login",response.data)
@@ -351,7 +354,8 @@ export default {
                 this.$store.dispatch("commitUserCode", { userCode });
                 this.$store.dispatch("commitEmail", { email });
                 this.$store.dispatch("commitFullName", { fullName });
-                if(changePassword==='true'){
+
+                if(changePassword===true){
                   this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true" ,changePassword:true} });
                 }else{
                   this.$router.push({ path: "/admindashboard", query: { loginSuccess: "true"} });

@@ -118,7 +118,8 @@
               </tr>
             </tbody>
           </table>
-          <div v-if="!searchedTransferedPayments" class="m-5 text-blue-500">
+
+          <div v-if="!searchedTransferedPayments.length" class="mx-5 mt-1 text-blue-500">
             No Transfered Payments
           </div>
 
@@ -514,7 +515,6 @@ export default {
     async handleTransferPayment() {
    console.log("transferiD",this.transferId);
       //  alert("hii");
-
       console.log(
         "data",
         this.paymentToBeEdited.transferType,
@@ -525,8 +525,6 @@ export default {
         this.paymentToBeEdited.refNumber,
         this.paymentToBeEdited.reason
       );
-
-   
       this.showError = false;
       this.errorMessage = "";
 
@@ -592,13 +590,10 @@ export default {
       fileArray.forEach((file) => {
         formData.append("attachments", file);
       });
-
       console.log("Form data", formData);
-
       const customHeaders = {
         "Content-Type": "multipart/form-data",
       };
-
       try {
         // Determine the appropriate request method and parameters
         const apiRequest = this.createOffset ? this.$apiPost : this.$apiPatch;
@@ -609,7 +604,6 @@ export default {
         await apiRequest(...params).then((response) => {
           console.log("Response from the update/add: ", response);
           console.log("response message", response.message)
-
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
 
@@ -627,7 +621,9 @@ export default {
         });
       } catch (error) {
         console.error("Error in the process", error.status, error.message);
-        this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
+        this.showError=true;
+        this.errorMessage = error.message;
+        //this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
       } finally {
 
       }
