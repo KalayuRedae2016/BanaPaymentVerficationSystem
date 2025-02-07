@@ -145,7 +145,7 @@
     <div v-if="showEditTransferForm">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 w-2/3 ">
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 lg:w-2/3 ">
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold">
@@ -239,7 +239,7 @@
                   <div class="mb-4">
                     <label class="custom-label">
                       {{ $t("Ref Number") }}
-                      <span class="custom-star ml-1">*</span>
+                      <span class="custom-star ml-1"></span>
                     </label>
                     <input type="text" v-model="paymentToBeEdited.refNumber" class="custom-input"
                       placeholder="Ref Number" />
@@ -317,7 +317,7 @@
                     </div>
                   </div>
                 </div>
-
+                <div class="text-red-500" v-if="showError">{{ errorMessage }}</div>
                 <button @click.prevent="handleTransferPayment()" type="submit" class="custom-button -mb-10 mt-5">
                   <i class="fas fa-save"> </i>
                   Save
@@ -564,7 +564,11 @@ export default {
         this.errorMessage = "Transfer Date is Required"
         return;
       }
-
+      if (this.paymentToBeEdited.reason == "") {
+        this.showError = true;
+        this.errorMessage = "Reason is Required"
+        return;
+      }
       console.log("attachments are", this.attachmentsData);
       const fileArray = (
         this.createOffset ? this.newAttachmentsData : this.attachmentsData

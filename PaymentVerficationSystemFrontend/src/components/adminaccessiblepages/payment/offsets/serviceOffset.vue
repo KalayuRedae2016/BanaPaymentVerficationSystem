@@ -107,7 +107,7 @@
     <div v-if="showEditTransferForm">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 w-2/3">
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 lg:w-2/3">
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold">
@@ -529,20 +529,12 @@ export default {
                 },
               });
             }, 2000);
-
-            // this.paymentTransfers = response.updatedTransferFunds;
-            // console.log("paymentTransfers: ", this.paymentTransfers);
-            // this.searchedTransferedPayments = this.paymentTransfers;
-            // console.log("searched Transfered Payments: ", this.searchedTransferedPayments);
-
-            // this.attachmentsData = response.organization.paymentTransfers.attachments;
-            // console.log("Attachments are", this.attachmentsData);
-
           }
         });
       } catch (error) {
-        console.error("Error in the process", error.status, error.message);
-        this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
+       console.error("Error in the process", error.status, error.message);
+       this.showError=true;
+       this.errorMessage=error.message;
       } finally {
 
       }

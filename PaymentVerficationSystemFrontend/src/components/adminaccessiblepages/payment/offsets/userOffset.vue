@@ -117,7 +117,7 @@
     <div v-if="showEditTransferForm">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 w-2/3">
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 lg:w-2/3">
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold ml-5">
@@ -223,9 +223,9 @@
                   <i class="fa fa-user mr-2"></i>  Confirm Offset
                   </button>
                   </div>
-                 
+                  <div v-if="!userBalances.length" class="mx-5 text-blue-500 my-2">No Payment To be offsted</div>
                 </div>
-
+                  
               </div>
         <div class="max-h-64 overflow-y-auto">
   
@@ -562,7 +562,7 @@ export default {
       }
     },
     async showPaymentAmmount(user) {
-      alert("hh")
+      //alert("hh")
       this.userBalances=[];
       this.showPaymentAmount = true;
       this.userCode = user.userCode;
@@ -586,6 +586,7 @@ export default {
         })
       } catch (error) {
         console.log("error for user balance fetching", error.status, error.message);
+      
       } finally {
 
       }
@@ -686,20 +687,12 @@ export default {
                 },
               });
             }, 2000);
-
-            // this.paymentTransfers = response.updatedTransferFunds;
-            // console.log("paymentTransfers: ", this.paymentTransfers);
-            // this.searchedTransferedPayments = this.paymentTransfers;
-            // console.log("searched Transfered Payments: ", this.searchedTransferedPayments);
-
-            // this.attachmentsData = response.organization.paymentTransfers.attachments;
-            // console.log("Attachments are", this.attachmentsData);
-
           }
         });
       } catch (error) {
         console.error("Error in the process", error.status, error.message);
-        this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
+        this.showError=true;
+        this.errorMessage = error.message;
       } finally {
 
       }

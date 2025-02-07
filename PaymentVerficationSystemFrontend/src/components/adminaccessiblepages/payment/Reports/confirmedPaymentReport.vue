@@ -11,7 +11,12 @@
           font-size: 10px;
           margin-top: 10px;
         ">
-        <div>Report Type: {{ reportType }}</div>
+        <div>
+          <p class="" v-if="reportType==='other'">Report Type: Range</p>
+           <p v-else>Report Type: {{ reportType }}</p>
+       
+
+        </div>
       </div>
       <div style="
           display: flex;
@@ -19,9 +24,34 @@
           color: black;
           font-size: 10px;
         ">
-        Date(Day-Month-Year): {{ this.year }}
-        <p v-if="month">-{{ this.month }}</p>
+
+        <div class="" v-if="reportType==='annually'">
+           Report for(Year):{{ year }}
+        </div>
+
+        <div class="" v-if="reportType==='semiAnnually'">
+           Report for(Year - Semi Annual):{{ year }}-{{ semiYear }}
+        </div>
+
+        <div class="" v-else-if="reportType==='monthly'">
+           Report for(Year-month):{{ year }} -{month}
+        </div>
+
+        <div class="" v-else-if="reportType==='weekly'">
+           Report For Current Week ({{ year }}-{{ month }})
+        </div>
+
+        <div class="" v-else-if="reportType==='daily'">
+           Report For(Year-month-day):{{ year }} -{{month}}-{{ day }}
+        </div>
+
+        <div class="" v-else-if="reportType==='other'">
+           Report For Range:{{ startingDate }} -{{ endingDate}}
+        </div>
+
       </div>
+
+
       <div style="
           display: flex;
           justify-content: flex-end;
@@ -394,13 +424,12 @@
           </div>
 
           <div class="mx-2  mb-1 text-green-500">
-  <div class="flex flex-row space-x-2">
-    <p v-for="(value, key) in query" :key="key" class="flex-shrink-0 mb-2 md:mb-0">
-      {{ capitalizeFirstLetter(key) }}: {{ capitalizeFirstLetter(value) }}
-    </p>
-  </div>
-</div>
-
+            <div class="flex flex-row space-x-2">
+              <p v-for="(value, key) in query" :key="key" class="flex-shrink-0 mb-2 md:mb-0">
+                {{ capitalizeFirstLetter(key) }}: {{ capitalizeFirstLetter(value) }}
+              </p>
+            </div>
+          </div>
 
 
           <div class="overflow-x-auto rounded mx-2 " v-if="reportLength > 0">
@@ -775,10 +804,11 @@ export default {
         params.year=this.year;
       }
       if(this.reportType ==='semiAnnually'){
+        params.year=this.year
         this.semiAnnuallySelected = true;
         this.reportType === "semiAnnually";
       }
-      params.year=this.year;
+    
       this.monthlySelected = ["monthly", "daily"].includes(
         this.reportType
       );
@@ -795,6 +825,7 @@ export default {
         this.month
       ) {
         params.month = this.month;
+        params.year=this.year
       }
 
       if (this.reportType === "daily" && this.day) {
