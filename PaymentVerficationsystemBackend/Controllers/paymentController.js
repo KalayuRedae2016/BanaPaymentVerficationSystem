@@ -1043,7 +1043,7 @@ exports.getPaymentNotifications = catchAsync(async (req, res, next) => {
   if (role === "User") {
     filter.user = userId,
       filter.seen = false
-  } else if (role === "Admin") {
+  } else if (role === "Admin"||role === "SuperAdmin") {
     filter.adminSeen = false
   } else {
     return next(new AppError("Invalid Role,must be User or Admin"), 400)
