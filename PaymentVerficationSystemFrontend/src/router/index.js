@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 // Import your components
 import HomeView from "../views/HomeView.vue";
-
+import landing from "../views/Landing.vue";
+import landing1 from "../views/landingCarausel.vue";
+import drawer from "../views/drawer.vue";
 import reset from "../views/reset.vue";
 
 import accessDenied from "../views/accessDenied.vue";
@@ -73,8 +75,28 @@ const routes = [
     component: portofilo,
     meta: { requiresGuest: true },
   },
-
+  {
+    path: "/landing",
+    component: landing,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: "/landing1",
+    component: landing1,
+    meta: { requiresGuest: true },
+  },
  
+  {
+    path: "/drawer",
+    component: drawer,
+    meta: { requiresGuest: true },
+    children: [
+      {
+        path: "portofilo", // Make this relative
+        component:portofilo, //
+      },
+    ]
+  },
 
   {
     path: "/jtable",
