@@ -17,8 +17,8 @@ echo "Starting MongoDB backup..."
 $MONGODUMP --out=$MONGODB_BACKUP_DIR
 
 # Backup application files using rsync
-echo "Starting application files backup..."
-$RSYNC -avz --delete $SOURCE_DIR $BACKUP_DIR
+# echo "Starting application files backup..."
+# $RSYNC -avz --delete $SOURCE_DIR $BACKUP_DIR
 
 # Print success message
 echo "Backup completed successfully!"
