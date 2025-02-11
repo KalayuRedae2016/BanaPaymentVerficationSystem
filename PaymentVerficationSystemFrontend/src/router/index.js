@@ -1,7 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 // Import your components
 import HomeView from "../views/HomeView.vue";
-
+import landing from "../views/Landing.vue";
+import landing1 from "../views/landingCarausel.vue";
+import drawer from "../views/drawer.vue";
 import reset from "../views/reset.vue";
 
 import accessDenied from "../views/accessDenied.vue";
@@ -35,24 +37,20 @@ import createClient from "../components/adminaccessiblepages/clients/createClien
 import editClient from "../components/Common/Setting/editProfile.vue";
 import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEditProfile.vue";
 import overdue from "../components/adminaccessiblepages/payment/Reports//paymentStatus/overdue.vue";
+import reportDetail from "../components/adminaccessiblepages/payment/Reports/reportDetail.vue";
 import paidUnpaid from "../components/adminaccessiblepages/payment/Reports//paymentStatus/paidUnpaid.vue"
 // import transferHistory from "../components/adminaccessiblepages/payment/Reports/transferHistory.vue"
-
-
 import idCardAdmin from "../components/adminaccessiblepages/id/idCard.vue";
 import sendEmail from "../components/adminaccessiblepages/messages/sendEmail.vue";
 //import bankStatement from "../components/adminaccessiblepages/payment/newPayment/bankStatement.vue";
 import paymentHistoryDetail from "../components/adminaccessiblepages/payment/newPayment/paymentHistoryDetail.vue";
-
 import usersForBankStatement from "../components/adminaccessiblepages/payment/newPayment/usersCanPay.vue";
-
 import commonModal from "../components/adminaccessiblepages/commonFiles/modal.vue";
 import parentModal from "../components/adminaccessiblepages/commonFiles/parentModal.vue";
 import empty from "../components/adminaccessiblepages/commonFiles/empty.vue";
 import emptyCompaney from "../components/adminaccessiblepages/commonFiles/emptyCompany.vue";
 import emptyClient from "../components/adminaccessiblepages/commonFiles/emptyClient.vue";
 import Logs from "../components/adminaccessiblepages/logsManagment/logs.vue";
-
 // User components
 //import userdashboard from "../components/UserAccessiblepages/userdashboard/Userdashboard.vue";
 import userdashboardFirst from "../components/UserAccessiblepages/userdashboard/Userdashboardfirst.vue";
@@ -77,8 +75,28 @@ const routes = [
     component: portofilo,
     meta: { requiresGuest: true },
   },
-
+  {
+    path: "/landing",
+    component: landing,
+    meta: { requiresGuest: true },
+  },
+  {
+    path: "/landing1",
+    component: landing1,
+    meta: { requiresGuest: true },
+  },
  
+  {
+    path: "/drawer",
+    component: drawer,
+    meta: { requiresGuest: true },
+    children: [
+      {
+        path: "portofilo", // Make this relative
+        component:portofilo, //
+      },
+    ]
+  },
 
   {
     path: "/jtable",
@@ -109,6 +127,7 @@ const routes = [
       { path: "", component: adminDashboard },
       { path: "res-dash", component: adminDashboard },
       { path: "logs", component: Logs },
+      { path: "report-detail", component: reportDetail },
       { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },
       { path: "display-companey", name: "display-companey", component: displayCompaney },
       { path: "edit-companey", name: "edit-companey", component: editCompaney },

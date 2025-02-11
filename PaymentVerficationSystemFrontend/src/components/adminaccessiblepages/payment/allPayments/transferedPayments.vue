@@ -118,7 +118,8 @@
               </tr>
             </tbody>
           </table>
-          <div v-if="!searchedTransferedPayments" class="m-5 text-blue-500">
+
+          <div v-if="!searchedTransferedPayments.length" class="mx-5 mt-1 text-blue-500">
             No Transfered Payments
           </div>
 
@@ -144,7 +145,7 @@
     <div v-if="showEditTransferForm">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
-          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 w-2/3 ">
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 px-5 lg:w-2/3 ">
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold">
@@ -238,7 +239,7 @@
                   <div class="mb-4">
                     <label class="custom-label">
                       {{ $t("Ref Number") }}
-                      <span class="custom-star ml-1">*</span>
+                      <span class="custom-star ml-1"></span>
                     </label>
                     <input type="text" v-model="paymentToBeEdited.refNumber" class="custom-input"
                       placeholder="Ref Number" />
@@ -316,7 +317,7 @@
                     </div>
                   </div>
                 </div>
-
+                <div class="text-red-500" v-if="showError">{{ errorMessage }}</div>
                 <button @click.prevent="handleTransferPayment()" type="submit" class="custom-button -mb-10 mt-5">
                   <i class="fas fa-save"> </i>
                   Save
@@ -514,7 +515,6 @@ export default {
     async handleTransferPayment() {
    console.log("transferiD",this.transferId);
       //  alert("hii");
-
       console.log(
         "data",
         this.paymentToBeEdited.transferType,
@@ -525,8 +525,6 @@ export default {
         this.paymentToBeEdited.refNumber,
         this.paymentToBeEdited.reason
       );
-
-   
       this.showError = false;
       this.errorMessage = "";
 
@@ -566,7 +564,11 @@ export default {
         this.errorMessage = "Transfer Date is Required"
         return;
       }
-
+      if (this.paymentToBeEdited.reason == "") {
+        this.showError = true;
+        this.errorMessage = "Reason is Required"
+        return;
+      }
       console.log("attachments are", this.attachmentsData);
       const fileArray = (
         this.createOffset ? this.newAttachmentsData : this.attachmentsData
@@ -592,13 +594,10 @@ export default {
       fileArray.forEach((file) => {
         formData.append("attachments", file);
       });
-
       console.log("Form data", formData);
-
       const customHeaders = {
         "Content-Type": "multipart/form-data",
       };
-
       try {
         // Determine the appropriate request method and parameters
         const apiRequest = this.createOffset ? this.$apiPost : this.$apiPatch;
@@ -609,7 +608,6 @@ export default {
         await apiRequest(...params).then((response) => {
           console.log("Response from the update/add: ", response);
           console.log("response message", response.message)
-
           if (response.status === 1) {
             this.$refs.toast.showSuccessToastMessage(response.message);
 
@@ -627,7 +625,9 @@ export default {
         });
       } catch (error) {
         console.error("Error in the process", error.status, error.message);
-        this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
+        this.showError=true;
+        this.errorMessage = error.message;
+        //this.$refs.toast.showErrorToastMessage("Something went wrongmmm!!");
       } finally {
 
       }

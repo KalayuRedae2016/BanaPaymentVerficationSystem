@@ -5,7 +5,8 @@
       <div class="flex items-center space-x-4 py-4 bg-white rounded-lg">
         <label class="flex items-center space-x-2">
           <span class="text-sm text-blue-600 font-semibold tracking-wide"
-            >Show</span
+            >Show
+          </span
           >
           <select
             @change="changeCurrentPage()"

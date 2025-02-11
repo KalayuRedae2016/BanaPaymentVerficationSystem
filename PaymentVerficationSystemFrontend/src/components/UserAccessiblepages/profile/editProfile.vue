@@ -1,146 +1,161 @@
 <template>
   <div class="pb-20 shadow-lg">
-    <Toast ref="toast"/>
+    <Toast ref="toast" />
     <div class="border-b border-blue-500">
       <p class="text-blue-500 font-bold px-4 pb-4 pt-3">Edit Client Profile</p>
     </div>
 
-    
-<div v-if="formEmptyEditProfile" class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
-  <strong class="font-bold">Success!</strong>
-  <span class="block sm:inline">User profile edited successfully.</span>
-  <button type="button" class="absolute top-0 bottom-0 right-0 px-4 py-3" aria-label="Close" onclick="this.parentElement.style.display='none'">
-    <svg class="fill-current h-6 w-6 text-green-700" role="button" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-      <title>Close</title>
-      <path d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.641a.5.5 0 00.707.707L10 10.707l3.641 3.64a.5.5 0 00.707-.707L10.707 10l3.641-3.641a.5.5 0 000-.707z" />
-    </svg>
-  </button>
-</div>
-<div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
-        <div
-          class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
+    <div
+      v-if="formEmptyEditProfile"
+      class="mx-10 mt-5 bg-blue-100 border border-green-400 text-blue-700 px-4 py-3 rounded relative"
+      role="alert"
+    >
+      <strong class="font-bold">Success!</strong>
+      <span class="block sm:inline">User profile edited successfully.</span>
+      <button
+        type="button"
+        class="absolute top-0 bottom-0 right-0 px-4 py-3"
+        aria-label="Close"
+        onclick="this.parentElement.style.display='none'"
+      >
+        <svg
+          class="fill-current h-6 w-6 text-green-700"
+          role="button"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
         >
-          <div class="m-4 w-full h-full lg:w-1/4 h-64 ">
-            <img
-              :src="imageData"
-              alt="User Profile Image"
-              class="h-64  w-64 lg:w-96"
-            />
+          <title>Close</title>
+          <path
+            d="M14.348 5.652a.5.5 0 00-.707 0L10 9.293 6.36 5.652a.5.5 0 10-.707.707L9.293 10l-3.64 3.641a.5.5 0 00.707.707L10 10.707l3.641 3.64a.5.5 0 00.707-.707L10.707 10l3.641-3.641a.5.5 0 000-.707z"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <div class="text-sm mx-0 lg:mx-5 mt-5 mb-5">
+      <div
+        class="flex flex-col lg:flex-row space-x-0 space-y-4 lg:space-y-0 border-t border-gray-300 shadow-lg"
+      >
+        <div class="m-4 w-full h-full lg:w-1/4 h-64">
+          <img
+            :src="imageData"
+            alt="User Profile Image"
+            class="h-64 w-64 lg:w-96"
+          />
+        </div>
+
+        <div class="mt-3 mx-auto lg:w-2/3">
+          <div class="bg-white p-2 rounded-md shadow-sm mt-3">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-id-badge text-green-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >{{ $t("User Code") }}:{{ clientProfile.userCode }}</span
+              >
+            </div>
           </div>
 
-          <div class="mt-3 mx-auto lg:w-2/3">
-            <div class="bg-white p-2 rounded-md shadow-sm mt-3">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-id-badge text-green-500"></i>
+          <div class="bg-white p-2 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-user text-yellow-500"></i>
 
-                <span class="text-sm text-gray-800"
-                  >{{ $t("User Code") }}:{{ clientProfile.userCode }}</span
-                >
-              </div>
+              <span class="text-sm text-gray-800"
+                >Full Name : {{ clientProfile.fullName }}</span
+              >
             </div>
-
-            <div class="bg-white p-2 rounded-md shadow-sm">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-user text-yellow-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >Full Name : {{ clientProfile.fullName }}</span
-                >
-              </div>
-            </div>
-
-            <div class="bg-white p-2 rounded-md shadow-sm mt-3">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-calendar-alt text-green-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >{{ $t("Age") }}:{{ clientProfile.age }}</span
-                >
-              </div>
-            </div>
-
-            <div class="bg-white p-2 rounded-md shadow-sm">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-venus-mars text-indigo-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >{{ $t("Gender") }}:{{ clientProfile.gender }}</span
-                >
-              </div>
-            </div>
-
-            <div class="bg-white p-2 rounded-md shadow-sm">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-map-marker-alt text-blue-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >{{ $t("Address") }}:{{ clientProfile.address }}</span
-                >
-              </div>
-            </div>
-
-            <div class="bg-white p-2 rounded-md shadow-sm">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-phone text-purple-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >{{ $t("phoneNumber") }}:{{ clientProfile.phoneNumber }}</span
-                >
-              </div>
-            </div>
-
-            <div class="bg-white p-2 rounded-md shadow-sm">
-              <div class="flex items-center space-x-3 border-b border-gray-300">
-                <i class="fas fa-envelope text-green-500"></i>
-
-                <span class="text-sm text-gray-800"
-                  >{{ $t("Email") }}:{{ clientProfile.email }}</span
-                >
-              </div>
-            </div>
-
-            <button
-              @click="showEditModal = true"
-              class="custom-button mb-10 ml-3 mt-5"
-            >
-              <i class="fas fa-edit mr-2"></i>Edit
-            </button>
           </div>
+
+          <div class="bg-white p-2 rounded-md shadow-sm mt-3">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-calendar-alt text-green-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >{{ $t("Age") }}:{{ clientProfile.age }}</span
+              >
+            </div>
+          </div>
+
+          <div class="bg-white p-2 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-venus-mars text-indigo-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >{{ $t("Gender") }}:{{ clientProfile.gender }}</span
+              >
+            </div>
+          </div>
+
+          <div class="bg-white p-2 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-map-marker-alt text-blue-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >{{ $t("Address") }}:{{ clientProfile.address }}</span
+              >
+            </div>
+          </div>
+
+          <div class="bg-white p-2 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-phone text-purple-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >{{ $t("phoneNumber") }}:{{ clientProfile.phoneNumber }}</span
+              >
+            </div>
+          </div>
+
+          <div class="bg-white p-2 rounded-md shadow-sm">
+            <div class="flex items-center space-x-3 border-b border-gray-300">
+              <i class="fas fa-envelope text-green-500"></i>
+
+              <span class="text-sm text-gray-800"
+                >{{ $t("Email") }}:{{ clientProfile.email }}</span
+              >
+            </div>
+          </div>
+
+          <button
+            @click="showEditModal = true"
+            class="custom-button mb-10 ml-3 mt-5"
+          >
+            <i class="fas fa-edit mr-2"></i>Edit
+          </button>
         </div>
       </div>
+    </div>
 
-      <div v-if="showEditModal" style="height: 400px">
-        <transition name="fade" mode="out-in">
-          <div
-            class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
-          >
-            <div class="bg-white rounded-lg p-6 border border-cyan-500">
-              <div class="flex justify-between items-center">
-                <div>Edit User Profile</div>
-                <div>
-                  <svg
-                    @click="showEditModal = !showEditModal"
-                    class="w-6 h-6 text-red-500 hover:text-red-700 transition-colors duration-300 cursor-pointer"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
+    <div v-if="showEditModal" style="height: 400px">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <div class="bg-white rounded-lg p-6 border border-cyan-500">
+            <div class="flex justify-between items-center">
+              <div>Edit User Profile</div>
+              <div>
+                <svg
+                  @click="showEditModal = !showEditModal"
+                  class="w-6 h-6 text-red-500 hover:text-red-700 transition-colors duration-300 cursor-pointer"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
               </div>
+            </div>
 
-              <hr class="my-4 md:bg-red-500" />
-              <div >
-                <form>
-
-                  <div style="height: 350px" class="scroll-y" >
-                  <div 
+            <hr class="my-4 md:bg-red-500" />
+            <div>
+              <form>
+                <div style="height: 350px" class="scroll-y">
+                  <div
                     class="flex flex-col lg:flex-row items-center gap-6 p-4 border border-blue-300 rounded-lg"
                   >
                     <!-- Image Container -->
@@ -289,23 +304,23 @@
                     />
                   </div>
                 </div>
-                  <button
-                    @click.prevent="editDetail()"
-                    type="submit"
-                    class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                <button
+                  @click.prevent="editDetail()"
+                  type="submit"
+                  class="bg-indigo-800 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  <i class="fas fa-save"
+                    ><span class="text-xs ml-3">{{ $t("save") }}</span></i
                   >
-                    <i class="fas fa-save"
-                      ><span class="text-xs ml-3">{{ $t("save") }}</span></i
-                    >
-                  </button>
-                </form>
-              </div>
-
-              <hr class="my-4 md:min-w-full bg-red-500" />
+                </button>
+              </form>
             </div>
+
+            <hr class="my-4 md:min-w-full bg-red-500" />
           </div>
-        </transition>
-      </div>
+        </div>
+      </transition>
+    </div>
 
     <div v-if="showSuccess">
       <transition name="fade" mode="out-in">
@@ -394,21 +409,19 @@
 </template>
     
     <script>
-
 import { mapGetters } from "vuex";
-import Toast from '../../Common/Toast.vue'
+import Toast from "../../Common/Toast.vue";
 export default {
   components: {
     Toast,
   },
   data() {
-
     return {
       componentKey: 0,
-      showSuccessToast:false,
-      showErrorToast:false,
-      succesToastMessage:"",
-      errorToastMessage:"",
+      showSuccessToast: false,
+      showErrorToast: false,
+      succesToastMessage: "",
+      errorToastMessage: "",
 
       showSuccess: false,
       showError: false,
@@ -454,20 +467,18 @@ export default {
     },
   },
   mounted() {
-
-    if (this.$route.query.formEmptyEditProfile === 'true') {
-    this.showSuccessToastMessage("Your Profile Editted Successfully");
+    if (this.$route.query.formEmptyEditProfile === "true") {
+      this.showSuccessToastMessage("Your Profile Editted Successfully");
       setTimeout(() => {
-        this.$router.push('/userdashboard/profile');
+        this.$router.push("/userdashboard/profile");
       }, 2000);
     }
-
 
     this.clientId = this.userId;
 
     console.log("client Id", this.clientId);
 
-    this.$apiGetById('/api/v1/users',this.clientId)
+    this.$apiGetById("/api/v1/users", this.clientId)
       .then((response) => {
         console.log("Response client profile", response);
 
@@ -477,7 +488,6 @@ export default {
       .catch((error) => {
         console.error("Error fetching client datakk:", error);
       });
-
   },
   methods: {
     showSuccessToastMessage(message) {
@@ -485,7 +495,7 @@ export default {
       this.showSuccessToast = true;
       setTimeout(() => {
         this.showSuccessToast = false;
-      }, 1000); 
+      }, 1000);
     },
 
     showErrorToastMessage(message) {
@@ -493,9 +503,8 @@ export default {
       this.showErrorToast = true;
       setTimeout(() => {
         this.showErrorToast = false;
-      }, 1000); 
+      }, 1000);
     },
-
 
     handleImageInput() {
       const fileInput = this.$refs.fileInput;
@@ -522,15 +531,22 @@ export default {
       formData.append("phoneNumber", this.clientProfile.phoneNumber);
       formData.append("gender", this.clientProfile.gender);
       const customHeaders = {
-    "Content-Type": "multipart/form-data",
-};
-      this.$apiPatch('/api/v1/users',this.clientProfile._id, formData,customHeaders)
+        "Content-Type": "multipart/form-data",
+      };
+      this.$apiPatch(
+        "/api/v1/users",
+        this.clientProfile._id,
+        formData,
+        customHeaders
+      )
         .then((response) => {
-          console.log("response from the update: " ,response);
+          console.log("response from the update: ", response);
           if (response.status === 1) {
-              this.clientProfile = response.updatedUser;
-              this.imageData = "data:image/jpeg;base64," + response.imageData;
-              this.$refs.toast.showSuccessToastMessage("Profile updated successfully");
+            this.clientProfile = response.updatedUser;
+            this.imageData = "data:image/jpeg;base64," + response.imageData;
+            this.$refs.toast.showSuccessToastMessage(
+              "Profile updated successfully"
+            );
           }
         })
         .catch((error) => {

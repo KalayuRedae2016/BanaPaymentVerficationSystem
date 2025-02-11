@@ -888,7 +888,6 @@ export default {
       errorToastMessage: "",
       showErrorToast: false,
       showSuccessToast: false,
-
       paymentSettingCreated: 0,
       showSuccess: false,
       showError: false,
@@ -900,21 +899,16 @@ export default {
       end_date_less_than_activeMonth: false,
       edit_activate_start_date_less_than_activeMonth: false,
       edit_activate_end_date_less_than_activeMonth: false,
-
       regularIsRequired: false,
       serviceIsRequired: false,
       activeYearIsRequired: false,
       serviceActiveMonthIsRequired: false,
-
       startingDateIsRequired: false,
       endingDateIsRequired: false,
       penality5DayIsRequired: false,
       penality10DayIsRequired: false,
       penalityAbove10DayIsRequired: false,
-
       regFeeIsRequired:false,
-
-
       paymentActivate: false,
       paymentSetting: {
         paymentActivate: true,

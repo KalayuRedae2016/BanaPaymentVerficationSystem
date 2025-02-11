@@ -225,7 +225,7 @@ export default {
 
   methods: {
     selectDeselectUser(userId) {
-    
+  
       console.log("selectDeselectEmail", userId);
       const index = this.selectedUsers.indexOf(userId);
       if (index === -1) {
