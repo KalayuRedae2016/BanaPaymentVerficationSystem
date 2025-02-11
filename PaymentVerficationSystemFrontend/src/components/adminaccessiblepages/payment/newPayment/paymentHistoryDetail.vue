@@ -1279,7 +1279,6 @@ export default {
           console.log("Error:", error);
         });
     },
-
     toggleIsPaid(event) {
       this.isPaid = !event.target.checked;
     },

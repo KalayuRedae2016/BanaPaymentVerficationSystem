@@ -13,18 +13,7 @@
             Payment Type:
           </h1>
           <div class="relative inline-block ml-5">
-            <!-- <select
-              v-model="dateType"
-              @change="fetchData()"
-              class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:border-blue-500"
-            >
-              <option value="" disabled>Select Report Type</option>
-              <option value="Annual">Annual</option>
-              <option value="semiAnnual">Semi-Annual</option>
-              <option value="monthly">Monthly</option>
-              <option value="weekly">Weekly</option>
-              <option value="daily">Daily</option>
-            </select> -->
+        
             <select
               v-model="paymentTipe"
               @change="fetchData"
@@ -178,12 +167,14 @@
       fetchData() {
        // alert("fetching data");
   
-       this.paymentSelected = false;
+  this.paymentSelected = false;
   const currentDate = new Date();
   const y = currentDate.getFullYear();
   const month = currentDate.getMonth() + 1;
   const timeRange = 'monthly';
   const paymentType = 'regularPayment';
+  
+
   
   this.apiClient
     .get(`/api/v1/closeHistory/reports?timeRange=${timeRange}&y=${y}&month=${month}&paymentType=${paymentType}`)
