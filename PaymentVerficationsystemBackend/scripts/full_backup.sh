@@ -27,7 +27,7 @@ mkdir -p "$BACKUP_DIR"
 mkdir -p "$MONGODB_BACKUP_DIR"
 
 # Get the current timestamp
-TIMESTAMP=$(date +"%Y%m%d%H%M%S")
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 
 # Function to perform MongoDB backup
 backup_mongo() {
