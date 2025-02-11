@@ -12,13 +12,20 @@ MONGODB_BACKUP_DIR="/backup/mongodb_backup"
 RSYNC="/usr/bin/rsync"
 MONGODUMP="/usr/bin/mongodump"
 
+# Load environment variables from .env (ensure correct path to your .env file)
+export $(cat /path/to/your/.env | xargs)
+
+# Ensure backup directories exist
+mkdir -p $BACKUP_DIR
+mkdir -p $MONGODB_BACKUP_DIR
+
 # Backup MongoDB data using mongodump
 echo "Starting MongoDB backup..."
-$MONGODUMP --out=$MONGODB_BACKUP_DIR
+$MONGODUMP --uri=$MONGODB_URI --out=$MONGODB_BACKUP_DIR/$(date +"%Y%m%d%H%M%S")
 
-# Backup application files using rsync
-# echo "Starting application files backup..."
-# $RSYNC -avz --delete $SOURCE_DIR $BACKUP_DIR
+# Backup application files using rsync (comment out if not needed)
+echo "Starting application files backup..."
+$RSYNC -avz --delete $SOURCE_DIR $BACKUP_DIR/$(date +"%Y%m%d%H%M%S")
 
 # Print success message
 echo "Backup completed successfully!"
