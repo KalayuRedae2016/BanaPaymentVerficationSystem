@@ -51,3 +51,7 @@ else
     echo "Usage: $0 {backup|restore}"
     exit 1
 fi
+
+#./full_backup.sh backup
+#./full_backup.sh restore
+
