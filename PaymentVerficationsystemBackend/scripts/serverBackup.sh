@@ -14,7 +14,7 @@ MONGODUMP="/usr/bin/mongodump"
 MONGORESTORE="/usr/bin/mongorestore"
 
 # Load environment variables from .env
-ENV_FILE="/var/www/BanaPaymentVerficationsystemBackend/PaymentVerficationsystemBackend/.env"
+ENV_FILE="/var/www/BanaPaymentVerficationSystem/PaymentVerficationsystemBackend/.env"
 if [ -f "$ENV_FILE" ]; then
     export $(grep -v '^#' "$ENV_FILE" | xargs -d '\n')
 else
