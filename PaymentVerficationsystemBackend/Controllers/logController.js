@@ -49,7 +49,7 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     id: log._id,
     model: log.model,
     action: log.action,
-    actor: log.actor,
+    actor: log.actor||null,
     actorName: userMap[log.actor?.toString()] || bankMap[log.actor?.toString()] || "Unknown",
     description: log.description,
     affectedData: (() => {
