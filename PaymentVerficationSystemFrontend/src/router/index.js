@@ -3,7 +3,6 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import landing from "../views/Landing.vue";
 import landing1 from "../views/landingCarausel.vue";
-import drawer from "../views/drawer.vue";
 import reset from "../views/reset.vue";
 
 import accessDenied from "../views/accessDenied.vue";
@@ -86,17 +85,7 @@ const routes = [
     meta: { requiresGuest: true },
   },
  
-  {
-    path: "/drawer",
-    component: drawer,
-    meta: { requiresGuest: true },
-    children: [
-      {
-        path: "portofilo", // Make this relative
-        component:portofilo, //
-      },
-    ]
-  },
+ 
 
   {
     path: "/jtable",
