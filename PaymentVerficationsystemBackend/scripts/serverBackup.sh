@@ -81,12 +81,14 @@ case "$1" in
         restore_mongo
         ;;
     *)
-        echo "Usage: $0 {backup_full|backup_incremental|restore}"
+        echo "Usage: $0 {backupFull|backupIncremental|restore}"
         exit 1
         ;;
 esac
 
 # Example Usage:
-# ./full_backup.sh backupFull
-# ./full_backup.sh backupIncremental
-# ./full_backup.sh restore
+# ./serverBackup.sh backupFull
+# ./serverBackup.sh backupIncremental
+# ./serverBackup.sh restore
+
+# 10 5 * * * /var/www/BanaPaymentVerficationSystem/PaymentVerficationsystemBackend/scripts/serverBackup.sh backupFull >> /var/log/mongo_full_backup.log 2>&1
