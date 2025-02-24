@@ -580,7 +580,7 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
   // });
 
   res.status(200).json({
-    status: 'success',
+    status: 1,
     message: `Edit permissions have been ${editPermission ? 'granted' : 'revoked/Disabled'} for the specified users.`,
     updatedCount: updatedUsers.modifiedCount,
   });
