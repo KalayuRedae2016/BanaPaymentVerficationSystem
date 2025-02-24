@@ -467,6 +467,7 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'userProfile' });
     if (this.$route.query.formEmptyEditProfile === "true") {
       this.showSuccessToastMessage("Your Profile Editted Successfully");
       setTimeout(() => {

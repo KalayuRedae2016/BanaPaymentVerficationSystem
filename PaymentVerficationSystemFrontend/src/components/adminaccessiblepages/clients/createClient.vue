@@ -391,6 +391,7 @@ export default {
   },
 
   mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'clients' });
     this.years = this.generateYearsArray(1914, 100).concat(
       this.generateYearsArray(2024, 100)
     );

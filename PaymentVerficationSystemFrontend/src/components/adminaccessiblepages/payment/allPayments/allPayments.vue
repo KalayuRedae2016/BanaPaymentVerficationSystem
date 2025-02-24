@@ -42,7 +42,7 @@
           </div>
         </div>
 
-        <div class="overflow-x-auto overflow-y-auto h-96">
+        <div  class="overflow-x-auto overflow-y-auto h-96">
           <!-- Table -->
           <table class="table-auto min-w-full border-collapse border-b border-gray-300 shadow-lg  border-t border-gray-300">
             <!-- Table Head -->
@@ -141,6 +141,11 @@
             </tbody>
           </table>
         </div>
+
+        <div v-if="a" class="mx-5 text-blue-500 text-lg">
+          No Opened,Overdue,Confirmed Payments
+        </div>
+
       </div>
     </div>
 
@@ -206,6 +211,7 @@ export default {
   },
   data() {
     return {
+      paymentLength:0,
       role:"",
       showDelateModal:false,
       selectMonth: false,
@@ -278,8 +284,7 @@ export default {
 
     }
 
-    await this.fetchPayments();
-
+  await this.fetchPayments();
     // Then evaluate conditions based on the query status
     if (this.$route.query.status === "confirmed") {
       this.paymentStatus = "paid";
@@ -331,7 +336,6 @@ export default {
     },
 
     paymentHistory(userCode, fullName, activeYear, activeMonth, status) {
-      //alert("hii");
       if (status == "confirmed") {
         this.$router.push({
           path: `/admindashboard/payment-history-detail/${userCode}`,
@@ -354,22 +358,22 @@ export default {
       });
       }
     },
-
     async fetchPayments() {
       const params = {
         keyword: "allPayments",
       }
-
       try {
         await this.$apiGet("/api/v1/payments/getAllPayments", params).then((response) => {
           console.log("response in the all payment nnnnnnn ", response);
           this.payments = response.payments;
           this.searchedpayments = this.payments;
+          if(response.payments!=null){
+           this.paymentLength = response.payments.length;
+          }
         })
       } catch (error) {
         console.error("Error fetching payment data:", error);
       } finally {
-
       };
     },
 

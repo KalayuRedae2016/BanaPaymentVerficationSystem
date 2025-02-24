@@ -256,6 +256,7 @@ export default {
 
 
  async  mounted() {
+  this.$store.dispatch("commitActiveItem", { activeItem: 'companyProfile' });
     if (this.$route.query.fromEmpty === "true") {
       this.$refs.toast.showSuccessToastMessage(
         "Your Company Profile Creeated Successfully"

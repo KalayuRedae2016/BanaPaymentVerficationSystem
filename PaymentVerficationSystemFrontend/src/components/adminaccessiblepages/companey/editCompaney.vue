@@ -781,6 +781,7 @@ export default {
     };
   },
   mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'companyProfile' });
     this.isLoading = true;
     this.$apiGet("/api/v1/organization")
       .then((response) => {

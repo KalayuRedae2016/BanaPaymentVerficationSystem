@@ -90,46 +90,80 @@
               {{ user.email }}
             </td>
             <td class="border-b border-gray-300 py-2 px-3">
-              <div class="flex items-center space-x-2">
-                <button
-                  @click="navigateToInClient(user._id)"
-                  class="bg-blue-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-blue-600"
-                >
-                  <i class="fas fa-info-circle"></i>
-                  <span></span>
-                </button>
-                <button
-                  @click="
-                    showResetModal = !showResetModal;
-                    selectedUserToBeResetPassword = user;
-                  "
-                  class="bg-yellow-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-yellow-600"
-                >
-                  <i class="fas fa-sync-alt"></i>
-                  <span></span>
-                </button>
-                <button
-                  @click="
-                    showDeactivateModal = !showDeactivateModal;
-                    userIdToBeDeactivated = user._id;
-                  "
-                  class="bg-pink-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
-                >
-                  <i class="fas fa-ban"></i>
-                  <span></span>
-                </button>
-                <button v-if="role==='SuperAdmin'"
-                  @click="
-                    showDelateModal = !showDelateModal;
-                    userToBeDeleted = user
-                  "
-                  class="bg-red-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
-                >
-                  <i class="fas fa-trash"></i>
-                  <span></span>
-                </button>
-              </div>
-            </td>
+  <div class="flex items-center space-x-2">
+    
+    <!-- Info Button -->
+    <div class="relative group">
+      <button
+        @click="navigateToInClient(user._id)"
+        class="bg-blue-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-blue-600"
+      >
+        <i class="fas fa-info-circle"></i>
+      </button>
+      <span
+        class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg"
+      >
+        View Detail
+      </span>
+    </div>
+
+    <!-- Reset Password Button -->
+    <div class="relative group">
+      <button
+        @click="
+          showResetModal = !showResetModal;
+          selectedUserToBeResetPassword = user;
+        "
+        class="bg-yellow-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-yellow-600"
+      >
+        <i class="fas fa-sync-alt"></i>
+      </button>
+      <span
+        class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg"
+      >
+        Reset Password
+      </span>
+    </div>
+
+    <!-- Deactivate Button -->
+    <div class="relative group">
+      <button
+        @click="
+          showDeactivateModal = !showDeactivateModal;
+          userIdToBeDeactivated = user._id;
+        "
+        class="bg-pink-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
+      >
+        <i class="fas fa-ban"></i>
+      </button>
+      <span
+        class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg"
+      >
+        Deactivate User
+      </span>
+    </div>
+
+    <!-- Delete Button (Only for SuperAdmin) -->
+    <div v-if="role === 'SuperAdmin'" class="relative group">
+      <button
+        @click="
+          showDelateModal = !showDelateModal;
+          userToBeDeleted = user;
+        "
+        class="bg-red-500 text-white px-2 py-2 rounded flex items-center space-x-1 hover:bg-red-600"
+      >
+        <i class="fas fa-trash"></i>
+      </button>
+      <span
+        class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded shadow-lg"
+      >
+        Delete User
+      </span>
+    </div>
+
+  </div>
+</td>
+
           </tr>
         </tbody>
       </table>
@@ -459,6 +493,7 @@ export default {
   created(){
     this.role=localStorage.getItem("role");  },
   async mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'clients' });
     await this.fetchData();
   },
   methods: {
@@ -544,7 +579,7 @@ console.log("user to be dekleted",userToBeDeleted);
       } catch (error) {
         this.errorMessage = error.message;
         this.showError = true;
-        conmsole.log("error during reseting", error.status, error.message);
+        console.log("error during reseting", error.status, error.message);
       } finally {
       }
     },

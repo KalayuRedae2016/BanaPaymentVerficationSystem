@@ -333,7 +333,7 @@ export default {
     };
   },
   mounted() {
-
+    this.$store.dispatch("commitActiveItem", { activeItem: 'userIdCard' });
 
    this.$apiGetById('/api/v1/users',localStorage.getItem('userId'))
     .then((response) => {

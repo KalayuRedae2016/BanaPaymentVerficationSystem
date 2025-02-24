@@ -116,7 +116,7 @@ export default {
   },
 
   async mounted() {
-
+    this.$store.dispatch("commitActiveItem", { activeItem: 'clients' });
     try {
       const params = {
         isActive: false,

@@ -222,6 +222,7 @@ export default {
   },
 
   async mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'message' });
       try { await this.$apiGet("/api/v1/users", {
         params: {
           isActive: true,

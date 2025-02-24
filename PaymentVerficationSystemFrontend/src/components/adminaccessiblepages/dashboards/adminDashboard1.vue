@@ -700,14 +700,14 @@ export default {
       }
 
       if (!this.newPassword) {
-        // alert("change password called")
+         alert("change password called")
         this.showError = true;
         this.errorMessage = "New Password is Required ";
         return;
       }
 
       if (!this.confirmPassword) {
-        //alert("p")
+        alert("p")
         this.showError = true;
         this.errorMessage = "Confirm Password is Required"
         return;
@@ -716,7 +716,7 @@ export default {
 
       if (this.newPassword != this.confirmPassword) {
 
-        this.passwordMisMatch = true
+        this.showError = true
         this.errorMessage = "Password Mis Match"
         return;
 

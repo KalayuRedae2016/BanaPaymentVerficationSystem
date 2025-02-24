@@ -2,9 +2,11 @@
   <div class="mb-48">
     <Toast ref="toast" />
     <div class="container mx-auto p-4 flex flex-col">
-      <div class="flex flex-row w-full border-b border-blue-500 pb-1">
-        <p class="text-blue-500 text-md font-bold">{{ $t("Active Clients") }}</p>
-        <div class="ml-auto flex space-x-2">
+      <div class="mt-16 lg:mt-0 flex flex-col lg: flex-row w-full border-b border-blue-500 pb-1 ">
+        <p class="text-blue-500 text-md font-bold pb-5 lg:pb-0">{{ $t("Active Clients") }}</p>
+
+
+        <div class="lg:-mt-8 ml-auto flex space-x-2">
           <button @click.prevent="navigateToCreateClient()" class="custom-button text-xs ">
             <i class="fa fa-add mr-2 "></i>Add
           </button>
@@ -14,7 +16,10 @@
           <button class="custom-button text-xs" @click="showDeactivatedUsers()">
             <i class="fa fa-user-slash" aria-hidden="true"></i> {{ $t("View Deactivated Users") }}
           </button>
+
         </div>
+
+  
       </div>
     </div>
 
@@ -45,67 +50,57 @@
                 class="custom-input" />
             </div>
 
-            <div class="overflow-x-auto overflow-y-auto max-h-64 border border-gray-300 p-4">
-              <!-- Table -->
-              <table class="table-auto min-w-full border-collapse">
-                <!-- Table Head -->
-                <thead class=" text-white sticky top-0 z-0">
-                  <tr class="text-blue-500 ">
-                    <th class="w-24 p-4 font-bold text-left">
-                      {{ $t("check") }}
-                      <input type="checkbox" class="ml-2" v-model="selectAll" @change="selectDeselectAll()" />
-                    </th>
-                    <th class="w-24 p-4 font-bold text-left">
-                      {{ $t("userCode") }}
-                    </th>
-                    <th class="w-24 p-4 font-bold text-left">
-                      {{ $t("fullName") }}
-                    </th>
+            <div class="border border-gray-300 p-4">
+  <div class="overflow-y-auto max-h-64"> 
+    <table class="table-auto min-w-full">
+      <thead class="text-blue-500 sticky top-0 z-40 bg-white shadow-md">
+        <tr class="text-blue-500">
+          <th class="w-24 p-4 font-bold text-left">
+            {{ $t("check") }}
+            <input type="checkbox" class="ml-2" v-model="selectAll" @change="selectDeselectAll()" />
+          </th>
+          <th class="w-24 p-4 font-bold text-left">
+            {{ $t("userCode") }}
+          </th>
+          <th class="w-24 p-4 font-bold text-left">
+            {{ $t("fullName") }}
+          </th>
+        </tr>
+      </thead>
 
-                  </tr>
-                </thead>
-                <!-- Scrollable Table Body -->
-                <tbody class="divide-y divide-gray-200 bg-gray-50 ">
-                  <tr @click="selectDeselectUser(searchClient._id)" v-for="(searchClient, index) in searchedusers"
-                    :key="searchClient._id"
-                    class="cursor-pointer bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg h-8">
-                    <td class="text-md text-gray-700">
-                      <input type="checkbox" class="pl-4 rounded focus:ring focus:ring-indigo-300"
-                        :checked="selectedUsers.includes(searchClient._id)"
-                        @change="selectDeselectUser(searchClient._id)" />
-                    </td>
-                    <td class=" text-xs text-gray-700 hidden h-8">
-                      <span class="font-bold text-indigo-600">{{
-                        index + 1
-                      }}</span>
-                    </td>
-                    <td class=" text-xs text-gray-700 h-6">
-                      <span class="font-bold text-indigo-600">{{
-                        searchClient.userCode
-                      }}</span>
-                    </td>
-                    <td class="text-xs text-gray-700 font-bold h-6">
-                      {{ searchClient.fullName }}
-                    </td>
-                  </tr>
+      <tbody class="bg-gray-50 divide-y divide-gray-200">
+        <tr v-for="(searchClient) in searchedusers" :key="searchClient._id"
+          @click="selectDeselectUser(searchClient._id)"
+          class="cursor-pointer bg-white hover:shadow-lg hover:bg-gray-100 rounded-lg">
+          <td class="text-md text-gray-700 p-2">
+            <input type="checkbox" class="pl-4 rounded focus:ring focus:ring-indigo-300"
+              :checked="selectedUsers.includes(searchClient._id)"
+              @change="selectDeselectUser(searchClient._id)" />
+          </td>
+          <td class="text-xs text-gray-700 p-2">
+            <span class="font-bold text-indigo-600">
+              {{ searchClient.userCode }}
+            </span>
+          </td>
+          <td class="text-xs text-gray-700 font-bold p-2">
+            {{ searchClient.fullName }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-                </tbody>
-              </table>
-            </div>
 
-            <!-- <div class="flex flex-row mt-2">
-              <label for="" class="custom-label w-1/4 mt-3">Close Date</label>
-              <input type="text" class="custom-input w-2/3">
-            </div> -->
+
+            
             <div class="w-full my-2 bg-blue-100 border-t blue-200 p-2 text-blue-700">
               Total selected :
               <span class="text-gray-600 font-extrabold ">{{
                 selectedUsers.length
               }}</span>
             </div>
-
             <p class="my-2 text-red-500 text-xs" v-if="selectAtLeastOneUser">Select At list One User??</p>
-
             <div class="mt-2 flex space-x-5">
               <button @click="giveRejectPermission(true)" class="custom-button">
                 <i class="fa fa-check"></i> {{ $t("Give Permission") }}
@@ -205,6 +200,7 @@ export default {
   },
 
   async mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'clients' });
     const params = {
       isActive: true
     }
@@ -287,15 +283,17 @@ export default {
   }
 }
 ,
-    async resetPassword(user) {
+async resetPassword(user) {
+  
       console.log("userId is", user._id);
       this.showResetModal = false;
       const payload = {
         id: user._id,
-        email: user.email,
       };
+
+      console.log("payload is", user._id,payload)
       try {
-        await this.$apiPatch("/api/v1/users/resetPasswordByAdmin", '', payload)
+        await this.$apiPatch("/api/v1/users/resetPasswordByAdmin", user._id, payload)
           .then((response) => {
             console.log("users", response);
             if (response.status === 1) {

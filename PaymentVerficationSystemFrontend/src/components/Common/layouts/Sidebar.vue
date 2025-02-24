@@ -9,10 +9,9 @@
         {{ $t("Payment Management") }}
       </h1>
     </div>
-
+    
     <hr class="border-gray-300 mb-4" />
 
-    <!-- Sidebar Links -->
     <ul class="space-y-1">
       <li
         v-if="role === 'Admin' || role === 'SuperAdmin'"

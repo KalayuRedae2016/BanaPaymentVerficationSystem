@@ -4,11 +4,8 @@ import HomeView from "../views/HomeView.vue";
 import landing from "../views/Landing.vue";
 import landing1 from "../views/landingCarausel.vue";
 import reset from "../views/reset.vue";
-
 import accessDenied from "../views/accessDenied.vue";
-
 import portofilo from "../views/portofilo.vue";
-
 import jTableCaller from '../components/Common/jatableCaller.vue';
 import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
 import resetTables from "../components/Common/resetTables.vue"
@@ -16,11 +13,7 @@ import userManual from "../components/Common/userManual.vue"
 import changeCommonPassword from '../components/Common/Setting/changePassword.vue'
 // Admin components
 // import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
-
-
 import adminDashboard from "../components/adminaccessiblepages/dashboards/adminDashboard1.vue";
-
-
 import newCompneySettings from "../components/adminaccessiblepages/companey/newCompaneySettings.vue";
 import displayCompaney from "../components/adminaccessiblepages/companey/displayCompaney.vue";
 import editCompaney from "../components/adminaccessiblepages/companey/editCompaney.vue";
@@ -29,9 +22,7 @@ import payment1 from "../components/adminaccessiblepages/payment/payments1.vue";
 import regular from "../components/adminaccessiblepages/payment/paymentSetting/blockNewPayment.vue";
 import clients from "../components/adminaccessiblepages/clients/clients.vue";
 import deactivate from "../components/adminaccessiblepages/clients/deactivate.vue";
-
 import importUsers from "../components/adminaccessiblepages/clients/insertMultiple.vue";
-
 import createClient from "../components/adminaccessiblepages/clients/createClient.vue";
 import editClient from "../components/Common/Setting/editProfile.vue";
 import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEditProfile.vue";
