@@ -283,62 +283,8 @@ export default {
   }
 }
 ,
-async resetPassword(user) {
-  
-      console.log("userId is", user._id);
-      this.showResetModal = false;
-      const payload = {
-        id: user._id,
-      };
 
-      console.log("payload is", user._id,payload)
-      try {
-        await this.$apiPatch("/api/v1/users/resetPasswordByAdmin", user._id, payload)
-          .then((response) => {
-            console.log("users", response);
-            if (response.status === 1) {
-              this.showResetedPasswordModal = true;
-              this.resetedPassword = response.resetedPassword;
-              this.$refs.toast.showSuccessToastMessage(response.message);
-              this.displayedItems();
-            }
-          })
-      } catch (error) {
-        this.errorMessage = error.message;
-        this.showError = true;
-        conmsole.log("error during reseting", error.status, error.message)
-      } finally {
 
-      };
-    },
-
-    async deactivate(userId) {
-      const payload = {
-        reason: this.deactivationReason,
-        isActive: false,
-      };
-
-      console.log("payload", payload);
-      this.showDeactivateModal = false;
-
-      try {
-        await this.$apiPut("/api/v1/users/active-deactive", userId, payload)
-          .then((response) => {
-            console.log("users", response);
-            if (response.status === 1) {
-              this.$refs.toast.showSuccessToastMessage(response.message);
-              this.$reloadPage();
-            } else {
-              this.showErrorToastMessage("Something went wrong!!");
-            }
-          })
-      } catch (error) {
-        console.log("error during activating", error.status, error.message);
-        this.$refs.toast.showErrorToastMessage("Something went wrong!!");
-      } finally {
-
-      }
-    },
 
 
     navigateToInClient(clientId) {

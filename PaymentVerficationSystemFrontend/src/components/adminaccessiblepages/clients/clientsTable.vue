@@ -558,12 +558,11 @@ console.log("user to be dekleted",userToBeDeleted);
       this.showResetModal = false;
       const payload = {
         id: user._id,
-        email: user.email,
       };
       try {
         await this.$apiPatch(
           "/api/v1/users/resetPasswordByAdmin",
-          "",
+          user._id,
           payload
         ).then((response) => {
           console.log("users", response);
