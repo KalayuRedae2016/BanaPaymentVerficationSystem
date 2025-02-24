@@ -350,7 +350,10 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   );
 
   // Step 8: Revoke edit permission after successful update
-  user.canEditDetails = false;
+  
+  if (!['Admin', 'SuperAdmin'].includes(user.role)) {
+    user.canEditDetails = false;
+  }
   await user.save();
 
   await logAction({
