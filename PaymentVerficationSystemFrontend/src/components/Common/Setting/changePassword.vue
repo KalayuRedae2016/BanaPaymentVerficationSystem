@@ -233,26 +233,21 @@ export default {
         email: this.newEmail,
       }
 
-      try { 
-        await this.$apiPatch('/api/v1/users/updateMe', '',payload)
-        .then((response) => {
-          console.log("response from the update: " ,response);
-          if (response.status === 1) {
-            const email=response.updatedUser.email;
-            this.newEmail=response.updatedUser.email;
-            this.$store.dispatch("commitEmail", {  email});
-           this.$refs.toast.showSuccessToastMessage(response.message);
-            this.$reloadPage();
-          }
-        })}
-        catch(error) {
-          console.log("error email chnage",error.status,error.message);
-          //this.$refs.toast.showErrorToastMessage("Somthing went wrong!!");
-          this.showEmailError=true;
-          this.errorMessage=error.message;
-        }finally{
-          console.log("email change finally");
-        };
+      try {
+  const response = await this.$apiPatch('/api/v1/users/updateMe', '', payload);
+  
+  console.log("Response from the update: update me", response);
+  if (response.status === 1) {
+    
+    this.$refs.toast.showSuccessToastMessage("Email Updated SuccessFully");
+    this.$reloadPage();
+  }
+} catch (error) {
+  console.log("Error while changing email:", error.status, error.message);
+  this.showEmailError = true;
+  this.errorMessage = error.message;
+} 
+
     },
 
    async changePassword() {
