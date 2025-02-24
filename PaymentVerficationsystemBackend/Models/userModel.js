@@ -104,13 +104,13 @@ const userSchema = new Schema(
       type: String,
       required: [true, 'Phone number is required'],
       unique: true, // Mongoose automatically creates a unique index for this field
-      validate: {
-        validator: function (v) {
-          // Regex to match a phone number that starts with a non-zero digit and is exactly 9 digits long
-          return /^\+251[0-9]{9}$/.test(v);
-        },
-       message: 'Phone number must start with +251 and contain 9 additional digits'
-      },
+      // validate: {
+      //   validator: function (v) {
+      //     // Regex to match a phone number that starts with a non-zero digit and is exactly 9 digits long
+      //     return /^\+251[0-9]{9}$/.test(v);
+      //   },
+      //  message: 'Phone number must start with +251 and contain 9 additional digits'
+      // },
     },
     profileImage: {
       type: String,

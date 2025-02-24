@@ -359,26 +359,21 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 
 exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
   const userId = req.params.userId;
-  const user = await User.findById(userId)
+  const user = await User.findById(userId);
+  onsole.log("reseted userId", userId);
+  console.log("reseted user", user);
+
   if (!user) {
     return next(new AppError('User is not found', 404));
   }
-  //console.log(user)
-  password = await user.generateRandomPassword();
+
+  // Generate a new password and update the user
+  const password = await user.generateRandomPassword();
   user.password = await bcrypt.hash(password, 12);
-  user.changePassword=true
+  user.changePassword = true;
   await user.save();
-  res.status(200).json({
-    status: 1,
-    userId: user._id,
-    role: user.role,
-    resetedPassword: password,
-    message: "Password Reseted Succeffully",
-    changePassword:user.changePassword
 
-  });
-
-  // Check if the user has an email
+  // If the user has no email, send response and return
   if (!user.email) {
     return res.status(200).json({
       status: 1,
@@ -386,15 +381,17 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
       role: user.role,
       resetedPassword: password,
       message: 'Password reset successfully. The password will be provided by the admin. Please contact support.',
+      changePassword: user.changePassword,
     });
   }
-  
+
   try {
+    // Send email to user
     const subject = 'Your Password Has Been Reset';
     const email = user.email;
     const loginLink = process.env.NODE_ENV === "development" ? "http://localhost:5173" : "https://banapvs.com";
     const message = `Hi ${user.fullName},
-   
+
         Your password has been reset by an administrator. Here are your new login credentials:
 
       - User Code: ${user.userCode}
@@ -403,7 +400,7 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
 
       Please log in and change your password immediately.
 
-      -LoginLink:${loginLink}
+      -Login Link: ${loginLink}
 
       If you did not request this change, please contact our support team.
 
@@ -411,18 +408,23 @@ exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
       The Bana Marketing Group Team`;
 
     await sendEmail({ email, subject, message });
+
+    // Return response after email is sent
     return res.status(200).json({
       status: 1,
       userId: user._id,
       role: user.role,
       resetedPassword: password,
-      message: 'Password reset successfully. The password will be provided by the admin. Please contact support.',
+      message: 'Password reset successfully. Check your email for details.',
+      changePassword: user.changePassword,
     });
+
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return next(new AppError('There was an error sending the email. Try again later!', 500));
   }
 });
+
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
   const userId= req.params.userId

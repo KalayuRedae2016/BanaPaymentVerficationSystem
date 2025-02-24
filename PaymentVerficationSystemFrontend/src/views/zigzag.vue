@@ -1,5 +1,5 @@
 <template>
-    <div class="relative bg-gradient-to-r from-blue-500 to-blue-300 text-white py-16 px-6 md:px-20 flex flex-col md:flex-row items-center overflow-hidden">
+       <div class="relative bg-gradient-to-r from-blue-500 to-blue-300 text-white py-16 px-6 md:px-20 flex flex-col md:flex-row items-center overflow-hidden">
     <div class="md:w-1/2 flex justify-center md:justify-start">
       <div class="w-60 md:w-72 bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
         <div class="w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center text-white text-2xl font-bold">✔</div>
@@ -32,12 +32,12 @@
       </div>
     </div>
     
-    <!-- Wave effect with multiple zigzags for a detailed 3D road-like effect -->
+    <!-- Enhanced 3D wave effect to simulate road perspective -->
     <div class="absolute bottom-0 left-0 w-full z-0">
       <svg viewBox="0 0 1440 320" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#3b82f6" fill-opacity="1" d="M0,224L80,208C160,192,320,160,480,165.3C640,171,800,213,960,224C1120,235,1280,213,1360,202.7L1440,192V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"></path>
-        <path fill="#1e3a8a" fill-opacity="1" d="M0,288L80,277.3C160,267,320,245,480,234.7C640,224,800,224,960,234.7C1120,245,1280,267,1360,277.3L1440,288V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"></path>
-        <path fill="#0f172a" fill-opacity="1" d="M0,320L80,298.7C160,277,320,235,480,224C640,213,800,235,960,256C1120,277,1280,299,1360,309.3L1440,320V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"></path>
+        <path fill="#3b82f6" fill-opacity="1" d="M0,240L80,220C160,200,320,160,480,180C640,200,800,260,960,270C1120,280,1280,240,1360,220L1440,200V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"></path>
+        <path fill="#1e3a8a" fill-opacity="1" d="M0,280L80,260C160,240,320,200,480,220C640,240,800,280,960,290C1120,300,1280,260,1360,240L1440,220V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"></path>
+        <path fill="#0f172a" fill-opacity="1" d="M0,320L80,300C160,280,320,240,480,260C640,280,800,300,960,310C1120,320,1280,280,1360,260L1440,240V320H1360C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320H0Z"></path>
       </svg>
     </div>
   </div>

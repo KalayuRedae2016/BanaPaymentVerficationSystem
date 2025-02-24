@@ -92,3 +92,6 @@ esac
 # ./serverBackup.sh restore
 
 # 10 5 * * * /var/www/BanaPaymentVerficationSystem/PaymentVerficationsystemBackend/scripts/serverBackup.sh backupFull >> /var/log/mongo_full_backup.log 2>&1
+#Mannually
+#/bin/bash /var/www/BanaPaymentVerficationSystem/PaymentVerficationsystemBackend/scripts/serverBackup.sh backupFull
+
