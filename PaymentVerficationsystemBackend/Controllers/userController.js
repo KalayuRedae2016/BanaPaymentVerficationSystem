@@ -374,7 +374,8 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   // Step 10: Send success response
   res.status(200).json({
     status: 1,
-    message: {
+    message:"user Updated Sucessfully",
+    updatedUser: {
       ...updatedUser._doc,
       formattedCreatedAt,
       formattedUpdatedAt,
