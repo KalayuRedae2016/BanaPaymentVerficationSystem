@@ -360,7 +360,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
 exports.resetPasswordByAdmin = catchAsync(async (req, res, next) => {
   const userId = req.params.userId;
   const user = await User.findById(userId);
-  onsole.log("reseted userId", userId);
+  console.log("reseted userId", userId);
   console.log("reseted user", user);
 
   if (!user) {
