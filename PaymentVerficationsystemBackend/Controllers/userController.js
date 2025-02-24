@@ -370,7 +370,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
 
   // Step 10: Send success response
   res.status(200).json({
-    status: 'success',
+    status: 1,
     message: {
       ...updatedUser._doc,
       formattedCreatedAt,
