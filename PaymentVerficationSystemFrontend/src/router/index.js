@@ -99,8 +99,8 @@ const routes = [
     path: "/admindashboard",
     component: commonDashboard,
     // meta: { requiresAuth: true, role: ['Admin', 'SuperAdmin'] },
-    meta: { requiresAuth: true},
-    //meta: { requiresGuest: true },
+    //meta: { requiresAuth: true},
+    meta: { requiresGuest: true },
     children: [
       // Admin routes
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
@@ -123,13 +123,11 @@ const routes = [
      
       // { path: "bank-statement/:userCode", component: bankStatement },
       { path: "user-for-bank-statement", component:  usersForBankStatement  },
-      
-  
       { path: "overdue", name: "overdue", component: overdue, props: true },
       { path: "paid-unpaid", name: "paid-unpaid", component: paidUnpaid, props: true },
       // { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
    
-      
+  
       { path: "empty/:clientId", component: empty },
       { path: "empty-companey", component: emptyCompaney },
       { path: "empty-client", component: emptyClient }, 
@@ -187,8 +185,8 @@ const routes = [
   {
     path: "/userdashboard",
     component: commonDashboard,
-    meta: { requiresAuth: true, role: 'User' },
-    //meta: { requiresGuest: true },
+    //meta: { requiresAuth: true, role: 'User' },
+    meta: { requiresGuest: true },
     children: [
       { path: "", component: userdashboardFirst },  
       { path: "info", component: infoPayment },
