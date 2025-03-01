@@ -201,7 +201,6 @@ export default {
     };
   },
 
-
   computed: {
     ...mapGetters(["getToken", "getUserId", "getRole"]),
     userId() {
@@ -223,7 +222,7 @@ export default {
 
   methods: {
    async  changeEmail() {
-      const formData = new FormData();
+  
       if(this.newEmail=='' || this.newEmail==null){
         this.newEmailIsRequired=true;
         return;
@@ -238,8 +237,8 @@ export default {
   
   console.log("Response from the update: update me", response);
   if (response.status === 1) {
-    
-    this.$refs.toast.showSuccessToastMessage("Email Updated SuccessFully");
+    this.$store.dispatch("commitEmail", { email: response.updatedUser.email});
+    this.$refs.toast.showSuccessToastMessage("Email updated successfully");
     this.$reloadPage();
   }
 } catch (error) {
