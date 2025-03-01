@@ -498,11 +498,11 @@ export default {
   },
 
  async  mounted() {
-    if(localStorage.getItem("token")===null){
-      this.$router.push({ path: "/" });
-    }else{
+    // if(localStorage.getItem("token")===null){
+    //   this.$router.push({ path: "/" });
+    // }else{
 
-    }
+    // }
 
     window.addEventListener("resize", this.checkScreenSize);
     this.checkScreenSize();
