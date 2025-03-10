@@ -6,6 +6,7 @@ const {logAction}=require("../utils/logUtils")
 const { generateUniqueApiKey } = require('../utils/generateUniqueApiKeyToken');
 const {formatDate,formatDateGC}=require("../utils/formatDate")
 
+
 exports.createOrganization = catchAsync(async (req, res, next) => {
   const { 
     companyName, 
@@ -305,3 +306,51 @@ exports.deleteOrgs = catchAsync(async (req, res, next) => {
     message: `${deletedOrg.deletedCount} Organization Deleted`
   });
 });
+
+exports.updateAPiKey = catchAsync(async (req, res, next) => {
+  console.log(req.params);
+
+  // Ensure you are using the correct param name based on your route definition
+  const keyId = req.params.keyId || req.params.Id;
+  console.log("Extracted keyId:", keyId);
+
+  if (!keyId) {
+    return next(new AppError("Key ID is not found", 404));
+  }
+
+  console.log("Updating API key for ID:", keyId);
+
+  const apiKey = await ApiKey.findOneAndUpdate(
+    { _id: keyId },
+    { key: generateUniqueApiKey() }, // Ensure this function generates a valid API key
+    { new: true, runValidators: true }
+  );
+
+  if (!apiKey) {
+    return next(new AppError("API key is not found", 404));
+  }
+
+  console.log("Updated API Key:", apiKey);
+
+  res.status(200).json({
+    success: 1,
+    data: apiKey,
+  });
+});
+exports.viewAPiKey = catchAsync(async (req, res, next) => {
+ 
+  const apiKey = await ApiKey.find({ status: "active" });
+  if (!apiKey || apiKey.length === 0) {
+    return res.status(200).json({
+      success: 1,
+      data: [],
+    });
+  }
+
+  res.status(200).json({
+    success: 1,
+    data: apiKey,
+  });
+});
+
+

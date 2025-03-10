@@ -109,7 +109,12 @@ exports.searchBills = async (req, res) => {
     const paymentQuery = {
       $or: [
         { userCode: { $regex: searchPattern } },
-        { fullName: { $regex: searchPattern } },
+      { billCode: { $regex: searchPattern } },
+      { fullName: { $regex: searchPattern } },
+      { firstName: { $regex: searchPattern } },
+      { middleName: { $regex: searchPattern } },
+      { lastName: { $regex: searchPattern } },
+      { phoneNumber: { $regex: searchPattern } },
       ],
       isPaid: false,
     };

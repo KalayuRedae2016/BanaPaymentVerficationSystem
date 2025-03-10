@@ -1,8 +1,12 @@
 const ApiKey = require('../Models/apiKeyModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
+const dotenv = require("dotenv");
+// Load environment variables based on the NODE_ENV
+const envFile = process.env.NODE_ENV === "production" ? ".env.production" : ".env.development";
+dotenv.config({ path: envFile });
 
-const authenticateApiKey = catchAsync(async (req, res, next) => {
+exports.authenticateApiKey = catchAsync(async (req, res, next) => {
   console.log("AuthenticatedPage....")
   
     console.log("headers",req.headers)
@@ -12,13 +16,28 @@ const authenticateApiKey = catchAsync(async (req, res, next) => {
     if (!apiKey) return next(new AppError('API Key is required'),400)
 
     const apiKeyData = await ApiKey.findOne({ key: apiKey, status: 'active' });
+
     if (!apiKeyData)  return next(new AppError('Invalid or revoked API Key'),400)
 
-    // const bankType = apiKeyData.bankType;
-    // req.bankType = bankType;
+    const bankType = apiKeyData.bankType;
+    req.bankType = bankType;
     req.apiKeyData = apiKeyData;
-  console.log(req.apiKeyData)
+    console.log(req.apiKeyData)
     next();
   })
 
-module.exports = authenticateApiKey;
+exports.protectWithPassword = (req, res, next) => {
+    const password = req.body.password;
+    const correctPassword = process.env.apiKey_ROUTE_PASSWORD || "mySecretPassword";
+    console.log("password",password)
+
+    if (!password || password !== correctPassword) {
+      return res.status(401).json({
+        success: 0,
+        message: "Unauthorized: Invalid APIKey password",
+      });
+    }
+  
+    next();
+  };
+  

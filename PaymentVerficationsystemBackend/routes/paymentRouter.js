@@ -3,7 +3,7 @@ const app = express();
 const path = require('path');
 const authoController = require('../Controllers/authoController');
 const verifyToken = require('../Middlware/verifyToken');
-const authenticateApiKey=require('../Middlware/verifyApiKey')
+const {authenticateApiKey,protectWithPassword}=require('../Middlware/verifyApiKey')
 
 const paymentController = require('../Controllers/paymentController');
 const router = express.Router();
