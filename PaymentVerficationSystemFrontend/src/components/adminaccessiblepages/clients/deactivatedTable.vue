@@ -303,6 +303,7 @@
       },
     },
     async mounted() {
+      this.$store.dispatch("commitActiveItem", { activeItem: 'clients' });
       await this.fetchData();
     },
     methods: {

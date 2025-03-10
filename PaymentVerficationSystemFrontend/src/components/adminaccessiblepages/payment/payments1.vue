@@ -336,6 +336,7 @@ export default {
     this.fetchClientData(this.clientId);
   },
   mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'payment' });
     console.log("active tab here", this.$route.query.activeTab);
 
     if (this.$route.query.activeTab == 0) {

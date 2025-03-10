@@ -111,7 +111,7 @@
             <div class="flex flex-row justify-between items-center">
               <div>
                 <label class="custom-label text-lg font-bold">
-                  {{ $t("Edit Transfer Payment") }}
+                  {{ $t("Edit Service Offsets") }}
                 </label>
               </div>
               <div>
@@ -448,9 +448,6 @@ export default {
         this.paymentToBeEdited.reason
       );
 
-
-
-
       this.showError = false;
       this.errorMessage = "";
 
@@ -528,7 +525,9 @@ export default {
                   radioStatus: "serviceOffsets"
                 },
               });
+              this.$reloadPage();
             }, 2000);
+
           }
         });
       } catch (error) {

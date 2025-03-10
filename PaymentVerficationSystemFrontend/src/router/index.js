@@ -4,11 +4,8 @@ import HomeView from "../views/HomeView.vue";
 import landing from "../views/Landing.vue";
 import landing1 from "../views/landingCarausel.vue";
 import reset from "../views/reset.vue";
-
 import accessDenied from "../views/accessDenied.vue";
-
 import portofilo from "../views/portofilo.vue";
-
 import jTableCaller from '../components/Common/jatableCaller.vue';
 import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
 import resetTables from "../components/Common/resetTables.vue"
@@ -16,11 +13,7 @@ import userManual from "../components/Common/userManual.vue"
 import changeCommonPassword from '../components/Common/Setting/changePassword.vue'
 // Admin components
 // import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
-
-
 import adminDashboard from "../components/adminaccessiblepages/dashboards/adminDashboard1.vue";
-
-
 import newCompneySettings from "../components/adminaccessiblepages/companey/newCompaneySettings.vue";
 import displayCompaney from "../components/adminaccessiblepages/companey/displayCompaney.vue";
 import editCompaney from "../components/adminaccessiblepages/companey/editCompaney.vue";
@@ -29,9 +22,7 @@ import payment1 from "../components/adminaccessiblepages/payment/payments1.vue";
 import regular from "../components/adminaccessiblepages/payment/paymentSetting/blockNewPayment.vue";
 import clients from "../components/adminaccessiblepages/clients/clients.vue";
 import deactivate from "../components/adminaccessiblepages/clients/deactivate.vue";
-
 import importUsers from "../components/adminaccessiblepages/clients/insertMultiple.vue";
-
 import createClient from "../components/adminaccessiblepages/clients/createClient.vue";
 import editClient from "../components/Common/Setting/editProfile.vue";
 import emptyEditProfile from "../components/adminaccessiblepages/clients/emptyEditProfile.vue";
@@ -107,9 +98,9 @@ const routes = [
   {
     path: "/admindashboard",
     component: commonDashboard,
-    // meta: { requiresAuth: true, role: ['Admin', 'SuperAdmin'] },
-    meta: { requiresAuth: true},
-    //meta: { requiresGuest: true },
+    meta: { requiresAuth: true, role: ['Admin', 'SuperAdmin'] },
+    //meta: { requiresAuth: true},
+    meta: { requiresGuest: true },
     children: [
       // Admin routes
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
@@ -132,13 +123,11 @@ const routes = [
      
       // { path: "bank-statement/:userCode", component: bankStatement },
       { path: "user-for-bank-statement", component:  usersForBankStatement  },
-      
-  
       { path: "overdue", name: "overdue", component: overdue, props: true },
       { path: "paid-unpaid", name: "paid-unpaid", component: paidUnpaid, props: true },
       // { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
    
-      
+  
       { path: "empty/:clientId", component: empty },
       { path: "empty-companey", component: emptyCompaney },
       { path: "empty-client", component: emptyClient }, 
@@ -150,61 +139,17 @@ const routes = [
       { path: "reset-table", name: "reset-table", component:  resetTables },
     ],
   },
-
-  // {
-  //   path: "/superadmindashboard",
-  //   component: commonDashboard,
-  //   meta: { requiresAuth: true, role: 'SuperAdmin' },
-  //   children: [
-  //     // Admin routes
-  //     { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
-  //     { path: "", component: adminDashboard },
-  //     { path: "res-dash", component: adminDashboard },
-  //     { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },
-  //     { path: "display-companey", name: "display-companey", component: displayCompaney },
-  //     { path: "edit-companey", name: "edit-companey", component: editCompaney },
-  //     { path: "change-password", name: "change-password", component: changeCommonPassword  },
-  //     { path: "payments1", name: "payments1", component: payment1 },
-  //     { path: "regular-new-setting", name: "regular-new-setting", component: regular }, 
-  //     { path: "clients", component: clients },
-  //     { path: "deactivate", component: deactivate },
-  //     { path: "create-client", name: "create-client", component: createClient },
-  //     { path: "edit-client/:clientId", name: "edit-client", component: editClient },
-  //     { path: "empty-edit-profile/:clientId", name: "empty-edit-profile", component: emptyEditProfile },
-     
-  //     // { path: "bank-statement/:userCode", component: bankStatement },
-  //     { path: "user-for-bank-statement", component:  usersForBankStatement  },
-      
-  
-  //     { path: "overdue", name: "overdue", component: overdue, props: true },
-  //     { path: "paid-unpaid", name: "paid-unpaid", component: paidUnpaid, props: true },
-  //     // { path: "transfer-history", name: "transfer-history", component: transferHistory,props: true },
-   
-      
-  //     { path: "empty/:clientId", component: empty },
-  //     { path: "empty-companey", component: emptyCompaney },
-  //     { path: "empty-client", component: emptyClient }, 
-  //     { path: "modal", component: commonModal },
-  //     { path: "parent-modal", component: parentModal },
-  //     { path: "send-email", component: sendEmail },
-  //     { path: "user-manual", component: userManual},
-  //     { path: "id-card", name: "id-card", component: idCardAdmin },
-  //     { path: "reset-table", name: "reset-table", component:  resetTables },
-  //   ],
-  // },
-  
   {
     path: "/userdashboard",
     component: commonDashboard,
     meta: { requiresAuth: true, role: 'User' },
-    //meta: { requiresGuest: true },
+    meta: { requiresGuest: true },
     children: [
       { path: "", component: userdashboardFirst },  
       { path: "info", component: infoPayment },
       { path: "profile", component: profile },
       { path: "change-password", component:changeCommonPassword },
       { path: "id-card", component:idCard},
-            // { path: "receipt", component: receiptPage },
     ],
   },
 ];

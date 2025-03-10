@@ -1,5 +1,8 @@
 <template>
   <div>
+
+
+
     <Toast ref="toast" />
     <div class="p-3 border-b border-blue-300">
       <h4 class="text-blue-500 mt-1">{{ $t("Profile Setting") }}</h4>
@@ -41,13 +44,18 @@
               >
                 New Email is required
               </p>
+              <p
+                v-if="showEmailError"
+                class="text-red-500 text-xs ml-3 mt-2"
+              >
+                {{ errorMessage }}
+              </p>
             </div>
           </div>
         </form>
       </div>
     </div>
 
-    <!-- Change Password Section -->
     <div class="mx-5">
       <div class="mt-4 py-4 ml-0 border-t border-gray-100 rounded-lg shadow-md">
         <div
@@ -55,10 +63,6 @@
           class="flex justify-between items-center cursor-pointer p-4 border-b border-gray-300 text-blue-800 "
 >
         <label class="font-medium custom-label text-blue-500 text-lg ">Change Password</label>
-          <!-- <i
-            :class="passwordVisible ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"
-            class="text-gray-500"
-          ></i> -->
         </div>
         
         <form
@@ -170,6 +174,7 @@ export default {
   },
   data() {
     return {
+      showEmailError:false,
       emailVisible: false,
       passwordVisible: false,
       role:"",
@@ -196,7 +201,6 @@ export default {
     };
   },
 
-
   computed: {
     ...mapGetters(["getToken", "getUserId", "getRole"]),
     userId() {
@@ -218,34 +222,35 @@ export default {
 
   methods: {
    async  changeEmail() {
-      const formData = new FormData();
+  
       if(this.newEmail=='' || this.newEmail==null){
         this.newEmailIsRequired=true;
         return;
       } 
-      formData.append("email", this.newEmail);
-      try { await this.$apiPatch('/api/v1/users',this.userId, formData)
-        .then((response) => {
-          console.log("response from the update: " ,response);
-          if (response.status === 1) {
-            const email=response.updatedUser.email;
-            this.newEmail=response.updatedUser.email;
-            this.$store.dispatch("commitEmail", {  email});
-            this.$refs.toast.showSuccessToastMessage(response.message);
-            this.$reloadPage();
-          }
-        })}
-        catch(error) {
-          console.log("error email chnage",error.status,error.message);
-          this.$refs.toast.showErrorToastMessage("Somthing went wrong!!");
-          this.showError=true;
-          this.errorMessage=error.message;
-        }finally{
-          console.log("email change finally");
-        };
+
+      const payload ={
+        email: this.newEmail,
+      }
+
+      try {
+  const response = await this.$apiPatch('/api/v1/users/updateMe', '', payload);
+  
+  console.log("Response from the update: update me", response);
+  if (response.status === 1) {
+    this.$store.dispatch("commitEmail", { email: response.updatedUser.email});
+    this.$refs.toast.showSuccessToastMessage("Email updated successfully");
+    this.$reloadPage();
+  }
+} catch (error) {
+  console.log("Error while changing email:", error.status, error.message);
+  this.showEmailError = true;
+  this.errorMessage = error.message;
+} 
+
     },
 
    async changePassword() {
+ 
       this.oldPasswordIsRequired = false;
       this.newPasswordIsRequired = false;
       this.confirmNewPasssordIsRequired = false;
@@ -254,20 +259,25 @@ export default {
 
 
       if (this.oldPassword == "" || this.oldPassword == null) {
+       // alert("old")
         this.oldPasswordIsRequired = true;
         return;
       }
 
       if (this.newPassword == "" || this.newPassword == null) {
+        //alert("new")
         this.newPasswordIsRequired = true;
         return;
       }
       if(this.newPassword.length<8){
+        //alert("length")
+
         this.errorMessage="Password should be at least 8 characters long";
         this.showError=true;
         return;
       }
       if (this.confirmNewPasssord == "" || this.confirmNewPasssord == null) {
+        alert("mismuch")
         this.confirmNewPasssordIsRequired = true;
         return;
       }

@@ -741,6 +741,7 @@ export default {
     },
   },
   async mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'clients' });
     this.isLoading = true;
 
     this.clientId = this.$route.params.clientId;

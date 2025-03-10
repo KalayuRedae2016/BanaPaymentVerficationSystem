@@ -92,6 +92,7 @@ import ErrorLogs from './errorLogs.vue';
     },
 
     mounted(){
+      this.$store.dispatch("commitActiveItem", { activeItem: 'logs' });
       const activeTabFromRoute = parseInt(this.$route.query.activeTab);  // Ensure it's treated as a number
   if (!isNaN(activeTabFromRoute)) {
     this.activeTab = activeTabFromRoute;

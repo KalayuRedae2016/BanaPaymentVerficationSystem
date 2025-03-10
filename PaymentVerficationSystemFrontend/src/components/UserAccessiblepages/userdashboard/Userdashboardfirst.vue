@@ -88,7 +88,7 @@ export default {
     },
   },
   mounted() {
-
+    this.$store.dispatch("commitActiveItem", { activeItem: 'userDashboard' });
 
 
 

@@ -215,6 +215,7 @@
     }
     },
     mounted(){
+      this.$store.dispatch("commitActiveItem", { activeItem: 'deadlines' });
       this.$apiGet("/api/v1/paymentSetting/latest")
       .then((response) => {
         if (response.status === 1) {

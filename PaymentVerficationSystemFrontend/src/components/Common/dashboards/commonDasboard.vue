@@ -107,7 +107,6 @@
           </div>  
           <ul>
             <li
-            
               class="border-b last:border-0"
             >
               <a
@@ -115,19 +114,8 @@
                 class="flex items-start px-4 py-2 hover:bg-gray-100"
                 @click="navigateToPayment(notification)"
               >
-                <img
-                  :src="'https://via.placeholder.com/128'"
-                  alt="Notification Image"
-                  class="w-10 h-10 rounded-full mr-3"
-                />
-                <div>
-                  <p class="text-sm font-bold text-blue-500">
-                    Paid for 2025 - ganuary
-                  </p>
-                  <p class="text-xs text-gray-500">
-                {{new Date()}}
-                  </p>
-                </div>
+                
+               
               </a>
             </li>
 
@@ -385,7 +373,11 @@
         </main>
       </div>
 
-      <footer class="block py-6 bg-gray-100">
+
+
+
+
+  <footer class="block py-6 bg-gray-100">
   <div class="container mx-auto px-6">
     <!-- Divider -->
     <hr class="mb-6 border-gray-300" />
@@ -419,7 +411,7 @@
       </div>
     </div>
   </div>
-</footer>
+  </footer>
 
 
     </div>
@@ -506,18 +498,9 @@ export default {
   },
 
  async  mounted() {
-
-// setTimeout(() => {
-//   this.$store.dispatch("commitReloading", false);
-//   this.$refs.smoozer.startSmoothReload();
-// }, 2000);
-   
-
-
     if(localStorage.getItem("token")===null){
       this.$router.push({ path: "/" });
     }else{
-
     }
 
     window.addEventListener("resize", this.checkScreenSize);
@@ -550,7 +533,7 @@ export default {
        // console.log("finally");
       });
 
-    await this.fetchNotifications();
+      await this.fetchNotifications();
     //this.showToast();
    //setInterval(this.fetchNotifications, 5000);
   },
@@ -590,11 +573,11 @@ this.$router.push('/admindashboard/user-manual')
 
     navigateToPayment(notification) {
       this.showNotificationDropdown=false;
-    console.log("notification",notification._id)
-      const payload = {
-        paymentId: notification._id,
-        role: this.role,
-      };
+        console.log("notification",notification._id)
+          const payload = {
+            paymentId: notification._id,
+            role: this.role,
+          };
       this.$apiPut("/api/v1/payments/markPaymentAsSeen", notification._id, payload)
         .then((response) => {
           console.log("response for payment update", response);
@@ -652,8 +635,6 @@ this.$router.push('/admindashboard/user-manual')
         this.largerScreen = false;
       }
     },
-
-
     getFullImagePath(image) {
       return `../../../${image}`;
     },

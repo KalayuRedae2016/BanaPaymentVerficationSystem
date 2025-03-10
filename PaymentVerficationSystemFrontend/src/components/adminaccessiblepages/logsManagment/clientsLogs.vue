@@ -420,6 +420,7 @@ export default {
     this.role = localStorage.getItem("role");
   },
   mounted() {
+    this.$store.dispatch("commitActiveItem", { activeItem: 'logs' });
     // this.displayedItems();
     this.fetchUserLogs();
   },
