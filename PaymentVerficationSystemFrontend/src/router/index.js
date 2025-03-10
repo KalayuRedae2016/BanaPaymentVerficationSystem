@@ -11,6 +11,8 @@ import commonDashboard from "../components/Common/dashboards/commonDasboard.vue"
 import resetTables from "../components/Common/resetTables.vue"
 import userManual from "../components/Common/userManual.vue"
 import changeCommonPassword from '../components/Common/Setting/changePassword.vue'
+
+import bankApiKey from '../components/Common/BankApikey/bankApiKey.vue'
 // Admin components
 // import Admindashboard from "../components/adminaccessiblepages/dashboards/Admindashboard.vue";
 import adminDashboard from "../components/adminaccessiblepages/dashboards/adminDashboard1.vue";
@@ -106,6 +108,7 @@ const routes = [
       { path: "payment-history-detail/:userCode", component:paymentHistoryDetail },
       { path: "", component: adminDashboard },
       { path: "res-dash", component: adminDashboard },
+      { path: "bank-api-key", component: bankApiKey },
       { path: "logs", component: Logs },
       { path: "report-detail", component: reportDetail },
       { path: "new-companey-setting", name: "new-companey-setting", component: newCompneySettings },

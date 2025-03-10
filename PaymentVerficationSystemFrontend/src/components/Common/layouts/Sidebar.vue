@@ -84,6 +84,15 @@
       </li>
 
       <li
+        v-if="role === 'Admin' || role === 'SuperAdmin'"
+        @click="setActive('Apikeys')"
+        class="flex items-center p-3 rounded-md transition cursor-pointer"
+        :class="activeItem === 'logs' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'"
+      >
+        <i class="fas fa-file-alt text-teal-600 mr-3"></i>
+        <span class="font-medium">{{ $t("Api Keys") }}</span>
+      </li>
+      <li
         v-if="role === 'User'"
         @click="setActive('userDashboard')"
         class="flex items-center p-3 rounded-md transition cursor-pointer"
@@ -170,16 +179,9 @@ export default {
     },
   },
   mounted() {
-
-
     this.role=localStorage.getItem("role");
     console.log("role in mouinted",localStorage.getItem("role"))
-
-
-  
-    // Add resize event listener
     window.addEventListener("resize", this.checkScreenSize);
-    // Initial check on mountss
     this.checkScreenSize();
   },
 
@@ -239,15 +241,19 @@ export default {
         },
       });
       } else if(item === "logs") {
-      //alert("logs")
-
       this.$router.push("/admindashboard/logs");
       }
       else if (item === "idCard") {
         this.$router.push("/admindashboard/id-card");
       } else if (item === "message") {
         this.$router.push("/admindashboard/send-email");
-      }else if(item === "userDashboard") {
+      }
+      else if(item === "Apikeys") {
+        this.$router.push("/admindashboard/bank-api-key");
+      }
+
+
+      else if(item === "userDashboard") {
        // alert("dashboard user")
         this.$router.push("/userdashboard");
       }
@@ -259,7 +265,9 @@ export default {
       }
       else if(item === "userIdCard") {
         this.$router.push("/userdashboard/id-card");
-      }else{
+      }
+     
+      else{
         console.log("No route found for ", item);
       }
     },
