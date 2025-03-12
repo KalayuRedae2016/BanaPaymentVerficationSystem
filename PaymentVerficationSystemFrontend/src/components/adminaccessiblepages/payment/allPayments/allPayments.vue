@@ -9,7 +9,7 @@
           <!-- Payment Status Select -->
 
           <select v-model="paymentStatus" @change="changeSearched(paymentStatus)"
-            class="w-full lg:w-1/4 border border-blue-600 rounded-lg h-10 px-0 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            class="text-gray-400  w-full lg:w-1/4 border border-blue-600 rounded-lg h-7 px-0 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
             <option value="" selected disabled>Select Status</option>
             <option value="all">All</option>
             <option value="paid" class="text-green-500">Paid/Confirmed</option>
@@ -19,7 +19,7 @@
 
           <!-- Year Select -->
           <select v-model="selectedYear" @change="changeSearched(paymentStatus)"
-            class="w-full lg:w-1/4 border border-blue-600 rounded-lg h-10 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            class="text-gray-400 w-full lg:w-1/4 border border-blue-600 rounded-lg h-7 px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
             <option value="" disabled>Select Year</option>
             <option value="all">All</option>
             <option v-for="year in $years" :key="year" :value="year">
@@ -29,7 +29,7 @@
 
           <!-- Month Select (conditional rendering) -->
           <select v-if="selectMonth" v-model="selectedMonth" @change="changeSearched(paymentStatus)"
-            class="w-full lg:w-1/4 border border-blue-600 rounded-lg h-10 px-0 lg:px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            class="w-full lg:w-1/4 border border-blue-600 rounded-lg h-7 px-0 lg:px-3 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
             <option value="" disabled>Select Month</option>
             <option value="all">All</option>
             <option v-for="month in $months" :key="month.value" :value="month.value">
@@ -38,7 +38,7 @@
           </select>
           <div class="flex-1 w-full">
             <input v-model="searchQuery" type="text" placeholder="Search by Name, Email, Username"
-              class="w-full px-4 py-2 border  border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" />
+              class="w-full h-7 px-2 border  border-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200" />
           </div>
         </div>
 

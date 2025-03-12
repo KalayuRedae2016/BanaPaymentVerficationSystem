@@ -17,6 +17,7 @@ router.route('/:id').patch(organizationController.updateOrganization)
 router.route('/:id/bankAccounts').post(organizationController.addBankAccount)
 
 
+
 router.route('/apikey/:keyId').patch(protectWithPassword,organizationController.updateAPiKey)
 router.route('/apiKey')
     .get(protectWithPassword,organizationController.viewAPiKey)

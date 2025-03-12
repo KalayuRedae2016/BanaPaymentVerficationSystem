@@ -27,7 +27,7 @@
           <div v-show="activeTab === 0" class="">
             <div class="">
               <!-- Payment Settings Options -->
-              <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
+              <div class="bg-white shadow-sm border border-gray-200 py-2 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
                   <!-- Current Payment Setting -->
                   <div class="flex items-center mx-4">
@@ -69,7 +69,7 @@
                 </div>
                 <div class="h-2  border-b-2 border-gray-300"></div>
                 <!-- Conditional Components -->
-                <div class="mt-8">
+                <div class="">
                   <block-payment
                     v-if="paymentSettingStatus === 'currentSetting'"
                   />
@@ -84,7 +84,7 @@
           <div v-show="activeTab === 1" class="">
             <div class="">
               <!-- Payment Options -->
-              <div class="bg-white shadow-sm border border-gray-200 pt-6 px-3">
+              <div class="bg-white shadow-sm border border-gray-200 pt-2 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
                   <!-- All Payments -->
                   <div class="flex items-center mx-4">
@@ -126,7 +126,7 @@
                 </div>
                 <div class="h-2  border-b-2 border-gray-300"></div>
                 <!-- Conditional Components -->
-                <div class="mt-8">
+                <div class="">
                   <all-payments v-if="paymentStatus === 'allPayments'" />
                   <new-payment
                     ref="childComp"
@@ -140,7 +140,7 @@
           <div v-show="activeTab === 2" class="">
             <div class="">
               <!-- Payment Options -->
-              <div class="bg-white shadow-sm border border-gray-200 pt-6 px-3">
+              <div class="bg-white shadow-sm border border-gray-200 pt-2 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
                   <div class="flex items-center mx-4">
                     <input
@@ -201,7 +201,7 @@
                 <div class="h-2  border-b-2 border-gray-300"></div>
 
                 <!-- Conditional Components -->
-                <div class="mt-8">
+                <div class="">
                   <transfered-payments
                     v-if="offsetPayments === 'transferOffsets'"
                   />
@@ -218,7 +218,7 @@
           <div v-show="activeTab === 3" class="">
             <div class="">
               <!-- Report Options -->
-              <div class="bg-white shadow-sm border border-gray-200 py-6 px-3">
+              <div class="bg-white shadow-sm border border-gray-200 py-2 px-3">
                 <div class="flex flex-col sm:flex-row gap-6">
                   <!-- User Level Report -->
                   <div class="flex items-center mx-4">
@@ -261,7 +261,7 @@
 
                 <div class="h-2  border-b-2 border-gray-300"></div>
                 <!-- Conditional Components -->
-                <div class="mt-8">
+                <div class="">
                   <all-payment-report
                     v-if="paymentReportStatus === 'userLevelReport'"
                   />

@@ -11,7 +11,7 @@ const state = {
   activeItem: localStorage.getItem('activeItem') || 'dashboard', // Default to 'dashboard'
   serviceBanks: localStorage.getItem('serviceBanks') || [],
   blockBanks:localStorage.getItem('blockBanks') || [],
-
+  apiKeyPassword:localStorage.getItem('apiKeyPassword') || [],
 };
 
 const mutations = {
@@ -66,7 +66,10 @@ const mutations = {
     state.reloading = reloading;
     localStorage.setItem('reloading', reloading);
   },
-
+  setApiKeyPassword(state, apiKeyPassword) {
+    state.apiKeyPassword = apiKeyPassword;
+    localStorage.setItem('apiKeyPassword', apiKeyPassword);
+  },
   logout(state) {
     state.userCode = null;
     state.name = null;
@@ -76,7 +79,9 @@ const mutations = {
     state.email=null;
     state.reloading = null;
     state.activeItem = 'dashboard'; // Reset to default when logging out
-    localStorage.removeItem('activeItem'); // Clear from localStorage
+    localStorage.removeItem('activeItem'); 
+    localStorage.removeItem('apiKeyPassword'); 
+    // Clear from localStorage
   },
 };
 
@@ -145,6 +150,11 @@ const actions = {
     commit('setReloading', reloading);
   },
 
+  commitApiKeyPassword({ commit }, { apiKeyPassword }) { // Action to commit activeItem
+    console.log("commit apikey",apiKeyPassword);
+    commit('setApiKeyPassword', apiKeyPassword);
+  },
+
   logout({ commit }) {
     commit('logout');
     localStorage.removeItem('userId');
@@ -156,6 +166,7 @@ const actions = {
     localStorage.removeItem('serviceBanks'),
     localStorage.removeItem('blockBanks'),
     localStorage.removeItem('reloading');
+    localStorage.removeItem('apiKeyPassword');
   },
 };
 
@@ -197,6 +208,10 @@ const getters = {
   },
   getReloading(state) {
     return state.reloading;
+  },
+
+  getApiKeyPassword(state) {
+    return state.apiKeyPassword;
   },
  // getters, // If you have other getters in your module, include them here
 };

@@ -27,17 +27,17 @@ exports.authenticateApiKey = catchAsync(async (req, res, next) => {
   })
 
 exports.protectWithPassword = (req, res, next) => {
-    const password = req.body.password;
+  //console.log("passowrd from reqbody")=req.body.password;
+    const password = req.query.password||req.body.password;
+    console.log("password is",password);
     const correctPassword = process.env.apiKey_ROUTE_PASSWORD || "mySecretPassword";
-    console.log("password",password)
-
+  
     if (!password || password !== correctPassword) {
       return res.status(401).json({
         success: 0,
         message: "Unauthorized: Invalid APIKey password",
       });
     }
-  
     next();
   };
   
