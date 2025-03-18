@@ -75,3 +75,14 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     logs: formattedLogs,
   });
 });
+
+exports.deleteLogs = catchAsync(async (req, res, next) => {
+  const deletedLogs = await Log.deleteMany({});  // Deletes all documents
+  if (deletedLogs.deletedCount === 0) {
+    return next(new AppError("No Logs entries found to delete", 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    message: `${deletedLogs.deletedCount} Logs Deleted`
+  });
+});
