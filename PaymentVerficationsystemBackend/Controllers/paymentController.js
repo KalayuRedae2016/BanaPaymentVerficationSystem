@@ -99,6 +99,7 @@ exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.searchBills = async (req, res) => {
+  console.log("keyword searched",req.query)
   try {
     const { keyword } = req.query;
     if (!keyword) {
@@ -120,7 +121,7 @@ exports.searchBills = async (req, res) => {
     };
 
     const payments = await Payment.find(paymentQuery)
-    // console.log("payment",payments)
+    //console.log("payment",payments)
 
     if (!payments.length) {
       return res.status(200).json({
@@ -165,7 +166,7 @@ exports.searchBills = async (req, res) => {
         }
       }
     }
-    // console.log(items)
+    console.log(items)
     return res.status(200).json({
       error: false,
       status: 1,

@@ -219,7 +219,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!correct) {
     //If password doesn't match, increment failedLoginAttempts
     user.failedLoginAttempts += 1;
-    if (user.failedLoginAttempts >= 5) {
+    if (user.failedLoginAttempts >= 10) {
       user.lockUntil = new Date(Date.now() + 60 * 60 * 1000); // Lock the account for 1 hour
     }
 
