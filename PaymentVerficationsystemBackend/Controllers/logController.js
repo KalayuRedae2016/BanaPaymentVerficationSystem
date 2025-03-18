@@ -35,10 +35,6 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     res.status(200).json({
       status: 1,
       total: totalLogs,
-      page: pageNum,
-      limit: limitNum,
-      result: logs.length,
-      logs: formattedLogs,
     });
   }
 
