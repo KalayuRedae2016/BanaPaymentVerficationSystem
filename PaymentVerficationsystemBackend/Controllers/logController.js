@@ -31,7 +31,15 @@ exports.getLogs = catchAsync(async (req, res, next) => {
   const totalLogs = await Log.countDocuments(filters);
 
   if (logs.length === 0) {
-    return next(new AppError("No logs found for the given query.", 404));
+    // return next(new AppError("No logs found for the given query.", 404));
+    res.status(200).json({
+      status: 1,
+      total: totalLogs,
+      page: pageNum,
+      limit: limitNum,
+      result: logs.length,
+      logs: formattedLogs,
+    });
   }
 
   //Get user details for all actors in logs, exclude 'system' actors
