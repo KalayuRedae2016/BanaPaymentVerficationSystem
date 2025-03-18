@@ -330,7 +330,13 @@ exports.confirmBills = async (req, res) => {
       });
 
       if (!unpaidBill) {
-        return next(new AppError(`Payment with paymentID ${billCode} not found`,400))
+        //return next(new AppError(`Payment with paymentID ${billCode} not found`,400))
+        return res.status(500).json({
+          error: true,
+          statusCode: 500,
+          ResultCode: 0,
+          message: `Payment with paymentID ${billCode} is not found`
+        });
         
       }
 
@@ -660,7 +666,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
     unpaidBill.confirmedID = userId,
-      unpaidBill.confirmationMethod = "Admin-confirmed"
+    unpaidBill.confirmationMethod = "Admin-confirmed"
   }
 
   // Save the updated bill
