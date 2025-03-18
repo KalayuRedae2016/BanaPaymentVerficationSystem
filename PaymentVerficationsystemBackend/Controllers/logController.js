@@ -34,8 +34,8 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     return next(new AppError("No logs found for the given query.", 404));
   }
 
-  // Get user details for all actors in logs
-  const actorIds = logs.map(log => log.actor); 
+  //Get user details for all actors in logs, exclude 'system' actors
+  const actorIds = logs.filter(log => log.actor !== 'system').map(log => log.actor); 
   const users = await User.find({ _id: { $in: actorIds } }).select("_id fullName");
   const banks = await ApiKey.find({ _id: { $in: actorIds } }).select("_id bankType");
 
@@ -50,7 +50,7 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     model: log.model,
     action: log.action,
     actor: log.actor||null,
-    actorName: userMap[log.actor?.toString()] || bankMap[log.actor?.toString()] || "Unknown",
+    actorName: log.actor === 'system' ? 'System' : userMap[log.actor?.toString()] || bankMap[log.actor?.toString()] || "Unknown",
     description: log.description,
     affectedData: (() => {
       try {

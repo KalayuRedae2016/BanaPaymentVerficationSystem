@@ -81,7 +81,7 @@ await user.save();
 await logAction({
   model: 'users',
   action: 'Create',
-  actor: req.user.id,
+  actor: req.user && req.user.id ? req.user.id : 'system',
   description: 'User created successfully',
   data: { userId: user.id,createdData:user},
   ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -459,7 +459,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'users',
     action: 'Update',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'User Password Updated',
     data: { userId: user.id,orginalData:user.password,updatedData:req.body},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,

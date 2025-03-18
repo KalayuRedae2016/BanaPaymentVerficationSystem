@@ -438,7 +438,7 @@ exports.confirmBills = async (req, res) => {
     await logAction({
       model: 'payments',
       action: 'Confirm',
-      actor: req.apiKeyData.id,
+      actor: req.apiKeyData && req.apiKeyData.id ? req.apiKeyData.id : 'system',
       description: 'PaymentS ConfirmedCreated',
       data: {paymentId:unpaidBill.id,billCode:unpaidBill.billCode,OrginalData:orginalSUbdocumentedBill,UpdatedData: req.body },
       ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -690,7 +690,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Confirm',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'PaymentS Confirmed',
     data: { paymentId: unpaidBill.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -811,7 +811,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Update',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Payments Editted',
     data: { paymentId: payment.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -1124,7 +1124,7 @@ exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Edit',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Mark Payment as seen',
     data: { paymentId: payment.id, payment,body: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -1242,7 +1242,7 @@ exports.deletePayment = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Payments Deleted',
     data: { paymentId:deleteId,deletedPayment},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -1807,7 +1807,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   await logAction({
     model: `${transferCase}`,
     action: 'Create',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description:  `${transferCase} is Created`,
     data: { transferId: createdTransfer.id,createdData:req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -2041,7 +2041,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     await logAction({
       model: `${transferCase}`,
       action: 'Update',
-      actor: req.user.id,
+      actor: req.user && req.user.id ? req.user.id : 'system',
       description:  `${transferCase} is Updated`,
       data: { transferId: createdTransfer.id,originalData:orginalTransferData,updatedData: req.body },
       ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -2090,7 +2090,7 @@ exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
   await logAction({
     model: `${deletedTransfer?.transferCase || 'Transfer'}`,
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Transfer is Deleted',
     data: { transferId, deletedData: deletedTransfer },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
