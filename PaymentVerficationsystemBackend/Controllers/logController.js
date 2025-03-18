@@ -32,7 +32,7 @@ exports.getLogs = catchAsync(async (req, res, next) => {
 
   if (logs.length === 0) {
     // return next(new AppError("No logs found for the given query.", 404));
-    res.status(200).json({
+    return res.status(200).json({
       status: 1,
       total: totalLogs,
       message:"No logs found for the given query."
