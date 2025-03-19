@@ -87,7 +87,7 @@
         v-if="role === 'Admin' || role === 'SuperAdmin'"
         @click="setActive('Apikeys')"
         class="flex items-center p-3 rounded-md transition cursor-pointer"
-        :class="activeItem === 'logs' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'"
+        :class="activeItem === 'Apikeys' ? 'bg-blue-100 text-blue-600' : 'hover:bg-gray-100'"
       >
         <i class="fas fa-file-alt text-teal-600 mr-3"></i>
         <span class="font-medium">{{ $t("Api Keys") }}</span>
@@ -192,27 +192,7 @@ export default {
   async created() {
     this.role=localStorage.getItem("role");
     this.setScreenSize();
-    window.addEventListener("resize", this.setScreenSize);
-
-    // if(this.role==="User"){
-    // const userId=localStorage.getItem("userId");
-    //  console.log("check it can edit",userId)
-    // try {
-    //   await this.$apiGetById("/api/v1/users", userId).then(
-    //     (response) => {
-    //       console.log("chack it can edit response",response);
-    //       this.canEditDetails= response.clientProfile.canEditDetails;
-    //       console.log("canedit",this.canEditDetails);
-    //     }
-    //   );
-    // } catch (error) {
-    //   console.error("Error fetching client datakk:", error);
-    // } finally {
-    // }
-    // }
-
-
-
+    window.addEventListener("resize", this.setScreenSize)
   },
   unmounted() {
     window.removeEventListener("resize", this.setScreenSize);

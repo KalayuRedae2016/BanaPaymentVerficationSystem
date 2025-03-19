@@ -181,6 +181,14 @@
                       ></i
                     >Edit
                   </button>
+                  <button
+                    class="ml-3 custom-button"
+                    @click="deleteModal=true"
+                  >
+                    <i class="fas fa-trash-alt  text-red-500 mr-2"
+                      ></i
+                    >Delete
+                  </button>
                 </div>
               </div>
             </div>
@@ -217,6 +225,7 @@ export default {
 
   data() {
     return {
+      deleteModal:false,
       successToastMessage: "",
       errorToastMessage: "",
       showErrorToast: false,
@@ -293,7 +302,21 @@ export default {
 
       }
   },
+
   methods: {
+
+    deleteOrg(){
+    try{
+    }catch(error){
+      this.$apiDelete('/api/v1/organization/deleteOrg').then(response=>{
+      console.log("response",response);
+      }
+      );
+    }finally{
+
+    }
+    },
+
     handleUpdate(data) {
       this.companyProfile = data.companyProfile;
       this.organizationCreated = data.organizationCreated;

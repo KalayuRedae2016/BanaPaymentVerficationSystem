@@ -21,7 +21,7 @@
                 class="cursor-pointer bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition duration-300">
                 <i class="fas fa-upload mr-2"></i>Upload Payments
               </label>
-              <input id="fileInput" type="file" ref="paymentsFileInput"  @change="handlePaymentFile()"
+              <input id="fileInput" type="file" ref="paymentsFileInput"  @change="handlePaymentsFile()"
                 class="hidden" />
               <p class="text-sm text-gray-500 mt-2">.xlsx</p>
             </div>
@@ -906,7 +906,6 @@
                 </svg>
               </div>
             </div>
-
             <hr class="my-4 md:min-w-full bg-red-500" />
 
             <div class="">
@@ -1097,19 +1096,21 @@ export default {
     async submitPayments(){
       const formData = new FormData();
       if (this.paymentsFile && this.paymentsFile !== null && this.paymentsFile !== "") {
-        formData.append("paymentsFile", this.paymentsFile);
+        formData.append("file", this.paymentsFile);
       }
+
       const customHeaders = {
         "Content-Type": "multipart/form-data",
       };
+
       try {
-        await this.$apiPatch(
-          "/api/v1/payments/uploadPayments",
-          this.clientProfile._id,
+        await this.$apiPost(
+          "/api/v1/payments/importPayments",
           formData,
           customHeaders
         ).then((response) => {
           console.log("response uploadpayments: ", response);
+          this.$refs.toast.showSuccessToastMessage("Payments Uploaded");
         
         });
       } catch (error) {

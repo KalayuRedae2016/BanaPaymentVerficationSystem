@@ -92,13 +92,16 @@ import ErrorLogs from './errorLogs.vue';
     },
 
     mounted(){
+      
       this.$store.dispatch("commitActiveItem", { activeItem: 'logs' });
+
+
       const activeTabFromRoute = parseInt(this.$route.query.activeTab);  // Ensure it's treated as a number
-  if (!isNaN(activeTabFromRoute)) {
-    this.activeTab = activeTabFromRoute;
-  } else {
-    this.activeTab = 0;  // Default to 0 if the query param is missing or invalid
-  }
+          if (!isNaN(activeTabFromRoute)) {
+            this.activeTab = activeTabFromRoute;
+          } else {
+            this.activeTab = 0;  // Default to 0 if the query param is missing or invalid
+          }
     },
     methods: {
   
