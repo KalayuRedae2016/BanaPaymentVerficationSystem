@@ -162,7 +162,7 @@ exports.updateUser = catchAsync(async (req, res) => {
   await logAction({
     model: 'users',
     action: 'Update',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'User Profie Updated',
     data: { userId: updatedUser.id,BeforeUpdate:originalUserData,updatedData:existingUser},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -193,7 +193,7 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'users',
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'User Profie Deleted',
     data: { userId: deletedUser.id,deletedUser},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -243,7 +243,7 @@ exports.activateDeactiveUser = catchAsync(async (req, res) => {
   await logAction({
     model: 'users',
     action: 'Update',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: `${user.fullName} is ${user.isActive ? 'Activated' : 'Deactivated'}`,
     data: { userId: user.id},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -359,7 +359,7 @@ exports.updateMe = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'users',
     action: 'Update',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: `${user.fullName} update his Profile`,
     data: { userId: user.id,filteredBody},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -575,7 +575,7 @@ exports.toggleEdiUserPermission= catchAsync(async (req, res, next) => {
   // await logAction({
   //   model: 'users',
   //   action: 'Update',
-  //   actor: req.user.id,
+  //    actor: req.user && req.user.id ? req.user.id : 'system',
   //   description: `${userCount} user(s) ${editPermission ? 'granted' : 'revoked/Disabled'} edit permissions.`,
   //   data: { userIds, updatedUsers },
   //   ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,

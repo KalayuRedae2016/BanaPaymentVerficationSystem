@@ -13,5 +13,6 @@ app.use(function (req, res, next) {
 });
 
 router.get("/",logController.getLogs)
+router.delete('/deleteLogs',logController.deleteLogs);// Delete logs
 
 module.exports = router;

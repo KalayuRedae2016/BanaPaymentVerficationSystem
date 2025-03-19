@@ -99,6 +99,7 @@ exports.createUnconfirmedPayments = catchAsync(async (req, res, next) => {
   });
 });
 exports.searchBills = async (req, res) => {
+  console.log("keyword searched",req.query)
   try {
     const { keyword } = req.query;
     if (!keyword) {
@@ -120,7 +121,7 @@ exports.searchBills = async (req, res) => {
     };
 
     const payments = await Payment.find(paymentQuery)
-    // console.log("payment",payments)
+    //console.log("payment",payments)
 
     if (!payments.length) {
       return res.status(200).json({
@@ -165,7 +166,7 @@ exports.searchBills = async (req, res) => {
         }
       }
     }
-    // console.log(items)
+    console.log(items)
     return res.status(200).json({
       error: false,
       status: 1,
@@ -330,7 +331,13 @@ exports.confirmBills = async (req, res) => {
       });
 
       if (!unpaidBill) {
-        return next(new AppError(`Payment with paymentID ${billCode} not found`,400))
+        //return next(new AppError(`Payment with paymentID ${billCode} not found`,400))
+        return res.status(500).json({
+          error: true,
+          statusCode: 500,
+          ResultCode: 0,
+          message: `Payment with paymentID ${billCode} is not found`
+        });
         
       }
 
@@ -431,7 +438,7 @@ exports.confirmBills = async (req, res) => {
     await logAction({
       model: 'payments',
       action: 'Confirm',
-      actor: req.apiKeyData.id,
+      actor: req.apiKeyData && req.apiKeyData.id ? req.apiKeyData.id : 'system',
       description: 'PaymentS ConfirmedCreated',
       data: {paymentId:unpaidBill.id,billCode:unpaidBill.billCode,OrginalData:orginalSUbdocumentedBill,UpdatedData: req.body },
       ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -660,7 +667,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
     unpaidBill.confirmedDate = new Date()
     unpaidBill.latest = true
     unpaidBill.confirmedID = userId,
-      unpaidBill.confirmationMethod = "Admin-confirmed"
+    unpaidBill.confirmationMethod = "Admin-confirmed"
   }
 
   // Save the updated bill
@@ -683,7 +690,7 @@ exports.confirmPayments = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Confirm',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'PaymentS Confirmed',
     data: { paymentId: unpaidBill.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -804,7 +811,7 @@ exports.editPayments = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Update',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Payments Editted',
     data: { paymentId: payment.id, OrginalData:originalPaymentData,UpdatedData: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -1117,7 +1124,7 @@ exports.markPaymentAsSeen = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Edit',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Mark Payment as seen',
     data: { paymentId: payment.id, payment,body: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -1235,7 +1242,7 @@ exports.deletePayment = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'payments',
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Payments Deleted',
     data: { paymentId:deleteId,deletedPayment},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -1800,7 +1807,7 @@ exports.createTransferFunds = catchAsync(async (req, res, next) => {
   await logAction({
     model: `${transferCase}`,
     action: 'Create',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description:  `${transferCase} is Created`,
     data: { transferId: createdTransfer.id,createdData:req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -2034,7 +2041,7 @@ exports.updateTransferFunds = catchAsync(async (req, res, next) => {
     await logAction({
       model: `${transferCase}`,
       action: 'Update',
-      actor: req.user.id,
+      actor: req.user && req.user.id ? req.user.id : 'system',
       description:  `${transferCase} is Updated`,
       data: { transferId: createdTransfer.id,originalData:orginalTransferData,updatedData: req.body },
       ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -2083,7 +2090,7 @@ exports.deleteTransferFunds = catchAsync(async (req, res, next) => {
   await logAction({
     model: `${deletedTransfer?.transferCase || 'Transfer'}`,
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Transfer is Deleted',
     data: { transferId, deletedData: deletedTransfer },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,

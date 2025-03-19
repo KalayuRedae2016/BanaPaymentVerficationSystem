@@ -31,11 +31,16 @@ exports.getLogs = catchAsync(async (req, res, next) => {
   const totalLogs = await Log.countDocuments(filters);
 
   if (logs.length === 0) {
-    return next(new AppError("No logs found for the given query.", 404));
+    // return next(new AppError("No logs found for the given query.", 404));
+    return res.status(200).json({
+      status: 1,
+      total: totalLogs,
+      message:"No logs found for the given query."
+    });
   }
 
-  // Get user details for all actors in logs
-  const actorIds = logs.map(log => log.actor); 
+  //Get user details for all actors in logs, exclude 'system' actors
+  const actorIds = logs.filter(log => log.actor !== 'system').map(log => log.actor); 
   const users = await User.find({ _id: { $in: actorIds } }).select("_id fullName");
   const banks = await ApiKey.find({ _id: { $in: actorIds } }).select("_id bankType");
 
@@ -50,7 +55,7 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     model: log.model,
     action: log.action,
     actor: log.actor||null,
-    actorName: userMap[log.actor?.toString()] || bankMap[log.actor?.toString()] || "Unknown",
+    actorName: log.actor === 'system' ? 'System' : userMap[log.actor?.toString()] || bankMap[log.actor?.toString()] || "Unknown",
     description: log.description,
     affectedData: (() => {
       try {
@@ -73,5 +78,16 @@ exports.getLogs = catchAsync(async (req, res, next) => {
     limit: limitNum,
     result: logs.length,
     logs: formattedLogs,
+  });
+});
+
+exports.deleteLogs = catchAsync(async (req, res, next) => {
+  const deletedLogs = await Log.deleteMany({});  // Deletes all documents
+  if (deletedLogs.deletedCount === 0) {
+    return next(new AppError("No Logs entries found to delete", 404));
+  }
+  res.status(200).json({
+    status: 'success',
+    message: `${deletedLogs.deletedCount} Logs Deleted`
   });
 });

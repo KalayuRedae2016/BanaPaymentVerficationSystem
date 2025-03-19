@@ -71,7 +71,7 @@ exports.createOrganization = catchAsync(async (req, res, next) => {
  await logAction({
   model: 'organizations',
   action: 'Create',
-  actor: req.user.id,
+  actor: req.user && req.user.id ? req.user.id : 'system',
   description: 'Organization Profie Created',
   data: { orgId:organization.id},
   ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -202,7 +202,7 @@ exports.updateOrganization = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'organizations',
     action: 'Update',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'organization Profie Updated',
     data: { orgId: organization.id, body: req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -294,7 +294,7 @@ exports.deleteOrgs = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'organizations',
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'Org Profie Deleted',
     data: {deletedOrg},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,

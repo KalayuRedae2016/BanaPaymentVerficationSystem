@@ -55,7 +55,7 @@ exports.createPaymentSetting = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'paymentSettings',
     action: 'Create',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'PaymentSetting Created',
     data: { settingId: PaymentSetting.id, createdData:req.body },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -191,7 +191,7 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'PaymentSettings',
     action: 'Create',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'PaymentSetting Created',
     data: { settingId:settingId, orginalData:orginalSetting,updatedData:updatedData},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -222,7 +222,7 @@ exports.deleteSetting = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'paymentSettings',
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'PaymentSetting Deleting',
     data: { settingId: req.query.id,deletedData:deletedSetting },
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
@@ -243,7 +243,7 @@ exports.deleteSettings = catchAsync(async (req, res, next) => {
   await logAction({
     model: 'paymentSettings',
     action: 'Delete',
-    actor: req.user.id,
+    actor: req.user && req.user.id ? req.user.id : 'system',
     description: 'User Profie Deleted',
     data: {deletedData:deletedSettings},
     ipAddress: req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress || null,
