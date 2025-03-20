@@ -1501,9 +1501,8 @@ exports.getLatestPayment = catchAsync(async (req, res, next) => {
   });
 });
 exports.deletePayment = catchAsync(async (req, res, next) => {
-  //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
-  const deleteId = req.query.id;
-  const deletedPayment = await Payment.findByIdAndDelete(req.query.id);
+  const deleteId = req.params.id;
+  const deletedPayment = await Payment.findByIdAndDelete(deleteId);
   if (!deletedPayment) {
     return next(new AppError('Payment entry not found', 404));
   }
