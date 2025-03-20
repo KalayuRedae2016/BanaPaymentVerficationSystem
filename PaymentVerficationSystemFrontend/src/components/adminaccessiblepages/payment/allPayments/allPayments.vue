@@ -270,7 +270,7 @@
             <!-- Modal Footer -->
             <div class="flex space-x-3 p-4">
               <button
-                @click="confirmPaymentDelete(paymentToBeDelated)"
+                @click="confirmPaymentDelete(paymentToBeDelated);showDelateModal=false;"
                 class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 <i class="fas fa-check mr-2"></i> Yes, Delete
@@ -319,7 +319,7 @@
 
             <div class="mt-6 flex space-x-5">
               <button
-                @click="deleteAllPayments()"
+                @click="deleteAllPayments();deletePaymentsModal=false;"
                 class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
               >
                 {{ $t("yes") }}
