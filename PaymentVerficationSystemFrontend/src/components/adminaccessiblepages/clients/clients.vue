@@ -25,6 +25,9 @@
 
     <clientTable></clientTable>
 
+    <div class=""> <button @click="deleteAllUsersModal=true" class="custom-button m-3"><i class="fas fa-trash-alt text-red-500 mr-2"></i>Delete All Users</button></div>
+
+
     <div v-if="editPermissionModal">
       <transition name="fade" mode="out-in">
         <div class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50">
@@ -113,6 +116,55 @@
         </div>
       </transition>
     </div>
+    <div v-if="deleteAllUsersModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 w-96">
+            <div class="flex items-center justify-center mb-4">
+              <svg
+                class="w-8 h-8 text-red-500 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v6m0 0v-6m0 6h6m-6 0H6"
+                ></path>
+              </svg>
+              <h2 class="text-2xl font-bold text-gray-800">
+                {{ $t("warning") }}
+              </h2>
+            </div>
+
+
+            <p class="text-gray-600 text-lg">
+              {{ $t("Do you want to delete All users") }}
+            </p>
+
+            <div class="mt-6 flex space-x-5">
+              <button
+                @click="deleteAllUsers();deleteAllUsersModal=false"
+                class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                {{ $t("yes") }}
+              </button>
+              <button
+                @click="deleteAllUsersModal = false"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300"
+              >
+                {{ $t("Cancel") }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
 
 </template>
@@ -127,25 +179,22 @@ export default {
   },
   data() {
     return {
-      //
+      deleteAllUsersModal:false,
       selectAtLeastOneUser: false,
       selectedUsers: [],
       searchedusers: [],
       clientId: "",
       users: [],
       selectAll: false,
-      //
       editPermissionModal: false,
       successToastMessage: "",
       errorToastMessage: "",
       showErrorToast: false,
       showSuccessToast: false,
-
       showSuccess: false,
       showError: false,
       successMessage: "",
       errorMessage: "",
-
       selectedUserToBeResetPassword: "",
       userIdToBeDeactivated: "",
       resetedPassword: "6tyyy",
@@ -153,8 +202,6 @@ export default {
       showDeactivateModal: false,
       showResetModal: false,
       deactivationReason: "",
-
-
       showFamilyMemberModal: false,
       addingSuccess: false,
       screenSize: "",
@@ -220,6 +267,19 @@ export default {
   },
 
   methods: {
+    deleteAllUsers(){
+      try{
+        this.$apiDelete('/api/v1/users','','').then((response)=>{
+        console.log("response",response);
+        this.$refs.toast.showSuccessToastMessage("All Users Delated Successfully");
+        });
+      }catch(error){
+        this.$refs.toast.showErrorToastMessage(error.message);
+        console.log("error status,error message",error.status,error.message)
+      }finally{
+      }
+    },
+
     selectDeselectUser(userId) {
   
       console.log("selectDeselectEmail", userId);

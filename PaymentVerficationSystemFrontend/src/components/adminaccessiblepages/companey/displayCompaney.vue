@@ -181,6 +181,7 @@
                       ></i
                     >Edit
                   </button>
+
                   <button
                     class="ml-3 custom-button"
                     @click="deleteModal=true"
@@ -205,7 +206,59 @@
 
 
     </div>
+
+    <div v-if="deleteModal">
+      <transition name="fade" mode="out-in">
+        <div
+          class="fixed inset-0 flex items-center justify-center z-10 bg-black bg-opacity-50"
+        >
+          <!-- Modal Content -->
+          <div class="bg-white rounded-lg p-6 border border-cyan-500 w-96">
+            <div class="flex items-center justify-center mb-4">
+              <svg
+                class="w-8 h-8 text-red-500 mr-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v6m0 0v-6m0 6h6m-6 0H6"
+                ></path>
+              </svg>
+              <h2 class="text-2xl font-bold text-gray-800">
+                {{ $t("warning") }}
+              </h2>
+            </div>
+
+
+            <p class="text-gray-600 text-lg">
+              {{ $t("Do you want to delete the organization") }}
+            </p>
+
+            <div class="mt-6 flex space-x-5">
+              <button
+                @click="deleteOrg()"
+                class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-red-500"
+              >
+                {{ $t("yes") }}
+              </button>
+              <button
+                @click="deleteModal = false"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-full focus:outline-none focus:ring-2 focus:ring-gray-300"
+              >
+                {{ $t("Cancel") }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </div>
   </div>
+
+  
 </template>
 
 <script>
@@ -307,11 +360,14 @@ export default {
 
     deleteOrg(){
     try{
-    }catch(error){
-      this.$apiDelete('/api/v1/organization/deleteOrg').then(response=>{
+      this.$apiDelete('/api/v1/organization','','').then((response)=>{
       console.log("response",response);
-      }
-      );
+      this.$refs.toast.showSuccessToastMessage("Org Delated Successfully");
+
+      });
+    }catch(error){
+      this.$refs.toast.showErrorToastMessage(error.message);
+      console.log("error status,error message",error.status,error.message)
     }finally{
 
     }
