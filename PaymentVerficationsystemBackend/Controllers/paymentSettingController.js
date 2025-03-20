@@ -214,10 +214,9 @@ exports.updatePaymentSettingBYId = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteSetting = catchAsync(async (req, res, next) => {
-  //const deletedPayment = await Payment.findByIdAndDelete(req.params.id);
-  const deletedSetting = await PaymentSetting.findByIdAndDelete(req.query.id)
+    const deletedSetting = await PaymentSetting.findByIdAndDelete(req.params.id)
   if (!deletedSetting) {
-    return next(new AppError("Payment entry not found", 404))
+    return next(new AppError("Setting entry not found", 404))
   }
   await logAction({
     model: 'paymentSettings',
