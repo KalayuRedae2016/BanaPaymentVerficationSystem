@@ -1044,6 +1044,7 @@ export default {
             this.$refs.toast.showSuccessToastMessage(
               "Payment deleted Successfully"
             );
+            this.$reloadPage();
           }
         );
       } catch (error) {

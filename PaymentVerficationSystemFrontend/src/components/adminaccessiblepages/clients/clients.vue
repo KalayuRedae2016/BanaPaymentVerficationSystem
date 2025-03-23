@@ -273,6 +273,7 @@ export default {
         console.log("response",response);
         this.$refs.toast.showSuccessToastMessage("All Users Delated Successfully");
         });
+        this.$reloadPage();
       }catch(error){
         this.$refs.toast.showErrorToastMessage(error.message);
         console.log("error status,error message",error.status,error.message)

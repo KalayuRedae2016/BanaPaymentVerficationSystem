@@ -358,12 +358,12 @@ export default {
 
   methods: {
 
-    deleteOrg(){
+  deleteOrg(){
     try{
       this.$apiDelete('/api/v1/organization','','').then((response)=>{
       console.log("response",response);
       this.$refs.toast.showSuccessToastMessage("Org Delated Successfully");
-
+      this.$reloadPage();
       });
     }catch(error){
       this.$refs.toast.showErrorToastMessage(error.message);

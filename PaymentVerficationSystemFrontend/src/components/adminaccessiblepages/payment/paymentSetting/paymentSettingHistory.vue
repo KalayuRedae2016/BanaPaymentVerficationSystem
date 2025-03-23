@@ -330,8 +330,6 @@ export default {
 
   },
   methods: {
-
-
     deletePaymentSetting() {
       console.log(" this.paymentSetting._id", this.paymentSetting._id)
       try {
@@ -349,8 +347,6 @@ export default {
       } finally {
       }
 
-
-      
     },
     deleteAllPaymentSettings(){
     try{

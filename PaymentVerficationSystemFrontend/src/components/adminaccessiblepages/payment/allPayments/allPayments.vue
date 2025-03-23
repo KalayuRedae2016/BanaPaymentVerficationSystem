@@ -446,6 +446,7 @@ export default {
             this.$refs.toast.showSuccessToastMessage(
               "Payment deleted Successfully"
             );
+            this.$reloadPage();
           }
         );
       } catch (error) {
@@ -463,6 +464,7 @@ export default {
             this.$refs.toast.showSuccessToastMessage(
               "All Payments Delated Successfully"
             );
+            this.$reloadPage();
           }
         );
       } catch (error) {
